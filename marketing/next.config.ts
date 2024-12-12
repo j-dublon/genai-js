@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/join-flow",
-        destination: `${JOIN_FLOW_URL}/join-flow`, //change this to the right url !!
+        destination: `${JOIN_FLOW_URL}/join-flow`,
       },
     ];
   },
