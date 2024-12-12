@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/join-flow",
-        destination: `https://join-flow-multizone-demo.vercel.app/join-flow`, //change this to the right url !!
+        destination: `https://join-flow-multizone-demo.vercel.app/`, //change this to the right url !!
       },
     ];
   },
