@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+const { JOIN_FLOW_URL } = process.env;
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -6,7 +7,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/join-flow",
-        destination: `https://join-flow-multizone-demo.vercel.app/join-flow`, //change this to the right url !!
+        destination: `${JOIN_FLOW_URL}/join-flow`, //change this to the right url !!
       },
     ];
   },
