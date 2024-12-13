@@ -1,2 +1,3 @@
+cd marketing
 npm test
 npm run lint
