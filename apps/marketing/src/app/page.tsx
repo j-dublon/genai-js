@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Button } from "../../../../packages/design-system/dist";
 
 export default function Home() {
   return (

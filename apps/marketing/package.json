@@ -8,9 +8,11 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "prepare": "cd .. && husky marketing/.husky"
+    "prepare": "cd .. && husky marketing/.husky",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@react-component-library/ui": "*",
     "next": "15.1.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
