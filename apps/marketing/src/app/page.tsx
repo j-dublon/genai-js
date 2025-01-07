@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Button } from "../../../../packages/design-system/dist";
+import { ButtonWrapper } from "@/componenents/atoms/Button/ButtonWrapper";
 
 export default function Home() {
   return (
@@ -19,6 +19,7 @@ export default function Home() {
         >
           Link to join flow
         </a>
+        <ButtonWrapper />
       </main>
     </div>
   );
