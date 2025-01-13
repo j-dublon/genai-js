@@ -28,10 +28,11 @@ export default defineConfig({
   plugins: [
     react() as UserConfig["plugins"],
     dts({ rollupTypes: true }) as any,
+    tailwindcss(),
   ],
   css: {
     postcss: {
-      plugins: [tailwindcss],
+      plugins: [tailwindcss()],
     },
   },
 });

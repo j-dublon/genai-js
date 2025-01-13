@@ -13,18 +13,21 @@
     ".": {
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.es.js"
+      "import": "./dist/index.es.js",
+      "styles": "./dist/style.css"
     },
     "./dist/style.css": "./dist/style.css"
   },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "buildWatch": "tsc -b && vite build --watch",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest"
   },
   "dependencies": {
+    "classnames": "2.5.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -45,7 +48,7 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "jest": "^29.7.0",
     "postcss": "^8.4.33",
-    "tailwindcss": "^3.4.0",
+    "tailwindcss": "3.3.3",
     "ts-jest": "^29.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
