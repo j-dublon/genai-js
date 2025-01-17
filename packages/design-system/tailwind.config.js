@@ -10,10 +10,12 @@ export default {
       transparent: "transparent",
       "core-yellow": "#FCFF59",
       "core-blue": "#ACB9FE",
+      "core-pink": "#F3B0FF",
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
       "ui-grey-200": "#F0F0E9",
       "outline-ui-grey-300": "#DBD8D0",
+      "link-ui": "#5A06D8",
     },
     borderRadius: {
       none: "0",
@@ -24,10 +26,6 @@ export default {
       xl: "34px",
       full: "9999px",
     },
-    // fontWeight: {
-    //   normal: 400,
-    //   semibold: 600,
-    // },
     fontFamily: {
       ...defaultTheme.fontFamily,
       sans: ["Garnett", "sans-serif"],
@@ -42,10 +40,6 @@ export default {
       sm: "0px 4px 12px 0px #0000001A;",
       md: "0px 0px 7px 0px rgba(0, 0, 0, 0.17)",
     },
-    // keyframes: {
-    //   strokeDashOffsetToZero: {
-    //     to: { strokeDashoffset: 0 },
-    //   },
     fadeInFromBottom: {
       "0%": { transform: "translateY(2000px)", opacity: "0" },
       "60%": { transform: "translateY(-30px)", opacity: "0.5" },

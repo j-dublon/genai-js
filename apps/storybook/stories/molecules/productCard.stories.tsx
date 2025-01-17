@@ -3,7 +3,12 @@ import { ProductCard } from "@react-component-library/ui";
 
 const meta: Meta<typeof ProductCard> = {
   component: ProductCard,
-  argTypes: {},
+  argTypes: {
+    accentColour: {
+      control: { type: "radio" },
+      options: ["blue", "yellow", "pink"],
+    },
+  },
 };
 
 export default meta;
@@ -22,10 +27,13 @@ export const Primary: Story = {
         "relative flex-initial transition-all duration-[350ms] md:group-hover:outline-core-black basis-[clamp(21rem,29vw,24rem)]"
       }
       header="C-900"
-      accentColour={"blue"}
+      accentColour={props.accentColour}
       dataVideoIndex={1}
       active={true}
     ></ProductCard>
   ),
   name: "Product Card",
+  args: {
+    accentColour: "yellow",
+  },
 };

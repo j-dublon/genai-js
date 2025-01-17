@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ButtonWrapper } from "@/componenents/atoms/Button/ButtonWrapper";
+import { ButtonWrapper } from "@/components/atoms/Button/ButtonWrapper";
 
 export default function Home() {
   return (
