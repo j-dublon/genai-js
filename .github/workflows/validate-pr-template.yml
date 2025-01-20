@@ -1,0 +1,30 @@
+name: Validate PR Template
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  validate-pr-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Validate PR Template
+        id: validate-template
+        run: |
+          # Extract the PR title and body
+          PR_TITLE=$(jq -r '.pull_request.title' "$GITHUB_EVENT_PATH")
+          PR_BODY=$(jq -r '.pull_request.body' "$GITHUB_EVENT_PATH")
+
+          # Check if the PR title starts with "feat"
+          if [[ "$PR_TITLE" =~ ^feat ]]; then
+            # Check for unchecked QA checklist items
+            if echo "$PR_BODY" | grep -q "\- \[ \]"; then
+              echo "❌ All QA checklist items must be checked before merging."
+              exit 1
+            fi
+          fi
+
+          echo "✅ PR checklist validation passed."
