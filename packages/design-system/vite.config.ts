@@ -39,6 +39,7 @@ export default defineConfig({
     alias: {
       "@components": resolve(__dirname, "lib/components"),
       "@icons": resolve(__dirname, "lib/icons"),
+      "@utils": resolve(__dirname, "lib/utils"),
     },
   },
 });

@@ -27,7 +27,8 @@
     "baseUrl": ".",
       "paths": {
     "@components/*": ["lib/components/*"],
-      "@icons/*": ["lib/icons/*"]
+      "@icons/*": ["lib/icons/*"],
+      "@utils/*": ["lib/utils/*"],
     }
   },
   "include": ["packages/design-system/lib/**/*", "./jest.setup.ts", "./jest.config.js"],

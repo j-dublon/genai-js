@@ -19,5 +19,7 @@ export const Primary: Story = {
   name: "Footer",
   args: {
     titleText: "Fast, fair, feel good broadband",
+    trustScore: 1,
+    numberOfReviews: 100,
   },
 };
