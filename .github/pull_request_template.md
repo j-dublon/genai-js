@@ -8,8 +8,8 @@
 
 ## Can you share a picture or video of the changes (if necessary) ?
 
-- [ ] Have you added screenshots for mobile and desktop versions of your changes?
+- [ ] I have added screenshots for mobile and desktop versions of my changes
 
 ## Design changes
 
-- [ ] Have you had design sign off on your changes?
+- [ ] I have had design sign off on my changes?
