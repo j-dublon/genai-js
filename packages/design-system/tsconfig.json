@@ -6,6 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
+     "types": ["node"],
 
     /* Bundler mode */
     "moduleResolution": "node",
@@ -20,8 +21,18 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Path aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": ["packages/design-system/lib/components/*"],
+      "@organisms/*": ["packages/design-system/lib/components/organisms/*"],
+      "@icons/*": ["packages/design-system/lib/components/icons/*"],
+      "@images/*": ["packages/design-system/lib/images/*"],
+      "@utils/*": ["packages/design-system/lib/utils/*"]
+    }
   },
-  "include": ["lib", "./jest.setup.ts", "./jest.config.js"],
+  "include": ["packages/design-system/lib/**/*", "./jest.setup.ts", "./jest.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

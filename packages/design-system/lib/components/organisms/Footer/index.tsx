@@ -1,8 +1,7 @@
-import { JSX } from "react";
+import React, { JSX } from "react";
 
 //import from where?
 import trustPilotScore from "../../../../public/images/trustPilotScore.png";
-
 export interface FooterProps {
   titleText: string;
 }
@@ -21,7 +20,10 @@ export function Footer(props: FooterProps): JSX.Element {
 
       {/* Trust pilot score */}
       {/* social media links */}
-
+      <TwitterIcon />
+      <InstagramIcon />
+      <FacebookIcon />
+      <LinkedInIcon />
       {/* footer disclaimer */}
     </div>
   );
