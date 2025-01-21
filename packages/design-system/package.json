@@ -52,6 +52,7 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
-    "vite-plugin-dts": "^4.3.0"
+    "vite-plugin-dts": "^4.3.0",
+    "vite-tsconfig-paths": "5.1.4"
   }
 }

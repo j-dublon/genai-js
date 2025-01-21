@@ -25,12 +25,9 @@
 
     /* Path aliases */
     "baseUrl": ".",
-    "paths": {
-      "@components/*": ["packages/design-system/lib/components/*"],
-      "@organisms/*": ["packages/design-system/lib/components/organisms/*"],
-      "@icons/*": ["packages/design-system/lib/components/icons/*"],
-      "@images/*": ["packages/design-system/lib/images/*"],
-      "@utils/*": ["packages/design-system/lib/utils/*"]
+      "paths": {
+    "@components/*": ["lib/components/*"],
+      "@icons/*": ["lib/icons/*"]
     }
   },
   "include": ["packages/design-system/lib/**/*", "./jest.setup.ts", "./jest.config.js"],
