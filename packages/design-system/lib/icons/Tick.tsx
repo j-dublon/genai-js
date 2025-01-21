@@ -1,4 +1,6 @@
-export const Tick = () => {
+import { JSX } from "react";
+
+export function Tick(): JSX.Element {
   return (
     <svg
       width="20"
@@ -13,4 +15,4 @@ export const Tick = () => {
       />
     </svg>
   );
-};
+}

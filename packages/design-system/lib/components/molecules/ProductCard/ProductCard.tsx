@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { JSX } from "react";
-import { Tick } from "./tick.tsx";
+import { Tick } from "../../../icons/Tick.tsx";
 
 interface Props {
   header: string;
