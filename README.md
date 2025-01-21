@@ -45,6 +45,26 @@ If it's your first time using this project, the best way to get up to speed is t
 
    This will start the Storybook application, which you can access on http://localhost:6005.
 
+4. **Run marketing and join flow apps**:
+   To run the other 2 apps ensure the project has been built with step 1
+   Then an env file will be needed in marketing
+
+   ```bash
+   JOIN_FLOW_URL=
+   ```
+
+   the value for this will typically be: http://localhost:3000
+
+   Run the apps with
+
+   ```bash
+   npm run start
+   ```
+
+   and they should run on http://localhost:3000
+
+   note: trying to run both apps at the same time will mean the second app to be started will run on http://localhost:3001
+
 ## Additional Information
 
 Ensure you have Node.js and npm installed on your machine.
