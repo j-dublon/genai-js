@@ -40,9 +40,12 @@ export const Primary: Story = {
       {
         header: "Company",
         links: [
-          { label: "About", href: "#" },
-          { label: "Careers", href: "#" },
-          { label: "Cuckoo Compass", href: "#" },
+          { label: "About", href: "/about" },
+          { label: "Careers", href: "careers.cuckoo.co/" },
+          {
+            label: "Cuckoo Compass",
+            href: "https://www.cuckoo.co/partner-with-us",
+          },
           { label: "Refer a Friend", href: "#" },
           { label: "The Loyalty Tax", href: "#" },
         ],
@@ -65,6 +68,8 @@ export const Primary: Story = {
           { label: "Call Charges", href: "#" },
           { label: "Prices & Charge List", href: "#" },
         ],
+        footerDisclaimerText:
+          "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. Our VAT number is 341752118. Cuckoo Internet Ltd is regulated by Ofcom.",
       },
     ],
   },
