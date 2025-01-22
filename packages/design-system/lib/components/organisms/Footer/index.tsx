@@ -12,6 +12,10 @@ export interface FooterProps {
   trustScore: number;
   footerSections: FooterLinksProps["sections"];
   footerDisclaimerText: string;
+  trustPilotLogo: {
+    altText: string;
+    imgSrc: string;
+  };
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -19,20 +23,22 @@ export const Footer: React.FC<FooterProps> = ({
   trustScore,
   footerSections,
   footerDisclaimerText,
+  trustPilotLogo,
 }) => {
   return (
     <footer className="h-[471px] bg-[#FCFF59] flex justify-center items-center p-[144px]">
-      {/* Title and Footer Links Section */}
       <div className="flex justify-between w-full max-w-[1200px]">
         <div className="flex flex-col justify-between w-1/2 p-4">
           <div className="max-w-[313px]">
             <h2 className="font-bold text-[26px] md:text-5xl">{titleText}</h2>
           </div>
-          {/* Trustpilot and Social Media Section */}
           <div className="flex items-end space-x-12">
-            {/* Trustpilot Section */}
-            <TrustpilotVertical trustScore={trustScore} />
-            {/* Social Media Icons */}
+            <TrustpilotVertical
+              width={128}
+              height={72}
+              trustScore={trustScore}
+              trustPilotLogo={trustPilotLogo}
+            />
             <div className="flex space-x-8">
               <div className="flex items-end">
                 <InstagramIcon />
@@ -49,7 +55,6 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
           </div>
         </div>
-        {/* Footer Links Section */}
         <div className="flex flex-col justify-between w-1/2 p-4 space-y-8">
           <FooterLinks sections={footerSections} />
           <FooterDisclaimer footerDisclaimerText={footerDisclaimerText} />

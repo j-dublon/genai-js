@@ -1,8 +1,13 @@
 import React from "react";
-import { TrustpilotLogo } from "@components/molecules/TrustpilotVertical/TrustpilotLogo";
-import { TrustpilotStars } from "@components/molecules/TrustpilotVertical/TrustpilotStars";
-
+import { TrustpilotStars } from "./TrustPilotStars";
+import { StorybookLogo } from "@components/atoms/StorybookLogo";
 interface Props {
+  trustPilotLogo: {
+    altText: string;
+    imgSrc: string;
+  };
+  width: number;
+  height: number;
   trustScore: number;
   maxWidth?: number;
   maxHeight?: number;
@@ -10,16 +15,24 @@ interface Props {
 
 export const TrustpilotVertical: React.FC<Props> = ({
   trustScore,
+  width,
+  height,
   maxWidth = 128,
   maxHeight = 72,
+  trustPilotLogo,
 }) => {
   return (
     <div
       className="flex flex-col items-start space-y-4"
       style={{ maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px` }}
     >
-      <TrustpilotLogo />
-      <TrustpilotStars trustScore={trustScore} width={144} height={36} />
+      <StorybookLogo
+        width={width}
+        height={height}
+        altText={trustPilotLogo.altText}
+        imgSrc={trustPilotLogo.imgSrc}
+      />
+      <TrustpilotStars trustScore={trustScore} width={width} height={height} />
     </div>
   );
 };
