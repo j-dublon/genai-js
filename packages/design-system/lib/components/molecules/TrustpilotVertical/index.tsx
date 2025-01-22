@@ -4,23 +4,22 @@ import { TrustpilotStars } from "@components/molecules/TrustpilotVertical/Trustp
 
 interface Props {
   trustScore: number;
-  numberOfReviews: number;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 export const TrustpilotVertical: React.FC<Props> = ({
   trustScore,
-  numberOfReviews,
+  maxWidth = 128,
+  maxHeight = 72,
 }) => {
   return (
-    <div className="flex grid">
-      <TrustpilotLogo width={144} height={36} />
-      <div className="w-auto max-w-none">
-        <TrustpilotStars trustScore={5} />
-        <div className="text-hummingbird mt-2 whitespace-nowrap text-[8px] lg:text-xs">
-          Trust Score <strong>{trustScore}</strong> &nbsp; | &nbsp;{" "}
-          <strong>{numberOfReviews.toLocaleString()}</strong> reviews
-        </div>
-      </div>
+    <div
+      className="flex flex-col items-start space-y-4"
+      style={{ maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px` }}
+    >
+      <TrustpilotLogo />
+      <TrustpilotStars trustScore={trustScore} width={144} height={36} />
     </div>
   );
 };

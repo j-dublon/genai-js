@@ -1,11 +1,15 @@
-import React from "react";
+import React, { JSX } from "react";
 
 interface TrustpilotStarsProps {
-  trustScore: number; // TrustScore to determine the star rating
+  trustScore: number;
+  width?: number;
+  height?: number;
 }
 
 export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
   trustScore,
+  width = 144,
+  height = 36,
 }) => {
   const getStarStatus = (trustScore: number) => {
     if (trustScore >= 1 && trustScore <= 1.2) return { full: 1, half: false };
@@ -22,12 +26,10 @@ export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
 
   const { full, half } = getStarStatus(trustScore);
 
-  // Render stars dynamically
   const renderStars = () => {
-    const stars = [];
+    const stars: JSX.Element[] = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= full) {
-        // Full star
         stars.push(
           <g key={i} transform={`translate(${(i - 1) * 104}, 0)`}>
             <rect x="0" y="0" width="96" height="96" fill="#00b67a" />
@@ -38,7 +40,6 @@ export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
           </g>
         );
       } else if (i === full + 1 && half) {
-        // Half star
         stars.push(
           <g key={i} transform={`translate(${(i - 1) * 104}, 0)`}>
             <rect x="0" y="0" width="96" height="96" fill="#DCDCE6" />
@@ -50,7 +51,6 @@ export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
           </g>
         );
       } else {
-        // Empty star
         stars.push(
           <g key={i} transform={`translate(${(i - 1) * 104}, 0)`}>
             <rect x="0" y="0" width="96" height="96" fill="#DCDCE6" />
@@ -69,8 +69,8 @@ export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 520 96"
-      width="520px"
-      height="96px"
+      width={width}
+      height={height}
     >
       {renderStars()}
     </svg>
