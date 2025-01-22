@@ -26,7 +26,10 @@ export const Footer: React.FC<FooterProps> = ({
   trustPilotLogo,
 }) => {
   return (
-    <footer className="h-[471px] bg-[#FCFF59] flex justify-center items-center p-[144px]">
+    <footer
+      className="h-[471px] bg-[#FCFF59] flex justify-center items-center p-[144px]"
+      aria-label="footer"
+    >
       <div className="flex justify-between w-full max-w-[1200px]">
         <div className="flex flex-col justify-between w-1/2 p-4">
           <div className="max-w-[313px]">
@@ -40,18 +43,18 @@ export const Footer: React.FC<FooterProps> = ({
               trustPilotLogo={trustPilotLogo}
             />
             <div className="flex space-x-8">
-              <div className="flex items-end">
+              <a href="https://www.instagram.com" aria-label="Instagram">
                 <InstagramIcon />
-              </div>
-              <div className="flex items-end">
+              </a>
+              <a href="https://www.twitter.com" aria-label="Twitter">
                 <TwitterIcon />
-              </div>
-              <div className="flex items-end">
+              </a>
+              <a href="https://www.facebook.com" aria-label="Facebook">
                 <FacebookIcon />
-              </div>
-              <div className="flex items-end">
+              </a>
+              <a href="https://www.linkedin.com" aria-label="LinkedIn">
                 <LinkedInIcon />
-              </div>
+              </a>
             </div>
           </div>
         </div>
