@@ -1,3 +1,4 @@
+import React from "react";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { TwitterIcon } from "@icons/Twitter";
 import { InstagramIcon } from "@icons/Instagram";
@@ -25,10 +26,7 @@ export const Footer: React.FC<FooterProps> = ({
   trustPilotLogo,
 }) => {
   return (
-    <footer
-      className="h-[471px] bg-[#FCFF59] flex justify-center items-center p-[144px]"
-      aria-label="footer"
-    >
+    <footer className="bg-[#FCFF59] flex justify-center items-center p-[144px]">
       <div className="flex justify-between w-full max-w-[1200px]">
         <div className="flex flex-col justify-between w-1/2 p-4">
           <div className="max-w-[313px]">
@@ -42,18 +40,18 @@ export const Footer: React.FC<FooterProps> = ({
               trustPilotLogo={trustPilotLogo}
             />
             <div className="flex space-x-8">
-              <a href="https://www.instagram.com" aria-label="Instagram">
-                <InstagramIcon />
-              </a>
-              <a href="https://www.twitter.com" aria-label="Twitter">
-                <TwitterIcon />
-              </a>
-              <a href="https://www.facebook.com" aria-label="Facebook">
-                <FacebookIcon />
-              </a>
-              <a href="https://www.linkedin.com" aria-label="LinkedIn">
-                <LinkedInIcon />
-              </a>
+              <div className="flex items-end">
+                <InstagramIcon aria-label="Instagram" />
+              </div>
+              <div className="flex items-end">
+                <TwitterIcon aria-label="Twitter" />
+              </div>
+              <div className="flex items-end">
+                <FacebookIcon aria-label="Facebook" />
+              </div>
+              <div className="flex items-end">
+                <LinkedInIcon aria-label="LinkedIn" />
+              </div>
             </div>
           </div>
         </div>

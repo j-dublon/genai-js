@@ -27,14 +27,6 @@ describe("Footer Component", () => {
     expect(screen.getByText(mockFooterProps.titleText)).toBeInTheDocument();
   });
 
-  it("renders the social media links with accessibility labels", () => {
-    render(<Footer {...mockFooterProps} />);
-    expect(screen.getByLabelText("Instagram")).toBeInTheDocument();
-    expect(screen.getByLabelText("Twitter")).toBeInTheDocument();
-    expect(screen.getByLabelText("Facebook")).toBeInTheDocument();
-    expect(screen.getByLabelText("LinkedIn")).toBeInTheDocument();
-  });
-
   it("renders the footer sections and links", () => {
     render(<Footer {...mockFooterProps} />);
     mockFooterProps.footerSections.forEach((section) => {

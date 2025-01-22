@@ -1,4 +1,3 @@
-import React from "react";
 import { TrustpilotStars } from "./TrustPilotStars";
 import { StorybookLogo } from "@components/atoms/StorybookLogo";
 
