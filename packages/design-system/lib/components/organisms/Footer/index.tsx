@@ -21,15 +21,15 @@ export const Footer: React.FC<FooterProps> = ({
   footerDisclaimerText,
 }) => {
   return (
-    <footer className="h-[471px] bg-[#FCFF59] flex flex-col justify-between p-[144px]">
+    <footer className="h-[471px] bg-[#FCFF59] flex justify-center items-center p-[144px]">
       {/* Title and Footer Links Section */}
-      <div className="flex justify-between bg-core-blue">
-        <div className="flex flex-col justify-between">
+      <div className="flex justify-between w-full max-w-[1200px]">
+        <div className="flex flex-col justify-between w-1/2 p-4">
           <div className="max-w-[313px]">
             <h2 className="font-bold text-[26px] md:text-5xl">{titleText}</h2>
           </div>
           {/* Trustpilot and Social Media Section */}
-          <div className="flex items-end">
+          <div className="flex items-end space-x-8">
             {/* Trustpilot Section */}
             <TrustpilotVertical trustScore={trustScore} />
 
@@ -51,7 +51,7 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </div>
         {/* Footer Links Section */}
-        <div className="space-y-8 bg-core-pink">
+        <div className="flex flex-col justify-between w-1/2 p-4 space-y-8">
           <FooterLinks sections={footerSections} />
           <FooterDisclaimer footerDisclaimerText={footerDisclaimerText} />
         </div>
