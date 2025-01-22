@@ -29,10 +29,9 @@ export const Footer: React.FC<FooterProps> = ({
             <h2 className="font-bold text-[26px] md:text-5xl">{titleText}</h2>
           </div>
           {/* Trustpilot and Social Media Section */}
-          <div className="flex items-end space-x-8">
+          <div className="flex items-end space-x-12">
             {/* Trustpilot Section */}
             <TrustpilotVertical trustScore={trustScore} />
-
             {/* Social Media Icons */}
             <div className="flex space-x-8">
               <div className="flex items-end">
