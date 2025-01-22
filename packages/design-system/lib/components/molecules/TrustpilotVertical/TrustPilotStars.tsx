@@ -8,8 +8,8 @@ interface TrustpilotStarsProps {
 
 export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
   trustScore,
-  width = 144,
-  height = 36,
+  width,
+  height,
 }) => {
   const getStarStatus = (trustScore: number) => {
     if (trustScore >= 1 && trustScore <= 1.2) return { full: 1, half: false };

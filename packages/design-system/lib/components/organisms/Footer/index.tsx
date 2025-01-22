@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({
   trustPilotLogo,
 }) => {
   return (
-    <footer className="bg-[#FCFF59] flex justify-center items-center p-[144px]">
+    <footer className="bg-core-yellow flex justify-center items-center p-[144px]">
       <div className="flex justify-between w-full max-w-[1200px]">
         <div className="flex flex-col justify-between w-1/2 p-4">
           <div className="max-w-[313px]">
@@ -34,8 +34,8 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
           <div className="flex items-end space-x-12">
             <TrustpilotVertical
-              width={128}
-              height={72}
+              width={144}
+              height={36}
               trustScore={trustScore}
               trustPilotLogo={trustPilotLogo}
             />
