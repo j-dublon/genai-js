@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { JSX } from "react";
-import { InputBoxButton } from "../../atoms/InputBoxButton/InputBoxButton";
+import { InputBoxButton } from "../../atoms/InputBoxButton";
 
 export interface PostcodeCheckerProps {
   titleText?: string;
