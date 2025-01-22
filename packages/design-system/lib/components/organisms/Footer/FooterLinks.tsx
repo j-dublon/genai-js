@@ -1,6 +1,6 @@
 import React from "react";
 
-interface FooterLinksProps {
+export interface FooterLinksProps {
   sections: {
     header: string;
     links: { label: string; href: string }[];
@@ -9,7 +9,7 @@ interface FooterLinksProps {
 
 export const FooterLinks: React.FC<FooterLinksProps> = ({ sections }) => {
   return (
-    <div className="absolute top-[85px] left-[calc(144px+313px+275px)] w-[600px] flex space-x-8">
+    <div className="w-[600px] flex space-x-8">
       {sections.map((section, index) => (
         <div key={index} className="flex-1">
           <h3

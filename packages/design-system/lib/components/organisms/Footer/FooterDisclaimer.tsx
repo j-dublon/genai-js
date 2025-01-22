@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface FooterDisclaimerProps {
   footerDisclaimerText: string;
 }
@@ -5,9 +7,5 @@ export interface FooterDisclaimerProps {
 export const FooterDisclaimer: React.FC<FooterDisclaimerProps> = ({
   footerDisclaimerText,
 }) => {
-  return (
-    <p className="text-sm text-[#565656] max-w-[313px]">
-      {footerDisclaimerText}
-    </p>
-  );
+  return <p className="text-sm text-[#565656]">{footerDisclaimerText}</p>;
 };

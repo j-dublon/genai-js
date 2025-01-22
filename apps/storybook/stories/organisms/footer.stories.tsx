@@ -34,8 +34,10 @@ export const Primary: Story = {
   render: (props: FooterProps) => <Footer {...props} />,
   name: "Footer",
   args: {
-    titleText: "Fast, fair, feel good broadband",
+    titleText: "Fast, fair, feel-good broadband",
     trustScore: 1,
+    footerDisclaimerText:
+      "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. Our VAT number is 341752118. Cuckoo Internet Ltd is regulated by Ofcom.",
     footerSections: [
       {
         header: "Company",
@@ -68,8 +70,6 @@ export const Primary: Story = {
           { label: "Call Charges", href: "#" },
           { label: "Prices & Charge List", href: "#" },
         ],
-        footerDisclaimerText:
-          "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. Our VAT number is 341752118. Cuckoo Internet Ltd is regulated by Ofcom.",
       },
     ],
   },
