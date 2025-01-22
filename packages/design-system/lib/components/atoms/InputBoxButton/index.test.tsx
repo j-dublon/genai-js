@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { InputBoxButton } from "./InputBoxButton";
+import { InputBoxButton } from ".";
 
 describe("InputBoxButton Component", () => {
   const props = { inputBoxButtonText: "Click me" };

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { PostcodeChecker } from "./PostcodeChecker";
+import { PostcodeChecker } from ".";
 
 describe("PostcodeChecker Component", () => {
   const props = {
