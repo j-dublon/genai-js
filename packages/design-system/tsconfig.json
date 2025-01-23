@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
-     "types": ["node"],
+    "types": ["node"],
 
     /* Bundler mode */
     "moduleResolution": "node",
@@ -25,12 +25,17 @@
 
     /* Path aliases */
     "baseUrl": ".",
-      "paths": {
-    "@components/*": ["lib/components/*"],
+    "paths": {
+      "@components/*": ["lib/components/*"],
       "@icons/*": ["lib/icons/*"],
-      "@utils/*": ["lib/utils/*"],
+      "@utils/*": ["lib/utils/*"]
     }
   },
-  "include": ["packages/design-system/lib/**/*", "./jest.setup.ts", "./jest.config.js"],
+  "include": [
+    "lib",
+    "packages/design-system/lib/**/*",
+    "./jest.setup.ts",
+    "./jest.config.js"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
