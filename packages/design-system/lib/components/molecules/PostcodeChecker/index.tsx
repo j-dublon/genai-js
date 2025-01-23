@@ -23,7 +23,7 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
           placeholder={placeholderText}
           name="postcode-checker"
           className={cx(
-            "bg-white border-2 border-[#DBD8D0] text-core-black leading-[39px] h-full outline-none transition-colors duration-400 w-full z-1",
+            "bg-white border-2 border-[#DBD8D0] text-core-black leading-[39px] h-full outline-hidden transition-colors duration-400 w-full z-1",
             {
               "md:rounded-[22px] rounded-xs": true,
               "md:text-[26px] text-base": true,
