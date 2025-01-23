@@ -1,7 +1,7 @@
 import { TrustpilotStars } from "./TrustPilotStars";
 import { StorybookLogo } from "@components/atoms/StorybookLogo";
 
-interface Props {
+interface TrustPilotVerticalProps {
   trustPilotLogo: {
     altText: string;
     imgSrc: string;
@@ -13,7 +13,7 @@ interface Props {
   maxHeight?: number;
 }
 
-export const TrustpilotVertical: React.FC<Props> = ({
+export const TrustpilotVertical: React.FC<TrustPilotVerticalProps> = ({
   trustScore,
   width,
   height,
