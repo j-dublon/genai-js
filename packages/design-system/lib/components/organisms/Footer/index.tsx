@@ -1,9 +1,9 @@
 import React from "react";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
-import { TwitterIcon } from "@icons/Twitter";
-import { InstagramIcon } from "@icons/Instagram";
-import { FacebookIcon } from "@icons/Facebook";
-import { LinkedInIcon } from "@icons/LinkedIn";
+import { TwitterIcon } from "../../../icons/Twitter";
+import { InstagramIcon } from "../../../icons/Instagram";
+import { FacebookIcon } from "../../../icons/Facebook";
+import { LinkedInIcon } from "../../../icons/LinkedIn";
 import { FooterLinks, FooterLinksProps } from "./FooterLinks";
 import { FooterDisclaimer } from "./FooterDisclaimer";
 
