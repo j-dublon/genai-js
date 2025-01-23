@@ -1,5 +1,5 @@
 import "./index.css";
-import { AccordionSection } from "./components/atoms/Accordion";
+import { AccordionSection } from "./components/molecules/AccordionSection";
 import { Button } from "./components/atoms/Button";
 import { CompanyLogo } from "./components/atoms/CompanyLogo";
 import { CompanyLogoStrip } from "./components/molecules/CompanyLogoStrip";
