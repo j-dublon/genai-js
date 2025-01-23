@@ -1,4 +1,3 @@
-import React from "react";
 interface TwitterIconProps {
   width?: number;
   height?: number;

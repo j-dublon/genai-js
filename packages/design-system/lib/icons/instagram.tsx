@@ -1,5 +1,3 @@
-import React from "react";
-
 interface InstagramIconProps {
   width?: number;
   height?: number;
