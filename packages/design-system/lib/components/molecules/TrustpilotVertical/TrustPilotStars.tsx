@@ -1,4 +1,3 @@
-import React from "react";
 import { getTrustPilotStarStatus } from "../../../utils/getTrustPilotStarStatus";
 
 interface TrustpilotStarsProps {

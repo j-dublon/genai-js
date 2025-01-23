@@ -1,4 +1,3 @@
-import React from "react";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { TwitterIcon } from "@icons/Twitter";
 import { InstagramIcon } from "@icons/Instagram";

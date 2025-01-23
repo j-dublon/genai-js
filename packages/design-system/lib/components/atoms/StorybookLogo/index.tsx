@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface StorybookLogoProps
   extends React.ImgHTMLAttributes<HTMLImageElement> {
   altText: string;
