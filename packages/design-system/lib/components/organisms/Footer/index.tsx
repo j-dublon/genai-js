@@ -4,7 +4,6 @@ import { TwitterIcon } from "@icons/Twitter";
 import { InstagramIcon } from "@icons/Instagram";
 import { FacebookIcon } from "@icons/Facebook";
 import { LinkedInIcon } from "@icons/LinkedIn";
-import { Chevron } from "../../../icons/Chevron";
 import { FooterLinks, FooterLinksProps } from "./FooterLinks";
 import { FooterDisclaimer } from "./FooterDisclaimer";
 
@@ -34,7 +33,6 @@ export const Footer: React.FC<FooterProps> = ({
             <h2 className="font-bold text-[26px] md:text-5xl">{titleText}</h2>
           </div>
           <div className="flex items-end space-x-12">
-            <Chevron />
             <TrustpilotVertical
               width={144}
               height={36}
