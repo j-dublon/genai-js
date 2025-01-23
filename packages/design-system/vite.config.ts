@@ -35,4 +35,11 @@ export default defineConfig({
       plugins: [tailwindcss()],
     },
   },
+  resolve: {
+    alias: {
+      "@components": resolve(__dirname, "lib/components"),
+      "@icons": resolve(__dirname, "lib/icons"),
+      "@utils": resolve(__dirname, "lib/utils"),
+    },
+  },
 });

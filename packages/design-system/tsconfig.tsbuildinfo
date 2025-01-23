@@ -1,1 +1,1 @@
-{"root":["./lib/index.ts","./lib/components/atoms/button.tsx","./lib/components/atoms/button.test.tsx","./jest.setup.ts"],"version":"5.7.2"}
+{"root":["./jest.setup.ts"],"version":"5.7.2"}
