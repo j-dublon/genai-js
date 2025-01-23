@@ -1,9 +1,18 @@
 import "./index.css";
+import { AccordionSection } from "./components/atoms/Accordion";
 import { Button } from "./components/atoms/Button";
-import { ProductCard } from "./components/molecules/ProductCard";
-import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
-import { InputBoxButton } from "./components/atoms/InputBoxButton";
 import { CompanyLogo } from "./components/atoms/CompanyLogo";
 import { CompanyLogoStrip } from "./components/molecules/CompanyLogoStrip";
+import { InputBoxButton } from "./components/atoms/InputBoxButton";
+import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
+import { ProductCard } from "./components/molecules/ProductCard";
 
-export { Button, ProductCard, PostcodeChecker, InputBoxButton, CompanyLogo, CompanyLogoStrip };
+export {
+  AccordionSection,
+  Button,
+  CompanyLogo,
+  CompanyLogoStrip,
+  InputBoxButton,
+  PostcodeChecker,
+  ProductCard,
+};
