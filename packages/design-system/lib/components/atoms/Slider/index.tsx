@@ -1,50 +1,19 @@
-import React, { JSX, useRef, useState } from "react";
+import { useScrollable } from "../../../hooks/useScrollable";
+import React, { useRef } from "react";
 
 interface SliderProps {
   children: React.ReactNode;
   draggable?: boolean;
-  hasSetCardWidth?: boolean;
-  visibleCards?: 1 | 2 | 3;
 }
 
-const useScrollable = (ref: React.RefObject<HTMLDivElement>) => {
-  const [isMouseDown, setIsMouseDown] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const onMouseDown = (e: React.MouseEvent) => {
-    setIsMouseDown(true);
-    setStartX(e.pageX - ref.current!.offsetLeft);
-    setScrollLeft(ref.current!.scrollLeft);
-  };
-
-  const onMouseUp = () => {
-    setIsMouseDown(false);
-  };
-
-  const onMouseMove = (e: React.MouseEvent) => {
-    if (!isMouseDown) return;
-    e.preventDefault();
-    const x = e.pageX - ref.current!.offsetLeft;
-    const walk = (x - startX) * 2;
-    ref.current!.scrollLeft = scrollLeft - walk;
-  };
-
-  return { isMouseDown, onMouseDown, onMouseUp, onMouseMove };
-};
-
-export const Slider = ({
-  draggable = false,
-  hasSetCardWidth = false,
-  visibleCards = 3,
-  children,
-}: SliderProps): JSX.Element => {
+export const Slider = ({ draggable = false, children }: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
+
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(ref);
 
   const baseStyles = `
-    select-none user-select-none
+    ${draggable ? "select-none user-select-none" : undefined}
     flex overflow-x-auto relative
     [&::-webkit-scrollbar]:h-0.5 py-10
     [&::-webkit-scrollbar-thumb]:bg-black
