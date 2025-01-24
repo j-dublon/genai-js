@@ -14,6 +14,6 @@ describe("CompanyLogoStrip Component", () => {
   };
   it("renders the component", () => {
     render(<CompanyLogoStrip {...props} />);
-    expect(screen.getByRole("img")).toBeInTheDocument();
+    expect(screen.getAllByRole("img")).toHaveLength(3);
   });
 });
