@@ -6,13 +6,19 @@ import { CompanyLogoStrip } from "./components/molecules/CompanyLogoStrip";
 import { InputBoxButton } from "./components/atoms/InputBoxButton";
 import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
 import { ProductCard } from "./components/molecules/ProductCard";
+import { StorybookLogo } from "./components/atoms/StorybookLogo";
+import { Footer } from "@components/organisms/Footer";
+import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 
 export {
   AccordionSection,
   Button,
+  ProductCard,
+  PostcodeChecker,
+  InputBoxButton,
+  StorybookLogo,
   CompanyLogo,
   CompanyLogoStrip,
-  InputBoxButton,
-  PostcodeChecker,
-  ProductCard,
+  Footer,
+  TrustpilotVertical,
 };
