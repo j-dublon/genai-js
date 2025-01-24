@@ -4,9 +4,14 @@ import React, { useRef } from "react";
 interface SliderProps {
   children: React.ReactNode;
   draggable?: boolean;
+  showScrollbar: boolean;
 }
 
-export const Slider = ({ draggable = false, children }: SliderProps) => {
+export const Slider = ({
+  draggable = false,
+  showScrollbar,
+  children,
+}: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
@@ -15,10 +20,14 @@ export const Slider = ({ draggable = false, children }: SliderProps) => {
   const baseStyles = `
     ${draggable ? "select-none user-select-none" : undefined}
     flex overflow-x-auto relative
-    [&::-webkit-scrollbar]:h-0.5 py-10
+    ${
+      showScrollbar
+        ? `[&::-webkit-scrollbar]:h-0.5 py-5 mx-4
     [&::-webkit-scrollbar-thumb]:bg-black
     [&::-webkit-scrollbar-thumb]:rounded-full
-    [&::-webkit-scrollbar-track]:bg-ui-grey-200
+    [&::-webkit-scrollbar-track]:bg-ui-grey-200`
+        : `[&::-webkit-scrollbar]:hidden`
+    }
   `;
 
   const marginStyles = `

@@ -2,6 +2,7 @@ import { Slider } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Slider> = {
+  tags: ["autodocs"],
   component: Slider,
 };
 
@@ -52,14 +53,17 @@ const slides = Array.from({ length: 5 }, (_, i) => (
 ));
 
 export const Primary: Story = {
-  args: { draggable: true },
+  args: { draggable: true, showScrollbar: true },
   argTypes: {
     draggable: {
       control: { type: "boolean" },
     },
+    showScrollbar: {
+      control: { type: "boolean" },
+    },
   },
   render: (props) => (
-    <div className="w-200">
+    <div className="w-65">
       <Slider {...props}>{slides}</Slider>
     </div>
   ),
