@@ -3,16 +3,19 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "test": "turbo run test",
     "lint": "turbo run lint",
     "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=docs^... && changeset publish"
+    "release": "turbo run build --filter=docs^... && changeset publish",
+    "prepare": "husky"
   },
   "packageManager": "npm@10.2.0",
   "devDependencies": {
     "@types/node": "22.10.7",
+    "husky": "9.1.7",
     "turbo": "2.3.3"
   },
   "engines": {
