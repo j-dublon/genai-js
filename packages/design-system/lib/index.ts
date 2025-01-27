@@ -9,6 +9,7 @@ import { CompanyLogo } from "./components/atoms/CompanyLogo";
 import { CompanyLogoStrip } from "./components/molecules/CompanyLogoStrip";
 import { StorybookLogo } from "./components/atoms/StorybookLogo";
 import { Slider } from "./components/atoms/Slider";
+import { ScaledText } from "@components/atoms/ScaledText";
 
 export {
   Slider,
@@ -17,6 +18,7 @@ export {
   PostcodeChecker,
   InputBoxButton,
   StorybookLogo,
+  ScaledText,
   CompanyLogo,
   CompanyLogoStrip,
   Footer,
