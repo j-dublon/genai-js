@@ -27,7 +27,9 @@ export default defineConfig({
   },
   plugins: [
     react() as UserConfig["plugins"],
-    dts({ rollupTypes: true }) as any,
+    dts({
+      rollupTypes: true,
+    }),
     tailwindcss(),
   ],
   resolve: {
