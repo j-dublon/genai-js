@@ -12,23 +12,14 @@ export default defineConfig({
       name: "react-beautiful-timeline",
       fileName: (format) => `index.${format}.js`,
     },
-    rollupOptions: {
-      external: ["react", "react-dom", "tailwindcss"],
-      output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
-          tailwindcss: "tailwindcss",
-        },
-      },
-    },
     sourcemap: true,
     emptyOutDir: true,
   },
   plugins: [
     react() as UserConfig["plugins"],
     dts({
-      rollupTypes: true,
+      entryRoot: "lib",
+      outDir: "dist",
     }),
     tailwindcss(),
   ],
