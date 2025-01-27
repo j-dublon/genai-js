@@ -61,5 +61,10 @@
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.9.5"
+  },
+  "overrides": {
+    "esbuild": {
+      "@esbuild/linux-x64": "0.21.5"
+    }
   }
 }
