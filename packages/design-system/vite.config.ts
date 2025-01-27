@@ -5,6 +5,7 @@ import dts from "vite-plugin-dts";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import pkg from "./package.json";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,16 +18,14 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom", "tailwindcss", "@swc/core"],
+      external: [...Object.keys(pkg.dependencies || {})],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
-          tailwindcss: "tailwindcss",
         },
       },
     },
-    outDir: "dist",
     sourcemap: true,
     emptyOutDir: true,
   },
