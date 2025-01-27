@@ -1,26 +1,38 @@
-import storybook from "eslint-plugin-storybook";
+// eslint.config.js
+import js from "@eslint/js";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import typescript from "@typescript-eslint/eslint-plugin";
+import tsParser from "@typescript-eslint/parser";
 
 export default [
-  ...storybook.configs.recommended,
+  js.configs.recommended,
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
+    files: ["**/*.ts", "**/*.tsx"],
     languageOptions: {
-      ecmaVersion: "latest",
-      sourceType: "module",
-      parser: "@typescript-eslint/parser",
+      parser: tsParser,
       parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
+        ecmaVersion: "latest",
+        sourceType: "module",
       },
     },
     plugins: {
-      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
-      storybook,
+      "@typescript-eslint": typescript,
+    },
+  },
+  {
+    files: ["**/*.jsx", "**/*.tsx"],
+    plugins: {
+      react,
+      "react-hooks": reactHooks,
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
     rules: {
-      // Add your custom ESLint rules here
+      // React-specific rules
     },
-    ignores: ["./node_modules"],
   },
 ];
