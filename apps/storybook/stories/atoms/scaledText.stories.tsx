@@ -10,10 +10,14 @@ export default meta;
 type Story = StoryObj<typeof ScaledText>;
 
 export const Primary: Story = {
-  render: (props) => <ScaledText {...props} />,
+  render: (props) => (
+    <div className="w-[600px] h-[300px]">
+      <ScaledText {...props} />{" "}
+    </div>
+  ),
   name: "Company Logo",
   args: {
-    topText: "Whoooooooo",
-    bottomText: "oooooooosh",
+    topText: "Whooooo",
+    bottomText: "oooosh",
   },
 };
