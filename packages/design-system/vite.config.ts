@@ -1,4 +1,4 @@
-import { defineConfig, UserConfig } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
@@ -30,7 +30,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   plugins: [
-    react() as UserConfig["plugins"],
+    [react()],
     dts({
       rollupTypes: true,
     }),
