@@ -24,7 +24,8 @@
     "buildWatch": "tsc -b && vite build --watch",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "check-types": "tsc --noEmit"
   },
   "dependencies": {
     "classnames": "2.5.1",
