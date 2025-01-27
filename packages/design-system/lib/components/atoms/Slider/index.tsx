@@ -1,4 +1,4 @@
-import { useScrollable } from "../../../hooks/useScrollable";
+import { useScrollable } from "@hooks/useScrollable";
 import React, { useRef } from "react";
 
 interface Props {
@@ -42,6 +42,9 @@ export const Slider = ({
 
   return (
     <div
+      role="region"
+      aria-roledescription="slider"
+      aria-label="Scrollable content"
       ref={ref}
       className={`
         ${baseStyles}
@@ -53,7 +56,13 @@ export const Slider = ({
       onMouseMove={draggable ? onMouseMove : undefined}
     >
       {React.Children.map(children, (child) => (
-        <div className="slider-item last:mr-0">{child}</div>
+        <div
+          role="group"
+          aria-roledescription="slide"
+          className="slider-item last:mr-0"
+        >
+          {child}
+        </div>
       ))}
     </div>
   );

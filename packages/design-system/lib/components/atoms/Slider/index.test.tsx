@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Slider } from "./";
-import { useScrollable } from "../../../hooks/useScrollable";
+import { useScrollable } from "@hooks/useScrollable";
 
 jest.mock("../../../hooks/useScrollable", () => ({
   useScrollable: jest.fn(),
