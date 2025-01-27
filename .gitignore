@@ -12,4 +12,3 @@ server/dist
 public/dist
 storybook-static/
 .swc
-.husky
