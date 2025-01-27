@@ -1,7 +1,6 @@
 import { defineConfig, UserConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
-import dts from "vite-plugin-dts";
 import tailwindcss from "@tailwindcss/vite";
 
 // https://vitejs.dev/config/
@@ -15,14 +14,7 @@ export default defineConfig({
     sourcemap: true,
     emptyOutDir: true,
   },
-  plugins: [
-    react() as UserConfig["plugins"],
-    dts({
-      entryRoot: "lib",
-      outDir: "dist",
-    }),
-    tailwindcss(),
-  ],
+  plugins: [react() as UserConfig["plugins"], tailwindcss()],
   resolve: {
     alias: {
       "@components": resolve(__dirname, "lib/components"),
