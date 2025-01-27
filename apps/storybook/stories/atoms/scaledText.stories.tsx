@@ -1,8 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { ScaledText } from "@react-component-library/ui";
+import { backgroundColors } from "../../values";
 
 const meta: Meta<typeof ScaledText> = {
   component: ScaledText,
+  argTypes: {
+    backgroundColor: {
+      options: backgroundColors,
+      control: { type: "select" },
+    },
+    topText: {
+      control: "text",
+    },
+    bottomText: {
+      control: "text",
+    },
+  },
 };
 
 export default meta;
@@ -15,9 +28,11 @@ export const Primary: Story = {
       <ScaledText {...props} />{" "}
     </div>
   ),
-  name: "Company Logo",
+  name: "Scaled Text",
+
   args: {
     topText: "Whooooo",
     bottomText: "oooosh",
+    backgroundColor: "secondary-blue",
   },
 };

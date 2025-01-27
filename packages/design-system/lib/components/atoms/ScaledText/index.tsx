@@ -7,7 +7,7 @@ interface Props {
   className: string;
 }
 
-export const ScaledText = ({ topText, bottomText }: Props) => {
+export const ScaledText = ({ topText, bottomText, backgroundColor }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [scale, setScale] = useState(1);
@@ -45,11 +45,11 @@ export const ScaledText = ({ topText, bottomText }: Props) => {
       </span>
     ));
   };
+
+  const containerClasses = `bg-${backgroundColor} w-full h-full flex flex-col rounded-lg overflow-hidden px-8 py-12 gap-14`;
+
   return (
-    <div
-      ref={containerRef}
-      className="w-full h-full flex flex-col bg-secondary-blue rounded-lg overflow-hidden px-8 py-12 gap-14"
-    >
+    <div ref={containerRef} className={containerClasses}>
       <h1
         ref={textRef}
         className="text-[80px] font-bold text-indigo-300 leading-none tracking-wide skew-x-12 w-full flex gap-12"
