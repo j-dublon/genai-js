@@ -4,8 +4,8 @@ const { JOIN_FLOW_URL } = process.env;
 const nextConfig: NextConfig = {
   /* config options here */
   async rewrites() {
-    if (!process.env.JOIN_FLOW_URL) {
-      throw new Error("JOIN_FLOW_URL environment variable is not defined");
+    if (process.env.CI === "true" || !process.env.JOIN_FLOW_URL) {
+      return [];
     }
     return [
       {
