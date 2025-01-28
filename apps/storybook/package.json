@@ -8,12 +8,12 @@
     "build": "storybook build --docs",
     "preview-storybook": "serve storybook-static",
     "clean": "rm -rf .turbo && rm -rf node_modules",
-    "lint": "eslint ./stories/*.stories.tsx --max-warnings 0"
+    "lint": "eslint 'stories/**/*.{stories.tsx,stories.jsx,stories.js}' --max-warnings 0"
   },
   "dependencies": {
     "@react-component-library/ui": "*",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^8.2.6",
@@ -21,9 +21,11 @@
     "@storybook/addon-links": "^8.2.6",
     "@storybook/react": "^8.2.6",
     "@storybook/react-vite": "^8.2.6",
+    "@typescript-eslint/eslint-plugin": "8.21.0",
+    "@typescript-eslint/parser": "8.21.0",
     "@vitejs/plugin-react": "^4.2.1",
     "autoprefixer": "10.4.20",
-    "eslint": "^8.57.0",
+    "eslint": "^9",
     "eslint-plugin-mdx": "3.1.5",
     "eslint-plugin-storybook": "0.11.2",
     "postcss": "8.4.49",
@@ -31,6 +33,6 @@
     "storybook": "^8.2.6",
     "tailwindcss": "4.0.0",
     "typescript": "5.5.4",
-    "vite": "^5.1.4"
+    "vite": "^6.0.9"
   }
 }

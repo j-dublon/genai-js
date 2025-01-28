@@ -2,7 +2,7 @@
 import { Preview } from "@storybook/react";
 import "../assets/index.css";
 
-import "@react-component-library/ui/dist/style.css";
+import "@react-component-library/ui/style.css";
 
 const preview: Preview = {
   parameters: {},
