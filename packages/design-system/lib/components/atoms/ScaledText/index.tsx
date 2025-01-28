@@ -4,8 +4,9 @@ interface Props {
   topText: string;
   bottomText: string;
   backgroundColor?: string;
-  textScale: number;
-  textGap: number;
+  textScale?: number;
+  textGap?: number;
+  imageUrl?: string;
 }
 
 export const ScaledText = ({
@@ -14,6 +15,7 @@ export const ScaledText = ({
   backgroundColor,
   textScale = 1.8,
   textGap = 12,
+  imageUrl,
 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
@@ -58,6 +60,11 @@ export const ScaledText = ({
 
   return (
     <div ref={containerRef} className={containerClasses}>
+      {imageUrl && (
+        <div className="absolute z-10 flex w-1/2 h-1/2 left-36">
+          <img src={imageUrl} />
+        </div>
+      )}
       <h1 ref={textRef} className={textClasses}>
         {wavy(topText, 1)}
       </h1>

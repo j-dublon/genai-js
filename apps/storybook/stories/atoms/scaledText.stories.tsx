@@ -22,6 +22,7 @@ const meta: Meta<typeof ScaledText> = {
       options: [1, 2, 4, 6, 8, 12, 14],
       control: { type: "select" },
     },
+    imageUrl: { control: "text" },
   },
 };
 
@@ -43,5 +44,6 @@ export const Primary: Story = {
     backgroundColor: "secondary-blue",
     textScale: 1.8,
     textGap: 12,
+    imageUrl: "../../assets/images/broadband-genie.svg",
   },
 };
