@@ -79,6 +79,14 @@ describe("FeatureText", () => {
     Object.defineProperty(textElement, "offsetHeight", { value: 100 });
 
     fireEvent(window, new Event("resize"));
+
+    const chars = screen
+      .getAllByRole("generic")
+      .filter((el) => el.style.transform?.includes("scale"));
+
+    chars.forEach((char) => {
+      expect(char.style.transform).toContain("scale(9)");
+    });
   });
 
   it("applies custom text scale", () => {
