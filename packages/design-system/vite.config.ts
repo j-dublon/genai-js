@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
+import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
@@ -23,12 +24,15 @@ export default defineConfig({
         },
       },
     },
+    sourcemap: true,
+    emptyOutDir: true,
   },
   plugins: [
-    react(),
+    [react()],
     dts({
       rollupTypes: true,
     }),
+    tailwindcss(),
   ],
   resolve: {
     alias: {
