@@ -1,40 +1,40 @@
-name: Pull request and merge
+# name: Pull request and merge
 
-on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+# on:
+#   pull_request:
+#     branches:
+#       - main
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  ci:
-    name: Turbo Repo CI
-    runs-on: ubuntu-latest
+# jobs:
+#   ci:
+#     name: Turbo Repo CI
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22.12.0
-          cache: "npm"
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 22.12.0
+#           cache: "npm"
 
-      - name: Install dependencies
-        run: npm install
+#       - name: Install dependencies
+#         run: npm install
 
-      - name: Run Build Task
-        env:
-          DEBUG: "turbo:*"
-          JOIN_FLOW_URL: "http://localhost:3000" # Placeholder URL for CI
-        run: npx turbo run build
+#       - name: Run Build Task
+#         env:
+#           DEBUG: "turbo:*"
+#           JOIN_FLOW_URL: "http://localhost:3000" # Placeholder URL for CI
+#         run: npx turbo run build
 
-      - name: Run Lint, Check-Types, and Test
-        env:
-          DEBUG: "turbo:*"
-          JOIN_FLOW_URL: "http://localhost:3000" # Same placeholder URL
-        run: |
-          npx turbo run lint check-types test
+#       - name: Run Lint, Check-Types, and Test
+#         env:
+#           DEBUG: "turbo:*"
+#           JOIN_FLOW_URL: "http://localhost:3000" # Same placeholder URL
+#         run: |
+#           npx turbo run lint check-types test
