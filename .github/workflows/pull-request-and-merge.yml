@@ -29,12 +29,12 @@ jobs:
       - name: Run Build Task
         env:
           DEBUG: "turbo:*"
-          JOIN_FLOW_URL: ${{ secrets.JOIN_FLOW_URL }}
+          JOIN_FLOW_URL: "https://marketing-cuckooprojects.vercel.app/"
         run: npx turbo run build
 
       - name: Run Lint, Check-Types, and Test
         env:
           DEBUG: "turbo:*"
-          JOIN_FLOW_URL: ${{ secrets.JOIN_FLOW_URL }}
+          JOIN_FLOW_URL: "https://marketing-cuckooprojects.vercel.app/"
         run: |
           npx turbo run lint check-types test
