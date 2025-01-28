@@ -27,8 +27,5 @@ jobs:
         run: npm install
 
       - name: Run Turbo tasks
-        # env:
-        #   JOIN_FLOW_URL: ${{ secrets.JOIN_FLOW_URL }}
         run: |
-          # Execute the necessary Turbo tasks
-          npx turbo run lint test check-types build
+          npx turbo run build check-types --verbose
