@@ -1,15 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
-    "@react-component-library/ui#build": {
-      "outputs": ["dist/**"]
-    },
-    "marketing#build": {
-      "dependsOn": ["@react-component-library/ui#build"]
-    },
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**"],
+      "env": ["JOIN_FLOW_URL"]
     },
     "check-types": {
       "dependsOn": ["@react-component-library/ui#build", "^check-types"]
