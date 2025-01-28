@@ -1,0 +1,34 @@
+name: Pull request and merge
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    name: Turbo Repo CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.12.0
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Turbo tasks
+        # env:
+        #   JOIN_FLOW_URL: ${{ secrets.JOIN_FLOW_URL }}
+        run: |
+          # Execute the necessary Turbo tasks
+          npx turbo run lint test check-types build
