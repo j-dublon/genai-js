@@ -3,8 +3,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["JOIN_FLOW_URL"]
+      "outputs": [".next/**", "!.next/cache/**"]
     },
     "check-types": {
       "dependsOn": ["^check-types"]
