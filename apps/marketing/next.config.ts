@@ -4,6 +4,9 @@ const { JOIN_FLOW_URL } = process.env;
 const nextConfig: NextConfig = {
   /* config options here */
   async rewrites() {
+    if (process.env.CI === "true" || !process.env.JOIN_FLOW_URL) {
+      return [];
+    }
     return [
       {
         source: "/join-flow",
