@@ -26,6 +26,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Turbo tasks
+      - name: Run Build Task
+        env:
+          DEBUG: "turbo:*"
+        run: npx turbo run build
+
+      - name: Run Lint, Check-Types, and Test
+        env:
+          DEBUG: "turbo:*"
         run: |
-          npx turbo run build check-types --verbose
+          npx turbo run lint check-types test
