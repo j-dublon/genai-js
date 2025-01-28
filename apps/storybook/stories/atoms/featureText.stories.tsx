@@ -1,12 +1,24 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { FeatureText } from "@react-component-library/ui";
-import { backgroundColors } from "../../values";
 
 const meta: Meta<typeof FeatureText> = {
   component: FeatureText,
   argTypes: {
     backgroundColor: {
-      options: backgroundColors,
+      options: [
+        "currentColor",
+        "transparent",
+        "core-yellow",
+        "core-blue",
+        "secondary-blue",
+        "core-pink",
+        "core-black",
+        "core-white",
+        "ui-grey-200",
+        "ui-grey-500",
+        "outline-ui-grey-300",
+        "link-ui",
+      ],
       control: { type: "select" },
     },
     topText: {
