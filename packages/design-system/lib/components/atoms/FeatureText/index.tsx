@@ -6,16 +6,19 @@ interface Props {
   backgroundColor?: string;
   textScale?: number;
   textGap?: number;
-  imageUrl?: string;
+  image?: {
+    url: string;
+    alt: string;
+  };
 }
 
-export const ScaledText = ({
+export const FeatureText = ({
   topText,
   bottomText,
   backgroundColor,
   textScale = 1.8,
   textGap = 12,
-  imageUrl,
+  image,
 }: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
@@ -35,8 +38,10 @@ export const ScaledText = ({
       const newScale = Math.min(widthScale, heightScale) * textScale;
       setScale(newScale);
     };
+
     updateScale();
     window.addEventListener("resize", updateScale);
+
     return () => window.removeEventListener("resize", updateScale);
   }, [topText, bottomText, textScale]);
 
@@ -55,20 +60,36 @@ export const ScaledText = ({
     ));
   };
 
-  const containerClasses = `bg-${backgroundColor} w-full h-full flex flex-col rounded-lg overflow-hidden px-8 py-12 gap-14`;
+  const containerClasses = `${backgroundColor ? `bg-${backgroundColor}` : ""} w-full h-full flex flex-col rounded-lg overflow-hidden px-8 py-12 gap-14`;
   const textClasses = `text-[80px] font-bold text-indigo-300 leading-none tracking-wide skew-x-12 w-full flex gap-${textGap}`;
 
   return (
-    <div ref={containerRef} className={containerClasses}>
-      {imageUrl && (
+    <div
+      ref={containerRef}
+      role="region"
+      aria-label="Feature text display"
+      className={containerClasses}
+    >
+      {image && (
         <div className="absolute z-10 flex w-1/2 h-1/2 left-36">
-          <img src={imageUrl} />
+          <img src={image.url} alt={image.alt} />
         </div>
       )}
-      <h1 ref={textRef} className={textClasses}>
+      <div className="sr-only">
+        <h1>{topText}</h1>
+        <h1>{bottomText}</h1>
+      </div>
+      <div
+        role="presentation"
+        aria-hidden="true"
+        ref={textRef}
+        className={textClasses}
+      >
         {wavy(topText, 1)}
-      </h1>
-      <h1 className={textClasses}>{wavy(bottomText, 1)}</h1>
+      </div>
+      <div role="presentation" aria-hidden="true" className={textClasses}>
+        {wavy(bottomText, 1)}
+      </div>
     </div>
   );
 };
