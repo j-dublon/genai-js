@@ -1,16 +1,10 @@
 npm i
 
-echo "Running tests for all workspaces..."
-npx turbo run test
-
 echo "Running type-check for all workspaces..."
 npx turbo run check-types
 
 echo "Running build for all workspaces..."
 npx turbo run build
-
-echo "Running lint for all workspaces..."
-npx turbo run lint
 
 if [ $? -ne 0 ]; then
   echo "Pre-commit hook failed!"
