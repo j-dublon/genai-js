@@ -4,10 +4,17 @@ interface Props {
   topText: string;
   bottomText: string;
   backgroundColor?: string;
-  className: string;
+  textScale: number;
+  textGap: number;
 }
 
-export const ScaledText = ({ topText, bottomText, backgroundColor }: Props) => {
+export const ScaledText = ({
+  topText,
+  bottomText,
+  backgroundColor,
+  textScale = 1.8,
+  textGap = 12,
+}: Props) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [scale, setScale] = useState(1);
@@ -23,13 +30,13 @@ export const ScaledText = ({ topText, bottomText, backgroundColor }: Props) => {
       const textHeight = textRef.current.offsetHeight;
       const widthScale = containerWidth / textWidth;
       const heightScale = containerHeight / textHeight;
-      const newScale = Math.min(widthScale, heightScale) * 1.8;
+      const newScale = Math.min(widthScale, heightScale) * textScale;
       setScale(newScale);
     };
     updateScale();
     window.addEventListener("resize", updateScale);
     return () => window.removeEventListener("resize", updateScale);
-  }, [topText, bottomText]);
+  }, [topText, bottomText, textScale]);
 
   const wavy = (text: string, waveIntensity: number) => {
     return [...text].map((char, i) => (
@@ -47,18 +54,14 @@ export const ScaledText = ({ topText, bottomText, backgroundColor }: Props) => {
   };
 
   const containerClasses = `bg-${backgroundColor} w-full h-full flex flex-col rounded-lg overflow-hidden px-8 py-12 gap-14`;
+  const textClasses = `text-[80px] font-bold text-indigo-300 leading-none tracking-wide skew-x-12 w-full flex gap-${textGap}`;
 
   return (
     <div ref={containerRef} className={containerClasses}>
-      <h1
-        ref={textRef}
-        className="text-[80px] font-bold text-indigo-300 leading-none tracking-wide skew-x-12 w-full flex gap-12"
-      >
+      <h1 ref={textRef} className={textClasses}>
         {wavy(topText, 1)}
       </h1>
-      <h1 className="text-[80px] font-bold text-indigo-300 leading-none tracking-wide skew-x-12 w-full flex gap-12">
-        {wavy(bottomText, 1)}
-      </h1>
+      <h1 className={textClasses}>{wavy(bottomText, 1)}</h1>
     </div>
   );
 };

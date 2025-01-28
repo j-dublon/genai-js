@@ -15,6 +15,13 @@ const meta: Meta<typeof ScaledText> = {
     bottomText: {
       control: "text",
     },
+    textScale: {
+      control: "number",
+    },
+    textGap: {
+      options: [1, 2, 4, 6, 8, 12, 14],
+      control: { type: "select" },
+    },
   },
 };
 
@@ -34,5 +41,7 @@ export const Primary: Story = {
     topText: "Whooooo",
     bottomText: "oooosh",
     backgroundColor: "secondary-blue",
+    textScale: 1.8,
+    textGap: 12,
   },
 };
