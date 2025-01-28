@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 const { JOIN_FLOW_URL } = process.env;
-
+console.log("JOIN_FLOW_URL:", process.env.JOIN_FLOW_URL);
 const nextConfig: NextConfig = {
   /* config options here */
   async rewrites() {
