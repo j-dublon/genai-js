@@ -1,10 +1,14 @@
-import { defineConfig, UserConfig } from "vite";
+import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
 import tailwindcss from "@tailwindcss/vite";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
-// https://vitejs.dev/config/
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 export default defineConfig({
   build: {
     lib: {
@@ -13,12 +17,10 @@ export default defineConfig({
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
-      external: ["react", "react-dom", "tailwindcss"],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
-          tailwindcss: "tailwindcss",
         },
       },
     },
@@ -26,8 +28,10 @@ export default defineConfig({
     emptyOutDir: true,
   },
   plugins: [
-    react() as UserConfig["plugins"],
-    dts({ rollupTypes: true }) as any,
+    [react()],
+    dts({
+      rollupTypes: true,
+    }),
     tailwindcss(),
   ],
   resolve: {

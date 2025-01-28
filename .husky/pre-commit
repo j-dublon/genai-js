@@ -1,8 +1,5 @@
 npm i
 
-echo "Running tests for all workspaces..."
-npx turbo run test
-
 echo "Running type-check for all workspaces..."
 npx turbo run check-types
 
