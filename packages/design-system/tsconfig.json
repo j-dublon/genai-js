@@ -29,6 +29,7 @@
       "@components/*": ["lib/components/*"],
       "@icons/*": ["lib/icons/*"],
       "@utils/*": ["lib/utils/*"],
+      "@lib/*": ["lib/*"],
       "@hooks/*": ["lib/hooks/*"]
     }
   },

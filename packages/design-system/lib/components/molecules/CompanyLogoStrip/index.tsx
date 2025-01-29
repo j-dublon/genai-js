@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { CompanyLogo } from "../../atoms/CompanyLogo";
+import { CompanyLogo } from "@components/atoms/CompanyLogo";
 
 export interface CompanyLogoStripProps {
   logos: CompanyLogoProps[];

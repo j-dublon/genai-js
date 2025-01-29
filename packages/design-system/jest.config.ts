@@ -10,6 +10,7 @@ export default {
     "^@components/(.*)$": "<rootDir>/lib/components/$1",
     "^@icons/(.*)$": "<rootDir>/lib/icons/$1",
     "^@utils/(.*)$": "<rootDir>/lib/utils/$1",
+    "^@lib/(.*)$": "<rootDir>/lib/$1",
     "^@hooks/(.*)$": "<rootDir>/lib/hooks/$1",
   },
 
