@@ -47,7 +47,7 @@ export const Primary: Story = {
   render: (props) => (
     <AccordionSection
       {...props}
-      backgroundColour="core-blue"
+      backgroundColour="core-yellow"
       questionColour="core-white"
       heading="Still not sure? Tell us what’s bothering you."
       text="We’ve seen and heard it all, so we’re pretty confident we can help you too."

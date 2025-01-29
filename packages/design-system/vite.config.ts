@@ -1,15 +1,15 @@
-import { defineConfig, UserConfig } from "vite";
+import { defineConfig, UserConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
-import tailwindcss from "@tailwindcss/vite";
+import tailwindcss from "tailwindcss";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "./lib/index.ts"),
-      name: "react-beautiful-timeline",
+      name: "react-design-ui",
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
@@ -25,6 +25,11 @@ export default defineConfig({
     sourcemap: true,
     emptyOutDir: true,
   },
+  css: {
+    postcss: {
+      plugins: [tailwindcss()],
+    },
+  },
   plugins: [
     react() as UserConfig["plugins"],
     dts({ rollupTypes: true }) as any,
@@ -36,5 +41,11 @@ export default defineConfig({
       "@icons": resolve(__dirname, "lib/icons"),
       "@utils": resolve(__dirname, "lib/utils"),
     },
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./setup-test.ts",
+    css: true,
   },
 });

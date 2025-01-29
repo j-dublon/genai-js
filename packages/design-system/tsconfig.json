@@ -31,11 +31,6 @@
       "@utils/*": ["lib/utils/*"]
     }
   },
-  "include": [
-    "lib",
-    "packages/design-system/lib/**/*",
-    "./jest.setup.ts",
-    "./jest.config.js"
-  ],
+  "include": ["lib", "packages/design-system/lib/**/*", "setup-test.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

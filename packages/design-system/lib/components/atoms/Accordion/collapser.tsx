@@ -25,10 +25,11 @@ export const Collapser = ({
         {toggle}
       </button>
       <div
+        data-testid="collapser-content"
         className={`transition-all duration-500 ease-in-out overflow-hidden ${
           FAQDropdownOpen
             ? "max-h-[1000px] opacity-100 visible"
-            : "max-h-0 opacity-0 invisible"
+            : "max-h-0 opacity-0 hidden"
         }`}
       >
         {close && (

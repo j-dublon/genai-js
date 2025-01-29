@@ -25,8 +25,8 @@ export const Arrow: React.FC<ArrowIconProps> = ({
       <path
         d="M32.8125 16.8311L21 28.6436L9.1875 16.8311"
         stroke={fill}
-        stroke-width="4"
-        stroke-linecap="square"
+        strokeWidth="4"
+        strokeLinecap="square"
       />
     </svg>
   );

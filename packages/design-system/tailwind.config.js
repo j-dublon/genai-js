@@ -3,7 +3,7 @@ import defaultTheme from "tailwindcss/defaultTheme";
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./lib/**/*.{js,ts,tsx}"],
+  content: ["./lib/**/*.{js,ts,tsx,jsx}"],
   theme: {
     colors: {
       currentColor: "currentColor",
@@ -14,6 +14,7 @@ export default {
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
       "ui-grey-200": "#F0F0E9",
+      "ui-grey-300": "#D8D8D0",
       "ui-grey-500": "#565656",
       "outline-ui-grey-300": "#DBD8D0",
       "link-ui": "#5A06D8",
@@ -64,17 +65,17 @@ export default {
     },
     animation: {
       scaleOpen: "scaleOpen 0.1s forwards",
-      marquee: 'marquee 25s linear infinite',
-      marquee2: 'marquee2 25s linear infinite',
+      marquee: "marquee 25s linear infinite",
+      marquee2: "marquee2 25s linear infinite",
     },
     keyframes: {
       marquee: {
-        '0%': { transform: 'translateX(0%)' },
-        '100%': { transform: 'translateX(-100%)' },
+        "0%": { transform: "translateX(0%)" },
+        "100%": { transform: "translateX(-100%)" },
       },
       marquee2: {
-        '0%': { transform: 'translateX(100%)' },
-        '100%': { transform: 'translateX(0%)' },
+        "0%": { transform: "translateX(100%)" },
+        "100%": { transform: "translateX(0%)" },
       },
     },
   },

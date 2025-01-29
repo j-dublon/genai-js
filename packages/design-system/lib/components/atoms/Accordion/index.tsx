@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Arrow } from "../../../icons/Arrow";
-import Link from "next/link";
 import { Button } from "../Button";
 import { Collapser } from "./collapser";
 
@@ -43,9 +42,14 @@ export const AccordionItem: React.FC<FaqItemProps> = ({
               </span>
             ))}
             {question.button_text && question.button_link && (
-              <Link href={question.button_link} passHref legacyBehavior>
-                <Button>{question.button_text}</Button>
-              </Link>
+              <Button
+                as="a"
+                href={question.button_link}
+                variant="outline"
+                size={"medium"}
+              >
+                {question.button_text}
+              </Button>
             )}
           </div>
         </div>
