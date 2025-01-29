@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { AccordionItem } from ".";
 import { describe, expect, it } from "vitest";
 
@@ -50,7 +50,7 @@ describe("Accordion Component", () => {
     expect(button).not.toBeInTheDocument();
   });
 
-  it("if accordion not expanded then content shouldn't show", () => {
+  it("if accordion not expanded then content shouldn't show", async () => {
     const questions = {
       dropdown_header: "testing header",
       dropdown_content: ["this is some content", "this is some more content"],
@@ -68,13 +68,18 @@ describe("Accordion Component", () => {
 
     const content = screen.getByTestId("collapser-content");
 
-    expect(content).not.toBeVisible();
+    // Instead of checking visibility, check if it has the "hidden" class or attribute
+    expect(content).toHaveClass("hidden");
 
     const header = screen.getByText("testing header");
     fireEvent.click(header);
 
-    // const content = screen.getByTestId("collapser-content");
-    expect(content).toBeVisible();
+    // Wait for transition effect to apply changes
+    await waitFor(() => {
+      expect(content).not.toHaveClass("hidden");
+      expect(content).toBeVisible();
+    });
+
     expect(screen.getByText("this is some content")).toBeInTheDocument();
     expect(screen.getByText("this is some more content")).toBeInTheDocument();
 

@@ -109,14 +109,14 @@ describe("FeatureText", () => {
   });
 
   it("removes resize event listener on unmount", () => {
-    const removeEventListenerSpy = jest.spyOn(window, "removeEventListener");
+    const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 
     const { unmount } = render(<FeatureText {...defaultProps} />);
     unmount();
 
     expect(removeEventListenerSpy).toHaveBeenCalledWith(
       "resize",
-      expect.any(Function),
+      expect.any(Function)
     );
 
     removeEventListenerSpy.mockRestore();

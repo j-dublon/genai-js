@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "types": ["node"],
+    "types": ["node", "vitest", "vitest/globals"],
 
     /* Bundler mode */
     "moduleResolution": "node",
