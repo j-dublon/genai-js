@@ -7,16 +7,20 @@ import { InputBoxButton } from "./components/atoms/InputBoxButton";
 import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
 import { ProductCard } from "./components/molecules/ProductCard";
 import { StorybookLogo } from "./components/atoms/StorybookLogo";
+import { Slider } from "./components/atoms/Slider";
+import { FeatureText } from "@components/atoms/FeatureText";
 import { Footer } from "@components/organisms/Footer";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 
 export {
   AccordionSection,
+  Slider,
   Button,
   ProductCard,
   PostcodeChecker,
   InputBoxButton,
   StorybookLogo,
+  FeatureText,
   CompanyLogo,
   CompanyLogoStrip,
   Footer,

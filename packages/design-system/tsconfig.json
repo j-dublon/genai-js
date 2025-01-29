@@ -28,7 +28,8 @@
     "paths": {
       "@components/*": ["lib/components/*"],
       "@icons/*": ["lib/icons/*"],
-      "@utils/*": ["lib/utils/*"]
+      "@utils/*": ["lib/utils/*"],
+      "@hooks/*": ["lib/hooks/*"]
     }
   },
   "include": ["lib", "packages/design-system/lib/**/*", "setup-test.ts"],

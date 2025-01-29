@@ -10,6 +10,7 @@ export default {
       transparent: "transparent",
       "core-yellow": "#FCFF59",
       "core-blue": "#ACB9FE",
+      "secondary-blue": "#6F89FF",
       "core-pink": "#F3B0FF",
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
@@ -79,5 +80,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
 };

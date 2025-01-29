@@ -5,9 +5,7 @@ export interface CompanyLogoProps extends React.ImgHTMLAttributes<ImageBitmap> {
   imgSrc: string;
 }
 
-export const CompanyLogo: React.FC<CompanyLogoProps> = (
-  props: CompanyLogoProps
-) => {
+export const CompanyLogo = (props: CompanyLogoProps) => {
   const { altText, width, height, imgSrc } = props;
   return (
     <img
@@ -19,5 +17,3 @@ export const CompanyLogo: React.FC<CompanyLogoProps> = (
     />
   );
 };
-
-CompanyLogo.displayName = "CompanyLogo";
