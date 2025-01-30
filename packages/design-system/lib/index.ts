@@ -10,6 +10,7 @@ import { CompanyLogoStrip } from "./components/molecules/CompanyLogoStrip";
 import { StorybookLogo } from "./components/atoms/StorybookLogo";
 import { Slider } from "./components/atoms/Slider";
 import { FeatureText } from "@components/atoms/FeatureText";
+import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 
 export {
   Slider,
@@ -23,4 +24,5 @@ export {
   CompanyLogoStrip,
   Footer,
   TrustpilotVertical,
+  HowFastCanYouGo
 };
