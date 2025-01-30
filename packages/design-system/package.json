@@ -23,7 +23,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "jest",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist && rm -rf coverage && rm -rf tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "classnames": "2.5.1"
