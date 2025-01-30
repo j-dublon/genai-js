@@ -1,7 +1,18 @@
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker"
 
+export interface HowFastCanYouGoProps {
+  inputBackgroundVideoWebm: {
+    url: string
+  };
+  inputBackgroundVideoMp4: {
+    url: string
+  };
+}
 
-export const HowFastCanYouGo: React.FC = () => {
+export const HowFastCanYouGo: React.FC<HowFastCanYouGoProps> = ({
+  inputBackgroundVideoWebm,
+  inputBackgroundVideoMp4
+}) => {
   return (
     <div className={`
       relative pb-16 gap-0 grid bg-[#f4f3ef]
@@ -26,10 +37,12 @@ export const HowFastCanYouGo: React.FC = () => {
           order-1 w-full max-h-[635px] object-cover
           md:col-start-5 md:col-span-8 md:row-start-1 md:row-span-3
         `}>
-        <source
-          src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/1ed68638-5926-4c9e-b5a1-c0a1342dd5c2_CK_Flex_Master.webm"
-          type="video/webm"
-        />
+        {inputBackgroundVideoWebm?.url && (
+          <source src={inputBackgroundVideoWebm.url} type="video/webm" />
+        )}
+        {inputBackgroundVideoMp4?.url && (
+          <source src={inputBackgroundVideoMp4.url} type="video/mp4" />
+        )}
       </video>
     </div>
 
