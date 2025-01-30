@@ -7,8 +7,8 @@
     "dev": "storybook dev -p 6006",
     "build": "storybook build --docs",
     "preview-storybook": "serve storybook-static",
-    "clean": "rm -rf .turbo && rm -rf node_modules",
-    "lint": "eslint 'stories/**/*.{stories.tsx,stories.jsx,stories.js}' --max-warnings 0"
+    "lint": "eslint 'stories/**/*.{stories.tsx,stories.jsx,stories.js}' --max-warnings 0",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf storybook-static && rm -rf coverage"
   },
   "dependencies": {
     "@react-component-library/ui": "*",
