@@ -13,11 +13,11 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
   const { titleText, topText, placeholderText, inputBoxButtonText } = props;
 
   return (
-    <div className="order-none z-10 p-10">
-      <h2 className="md:w-[59%] font-bold md:text-5xl text-[26px]">
+    <div className="z-10 order-none p-10">
+      <h2 className="w-full md:w-[59%] font-bold md:text-5xl text-[26px]">
         {titleText}
       </h2>
-      <div className="mt-5 relative md:h-28">
+      <div className="relative mt-5 md:h-28">
         <input
           aria-labelledby="input"
           placeholder={placeholderText}
