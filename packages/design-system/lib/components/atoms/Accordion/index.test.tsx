@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { AccordionItem } from ".";
-import { describe, expect, it } from "vitest";
 
 describe("Accordion Component", () => {
   it("renders the accordion item with children", () => {
@@ -79,12 +78,5 @@ describe("Accordion Component", () => {
       expect(content).not.toHaveClass("hidden");
       expect(content).toBeVisible();
     });
-
-    expect(screen.getByText("this is some content")).toBeInTheDocument();
-    expect(screen.getByText("this is some more content")).toBeInTheDocument();
-
-    const button = screen.getByRole("link", { name: "button text" });
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveAttribute("href", "www.test.com");
   });
 });

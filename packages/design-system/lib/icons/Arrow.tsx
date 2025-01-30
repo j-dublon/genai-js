@@ -21,6 +21,7 @@ export const Arrow: React.FC<ArrowIconProps> = ({
       className={`transition-transform duration-300 ${
         FAQDropdownOpen ? "rotate-180" : ""
       }`}
+      aria-label="arrow icon"
     >
       <path
         d="M32.8125 16.8311L21 28.6436L9.1875 16.8311"

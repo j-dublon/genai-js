@@ -46,6 +46,6 @@ export default defineConfig({
     globals: true,
     environment: "jsdom",
     setupFiles: "./setup-test.ts",
-    css: false,
+    css: false, //getting issues with tailwindcss v4 leaving this as false for now
   },
 });

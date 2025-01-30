@@ -21,6 +21,7 @@ export const Collapser = ({
         onClick={() => setFAQDropdownOpen(!FAQDropdownOpen)}
         className="bg-transparent border-none cursor-pointer w-full"
         type="button"
+        aria-label={`${FAQDropdownOpen ? "close" : "open"} faq section`}
       >
         {toggle}
       </button>
@@ -36,6 +37,7 @@ export const Collapser = ({
           <div
             className="cursor-pointer float-right"
             onClick={() => setFAQDropdownOpen(!FAQDropdownOpen)}
+            aria-label="close faq section"
           >
             {close}
           </div>
