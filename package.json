@@ -6,12 +6,12 @@
     "check-types": "turbo run check-types",
     "test": "turbo run test",
     "lint": "turbo run lint",
-    "clean": "turbo run clean && rm -rf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build --filter=docs^... && changeset publish",
-    "prepare": "husky"
+    "prepare": "husky",
+    "clean": "turbo run clean && rm -rf node_modules && rm -rf .turbo"
   },
   "packageManager": "npm@10.2.0",
   "devDependencies": {

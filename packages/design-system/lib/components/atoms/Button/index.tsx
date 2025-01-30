@@ -1,21 +1,19 @@
-import { type ButtonHTMLAttributes, forwardRef, JSX } from "react";
+import { type ButtonHTMLAttributes, forwardRef } from "react";
 
-export namespace IButton {
-  type Size = "small" | "medium" | "large";
-  export type Tint = "black" | "yellow" | "white" | "blue";
-  export type Variant = "solid" | "outline";
-  export interface IProps extends ButtonHTMLAttributes<HTMLElement> {
-    as?: keyof JSX.IntrinsicElements | React.ComponentType<any>;
-    isDisabled?: boolean;
-    fullWidth?: boolean;
-    href?: string;
-    onClick?: (event?: React.SyntheticEvent) => void;
-    size?: Size | Size[];
-    tint?: Tint;
-    outlineColour?: Tint;
-    variant?: Variant;
-    justifyContent?: string;
-  }
+export type Size = "small" | "medium" | "large";
+export type Tint = "black" | "yellow" | "white" | "blue";
+export type Variant = "solid" | "outline";
+
+export interface IProps extends ButtonHTMLAttributes<HTMLElement> {
+  as?: React.ElementType;
+  isDisabled?: boolean;
+  href?: string;
+  onClick?: (event?: React.SyntheticEvent) => void;
+  size?: Size | Size[];
+  tint?: Tint;
+  outlineColour?: Tint;
+  variant?: Variant;
+  justifyContent?: string;
 }
 
 export const Button = forwardRef(
@@ -23,7 +21,6 @@ export const Button = forwardRef(
     {
       as: Component = "button",
       isDisabled = false,
-      fullWidth = false,
       href,
       onClick,
       size = "medium",
@@ -35,7 +32,7 @@ export const Button = forwardRef(
       outlineColour,
       justifyContent = "center",
       ...props
-    }: IButton.IProps,
+    }: IProps,
     ref
   ) => {
     const isOutline = variant === "outline";

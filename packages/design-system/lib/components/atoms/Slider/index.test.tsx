@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { Slider } from "./";
 import { useScrollable } from "@hooks/useScrollable";
-import { Mock } from "vitest";
+import { vi, Mock } from "vitest";
 
 vi.mock("@hooks/useScrollable", () => ({
   useScrollable: vi.fn(),

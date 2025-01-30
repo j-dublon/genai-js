@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { ButtonWrapper } from "@/components/atoms/Button/ButtonWrapper";
 
 export default function Home() {
   return (
@@ -19,7 +18,6 @@ export default function Home() {
         >
           Link to join flow
         </a>
-        <ButtonWrapper />
       </main>
     </div>
   );
