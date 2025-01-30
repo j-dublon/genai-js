@@ -1,8 +1,7 @@
 import cx from "classnames";
-import { JSX } from "react";
-import { Tick } from "../../../icons/Tick.tsx";
+import { Tick } from "@icons/Tick.tsx";
 
-interface Props {
+interface ProductCardProps {
   header: string;
   className?: string;
   accentColour?: string;
@@ -10,7 +9,7 @@ interface Props {
   active?: boolean;
 }
 
-export const ProductCard = (props: Props): JSX.Element => {
+export const ProductCard: React.FC<ProductCardProps> = (props) => {
   const { header, dataVideoIndex, active, accentColour } = props;
   const colour = "bg-core-" + accentColour;
 

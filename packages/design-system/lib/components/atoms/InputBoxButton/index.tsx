@@ -1,11 +1,10 @@
-import { JSX } from "react";
-import { Chevron } from "../../../icons/Chevron";
+import { Chevron } from "@icons/Chevron";
 
 export interface InputBoxButtonProps {
   inputBoxButtonText?: string;
 }
 
-export function InputBoxButton(props: InputBoxButtonProps): JSX.Element {
+export const InputBoxButton: React.FC<InputBoxButtonProps> = (props) => {
   const { inputBoxButtonText } = props;
 
   return (
@@ -25,6 +24,6 @@ export function InputBoxButton(props: InputBoxButtonProps): JSX.Element {
       </span>
     </button>
   );
-}
+};
 
 InputBoxButton.displayName = "InputBoxButton";

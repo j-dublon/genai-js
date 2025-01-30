@@ -39,6 +39,7 @@ export default defineConfig({
       "@components": resolve(__dirname, "lib/components"),
       "@icons": resolve(__dirname, "lib/icons"),
       "@utils": resolve(__dirname, "lib/utils"),
+      "@lib": resolve(__dirname, "lib"),
       "@hooks": resolve(__dirname, "lib/hooks"),
     },
   },

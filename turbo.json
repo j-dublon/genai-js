@@ -7,7 +7,7 @@
       "env": ["JOIN_FLOW_URL"]
     },
     "check-types": {
-      "dependsOn": ["^check-types"]
+      "dependsOn": ["@react-component-library/ui#build", "^check-types"]
     },
     "test": {
       "dependsOn": ["^test"]
