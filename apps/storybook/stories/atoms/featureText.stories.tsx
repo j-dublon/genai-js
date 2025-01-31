@@ -31,8 +31,7 @@ const meta: Meta<typeof FeatureText> = {
       control: "number",
     },
     textGap: {
-      options: [1, 2, 4, 6, 8, 12, 14],
-      control: { type: "select" },
+      control: { type: "number" },
     },
     image: { control: "object" },
   },
@@ -52,10 +51,10 @@ export const Primary: Story = {
 
   args: {
     topText: "Whooooo",
-    bottomText: "oooosh",
+    bottomText: "ooooosh",
     backgroundColor: "secondary-blue",
     textScale: 1.8,
-    textGap: 12,
+    textGap: 8,
     image: {
       url: "../../assets/images/broadband-genie.svg",
       alt: "its an image",
