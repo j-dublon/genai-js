@@ -3,6 +3,7 @@ import { type ButtonHTMLAttributes, forwardRef } from "react";
 export type Size = "small" | "medium" | "large";
 export type Tint = "black" | "yellow" | "white" | "blue";
 export type Variant = "solid" | "outline";
+export type justify = "center" | "end";
 
 export interface IProps extends ButtonHTMLAttributes<HTMLElement> {
   as?: React.ElementType;
@@ -13,7 +14,7 @@ export interface IProps extends ButtonHTMLAttributes<HTMLElement> {
   tint?: Tint;
   outlineColour?: Tint;
   variant?: Variant;
-  justifyContent?: string;
+  justifyContent?: justify;
 }
 
 export const Button = forwardRef(
@@ -33,7 +34,7 @@ export const Button = forwardRef(
       justifyContent = "center",
       ...props
     }: IProps,
-    ref
+    ref,
   ) => {
     const isOutline = variant === "outline";
     const buttonClasses = `
@@ -52,8 +53,8 @@ export const Button = forwardRef(
       size === "small"
         ? "py-2 px-3 text-sm rounded-md"
         : size === "large"
-        ? "py-4 px-6 text-lg rounded-lg"
-        : "py-3 px-4 text-base rounded-md"
+          ? "py-4 px-6 text-lg rounded-lg"
+          : "py-3 px-4 text-base rounded-md"
     }
     hover:${isOutline ? "bg-opacity-10" : "bg-gray-700"} 
     hover:border-gray-400
@@ -76,7 +77,7 @@ export const Button = forwardRef(
         {children}
       </Component>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

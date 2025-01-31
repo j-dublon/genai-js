@@ -20,10 +20,10 @@ describe("TrustpilotVertical Component", () => {
   it("renders the Trustpilot stars with correct aria-label", () => {
     render(<TrustpilotVertical {...mockProps} />);
     expect(
-      screen.getByRole("img", { name: /trustpilot stars/i })
+      screen.getByRole("img", { name: /trustpilot stars/i }),
     ).toHaveAttribute(
       "aria-label",
-      "Trustpilot stars: 4 full star(s) and a half-star"
+      "Trustpilot stars: 4 full star(s) and a half-star",
     );
   });
 });

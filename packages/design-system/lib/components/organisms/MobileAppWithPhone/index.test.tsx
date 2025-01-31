@@ -23,8 +23,8 @@ describe("MobileAppWithPhone Component", () => {
     mockMobileProps.textItems.forEach((item) => {
       expect(
         screen.getAllByLabelText(
-          `Text item with statement: ${item.itemText}`
-        )[0]
+          `Text item with statement: ${item.itemText}`,
+        )[0],
       ).toBeInTheDocument();
     });
   });

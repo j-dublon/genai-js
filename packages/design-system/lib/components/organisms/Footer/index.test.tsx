@@ -46,7 +46,7 @@ describe("Footer Component", () => {
   it("renders the footer disclaimer text", () => {
     render(<Footer {...mockFooterProps} />);
     expect(
-      screen.getByText(mockFooterProps.footerDisclaimerText)
+      screen.getByText(mockFooterProps.footerDisclaimerText),
     ).toBeInTheDocument();
   });
 });

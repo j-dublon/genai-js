@@ -15,7 +15,7 @@ describe("Accordion section Component", () => {
         heading="Test main header"
         text="Test sub header text"
         questionsArr={[questions]}
-      />
+      />,
     );
 
     expect(screen.getByText("Test main header")).toBeInTheDocument();
@@ -30,7 +30,7 @@ describe("Accordion section Component", () => {
         heading="Still not sure? Tell us what’s bothering you."
         text="We’ve seen and heard it all, so we’re pretty confident we can help you too."
         questionsArr={[]}
-      />
+      />,
     );
 
     const button = screen.queryByRole("link");

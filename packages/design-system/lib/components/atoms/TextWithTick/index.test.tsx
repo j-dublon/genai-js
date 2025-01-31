@@ -16,7 +16,7 @@ describe("TextWithTick Component", () => {
     render(<TextWithTick {...props} />);
 
     const textWithTick = screen.getByLabelText(
-      "Text with tick with the statement Test text"
+      "Text with tick with the statement Test text",
     );
     expect(textWithTick).toBeInTheDocument();
   });

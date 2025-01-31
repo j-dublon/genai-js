@@ -23,10 +23,10 @@ describe("CompanyLogoStrip Component", () => {
   it("renders the component", () => {
     render(<CompanyLogoStrip {...props} />);
     expect(
-      screen.getAllByRole("img", { name: "Test Alt Text 1" })
+      screen.getAllByRole("img", { name: "Test Alt Text 1" }),
     ).toHaveLength(3);
     expect(
-      screen.getAllByRole("img", { name: "Test Alt Text 2" })
+      screen.getAllByRole("img", { name: "Test Alt Text 2" }),
     ).toHaveLength(3);
   });
 

@@ -25,7 +25,7 @@ describe("Slider", () => {
       <Slider>
         <div data-testid="child-1">Item 1</div>
         <div data-testid="child-2">Item 2</div>
-      </Slider>
+      </Slider>,
     );
     expect(screen.getByTestId("child-1")).toBeInTheDocument();
     expect(screen.getByTestId("child-2")).toBeInTheDocument();
