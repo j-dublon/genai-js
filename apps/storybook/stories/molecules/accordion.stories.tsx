@@ -44,15 +44,11 @@ const questionsArr = [questions, questions2, questions3];
  * to learn how to use render functions.
  */
 export const Primary: Story = {
-  render: (props) => (
+  render: () => (
     <AccordionSection
-      {...props}
-      backgroundColour="core-yellow"
-      questionColour="core-white"
       heading="Still not sure? Tell us what’s bothering you."
       text="We’ve seen and heard it all, so we’re pretty confident we can help you too."
       questionsArr={questionsArr}
-      paddingY="acorn"
     ></AccordionSection>
   ),
   name: "Accordion",

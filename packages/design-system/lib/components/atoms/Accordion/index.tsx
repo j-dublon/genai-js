@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Arrow } from "../../../icons/Arrow";
+import { Arrow } from "@icons/Arrow";
 import { Button } from "../Button";
 import { Collapser } from "./collapser";
 
@@ -12,21 +12,19 @@ export interface QuestionsArrProps {
 
 interface FaqItemProps {
   question: QuestionsArrProps;
-  questionColour: string | undefined;
 }
 
 export const AccordionItem: React.FC<FaqItemProps> = ({
   question,
-  questionColour,
 }: FaqItemProps) => {
   const [FAQDropdownOpen, setFAQDropdownOpen] = useState(false);
   return (
-    <div className={`bg-${questionColour || "white"} py-4 px-6 rounded-lg `}>
+    <div className="bg-core-white  py-4 px-6 rounded-lg">
       <Collapser
         toggle={
           <div className="flex items-center justify-between cursor-pointer">
             <p className="font-bold text-2xl">{question.dropdown_header}</p>
-            <div className="flex-end border-2 rounded-full border-ui-grey-200">
+            <div className="justify-end border-2 rounded-full border-ui-grey-200">
               <Arrow FAQDropdownOpen={FAQDropdownOpen} />
             </div>
           </div>

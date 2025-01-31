@@ -10,13 +10,7 @@ describe("Accordion Component", () => {
       button_link: "www.test.com",
     };
 
-    render(
-      <AccordionItem
-        questionColour="core-white"
-        key={`faq-question-test`}
-        question={questions}
-      />
-    );
+    render(<AccordionItem key={`faq-question-test`} question={questions} />);
 
     const header = screen.getByText("testing header");
     expect(header).toBeInTheDocument();
@@ -37,13 +31,7 @@ describe("Accordion Component", () => {
       dropdown_content: ["this is some content", "this is some more content"],
     };
 
-    render(
-      <AccordionItem
-        questionColour="core-white"
-        key={`faq-question-test`}
-        question={questions}
-      />
-    );
+    render(<AccordionItem key={`faq-question-test`} question={questions} />);
 
     const button = screen.queryByRole("link");
     expect(button).not.toBeInTheDocument();
@@ -57,13 +45,7 @@ describe("Accordion Component", () => {
       button_link: "www.test.com",
     };
 
-    render(
-      <AccordionItem
-        questionColour="core-white"
-        key={`faq-question-test`}
-        question={questions}
-      />
-    );
+    render(<AccordionItem key={`faq-question-test`} question={questions} />);
 
     const content = screen.getByTestId("collapser-content");
 

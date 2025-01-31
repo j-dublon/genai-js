@@ -12,12 +12,9 @@ describe("Accordion section Component", () => {
 
     render(
       <AccordionSection
-        backgroundColour="core-yellow"
-        questionColour="core-white"
         heading="Test main header"
         text="Test sub header text"
         questionsArr={[questions]}
-        paddingY="acorn"
       />
     );
 
@@ -30,12 +27,9 @@ describe("Accordion section Component", () => {
   it("when no button values passed in button doesn't show", () => {
     render(
       <AccordionSection
-        backgroundColour="core-yellow"
-        questionColour="core-white"
         heading="Still not sure? Tell us what’s bothering you."
         text="We’ve seen and heard it all, so we’re pretty confident we can help you too."
         questionsArr={[]}
-        paddingY="acorn"
       />
     );
 
