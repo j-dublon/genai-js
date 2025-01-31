@@ -1,18 +1,6 @@
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker"
 
-export interface HowFastCanYouGoProps {
-  inputBackgroundVideoWebm: {
-    url: string
-  };
-  inputBackgroundVideoMp4: {
-    url: string
-  };
-}
-
-export const HowFastCanYouGo: React.FC<HowFastCanYouGoProps> = ({
-  inputBackgroundVideoWebm,
-  inputBackgroundVideoMp4
-}) => {
+export const HowFastCanYouGo: React.FC = () => {
   return (
     <div className="relative pb-16 gap-0 grid bg-[#f4f3ef] md:[grid-template-rows:160px_auto_160px] md:pb-0 md:items-center">
       <div className="rounded-[22px] bg-core-white drop-shadow-lg w-full h-fit order-2 md:order-none md:col-start-1 md:col-span-6 md:row-start-2 md:z-[1]">
@@ -29,12 +17,8 @@ export const HowFastCanYouGo: React.FC<HowFastCanYouGoProps> = ({
         loop
         muted
         className="order-1 w-full max-h-[635px] object-cover md:col-start-5 md:col-span-8 md:row-start-1 md:row-span-3">
-        {inputBackgroundVideoWebm?.url && (
-          <source src={inputBackgroundVideoWebm.url} type="video/webm" />
-        )}
-        {inputBackgroundVideoMp4?.url && (
-          <source src={inputBackgroundVideoMp4.url} type="video/mp4" />
-        )}
+          <source src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/1ed68638-5926-4c9e-b5a1-c0a1342dd5c2_CK_Flex_Master.webm" type="video/webm" />
+          <source src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/7d413c03-5afb-4c9b-8934-f6f21ebda40c_CK_Flex_Master.mp4" type="video/mp4" />
       </video>
     </div>
 
