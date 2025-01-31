@@ -11,7 +11,7 @@ export const TextWithTick: React.FC<TextWithTickProps> = ({
 }) => {
   return (
     <div
-      className="flex items-center gap-2.5"
+      className="flex items-center gap-2.5 bg-core-white p-3 rounded-full"
       aria-label={`Text with tick with the statement ${textInput}`}
     >
       <span>
@@ -19,7 +19,7 @@ export const TextWithTick: React.FC<TextWithTickProps> = ({
       </span>
 
       <p
-        className="text-blackbird"
+        className="text-xl"
         aria-label={
           ariaLabel ? ariaLabel : `Text with the statement ${textInput}`
         }

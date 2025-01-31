@@ -13,7 +13,7 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
   const { titleText, topText, placeholderText, inputBoxButtonText } = props;
 
   return (
-    <div className="order-none z-10 p-10">
+    <div className="order-none z-10 md:pb-4">
       <h2 className="md:w-[59%] font-bold md:text-5xl text-[26px]">
         {titleText}
       </h2>
@@ -23,7 +23,7 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
           placeholder={placeholderText}
           name="postcode-checker"
           className={cx(
-            "bg-white border-2 border-[#DBD8D0] text-core-black leading-[39px] h-full outline-hidden transition-colors duration-400 w-full z-1",
+            "bg-core-white border-2 border-outline-ui-grey-300 leading-[39px] h-full outline-hidden transition-colors duration-400 w-full z-1",
             {
               "md:rounded-[22px] rounded-xs": true,
               "md:text-[26px] text-base": true,
