@@ -1,6 +1,6 @@
 import cx from "classnames";
 import { JSX } from "react";
-import { InputBoxButton } from "../../atoms/InputBoxButton";
+import { InputBoxButton } from "@components/atoms/InputBoxButton";
 
 export interface PostcodeCheckerProps {
   titleText?: string;
@@ -29,7 +29,7 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
               "md:text-[26px] text-base": true,
               "p-[19px_22px]": !topText || window.innerWidth < 768,
               "md:p-[40px_22px_19px]": topText && window.innerWidth >= 768,
-            }
+            },
           )}
         />
         {topText && (

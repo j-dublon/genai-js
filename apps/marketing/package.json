@@ -9,7 +9,8 @@
     "lint": "next lint",
     "test": "jest",
     "prepare": "cd .. && husky marketing/.husky",
-    "check-types": "tsc --noEmit"
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next && rm -rf coverage && rm -rf tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@react-component-library/ui": "*",
@@ -33,6 +34,7 @@
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "tailwindcss": "4.0.0",
+    "ts-jest": "29.2.5",
     "ts-node": "^10.9.2",
     "typescript": "^5"
   }

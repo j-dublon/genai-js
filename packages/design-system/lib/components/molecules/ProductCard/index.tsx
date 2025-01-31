@@ -1,8 +1,7 @@
 import cx from "classnames";
-import { JSX } from "react";
-import { Tick } from "../../../icons/Tick.tsx";
+import { Tick } from "@icons/Tick.tsx";
 
-interface Props {
+interface ProductCardProps {
   header: string;
   className?: string;
   accentColour?: string;
@@ -10,7 +9,7 @@ interface Props {
   active?: boolean;
 }
 
-export const ProductCard = (props: Props): JSX.Element => {
+export const ProductCard: React.FC<ProductCardProps> = (props) => {
   const { header, dataVideoIndex, active, accentColour } = props;
   const colour = "bg-core-" + accentColour;
 
@@ -29,7 +28,7 @@ export const ProductCard = (props: Props): JSX.Element => {
             <div className="wrap flex items-center gap-2">
               <span
                 className={cx(
-                  "text-[16px] px-2 flex w-fit items-center justify-center whitespace-nowrap rounded-xl border-2 border-core-black py-0.5 font-semibold"
+                  "text-[16px] px-2 flex w-fit items-center justify-center whitespace-nowrap rounded-xl border-2 border-core-black py-0.5 font-semibold",
                 )}
               >
                 900Mbps
@@ -57,7 +56,7 @@ export const ProductCard = (props: Props): JSX.Element => {
         </div>
         <aside
           className={cx(
-            `px-2 py-2 mt-6 flex flex-row items-center rounded-md ${colour} transition-all duration-[350ms] md:opacity-0 md:group-hover:opacity-100`
+            `px-2 py-2 mt-6 flex flex-row items-center rounded-md ${colour} transition-all duration-[350ms] md:opacity-0 md:group-hover:opacity-100`,
           )}
         >
           <span className="rounded-[80px] px-3 text-[24px] font-semibold">

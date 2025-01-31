@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useScrollable } from "./";
 
@@ -6,8 +7,8 @@ describe("useScrollable", () => {
     current: {
       offsetLeft: 100,
       scrollLeft,
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
       tagName: "DIV",
       style: {},
     } as unknown as HTMLDivElement,

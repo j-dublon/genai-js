@@ -16,7 +16,7 @@ type Story = StoryObj<typeof InputBoxButton>;
  */
 export const Primary: Story = {
   render: (props) => <InputBoxButton {...props} />,
-  name: "InputBoxButton",
+  name: "Input Box Button",
   args: {
     inputBoxButtonText: "",
   },

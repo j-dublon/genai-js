@@ -1,4 +1,4 @@
-import { getTrustPilotStarStatus } from "../../../utils/getTrustPilotStarStatus";
+import { getTrustPilotStarStatus } from "@utils/getTrustPilotStarStatus";
 
 interface TrustpilotStarsProps {
   trustScore: number;

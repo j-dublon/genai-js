@@ -1,3 +1,4 @@
+import { vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { FeatureText } from ".";
 
@@ -109,7 +110,7 @@ describe("FeatureText", () => {
   });
 
   it("removes resize event listener on unmount", () => {
-    const removeEventListenerSpy = jest.spyOn(window, "removeEventListener");
+    const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 
     const { unmount } = render(<FeatureText {...defaultProps} />);
     unmount();

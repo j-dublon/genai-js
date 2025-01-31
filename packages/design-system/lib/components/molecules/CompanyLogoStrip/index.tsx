@@ -1,5 +1,5 @@
 import cx from "classnames";
-import { CompanyLogo } from "../../atoms/CompanyLogo";
+import { CompanyLogo } from "@components/atoms/CompanyLogo";
 
 export interface CompanyLogoStripProps {
   logos: CompanyLogoProps[];
@@ -21,7 +21,7 @@ export const CompanyLogoStrip: React.FC<CompanyLogoStripProps> = ({
     <div
       className={cx(
         "relative overflow-x-hidden md:py-5 md:px-10 md:mb-5",
-        backgroundColor
+        backgroundColor,
       )}
     >
       <div className="hidden md:flex justify-around">

@@ -1,0 +1,34 @@
+name: Pull request and merge
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    name: Turbo Repo CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.12.0
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Build Task
+        run: npx turbo run build
+
+      - name: Run Lint, Check-Types, and Test
+        run: |
+          npx turbo run lint check-types test
