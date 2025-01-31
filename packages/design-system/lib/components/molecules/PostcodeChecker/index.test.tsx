@@ -14,7 +14,7 @@ describe("PostcodeChecker Component", () => {
     expect(screen.getByText("Test title")).toBeInTheDocument();
     expect(screen.getByText("Test top text title")).toBeInTheDocument();
     expect(
-      screen.getByPlaceholderText("Test placeholder text")
+      screen.getByPlaceholderText("Test placeholder text"),
     ).toBeInTheDocument();
   });
 

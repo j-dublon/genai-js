@@ -1,6 +1,4 @@
 import "./index.css";
-import { Footer } from "@components/organisms/Footer";
-import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { Button } from "@components/atoms/Button";
 import { ProductCard } from "@components/molecules/ProductCard";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
@@ -15,8 +13,12 @@ import { AccountAppButton } from "@components/atoms/AccountAppButton";
 import { MobileAppWithPhone } from "@components/organisms/MobileAppWithPhone";
 import { Slider } from "./components/atoms/Slider";
 import { FeatureText } from "@components/atoms/FeatureText";
+import { Footer } from "@components/organisms/Footer";
+import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
+import { AccordionSection } from "@components/molecules/AccordionSection";
 
 export {
+  AccordionSection,
   Slider,
   FeatureText,
   Button,

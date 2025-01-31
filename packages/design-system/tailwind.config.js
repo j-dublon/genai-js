@@ -15,6 +15,7 @@ export default {
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
       "ui-grey-200": "#F0F0E9",
+      "ui-grey-300": "#D8D8D0",
       "ui-grey-500": "#565656",
       "outline-ui-grey-300": "#DBD8D0",
       "link-ui": "#5A06D8",

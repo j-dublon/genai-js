@@ -20,7 +20,7 @@ describe("MobileApp Component", () => {
     expect(heading).toBeInTheDocument();
 
     const boldText = screen.getAllByText(
-      /Manage your order and installation/i
+      /Manage your order and installation/i,
     )[0];
 
     expect(boldText).toBeInTheDocument();

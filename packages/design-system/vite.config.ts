@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
 import dts from "vite-plugin-dts";
@@ -13,7 +13,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: resolve(__dirname, "./lib/index.ts"),
-      name: "react-beautiful-timeline",
+      name: "react-design-ui",
       fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
@@ -43,5 +43,11 @@ export default defineConfig({
       "@lib": resolve(__dirname, "lib"),
       "@hooks": resolve(__dirname, "lib/hooks"),
     },
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./setup-test.ts",
+    css: false, //getting issues with tailwindcss v4 leaving this as false for now
   },
 });
