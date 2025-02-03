@@ -13,6 +13,7 @@ import { AccountAppButton } from "@components/atoms/AccountAppButton";
 import { MobileAppWithPhone } from "@components/organisms/MobileAppWithPhone";
 import { Slider } from "./components/atoms/Slider";
 import { FeatureText } from "@components/atoms/FeatureText";
+import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { Footer } from "@components/organisms/Footer";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { AccordionSection } from "@components/molecules/AccordionSection";
@@ -30,6 +31,7 @@ export {
   CompanyLogoStrip,
   Footer,
   TrustpilotVertical,
+  HowFastCanYouGo,
   TextWithTick,
   Heading,
   MobileApp,
