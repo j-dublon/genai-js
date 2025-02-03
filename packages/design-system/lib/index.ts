@@ -17,6 +17,8 @@ import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { Footer } from "@components/organisms/Footer";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { AccordionSection } from "@components/molecules/AccordionSection";
+import { ColourPill } from "@components/atoms/ColourPill";
+import { TimelineCard } from "@components/molecules/TimelineCard";
 
 export {
   AccordionSection,
@@ -37,4 +39,6 @@ export {
   MobileApp,
   AccountAppButton,
   MobileAppWithPhone,
+  ColourPill,
+  TimelineCard,
 };
