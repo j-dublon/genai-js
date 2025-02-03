@@ -3,7 +3,7 @@ import { PostcodeChecker } from "@components/molecules/PostcodeChecker"
 export const HowFastCanYouGo: React.FC = () => {
   return (
     <div className="relative pb-16 gap-0 grid bg-[#f4f3ef] md:[grid-template-rows:160px_auto_160px] md:pb-0 md:items-center">
-      <div className="rounded-[22px] bg-core-white drop-shadow-lg w-full h-fit order-2 md:order-none md:col-start-1 md:col-span-6 md:row-start-2 md:z-[1]">
+      <div className="rounded-[22px] bg-core-white drop-shadow-lg w-full h-fit order-2 md:order-none md:col-start-1 md:col-span-6 md:row-start-2 md:z-[1] max-w-[565px]">
         <PostcodeChecker
           titleText="How fast can you go?"
           topText="Check your speed"
