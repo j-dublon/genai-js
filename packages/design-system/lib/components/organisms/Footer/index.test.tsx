@@ -5,7 +5,6 @@ import { Footer, FooterProps } from ".";
 const mockFooterProps: FooterProps = {
   titleText: "Fast, fair, feel-good broadband",
   trustScore: 4.8,
-  numberOfReviews: 123,
   footerSections: [
     {
       header: "Company",

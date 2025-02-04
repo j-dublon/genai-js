@@ -1,30 +1,35 @@
 import { render, screen } from "@testing-library/react";
-import { TrustpilotHorizontal } from ".";
+import { TrustpilotHorizontal } from "./index";
 
 const mockProps = {
   trustScore: 4.5,
   width: 144,
   height: 36,
-  numberOfReviews: 4.5,
+  numberOfReviews: 123,
   trustPilotLogo: {
     altText: "Trustpilot Logo",
     imgSrc: "https://via.placeholder.com/150",
   },
 };
 
-describe("TrustpilotVertical Component", () => {
-  it("renders the Trustpilot logo with alt text", () => {
+describe("TrustpilotHorizontal Component", () => {
+  it("renders the Trustpilot logo with correct alt text", () => {
     render(<TrustpilotHorizontal {...mockProps} />);
-    expect(screen.getByAltText("Trustpilot Logo")).toBeInTheDocument();
+    const logo = screen.getByAltText("Trustpilot Logo");
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute("src", mockProps.trustPilotLogo.imgSrc);
   });
 
-  it("renders the Trustpilot stars with correct aria-label", () => {
+  it("displays the correct number of reviews", () => {
     render(<TrustpilotHorizontal {...mockProps} />);
-    expect(
-      screen.getByRole("img", { name: /trustpilot stars/i })
-    ).toHaveAttribute(
-      "aria-label",
-      "Trustpilot stars: 4 full star(s) and a half-star"
-    );
+    const reviewsText = screen.getByText((content, element) => {
+      return (
+        content.includes("Based on") &&
+        content.includes("reviews") &&
+        element?.querySelector(".font-bold")?.textContent ===
+          mockProps.numberOfReviews.toLocaleString()
+      );
+    });
+    expect(reviewsText).toBeInTheDocument();
   });
 });

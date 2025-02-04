@@ -27,7 +27,6 @@ interface FooterSection {
 interface FooterProps {
   titleText: string;
   trustScore: number;
-  numberOfReviews: number;
   footerSections: FooterSection[];
 }
 
@@ -37,7 +36,6 @@ export const Primary: Story = {
   args: {
     titleText: "Fast, fair, feel-good broadband",
     trustScore: 3.5,
-    numberOfReviews: 120,
     trustPilotLogo: {
       altText: "Trustpilot logo",
       imgSrc: "/assets/images/trustpilot-logo.svg",

@@ -46,11 +46,12 @@ export const TrustpilotHorizontal: React.FC<TrustPilotHorizontalProps> = ({
           trustScore={trustScore}
           width={width}
           height={height}
-          aria-label={`Trustpilot stars with score of ${trustScore}`}
         />
       </div>
       <div className="text-hummingbird whitespace-nowrap sm:text-robin md:text-blackbird">
-        Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
+        Based on{" "}
+        <span className="font-bold">{numberOfReviews.toLocaleString()}</span>{" "}
+        reviews
       </div>
     </div>
   );
