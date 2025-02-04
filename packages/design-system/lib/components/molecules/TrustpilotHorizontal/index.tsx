@@ -1,5 +1,6 @@
 import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
 import { StorybookLogo } from "@components/atoms/StorybookLogo";
+import cx from "classnames";
 
 interface TrustPilotHorizontalProps {
   trustPilotLogo: {
@@ -25,23 +26,29 @@ export const TrustpilotHorizontal: React.FC<TrustPilotHorizontalProps> = ({
 }) => {
   return (
     <div
-      className="flex items-center justify-between"
-      style={{ maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px` }}
+      className={cx(
+        "flex items-center space-x-2 lg:space-x-4",
+        { [`w-${maxWidth}`]: maxWidth },
+        { [`h-${maxHeight}`]: maxHeight }
+      )}
     >
-      <StorybookLogo
-        width={width}
-        height={height}
-        altText={trustPilotLogo.altText}
-        imgSrc={trustPilotLogo.imgSrc}
-        aria-label="Trustpilot logo"
-        className="mr-2 h-8 lg:mr-4 lg:h-8"
-      />
-      <TrustpilotStars
-        trustScore={trustScore}
-        width={width}
-        height={height}
-        aria-label={`Trustpilot stars with score of ${trustScore}`}
-      />
+      <div className="flex-shrink-0">
+        <StorybookLogo
+          width={width}
+          height={height}
+          altText={trustPilotLogo.altText}
+          imgSrc={trustPilotLogo.imgSrc}
+          aria-label="Trustpilot logo"
+        />
+      </div>
+      <div className="flex-shrink-0">
+        <TrustpilotStars
+          trustScore={trustScore}
+          width={width}
+          height={height}
+          aria-label={`Trustpilot stars with score of ${trustScore}`}
+        />
+      </div>
       <div className="text-hummingbird whitespace-nowrap sm:text-robin md:text-blackbird">
         Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
       </div>

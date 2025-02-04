@@ -1,4 +1,4 @@
-import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
+// import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { TwitterIcon } from "@icons/Twitter";
 import { InstagramIcon } from "@icons/Instagram";
 import { FacebookIcon } from "@icons/Facebook";
@@ -44,14 +44,14 @@ export const Footer: React.FC<FooterProps> = ({
                 trustPilotLogo={trustPilotLogo}
               />
             )}
-            {trustScore && (
+            {/* {trustScore && (
               <TrustpilotVertical
                 width={144}
                 height={36}
                 trustScore={trustScore}
                 trustPilotLogo={trustPilotLogo}
               />
-            )}
+            )} */}
             <div className="flex space-x-8">
               <div className="flex items-end">
                 <InstagramIcon aria-label="Instagram" />
