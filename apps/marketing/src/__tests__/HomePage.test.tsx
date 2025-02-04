@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { HomePage } from "../components/pages/homePage";
+import { HomePage } from "../components/pages/homePagetemp";
 
 describe("HomePage", () => {
   it("renders the Ridiculously fast full fibre broadband heading", () => {
