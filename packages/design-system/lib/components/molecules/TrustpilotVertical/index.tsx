@@ -1,4 +1,4 @@
-import { TrustpilotStars } from "./TrustPilotStars";
+import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
 import { StorybookLogo } from "@components/atoms/StorybookLogo";
 
 interface TrustPilotVerticalProps {
@@ -25,7 +25,6 @@ export const TrustpilotVertical: React.FC<TrustPilotVerticalProps> = ({
     <div
       className="flex flex-col items-start space-y-4"
       style={{ maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px` }}
-      aria-label="Trustpilot vertical section"
     >
       <StorybookLogo
         width={width}

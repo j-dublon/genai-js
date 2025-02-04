@@ -15,6 +15,8 @@ import { Slider } from "./components/atoms/Slider";
 import { FeatureText } from "@components/atoms/FeatureText";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { Footer } from "@components/organisms/Footer";
+import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
+import { TrustpilotHorizontal } from "@components/molecules/TrustpilotHorizontal";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ColourPill } from "@components/atoms/ColourPill";
@@ -32,6 +34,8 @@ export {
   CompanyLogo,
   CompanyLogoStrip,
   Footer,
+  TrustpilotStars,
+  TrustpilotHorizontal,
   TrustpilotVertical,
   HowFastCanYouGo,
   TextWithTick,
