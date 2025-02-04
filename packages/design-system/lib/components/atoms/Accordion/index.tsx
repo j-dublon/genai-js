@@ -19,12 +19,12 @@ export const AccordionItem: React.FC<FaqItemProps> = ({
 }: FaqItemProps) => {
   const [FAQDropdownOpen, setFAQDropdownOpen] = useState(false);
   return (
-    <div className="bg-core-white  py-4 px-6 rounded-lg">
+    <div className="bg-core-white rounded-lg">
       <Collapser
         toggle={
-          <div className="flex items-center justify-between cursor-pointer">
+          <div className="flex items-center justify-between cursor-pointer px-8 py-3">
             <p className="font-bold text-2xl">{question.dropdown_header}</p>
-            <div className="justify-end border-2 rounded-full border-ui-grey-200">
+            <div className="flex justify-center items-center border-2 rounded-full border-ui-grey-200 w-16 h-16">
               <Arrow FAQDropdownOpen={FAQDropdownOpen} />
             </div>
           </div>

@@ -47,9 +47,8 @@ export const Primary: Story = {
   render: () => (
     <AccordionSection
       heading="Still not sure? Tell us what’s bothering you."
-      text="We’ve seen and heard it all, so we’re pretty confident we can help you too."
       questionsArr={questionsArr}
-    ></AccordionSection>
+    />
   ),
   name: "Accordion",
   args: {},

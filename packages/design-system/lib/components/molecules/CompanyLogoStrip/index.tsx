@@ -20,8 +20,8 @@ export const CompanyLogoStrip: React.FC<CompanyLogoStripProps> = ({
   return (
     <div
       className={cx(
-        "relative overflow-x-hidden md:py-5 md:px-10 md:mb-5 w-full",
-        backgroundColor,
+        "relative overflow-x-hidden md:py-5 md:px-10 w-full",
+        backgroundColor
       )}
     >
       <div className="hidden md:flex justify-around">
