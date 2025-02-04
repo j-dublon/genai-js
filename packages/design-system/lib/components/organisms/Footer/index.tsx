@@ -5,10 +5,12 @@ import { FacebookIcon } from "@icons/Facebook";
 import { LinkedInIcon } from "@icons/LinkedIn";
 import { FooterLinks, FooterLinksProps } from "./FooterLinks";
 import { FooterDisclaimer } from "./FooterDisclaimer";
+import { TrustpilotHorizontal } from "@components/molecules/TrustpilotHorizontal";
 
 export interface FooterProps {
   titleText: string;
   trustScore: number;
+  numberOfReviews: number;
   footerSections: FooterLinksProps["sections"];
   footerDisclaimerText: string;
   trustPilotLogo: {
@@ -20,6 +22,7 @@ export interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({
   titleText,
   trustScore,
+  numberOfReviews,
   footerSections,
   footerDisclaimerText,
   trustPilotLogo,
@@ -32,12 +35,23 @@ export const Footer: React.FC<FooterProps> = ({
             <h2 className="font-bold text-[26px] md:text-5xl">{titleText}</h2>
           </div>
           <div className="flex items-end space-x-12">
-            <TrustpilotVertical
-              width={144}
-              height={36}
-              trustScore={trustScore}
-              trustPilotLogo={trustPilotLogo}
-            />
+            {trustScore && numberOfReviews && (
+              <TrustpilotHorizontal
+                width={144}
+                height={36}
+                numberOfReviews={120}
+                trustScore={trustScore}
+                trustPilotLogo={trustPilotLogo}
+              />
+            )}
+            {trustScore && (
+              <TrustpilotVertical
+                width={144}
+                height={36}
+                trustScore={trustScore}
+                trustPilotLogo={trustPilotLogo}
+              />
+            )}
             <div className="flex space-x-8">
               <div className="flex items-end">
                 <InstagramIcon aria-label="Instagram" />

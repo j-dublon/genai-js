@@ -5,6 +5,7 @@ import { Footer, FooterProps } from ".";
 const mockFooterProps: FooterProps = {
   titleText: "Fast, fair, feel-good broadband",
   trustScore: 4.8,
+  numberOfReviews: 123,
   footerSections: [
     {
       header: "Company",
@@ -46,7 +47,7 @@ describe("Footer Component", () => {
   it("renders the footer disclaimer text", () => {
     render(<Footer {...mockFooterProps} />);
     expect(
-      screen.getByText(mockFooterProps.footerDisclaimerText),
+      screen.getByText(mockFooterProps.footerDisclaimerText)
     ).toBeInTheDocument();
   });
 });
