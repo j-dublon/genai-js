@@ -20,6 +20,7 @@ export const HeroBanner: React.FC = () => {
         </p>
         <form>
           <PostcodeChecker
+            className="bg-white"
             placeholderText="Pop in your address"
             inputBoxButtonText="Let's go"
           />
