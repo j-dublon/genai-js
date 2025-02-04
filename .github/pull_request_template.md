@@ -2,10 +2,6 @@
 
 - [ ] I have added text content via CMS through props
 
-## Accessibility
-
-- [ ] I have added alt text for images and aria labels on components that may require them
-
 ## Unit test ?
 
 - [ ] I have added a unit test for the changes I’ve made, including accessibility if relevant
