@@ -14,7 +14,7 @@ import { Slider } from "./components/atoms/Slider";
 import { FeatureText } from "@components/atoms/FeatureText";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { Footer } from "@components/organisms/Footer";
-import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
+import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { TrustpilotHorizontal } from "@components/molecules/TrustpilotHorizontal";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { AccordionSection } from "@components/molecules/AccordionSection";

@@ -1,4 +1,4 @@
-import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
+import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import cx from "classnames";
 import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 
