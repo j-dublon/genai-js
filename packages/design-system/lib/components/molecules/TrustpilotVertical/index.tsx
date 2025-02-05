@@ -1,6 +1,6 @@
 import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
 import cx from "classnames";
-import { TrustPilotLogo } from "@icons/TrustPilotLogo";
+import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 
 interface TrustPilotVerticalProps {
   trustPilotAriaLabel?: string;
@@ -22,12 +22,12 @@ export const TrustpilotVertical = ({
   return (
     <div
       className={cx(
-        "flex flex-col items-start space-y-4",
+        "flex flex-col items-start",
         { [`max-w-${maxWidth}`]: maxWidth },
         { [`max-h-${maxHeight}`]: maxHeight }
       )}
     >
-      <TrustPilotLogo
+      <TrustpilotLogo
         width={width}
         height={height}
         aria-label={trustPilotAriaLabel}

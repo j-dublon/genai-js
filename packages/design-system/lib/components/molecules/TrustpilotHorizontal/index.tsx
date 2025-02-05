@@ -1,5 +1,5 @@
 import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
-import { TrustPilotLogo } from "@icons/TrustPilotLogo";
+import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 import cx from "classnames";
 
 interface TrustPilotHorizontalProps {
@@ -30,7 +30,7 @@ export const TrustpilotHorizontal = ({
       )}
     >
       <div className="flex-shrink-0">
-        <TrustPilotLogo
+        <TrustpilotLogo
           width={width}
           height={height}
           aria-label={trustPilotAriaLabel}

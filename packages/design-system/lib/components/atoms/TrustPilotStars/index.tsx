@@ -12,7 +12,6 @@ export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
   height,
 }) => {
   const { full, half } = getTrustPilotStarStatus(trustScore);
-
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
