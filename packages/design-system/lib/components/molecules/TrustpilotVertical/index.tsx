@@ -1,5 +1,6 @@
 import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
 import { StorybookLogo } from "@components/atoms/StorybookLogo";
+import cx from "classnames";
 
 interface TrustPilotVerticalProps {
   trustPilotLogo: {
@@ -13,18 +14,21 @@ interface TrustPilotVerticalProps {
   maxHeight?: number;
 }
 
-export const TrustpilotVertical: React.FC<TrustPilotVerticalProps> = ({
+export const TrustpilotVertical = ({
   trustScore,
   width,
   height,
   maxWidth = 128,
   maxHeight = 72,
   trustPilotLogo,
-}) => {
+}: TrustPilotVerticalProps) => {
   return (
     <div
-      className="flex flex-col items-start space-y-4"
-      style={{ maxWidth: `${maxWidth}px`, maxHeight: `${maxHeight}px` }}
+      className={cx(
+        "flex flex-col items-start space-y-4",
+        { [`max-w-${maxWidth}`]: maxWidth },
+        { [`max-h-${maxHeight}`]: maxHeight }
+      )}
     >
       <StorybookLogo
         width={width}

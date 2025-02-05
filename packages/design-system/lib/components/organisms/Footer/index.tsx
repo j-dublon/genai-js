@@ -17,13 +17,13 @@ export interface FooterProps {
   };
 }
 
-export const Footer: React.FC<FooterProps> = ({
+export const Footer = ({
   titleText,
   trustScore,
   footerSections,
   footerDisclaimerText,
   trustPilotLogo,
-}) => {
+}: FooterProps) => {
   return (
     <footer className="bg-core-yellow flex justify-center items-center p-[144px]">
       <div className="flex justify-between w-full max-w-[1200px]">
@@ -64,5 +64,3 @@ export const Footer: React.FC<FooterProps> = ({
     </footer>
   );
 };
-
-Footer.displayName = "Footer";

@@ -15,7 +15,7 @@ interface TrustPilotHorizontalProps {
   maxHeight?: number;
 }
 
-export const TrustpilotHorizontal: React.FC<TrustPilotHorizontalProps> = ({
+export const TrustpilotHorizontal = ({
   trustScore,
   numberOfReviews,
   width,
@@ -23,7 +23,7 @@ export const TrustpilotHorizontal: React.FC<TrustPilotHorizontalProps> = ({
   maxWidth = 128,
   maxHeight = 72,
   trustPilotLogo,
-}) => {
+}: TrustPilotHorizontalProps) => {
   return (
     <div
       className={cx(
