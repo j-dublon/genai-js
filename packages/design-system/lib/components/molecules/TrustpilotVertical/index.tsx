@@ -32,12 +32,7 @@ export const TrustpilotVertical = ({
         height={height}
         aria-label={trustPilotAriaLabel}
       />
-      <TrustpilotStars
-        trustScore={trustScore}
-        width={width}
-        height={height}
-        aria-label={`Trustpilot stars with score of ${trustScore}`}
-      />
+      <TrustpilotStars trustScore={trustScore} width={width} height={20} />
     </div>
   );
 };

@@ -18,11 +18,6 @@ export default meta;
 
 type Story = StoryObj<typeof TrustpilotHorizontal>;
 
-interface TrustPilotLogo {
-  altText: string;
-  imgSrc: string;
-}
-
 interface TrustpilotHorizontalProps {
   trustScore: number;
   numberOfReviews: number;
@@ -30,7 +25,6 @@ interface TrustpilotHorizontalProps {
   height: number;
   maxWidth?: number;
   maxHeight?: number;
-  trustPilotLogo: TrustPilotLogo;
 }
 
 export const Primary: Story = {
