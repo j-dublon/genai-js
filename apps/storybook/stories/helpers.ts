@@ -11,7 +11,10 @@ export const getRandomGuide = () => {
     image: {
       src: `../../assets/images/guide-${rand}.svg`,
       alt: `Its guide image ${rand}`,
+      width: 471,
+      height: 280,
     },
     tags: [{ text: tags[rand], backgroundColor: getRandomColor() }],
+    onClick: () => console.log(`you clicked guide with tag ${tags[rand]}`),
   };
 };

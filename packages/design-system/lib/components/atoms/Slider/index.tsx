@@ -1,7 +1,7 @@
 import { useScrollable } from "@hooks/useScrollable";
 import React, { useRef } from "react";
 
-interface Props {
+export interface SliderProps {
   children: React.ReactNode;
   draggable?: boolean;
   showScrollbar?: boolean;
@@ -11,7 +11,7 @@ export const Slider = ({
   draggable = false,
   showScrollbar = true,
   children,
-}: Props) => {
+}: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
