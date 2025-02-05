@@ -17,7 +17,7 @@ export const ColourPill: React.FC<ColourPillProps> = ({
       aria-label={`Colour pill with the text ${colourPillText}`}
     >
       <p
-        className="text-xl p-1 font-bold"
+        className="text-xs md:text-[16px] p-1 font-bold"
         aria-label={
           ariaLabel ? ariaLabel : `Colour pill text ${colourPillText}`
         }
