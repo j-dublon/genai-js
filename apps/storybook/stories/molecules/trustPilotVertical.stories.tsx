@@ -16,11 +16,6 @@ export default meta;
 
 type Story = StoryObj<typeof TrustpilotVertical>;
 
-interface TrustPilotLogo {
-  altText: string;
-  imgSrc: string;
-}
-
 interface TrustpilotVerticalProps {
   trustScore: number;
   width: number;
