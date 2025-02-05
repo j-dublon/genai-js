@@ -8,6 +8,7 @@ const meta: Meta<typeof Footer> = {
 export default meta;
 
 type Story = StoryObj<typeof Footer>;
+
 interface Link {
   label: string;
   href: string;
