@@ -21,6 +21,17 @@ const meta: Meta<typeof FeatureText> = {
       ],
       control: { type: "select" },
     },
+    textColor: {
+      options: [
+        "current",
+        "transparent",
+        "black",
+        "white",
+        "blue",
+        "indigo-300",
+      ],
+      control: { type: "select" },
+    },
     topText: {
       control: "text",
     },
@@ -43,7 +54,7 @@ type Story = StoryObj<typeof FeatureText>;
 
 export const Primary: Story = {
   render: (props) => (
-    <div className="w-[600px] h-[300px]">
+    <div className="md:w-[600px] md:h-[300px]">
       <FeatureText {...props} />{" "}
     </div>
   ),
@@ -53,6 +64,7 @@ export const Primary: Story = {
     topText: "Whooooo",
     bottomText: "ooooosh",
     backgroundColor: "secondary-blue",
+    textColor: "indigo-300",
     textScale: 1.8,
     textGap: 8,
     image: {
