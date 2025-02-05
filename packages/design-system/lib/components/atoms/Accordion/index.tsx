@@ -14,9 +14,7 @@ interface FaqItemProps {
   question: QuestionsArrProps;
 }
 
-export const AccordionItem: React.FC<FaqItemProps> = ({
-  question,
-}: FaqItemProps) => {
+export const AccordionItem = ({ question }: FaqItemProps) => {
   const [FAQDropdownOpen, setFAQDropdownOpen] = useState(false);
   return (
     <div className="bg-core-white rounded-lg">
