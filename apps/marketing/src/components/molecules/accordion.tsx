@@ -49,6 +49,7 @@ export const AccordionWrapper = () => {
   return (
     <AccordionSection
       heading="Still not sure? Tell us what’s bothering you."
+      subText="Lorem ipsum dolor sit amet consectetur. Varius tellus id risus quam a tortor phasellus."
       questionsArr={questionsArr}
     />
   );
