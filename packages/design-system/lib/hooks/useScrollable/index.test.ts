@@ -10,8 +10,8 @@ describe("useScrollable", () => {
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       tagName: "DIV",
-      style: {},
-    } as unknown as HTMLDivElement,
+      style: {}
+    } as unknown as HTMLDivElement
   });
 
   const mockRef = mock();
@@ -49,7 +49,7 @@ describe("useScrollable", () => {
       result.current.onMouseDown({ pageX: 150 } as React.MouseEvent);
       result.current.onMouseMove({
         pageX: 200,
-        preventDefault: () => {},
+        preventDefault: () => {}
       } as unknown as React.MouseEvent);
     });
     expect(mockRefWithScroll.current.scrollLeft).toBeDefined();
@@ -62,7 +62,7 @@ describe("useScrollable", () => {
     act(() => {
       result.current.onMouseMove({
         pageX: 200,
-        preventDefault: () => {},
+        preventDefault: () => {}
       } as unknown as React.MouseEvent);
     });
     expect(mockRefWithScroll.current.scrollLeft).toBe(initialScrollLeft);

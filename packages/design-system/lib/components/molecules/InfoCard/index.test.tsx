@@ -19,9 +19,9 @@ describe("InfoCard Component", () => {
       textGap: 8,
       image: {
         url: "/test-asset.png",
-        alt: "Test image alt text",
-      },
-    },
+        alt: "Test image alt text"
+      }
+    }
   };
   it("renders the component", () => {
     render(<InfoCard {...baseProps} />);
@@ -45,7 +45,7 @@ describe("InfoCard Component", () => {
   it("doesn't render the additional text if additionalText prop isn't set", () => {
     const newProps = {
       ...baseProps,
-      additionalText: undefined, // Override the additionalText prop
+      additionalText: undefined // Override the additionalText prop
     };
     render(<InfoCard {...newProps} />);
 
@@ -55,7 +55,7 @@ describe("InfoCard Component", () => {
   it("doesn't render the image if featureTextProps prop isn't set", () => {
     const newProps = {
       ...baseProps,
-      featureTextProps: undefined, // Override the imgProps prop
+      featureTextProps: undefined // Override the imgProps prop
     };
     render(<InfoCard {...newProps} />);
 

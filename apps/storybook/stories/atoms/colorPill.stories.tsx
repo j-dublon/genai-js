@@ -11,10 +11,10 @@ const meta: Meta<typeof ColorPill> = {
         "bg-ui-grey-200",
         "bg-core-yellow",
         "bg-core-white",
-        "bg-core-pink",
-      ],
-    },
-  },
+        "bg-core-pink"
+      ]
+    }
+  }
 };
 
 export default meta;
@@ -26,6 +26,6 @@ export const Primary: Story = {
   name: "Color Pill",
   args: {
     colorPillText: "Test",
-    backgroundColor: "bg-core-pink",
-  },
+    backgroundColor: "bg-core-pink"
+  }
 };

@@ -6,7 +6,7 @@ describe("StorybookLogo Component", () => {
     altText: "Test Logo",
     imgSrc: "https://via.placeholder.com/150",
     width: 150,
-    height: 150,
+    height: 150
   };
 
   it("renders the logo with correct attributes", () => {

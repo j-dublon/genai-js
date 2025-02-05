@@ -3,7 +3,7 @@ import {
   Heading,
   TextWithTick,
   PostcodeChecker,
-  TrustpilotVertical,
+  TrustpilotVertical
 } from "@react-component-library/ui";
 
 export const HeroBanner: React.FC = () => {
@@ -30,7 +30,7 @@ export const HeroBanner: React.FC = () => {
           height={100}
           trustPilotLogo={{
             altText: "Trustpilot Logo",
-            imgSrc: "/assets/images/trustpilot-logo.svg",
+            imgSrc: "/assets/images/trustpilot-logo.svg"
           }}
         />
       </div>

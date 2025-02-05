@@ -7,32 +7,32 @@ const logos = [
     altText: "Broadband genie logo",
     width: "100",
     height: "100",
-    imgSrc: "/assets/images/broadband-genie.svg",
+    imgSrc: "/assets/images/broadband-genie.svg"
   },
   {
     altText: "Compare the market logo",
     width: "100",
     height: "100",
-    imgSrc: "/assets/images/compare-the-market.svg",
+    imgSrc: "/assets/images/compare-the-market.svg"
   },
   {
     altText: "Go compare logo",
     width: "100",
     height: "100",
-    imgSrc: "/assets/images/go-compare.svg",
+    imgSrc: "/assets/images/go-compare.svg"
   },
   {
     altText: "Money supermarket logo",
     width: "100",
     height: "100",
-    imgSrc: "/assets/images/money-supermarket.svg",
+    imgSrc: "/assets/images/money-supermarket.svg"
   },
   {
     altText: "Which logo",
     width: "100",
     height: "100",
-    imgSrc: "/assets/images/which.svg",
-  },
+    imgSrc: "/assets/images/which.svg"
+  }
 ];
 
 export const CompanyLogoStripWrapper = () => {

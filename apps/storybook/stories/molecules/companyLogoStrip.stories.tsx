@@ -10,10 +10,10 @@ const meta: Meta<typeof CompanyLogoStrip> = {
         "bg-core-black",
         "bg-ui-grey-200",
         "bg-core-yellow",
-        "bg-core-white",
-      ],
-    },
-  },
+        "bg-core-white"
+      ]
+    }
+  }
 };
 
 export default meta;
@@ -29,33 +29,33 @@ export const Primary: Story = {
         altText: "Broadband genie logo",
         width: "100",
         height: "100",
-        imgSrc: "/assets/images/broadband-genie.svg",
+        imgSrc: "/assets/images/broadband-genie.svg"
       },
       {
         altText: "Compare the market logo",
         width: "100",
         height: "100",
-        imgSrc: "/assets/images/compare-the-market.svg",
+        imgSrc: "/assets/images/compare-the-market.svg"
       },
       {
         altText: "Go compare logo",
         width: "100",
         height: "100",
-        imgSrc: "/assets/images/go-compare.svg",
+        imgSrc: "/assets/images/go-compare.svg"
       },
       {
         altText: "Money supermarket logo",
         width: "100",
         height: "100",
-        imgSrc: "/assets/images/money-supermarket.svg",
+        imgSrc: "/assets/images/money-supermarket.svg"
       },
       {
         altText: "Which logo",
         width: "100",
         height: "100",
-        imgSrc: "/assets/images/which.svg",
-      },
+        imgSrc: "/assets/images/which.svg"
+      }
     ],
-    backgroundColor: "bg-ui-grey-200",
-  },
+    backgroundColor: "bg-ui-grey-200"
+  }
 };

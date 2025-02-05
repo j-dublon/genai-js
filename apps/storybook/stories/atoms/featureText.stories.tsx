@@ -17,9 +17,9 @@ const meta: Meta<typeof FeatureText> = {
         "ui-grey-200",
         "ui-grey-500",
         "outline-ui-grey-300",
-        "link-ui",
+        "link-ui"
       ],
-      control: { type: "select" },
+      control: { type: "select" }
     },
     textColor: {
       options: [
@@ -28,24 +28,24 @@ const meta: Meta<typeof FeatureText> = {
         "black",
         "white",
         "blue",
-        "indigo-300",
+        "indigo-300"
       ],
-      control: { type: "select" },
+      control: { type: "select" }
     },
     topText: {
-      control: "text",
+      control: "text"
     },
     bottomText: {
-      control: "text",
+      control: "text"
     },
     textScale: {
-      control: "number",
+      control: "number"
     },
     textGap: {
-      control: { type: "number" },
+      control: { type: "number" }
     },
-    image: { control: "object" },
-  },
+    image: { control: "object" }
+  }
 };
 
 export default meta;
@@ -69,7 +69,7 @@ export const Primary: Story = {
     textGap: 8,
     image: {
       url: "../../assets/images/broadband-genie.svg",
-      alt: "its an image",
-    },
-  },
+      alt: "its an image"
+    }
+  }
 };

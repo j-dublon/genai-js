@@ -10,15 +10,15 @@ const mockFooterProps: FooterProps = {
       header: "Company",
       links: [
         { label: "About Us", href: "/about" },
-        { label: "Careers", href: "/careers" },
-      ],
-    },
+        { label: "Careers", href: "/careers" }
+      ]
+    }
   ],
   footerDisclaimerText: "© 2025 Your Company. All rights reserved.",
   trustPilotLogo: {
     altText: "Trustpilot Logo",
-    imgSrc: "https://via.placeholder.com/150",
-  },
+    imgSrc: "https://via.placeholder.com/150"
+  }
 };
 
 describe("Footer Component", () => {
@@ -46,7 +46,7 @@ describe("Footer Component", () => {
   it("renders the footer disclaimer text", () => {
     render(<Footer {...mockFooterProps} />);
     expect(
-      screen.getByText(mockFooterProps.footerDisclaimerText),
+      screen.getByText(mockFooterProps.footerDisclaimerText)
     ).toBeInTheDocument();
   });
 });

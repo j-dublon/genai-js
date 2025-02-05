@@ -19,7 +19,7 @@ export const TrustpilotVertical: React.FC<TrustPilotVerticalProps> = ({
   height,
   maxWidth = 128,
   maxHeight = 72,
-  trustPilotLogo,
+  trustPilotLogo
 }) => {
   return (
     <div

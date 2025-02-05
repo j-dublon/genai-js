@@ -21,6 +21,10 @@
     },
     "clean": {
       "cache": false
+    },
+    "format": {
+      "cache": false,
+      "persistent": false
     }
   }
 }

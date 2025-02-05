@@ -7,7 +7,7 @@ describe("Accordion Component", () => {
       dropdown_header: "testing header",
       dropdown_content: ["this is some content", "this is some more content"],
       button_text: "button text",
-      button_link: "www.test.com",
+      button_link: "www.test.com"
     };
 
     render(<AccordionItem key={`faq-question-test`} question={questions} />);
@@ -28,7 +28,7 @@ describe("Accordion Component", () => {
   it("when no button values passed in button doesn't show", () => {
     const questions = {
       dropdown_header: "testing header",
-      dropdown_content: ["this is some content", "this is some more content"],
+      dropdown_content: ["this is some content", "this is some more content"]
     };
 
     render(<AccordionItem key={`faq-question-test`} question={questions} />);
@@ -42,7 +42,7 @@ describe("Accordion Component", () => {
       dropdown_header: "testing header",
       dropdown_content: ["this is some content", "this is some more content"],
       button_text: "button text",
-      button_link: "www.test.com",
+      button_link: "www.test.com"
     };
 
     render(<AccordionItem key={`faq-question-test`} question={questions} />);

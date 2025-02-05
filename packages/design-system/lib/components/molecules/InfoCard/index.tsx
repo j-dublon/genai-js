@@ -20,7 +20,7 @@ export const InfoCard: React.FC<InfoCardProps> = ({
   contextText,
   additionalText,
   buttonText,
-  featureTextProps,
+  featureTextProps
 }) => {
   return (
     <div

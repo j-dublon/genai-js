@@ -6,9 +6,9 @@ const meta: Meta<typeof Button> = {
   argTypes: {
     type: {
       control: { type: "radio" },
-      options: ["button", "submit", "reset"],
-    },
-  },
+      options: ["button", "submit", "reset"]
+    }
+  }
 };
 
 export default meta;
@@ -24,6 +24,6 @@ export const Primary: Story = {
   name: "Button",
   args: {
     children: "Hello",
-    type: "submit",
-  },
+    type: "submit"
+  }
 };

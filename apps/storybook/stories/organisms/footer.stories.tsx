@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Footer } from "@react-component-library/ui";
 
 const meta: Meta<typeof Footer> = {
-  component: Footer,
+  component: Footer
 };
 
 export default meta;
@@ -33,7 +33,7 @@ export const Primary: Story = {
     trustScore: 3.5,
     trustPilotLogo: {
       altText: "Trustpilot logo",
-      imgSrc: "/assets/images/trustpilot-logo.svg",
+      imgSrc: "/assets/images/trustpilot-logo.svg"
     },
     footerDisclaimerText:
       "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. Our VAT number is 341752118. Cuckoo Internet Ltd is regulated by Ofcom.",
@@ -45,19 +45,19 @@ export const Primary: Story = {
           { label: "Careers", href: "careers.cuckoo.co/" },
           {
             label: "Cuckoo Compass",
-            href: "https://www.cuckoo.co/partner-with-us",
+            href: "https://www.cuckoo.co/partner-with-us"
           },
           { label: "Refer a Friend", href: "#" },
-          { label: "The Loyalty Tax", href: "#" },
-        ],
+          { label: "The Loyalty Tax", href: "#" }
+        ]
       },
       {
         header: "Help & Contact",
         links: [
           { label: "Support", href: "#" },
           { label: "Content Hub", href: "#" },
-          { label: "Press", href: "#" },
-        ],
+          { label: "Press", href: "#" }
+        ]
       },
       {
         header: "Useful Links",
@@ -67,9 +67,9 @@ export const Primary: Story = {
           { label: "Cookie Policy", href: "#" },
           { label: "Complaints Code", href: "#" },
           { label: "Call Charges", href: "#" },
-          { label: "Prices & Charge List", href: "#" },
-        ],
-      },
-    ],
-  },
+          { label: "Prices & Charge List", href: "#" }
+        ]
+      }
+    ]
+  }
 };

@@ -11,10 +11,10 @@ const meta: Meta<typeof TimelineCard> = {
         "bg-ui-grey-200",
         "bg-core-yellow",
         "bg-core-white",
-        "bg-core-pink",
-      ],
-    },
-  },
+        "bg-core-pink"
+      ]
+    }
+  }
 };
 
 export default meta;
@@ -28,6 +28,6 @@ export const Primary: Story = {
     colorPillText: "Now",
     backgroundColor: "bg-core-pink",
     subtitleText: "We'll contact your old broadband provider",
-    contextText: "Letting them know you're switching to Cuckoo",
-  },
+    contextText: "Letting them know you're switching to Cuckoo"
+  }
 };

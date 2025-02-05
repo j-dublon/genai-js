@@ -7,7 +7,7 @@ describe("Accordion section Component", () => {
       dropdown_header: "testing question header",
       dropdown_content: ["this is some content", "this is some more content"],
       button_text: "button text",
-      button_link: "www.test.com",
+      button_link: "www.test.com"
     };
 
     render(

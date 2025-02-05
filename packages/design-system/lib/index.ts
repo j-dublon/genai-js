@@ -22,7 +22,6 @@ import { TimelineCard } from "@components/molecules/TimelineCard";
 import { InfoCard } from "@components/molecules/InfoCard";
 import { ArticleCard } from "@components/molecules/ArticleCard";
 
-
 export {
   AccordionSection,
   Slider,
@@ -46,5 +45,4 @@ export {
   TimelineCard,
   InfoCard,
   ArticleCard
-
 };

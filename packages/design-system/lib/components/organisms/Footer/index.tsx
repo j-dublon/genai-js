@@ -22,7 +22,7 @@ export const Footer: React.FC<FooterProps> = ({
   trustScore,
   footerSections,
   footerDisclaimerText,
-  trustPilotLogo,
+  trustPilotLogo
 }) => {
   return (
     <footer className="bg-core-yellow flex justify-center items-center p-[144px]">

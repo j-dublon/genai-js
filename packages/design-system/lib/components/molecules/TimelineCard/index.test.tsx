@@ -6,7 +6,7 @@ describe("TimelineCard Component", () => {
     colorPillText: "Test text",
     backgroundColor: "bg-core-yellow",
     subtitleText: "Test subtitle text",
-    contextText: "Test lighter text",
+    contextText: "Test lighter text"
   };
   it("renders the component", () => {
     render(<TimelineCard {...mockProps} />);

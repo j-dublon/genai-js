@@ -9,7 +9,7 @@ export const Arrow = ({
   width = 42,
   height = 42,
   fill = "#1F1F1F",
-  FAQDropdownOpen = false,
+  FAQDropdownOpen = false
 }: ArrowIconProps) => {
   return (
     <svg

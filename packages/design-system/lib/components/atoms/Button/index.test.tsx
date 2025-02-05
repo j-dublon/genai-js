@@ -24,7 +24,7 @@ describe("Button Component", () => {
     render(
       <Button aria-label="Custom Button" data-testid="custom-button">
         Click Me
-      </Button>,
+      </Button>
     );
 
     // Check if the button has the correct aria-label and data-testid

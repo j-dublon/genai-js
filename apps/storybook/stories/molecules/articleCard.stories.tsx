@@ -3,7 +3,7 @@ import { ArticleCard } from "@react-component-library/ui";
 
 const meta: Meta<typeof ArticleCard> = {
   component: ArticleCard,
-  argTypes: {},
+  argTypes: {}
 };
 
 export default meta;
@@ -21,5 +21,5 @@ export const Primary: Story = {
     />
   ),
   name: "ArticleCard",
-  args: {},
+  args: {}
 };

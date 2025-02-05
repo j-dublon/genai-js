@@ -7,7 +7,7 @@ interface TickIconProps {
 export const Tick: React.FC<TickIconProps> = ({
   width = 20,
   height = 20,
-  fill = "#1F1F1F",
+  fill = "#1F1F1F"
 }) => {
   return (
     <svg

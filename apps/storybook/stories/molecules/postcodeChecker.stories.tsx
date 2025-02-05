@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PostcodeChecker } from "@react-component-library/ui";
 
 const meta: Meta<typeof PostcodeChecker> = {
-  component: PostcodeChecker,
+  component: PostcodeChecker
 };
 
 export default meta;
@@ -16,6 +16,6 @@ export const Primary: Story = {
     titleText: "How fast can you go?",
     topText: "Check your speed",
     placeholderText: "Enter postcode",
-    inputBoxButtonText: "Check availability",
-  },
+    inputBoxButtonText: "Check availability"
+  }
 };

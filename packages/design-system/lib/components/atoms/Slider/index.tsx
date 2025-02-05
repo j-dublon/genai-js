@@ -10,7 +10,7 @@ interface Props {
 export const Slider = ({
   draggable = false,
   showScrollbar = true,
-  children,
+  children
 }: Props) => {
   const ref = useRef<HTMLDivElement>(null);
 

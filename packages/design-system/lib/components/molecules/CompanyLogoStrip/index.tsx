@@ -15,7 +15,7 @@ type CompanyLogoProps = {
 
 export const CompanyLogoStrip: React.FC<CompanyLogoStripProps> = ({
   logos,
-  backgroundColor,
+  backgroundColor
 }) => {
   return (
     <div
