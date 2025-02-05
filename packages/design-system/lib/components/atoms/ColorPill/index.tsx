@@ -6,11 +6,11 @@ export interface ColorPillProps {
   ariaLabel?: string;
 }
 
-export const ColorPill: React.FC<ColorPillProps> = ({
+export const ColorPill = ({
   colorPillText,
   backgroundColor,
   ariaLabel,
-}) => {
+}: ColorPillProps) => {
   return (
     <div
       className={cx("flex items-center px-2 rounded-xl w-fit", backgroundColor)}
@@ -25,5 +25,3 @@ export const ColorPill: React.FC<ColorPillProps> = ({
     </div>
   );
 };
-
-ColorPill.displayName = "ColorPill";
