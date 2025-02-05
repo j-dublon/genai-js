@@ -4,12 +4,12 @@
 
 ## Unit test ?
 
-- [ ] I have added a unit test for the changes I’ve made
+- [ ] I have added a unit test for the changes I’ve made, including accessibility if relevant
 
 ## Can you share a picture or video of the changes (if necessary) ?
 
 - [ ] I have added screenshots for mobile and desktop versions of my changes
 
-## Design changes
+## Infrastructure changes
 
-- [ ] I have had design sign off on my changes?
+- [ ] If I have added/modified any packages or config in a repo, I have made sure there is consistency in all other repositories as well
