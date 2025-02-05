@@ -1,4 +1,4 @@
-import { getTrustPilotStarStatus } from "@lib/hooks/getTrustPilotStarStatus";
+import { getTrustpilotStarStatus } from "@lib/hooks/getTrustpilotStarStatus";
 
 interface TrustpilotStarsProps {
   trustScore: number;
@@ -11,7 +11,7 @@ export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
   width,
   height,
 }) => {
-  const { full, half } = getTrustPilotStarStatus(trustScore);
+  const { full, half } = getTrustpilotStarStatus(trustScore);
 
   return (
     <svg
