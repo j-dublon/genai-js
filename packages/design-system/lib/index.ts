@@ -18,8 +18,9 @@ import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { TrustpilotHorizontal } from "@components/molecules/TrustpilotHorizontal";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { AccordionSection } from "@components/molecules/AccordionSection";
-import { ColourPill } from "@components/atoms/ColourPill";
+import { ColorPill } from "@components/atoms/ColorPill";
 import { TimelineCard } from "@components/molecules/TimelineCard";
+import { InfoCard } from "@components/molecules/InfoCard";
 import { ArticleCard } from "@components/molecules/ArticleCard";
 
 export {
@@ -42,7 +43,8 @@ export {
   MobileApp,
   AccountAppButton,
   MobileAppWithPhone,
-  ColourPill,
+  ColorPill,
   TimelineCard,
+  InfoCard,
   ArticleCard,
 };

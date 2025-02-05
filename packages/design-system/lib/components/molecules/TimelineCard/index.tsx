@@ -1,29 +1,29 @@
-import { ColourPill } from "@lib/index";
+import { ColorPill } from "@lib/index";
 
 export interface TimelineCardProps {
-  colourPillText: string;
+  colorPillText: string;
   backgroundColor: string;
   subtitleText: string;
-  lighterText: string;
+  contextText: string;
 }
 
 export const TimelineCard: React.FC<TimelineCardProps> = ({
-  colourPillText,
+  colorPillText,
   backgroundColor,
   subtitleText,
-  lighterText,
+  contextText,
 }) => {
   return (
     <div className="p-5 bg-ui-grey-200 rounded-lg md:w-[30%]">
       <div className="pb-7">
-        <ColourPill
-          colourPillText={colourPillText}
+        <ColorPill
+          colorPillText={colorPillText}
           backgroundColor={backgroundColor}
         />
       </div>
       <div className="flex flex-col gap-2.5">
         <p className="text-xl font-bold">{subtitleText}</p>
-        <p className="text-xl">{lighterText}</p>
+        <p className="text-xl">{contextText}</p>
       </div>
     </div>
   );

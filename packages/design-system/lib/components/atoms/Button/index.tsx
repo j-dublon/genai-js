@@ -12,7 +12,7 @@ export interface IProps extends ButtonHTMLAttributes<HTMLElement> {
   onClick?: (event?: React.SyntheticEvent) => void;
   size?: Size | Size[];
   tint?: Tint;
-  outlineColour?: Tint;
+  outlineColor?: Tint;
   variant?: Variant;
   justifyContent?: justify;
 }
@@ -30,11 +30,11 @@ export const Button = forwardRef(
       children,
       type,
       id,
-      outlineColour,
+      outlineColor,
       justifyContent = "center",
       ...props
     }: IProps,
-    ref,
+    ref
   ) => {
     const isOutline = variant === "outline";
     const buttonClasses = `
@@ -44,7 +44,7 @@ export const Button = forwardRef(
     ${isOutline ? "border-2" : "bg-transparent border-0"}
     ${
       isOutline
-        ? outlineColour === "blue"
+        ? outlineColor === "blue"
           ? "border-blue-500 text-blue-500"
           : "border-ui-grey-300 text-gray-800"
         : "text-white"
@@ -77,7 +77,7 @@ export const Button = forwardRef(
         {children}
       </Component>
     );
-  },
+  }
 );
 
 Button.displayName = "Button";
