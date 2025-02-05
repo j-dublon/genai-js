@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import { HomePage } from "../components/pages/homepage";
+import { HomePage } from "../components/pages/homePage";
 
 describe("HomePage", () => {
   it("renders the Ridiculously fast full fibre broadband heading", () => {
@@ -15,15 +15,15 @@ describe("HomePage", () => {
     render(<HomePage />);
     expect(
       screen.getByText(
-        "Stream, game and WFH, all at the same time, with no drop-offs.",
-      ),
+        "Stream, game and WFH, all at the same time, with no drop-offs."
+      )
     ).toBeInTheDocument();
   });
 
   it("renders PostcodeChecker input", () => {
     render(<HomePage />);
     expect(
-      screen.getByPlaceholderText("Pop in your address"),
+      screen.getByPlaceholderText("Pop in your address")
     ).toBeInTheDocument();
   });
 
@@ -35,10 +35,10 @@ describe("HomePage", () => {
   it("renders all TextWithTick items", () => {
     render(<HomePage />);
     expect(
-      screen.getByText("Full fibre speeds up to 900Mbps"),
+      screen.getByText("Full fibre speeds up to 900Mbps")
     ).toBeInTheDocument();
     expect(
-      screen.getByText("5x more reliable than traditional broadband"),
+      screen.getByText("5x more reliable than traditional broadband")
     ).toBeInTheDocument();
     expect(screen.getByText("eero Pro 6E router")).toBeInTheDocument();
     expect(screen.getByText("UK-based Customer Care team")).toBeInTheDocument();
@@ -48,7 +48,7 @@ describe("HomePage", () => {
     render(<HomePage />);
     const heroBanner = screen.getByTestId("hero-banner");
     expect(heroBanner).toHaveStyle(
-      "background-image: url('/assets/images/cuckoo_background.png')",
+      "background-image: url('/assets/images/cuckoo_background.png')"
     );
   });
 });
