@@ -1,12 +1,9 @@
 import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
-import { StorybookLogo } from "@components/atoms/StorybookLogo";
+import { TrustPilotLogo } from "@icons/TrustPilotLogo";
 import cx from "classnames";
 
 interface TrustPilotHorizontalProps {
-  trustPilotLogo: {
-    altText: string;
-    imgSrc: string;
-  };
+  trustPilotAriaLabel?: string;
   width: number;
   height: number;
   trustScore: number;
@@ -18,11 +15,11 @@ interface TrustPilotHorizontalProps {
 export const TrustpilotHorizontal = ({
   trustScore,
   numberOfReviews,
+  trustPilotAriaLabel,
   width,
   height,
   maxWidth = 128,
   maxHeight = 72,
-  trustPilotLogo,
 }: TrustPilotHorizontalProps) => {
   return (
     <div
@@ -33,12 +30,10 @@ export const TrustpilotHorizontal = ({
       )}
     >
       <div className="flex-shrink-0">
-        <StorybookLogo
+        <TrustPilotLogo
           width={width}
           height={height}
-          altText={trustPilotLogo.altText}
-          imgSrc={trustPilotLogo.imgSrc}
-          aria-label="Trustpilot logo"
+          aria-label={trustPilotAriaLabel}
         />
       </div>
       <div className="flex-shrink-0">
@@ -48,10 +43,17 @@ export const TrustpilotHorizontal = ({
           height={height}
         />
       </div>
-      <div className="text-hummingbird whitespace-nowrap sm:text-robin md:text-blackbird">
-        Based on{" "}
-        <span className="font-bold">{numberOfReviews.toLocaleString()}</span>{" "}
-        reviews
+      <div
+        className={cx(
+          "whitespace-nowrap",
+          "text-core-black",
+          "font-garnett",
+          "text-18px",
+          "font-600",
+          "leading-140"
+        )}
+      >
+        Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
       </div>
     </div>
   );

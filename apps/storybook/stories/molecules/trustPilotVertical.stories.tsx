@@ -9,13 +9,7 @@ const meta: Meta<typeof TrustpilotVertical> = {
     height: { control: "number" },
     maxWidth: { control: "number" },
     maxHeight: { control: "number" },
-    trustPilotLogo: {
-      control: "object",
-      defaultValue: {
-        altText: "Trustpilot Logo",
-        imgSrc: "../../assets/images/trustpilot-logo.svg,",
-      },
-    },
+    trustPilotAriaLabel: { control: "text" },
   },
 };
 
@@ -50,9 +44,6 @@ export const Primary: Story = {
     height: 50,
     maxWidth: 128,
     maxHeight: 72,
-    trustPilotLogo: {
-      altText: "Trustpilot Logo",
-      imgSrc: "../../assets/images/trustpilot-logo.svg",
-    },
+    trustPilotAriaLabel: "Trustpilot Logo",
   },
 };

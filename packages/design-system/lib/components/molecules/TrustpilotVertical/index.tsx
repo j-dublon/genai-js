@@ -1,12 +1,9 @@
 import { TrustpilotStars } from "@components/atoms/TrustPilotStars";
-import { StorybookLogo } from "@components/atoms/StorybookLogo";
 import cx from "classnames";
+import { TrustPilotLogo } from "@icons/TrustPilotLogo";
 
 interface TrustPilotVerticalProps {
-  trustPilotLogo: {
-    altText: string;
-    imgSrc: string;
-  };
+  trustPilotAriaLabel?: string;
   width: number;
   height: number;
   trustScore: number;
@@ -20,7 +17,7 @@ export const TrustpilotVertical = ({
   height,
   maxWidth = 128,
   maxHeight = 72,
-  trustPilotLogo,
+  trustPilotAriaLabel,
 }: TrustPilotVerticalProps) => {
   return (
     <div
@@ -30,12 +27,10 @@ export const TrustpilotVertical = ({
         { [`max-h-${maxHeight}`]: maxHeight }
       )}
     >
-      <StorybookLogo
+      <TrustPilotLogo
         width={width}
         height={height}
-        altText={trustPilotLogo.altText}
-        imgSrc={trustPilotLogo.imgSrc}
-        aria-label="Trustpilot logo"
+        aria-label={trustPilotAriaLabel}
       />
       <TrustpilotStars
         trustScore={trustScore}

@@ -22,7 +22,6 @@ export const Footer = ({
   trustScore,
   footerSections,
   footerDisclaimerText,
-  trustPilotLogo,
 }: FooterProps) => {
   return (
     <footer className="bg-core-yellow flex justify-center items-center p-[144px]">
@@ -37,7 +36,6 @@ export const Footer = ({
                 width={144}
                 height={36}
                 trustScore={trustScore}
-                trustPilotLogo={trustPilotLogo}
               />
             )}
             <div className="flex space-x-8">
