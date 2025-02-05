@@ -43,5 +43,3 @@ export const TrustpilotVertical: React.FC<TrustPilotVerticalProps> = ({
     </div>
   );
 };
-
-TrustpilotVertical.displayName = "TrustpilotVertical";

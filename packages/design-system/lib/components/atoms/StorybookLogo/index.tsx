@@ -25,5 +25,3 @@ export const StorybookLogo: React.FC<StorybookLogoProps> = ({
     />
   );
 };
-
-StorybookLogo.displayName = "StoryBookLogo";

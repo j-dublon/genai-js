@@ -37,16 +37,23 @@ describe("Footer Component", () => {
     });
   });
 
-  it("renders the Trustpilot logo with alt text", () => {
+  it("renders both the Trustpilot logos with alt text", () => {
     render(<Footer {...mockFooterProps} />);
-    const logo = screen.getByAltText(mockFooterProps.trustPilotLogo.altText);
-    expect(logo).toHaveAttribute("src", mockFooterProps.trustPilotLogo.imgSrc);
+    const logo = screen.getAllByAltText(mockFooterProps.trustPilotLogo.altText);
+    expect(logo[0]).toHaveAttribute(
+      "src",
+      mockFooterProps.trustPilotLogo.imgSrc
+    );
+    expect(logo[1]).toHaveAttribute(
+      "src",
+      mockFooterProps.trustPilotLogo.imgSrc
+    );
   });
 
   it("renders the footer disclaimer text", () => {
     render(<Footer {...mockFooterProps} />);
     expect(
-      screen.getByText(mockFooterProps.footerDisclaimerText),
+      screen.getByText(mockFooterProps.footerDisclaimerText)
     ).toBeInTheDocument();
   });
 });

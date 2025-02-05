@@ -8,12 +8,6 @@ const meta: Meta<typeof Footer> = {
 export default meta;
 
 type Story = StoryObj<typeof Footer>;
-
-/*
- *👇 Render functions are a framework specific feature to allow you control on how the component renders.
- * See https://storybook.js.org/docs/react/api/csf
- * to learn how to use render functions.
- */
 interface Link {
   label: string;
   href: string;
@@ -24,10 +18,17 @@ interface FooterSection {
   links: Link[];
 }
 
+interface Image {
+  altText: string;
+  imgSrc: string;
+}
+
 interface FooterProps {
   titleText: string;
   trustScore: number;
   footerSections: FooterSection[];
+  footerDisclaimerText: string;
+  trustPilotLogo: Image;
 }
 
 export const Primary: Story = {
