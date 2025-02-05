@@ -19,7 +19,7 @@ export const Slider = ({
 
   const baseStyles = `
     ${draggable ? "select-none user-select-none" : undefined}
-    flex overflow-x-auto relative
+    flex overflow-x-auto relative gap-8
     ${
       showScrollbar
         ? `[&::-webkit-scrollbar]:h-0.5 py-5 mx-4

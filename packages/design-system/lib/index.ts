@@ -21,6 +21,7 @@ import { ColourPill } from "@components/atoms/ColourPill";
 import { TimelineCard } from "@components/molecules/TimelineCard";
 import { Guides } from "@components/organisms/Guides";
 import { GuideCard } from "@components/atoms/GuideCard";
+import { ArticleCard } from "@components/molecules/ArticleCard";
 
 export {
   AccordionSection,
@@ -45,4 +46,5 @@ export {
   TimelineCard,
   Guides,
   GuideCard,
+  ArticleCard,
 };
