@@ -3,7 +3,6 @@ import cx from "classnames";
 import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 
 interface TrustPilotVerticalProps {
-  trustPilotAriaLabel?: string;
   width: number;
   height: number;
   trustScore: number;
@@ -17,7 +16,6 @@ export const TrustpilotVertical = ({
   height,
   maxWidth = 128,
   maxHeight = 72,
-  trustPilotAriaLabel,
 }: TrustPilotVerticalProps) => {
   return (
     <div
@@ -27,11 +25,7 @@ export const TrustpilotVertical = ({
         { [`max-h-${maxHeight}`]: maxHeight }
       )}
     >
-      <TrustpilotLogo
-        width={width}
-        height={height}
-        aria-label={trustPilotAriaLabel}
-      />
+      <TrustpilotLogo width={width} height={height} />
       <TrustpilotStars trustScore={trustScore} width={width} height={20} />
     </div>
   );

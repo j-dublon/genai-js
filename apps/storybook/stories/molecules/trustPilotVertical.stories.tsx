@@ -9,7 +9,6 @@ const meta: Meta<typeof TrustpilotVertical> = {
     height: { control: "number" },
     maxWidth: { control: "number" },
     maxHeight: { control: "number" },
-    trustPilotAriaLabel: { control: "text" },
   },
 };
 
@@ -28,7 +27,6 @@ interface TrustpilotVerticalProps {
   height: number;
   maxWidth?: number;
   maxHeight?: number;
-  trustPilotLogo: TrustPilotLogo;
 }
 
 export const Primary: Story = {
@@ -44,6 +42,5 @@ export const Primary: Story = {
     height: 50,
     maxWidth: 128,
     maxHeight: 72,
-    trustPilotAriaLabel: "Trustpilot Logo",
   },
 };

@@ -28,6 +28,7 @@ interface FooterProps {
   titleText: string;
   trustScore: number;
   footerSections: FooterSection[];
+  footerDisclaimerText: string;
 }
 
 export const Primary: Story = {
@@ -36,10 +37,6 @@ export const Primary: Story = {
   args: {
     titleText: "Fast, fair, feel-good broadband",
     trustScore: 3.5,
-    trustPilotLogo: {
-      altText: "Trustpilot logo",
-      imgSrc: "/assets/images/trustpilot-logo.svg",
-    },
     footerDisclaimerText:
       "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. Our VAT number is 341752118. Cuckoo Internet Ltd is regulated by Ofcom.",
     footerSections: [

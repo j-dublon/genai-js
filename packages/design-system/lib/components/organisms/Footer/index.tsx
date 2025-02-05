@@ -11,10 +11,6 @@ export interface FooterProps {
   trustScore: number;
   footerSections: FooterLinksProps["sections"];
   footerDisclaimerText: string;
-  trustPilotLogo: {
-    altText: string;
-    imgSrc: string;
-  };
 }
 
 export const Footer = ({

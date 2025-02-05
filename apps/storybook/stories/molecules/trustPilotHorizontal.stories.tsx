@@ -10,7 +10,6 @@ const meta: Meta<typeof TrustpilotHorizontal> = {
     height: { control: "number" },
     maxWidth: { control: "number" },
     maxHeight: { control: "number" },
-    trustPilotAriaLabel: { control: "text" },
   },
 };
 
@@ -41,6 +40,5 @@ export const Primary: Story = {
     height: 50,
     maxWidth: 128,
     maxHeight: 72,
-    trustPilotAriaLabel: "Trustpilot Logo",
   },
 };

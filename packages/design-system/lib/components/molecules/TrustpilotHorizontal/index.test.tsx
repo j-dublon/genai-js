@@ -6,30 +6,22 @@ const mockProps = {
   width: 144,
   height: 36,
   numberOfReviews: 123,
-  trustPilotLogo: {
-    altText: "Trustpilot Logo",
-    imgSrc: "https://via.placeholder.com/150",
-  },
+  trustPilotAriaLabel: "Trustpilot Logo",
 };
 
 describe("TrustpilotHorizontal Component", () => {
-  it("renders the Trustpilot logo with correct alt text", () => {
+  it("renders the Trustpilot logo with correct aria-label", () => {
     render(<TrustpilotHorizontal {...mockProps} />);
-    const logo = screen.getByAltText("Trustpilot Logo");
+    const logo = screen.getByLabelText("Trustpilot Logo");
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute("src", mockProps.trustPilotLogo.imgSrc);
   });
 
   it("displays the correct number of reviews", () => {
     render(<TrustpilotHorizontal {...mockProps} />);
-    const reviewsText = screen.getByText((content, element) => {
-      return (
-        content.includes("Based on") &&
-        content.includes("reviews") &&
-        element?.querySelector(".font-bold")?.textContent ===
-          mockProps.numberOfReviews.toLocaleString()
-      );
-    });
+    const reviewsText = screen.getByText(/Based on/i);
     expect(reviewsText).toBeInTheDocument();
+    expect(reviewsText).toHaveTextContent(
+      `Based on ${mockProps.numberOfReviews.toLocaleString()} reviews`
+    );
   });
 });

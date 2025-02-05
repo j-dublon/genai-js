@@ -3,7 +3,6 @@ import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 import cx from "classnames";
 
 interface TrustPilotHorizontalProps {
-  trustPilotAriaLabel?: string;
   width: number;
   height: number;
   trustScore: number;
@@ -15,7 +14,6 @@ interface TrustPilotHorizontalProps {
 export const TrustpilotHorizontal = ({
   trustScore,
   numberOfReviews,
-  trustPilotAriaLabel,
   width,
   height,
   maxWidth = 128,
@@ -30,11 +28,7 @@ export const TrustpilotHorizontal = ({
       )}
     >
       <div className="flex-shrink-0">
-        <TrustpilotLogo
-          width={width}
-          height={height}
-          aria-label={trustPilotAriaLabel}
-        />
+        <TrustpilotLogo width={width} height={height} />
       </div>
       <div className="flex-shrink-0">
         <TrustpilotStars
