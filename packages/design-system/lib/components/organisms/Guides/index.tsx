@@ -2,13 +2,13 @@ import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Slider } from "@components/atoms/Slider";
 import useIsDesktopScreen from "@lib/hooks/isDesktop";
 
-interface Props {
+export interface GuidesProps {
   guides: GuideCardProps[];
 }
-export const Guides = ({ guides }: Props) => {
+export const Guides = ({ guides }: GuidesProps) => {
   const isDesktop = useIsDesktopScreen();
   return (
-    <section aria-label="Guides">
+    <section aria-label="Guides" className="h-fit">
       <Slider
         draggable
         showScrollbar={isDesktop}
