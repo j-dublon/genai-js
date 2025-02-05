@@ -23,6 +23,14 @@ export const Primary: Story = {
         ...getRandomGuide(),
         title: "Another one",
       },
+      {
+        ...getRandomGuide(),
+        title: "Another one",
+      },
+      {
+        ...getRandomGuide(),
+        title: "Another one",
+      },
     ],
   },
 };

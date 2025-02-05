@@ -13,13 +13,13 @@ interface Props {
 }
 export const Guides = ({ guides }: Props) => {
   return (
-    <Slider>
-      {guides.map((g) => (
+    <Slider draggable showScrollbar={false}>
+      {guides.map((g, i) => (
         <GuideCard
           image={g.image}
           tags={g.tags}
           title={g.title}
-          key={g.title}
+          key={`${g.title}${i}`}
         />
       ))}
     </Slider>

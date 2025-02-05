@@ -9,9 +9,9 @@ interface Props {
 
 export const GuideCard = ({ title, image, tags }: Props) => {
   return (
-    <div className="flex flex-col sm:w-[466px] md:w-[292px] h-[310px]">
-      <img src={image.src} className="rounded-md" />
-      <div className="flex flex-row mt-2 gap-2">
+    <div className="flex flex-col sm:min-w-[466px] min-w-[292px] h-[310px]">
+      <img src={image.src} className="rounded-md" draggable={false} />
+      <div className="flex flex-row mt-2 gap-2 pl-0">
         {tags.map((t) => (
           <ColourPill
             colourPillText={t.text}
