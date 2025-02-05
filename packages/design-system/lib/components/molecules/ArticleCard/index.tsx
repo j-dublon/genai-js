@@ -1,5 +1,3 @@
-import { JSX } from "react";
-
 interface ArticleCardProps {
   imageAlt: string;
   imageUrl: string;
@@ -8,7 +6,7 @@ interface ArticleCardProps {
   primaryTag: string;
 }
 
-export const ArticleCard = (props: ArticleCardProps): JSX.Element => {
+export const ArticleCard = (props: ArticleCardProps) => {
   const { imageAlt, imageUrl, title, slug, primaryTag } = props;
 
   return (
