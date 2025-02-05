@@ -8,9 +8,9 @@ const mockProps = {
 };
 
 describe("TrustpilotVertical Component", () => {
-  it("renders the Trustpilot logo with correct aria-label", () => {
+  it("displays the trust pilot logo", () => {
     render(<TrustpilotVertical {...mockProps} />);
-    const logo = screen.getByLabelText("Trustpilot Logo");
+    const logo = screen.getByLabelText("TrustPilot Logo");
     expect(logo).toBeInTheDocument();
   });
 
