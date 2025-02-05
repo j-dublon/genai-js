@@ -11,7 +11,11 @@ describe("Accordion section Component", () => {
     };
 
     render(
-      <AccordionSection heading="Test main header" questionsArr={[questions]} />
+      <AccordionSection
+        heading="Test main header"
+        subText="Test sub header text"
+        questionsArr={[questions]}
+      />
     );
 
     expect(screen.getByText("Test main header")).toBeInTheDocument();
