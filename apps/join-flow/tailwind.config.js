@@ -1,5 +1,7 @@
+import sharedConfig from "../../packages/tailwind-config/tailwind.config";
+
 export default {
-  content: ["./src/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
+  ...sharedConfig,
   theme: {
     extend: {},
   },
