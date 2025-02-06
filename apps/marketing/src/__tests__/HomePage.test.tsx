@@ -29,7 +29,8 @@ describe("HomePage", () => {
 
   it("renders TrustpilotVertical component", () => {
     render(<HomePage />);
-    expect(screen.getByAltText("Trustpilot Logo")).toBeInTheDocument();
+    const logo = screen.getByLabelText("TrustPilot Logo");
+    expect(logo).toBeInTheDocument();
   });
 
   it("renders all TextWithTick items", () => {

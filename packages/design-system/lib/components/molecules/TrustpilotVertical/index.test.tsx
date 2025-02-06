@@ -5,25 +5,20 @@ const mockProps = {
   trustScore: 4.5,
   width: 144,
   height: 36,
-  trustPilotLogo: {
-    altText: "Trustpilot Logo",
-    imgSrc: "https://via.placeholder.com/150",
-  },
 };
 
 describe("TrustpilotVertical Component", () => {
-  it("renders the Trustpilot logo with alt text", () => {
+  it("displays the trust pilot logo", () => {
     render(<TrustpilotVertical {...mockProps} />);
-    expect(screen.getByAltText("Trustpilot Logo")).toBeInTheDocument();
+    const logo = screen.getByLabelText("TrustPilot Logo");
+    expect(logo).toBeInTheDocument();
   });
 
   it("renders the Trustpilot stars with correct aria-label", () => {
     render(<TrustpilotVertical {...mockProps} />);
-    expect(
-      screen.getByRole("img", { name: /trustpilot stars/i }),
-    ).toHaveAttribute(
-      "aria-label",
-      "Trustpilot stars: 4 full star(s) and a half-star",
+    const stars = screen.getByLabelText(
+      "Trustpilot stars: 4 full star(s) and a half-star"
     );
+    expect(stars).toBeInTheDocument();
   });
 });

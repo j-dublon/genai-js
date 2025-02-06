@@ -24,15 +24,7 @@ export const HeroBanner: React.FC = () => {
             inputBoxButtonText="Let's go"
           />
         </form>
-        <TrustpilotVertical
-          trustScore={4}
-          width={100}
-          height={100}
-          trustPilotLogo={{
-            altText: "Trustpilot Logo",
-            imgSrc: "/assets/images/trustpilot-logo.svg",
-          }}
-        />
+        <TrustpilotVertical trustScore={4} width={100} height={100} />
       </div>
       <div className="flex-1 py-10 md:flex flex-col gap-2 font-bold">
         {/* This will be updated to use data from the CMS */}
