@@ -1,9 +1,10 @@
+import sharedConfig from "../tailwind-config/tailwind.config";
 // @ts-check
 import defaultTheme from "tailwindcss/defaultTheme";
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./lib/**/*.{js,ts,tsx}"],
+  ...sharedConfig,
   theme: {
     colors: {
       currentColor: "currentColor",
