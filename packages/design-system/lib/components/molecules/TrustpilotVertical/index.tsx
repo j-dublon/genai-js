@@ -2,7 +2,7 @@ import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import cx from "classnames";
 import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 
-interface TrustPilotVerticalProps {
+interface TrustpilotVerticalProps {
   width: number;
   height: number;
   trustScore: number;
@@ -16,7 +16,7 @@ export const TrustpilotVertical = ({
   height,
   maxWidth = 128,
   maxHeight = 72,
-}: TrustPilotVerticalProps) => {
+}: TrustpilotVerticalProps) => {
   return (
     <div
       className={cx(
