@@ -28,8 +28,8 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
               "md:rounded-[22px] rounded-xs": true,
               "md:text-[26px] text-base": true,
               "p-[19px_22px]": !topText || window.innerWidth < 768,
-              "md:p-[40px_22px_19px]": topText && window.innerWidth >= 768
-            }
+              "md:p-[40px_22px_19px]": topText && window.innerWidth >= 768,
+            },
           )}
         />
         {topText && (

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Slider> = {
   tags: ["autodocs"],
-  component: Slider
+  component: Slider,
 };
 
 export default meta;
@@ -13,7 +13,7 @@ type Story = StoryObj<typeof Slider>;
 const ExampleSlide = ({
   title,
   content,
-  name
+  name,
 }: {
   title: string;
   content: string;
@@ -24,7 +24,7 @@ const ExampleSlide = ({
     "compare-the-market.svg",
     "go-compare.svg",
     "money-supermarket.svg",
-    "which.svg"
+    "which.svg",
   ];
   return (
     <div className="bg-gray-200 rounded-3xl flex flex-col h-[300px] p-6 mr-4">
@@ -56,16 +56,16 @@ export const Primary: Story = {
   args: { draggable: true, showScrollbar: true },
   argTypes: {
     draggable: {
-      control: { type: "boolean" }
+      control: { type: "boolean" },
     },
     showScrollbar: {
-      control: { type: "boolean" }
-    }
+      control: { type: "boolean" },
+    },
   },
   render: (props) => (
     <div className="w-65">
       <Slider {...props}>{slides}</Slider>
     </div>
   ),
-  name: "Slider"
+  name: "Slider",
 };

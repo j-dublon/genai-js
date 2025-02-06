@@ -5,7 +5,7 @@ import { FeatureText } from ".";
 describe("FeatureText", () => {
   const defaultProps = {
     topText: "Hello",
-    bottomText: "World"
+    bottomText: "World",
   };
 
   it("renders both texts correctly for screen readers", () => {
@@ -19,7 +19,7 @@ describe("FeatureText", () => {
     render(<FeatureText {...defaultProps} backgroundColor="blue-500" />);
 
     const container = screen.getByRole("region", {
-      name: "Feature text display"
+      name: "Feature text display",
     });
     expect(container).toHaveClass("bg-blue-500");
   });
@@ -29,8 +29,8 @@ describe("FeatureText", () => {
       ...defaultProps,
       image: {
         url: "/test-image.jpg",
-        alt: "Test image"
-      }
+        alt: "Test image",
+      },
     };
 
     render(<FeatureText {...imageProps} />);
@@ -117,7 +117,7 @@ describe("FeatureText", () => {
 
     expect(removeEventListenerSpy).toHaveBeenCalledWith(
       "resize",
-      expect.any(Function)
+      expect.any(Function),
     );
 
     removeEventListenerSpy.mockRestore();

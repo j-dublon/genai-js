@@ -9,13 +9,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
     tsconfigPaths({
-      projects: ["../../packages/design-system/tsconfig.json"]
-    })
+      projects: ["../../packages/design-system/tsconfig.json"],
+    }),
   ],
   resolve: {
     alias: {
       react: resolve(__dirname, "./node_modules/react"),
-      "react-dom": resolve(__dirname, "./node_modules/react-dom")
-    }
-  }
+      "react-dom": resolve(__dirname, "./node_modules/react-dom"),
+    },
+  },
 });

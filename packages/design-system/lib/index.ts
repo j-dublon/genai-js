@@ -5,7 +5,6 @@ import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
 import { InputBoxButton } from "@components/atoms/InputBoxButton";
 import { CompanyLogo } from "@components/atoms/CompanyLogo";
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
-import { StorybookLogo } from "@components/atoms/StorybookLogo";
 import { TextWithTick } from "@components/atoms/TextWithTick";
 import { Heading } from "@components/atoms/Heading";
 import { MobileApp } from "@components/molecules/MobileApp";
@@ -15,6 +14,8 @@ import { Slider } from "./components/atoms/Slider";
 import { FeatureText } from "@components/atoms/FeatureText";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { Footer } from "@components/organisms/Footer";
+import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
+import { TrustpilotHorizontal } from "@components/molecules/TrustpilotHorizontal";
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ColorPill } from "@components/atoms/ColorPill";
@@ -30,10 +31,11 @@ export {
   ProductCard,
   PostcodeChecker,
   InputBoxButton,
-  StorybookLogo,
   CompanyLogo,
   CompanyLogoStrip,
   Footer,
+  TrustpilotStars,
+  TrustpilotHorizontal,
   TrustpilotVertical,
   HowFastCanYouGo,
   TextWithTick,
@@ -44,5 +46,5 @@ export {
   ColorPill,
   TimelineCard,
   InfoCard,
-  ArticleCard
+  ArticleCard,
 };

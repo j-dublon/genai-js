@@ -5,7 +5,7 @@ export interface FooterDisclaimerProps {
 }
 
 export const FooterDisclaimer: React.FC<FooterDisclaimerProps> = ({
-  footerDisclaimerText
+  footerDisclaimerText,
 }) => {
   return <p className="text-sm core-ui-grey-500">{footerDisclaimerText}</p>;
 };

@@ -19,20 +19,20 @@ describe("InfoCard Component", () => {
       textGap: 8,
       image: {
         url: "/test-asset.png",
-        alt: "Test image alt text"
-      }
-    }
+        alt: "Test image alt text",
+      },
+    },
   };
   it("renders the component", () => {
     render(<InfoCard {...baseProps} />);
 
     expect(screen.getByText("Test title")).toBeInTheDocument();
     expect(screen.getByText("Test title")).toHaveStyle(
-      "background-color: bg-core-grey"
+      "background-color: bg-core-grey",
     );
     expect(screen.getByText("Test color pill text")).toBeInTheDocument();
     expect(screen.getByText("Test color pill text")).toHaveStyle(
-      "background-color: bg-core-yellow"
+      "background-color: bg-core-yellow",
     );
 
     expect(screen.getByText("Test lighter text")).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe("InfoCard Component", () => {
   it("doesn't render the additional text if additionalText prop isn't set", () => {
     const newProps = {
       ...baseProps,
-      additionalText: undefined // Override the additionalText prop
+      additionalText: undefined, // Override the additionalText prop
     };
     render(<InfoCard {...newProps} />);
 
@@ -55,12 +55,12 @@ describe("InfoCard Component", () => {
   it("doesn't render the image if featureTextProps prop isn't set", () => {
     const newProps = {
       ...baseProps,
-      featureTextProps: undefined // Override the imgProps prop
+      featureTextProps: undefined, // Override the imgProps prop
     };
     render(<InfoCard {...newProps} />);
 
     expect(
-      screen.queryByAltText("Test image alt text")
+      screen.queryByAltText("Test image alt text"),
     ).not.toBeInTheDocument();
   });
 });

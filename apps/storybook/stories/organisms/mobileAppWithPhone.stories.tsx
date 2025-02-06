@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { MobileAppWithPhone } from "@react-component-library/ui";
 
 const meta: Meta<typeof MobileAppWithPhone> = {
-  component: MobileAppWithPhone
+  component: MobileAppWithPhone,
 };
 
 export default meta;
@@ -16,17 +16,17 @@ export const Primary: Story = {
     headingText: "It’s all in hand with the app",
     textItems: [
       {
-        itemText: "Manage your order and installation"
+        itemText: "Manage your order and installation",
       },
       {
-        itemText: "Manage your account and view your bills"
+        itemText: "Manage your account and view your bills",
       },
       {
-        itemText: "Manage your package"
+        itemText: "Manage your package",
       },
       {
-        itemText: "Add mesh devices to blanket your home"
-      }
-    ]
-  }
+        itemText: "Add mesh devices to blanket your home",
+      },
+    ],
+  },
 };

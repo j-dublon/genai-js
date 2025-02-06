@@ -5,7 +5,7 @@ describe("ColorPill Component", () => {
   const props = {
     colorPillText: "Test text",
     backgroundColor: "bg-core-yellow",
-    ariaLabel: "Custom aria label"
+    ariaLabel: "Custom aria label",
   };
 
   it("renders the ColorPill with custom text", () => {
@@ -28,7 +28,7 @@ describe("ColorPill Component", () => {
     render(<ColorPill {...props} />);
 
     const colorPill = screen.getByLabelText(
-      "Color pill with the text Test text"
+      "Color pill with the text Test text",
     );
     expect(colorPill).toBeInTheDocument();
   });

@@ -11,19 +11,14 @@ export interface FooterProps {
   trustScore: number;
   footerSections: FooterLinksProps["sections"];
   footerDisclaimerText: string;
-  trustPilotLogo: {
-    altText: string;
-    imgSrc: string;
-  };
 }
 
-export const Footer: React.FC<FooterProps> = ({
+export const Footer = ({
   titleText,
   trustScore,
   footerSections,
   footerDisclaimerText,
-  trustPilotLogo
-}) => {
+}: FooterProps) => {
   return (
     <footer className="bg-core-yellow flex justify-center items-center p-[144px]">
       <div className="flex justify-between w-full max-w-[1200px]">
@@ -32,12 +27,13 @@ export const Footer: React.FC<FooterProps> = ({
             <h2 className="font-bold text-[26px] md:text-5xl">{titleText}</h2>
           </div>
           <div className="flex items-end space-x-12">
-            <TrustpilotVertical
-              width={144}
-              height={36}
-              trustScore={trustScore}
-              trustPilotLogo={trustPilotLogo}
-            />
+            {trustScore && (
+              <TrustpilotVertical
+                width={144}
+                height={36}
+                trustScore={trustScore}
+              />
+            )}
             <div className="flex space-x-8">
               <div className="flex items-end">
                 <InstagramIcon aria-label="Instagram" />
@@ -62,5 +58,3 @@ export const Footer: React.FC<FooterProps> = ({
     </footer>
   );
 };
-
-Footer.displayName = "Footer";

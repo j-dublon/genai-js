@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { Heading } from "@react-component-library/ui";
 
 const meta: Meta<typeof Heading> = {
-  component: Heading
+  component: Heading,
 };
 
 export default meta;
@@ -13,6 +13,6 @@ export const Primary: Story = {
   render: (props) => <Heading {...props} />,
   name: "Heading",
   args: {
-    headingText: "This is an example bit of text"
-  }
+    headingText: "This is an example bit of text",
+  },
 };

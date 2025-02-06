@@ -7,7 +7,7 @@ interface TwitterIconProps {
 export const TwitterIcon: React.FC<TwitterIconProps> = ({
   width = 25,
   height = 21,
-  fill = "#1F1F1F"
+  fill = "#1F1F1F",
 }) => {
   return (
     <svg

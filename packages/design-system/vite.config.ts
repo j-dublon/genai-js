@@ -14,26 +14,26 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, "./lib/index.ts"),
       name: "react-design-ui",
-      fileName: (format) => `index.${format}.js`
+      fileName: (format) => `index.${format}.js`,
     },
     rollupOptions: {
       external: ["react", "react-dom", "react/jsx-runtime"],
       output: {
         globals: {
           react: "React",
-          "react-dom": "ReactDOM"
-        }
-      }
+          "react-dom": "ReactDOM",
+        },
+      },
     },
     sourcemap: true,
-    emptyOutDir: true
+    emptyOutDir: true,
   },
   plugins: [
     [react()],
     dts({
-      rollupTypes: true
+      rollupTypes: true,
     }),
-    tailwindcss()
+    tailwindcss(),
   ],
   resolve: {
     alias: {
@@ -41,13 +41,13 @@ export default defineConfig({
       "@icons": resolve(__dirname, "lib/icons"),
       "@utils": resolve(__dirname, "lib/utils"),
       "@lib": resolve(__dirname, "lib"),
-      "@hooks": resolve(__dirname, "lib/hooks")
-    }
+      "@hooks": resolve(__dirname, "lib/hooks"),
+    },
   },
   test: {
     globals: true,
     environment: "jsdom",
     setupFiles: "./setup-test.ts",
-    css: false //getting issues with tailwindcss v4 leaving this as false for now
-  }
+    css: false, //getting issues with tailwindcss v4 leaving this as false for now
+  },
 });

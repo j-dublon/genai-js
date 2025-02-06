@@ -6,7 +6,7 @@ describe("CompanyLogo Component", () => {
     altText: "Test alt text",
     width: "100",
     height: "100",
-    imgSrc: "Test img src"
+    imgSrc: "Test img src",
   };
   it("renders the button with children", () => {
     render(<CompanyLogo {...props} />);

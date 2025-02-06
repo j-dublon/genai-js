@@ -11,8 +11,8 @@ const meta: Meta<typeof InfoCard> = {
         "bg-ui-grey-200",
         "bg-core-yellow",
         "bg-core-white",
-        "bg-core-pink"
-      ]
+        "bg-core-pink",
+      ],
     },
     infoCardBackgroundColor: {
       control: { type: "radio" },
@@ -21,10 +21,10 @@ const meta: Meta<typeof InfoCard> = {
         "bg-ui-grey-200",
         "bg-core-yellow",
         "bg-core-white",
-        "bg-core-pink"
-      ]
-    }
-  }
+        "bg-core-pink",
+      ],
+    },
+  },
 };
 
 export default meta;
@@ -54,8 +54,8 @@ export const Primary: Story = {
 
       image: {
         url: "/assets/images/eero.svg",
-        alt: "Picture of an eero router on a background called whoosh"
-      }
-    }
-  }
+        alt: "Picture of an eero router on a background called whoosh",
+      },
+    },
+  },
 };

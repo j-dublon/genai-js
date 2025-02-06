@@ -7,9 +7,9 @@ const mockMobileProps: MobileAppProps = {
   headingText: "It’s all in hand with the app",
   textItems: [
     {
-      itemText: "Manage your order and installation"
-    }
-  ]
+      itemText: "Manage your order and installation",
+    },
+  ],
 };
 
 describe("MobileAppWithPhone Component", () => {
@@ -23,8 +23,8 @@ describe("MobileAppWithPhone Component", () => {
     mockMobileProps.textItems.forEach((item) => {
       expect(
         screen.getAllByLabelText(
-          `Text item with statement: ${item.itemText}`
-        )[0]
+          `Text item with statement: ${item.itemText}`,
+        )[0],
       ).toBeInTheDocument();
     });
   });

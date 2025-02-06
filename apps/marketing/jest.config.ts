@@ -3,7 +3,7 @@ import nextJest from "next/jest";
 import { resolve } from "path";
 
 const createJestConfig = nextJest({
-  dir: "./"
+  dir: "./",
 });
 
 const config: Config = {
@@ -13,12 +13,12 @@ const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jsdom",
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest"
+    "^.+\\.(ts|tsx)$": "ts-jest",
   },
   testPathIgnorePatterns: ["/node_modules/", "/.next/"],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1"
-  }
+    "^@/(.*)$": "<rootDir>/src/$1",
+  },
 };
 
 export default createJestConfig(config);

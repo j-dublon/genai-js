@@ -9,7 +9,7 @@ export interface ColorPillProps {
 export const ColorPill: React.FC<ColorPillProps> = ({
   colorPillText,
   backgroundColor,
-  ariaLabel
+  ariaLabel,
 }) => {
   return (
     <div

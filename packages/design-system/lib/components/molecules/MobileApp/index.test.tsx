@@ -6,21 +6,21 @@ describe("MobileApp Component", () => {
     headingText: "It's all in hand with the app",
     textItems: [
       {
-        itemText: "Manage your order and installation"
-      }
-    ]
+        itemText: "Manage your order and installation",
+      },
+    ],
   };
   it("renders the component", () => {
     render(<MobileApp {...mockProps} />);
 
     const heading = screen.getByRole("heading", {
-      name: "It's all in hand with the app"
+      name: "It's all in hand with the app",
     });
 
     expect(heading).toBeInTheDocument();
 
     const boldText = screen.getAllByText(
-      /Manage your order and installation/i
+      /Manage your order and installation/i,
     )[0];
 
     expect(boldText).toBeInTheDocument();

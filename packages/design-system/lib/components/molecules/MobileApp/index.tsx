@@ -11,7 +11,7 @@ type MobileAppTextItemsProps = {
 
 export const MobileApp: React.FC<MobileAppProps> = ({
   headingText,
-  textItems
+  textItems,
 }) => {
   return (
     <div className="md:py-12 md:px-10 p-6 bg-core-white md:rounded-lg md:w-[35%]">

@@ -13,7 +13,7 @@ export const Collapser = ({
   children,
   close,
   FAQDropdownOpen,
-  setFAQDropdownOpen
+  setFAQDropdownOpen,
 }: CollapserProps) => {
   return (
     <>

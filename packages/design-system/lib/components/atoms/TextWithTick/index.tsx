@@ -7,7 +7,7 @@ export interface TextWithTickProps {
 
 export const TextWithTick: React.FC<TextWithTickProps> = ({
   textInput,
-  ariaLabel
+  ariaLabel,
 }) => {
   return (
     <div

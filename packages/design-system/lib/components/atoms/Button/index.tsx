@@ -34,7 +34,7 @@ export const Button = forwardRef(
       justifyContent = "center",
       ...props
     }: IProps,
-    ref
+    ref,
   ) => {
     const isOutline = variant === "outline";
     const buttonClasses = `
@@ -77,7 +77,7 @@ export const Button = forwardRef(
         {children}
       </Component>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

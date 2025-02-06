@@ -6,9 +6,9 @@ const meta: Meta<typeof ProductCard> = {
   argTypes: {
     accentColor: {
       control: { type: "radio" },
-      options: ["blue", "yellow", "pink"]
-    }
-  }
+      options: ["blue", "yellow", "pink"],
+    },
+  },
 };
 
 export default meta;
@@ -29,6 +29,6 @@ export const Primary: Story = {
   ),
   name: "Product Card",
   args: {
-    accentColor: "yellow"
-  }
+    accentColor: "yellow",
+  },
 };

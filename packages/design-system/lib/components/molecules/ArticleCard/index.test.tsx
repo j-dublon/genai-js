@@ -8,7 +8,7 @@ describe("ArticleCard Component", () => {
     imageAlt: "Article image 1",
     title: "First blog post",
     slug: "/blog/1",
-    primaryTag: "Test Tag"
+    primaryTag: "Test Tag",
   };
 
   it("renders the component", () => {

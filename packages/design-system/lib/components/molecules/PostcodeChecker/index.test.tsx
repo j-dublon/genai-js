@@ -6,7 +6,7 @@ describe("PostcodeChecker Component", () => {
     titleText: "Test title",
     topText: "Test top text title",
     placeholderText: "Test placeholder text",
-    inputBoxButtonText: "Test"
+    inputBoxButtonText: "Test",
   };
   it("renders the component", () => {
     render(<PostcodeChecker {...props} />);
@@ -14,7 +14,7 @@ describe("PostcodeChecker Component", () => {
     expect(screen.getByText("Test title")).toBeInTheDocument();
     expect(screen.getByText("Test top text title")).toBeInTheDocument();
     expect(
-      screen.getByPlaceholderText("Test placeholder text")
+      screen.getByPlaceholderText("Test placeholder text"),
     ).toBeInTheDocument();
   });
 
@@ -22,7 +22,7 @@ describe("PostcodeChecker Component", () => {
     const newProps = {
       titleText: "Test title",
       placeholderText: "Test placeholder text",
-      InputBoxButtonText: "Test"
+      InputBoxButtonText: "Test",
     };
     render(<PostcodeChecker {...newProps} />);
 

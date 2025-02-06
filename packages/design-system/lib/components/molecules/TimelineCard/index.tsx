@@ -11,7 +11,7 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
   colorPillText,
   backgroundColor,
   subtitleText,
-  contextText
+  contextText,
 }) => {
   return (
     <div className="p-5 bg-ui-grey-200 rounded-lg md:w-[30%]">

@@ -22,7 +22,7 @@ export const FeatureText = ({
   textScale = 1.8,
   textGap = 12,
   infoCard = false,
-  image
+  image,
 }: FeatureTextProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
@@ -56,7 +56,7 @@ export const FeatureText = ({
         className="inline-block"
         style={{
           transform: `translateY(${Math.sin(i * waveIntensity) * -30}px) scale(${scale})`,
-          display: "inline-block"
+          display: "inline-block",
         }}
       >
         {char}

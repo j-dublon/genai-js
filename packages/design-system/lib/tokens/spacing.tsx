@@ -8,5 +8,5 @@ export const spacing = {
   birch: "64px",
   oak: "80px",
   pine: "96px",
-  redwood: "160px"
+  redwood: "160px",
 } as const;

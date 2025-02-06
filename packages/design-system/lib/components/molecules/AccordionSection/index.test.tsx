@@ -7,7 +7,7 @@ describe("Accordion section Component", () => {
       dropdown_header: "testing question header",
       dropdown_content: ["this is some content", "this is some more content"],
       button_text: "button text",
-      button_link: "www.test.com"
+      button_link: "www.test.com",
     };
 
     render(
@@ -15,7 +15,7 @@ describe("Accordion section Component", () => {
         heading="Test main header"
         subText="Test sub header text"
         questionsArr={[questions]}
-      />
+      />,
     );
 
     expect(screen.getByText("Test main header")).toBeInTheDocument();
@@ -29,7 +29,7 @@ describe("Accordion section Component", () => {
       <AccordionSection
         heading="Still not sure? Tell us what’s bothering you."
         questionsArr={[]}
-      />
+      />,
     );
 
     const button = screen.queryByRole("link");

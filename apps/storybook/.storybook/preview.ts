@@ -5,7 +5,7 @@ import "../assets/index.css";
 import "@react-component-library/ui/style.css";
 
 const preview: Preview = {
-  parameters: {}
+  parameters: {},
 };
 
 export default preview;
