@@ -21,14 +21,14 @@ export const Footer = ({
 }: FooterProps) => {
   return (
     <footer className="bg-core-yellow flex md:justify-center md:items-center px-5 py-10 lg:pr-36  md:py-14">
-      <div className="flex flex-col md:flex-row justify-between w-full md:max-w-[1200px]">
-        <div className="flex flex-col md:flex-auto justify-between md:w-1/2 p-4">
+      <div className="flex flex-col md:flex-row md:justify-between w-full md:max-w-[1200px]">
+        <div className="flex flex-col md:flex-auto md:justify-between md:w-1/2 py-4">
           <div className="md:max-w-[313px] pt-9">
             <h2 className="font-bold text-4xl md:text-5xl">{titleText}</h2>
           </div>
-          <div className="flex items-end space-x-12">
+          <div className="flex items-end space-x-12 pt-10">
             {trustScore && (
-              <div className="invisible md:visible">
+              <div className="hidden md:block">
                 <TrustpilotVertical
                   width={144}
                   height={36}
@@ -64,7 +64,7 @@ export const Footer = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-between md:w-1/2 p-4 space-y-8">
+        <div className="flex flex-col justify-between md:w-1/2 py-4 space-y-8">
           <FooterLinks sections={footerSections} />
           {trustScore && (
             <div className="visible md:invisible">
