@@ -5,10 +5,7 @@ export interface TextWithTickProps {
   ariaLabel?: string;
 }
 
-export const TextWithTick: React.FC<TextWithTickProps> = ({
-  textInput,
-  ariaLabel,
-}) => {
+export const TextWithTick = ({ textInput, ariaLabel }: TextWithTickProps) => {
   return (
     <div
       className="flex items-center gap-2.5 bg-core-white p-3 rounded-full"

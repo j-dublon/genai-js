@@ -4,11 +4,11 @@ interface LinkedInIconProps {
   fill?: string;
 }
 
-export const LinkedInIcon: React.FC<LinkedInIconProps> = ({
+export const LinkedInIcon = ({
   width = 22,
   height = 21,
   fill = "#1F1F1F",
-}) => {
+}: LinkedInIconProps) => {
   return (
     <svg
       width={width}

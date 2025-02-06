@@ -1,7 +1,7 @@
 import { Phone } from "@icons/Phone";
 import { MobileApp, MobileAppProps } from "@components/molecules/MobileApp";
 
-export const MobileAppWithPhone: React.FC<MobileAppProps> = (props) => {
+export const MobileAppWithPhone = (props: MobileAppProps) => {
   return (
     <div className="md:flex md:gap-20 items-center bg-core-yellow md:p-20 justify-center">
       <div
@@ -16,5 +16,3 @@ export const MobileAppWithPhone: React.FC<MobileAppProps> = (props) => {
     </div>
   );
 };
-
-MobileAppWithPhone.displayName = "MobileAppWithPhone";

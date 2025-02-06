@@ -6,11 +6,11 @@ interface TrustpilotStarsProps {
   height?: number;
 }
 
-export const TrustpilotStars: React.FC<TrustpilotStarsProps> = ({
+export const TrustpilotStars = ({
   trustScore,
   width,
   height,
-}) => {
+}: TrustpilotStarsProps) => {
   const { full, half } = getTrustpilotStarStatus(trustScore);
 
   return (

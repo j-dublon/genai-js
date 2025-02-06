@@ -7,12 +7,12 @@ export interface TimelineCardProps {
   contextText: string;
 }
 
-export const TimelineCard: React.FC<TimelineCardProps> = ({
+export const TimelineCard = ({
   colorPillText,
   backgroundColor,
   subtitleText,
   contextText,
-}) => {
+}: TimelineCardProps) => {
   return (
     <div className="p-5 bg-ui-grey-200 rounded-lg md:w-[30%]">
       <div className="pb-7">
@@ -28,5 +28,3 @@ export const TimelineCard: React.FC<TimelineCardProps> = ({
     </div>
   );
 };
-
-TimelineCard.displayName = "TimelineCard";

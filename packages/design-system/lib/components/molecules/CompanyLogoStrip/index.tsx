@@ -13,10 +13,10 @@ type CompanyLogoProps = {
   imgSrc: string;
 };
 
-export const CompanyLogoStrip: React.FC<CompanyLogoStripProps> = ({
+export const CompanyLogoStrip = ({
   logos,
   backgroundColor,
-}) => {
+}: CompanyLogoStripProps) => {
   return (
     <div
       className={cx(

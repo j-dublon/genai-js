@@ -9,7 +9,7 @@ interface ProductCardProps {
   active?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = (props) => {
+export const ProductCard = (props: ProductCardProps) => {
   const { header, dataVideoIndex, active, accentColor } = props;
   const color = "bg-core-" + accentColor;
 
@@ -67,5 +67,3 @@ export const ProductCard: React.FC<ProductCardProps> = (props) => {
     </div>
   );
 };
-
-ProductCard.displayName = "ProductCard";

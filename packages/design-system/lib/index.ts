@@ -20,6 +20,8 @@ import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ColorPill } from "@components/atoms/ColorPill";
 import { TimelineCard } from "@components/molecules/TimelineCard";
+import { Guides } from "@components/organisms/Guides";
+import { GuideCard } from "@components/atoms/GuideCard";
 import { InfoCard } from "@components/molecules/InfoCard";
 import { ArticleCard } from "@components/molecules/ArticleCard";
 
@@ -45,6 +47,8 @@ export {
   MobileAppWithPhone,
   ColorPill,
   TimelineCard,
-  InfoCard,
+  Guides,
+  GuideCard,
   ArticleCard,
+  InfoCard,
 };

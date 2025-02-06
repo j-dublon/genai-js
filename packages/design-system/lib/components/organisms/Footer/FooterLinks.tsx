@@ -5,7 +5,7 @@ export interface FooterLinksProps {
   }[];
 }
 
-export const FooterLinks: React.FC<FooterLinksProps> = ({ sections }) => {
+export const FooterLinks = ({ sections }: FooterLinksProps) => {
   return (
     <div className="w-[600px] flex space-x-8 py-4">
       {sections.map((section, index) => (

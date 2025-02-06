@@ -12,7 +12,7 @@ export interface InfoCardProps {
   featureTextProps?: FeatureTextProps;
 }
 
-export const InfoCard: React.FC<InfoCardProps> = ({
+export const InfoCard = ({
   titleText,
   colorPillText,
   colorPillBackgroundColor,
@@ -21,7 +21,7 @@ export const InfoCard: React.FC<InfoCardProps> = ({
   additionalText,
   buttonText,
   featureTextProps,
-}) => {
+}: InfoCardProps) => {
   return (
     <div
       className={`${additionalText || featureTextProps ? "md:max-w-[1152px] md:max-h-[409px] min-w-[350px] min-h-sm" : "w-fit h-fit"}`}
