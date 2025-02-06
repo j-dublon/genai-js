@@ -19,11 +19,6 @@ interface FooterSection {
   links: Link[];
 }
 
-interface Image {
-  altText: string;
-  imgSrc: string;
-}
-
 interface FooterProps {
   titleText: string;
   trustScore: number;

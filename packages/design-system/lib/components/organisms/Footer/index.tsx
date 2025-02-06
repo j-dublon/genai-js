@@ -6,11 +6,6 @@ import { LinkedInIcon } from "@icons/LinkedIn";
 import { FooterLinks, FooterLinksProps } from "./FooterLinks";
 import { FooterDisclaimer } from "./FooterDisclaimer";
 
-export interface Image {
-  altText: string;
-  imgSrc: string;
-}
-
 export interface FooterProps {
   titleText: string;
   trustScore: number;
