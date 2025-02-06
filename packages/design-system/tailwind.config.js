@@ -5,11 +5,6 @@ import defaultTheme from "tailwindcss/defaultTheme";
 /** @type {import('tailwindcss').Config} */
 export default {
   ...sharedConfig,
-  content: [
-    "./lib/**/*.{js,ts,tsx}",
-    "../../apps/**/src/**/*.{js,ts,tsx}", // Ensure microsites are scanned
-    "../../packages/tailwind-config/**/*.{js,ts,tsx}", // Shared Tailwind config, if applicable
-  ],
   theme: {
     colors: {
       currentColor: "currentColor",
