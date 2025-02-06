@@ -7,18 +7,18 @@ export interface FooterLinksProps {
 
 export const FooterLinks = ({ sections }: FooterLinksProps) => {
   return (
-    <div className="w-[600px] flex space-x-8 py-4">
+    <div className="flex flex-col sm:flex-row space-y-8 sm:space-y-0 sm:space-x-8 py-4">
       {sections.map((section, index) => (
         <div key={index} className="flex-1">
-          <h3 className="font-sans text-[12px] font-normal leading-[19.2px] core-ui-grey-500 text-left">
+          <h3 className="text-xs text-ui-grey-500 text-left">
             {section.header}
           </h3>
-          <ul className="mt-4 space-y-[16px]">
+          <ul className="mt-4 space-y-4">
             {section.links.map((link, linkIndex) => (
               <li key={linkIndex}>
                 <a
                   href={link.href}
-                  className="font-sans text-[14px] font-normal leading-[22.4px] text-left no-underline hover:underline underline-offset-2 decoration-gray-600 hover:text-gray-800 transition-colors duration-200"
+                  className="text-sm text-left no-underline hover:underline underline-offset-2"
                 >
                   {link.label}
                 </a>
