@@ -9,10 +9,7 @@ type MobileAppTextItemsProps = {
   itemText: string;
 };
 
-export const MobileApp: React.FC<MobileAppProps> = ({
-  headingText,
-  textItems,
-}) => {
+export const MobileApp = ({ headingText, textItems }: MobileAppProps) => {
   return (
     <div className="md:py-12 md:px-10 p-6 bg-core-white md:rounded-lg md:w-[35%]">
       <div className="md:pr-12">
@@ -45,5 +42,3 @@ export const MobileApp: React.FC<MobileAppProps> = ({
     </div>
   );
 };
-
-MobileApp.displayName = "MobileApp";

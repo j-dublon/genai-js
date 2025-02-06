@@ -24,7 +24,7 @@ export const TrustpilotHorizontal = ({
       className={cx(
         "flex items-center space-x-2 lg:space-x-4",
         { [`w-${maxWidth}`]: maxWidth },
-        { [`h-${maxHeight}`]: maxHeight }
+        { [`h-${maxHeight}`]: maxHeight },
       )}
     >
       <div className="flex-shrink-0">
@@ -44,7 +44,7 @@ export const TrustpilotHorizontal = ({
           "font-garnett",
           "text-18px",
           "font-600",
-          "leading-140"
+          "leading-140",
         )}
       >
         Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews

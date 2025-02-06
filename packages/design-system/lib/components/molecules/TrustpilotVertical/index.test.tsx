@@ -17,7 +17,7 @@ describe("TrustpilotVertical Component", () => {
   it("renders the Trustpilot stars with correct aria-label", () => {
     render(<TrustpilotVertical {...mockProps} />);
     const stars = screen.getByLabelText(
-      "Trustpilot stars: 4 full star(s) and a half-star"
+      "Trustpilot stars: 4 full star(s) and a half-star",
     );
     expect(stars).toBeInTheDocument();
   });

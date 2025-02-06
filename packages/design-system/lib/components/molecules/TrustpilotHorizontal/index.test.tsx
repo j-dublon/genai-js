@@ -21,7 +21,7 @@ describe("TrustpilotHorizontal Component", () => {
     const reviewsText = screen.getByText(/Based on/i);
     expect(reviewsText).toBeInTheDocument();
     expect(reviewsText).toHaveTextContent(
-      `Based on ${mockProps.numberOfReviews.toLocaleString()} reviews`
+      `Based on ${mockProps.numberOfReviews.toLocaleString()} reviews`,
     );
   });
 });

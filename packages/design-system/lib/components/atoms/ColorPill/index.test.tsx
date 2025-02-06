@@ -28,7 +28,7 @@ describe("ColorPill Component", () => {
     render(<ColorPill {...props} />);
 
     const colorPill = screen.getByLabelText(
-      "Color pill with the text Test text"
+      "Color pill with the text Test text",
     );
     expect(colorPill).toBeInTheDocument();
   });

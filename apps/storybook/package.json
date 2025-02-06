@@ -8,6 +8,7 @@
     "build": "storybook build --docs",
     "preview-storybook": "serve storybook-static",
     "lint": "eslint 'stories/**/*.{stories.tsx,stories.jsx,stories.js}' --max-warnings 0",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf storybook-static && rm -rf coverage"
   },
   "dependencies": {
@@ -29,6 +30,7 @@
     "eslint-plugin-mdx": "3.1.5",
     "eslint-plugin-storybook": "0.11.2",
     "postcss": "8.4.49",
+    "prettier": "3.4.2",
     "serve": "^14.2.1",
     "storybook": "^8.2.6",
     "tailwindcss": "4.0.0",

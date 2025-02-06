@@ -22,7 +22,7 @@ export const TrustpilotVertical = ({
       className={cx(
         "flex flex-col items-start",
         { [`max-w-${maxWidth}`]: maxWidth },
-        { [`max-h-${maxHeight}`]: maxHeight }
+        { [`max-h-${maxHeight}`]: maxHeight },
       )}
     >
       <TrustpilotLogo width={width} height={height} />
