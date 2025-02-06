@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
+type backgroundColor = "blue" | "yellow";
+
 export interface FeatureTextProps {
   topText: string;
   bottomText: string;
-  backgroundColor?: string;
-  textColor?: string;
+  backgroundColor: backgroundColor;
+  textColor: "indigo" | "black" | "white" | "grey";
   textScale?: number;
-  textGap?: number;
+  textGap: "small" | "medium" | "large";
   infoCard?: boolean;
   image?: {
     url: string;
@@ -17,10 +19,10 @@ export interface FeatureTextProps {
 export const FeatureText = ({
   topText,
   bottomText,
-  backgroundColor,
-  textColor = "indigo-300",
+  backgroundColor = "blue",
+  textColor = "black",
   textScale = 1.8,
-  textGap = 12,
+  textGap = "small",
   infoCard = false,
   image,
 }: FeatureTextProps) => {
@@ -64,8 +66,24 @@ export const FeatureText = ({
     ));
   };
 
-  const containerClasses = `${backgroundColor ? `bg-${backgroundColor}` : ""} ${infoCard ? "rounded-t-lg" : "rounded-lg"} flex flex-col overflow-hidden px-8 py-12 gap-14`;
-  const textClasses = `md:text-[80px] text-[30px] font-bold text-${textColor} leading-none tracking-wide skew-x-12 w-full flex gap-${textGap} justify-between`;
+  const bgColorVariants = {
+    blue: "bg-blue-300",
+    yellow: "bg-yellow-300",
+  };
+  const textColorVariants = {
+    indigo: "text-indigo-300",
+    black: "text-black",
+    white: "text-core-white",
+    grey: "text-ui-grey-300",
+  };
+  const gapVariants = {
+    small: "gap-2",
+    medium: "gap-8",
+    large: "gap-14",
+  };
+
+  const containerClasses = `${bgColorVariants[backgroundColor]} ${infoCard ? "rounded-t-lg" : "rounded-lg"} flex flex-col overflow-hidden px-8 py-12 gap-14`;
+  const textClasses = `md:text-[80px] text-[30px] font-bold ${textColorVariants[textColor]} leading-none tracking-wide skew-x-12 w-full flex ${gapVariants[textGap]} justify-between opacity-50`;
 
   return (
     <div

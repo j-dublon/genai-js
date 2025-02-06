@@ -5,31 +5,11 @@ const meta: Meta<typeof FeatureText> = {
   component: FeatureText,
   argTypes: {
     backgroundColor: {
-      options: [
-        "currentColor",
-        "transparent",
-        "core-yellow",
-        "core-blue",
-        "secondary-blue",
-        "core-pink",
-        "core-black",
-        "core-white",
-        "ui-grey-200",
-        "ui-grey-500",
-        "outline-ui-grey-300",
-        "link-ui",
-      ],
+      options: ["blue", "yellow"],
       control: { type: "select" },
     },
     textColor: {
-      options: [
-        "current",
-        "transparent",
-        "black",
-        "white",
-        "blue",
-        "indigo-300",
-      ],
+      options: ["indigo", "black", "white", "grey"],
       control: { type: "select" },
     },
     topText: {
@@ -39,10 +19,11 @@ const meta: Meta<typeof FeatureText> = {
       control: "text",
     },
     textScale: {
-      control: "number",
+      control: { type: "number" },
     },
     textGap: {
-      control: { type: "number" },
+      options: ["small", "medium", "large"],
+      control: { type: "select" },
     },
     image: { control: "object" },
   },
@@ -63,12 +44,12 @@ export const Primary: Story = {
   args: {
     topText: "Whooooo",
     bottomText: "ooooosh",
-    backgroundColor: "secondary-blue",
-    textColor: "indigo-300",
+    backgroundColor: "blue",
+    textColor: "white",
     textScale: 1.8,
-    textGap: 8,
+    textGap: "medium",
     image: {
-      url: "../../assets/images/broadband-genie.svg",
+      url: "../../assets/images/eero.svg",
       alt: "its an image",
     },
   },

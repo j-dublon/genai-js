@@ -10,21 +10,25 @@ describe("InfoCard Component", () => {
     contextText: "Test lighter text",
     additionalText: "Test additional text",
     buttonText: "Test button text",
-    featureTextProps: {
-      topText: "Whooooo",
-      bottomText: "ooooosh",
-      backgroundColor: "core-blue",
-      textColor: "white",
-      textScale: 1.8,
-      textGap: 8,
-      image: {
-        url: "/test-asset.png",
-        alt: "Test image alt text",
-      },
-    },
   };
   it("renders the component", () => {
-    render(<InfoCard {...baseProps} />);
+    render(
+      <InfoCard
+        {...baseProps}
+        featureTextProps={{
+          topText: "Whooooo",
+          bottomText: "ooooosh",
+          backgroundColor: "blue",
+          textColor: "white",
+          textScale: 1.8,
+          textGap: "medium",
+          image: {
+            url: "/test-asset.png",
+            alt: "Test image alt text",
+          },
+        }}
+      />,
+    );
 
     expect(screen.getByText("Test title")).toBeInTheDocument();
     expect(screen.getByText("Test title")).toHaveStyle(
