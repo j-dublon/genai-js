@@ -39,15 +39,15 @@ export const Footer = ({
             <div className="flex space-x-8">
               <a
                 className="flex items-end"
-                href="https://www.instagram.com/cuckoobroadband/"
-              >
-                <InstagramIcon aria-label="Instagram" />
-              </a>
-              <a
-                className="flex items-end"
                 href="https://twitter.com/cuckoointernet"
               >
                 <TwitterIcon aria-label="Twitter" />
+              </a>
+              <a
+                className="flex items-end"
+                href="https://www.instagram.com/cuckoobroadband/"
+              >
+                <InstagramIcon aria-label="Instagram" />
               </a>
               <a
                 className="flex items-end"
