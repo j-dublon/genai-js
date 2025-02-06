@@ -24,7 +24,6 @@ export const Footer = ({
   trustScore,
   footerSections,
   footerDisclaimerText,
-  trustPilotLogo,
 }: FooterProps) => {
   return (
     <footer className="bg-core-yellow flex md:justify-center md:items-center px-5 py-10 lg:pr-36  md:py-14">
@@ -33,15 +32,16 @@ export const Footer = ({
           <div className="md:max-w-[313px] pt-9">
             <h2 className="font-bold text-4xl md:text-5xl">{titleText}</h2>
           </div>
-          <div className="flex flex-col md:flex-row md:items-end space-x-12">
-            <div className="invisible md:visible">
-              <TrustpilotVertical
-                width={144}
-                height={36}
-                trustScore={trustScore}
-                trustPilotLogo={trustPilotLogo}
-              />
-            </div>
+          <div className="flex items-end space-x-12">
+            {trustScore && (
+              <div className="invisible md:visible">
+                <TrustpilotVertical
+                  width={144}
+                  height={36}
+                  trustScore={trustScore}
+                />
+              </div>
+            )}
             <div className="flex space-x-8">
               <a
                 className="flex items-end"
@@ -72,14 +72,15 @@ export const Footer = ({
         </div>
         <div className="flex flex-col justify-between md:w-1/2 p-4 space-y-8">
           <FooterLinks sections={footerSections} />
-          <div className="visible md:invisible">
-            <TrustpilotVertical
-              width={144}
-              height={36}
-              trustScore={trustScore}
-              trustPilotLogo={trustPilotLogo}
-            />
-          </div>
+          {trustScore && (
+            <div className="visible md:invisible">
+              <TrustpilotVertical
+                width={144}
+                height={36}
+                trustScore={trustScore}
+              />
+            </div>
+          )}
           <FooterDisclaimer footerDisclaimerText={footerDisclaimerText} />
         </div>
       </div>

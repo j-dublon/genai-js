@@ -15,10 +15,6 @@ const mockFooterProps: FooterProps = {
     },
   ],
   footerDisclaimerText: "© 2025 Your Company. All rights reserved.",
-  trustPilotLogo: {
-    altText: "Trustpilot Logo",
-    imgSrc: "https://via.placeholder.com/150",
-  },
 };
 
 describe("Footer Component", () => {
@@ -35,19 +31,6 @@ describe("Footer Component", () => {
         expect(screen.getByText(link.label)).toBeInTheDocument();
       });
     });
-  });
-
-  it("renders both the Trustpilot logos with alt text", () => {
-    render(<Footer {...mockFooterProps} />);
-    const logo = screen.getAllByAltText(mockFooterProps.trustPilotLogo.altText);
-    expect(logo[0]).toHaveAttribute(
-      "src",
-      mockFooterProps.trustPilotLogo.imgSrc
-    );
-    expect(logo[1]).toHaveAttribute(
-      "src",
-      mockFooterProps.trustPilotLogo.imgSrc
-    );
   });
 
   it("renders the footer disclaimer text", () => {

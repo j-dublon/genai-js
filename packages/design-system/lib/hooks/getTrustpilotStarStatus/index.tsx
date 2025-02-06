@@ -1,4 +1,4 @@
-export const getTrustPilotStarStatus = (trustScore: number) => {
+export const getTrustpilotStarStatus = (trustScore: number) => {
   if (trustScore >= 1 && trustScore <= 1.2) return { full: 1, half: false };
   if (trustScore >= 1.3 && trustScore <= 1.7) return { full: 1, half: true };
   if (trustScore >= 1.8 && trustScore <= 2.2) return { full: 2, half: false };
