@@ -1,5 +1,5 @@
 import { Image, Tag } from "../../../types";
-import { ColourPill } from "../ColourPill";
+import { ColorPill } from "../ColorPill";
 
 export interface GuideCardProps {
   title: string;
@@ -44,8 +44,8 @@ export const GuideCard = ({ title, image, tags, onClick }: GuideCardProps) => {
       >
         {tags.map((t, i) => (
           <div key={`${t.text}${i}`} role="listitem">
-            <ColourPill
-              colourPillText={t.text}
+            <ColorPill
+              colorPillText={t.text}
               backgroundColor={t.backgroundColor}
             />
           </div>

@@ -1,4 +1,4 @@
-export const GooglePlay: React.FC = () => {
+export const GooglePlay = () => {
   return (
     <svg
       className="w-[120px] h-[40px] md:w-[150px] md:h-[50px]"

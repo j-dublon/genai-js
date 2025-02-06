@@ -9,7 +9,7 @@ interface ProductCardProps {
   active?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = (props) => {
+export const ProductCard = (props: ProductCardProps) => {
   const { header, dataVideoIndex, active, accentColor } = props;
   const color = "bg-core-" + accentColor;
 
@@ -28,7 +28,7 @@ export const ProductCard: React.FC<ProductCardProps> = (props) => {
             <div className="wrap flex items-center gap-2">
               <span
                 className={cx(
-                  "text-[16px] px-2 flex w-fit items-center justify-center whitespace-nowrap rounded-xl border-2 border-core-black py-0.5 font-semibold"
+                  "text-[16px] px-2 flex w-fit items-center justify-center whitespace-nowrap rounded-xl border-2 border-core-black py-0.5 font-semibold",
                 )}
               >
                 900Mbps
@@ -56,7 +56,7 @@ export const ProductCard: React.FC<ProductCardProps> = (props) => {
         </div>
         <aside
           className={cx(
-            `px-2 py-2 mt-6 flex flex-row items-center rounded-md ${color} transition-all duration-[350ms] md:opacity-0 md:group-hover:opacity-100`
+            `px-2 py-2 mt-6 flex flex-row items-center rounded-md ${color} transition-all duration-[350ms] md:opacity-0 md:group-hover:opacity-100`,
           )}
         >
           <span className="rounded-[80px] px-3 text-[24px] font-semibold">
@@ -67,5 +67,3 @@ export const ProductCard: React.FC<ProductCardProps> = (props) => {
     </div>
   );
 };
-
-ProductCard.displayName = "ProductCard";

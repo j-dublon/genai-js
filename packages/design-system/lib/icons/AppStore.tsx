@@ -1,4 +1,4 @@
-export const AppStore: React.FC = () => {
+export const AppStore = () => {
   return (
     <svg
       className="w-[120px] h-[40px] md:w-[150px] md:h-[50px]"

@@ -3,16 +3,16 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GuideCard } from ".";
 
-vi.mock("../ColourPill", () => ({
-  ColourPill: ({
-    colourPillText,
+vi.mock("../ColorPill", () => ({
+  ColorPill: ({
+    colorPillText,
     backgroundColor,
   }: {
-    colourPillText: string;
+    colorPillText: string;
     backgroundColor: string;
   }) => (
-    <div data-testid="colour-pill" style={{ backgroundColor }}>
-      {colourPillText}
+    <div data-testid="color-pill" style={{ backgroundColor }}>
+      {colorPillText}
     </div>
   ),
 }));
@@ -59,7 +59,7 @@ describe("GuideCard", () => {
     // Check tags
     expect(screen.getByRole("list", { name: "Tags" })).toBeInTheDocument();
     expect(screen.getAllByRole("listitem")).toHaveLength(2);
-    expect(screen.getAllByTestId("colour-pill")).toHaveLength(2);
+    expect(screen.getAllByTestId("color-pill")).toHaveLength(2);
   });
 
   it("handles click events", async () => {
