@@ -3,37 +3,52 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { FeatureText } from ".";
 
 describe("FeatureText", () => {
-  const defaultProps = {
-    topText: "Hello",
-    bottomText: "World",
-  };
-
   it("renders both texts correctly for screen readers", () => {
-    render(<FeatureText {...defaultProps} />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="blue"
+        textColor="indigo"
+        textGap="medium"
+      />,
+    );
 
     expect(screen.getByText("Hello")).toBeInTheDocument();
     expect(screen.getByText("World")).toBeInTheDocument();
   });
 
   it("renders with custom background color", () => {
-    render(<FeatureText {...defaultProps} backgroundColor="blue-500" />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="medium"
+      />,
+    );
 
     const container = screen.getByRole("region", {
       name: "Feature text display",
     });
-    expect(container).toHaveClass("bg-blue-500");
+    expect(container).toHaveClass("bg-yellow-300");
   });
 
   it("renders image when provided", () => {
-    const imageProps = {
-      ...defaultProps,
-      image: {
-        url: "/test-image.jpg",
-        alt: "Test image",
-      },
-    };
-
-    render(<FeatureText {...imageProps} />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="medium"
+        image={{
+          url: "/test-image.jpg",
+          alt: "Test image",
+        }}
+      />,
+    );
 
     const image = screen.getByAltText("Test image");
     expect(image).toBeInTheDocument();
@@ -42,14 +57,30 @@ describe("FeatureText", () => {
   });
 
   it("does not render image when not provided", () => {
-    render(<FeatureText {...defaultProps} />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="medium"
+      />,
+    );
 
     const images = screen.queryAllByRole("img");
     expect(images).toHaveLength(0);
   });
 
   it("hides decorative text from screen readers", () => {
-    render(<FeatureText {...defaultProps} />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="medium"
+      />,
+    );
 
     const hiddenElements = document.querySelectorAll('[aria-hidden="true"]');
     expect(hiddenElements.length).toBeGreaterThan(0);
@@ -61,7 +92,15 @@ describe("FeatureText", () => {
   });
 
   it("provides screen reader only text", () => {
-    render(<FeatureText {...defaultProps} />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="medium"
+      />,
+    );
 
     const srOnlyElement = document.querySelector(".sr-only");
     expect(srOnlyElement).toBeInTheDocument();
@@ -69,7 +108,15 @@ describe("FeatureText", () => {
   });
 
   it("updates scale on window resize", () => {
-    const { container } = render(<FeatureText {...defaultProps} />);
+    const { container } = render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="medium"
+      />,
+    );
 
     Object.defineProperty(container.firstChild, "offsetWidth", { value: 1000 });
     Object.defineProperty(container.firstChild, "offsetHeight", { value: 500 });
@@ -91,7 +138,16 @@ describe("FeatureText", () => {
   });
 
   it("applies custom text scale", () => {
-    render(<FeatureText {...defaultProps} textScale={2.5} />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="medium"
+        textScale={2.5}
+      />,
+    );
 
     const chars = screen
       .getAllByRole("generic", { hidden: true })
@@ -101,18 +157,34 @@ describe("FeatureText", () => {
   });
 
   it("applies custom text gap", () => {
-    render(<FeatureText {...defaultProps} textGap={24} />);
+    render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="small"
+      />,
+    );
 
     const textElements = document.querySelectorAll('[role="presentation"]');
     textElements.forEach((element) => {
-      expect(element).toHaveClass("gap-24");
+      expect(element).toHaveClass("gap-2");
     });
   });
 
   it("removes resize event listener on unmount", () => {
     const removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
 
-    const { unmount } = render(<FeatureText {...defaultProps} />);
+    const { unmount } = render(
+      <FeatureText
+        topText="Hello"
+        bottomText="World"
+        backgroundColor="yellow"
+        textColor="indigo"
+        textGap="small"
+      />,
+    );
     unmount();
 
     expect(removeEventListenerSpy).toHaveBeenCalledWith(
