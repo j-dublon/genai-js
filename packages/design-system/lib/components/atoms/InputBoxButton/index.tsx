@@ -4,7 +4,7 @@ export interface InputBoxButtonProps {
   inputBoxButtonText?: string;
 }
 
-export const InputBoxButton: React.FC<InputBoxButtonProps> = (props) => {
+export const InputBoxButton = (props: InputBoxButtonProps) => {
   const { inputBoxButtonText } = props;
 
   return (

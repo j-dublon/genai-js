@@ -4,11 +4,11 @@ interface InstagramIconProps {
   fill?: string;
 }
 
-export const InstagramIcon: React.FC<InstagramIconProps> = ({
+export const InstagramIcon = ({
   width = 21,
   height = 21,
   fill = "#1F1F1F",
-}) => {
+}: InstagramIconProps) => {
   return (
     <svg
       width={width}

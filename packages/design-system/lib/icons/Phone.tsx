@@ -1,4 +1,4 @@
-export const Phone: React.FC = () => {
+export const Phone = () => {
   return (
     <svg
       width="464"

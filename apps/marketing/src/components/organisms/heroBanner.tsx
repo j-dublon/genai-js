@@ -6,7 +6,7 @@ import {
   TrustpilotVertical,
 } from "@react-component-library/ui";
 
-export const HeroBanner: React.FC = () => {
+export const HeroBanner = () => {
   return (
     <div
       className="flex md:p-20 justify-between w-full gap-14 bg-cover bg-center"
