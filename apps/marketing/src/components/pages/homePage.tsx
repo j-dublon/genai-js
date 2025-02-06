@@ -4,7 +4,7 @@ import { AccordionWrapper } from "@/components/molecules/accordion";
 
 export const HomePage = () => {
   return (
-    <div>
+    <div className="blur-xs">
       <HeroBanner />
       <CompanyLogoStripWrapper />
       <AccordionWrapper />
