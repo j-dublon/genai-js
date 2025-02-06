@@ -1,2 +1,4 @@
-build
-coverage
+**/.git
+**/node_modules
+
+packages/design-system/dist
