@@ -28,11 +28,11 @@ describe("InfoCard Component", () => {
 
     expect(screen.getByText("Test title")).toBeInTheDocument();
     expect(screen.getByText("Test title")).toHaveStyle(
-      "background-color: bg-core-grey"
+      "background-color: bg-core-grey",
     );
     expect(screen.getByText("Test color pill text")).toBeInTheDocument();
     expect(screen.getByText("Test color pill text")).toHaveStyle(
-      "background-color: bg-core-yellow"
+      "background-color: bg-core-yellow",
     );
 
     expect(screen.getByText("Test lighter text")).toBeInTheDocument();
@@ -60,7 +60,7 @@ describe("InfoCard Component", () => {
     render(<InfoCard {...newProps} />);
 
     expect(
-      screen.queryByAltText("Test image alt text")
+      screen.queryByAltText("Test image alt text"),
     ).not.toBeInTheDocument();
   });
 });

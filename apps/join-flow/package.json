@@ -8,6 +8,7 @@
     "start": "next start",
     "test": "jest --passWithNoTests",
     "lint": "next lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next && rm -rf coverage && rm -rf tsconfig.tsbuildinfo"
   },
@@ -24,6 +25,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
+    "prettier": "3.4.2",
     "tailwindcss": "4.0.0",
     "typescript": "^5"
   }
