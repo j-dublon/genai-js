@@ -1,6 +1,5 @@
 export const props = {
   titleText: "Fast, fair, feel-good broadband",
-  trustScore: 3.5,
   trustPilotLogo: {
     altText: "Trustpilot logo",
     imgSrc: "/assets/images/trustpilot-logo.svg",

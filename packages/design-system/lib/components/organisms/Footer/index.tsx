@@ -8,7 +8,7 @@ import { FooterDisclaimer } from "./FooterDisclaimer";
 
 export interface FooterProps {
   titleText: string;
-  trustScore: number;
+  trustScore?: number;
   footerSections: FooterLinksProps["sections"];
   footerDisclaimerText: string;
 }
@@ -27,7 +27,7 @@ export const Footer = ({
             <h2 className="font-bold text-4xl md:text-5xl">{titleText}</h2>
           </div>
           <div className="flex items-end space-x-12 pt-10">
-            {trustScore && (
+            {trustScore !== undefined && (
               <div className="hidden md:block">
                 <TrustpilotVertical
                   width={144}

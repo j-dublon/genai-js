@@ -1,53 +1,67 @@
 import "@testing-library/jest-dom";
-import { render, screen } from "@testing-library/react";
 import { HomePage } from "../components/pages/homePage";
+import { render, screen } from "@testing-library/react";
+
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    ok: true,
+    status: 200,
+    json: () =>
+      Promise.resolve({ data: { trustScore: 4.5, numberOfReviews: 100 } }),
+  } as Response),
+);
 
 describe("HomePage", () => {
-  it("renders the Ridiculously fast full fibre broadband heading", () => {
-    render(<HomePage />);
+  beforeEach(() => {
+    (fetch as jest.Mock).mockClear();
+  });
 
-    // Check if the heading is in the document
-    const heading = screen.getByText("Ridiculously fast full fibre broadband");
+  it("renders the 'Ridiculously fast full fibre broadband' heading", async () => {
+    render(<HomePage />);
+    const heading = await screen.findByText(
+      "Ridiculously fast full fibre broadband",
+    );
     expect(heading).toBeInTheDocument();
   });
 
-  it("renders the description text", () => {
+  it("renders the description text", async () => {
     render(<HomePage />);
-    expect(
-      screen.getByText(
-        "Stream, game and WFH, all at the same time, with no drop-offs.",
-      ),
-    ).toBeInTheDocument();
+    const description = await screen.findByText(
+      "Stream, game and WFH, all at the same time, with no drop-offs.",
+    );
+    expect(description).toBeInTheDocument();
   });
 
-  it("renders PostcodeChecker input", () => {
+  it("renders PostcodeChecker input", async () => {
     render(<HomePage />);
-    expect(
-      screen.getByPlaceholderText("Pop in your address"),
-    ).toBeInTheDocument();
+    const input = await screen.findByPlaceholderText("Pop in your address");
+    expect(input).toBeInTheDocument();
   });
 
-  it("renders TrustpilotVertical component", () => {
+  it("renders TrustpilotVertical component", async () => {
     render(<HomePage />);
-    const logo = screen.getAllByLabelText("TrustPilot Logo");
+    const logo = await screen.findAllByLabelText("TrustPilot Logo");
     expect(logo[0]).toBeInTheDocument();
   });
 
-  it("renders all TextWithTick items", () => {
+  it("renders all TextWithTick items", async () => {
     render(<HomePage />);
-    expect(
-      screen.getByText("Full fibre speeds up to 900Mbps"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("5x more reliable than traditional broadband"),
-    ).toBeInTheDocument();
-    expect(screen.getByText("eero Pro 6E router")).toBeInTheDocument();
-    expect(screen.getByText("UK-based Customer Care team")).toBeInTheDocument();
+    const item1 = await screen.findByText("Full fibre speeds up to 900Mbps");
+    const item2 = await screen.findByText(
+      "5x more reliable than traditional broadband",
+    );
+    const item3 = await screen.findByText("eero Pro 6E router");
+    const item4 = await screen.findByText("UK-based Customer Care team");
+
+    expect(item1).toBeInTheDocument();
+    expect(item2).toBeInTheDocument();
+    expect(item3).toBeInTheDocument();
+    expect(item4).toBeInTheDocument();
   });
 
-  it("applies background image correctly", () => {
+  it("applies background image correctly", async () => {
     render(<HomePage />);
-    const heroBanner = screen.getByTestId("hero-banner");
+    const heroBanner = await screen.findByTestId("hero-banner");
     expect(heroBanner).toHaveStyle(
       "background-image: url('/assets/images/cuckoo_background.png')",
     );

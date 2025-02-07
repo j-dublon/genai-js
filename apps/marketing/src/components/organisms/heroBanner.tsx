@@ -6,7 +6,11 @@ import {
   TrustpilotVertical,
 } from "@react-component-library/ui";
 
-export const HeroBanner = () => {
+interface HeroBannerProps {
+  trustScore?: number;
+}
+
+export const HeroBanner = ({ trustScore }: HeroBannerProps) => {
   return (
     <div
       className="flex md:p-20 justify-between w-full gap-14 bg-cover bg-center"
@@ -24,7 +28,13 @@ export const HeroBanner = () => {
             inputBoxButtonText="Let's go"
           />
         </form>
-        <TrustpilotVertical trustScore={4} width={100} height={100} />
+        {trustScore !== undefined && (
+          <TrustpilotVertical
+            trustScore={trustScore}
+            width={100}
+            height={100}
+          />
+        )}
       </div>
       <div className="flex-1 py-10 md:flex flex-col gap-2 font-bold">
         {/* This will be updated to use data from the CMS */}
