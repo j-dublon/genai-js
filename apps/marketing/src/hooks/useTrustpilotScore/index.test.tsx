@@ -1,11 +1,13 @@
 import { renderHook, waitFor } from "@testing-library/react";
 import { useTrustpilotScore } from ".";
+import { vi } from "vitest";
 
-global.fetch = jest.fn();
+const mockedFetch = vi.fn() as unknown as jest.MockedFunction<typeof fetch>;
+global.fetch = mockedFetch;
 
 describe("useTrustpilotScore", () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return trustScore and numberOfReviews when the API call is successful", async () => {
@@ -16,10 +18,10 @@ describe("useTrustpilotScore", () => {
       },
     };
 
-    (fetch as jest.Mock).mockResolvedValueOnce({
+    mockedFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockResponse,
-    });
+    } as Response);
 
     const { result } = renderHook(() => useTrustpilotScore());
 
@@ -34,13 +36,13 @@ describe("useTrustpilotScore", () => {
   });
 
   it("should return null data and set an error when the API call fails", async () => {
-    const consoleErrorSpy = jest
+    const consoleErrorSpy = vi
       .spyOn(console, "error")
       .mockImplementation(() => {});
 
-    (fetch as jest.Mock).mockResolvedValueOnce({
+    mockedFetch.mockResolvedValueOnce({
       ok: false,
-    });
+    } as Response);
 
     const { result } = renderHook(() => useTrustpilotScore());
 

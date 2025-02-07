@@ -13,4 +13,6 @@ public/dist
 storybook-static/
 .swc
 
+/coverage
+
 tsconfig.buildinfo

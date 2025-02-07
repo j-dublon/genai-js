@@ -1,21 +1,24 @@
 import "@testing-library/jest-dom";
 import { HomePage } from "../components/pages/homePage";
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
-global.fetch = jest.fn(() =>
+const mockedFetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
     status: 200,
-    json: () =>
+    json: vi.fn(() =>
       Promise.resolve({ data: { trustScore: 4.5, numberOfReviews: 100 } }),
-  } as Response),
+    ),
+  } as unknown as Response),
 );
+
+global.fetch = mockedFetch;
 
 describe("HomePage", () => {
   beforeEach(() => {
-    (fetch as jest.Mock).mockClear();
+    mockedFetch.mockClear();
   });
-
   it("renders the 'Ridiculously fast full fibre broadband' heading", async () => {
     render(<HomePage />);
     const heading = await screen.findByText(
