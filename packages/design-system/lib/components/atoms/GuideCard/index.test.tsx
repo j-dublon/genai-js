@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { GuideCard } from ".";
+import { BackgroundColors } from "@lib/types";
 
 vi.mock("../ColorPill", () => ({
   ColorPill: ({
@@ -9,7 +10,7 @@ vi.mock("../ColorPill", () => ({
     backgroundColor,
   }: {
     colorPillText: string;
-    backgroundColor: string;
+    backgroundColor: BackgroundColors;
   }) => (
     <div data-testid="color-pill" style={{ backgroundColor }}>
       {colorPillText}
@@ -25,9 +26,9 @@ describe("GuideCard", () => {
     height: 200,
   };
 
-  const mockTags = [
-    { text: "Tag 1", backgroundColor: "#FF0000" },
-    { text: "Tag 2", backgroundColor: "#00FF00" },
+  const mockTags: { text: string; backgroundColor: BackgroundColors }[] = [
+    { text: "Tag 1", backgroundColor: "yellow" },
+    { text: "Tag 2", backgroundColor: "pink" },
   ];
 
   const defaultProps = {

@@ -49,6 +49,7 @@ describe("HomePage", () => {
 
   it("renders all TextWithTick items", async () => {
     render(<HomePage />);
+
     const item1 = await screen.findByText("Full fibre speeds up to 900Mbps");
     const item2 = await screen.findByText(
       "5x more reliable than traditional broadband",

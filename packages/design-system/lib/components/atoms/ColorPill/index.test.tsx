@@ -1,10 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { ColorPill } from ".";
+import { ColorPill, ColorPillProps } from ".";
 
 describe("ColorPill Component", () => {
-  const props = {
+  const props: ColorPillProps = {
     colorPillText: "Test text",
-    backgroundColor: "bg-core-yellow",
+    backgroundColor: "yellow",
     ariaLabel: "Custom aria label",
   };
 

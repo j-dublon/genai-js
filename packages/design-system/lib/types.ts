@@ -7,5 +7,7 @@ export interface Image {
 
 export interface Tag {
   text: string;
-  backgroundColor: string;
+  backgroundColor: BackgroundColors;
 }
+
+export type BackgroundColors = "yellow" | "pink" | "grey" | "orange" | "blue";

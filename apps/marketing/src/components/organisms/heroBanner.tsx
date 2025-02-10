@@ -13,11 +13,11 @@ interface HeroBannerProps {
 export const HeroBanner = ({ trustScore }: HeroBannerProps) => {
   return (
     <div
-      className="flex md:p-20 justify-between w-full gap-14 bg-cover bg-center"
+      className="flex md:p-20 md:justify-between w-full md:gap-14 bg-cover bg-center"
       style={{ backgroundImage: "url('/assets/images/cuckoo_background.png')" }}
       data-testid="hero-banner"
     >
-      <div className="flex-1 flex flex-col pr-10">
+      <div className="flex-1 flex flex-col md:pr-10">
         <Heading headingText="Ridiculously fast full fibre broadband" />
         <p className="pb-5">
           Stream, game and WFH, all at the same time, with no drop-offs.

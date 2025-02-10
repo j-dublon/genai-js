@@ -24,6 +24,7 @@ import { Guides } from "@components/organisms/Guides";
 import { GuideCard } from "@components/atoms/GuideCard";
 import { InfoCard } from "@components/molecules/InfoCard";
 import { ArticleCard } from "@components/molecules/ArticleCard";
+import { CardSection } from "@components/organisms/CardSection";
 
 export {
   AccordionSection,
@@ -51,4 +52,5 @@ export {
   GuideCard,
   ArticleCard,
   InfoCard,
+  CardSection,
 };

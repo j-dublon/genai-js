@@ -36,5 +36,5 @@ const logos = [
 ];
 
 export const CompanyLogoStripWrapper = () => {
-  return <CompanyLogoStrip logos={logos} backgroundColor="bg-core-white" />;
+  return <CompanyLogoStrip logos={logos} backgroundColor="bg-ui-grey-200" />;
 };

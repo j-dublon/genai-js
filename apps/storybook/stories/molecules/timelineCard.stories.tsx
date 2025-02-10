@@ -28,6 +28,6 @@ export const Primary: Story = {
     colorPillText: "Now",
     backgroundColor: "bg-core-pink",
     subtitleText: "We'll contact your old broadband provider",
-    contextText: "Letting them know you're switching to Cuckoo",
+    subHeading: "Letting them know you're switching to Cuckoo",
   },
 };

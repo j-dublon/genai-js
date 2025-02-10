@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-type backgroundColor = "blue" | "yellow";
+type BackgroundColor = "blue" | "yellow" | "pink" | "grey" | "orange";
 
 export interface FeatureTextProps {
   topText: string;
   bottomText: string;
-  backgroundColor: backgroundColor;
+  backgroundColor: BackgroundColor;
   textColor: "indigo" | "black" | "white" | "grey";
   textScale?: number;
   textGap: "small" | "medium" | "large";
@@ -67,8 +67,11 @@ export const FeatureText = ({
   };
 
   const bgColorVariants = {
-    blue: "bg-blue-300",
-    yellow: "bg-yellow-300",
+    blue: "bg-secondary-blue",
+    yellow: "bg-core-yellow",
+    pink: "bg-core-pink",
+    grey: "bg-ui-grey-300",
+    orange: "bg-secondary-orange",
   };
   const textColorVariants = {
     indigo: "text-indigo-300",

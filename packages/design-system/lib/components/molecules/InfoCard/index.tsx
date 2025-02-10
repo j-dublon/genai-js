@@ -1,12 +1,14 @@
 import cx from "classnames";
 import { ColorPill } from "@components/atoms/ColorPill";
 import { FeatureText, FeatureTextProps } from "@components/atoms/FeatureText";
+import { BackgroundColors } from "@lib/types";
+
 export interface InfoCardProps {
-  titleText: string;
+  titleText?: string;
   colorPillText: string;
-  colorPillBackgroundColor: string;
-  infoCardBackgroundColor: string;
-  contextText: string;
+  colorPillBackgroundColor: BackgroundColors;
+  infoCardBackgroundColor: BackgroundColors;
+  subHeading?: string;
   additionalText?: string;
   buttonText?: string;
   featureTextProps?: FeatureTextProps;
@@ -17,51 +19,94 @@ export const InfoCard = ({
   colorPillText,
   colorPillBackgroundColor,
   infoCardBackgroundColor,
-  contextText,
+  subHeading,
   additionalText,
   buttonText,
   featureTextProps,
 }: InfoCardProps) => {
+  const bgColorVariants = {
+    pink: "bg-core-pink",
+    yellow: "bg-core-yellow",
+    grey: "bg-ui-grey-200",
+    orange: "bg-secondary-orange",
+    blue: "bg-core-blue",
+  };
+
   return (
     <div
-      className={`${additionalText || featureTextProps ? "md:max-w-[1152px] md:max-h-[409px] min-w-[350px] min-h-sm" : "w-fit h-fit"}`}
+      className={`${additionalText || featureTextProps ? "md:max-w-[1152px] md:min-w-[564px] min-w-[350px] min-h-sm" : "flex flex-col"}`}
     >
-      {featureTextProps && (
-        <div>
-          <FeatureText {...featureTextProps} />
-        </div>
-      )}
+      {featureTextProps && <FeatureText {...featureTextProps} />}
 
       <div
         className={cx(
-          `p-5 ${featureTextProps ? "rounded-b-lg" : "rounded-lg"}  ${additionalText && "flex md:flex-row flex-col md:gap-16 gap-5"}`,
-          `md:w-${additionalText ? "" : "fit"}`,
-          infoCardBackgroundColor,
+          `p-5 ${featureTextProps ? "rounded-b-lg" : "rounded-lg"} ${additionalText && "flex md:flex-row flex-col md:gap-16 gap-5"} ${bgColorVariants[infoCardBackgroundColor]}`,
+          `md:w-${additionalText ? "" : "fit"} flex-1`,
         )}
       >
-        <div className={`md:p-5 ${additionalText && "md:w-[50%]"}`}>
-          <h1 className="font-bold md:text-5xl text-4xl md:pb-7 pb-4">
-            {titleText}
-          </h1>
-          <div className="md:pb-5 pb-2">
-            <ColorPill
-              colorPillText={colorPillText}
-              backgroundColor={colorPillBackgroundColor}
-            />
+        {titleText && subHeading ? (
+          <div className={`md:p-5 ${additionalText && "md:w-[55%]"}`}>
+            <h1 className="font-bold md:text-5xl text-4xl md:pb-7 pb-4">
+              {titleText}
+            </h1>
+            <div>
+              <p
+                className={
+                  titleText
+                    ? "md:text-[26px] text-[16px] md:font-light font-semibold"
+                    : "md:text-5xl text-4xl font-semibold"
+                }
+              >
+                {subHeading}
+              </p>
+            </div>
+            <div className="md:pt-5 pb-2 w-fit">
+              <ColorPill
+                colorPillText={colorPillText}
+                backgroundColor={colorPillBackgroundColor}
+              />
+            </div>
           </div>
-          <div>
-            <p className="md:text-[26px] text-[16px] md:font-light font-medium">
-              {contextText}
-            </p>
+        ) : (
+          <div className={`md:p-5 ${additionalText && "md:w-[50%]"}`}>
+            {titleText && (
+              <h1 className="font-bold md:text-5xl text-4xl md:pb-7 pb-4">
+                {titleText}
+              </h1>
+            )}
+            <div className="md:pt-5 pb-7 w-fit">
+              <ColorPill
+                colorPillText={colorPillText}
+                backgroundColor={colorPillBackgroundColor}
+              />
+            </div>
+
+            <div>
+              {subHeading && (
+                <p
+                  className={
+                    titleText
+                      ? "md:text-[26px] text-[16px] md:font-light font-semibold"
+                      : "md:text-5xl text-4xl font-semibold"
+                  }
+                >
+                  {subHeading}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
+        )}
+
         {additionalText && (
           <div className="md:p-5 md:w-[75%]">
             <p className="pb-5 md:text-[26px] text-[16px] font-normal">
               {additionalText}
             </p>
             {buttonText && (
-              <button className="rounded-md border-2 border-core-black p-4 font-bold md:text-[20px] text-[15px]">
+              <button
+                className="rounded-md border-2 border-core-black p-4 font-bold md:text-[20px] text-[15px]"
+                aria-label={`Open ${buttonText} page`}
+              >
                 {buttonText}
               </button>
             )}

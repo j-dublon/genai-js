@@ -5,7 +5,11 @@ export default {
     "../../packages/component-library/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        garnett: ['Garnett', 'sans-serif'], // 'Garnett' is the font name, with 'sans-serif' as a fallback
+      },
+    },
   },
   plugins: [],
 };

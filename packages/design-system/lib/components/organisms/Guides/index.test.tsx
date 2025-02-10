@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { Guides } from ".";
 import useIsDesktopScreen from "@lib/hooks/isDesktop";
 import { SliderProps } from "@components/atoms/Slider";
+import { BackgroundColors } from "@lib/types";
 
 vi.mock("@lib/hooks/isDesktop", () => ({
   default: vi.fn(),
@@ -31,13 +32,13 @@ describe("Guides", () => {
   const mockGuides = [
     {
       title: "Guide 1",
-      tags: [{ text: "Tag 1", backgroundColor: "#FF0000" }],
+      tags: [{ text: "Tag 1", backgroundColor: "yellow" as BackgroundColors }],
       image: { src: "image1.jpg", alt: "Image 1", width: 300, height: 100 },
       onClick: vi.fn(),
     },
     {
       title: "Guide 2",
-      tags: [{ text: "Tag 2", backgroundColor: "#00FF00" }],
+      tags: [{ text: "Tag 2", backgroundColor: "pink" as BackgroundColors }],
       image: { src: "image2.jpg", alt: "Image 2", width: 300, height: 100 },
       onClick: vi.fn(),
     },

@@ -1,12 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { TimelineCard } from ".";
+import { BackgroundColors } from "@lib/types";
 
 describe("TimelineCard Component", () => {
   const mockProps = {
     colorPillText: "Test text",
-    backgroundColor: "bg-core-yellow",
+    backgroundColor: "yellow" as BackgroundColors,
     subtitleText: "Test subtitle text",
-    contextText: "Test lighter text",
+    subHeading: "Test lighter text",
   };
   it("renders the component", () => {
     render(<TimelineCard {...mockProps} />);
@@ -21,8 +22,8 @@ describe("TimelineCard Component", () => {
     expect(subtitleText).toBeInTheDocument();
     expect(subtitleText).toHaveClass("font-bold");
 
-    const contextText = screen.getByText(/test lighter text/i);
+    const subHeading = screen.getByText(/test lighter text/i);
 
-    expect(contextText).toBeInTheDocument();
+    expect(subHeading).toBeInTheDocument();
   });
 });

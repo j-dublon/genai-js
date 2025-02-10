@@ -1,17 +1,18 @@
 import { ColorPill } from "@lib/index";
+import { BackgroundColors } from "@lib/types";
 
 export interface TimelineCardProps {
   colorPillText: string;
-  backgroundColor: string;
+  backgroundColor: BackgroundColors;
   subtitleText: string;
-  contextText: string;
+  subHeading: string;
 }
 
 export const TimelineCard = ({
   colorPillText,
   backgroundColor,
   subtitleText,
-  contextText,
+  subHeading,
 }: TimelineCardProps) => {
   return (
     <div className="p-5 bg-ui-grey-200 rounded-lg md:w-[30%]">
@@ -23,7 +24,7 @@ export const TimelineCard = ({
       </div>
       <div className="flex flex-col gap-2.5">
         <p className="text-xl font-bold">{subtitleText}</p>
-        <p className="text-xl">{contextText}</p>
+        <p className="text-xl">{subHeading}</p>
       </div>
     </div>
   );

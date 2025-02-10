@@ -1,8 +1,9 @@
 import cx from "classnames";
+import { BackgroundColors } from "@lib/types";
 
 export interface ColorPillProps {
   colorPillText: string;
-  backgroundColor?: string;
+  backgroundColor: BackgroundColors;
   ariaLabel?: string;
 }
 
@@ -11,17 +12,28 @@ export const ColorPill = ({
   backgroundColor,
   ariaLabel,
 }: ColorPillProps) => {
+  const bgColorVariants = {
+    pink: "bg-core-pink",
+    yellow: "bg-core-yellow",
+    grey: "bg-ui-grey-300",
+    orange: "bg-secondary-orange",
+    blue: "bg-core-blue",
+  };
+
   return (
     <div
-      className={cx("flex items-center px-2 rounded-xl w-fit", backgroundColor)}
+      className={cx(
+        "flex items-center px-2 rounded-xl w-fit",
+        `${bgColorVariants[backgroundColor]}`,
+      )}
       aria-label={`Color pill with the text ${colorPillText}`}
     >
-      <p
-        className="md:text-4xl text-2xl md:p-3 p-2 font-semibold"
+      <h1
+        className="md:text-5xl text-2xl md:p-3 p-2 font-semibold"
         aria-label={ariaLabel ? ariaLabel : `Color pill text ${colorPillText}`}
       >
         {colorPillText}
-      </p>
+      </h1>
     </div>
   );
 };

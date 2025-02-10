@@ -5,14 +5,8 @@ const meta: Meta<typeof ColorPill> = {
   component: ColorPill,
   argTypes: {
     backgroundColor: {
-      control: { type: "radio" },
-      options: [
-        "bg-core-black",
-        "bg-ui-grey-200",
-        "bg-core-yellow",
-        "bg-core-white",
-        "bg-core-pink",
-      ],
+      options: ["yellow", "pink"],
+      control: { type: "select" },
     },
   },
 };
@@ -26,6 +20,6 @@ export const Primary: Story = {
   name: "Color Pill",
   args: {
     colorPillText: "Test",
-    backgroundColor: "bg-core-pink",
+    backgroundColor: "yellow",
   },
 };

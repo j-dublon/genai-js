@@ -1,15 +1,27 @@
 import { render, screen } from "@testing-library/react";
-import { InfoCard } from ".";
+import { InfoCard, InfoCardProps } from ".";
 
 describe("InfoCard Component", () => {
-  const baseProps = {
+  const baseProps: InfoCardProps = {
     titleText: "Test title",
     colorPillText: "Test color pill text",
-    colorPillBackgroundColor: "bg-core-yellow",
-    infoCardBackgroundColor: "bg-core-grey",
-    contextText: "Test lighter text",
+    colorPillBackgroundColor: "yellow",
+    infoCardBackgroundColor: "grey",
+    subHeading: "Test lighter text",
     additionalText: "Test additional text",
     buttonText: "Test button text",
+    featureTextProps: {
+      topText: "Whooooo",
+      bottomText: "ooooosh",
+      backgroundColor: "blue",
+      textColor: "white",
+      textScale: 1.8,
+      textGap: "medium",
+      image: {
+        url: "/test-asset.png",
+        alt: "Test image alt text",
+      },
+    },
   };
   it("renders the component", () => {
     render(

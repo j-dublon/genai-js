@@ -5,24 +5,12 @@ const meta: Meta<typeof InfoCard> = {
   component: InfoCard,
   argTypes: {
     colorPillBackgroundColor: {
-      control: { type: "radio" },
-      options: [
-        "bg-core-black",
-        "bg-ui-grey-200",
-        "bg-core-yellow",
-        "bg-core-white",
-        "bg-core-pink",
-      ],
+      options: ["yellow", "pink", "grey", "orange"],
+      control: { type: "select" },
     },
     infoCardBackgroundColor: {
-      control: { type: "radio" },
-      options: [
-        "bg-core-black",
-        "bg-ui-grey-200",
-        "bg-core-yellow",
-        "bg-core-white",
-        "bg-core-pink",
-      ],
+      options: ["yellow", "pink", "grey", "orange"],
+      control: { type: "select" },
     },
   },
 };
@@ -37,16 +25,16 @@ export const Primary: Story = {
   args: {
     titleText: "A proper fancy router",
     colorPillText: "worth £249.99*",
-    colorPillBackgroundColor: "bg-core-yellow",
-    infoCardBackgroundColor: "bg-ui-grey-200",
-    contextText: "Free eero Pro 6E router",
+    colorPillBackgroundColor: "yellow",
+    infoCardBackgroundColor: "grey",
+    subHeading: "Free eero Pro 6E router",
     additionalText:
       "TrueMesh technology, built-in security, and signal and coverage literally everywhere in your home? Yep, we’d say that’s very fancy indeed. ",
     buttonText: "Tell me more",
     featureTextProps: {
       topText: "Whooooo",
       bottomText: "ooooosh",
-      backgroundColor: "core-blue",
+      backgroundColor: "blue",
       textColor: "white",
       textScale: 3,
       textGap: 12,

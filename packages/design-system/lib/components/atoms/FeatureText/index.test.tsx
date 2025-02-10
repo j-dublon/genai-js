@@ -32,7 +32,7 @@ describe("FeatureText", () => {
     const container = screen.getByRole("region", {
       name: "Feature text display",
     });
-    expect(container).toHaveClass("bg-yellow-300");
+    expect(container).toHaveClass("bg-core-yellow");
   });
 
   it("renders image when provided", () => {
