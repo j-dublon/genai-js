@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        garnett: ['Garnett', 'sans-serif'], // 'Garnett' is the font name, with 'sans-serif' as a fallback
+        garnett: ['Garnett', 'sans-serif'],
       },
     },
   },
