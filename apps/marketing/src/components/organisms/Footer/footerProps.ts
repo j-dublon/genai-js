@@ -5,7 +5,7 @@ export const props = {
     imgSrc: "/assets/images/trustpilot-logo.svg",
   },
   footerDisclaimerText:
-    "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. Our VAT number is 341752118. Cuckoo Internet Ltd is regulated by Ofcom.",
+    "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). \n Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. \n Our VAT number is 341752118. \n Cuckoo Internet Ltd is regulated by Ofcom.",
   footerSections: [
     {
       header: "Company",

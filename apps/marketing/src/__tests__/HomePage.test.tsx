@@ -52,10 +52,12 @@ describe("HomePage", () => {
 
     const item1 = await screen.findByText("Full fibre speeds up to 900Mbps");
     const item2 = await screen.findByText(
-      "5x more reliable than traditional broadband",
+      "UK’s most reliable broadband technology",
     );
-    const item3 = await screen.findByText("eero Pro 6E router");
-    const item4 = await screen.findByText("UK-based Customer Care team");
+    const item3 = await screen.findByText(
+      "Free* eero Pro 6E router, worth £249.99**",
+    );
+    const item4 = await screen.findByText("Fair and transparent prices");
 
     expect(item1).toBeInTheDocument();
     expect(item2).toBeInTheDocument();

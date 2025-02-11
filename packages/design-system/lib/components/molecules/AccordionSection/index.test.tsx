@@ -27,7 +27,7 @@ describe("Accordion section Component", () => {
   it("when no button values passed in button doesn't show", () => {
     render(
       <AccordionSection
-        heading="Still not sure? Tell us what’s bothering you."
+        heading="Questions about full fibre, broadband, or anything else at all?"
         questionsArr={[]}
       />,
     );

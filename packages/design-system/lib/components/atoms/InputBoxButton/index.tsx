@@ -9,7 +9,7 @@ export const InputBoxButton = (props: InputBoxButtonProps) => {
 
   return (
     <button
-      className="bg-core-black text-core-white font-bold text-xl md:p-6 p-4 md:rounded-lg rounded-xl relative"
+      className="bg-core-black text-core-white font-bold text-xl p-4 md:rounded-lg rounded-xl relative"
       type="submit"
     >
       {inputBoxButtonText ? (

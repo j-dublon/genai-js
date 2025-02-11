@@ -48,7 +48,7 @@ const questionsArr = [
 export const AccordionWrapper = () => {
   return (
     <AccordionSection
-      heading="Still not sure? Tell us what’s bothering you."
+      heading="Questions about full fibre, broadband, or anything else at all?"
       subText="Lorem ipsum dolor sit amet consectetur. Varius tellus id risus quam a tortor phasellus."
       questionsArr={questionsArr}
     />

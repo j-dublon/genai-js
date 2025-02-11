@@ -8,10 +8,15 @@ import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
 
 export const HomePage = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
+  const broadbandOffer = true;
 
   return (
     <div className="w-full">
-      <HeroBanner trustScore={trustpilotRating?.trustScore} />
+      <HeroBanner
+        trustScore={trustpilotRating?.trustScore}
+        numberOfReviews={trustpilotRating?.numberOfReviews}
+        broadbandOffer={broadbandOffer}
+      />
       <CompanyLogoStripWrapper />
       <CardSectionWrapper />
       <AccordionWrapper />

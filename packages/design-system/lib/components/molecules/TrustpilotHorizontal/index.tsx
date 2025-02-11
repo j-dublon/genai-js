@@ -44,7 +44,6 @@ export const TrustpilotHorizontal = ({
           "font-garnett",
           "text-18px",
           "font-600",
-          "leading-140",
         )}
       >
         Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews

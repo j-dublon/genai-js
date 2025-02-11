@@ -41,7 +41,7 @@ const questionsArr = [questions, questions2, questions3];
 export const Primary: Story = {
   render: () => (
     <AccordionSection
-      heading="Still not sure? Tell us what’s bothering you."
+      heading="Questions about full fibre, broadband, or anything else at all?"
       questionsArr={questionsArr}
     />
   ),

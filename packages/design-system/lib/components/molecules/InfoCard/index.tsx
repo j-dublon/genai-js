@@ -99,7 +99,7 @@ export const InfoCard = ({
 
         {additionalText && (
           <div className="md:p-5 md:w-[75%]">
-            <p className="pb-5 md:text-[26px] text-[16px] font-normal">
+            <p className="pb-5 md:text-[26px] text-[16px] font-normal whitespace-pre-line">
               {additionalText}
             </p>
             {buttonText && (

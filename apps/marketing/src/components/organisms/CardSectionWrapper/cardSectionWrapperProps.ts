@@ -23,7 +23,7 @@ export const props: {
     infoCardBackgroundColor: "grey",
     subHeading: "Free* eero Pro 6E router",
     additionalText:
-      "The eero router makes your Wi-Fi signal nice and strong all throughout your home, thanks to something called TrueMesh technology. That means no dead spots or drop-offs – even if you fancied an afternoon of WFHing in the garden.",
+      "The eero router makes your Wi-Fi signal nice and strong all throughout your home, thanks to something called TrueMesh technology. \n\n That means no dead spots or drop-offs – even if you fancied an afternoon of WFHing in the garden.",
     buttonText: "Oooh, tell me more",
     featureTextProps: {
       topText: "Whooooo",

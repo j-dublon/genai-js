@@ -13,11 +13,11 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
   const { titleText, topText, placeholderText, inputBoxButtonText } = props;
 
   return (
-    <div className="z-10 order-none p-10">
+    <div className="z-10 order-none">
       <h2 className="w-full md:w-[59%] font-bold md:text-5xl text-[26px]">
         {titleText}
       </h2>
-      <div className="relative mt-5 md:h-28">
+      <div className="relative mt-5">
         <input
           aria-labelledby="input"
           placeholder={placeholderText}
@@ -26,8 +26,8 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
             "bg-core-white border-2 border-outline-ui-grey-300 leading-[39px] h-full outline-hidden transition-colors duration-400 w-full z-1",
             {
               "md:rounded-[22px] rounded-xs": true,
-              "md:text-[26px] text-base": true,
-              "p-[19px_22px]": !topText || window.innerWidth < 768,
+              "md:text-[20px] text-base": true,
+              "p-[25px_25px]": !topText || window.innerWidth < 768,
               "md:p-[40px_22px_19px]": topText && window.innerWidth >= 768,
             },
           )}
@@ -37,7 +37,7 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
             {topText}
           </label>
         )}
-        <span className="absolute top-[50%] translate-y-[-50%] right-6">
+        <span className="absolute top-[50%] translate-y-[-50%] right-2">
           <InputBoxButton inputBoxButtonText={inputBoxButtonText} />
         </span>
       </div>
