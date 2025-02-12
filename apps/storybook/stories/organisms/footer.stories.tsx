@@ -9,25 +9,8 @@ export default meta;
 
 type Story = StoryObj<typeof Footer>;
 
-interface Link {
-  label: string;
-  href: string;
-}
-
-interface FooterSection {
-  header: string;
-  links: Link[];
-}
-
-interface FooterProps {
-  titleText: string;
-  trustScore: number;
-  footerSections: FooterSection[];
-  footerDisclaimerText: string;
-}
-
 export const Primary: Story = {
-  render: (props: FooterProps) => <Footer {...props} />,
+  render: (props) => <Footer {...props} />,
   name: "Footer",
   args: {
     titleText: "Fast, fair, feel-good broadband",

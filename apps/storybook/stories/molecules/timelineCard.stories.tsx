@@ -26,7 +26,7 @@ export const Primary: Story = {
   name: "Timeline card",
   args: {
     colorPillText: "Now",
-    backgroundColor: "bg-core-pink",
+    backgroundColor: "pink",
     subtitleText: "We'll contact your old broadband provider",
     subHeading: "Letting them know you're switching to Cuckoo",
   },

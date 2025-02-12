@@ -64,8 +64,8 @@ export const Primary: Story = {
       height: 280,
     },
     tags: [
-      { text: "Guide", backgroundColor: "bg-core-blue" },
-      { text: "Broadband", backgroundColor: "bg-red-300" },
+      { text: "Guide", backgroundColor: "blue" },
+      { text: "Broadband", backgroundColor: "red" },
     ],
   },
 };

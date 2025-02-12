@@ -11,6 +11,7 @@ export default {
       transparent: "transparent",
       "core-yellow": "#FCFF59",
       "core-blue": "#ACB9FE",
+      "core-red": "#FF8A65",
       "secondary-blue": "#6F89FF",
       "secondary-orange": "#FFC633",
       "core-pink": "#F3B0FF",

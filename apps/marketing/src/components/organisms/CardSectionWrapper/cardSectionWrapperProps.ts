@@ -64,7 +64,13 @@ export interface InfoCardProps {
   };
 }
 
-export type BackgroundColors = "yellow" | "pink" | "grey" | "orange" | "blue";
+export type BackgroundColors =
+  | "yellow"
+  | "pink"
+  | "grey"
+  | "orange"
+  | "blue"
+  | "red";
 
 export type TextColorList = "indigo" | "black" | "white" | "grey";
 

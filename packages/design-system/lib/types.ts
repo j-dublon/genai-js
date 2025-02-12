@@ -10,4 +10,10 @@ export interface Tag {
   backgroundColor: BackgroundColors;
 }
 
-export type BackgroundColors = "yellow" | "pink" | "grey" | "orange" | "blue";
+export type BackgroundColors =
+  | "yellow"
+  | "pink"
+  | "grey"
+  | "orange"
+  | "blue"
+  | "red";

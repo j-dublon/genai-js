@@ -2,6 +2,7 @@ import cx from "classnames";
 import { ColorPill } from "@components/atoms/ColorPill";
 import { FeatureText, FeatureTextProps } from "@components/atoms/FeatureText";
 import { BackgroundColors } from "@lib/types";
+import { bgColorVariants } from "@lib/variants";
 
 export interface InfoCardProps {
   titleText?: string;
@@ -24,14 +25,6 @@ export const InfoCard = ({
   buttonText,
   featureTextProps,
 }: InfoCardProps) => {
-  const bgColorVariants = {
-    pink: "bg-core-pink",
-    yellow: "bg-core-yellow",
-    grey: "bg-ui-grey-200",
-    orange: "bg-secondary-orange",
-    blue: "bg-core-blue",
-  };
-
   return (
     <div
       className={`${additionalText || featureTextProps ? "md:max-w-[1152px] md:min-w-[564px] min-w-[350px] min-h-sm" : "flex flex-col"}`}

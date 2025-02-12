@@ -1,5 +1,6 @@
 import cx from "classnames";
 import { BackgroundColors } from "@lib/types";
+import { bgColorVariants } from "@lib/variants";
 
 export interface ColorPillProps {
   colorPillText: string;
@@ -12,14 +13,6 @@ export const ColorPill = ({
   backgroundColor,
   ariaLabel,
 }: ColorPillProps) => {
-  const bgColorVariants = {
-    pink: "bg-core-pink",
-    yellow: "bg-core-yellow",
-    grey: "bg-ui-grey-300",
-    orange: "bg-secondary-orange",
-    blue: "bg-core-blue",
-  };
-
   return (
     <div
       className={cx(

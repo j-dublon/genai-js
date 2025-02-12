@@ -37,7 +37,7 @@ export const Primary: Story = {
       backgroundColor: "blue",
       textColor: "white",
       textScale: 3,
-      textGap: 12,
+      textGap: "medium",
       infoCard: true,
 
       image: {

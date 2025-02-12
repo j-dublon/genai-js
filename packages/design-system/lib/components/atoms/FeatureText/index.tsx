@@ -1,11 +1,11 @@
+import { BackgroundColors } from "@lib/types";
+import { bgColorVariants, textColorVariants, gapVariants } from "@lib/variants";
 import { useEffect, useRef, useState } from "react";
-
-type BackgroundColor = "blue" | "yellow" | "pink" | "grey" | "orange";
 
 export interface FeatureTextProps {
   topText: string;
   bottomText: string;
-  backgroundColor: BackgroundColor;
+  backgroundColor: BackgroundColors;
   textColor: "indigo" | "black" | "white" | "grey";
   textScale?: number;
   textGap: "small" | "medium" | "large";
@@ -64,25 +64,6 @@ export const FeatureText = ({
         {char}
       </span>
     ));
-  };
-
-  const bgColorVariants = {
-    blue: "bg-secondary-blue",
-    yellow: "bg-core-yellow",
-    pink: "bg-core-pink",
-    grey: "bg-ui-grey-300",
-    orange: "bg-secondary-orange",
-  };
-  const textColorVariants = {
-    indigo: "text-indigo-300",
-    black: "text-black",
-    white: "text-core-white",
-    grey: "text-ui-grey-300",
-  };
-  const gapVariants = {
-    small: "gap-2",
-    medium: "gap-8",
-    large: "gap-14",
   };
 
   const containerClasses = `${bgColorVariants[backgroundColor]} ${infoCard ? "rounded-t-lg" : "rounded-lg"} flex flex-col overflow-hidden px-8 py-12 gap-14`;
