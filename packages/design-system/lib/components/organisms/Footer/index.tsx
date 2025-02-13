@@ -1,10 +1,11 @@
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
-import { TwitterIcon } from "@icons/Twitter";
-import { InstagramIcon } from "@icons/Instagram";
 import { FacebookIcon } from "@icons/Facebook";
+import { InstagramIcon } from "@icons/Instagram";
 import { LinkedInIcon } from "@icons/LinkedIn";
-import { FooterLinks, FooterLinksProps } from "./FooterLinks";
+import { TwitterIcon } from "@icons/Twitter";
+
 import { FooterDisclaimer } from "./FooterDisclaimer";
+import { FooterLinks, FooterLinksProps } from "./FooterLinks";
 
 export interface FooterProps {
   titleText: string;

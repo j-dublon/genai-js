@@ -1,8 +1,8 @@
-import cx from "classnames";
 import { ColorPill } from "@components/atoms/ColorPill";
 import { FeatureText, FeatureTextProps } from "@components/atoms/FeatureText";
 import { BackgroundColors } from "@lib/types";
 import { bgColorVariants } from "@lib/variants";
+import cx from "classnames";
 
 export interface InfoCardProps {
   titleText?: string;

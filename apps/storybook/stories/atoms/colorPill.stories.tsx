@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { ColorPill } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ColorPill> = {
   component: ColorPill,

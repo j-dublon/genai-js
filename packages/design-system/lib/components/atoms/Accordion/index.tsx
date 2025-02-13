@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { Arrow } from "@icons/Arrow";
+import { useState } from "react";
+
 import { Button } from "../Button";
 import { Collapser } from "./collapser";
 

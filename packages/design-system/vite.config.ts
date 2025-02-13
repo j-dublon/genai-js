@@ -1,10 +1,10 @@
-import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react-swc";
-import { resolve } from "path";
-import dts from "vite-plugin-dts";
-import tailwindcss from "@tailwindcss/vite";
+import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import { dirname } from "path";
+
+import react from "@vitejs/plugin-react-swc";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vitest/config";
+import dts from "vite-plugin-dts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

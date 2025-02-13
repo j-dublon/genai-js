@@ -10,6 +10,7 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "lint": "next lint",
+    "sort": "npx eslint src --fix --rule simple-import-sort/imports:error",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next && rm -rf coverage && rm -rf tsconfig.tsbuildinfo"
@@ -32,6 +33,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.0",
+    "eslint-plugin-simple-import-sort": "12.1.1",
     "prettier": "3.4.2",
     "tailwindcss": "4.0.0",
     "typescript": "^5",

@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+
 import { ColorPill, ColorPillProps } from ".";
 
 describe("ColorPill Component", () => {

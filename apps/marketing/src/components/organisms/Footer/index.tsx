@@ -1,5 +1,6 @@
 "use client";
 import { Footer } from "@react-component-library/ui";
+
 import { props } from "./footerProps";
 
 interface FooterWrapperProps {

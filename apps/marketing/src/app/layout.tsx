@@ -1,6 +1,7 @@
-import type { Metadata } from "next";
 import "../../fonts.css";
 import "@react-component-library/ui/ui.css";
+
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Create Next App",

@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
+import { render, screen } from "@testing-library/react";
 
 describe("CompanyLogoStrip Component", () => {
   const props = {

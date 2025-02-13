@@ -1,6 +1,7 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { useTrustpilotScore } from ".";
 import { vi } from "vitest";
+
+import { useTrustpilotScore } from ".";
 
 const mockedFetch = vi.fn() as unknown as jest.MockedFunction<typeof fetch>;
 global.fetch = mockedFetch;

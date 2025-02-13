@@ -1,6 +1,6 @@
-import cx from "classnames";
-import { Tick } from "@icons/Tick";
 import { OfferIcon } from "@icons/OfferIcon";
+import { Tick } from "@icons/Tick";
+import cx from "classnames";
 
 export interface TextWithTickProps {
   textInput: string;

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { FeatureText } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof FeatureText> = {
   component: FeatureText,

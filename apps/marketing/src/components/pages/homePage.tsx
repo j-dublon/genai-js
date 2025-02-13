@@ -1,9 +1,9 @@
 "use client";
-import { HeroBanner } from "@/components/organisms/heroBanner";
-import { CompanyLogoStripWrapper } from "@/components/molecules/companyLogoStrip";
 import { AccordionWrapper } from "@/components/molecules/accordion";
+import { CompanyLogoStripWrapper } from "@/components/molecules/companyLogoStrip";
 import { CardSectionWrapper } from "@/components/organisms/CardSectionWrapper";
 import { FooterWrapper } from "@/components/organisms/Footer";
+import { HeroBanner } from "@/components/organisms/heroBanner";
 import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
 
 export const HomePage = () => {

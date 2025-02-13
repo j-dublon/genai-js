@@ -1,5 +1,5 @@
-import { Phone } from "@icons/Phone";
 import { MobileApp, MobileAppProps } from "@components/molecules/MobileApp";
+import { Phone } from "@icons/Phone";
 
 export const MobileAppWithPhone = (props: MobileAppProps) => {
   return (

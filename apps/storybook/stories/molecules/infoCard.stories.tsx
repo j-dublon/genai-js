@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { InfoCard } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof InfoCard> = {
   component: InfoCard,

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { InputBoxButton } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof InputBoxButton> = {
   component: InputBoxButton,

@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+
 import { TextWithTick } from ".";
 
 describe("TextWithTick Component", () => {

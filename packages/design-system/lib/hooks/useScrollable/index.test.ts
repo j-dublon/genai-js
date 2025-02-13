@@ -1,5 +1,6 @@
+import { act, renderHook } from "@testing-library/react";
 import { vi } from "vitest";
-import { renderHook, act } from "@testing-library/react";
+
 import { useScrollable } from "./";
 
 describe("useScrollable", () => {

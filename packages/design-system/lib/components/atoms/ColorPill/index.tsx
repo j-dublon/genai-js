@@ -1,6 +1,6 @@
-import cx from "classnames";
 import { BackgroundColors } from "@lib/types";
 import { bgColorVariants } from "@lib/variants";
+import cx from "classnames";
 
 export interface ColorPillProps {
   colorPillText: string;

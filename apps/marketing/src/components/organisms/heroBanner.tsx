@@ -1,7 +1,7 @@
 "use client";
 import {
-  PostcodeChecker,
   Heading,
+  PostcodeChecker,
   TextWithTick,
   TrustpilotHorizontal,
 } from "@react-component-library/ui";

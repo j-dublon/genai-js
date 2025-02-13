@@ -1,57 +1,58 @@
 "use client";
 import "./index.css";
+
+import { AccountAppButton } from "./components/atoms/AccountAppButton";
 import { Button } from "./components/atoms/Button";
-import { ProductCard } from "./components/molecules/ProductCard";
-import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
-import { CompanyLogoStrip } from "./components/molecules/CompanyLogoStrip";
-import { MobileApp } from "./components/molecules/MobileApp";
-import { MobileAppWithPhone } from "./components/organisms/MobileAppWithPhone";
-import { Slider } from "./components/atoms/Slider";
+import { ColorPill } from "./components/atoms/ColorPill";
+import { CompanyLogo } from "./components/atoms/CompanyLogo";
 import { FeatureText } from "./components/atoms/FeatureText";
-import { HowFastCanYouGo } from "./components/organisms/HowFastCanYouGo";
-import { Footer } from "./components/organisms/Footer";
+import { GuideCard } from "./components/atoms/GuideCard";
+import { Heading } from "./components/atoms/Heading";
+import { InputBoxButton } from "./components/atoms/InputBoxButton";
+import { Slider } from "./components/atoms/Slider";
+import { TextWithTick } from "./components/atoms/TextWithTick";
+import { TrustpilotStars } from "./components/atoms/TrustpilotStars";
+import { AccordionSection } from "./components/molecules/AccordionSection";
+import { ArticleCard } from "./components/molecules/ArticleCard";
+import { CompanyLogoStrip } from "./components/molecules/CompanyLogoStrip";
+import { InfoCard } from "./components/molecules/InfoCard";
+import { MobileApp } from "./components/molecules/MobileApp";
+import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
+import { ProductCard } from "./components/molecules/ProductCard";
+import { TimelineCard } from "./components/molecules/TimelineCard";
 import { TrustpilotHorizontal } from "./components/molecules/TrustpilotHorizontal";
 import { TrustpilotVertical } from "./components/molecules/TrustpilotVertical";
-import { AccordionSection } from "./components/molecules/AccordionSection";
-import { ColorPill } from "./components/atoms/ColorPill";
-import { TimelineCard } from "./components/molecules/TimelineCard";
-import { Guides } from "./components/organisms/Guides";
-import { GuideCard } from "./components/atoms/GuideCard";
-import { InfoCard } from "./components/molecules/InfoCard";
 import { CardSection } from "./components/organisms/CardSection";
-import { InputBoxButton } from "./components/atoms/InputBoxButton";
-import { CompanyLogo } from "./components/atoms/CompanyLogo";
-import { TextWithTick } from "./components/atoms/TextWithTick";
-import { Heading } from "./components/atoms/Heading";
-import { AccountAppButton } from "./components/atoms/AccountAppButton";
-import { TrustpilotStars } from "./components/atoms/TrustpilotStars";
-import { ArticleCard } from "./components/molecules/ArticleCard";
+import { Footer } from "./components/organisms/Footer";
+import { Guides } from "./components/organisms/Guides";
+import { HowFastCanYouGo } from "./components/organisms/HowFastCanYouGo";
+import { MobileAppWithPhone } from "./components/organisms/MobileAppWithPhone";
 
 export {
   AccordionSection,
-  Slider,
-  FeatureText,
+  AccountAppButton,
+  ArticleCard,
   Button,
-  ProductCard,
-  PostcodeChecker,
+  CardSection,
+  ColorPill,
+  CompanyLogo,
   CompanyLogoStrip,
+  FeatureText,
   Footer,
-  TrustpilotHorizontal,
-  TrustpilotVertical,
+  GuideCard,
+  Guides,
+  Heading,
   HowFastCanYouGo,
+  InfoCard,
+  InputBoxButton,
   MobileApp,
   MobileAppWithPhone,
-  ColorPill,
-  TimelineCard,
-  Guides,
-  GuideCard,
-  InfoCard,
-  CardSection,
-  InputBoxButton,
-  CompanyLogo,
+  PostcodeChecker,
+  ProductCard,
+  Slider,
   TextWithTick,
-  Heading,
-  AccountAppButton,
+  TimelineCard,
+  TrustpilotHorizontal,
   TrustpilotStars,
-  ArticleCard,
+  TrustpilotVertical,
 };

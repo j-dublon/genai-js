@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import { MobileApp } from "@components/molecules/MobileApp";
+import { render, screen } from "@testing-library/react";
 
 describe("MobileApp Component", () => {
   const mockProps = {

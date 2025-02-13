@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+
 import { InputBoxButton } from ".";
 
 describe("InputBoxButton Component", () => {

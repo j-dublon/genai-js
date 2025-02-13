@@ -3,6 +3,7 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import typescript from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
+import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export default [
   js.configs.recommended,
@@ -17,6 +18,11 @@ export default [
     },
     plugins: {
       "@typescript-eslint": typescript,
+      "simple-import-sort": simpleImportSort,
+    },
+    rules: {
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
     },
   },
   {
@@ -24,6 +30,7 @@ export default [
     plugins: {
       react,
       "react-hooks": reactHooks,
+      "simple-import-sort": simpleImportSort,
     },
     settings: {
       react: {
@@ -40,6 +47,8 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
+      "simple-import-sort/imports": "error",
+      "simple-import-sort/exports": "error",
     },
   },
 ];

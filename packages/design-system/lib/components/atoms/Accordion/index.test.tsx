@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+
 import { AccordionItem } from ".";
 
 describe("Accordion Component", () => {

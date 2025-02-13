@@ -1,7 +1,9 @@
-import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { MobileAppWithPhone } from ".";
+
 import { MobileAppProps } from "@components/molecules/MobileApp";
+import { render, screen } from "@testing-library/react";
+
+import { MobileAppWithPhone } from ".";
 
 const mockMobileProps: MobileAppProps = {
   headingText: "It’s all in hand with the app",

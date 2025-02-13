@@ -22,6 +22,10 @@
     "clean": {
       "cache": false
     },
+    "sort": {
+      "dependsOn": ["^sort"],
+      "cache": false
+    },
     "format": {
       "cache": false,
       "persistent": false

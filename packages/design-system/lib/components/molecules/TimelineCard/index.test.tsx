@@ -1,6 +1,7 @@
-import { render, screen } from "@testing-library/react";
-import { TimelineCard } from ".";
 import { BackgroundColors } from "@lib/types";
+import { render, screen } from "@testing-library/react";
+
+import { TimelineCard } from ".";
 
 describe("TimelineCard Component", () => {
   const mockProps = {

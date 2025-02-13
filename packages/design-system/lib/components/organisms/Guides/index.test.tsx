@@ -1,9 +1,10 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { Guides } from ".";
-import useIsDesktopScreen from "@lib/hooks/isDesktop";
 import { SliderProps } from "@components/atoms/Slider";
+import useIsDesktopScreen from "@lib/hooks/isDesktop";
 import { BackgroundColors } from "@lib/types";
+import { render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { Guides } from ".";
 
 vi.mock("@lib/hooks/isDesktop", () => ({
   default: vi.fn(),

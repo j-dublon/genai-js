@@ -1,8 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from "vitest";
+import { BackgroundColors } from "@lib/types";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { GuideCard } from ".";
-import { BackgroundColors } from "@lib/types";
 
 vi.mock("../ColorPill", () => ({
   ColorPill: ({

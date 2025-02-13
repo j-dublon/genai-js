@@ -1,7 +1,9 @@
 import "@testing-library/jest-dom";
-import { HomePage } from "../components/pages/homePage";
+
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
+
+import { HomePage } from "../components/pages/homePage";
 
 const mockedFetch = vi.fn(() =>
   Promise.resolve({

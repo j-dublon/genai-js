@@ -1,6 +1,6 @@
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
-import cx from "classnames";
 import { TrustpilotLogo } from "@icons/TrustpilotLogo";
+import cx from "classnames";
 
 interface TrustpilotVerticalProps {
   width: number;

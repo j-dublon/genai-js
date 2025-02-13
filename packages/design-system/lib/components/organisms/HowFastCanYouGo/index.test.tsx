@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+
+import { render, screen } from "@testing-library/react";
+
 import { HowFastCanYouGo } from "./index";
 
 describe("HowFastCanYouGo component", () => {

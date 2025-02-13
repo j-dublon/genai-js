@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { AppStore } from "@icons/AppStore";
 import { GooglePlay } from "@icons/GooglePlay";
+import Link from "next/link";
 
 const Apple = () => (
   <Link href="https://apps.apple.com/app/id6738845205" target="_blank">

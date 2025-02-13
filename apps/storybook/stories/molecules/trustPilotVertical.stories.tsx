@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { TrustpilotVertical } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof TrustpilotVertical> = {
   component: TrustpilotVertical,

@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { TextWithTick } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof TextWithTick> = {
   component: TextWithTick,

@@ -1,5 +1,5 @@
 import { BackgroundColors } from "@lib/types";
-import { bgColorVariants, textColorVariants, gapVariants } from "@lib/variants";
+import { bgColorVariants, gapVariants, textColorVariants } from "@lib/variants";
 import { useEffect, useRef, useState } from "react";
 
 export interface FeatureTextProps {

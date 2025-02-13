@@ -1,5 +1,5 @@
-import cx from "classnames";
 import { Tick } from "@icons/Tick.tsx";
+import cx from "classnames";
 
 interface ProductCardProps {
   header: string;

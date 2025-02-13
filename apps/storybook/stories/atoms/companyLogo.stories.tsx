@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { CompanyLogo } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof CompanyLogo> = {
   component: CompanyLogo,

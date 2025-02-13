@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
+
+import { render, screen } from "@testing-library/react";
+
 import { CardSection, CardSectionProps } from ".";
 
 const mockCardSectionProps: CardSectionProps = {
