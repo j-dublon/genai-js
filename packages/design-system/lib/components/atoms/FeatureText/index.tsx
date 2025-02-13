@@ -29,6 +29,14 @@ export const FeatureText = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLParagraphElement>(null);
   const [scale, setScale] = useState(1);
+  const [waveOffsets, setWaveOffsets] = useState<number[]>([]);
+
+  // prevents hyrdration errors between server/client renders
+  useEffect(() => {
+    setWaveOffsets(
+      [...topText, ...bottomText].map((_, i) => Math.sin(i * 0.5) * -30),
+    );
+  }, [topText, bottomText]);
 
   useEffect(() => {
     const updateScale = () => {
@@ -51,13 +59,15 @@ export const FeatureText = ({
     return () => window.removeEventListener("resize", updateScale);
   }, [topText, bottomText, textScale]);
 
-  const wavy = (text: string, waveIntensity: number) => {
+  const wavy = (text: string) => {
     return [...text].map((char, i) => (
       <span
         key={i}
         className="inline-block"
         style={{
-          transform: `translateY(${Math.sin(i * waveIntensity) * -30}px) scale(${scale})`,
+          transform: waveOffsets.length
+            ? `translateY(${waveOffsets[i]}px) scale(${scale})`
+            : undefined,
           display: "inline-block",
         }}
       >
@@ -88,11 +98,11 @@ export const FeatureText = ({
             ref={textRef}
             className={textClasses}
           >
-            {wavy(topText, 0.5)}
+            {wavy(topText)}
           </div>
 
           <div role="presentation" aria-hidden="true" className={textClasses}>
-            {wavy(bottomText, 0.5)}
+            {wavy(bottomText)}
           </div>
         </div>
 
