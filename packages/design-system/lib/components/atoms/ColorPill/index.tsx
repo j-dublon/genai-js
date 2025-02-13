@@ -6,12 +6,14 @@ export interface ColorPillProps {
   colorPillText: string;
   backgroundColor: BackgroundColors;
   ariaLabel?: string;
+  className?: string;
 }
 
 export const ColorPill = ({
   colorPillText,
   backgroundColor,
   ariaLabel,
+  className,
 }: ColorPillProps) => {
   return (
     <div
@@ -22,7 +24,7 @@ export const ColorPill = ({
       aria-label={`Color pill with the text ${colorPillText}`}
     >
       <h1
-        className="md:text-5xl text-2xl md:p-3 p-2 font-semibold"
+        className={cx("md:p-3 p-2 font-semibold", className)}
         aria-label={ariaLabel ? ariaLabel : `Color pill text ${colorPillText}`}
       >
         {colorPillText}

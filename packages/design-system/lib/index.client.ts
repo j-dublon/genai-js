@@ -1,6 +1,8 @@
 "use client";
 import "./index.css";
 
+import { TimelineCardList } from "@components/molecules/TimelineCardList";
+
 import { AccountAppButton } from "./components/atoms/AccountAppButton";
 import { Button } from "./components/atoms/Button";
 import { ColorPill } from "./components/atoms/ColorPill";
@@ -52,6 +54,7 @@ export {
   Slider,
   TextWithTick,
   TimelineCard,
+  TimelineCardList,
   TrustpilotHorizontal,
   TrustpilotStars,
   TrustpilotVertical,

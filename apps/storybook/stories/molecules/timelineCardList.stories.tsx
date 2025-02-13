@@ -1,0 +1,59 @@
+import { TimelineCardList } from "@react-component-library/ui";
+import type { Meta, StoryObj } from "@storybook/react";
+
+const meta: Meta<typeof TimelineCardList> = {
+  component: TimelineCardList,
+};
+
+export default meta;
+
+type Story = StoryObj<typeof TimelineCardList>;
+
+interface TimelineCardListProps {
+  timelineCardProps: TimelineCardProps[];
+}
+
+interface TimelineCardProps {
+  colorPillText: string;
+  backgroundColor: BackgroundColors;
+  subtitleText: string;
+  subHeading: string;
+  className?: string;
+}
+
+type BackgroundColors = "yellow" | "pink" | "grey" | "orange" | "blue" | "red";
+
+export const Primary: Story = {
+  render: (props: TimelineCardListProps) => (
+    <div className="flex md:flex-row flex-col gap-1">
+      <TimelineCardList {...props} />
+    </div>
+  ),
+  name: "Timeline card list",
+  args: {
+    timelineCardProps: [
+      {
+        colorPillText: "Today",
+        backgroundColor: "pink",
+        subtitleText: "We contact your current provider",
+        subHeading: "Letting them know you're switching to Cuckoo",
+        className: "md:text-[26px] text-[14px]",
+      },
+      {
+        colorPillText: "Day 10",
+        backgroundColor: "pink",
+        subtitleText: "They'll confirm you're leaving",
+        subHeading: "And send you any final bills",
+        className: "md:text-[26px] text-[14px]",
+      },
+      {
+        colorPillText: "Day 14",
+        backgroundColor: "pink",
+        subtitleText: "We get you connected",
+        subHeading:
+          "If you need an engineer, they'll pop by and get you set up",
+        className: "md:text-[26px] text-[14px]",
+      },
+    ],
+  },
+};
