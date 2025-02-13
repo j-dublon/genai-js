@@ -11,14 +11,14 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/index.client.d.ts",
       "import": "./dist/index.client.es.js",
-      "require": "./dist/index.client.cjs.js",
-      "types": "./dist/index.client.d.ts"
+      "require": "./dist/index.client.cjs.js"
     },
     "./server": {
+      "types": "./dist/index.server.d.ts",
       "import": "./dist/index.server.es.js",
-      "require": "./dist/index.server.cjs.js",
-      "types": "./dist/index.server.d.ts"
+      "require": "./dist/index.server.cjs.js"
     },
     "./ui.css": "./dist/ui.css"
   },
