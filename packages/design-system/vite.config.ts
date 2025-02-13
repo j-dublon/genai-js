@@ -9,45 +9,52 @@ import { dirname } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default defineConfig({
-  build: {
-    lib: {
-      entry: resolve(__dirname, "./lib/index.ts"),
-      name: "react-design-ui",
-      fileName: (format) => `index.${format}.js`,
-    },
-    rollupOptions: {
-      external: ["react", "react-dom", "react/jsx-runtime"],
-      output: {
-        globals: {
-          react: "React",
-          "react-dom": "ReactDOM",
+export default defineConfig(({ command }) => {
+  const isProd = command === "build";
+  return {
+    build: {
+      minify: isProd,
+      lib: {
+        entry: {
+          "index.client": resolve(__dirname, "./lib/index.client.ts"),
+          "index.server": resolve(__dirname, "./lib/index.server.ts"),
+        },
+        name: "react-design-ui",
+        fileName: (format, eN) => `${eN}.${format}.js`,
+      },
+      rollupOptions: {
+        external: ["react", "react-dom", "react/jsx-runtime"],
+        output: {
+          globals: {
+            react: "React",
+            "react-dom": "ReactDOM",
+          },
         },
       },
+      sourcemap: !isProd,
+      emptyOutDir: true,
     },
-    sourcemap: true,
-    emptyOutDir: true,
-  },
-  plugins: [
-    [react()],
-    dts({
-      rollupTypes: true,
-    }),
-    tailwindcss(),
-  ],
-  resolve: {
-    alias: {
-      "@components": resolve(__dirname, "lib/components"),
-      "@icons": resolve(__dirname, "lib/icons"),
-      "@utils": resolve(__dirname, "lib/utils"),
-      "@lib": resolve(__dirname, "lib"),
-      "@hooks": resolve(__dirname, "lib/hooks"),
+    plugins: [
+      react(),
+      dts({
+        rollupTypes: true,
+      }),
+      tailwindcss(),
+    ],
+    resolve: {
+      alias: {
+        "@components": resolve(__dirname, "lib/components"),
+        "@icons": resolve(__dirname, "lib/icons"),
+        "@utils": resolve(__dirname, "lib/utils"),
+        "@lib": resolve(__dirname, "lib"),
+        "@hooks": resolve(__dirname, "lib/hooks"),
+      },
     },
-  },
-  test: {
-    globals: true,
-    environment: "jsdom",
-    setupFiles: "./setup-test.ts",
-    css: false, //getting issues with tailwindcss v4 leaving this as false for now
-  },
+    test: {
+      globals: true,
+      environment: "jsdom",
+      setupFiles: "./setup-test.ts",
+      css: false, //getting issues with tailwindcss v4 leaving this as false for now
+    },
+  };
 });

@@ -11,16 +11,21 @@
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.umd.js",
-      "import": "./dist/index.es.js"
+      "import": "./dist/index.client.es.js",
+      "require": "./dist/index.client.cjs.js",
+      "types": "./dist/index.client.d.ts"
     },
-    "./style.css": "./dist/ui.css"
+    "./server": {
+      "import": "./dist/index.server.es.js",
+      "require": "./dist/index.server.cjs.js",
+      "types": "./dist/index.server.d.ts"
+    },
+    "./ui.css": "./dist/ui.css"
   },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "buildWatch": "tsc -b && vite build --watch",
+    "build:watch": "concurrently \"tsc -b --watch\" \"vite build --watch\"",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "preview": "vite preview",
@@ -53,6 +58,7 @@
     "@vitejs/plugin-react-swc": "3.7.2",
     "@vitest/coverage-v8": "3.0.5",
     "autoprefixer": "^10.4.16",
+    "concurrently": "9.1.2",
     "eslint": "9.19.0",
     "eslint-plugin-jest": "28.11.0",
     "eslint-plugin-react-hooks": "^5.1.0",

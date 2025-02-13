@@ -34,5 +34,3 @@ export const TextWithTick = ({
     </div>
   );
 };
-
-TextWithTick.displayName = "TextWithTick";

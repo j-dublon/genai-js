@@ -44,5 +44,3 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
     </div>
   );
 }
-
-PostcodeChecker.displayName = "PostcodeChecker";

@@ -21,7 +21,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "design-system": ["../../packages/design-system/dist"]
     }
   },
   "include": [

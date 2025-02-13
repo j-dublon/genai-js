@@ -1,4 +1,6 @@
-import { Heading, TextWithTick, AccountAppButton } from "@lib/index";
+import { AccountAppButton } from "@components/atoms/AccountAppButton";
+import { Heading } from "@components/atoms/Heading";
+import { TextWithTick } from "@components/atoms/TextWithTick";
 
 export interface MobileAppProps {
   headingText: string;

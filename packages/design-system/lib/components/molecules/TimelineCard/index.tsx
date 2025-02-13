@@ -1,4 +1,4 @@
-import { ColorPill } from "@lib/index";
+import { ColorPill } from "@components/atoms/ColorPill";
 import { BackgroundColors } from "@lib/types";
 
 export interface TimelineCardProps {

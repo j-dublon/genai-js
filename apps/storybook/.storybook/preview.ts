@@ -1,6 +1,6 @@
 import { Preview } from "@storybook/react";
 
-import "@react-component-library/ui/style.css";
+import "@react-component-library/ui/ui.css";
 import "../fonts.css";
 
 const preview: Preview = {

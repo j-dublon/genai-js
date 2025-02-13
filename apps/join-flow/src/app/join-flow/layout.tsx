@@ -1,4 +1,4 @@
-import "@react-component-library/ui/style.css";
+import "@react-component-library/ui/ui.css";
 
 export default function RootLayout({
   children,
