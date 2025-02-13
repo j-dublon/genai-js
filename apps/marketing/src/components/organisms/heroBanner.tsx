@@ -23,7 +23,7 @@ export const HeroBanner = ({
       style={{ backgroundImage: "url('/assets/images/cuckoo_background.png')" }}
       data-testid="hero-banner"
     >
-      <div className="flex md:flex-row flex-col md:py-20 p-5 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
+      <div className="flex md:flex-row flex-col p-5 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
         <div className="flex-1 flex flex-col md:pr-10">
           <Heading headingText="Ridiculously fast full fibre broadband" />
           <p className="pb-5 font-garnett text-[26px] font-normal leading-[1.5]">
