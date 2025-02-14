@@ -1,4 +1,4 @@
-import { Arrow } from "@icons/Arrow";
+import { ChevronVerticalWithCircle } from "@icons/ChevronVerticalWithCircle";
 import { useState } from "react";
 
 import { Button } from "../Button";
@@ -24,7 +24,7 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
           <div className="flex items-center justify-between cursor-pointer px-4 lg:px-8 py-3">
             <p className="font-bold md:text-2xl">{question.dropdown_header}</p>
             <div className="flex justify-center items-center border-2 rounded-full border-ui-grey-200 w-10 h-10 lg:w-16 lg:h-16">
-              <Arrow FAQDropdownOpen={FAQDropdownOpen} />
+              <ChevronVerticalWithCircle DropdownOpen={FAQDropdownOpen} />
             </div>
           </div>
         }

@@ -1,5 +1,6 @@
-import { Chevron } from "@icons/Chevron";
-import React from "react";
+import { ChevronRight } from "@icons/ChevronRight";
+import { ChevronVertical } from "@icons/ChevronVertical";
+import React, { useEffect, useState } from "react";
 
 import { TimelineCard, TimelineCardProps } from "../TimelineCard";
 
@@ -10,24 +11,28 @@ interface TimelineCardListProps {
 export const TimelineCardList = ({
   timelineCardProps,
 }: TimelineCardListProps) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
-      {timelineCardProps.map(
-        (timelineCardProp: TimelineCardProps, index: number) => (
-          <React.Fragment key={`${timelineCardProp.subHeading}${index}`}>
-            <TimelineCard {...timelineCardProp} />
+      {timelineCardProps.map((timelineCardProp, index) => (
+        <React.Fragment key={`${timelineCardProp.subHeading}${index}`}>
+          <TimelineCard {...timelineCardProp} />
 
-            {index < timelineCardProps.length - 1 && (
-              <div className="flex md:flex-row flex-col items-center py-3 md:px-1">
-                <Chevron
-                  chevronWithCircle={false}
-                  className="transform rotate-90 h-8 md:rotate-0 md:w-12 md:h-12"
-                />
-              </div>
-            )}
-          </React.Fragment>
-        ),
-      )}
+          {index < timelineCardProps.length - 1 && (
+            <div className="flex items-center md:px-1 pb-5 justify-center">
+              {isMobile ? <ChevronVertical /> : <ChevronRight />}
+            </div>
+          )}
+        </React.Fragment>
+      ))}
     </>
   );
 };
