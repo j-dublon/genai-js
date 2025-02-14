@@ -1,6 +1,7 @@
 "use client";
 import { AccordionWrapper } from "@/components/molecules/accordion";
 import { CompanyLogoStripWrapper } from "@/components/molecules/companyLogoStrip";
+import { HowFastCanYouGoWrapper } from "@/components/molecules/howFastCanYouGo";
 import { CardSectionWrapper } from "@/components/organisms/CardSectionWrapper";
 import { ClickSwitchDoneSection } from "@/components/organisms/ClickSwitchDoneSection";
 import { FooterWrapper } from "@/components/organisms/Footer";
@@ -21,6 +22,7 @@ export const HomePage = () => {
       <CompanyLogoStripWrapper />
       <CardSectionWrapper />
       <AccordionWrapper />
+      <HowFastCanYouGoWrapper />
       <ClickSwitchDoneSection />
       <FooterWrapper trustScore={trustpilotRating?.trustScore} />
     </div>

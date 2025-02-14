@@ -1,9 +1,10 @@
 import { renderHook, waitFor } from "@testing-library/react";
-import { vi } from "vitest";
+import { afterEach, describe, expect, it, MockedFunction, vi } from "vitest";
 
 import { useTrustpilotScore } from ".";
 
-const mockedFetch = vi.fn() as unknown as jest.MockedFunction<typeof fetch>;
+const mockedFetch = vi.fn() as MockedFunction<typeof fetch>;
+
 global.fetch = mockedFetch;
 
 describe("useTrustpilotScore", () => {

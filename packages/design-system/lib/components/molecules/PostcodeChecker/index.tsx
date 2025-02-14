@@ -1,3 +1,4 @@
+"use client";
 import { InputBoxButton } from "@components/atoms/InputBoxButton";
 import cx from "classnames";
 import { JSX } from "react";
@@ -13,7 +14,7 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
   const { titleText, topText, placeholderText, inputBoxButtonText } = props;
 
   return (
-    <div className="z-10 order-none">
+    <div className="z-10 order-none p-8">
       <h2 className="w-full md:w-[59%] font-bold md:text-5xl text-[26px]">
         {titleText}
       </h2>
@@ -23,13 +24,8 @@ export function PostcodeChecker(props: PostcodeCheckerProps): JSX.Element {
           placeholder={placeholderText}
           name="postcode-checker"
           className={cx(
-            "bg-core-white border-2 border-outline-ui-grey-300 leading-[39px] h-full outline-hidden transition-colors duration-400 w-full z-1",
-            {
-              "md:rounded-[22px] rounded-xs": true,
-              "md:text-[20px] text-base": true,
-              "p-[25px_25px]": !topText || window.innerWidth < 768,
-              "md:p-[40px_22px_19px]": topText && window.innerWidth >= 768,
-            },
+            "bg-core-white border-2 border-outline-ui-grey-300 leading-[39px] h-full outline-hidden transition-colors duration-400 w-full z-1 md:rounded-[22px] rounded-xs md:text-[20px] text-base p-[25px]",
+            { "md:p-[40px_22px_19px]": topText },
           )}
         />
         {topText && (

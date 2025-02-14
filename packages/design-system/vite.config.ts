@@ -32,15 +32,9 @@ export default defineConfig(({ command }) => {
         },
       },
       sourcemap: !isProd,
-      emptyOutDir: true,
+      emptyOutDir: isProd,
     },
-    plugins: [
-      react(),
-      dts({
-        rollupTypes: true,
-      }),
-      tailwindcss(),
-    ],
+    plugins: [react(), dts({ rollupTypes: true }), tailwindcss()],
     resolve: {
       alias: {
         "@components": resolve(__dirname, "lib/components"),

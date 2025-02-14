@@ -24,8 +24,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
-    "build:watch": "concurrently \"tsc -b --watch\" \"vite build --watch\"",
+    "build": "vite build",
+    "build:watch": "vite build --watch",
     "lint": "eslint .",
     "sort": "npx eslint lib --fix --rule simple-import-sort/imports:error",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
@@ -59,7 +59,6 @@
     "@vitejs/plugin-react-swc": "3.7.2",
     "@vitest/coverage-v8": "3.0.5",
     "autoprefixer": "^10.4.16",
-    "concurrently": "9.1.2",
     "eslint": "9.19.0",
     "eslint-plugin-jest": "28.11.0",
     "eslint-plugin-react-hooks": "^5.1.0",
