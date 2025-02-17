@@ -1,50 +1,92 @@
-# React + TypeScript + Vite
+# @react-component-library/ui
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React UI component library built with Vite. This package provides a collection of reusable UI components optimized for both client and server environments, and it’s designed to work seamlessly in a monorepo setup with Next.js apps.
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **UMD, ES, & CommonJS Support:**  
+  The library is built in multiple formats so you can use it in various environments.
 
-## Expanding the ESLint configuration
+- **TypeScript Ready:**  
+  Type definitions are provided for all builds, ensuring excellent editor support and type safety.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Client & Server Exports:**  
+  Separate entry points exist for client (`index.client`) and server (`index.server`) components.
 
-- Configure the top-level `parserOptions` property like this:
+- **Style Support:**  
+  A CSS file (`ui.css`) is also exported, making it easy to include the necessary styles.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+## Installation
+
+Since this package is typically used within a monorepo, add it as a dependency in your project:
+
+```bash
+npm install @react-component-library/ui
+# or
+yarn add @react-component-library/ui
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+> **Note:** Make sure you have `react` and `react-dom` installed as peer dependencies.
 
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
+## Usage
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
+Import components as needed:
+
+```jsx
+// For client-side components
+import { Button } from "@react-component-library/ui";
+
+// For server-specific components
+import { ServerComponent } from "@react-component-library/ui/server";
+
+// Import the styles
+import "@react-component-library/ui/ui.css";
 ```
+
+## Available Scripts
+
+- **build**  
+  Runs a production build using Vite, generating optimized output in the `dist` folder.
+
+- **build:dev**  
+  Builds the project in development mode (`--mode development`), useful for debugging with less optimization.
+
+- **build:dev:watch**  
+  Builds in development mode and watches for changes, automatically rebuilding the `dist` folder on file updates.
+
+- **lint**  
+  Runs ESLint to check for code quality and style issues across the project.
+
+- **sort**  
+  Automatically sorts imports in the `lib` directory using ESLint with the `simple-import-sort` rule.
+
+- **format**  
+  Formats all TypeScript, TSX, and Markdown files using Prettier.
+
+- **preview**  
+  Serves a local preview of the production build using Vite’s preview server.
+
+- **test**  
+  Runs the test suite using Vitest.
+
+- **test:watch**  
+  Runs Vitest in watch mode, automatically re-running tests when changes are detected.
+
+- **test:coverage**  
+  Runs tests and generates a coverage report with Vitest.
+
+- **check-types**  
+  Checks TypeScript types without emitting any output, ensuring type correctness.
+
+- **clean**  
+  Removes generated files and directories (like `dist`, coverage reports, and caches) to reset the workspace.
+
+## Development
+
+For a smooth development experience, run:
+
+```bash
+npm run build:dev:watch
+```
+
+Build the project in development mode and watch for changes, ensuring that both your JavaScript bundles and type definitions stay up to date.

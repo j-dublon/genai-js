@@ -9,11 +9,11 @@ import dts from "vite-plugin-dts";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export default defineConfig(({ command }) => {
-  const isProd = command === "build";
+export default defineConfig(({ mode }) => {
+  const isDevMode = mode === "development";
   return {
     build: {
-      minify: isProd,
+      minify: true,
       lib: {
         entry: {
           "index.client": resolve(__dirname, "./lib/index.client.ts"),
@@ -31,10 +31,16 @@ export default defineConfig(({ command }) => {
           },
         },
       },
-      sourcemap: !isProd,
-      emptyOutDir: isProd,
+      sourcemap: true,
+      emptyOutDir: !isDevMode,
     },
-    plugins: [react(), dts({ rollupTypes: true }), tailwindcss()],
+    plugins: [
+      react(),
+      tailwindcss(),
+      dts({
+        rollupTypes: !isDevMode,
+      }),
+    ],
     resolve: {
       alias: {
         "@components": resolve(__dirname, "lib/components"),

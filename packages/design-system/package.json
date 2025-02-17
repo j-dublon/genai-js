@@ -23,9 +23,9 @@
     "./ui.css": "./dist/ui.css"
   },
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "build:watch": "vite build --watch",
+    "build:dev": "vite build --mode development",
+    "build:dev:watch": "vite build --watch --mode development",
     "lint": "eslint .",
     "sort": "npx eslint lib --fix --rule simple-import-sort/imports:error",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
