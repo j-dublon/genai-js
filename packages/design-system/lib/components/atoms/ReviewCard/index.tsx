@@ -23,17 +23,16 @@ export const ReviewCard = ({
           {title}
         </h3>
       </div>
-      <div
-        className="mt-12"
+      <span
+        role="img"
+        className="sr-only"
         aria-label={`Rating: ${starRating} out of 5 stars`}
-        aria-hidden="true"
-      >
+      />
+      <div className="mt-12" aria-hidden="true">
         <TrustpilotStars trustScore={starRating} height={28} />
       </div>
       <blockquote className="mt-6 md:text-md text-sm max-h-[90px] ">
-        <div className="overflow-ellipsis line-clamp-3 font-thin">
-          {reviewText}
-        </div>
+        <div className="line-clamp-3 font-thin">{reviewText}</div>
         <div className="mt-4 md:text-md text-sm font-bold">{author}</div>
       </blockquote>
     </article>
