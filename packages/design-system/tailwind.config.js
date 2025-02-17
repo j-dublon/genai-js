@@ -23,10 +23,10 @@ export default {
       "outline-ui-grey-300": "#DBD8D0",
       "link-ui": "#5A06D8",
       "light-green": "#A4FFA7",
-      "light-blue": "#C3F9FD"
+      "light-blue": "#C3F9FD",
     },
     backgroundImage: {
-      'offer-gradient': 'linear-gradient(227deg, #A4FFA7 25%, #C3F9FD 74%)',
+      "offer-gradient": "linear-gradient(227deg, #A4FFA7 25%, #C3F9FD 74%)",
     },
     borderRadius: {
       none: "0",
@@ -86,6 +86,14 @@ export default {
         "0%": { transform: "translateX(100%)" },
         "100%": { transform: "translateX(0%)" },
       },
+    },
+    text: {
+      sm: "1rem",
+      md: "1.25rem",
+      lg: "1.5rem",
+      xl: "1.75rem",
+      "2xl": "2rem",
+      "3xl": "2.25rem",
     },
   },
   plugins: [require("tailwind-scrollbar")({ nocompatible: true })],

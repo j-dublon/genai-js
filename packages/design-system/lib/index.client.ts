@@ -1,8 +1,6 @@
 "use client";
 import "./index.css";
 
-import { TimelineCardList } from "@components/molecules/TimelineCardList";
-
 import { AccountAppButton } from "./components/atoms/AccountAppButton";
 import { Button } from "./components/atoms/Button";
 import { ColorPill } from "./components/atoms/ColorPill";
@@ -22,6 +20,7 @@ import { MobileApp } from "./components/molecules/MobileApp";
 import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
 import { ProductCard } from "./components/molecules/ProductCard";
 import { TimelineCard } from "./components/molecules/TimelineCard";
+import { TimelineCardList } from "./components/molecules/TimelineCardList";
 import { TrustpilotHorizontal } from "./components/molecules/TrustpilotHorizontal";
 import { TrustpilotVertical } from "./components/molecules/TrustpilotVertical";
 import { CardSection } from "./components/organisms/CardSection";
