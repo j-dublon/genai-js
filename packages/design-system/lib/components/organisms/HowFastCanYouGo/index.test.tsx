@@ -8,6 +8,6 @@ describe("HowFastCanYouGo component", () => {
   it("renders the PostcodeChecker", () => {
     render(<HowFastCanYouGo />);
     expect(screen.getByText("How fast can you go?")).toBeInTheDocument();
-    expect(screen.getByText("Check your speed")).toBeInTheDocument();
+    expect(screen.getByText("Let's go")).toBeInTheDocument();
   });
 });

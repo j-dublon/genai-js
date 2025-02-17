@@ -5,7 +5,7 @@ import { PostcodeChecker } from ".";
 describe("PostcodeChecker Component", () => {
   const props = {
     titleText: "Test title",
-    topText: "Test top text title",
+    labelText: "Test label text title",
     placeholderText: "Test placeholder text",
     inputBoxButtonText: "Test",
   };
@@ -13,13 +13,13 @@ describe("PostcodeChecker Component", () => {
     render(<PostcodeChecker {...props} />);
 
     expect(screen.getByText("Test title")).toBeInTheDocument();
-    expect(screen.getByText("Test top text title")).toBeInTheDocument();
+    expect(screen.getByText("Test label text title")).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText("Test placeholder text"),
     ).toBeInTheDocument();
   });
 
-  it("doesn't render the top text if topText prop isn't set", () => {
+  it("doesn't render the label text if labelText prop isn't set", () => {
     const newProps = {
       titleText: "Test title",
       placeholderText: "Test placeholder text",
@@ -27,6 +27,6 @@ describe("PostcodeChecker Component", () => {
     };
     render(<PostcodeChecker {...newProps} />);
 
-    expect(screen.queryByText("Test top text title")).not.toBeInTheDocument();
+    expect(screen.queryByText("Test label text title")).not.toBeInTheDocument();
   });
 });

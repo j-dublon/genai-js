@@ -14,7 +14,7 @@ export const Primary: Story = {
   name: "PostcodeChecker",
   args: {
     titleText: "How fast can you go?",
-    topText: "Check your speed",
+    labelText: "Let's go",
     placeholderText: "Enter postcode",
     inputBoxButtonText: "Check availability",
   },
