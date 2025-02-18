@@ -16,8 +16,6 @@ export const TextWithTick = ({
   backgroundColor = "white",
   broadbandOffer = false,
 }: TextWithTickProps) => {
-  console.log(broadbandOffer);
-
   return (
     <div
       className={cx(
