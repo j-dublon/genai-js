@@ -5,10 +5,10 @@ export interface InputBoxButtonProps {
 export const InputBoxButton = ({ inputBoxButtonText }: InputBoxButtonProps) => {
   return (
     <button
-      className="bg-core-black text-core-white font-bold text-xl p-4 md:rounded-lg rounded-xl relative"
+      className="bg-core-black text-core-white font-bold text-md p-2 rounded-lg h-[60px] relative w-full"
       type="submit"
     >
-      <span>{inputBoxButtonText}</span>
+      <span className="max-h-7">{inputBoxButtonText}</span>
     </button>
   );
 };

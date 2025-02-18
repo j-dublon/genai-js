@@ -5,8 +5,8 @@ interface TrustpilotLogoProps {
 }
 
 export const TrustpilotLogo = ({
-  width = 600,
-  height = 147,
+  width = 100,
+  height = 25,
   ariaLabel = "TrustPilot Logo",
 }: TrustpilotLogoProps) => {
   return (

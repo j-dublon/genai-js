@@ -6,10 +6,6 @@ const meta: Meta<typeof TrustpilotHorizontal> = {
   argTypes: {
     trustScore: { control: "number" },
     numberOfReviews: { control: "number" },
-    width: { control: "number" },
-    height: { control: "number" },
-    maxWidth: { control: "number" },
-    maxHeight: { control: "number" },
   },
 };
 
@@ -19,16 +15,12 @@ type Story = StoryObj<typeof TrustpilotHorizontal>;
 
 interface TrustpilotHorizontalProps {
   trustScore: number;
-  numberOfReviews: number;
-  width: number;
-  height: number;
-  maxWidth?: number;
-  maxHeight?: number;
+  numberOfReviews?: number;
 }
 
 export const Primary: Story = {
   render: (props: TrustpilotHorizontalProps) => (
-    <div style={{ width: props.maxWidth, height: props.maxHeight }}>
+    <div style={{ width: 128, height: 72 }}>
       <TrustpilotHorizontal {...props} />
     </div>
   ),
@@ -36,9 +28,5 @@ export const Primary: Story = {
   args: {
     trustScore: 4.5,
     numberOfReviews: 1234,
-    width: 100,
-    height: 50,
-    maxWidth: 128,
-    maxHeight: 72,
   },
 };

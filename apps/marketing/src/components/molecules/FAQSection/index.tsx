@@ -45,7 +45,7 @@ const questionsArr = [
   },
 ];
 
-export const AccordionWrapper = () => {
+export const FAQSection = () => {
   return (
     <AccordionSection
       heading="Questions about full fibre, broadband, or anything else at all?"

@@ -39,6 +39,7 @@ export default defineConfig(({ mode }) => {
       tailwindcss(),
       dts({
         rollupTypes: !isDevMode,
+        insertTypesEntry: true,
       }),
     ],
     resolve: {

@@ -19,7 +19,7 @@ export async function GET() {
   const url = `https://api.trustpilot.com/v1/business-units/find?name=cuckoo.co&apikey=${TRUSTPILOT_API_KEY}`;
 
   try {
-    logger.info(`Fetching Trustpilot data from URL: ${url}`);
+    logger.info(`Fetching Trustpilot data`);
     const response = await fetch(url, {
       method: "GET",
       next: { revalidate: hourAsSeconds }, // Cache response for an hour

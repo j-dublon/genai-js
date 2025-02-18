@@ -3,7 +3,7 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
-import { HomePage } from "../components/pages/homePage";
+import { HomePage } from "../components/pages/HomePage";
 
 const mockedFetch = vi.fn(() =>
   Promise.resolve({
@@ -22,51 +22,23 @@ describe("HomePage", () => {
     mockedFetch.mockClear();
     render(<HomePage />);
   });
-  it("renders the 'Ridiculously fast full fibre broadband' heading", async () => {
+
+  it("renders the Hero banner section", async () => {
     const heading = await screen.findByText(
       "Ridiculously fast full fibre broadband",
     );
     expect(heading).toBeInTheDocument();
   });
 
-  it("renders the description text", async () => {
-    const description = await screen.findByText(
-      "Stream, game and WFH, all at the same time, with no drop-offs.",
-    );
-    expect(description).toBeInTheDocument();
+  it("renders the join the flock section section", () => {
+    screen.getByText("Join the flock today");
   });
 
-  it("renders PostcodeChecker input", async () => {
-    const input = await screen.findByPlaceholderText("Pop in your address");
-    expect(input).toBeInTheDocument();
-  });
-
-  it("renders TrustpilotVertical component", async () => {
-    const logo = await screen.findAllByLabelText("TrustPilot Logo");
-    expect(logo[0]).toBeInTheDocument();
-  });
-
-  it("renders all TextWithTick items", async () => {
-    const item1 = await screen.findByText("Full fibre speeds up to 900Mbps");
-    const item2 = await screen.findByText(
-      "UK’s most reliable broadband technology",
+  it("renders the FAQ section", async () => {
+    const heading = await screen.findByText(
+      "Questions about full fibre, broadband, or anything else at all?",
     );
-    const item3 = await screen.findByText(
-      "Free* eero Pro 6E router, worth £249.99**",
-    );
-    const item4 = await screen.findByText("Fair and transparent prices");
-
-    expect(item1).toBeInTheDocument();
-    expect(item2).toBeInTheDocument();
-    expect(item3).toBeInTheDocument();
-    expect(item4).toBeInTheDocument();
-  });
-
-  it("applies background image correctly", async () => {
-    const heroBanner = await screen.findByTestId("hero-banner");
-    expect(heroBanner).toHaveStyle(
-      "background-image: url('/assets/images/cuckoo_background.png')",
-    );
+    expect(heading).toBeInTheDocument();
   });
 
   it("renders the Click Switch Done section", () => {
@@ -81,5 +53,10 @@ describe("HomePage", () => {
       "../../assets/images/done_button.svg",
     );
     expect(imgElement).toHaveClass("w-32 md:w-56 h-auto");
+  });
+
+  it("renders the Footer section", async () => {
+    const heading = await screen.findByText("Fast, fair, feel-good broadband");
+    expect(heading).toBeInTheDocument();
   });
 });

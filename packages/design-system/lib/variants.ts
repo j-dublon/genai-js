@@ -5,6 +5,7 @@ export const bgColorVariants = {
   grey: "bg-ui-grey-300",
   orange: "bg-secondary-orange",
   red: "bg-core-red",
+  white: "bg-core-white",
 };
 export const textColorVariants = {
   indigo: "text-indigo-300",

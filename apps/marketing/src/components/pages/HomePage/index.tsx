@@ -1,11 +1,12 @@
 "use client";
-import { AccordionWrapper } from "@/components/molecules/accordion";
-import { CompanyLogoStripWrapper } from "@/components/molecules/companyLogoStrip";
-import { HowFastCanYouGoWrapper } from "@/components/molecules/howFastCanYouGo";
+import { CompanyLogoStripWrapper } from "@/components/molecules/CompanyLogoStrip";
+import { FAQSection } from "@/components/molecules/FAQSection";
+import { HowFastCanYouGoWrapper } from "@/components/molecules/HowFastCanYouGo";
 import { CardSectionWrapper } from "@/components/organisms/CardSectionWrapper";
 import { ClickSwitchDoneSection } from "@/components/organisms/ClickSwitchDoneSection";
 import { FooterWrapper } from "@/components/organisms/Footer";
-import { HeroBanner } from "@/components/organisms/heroBanner";
+import { HeroBanner } from "@/components/organisms/HeroBanner";
+import { JoinTheFlock } from "@/components/organisms/JoinTheFlock";
 import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
 
 export const HomePage = () => {
@@ -21,9 +22,13 @@ export const HomePage = () => {
       />
       <CompanyLogoStripWrapper />
       <CardSectionWrapper />
-      <AccordionWrapper />
-      <HowFastCanYouGoWrapper />
+      <JoinTheFlock
+        trustScore={trustpilotRating?.trustScore}
+        numberOfReviews={trustpilotRating?.numberOfReviews}
+      />
+      <FAQSection />
       <ClickSwitchDoneSection />
+      <HowFastCanYouGoWrapper />
       <FooterWrapper trustScore={trustpilotRating?.trustScore} />
     </div>
   );

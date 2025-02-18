@@ -16,4 +16,5 @@ export type BackgroundColors =
   | "grey"
   | "orange"
   | "blue"
-  | "red";
+  | "red"
+  | "white";

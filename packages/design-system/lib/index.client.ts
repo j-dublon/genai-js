@@ -19,6 +19,7 @@ import { InfoCard } from "./components/molecules/InfoCard";
 import { MobileApp } from "./components/molecules/MobileApp";
 import { PostcodeChecker } from "./components/molecules/PostcodeChecker";
 import { ProductCard } from "./components/molecules/ProductCard";
+import { TextWithTickList } from "./components/molecules/TextWithTickList";
 import { TimelineCard } from "./components/molecules/TimelineCard";
 import { TimelineCardList } from "./components/molecules/TimelineCardList";
 import { TrustpilotHorizontal } from "./components/molecules/TrustpilotHorizontal";
@@ -52,6 +53,7 @@ export {
   ProductCard,
   Slider,
   TextWithTick,
+  TextWithTickList,
   TimelineCard,
   TimelineCardList,
   TrustpilotHorizontal,

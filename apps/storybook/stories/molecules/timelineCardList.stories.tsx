@@ -9,22 +9,8 @@ export default meta;
 
 type Story = StoryObj<typeof TimelineCardList>;
 
-interface TimelineCardListProps {
-  timelineCardProps: TimelineCardProps[];
-}
-
-interface TimelineCardProps {
-  colorPillText: string;
-  backgroundColor: BackgroundColors;
-  subtitleText: string;
-  subHeading: string;
-  className?: string;
-}
-
-type BackgroundColors = "yellow" | "pink" | "grey" | "orange" | "blue" | "red";
-
 export const Primary: Story = {
-  render: (props: TimelineCardListProps) => (
+  render: (props) => (
     <div className="flex md:flex-row flex-col gap-1">
       <TimelineCardList {...props} />
     </div>

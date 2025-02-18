@@ -21,22 +21,14 @@ export const MobileApp = ({ headingText, textItems }: MobileAppProps) => {
       <div className="py-10 md:flex flex-col gap-[10px] hidden">
         {textItems.map((item, index) => (
           <div key={index} className={index === 0 ? "font-bold" : ""}>
-            <TextWithTick
-              key={index}
-              textInput={item.itemText}
-              ariaLabel={`Text item with statement: ${item.itemText}`}
-            />
+            <TextWithTick key={index} textInput={item.itemText} />
           </div>
         ))}
       </div>
 
       <div className="md:hidden py-6 flex flex-col gap-4">
         {textItems.map((item, index) => (
-          <TextWithTick
-            key={index}
-            textInput={item.itemText}
-            ariaLabel={`Text item with statement: ${item.itemText}`}
-          />
+          <TextWithTick key={index} textInput={item.itemText} />
         ))}
       </div>
 

@@ -3,51 +3,33 @@ import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 import cx from "classnames";
 
 interface TrustpilotHorizontalProps {
-  width: number;
-  height: number;
   trustScore: number;
-  numberOfReviews: number;
-  maxWidth?: number;
-  maxHeight?: number;
+  numberOfReviews?: number;
 }
 
 export const TrustpilotHorizontal = ({
   trustScore,
   numberOfReviews,
-  width,
-  height,
-  maxWidth = 128,
-  maxHeight = 72,
 }: TrustpilotHorizontalProps) => {
   return (
     <div
       className={cx(
-        "flex items-center space-x-2 lg:space-x-4",
-        { [`w-${maxWidth}`]: maxWidth },
-        { [`h-${maxHeight}`]: maxHeight },
+        "flex flex-col md:flex-row items-center space-x-2 space-y-2 lg:space-x-4 ",
       )}
     >
-      <div className="flex-shrink-0">
-        <TrustpilotLogo width={width} height={height} />
+      <div className="flex flex-row space-x-2">
+        <div className="flex-shrink-0">
+          <TrustpilotLogo />
+        </div>
+        <div className="flex-shrink-0">
+          <TrustpilotStars trustScore={trustScore} />
+        </div>
       </div>
-      <div className="flex-shrink-0">
-        <TrustpilotStars
-          trustScore={trustScore}
-          width={width}
-          height={height}
-        />
-      </div>
-      <div
-        className={cx(
-          "whitespace-nowrap",
-          "text-core-black",
-          "font-garnett",
-          "text-18px",
-          "font-600",
-        )}
-      >
-        Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
-      </div>
+      {numberOfReviews && (
+        <div className={cx("whitespace-nowrap", "text-18px")}>
+          Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
+        </div>
+      )}
     </div>
   );
 };

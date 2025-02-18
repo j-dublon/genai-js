@@ -2,9 +2,10 @@
 import {
   Heading,
   PostcodeChecker,
-  TextWithTick,
+  TextWithTickList,
   TrustpilotHorizontal,
 } from "@react-component-library/ui";
+import { ComponentProps } from "react";
 
 interface HeroBannerProps {
   trustScore?: number;
@@ -15,8 +16,15 @@ interface HeroBannerProps {
 export const HeroBanner = ({
   trustScore,
   numberOfReviews = 0,
-  broadbandOffer,
 }: HeroBannerProps) => {
+  const TextItemList: ComponentProps<typeof TextWithTickList> = {
+    TextWithTickList: [
+      { textInput: "Lorem ipsum dolor sit", broadbandOffer: true },
+      { textInput: "Full fibre speeds up to 900Mbps" },
+      { textInput: "UK’s most reliable broadband technology" },
+      { textInput: "Free* eero Pro 6E router, worth £249.99**" },
+    ],
+  };
   return (
     <div
       className="flex justify-center"
@@ -29,48 +37,21 @@ export const HeroBanner = ({
           <p className="pb-5 font-garnett text-[26px] font-normal leading-[1.5]">
             Stream, game and WFH, all at the same time, with no drop-offs.
           </p>
-          <form>
-            <PostcodeChecker
-              placeholderText="Pop in your address"
-              inputBoxButtonText="Let's go"
-            />
-          </form>
+          <PostcodeChecker
+            placeholderText="Pop in your address"
+            inputBoxButtonText="Let's go"
+          />
           {trustScore !== undefined && (
             <TrustpilotHorizontal
               trustScore={trustScore}
-              width={100}
-              height={100}
               numberOfReviews={numberOfReviews}
             />
           )}
         </div>
         <div className="flex w-[85%] h-[85%]">
           <div className="flex-1 flex flex-col gap-2 font-bold justify-start">
-            {/* This will be updated to use data from the CMS */}
-            {broadbandOffer && (
-              <TextWithTick
-                textInput="Lorem ipsum dolor sit"
-                ariaLabel="Lorem ipsum dolor sit"
-                broadbandOffer={broadbandOffer}
-              />
-            )}
-
-            <TextWithTick
-              textInput="Full fibre speeds up to 900Mbps"
-              ariaLabel="Full fibre speeds up to 900Mbps"
-            />
-
-            <TextWithTick
-              textInput="UK’s most reliable broadband technology"
-              ariaLabel="UK’s most reliable broadband technology"
-            />
-            <TextWithTick
-              textInput="Free* eero Pro 6E router, worth £249.99** "
-              ariaLabel="Free* eero Pro 6E router, worth £249.99** "
-            />
-            <TextWithTick
-              textInput="Fair and transparent prices"
-              ariaLabel="Fair and transparent prices"
+            <TextWithTickList
+              TextWithTickList={TextItemList.TextWithTickList}
             />
           </div>
         </div>

@@ -8,8 +8,8 @@ interface TrustpilotStarsProps {
 
 export const TrustpilotStars = ({
   trustScore,
-  width,
-  height,
+  width = 140,
+  height = 25,
 }: TrustpilotStarsProps) => {
   const { full, half } = getTrustpilotStarStatus(trustScore);
 
