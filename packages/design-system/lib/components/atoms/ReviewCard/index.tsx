@@ -1,6 +1,6 @@
 import { TrustpilotStars } from "../TrustpilotStars";
 
-interface ReviewCardProps {
+export interface ReviewCardProps {
   title: string;
   starRating: number;
   reviewText: string;

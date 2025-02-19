@@ -7,6 +7,8 @@ import { ClickSwitchDoneSection } from "@/components/organisms/ClickSwitchDoneSe
 import { FooterWrapper } from "@/components/organisms/Footer";
 import { HeroBanner } from "@/components/organisms/HeroBanner";
 import { JoinTheFlock } from "@/components/organisms/JoinTheFlock";
+import { TrustPilotSliderWrapper } from "@/components/organisms/TrustPilotSlider";
+import { reviews } from "@/components/organisms/TrustPilotSlider/trustpilotSliderProps";
 import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
 
 export const HomePage = () => {
@@ -28,6 +30,11 @@ export const HomePage = () => {
       />
       <FAQSection />
       <ClickSwitchDoneSection />
+      <TrustPilotSliderWrapper
+        reviewCount={Number(trustpilotRating?.numberOfReviews)}
+        trustScore={Number(trustpilotRating?.trustScore)}
+        reviews={reviews}
+      />
       <HowFastCanYouGoWrapper />
       <FooterWrapper trustScore={trustpilotRating?.trustScore} />
     </div>

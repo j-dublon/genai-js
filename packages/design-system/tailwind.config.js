@@ -88,6 +88,7 @@ export default {
       },
     },
     text: {
+      xs: ".75rem",
       sm: "1rem",
       md: "1.25rem",
       lg: "1.5rem",
@@ -102,5 +103,6 @@ export default {
       "9xl": "8rem",
     },
   },
-  plugins: [require("tailwind-scrollbar")({ nocompatible: true })],
+
+  plugins: [require("tailwind-scrollbar")],
 };
