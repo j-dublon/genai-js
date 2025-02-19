@@ -4,6 +4,7 @@ import { FAQSection } from "@/components/molecules/FAQSection";
 import { HowFastCanYouGoWrapper } from "@/components/molecules/HowFastCanYouGo";
 import { CardSectionWrapper } from "@/components/organisms/CardSectionWrapper";
 import { ClickSwitchDoneSection } from "@/components/organisms/ClickSwitchDoneSection";
+import { CuckooProtect } from "@/components/organisms/CuckooProtect";
 import { FooterWrapper } from "@/components/organisms/Footer";
 import { HeroBanner } from "@/components/organisms/HeroBanner";
 import { JoinTheFlock } from "@/components/organisms/JoinTheFlock";
@@ -14,6 +15,9 @@ import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
 export const HomePage = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const broadbandOffer = true;
+
+  const enableCuckooProtect =
+    process.env.NEXT_PUBLIC_ENABLE_CUCKOO_PROTECT === "true";
 
   return (
     <div className="w-full">
@@ -30,6 +34,7 @@ export const HomePage = () => {
       />
       <FAQSection />
       <ClickSwitchDoneSection />
+      {enableCuckooProtect && <CuckooProtect />}
       <TrustPilotSliderWrapper
         reviewCount={Number(trustpilotRating?.numberOfReviews)}
         trustScore={Number(trustpilotRating?.trustScore)}

@@ -20,6 +20,7 @@ global.fetch = mockedFetch;
 describe("HomePage", () => {
   beforeEach(() => {
     mockedFetch.mockClear();
+    process.env.NEXT_PUBLIC_ENABLE_CUCKOO_PROTECT = "true";
     render(<HomePage />);
   });
 
@@ -53,6 +54,11 @@ describe("HomePage", () => {
       "../../assets/images/done_button.svg",
     );
     expect(imgElement).toHaveClass("w-32 md:w-56 h-auto");
+  });
+
+  it("renders the Cuckoo Protect section", async () => {
+    const imgElement = screen.getByAltText("Cuckoo protect logo");
+    expect(imgElement).toBeInTheDocument();
   });
 
   it("renders the Footer section", async () => {

@@ -26,7 +26,7 @@ export const TextWithTick = ({
     >
       <span>{broadbandOffer ? <OfferIcon /> : <Tick />}</span>
 
-      <p className="text-md">{textInput}</p>
+      <p className="md:text-md text-[14px]">{textInput}</p>
     </div>
   );
 };
