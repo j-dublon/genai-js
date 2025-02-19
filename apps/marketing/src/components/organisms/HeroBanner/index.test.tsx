@@ -52,11 +52,4 @@ describe("HeroBanner", () => {
     expect(item2).toBeInTheDocument();
     expect(item3).toBeInTheDocument();
   });
-
-  it("applies background image correctly", async () => {
-    const heroBanner = await screen.findByTestId("hero-banner");
-    expect(heroBanner).toHaveStyle(
-      "background-image: url('/assets/images/cuckoo_background.png')",
-    );
-  });
 });

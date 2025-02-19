@@ -89,7 +89,7 @@ export default {
       },
     },
     text: {
-      xs: ".75rem",
+      xs: "0.875rem",
       sm: "1rem",
       md: "1.25rem",
       lg: "1.5rem",

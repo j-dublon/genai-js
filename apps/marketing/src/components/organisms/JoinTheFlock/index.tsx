@@ -48,15 +48,15 @@ export const JoinTheFlock = ({
           type="video/mp4"
         />
       </video>
-      <div className="z-20 flex flex-col items-center p-10 md:p-20 md:justify-between w-full md:gap-14 bg-cover bg-center md:py-40">
-        <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 px-10 py-16">
+      <div className="z-20 flex flex-col items-center p-5 md:p-20 md:justify-between w-full md:gap-14 bg-cover bg-center md:py-40">
+        <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 px-4 md:px-10 py-16">
           <div className="flex-2 flex flex-col md:pr-10 min-w-0 pb-5">
             <h2 className="text-5xl font-bold pb-5">Join the flock today </h2>
             <p className="text-[26px] pb-10">
               Get full fibre speeds, actually amazing signal, plus aaall this
               too...
             </p>
-            <div className="pb-10 lg:pr-20 min-w-[326px]">
+            <div className="pb-10 lg:pr-20 ">
               <PostcodeChecker
                 placeholderText="Pop in your address"
                 inputBoxButtonText="Let's go"
@@ -69,7 +69,7 @@ export const JoinTheFlock = ({
               />
             )}
           </div>
-          <div className="flex-2 flex flex-col gap-2 md:font-bold min-w-0">
+          <div className="flex-2 flex flex-col gap-2 font-bold min-w-0">
             <TextWithTickList
               TextWithTickList={TextItemList.TextWithTickList}
             />

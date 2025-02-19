@@ -26,21 +26,32 @@ export const HeroBanner = ({
     ],
   };
   return (
-    <div
-      className="flex justify-center"
-      style={{ backgroundImage: "url('/assets/images/cuckoo_background.png')" }}
-      data-testid="hero-banner"
-    >
-      <div className="flex md:flex-row flex-col p-5 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
-        <div className="flex-1 flex flex-col md:pr-10">
+    <div className="flex justify-center" data-testid="hero-banner">
+      <video
+        data-test-id="hero-banner-video"
+        autoPlay
+        playsInline
+        loop
+        muted
+        className="absolute order-1 h-full w-full object-cover col-start-5 col-span-8 row-start-1 row-span-3 -z-10"
+      >
+        <source
+          src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/Z7SYdZ7c43Q3f64O_Hero_motion_banner.mp4"
+          type="video/mp4"
+        />
+      </video>
+      <div className="flex md:flex-row flex-col p-5 pb-10 md:pt-20 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
+        <div className="flex-1 flex flex-col md:pr-10 pb-10 md:pb-36">
           <Heading headingText="Ridiculously fast full fibre broadband" />
           <p className="pb-5 font-garnett text-[26px] font-normal leading-[1.5]">
             Stream, game and WFH, all at the same time, with no drop-offs.
           </p>
-          <PostcodeChecker
-            placeholderText="Pop in your address"
-            inputBoxButtonText="Let's go"
-          />
+          <div className="pb-16">
+            <PostcodeChecker
+              placeholderText="Pop in your address"
+              inputBoxButtonText="Let's go"
+            />
+          </div>
           {trustScore !== undefined && (
             <TrustpilotHorizontal
               trustScore={trustScore}
@@ -48,7 +59,7 @@ export const HeroBanner = ({
             />
           )}
         </div>
-        <div className="flex w-[85%] h-[85%]">
+        <div className="flex md:w-[85%] w-full h-[85%]">
           <div className="flex-1 flex flex-col gap-2 font-bold justify-start">
             <TextWithTickList
               TextWithTickList={TextItemList.TextWithTickList}
