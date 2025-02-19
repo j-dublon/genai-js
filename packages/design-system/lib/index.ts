@@ -3,7 +3,6 @@ import "./index.css";
 import { AccountAppButton } from "@components/atoms/AccountAppButton";
 import { Button } from "@components/atoms/Button";
 import { ColorPill } from "@components/atoms/ColorPill";
-import { CompanyLogo } from "@components/atoms/CompanyLogo";
 import { FeatureText } from "@components/atoms/FeatureText";
 import { GuideCard } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
@@ -37,7 +36,6 @@ export {
   Button,
   CardSection,
   ColorPill,
-  CompanyLogo,
   CompanyLogoStrip,
   FeatureText,
   Footer,

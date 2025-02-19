@@ -8,6 +8,7 @@ import { CuckooProtect } from "@/components/organisms/CuckooProtect";
 import { FooterWrapper } from "@/components/organisms/Footer";
 import { HeroBanner } from "@/components/organisms/HeroBanner";
 import { JoinTheFlock } from "@/components/organisms/JoinTheFlock";
+import { LifeAtCuckoo } from "@/components/organisms/LifeAtCuckoo";
 import { TrustPilotSliderWrapper } from "@/components/organisms/TrustPilotSlider";
 import { reviews } from "@/components/organisms/TrustPilotSlider/trustpilotSliderProps";
 import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
@@ -26,8 +27,8 @@ export const HomePage = () => {
         numberOfReviews={trustpilotRating?.numberOfReviews}
         broadbandOffer={broadbandOffer}
       />
-      <CompanyLogoStripWrapper />
       <CardSectionWrapper />
+      <CompanyLogoStripWrapper />
       <JoinTheFlock
         trustScore={trustpilotRating?.trustScore}
         numberOfReviews={trustpilotRating?.numberOfReviews}
@@ -40,6 +41,7 @@ export const HomePage = () => {
         trustScore={Number(trustpilotRating?.trustScore)}
         reviews={reviews}
       />
+      <LifeAtCuckoo />
       <HowFastCanYouGoWrapper />
       <FooterWrapper trustScore={trustpilotRating?.trustScore} />
     </div>

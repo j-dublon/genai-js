@@ -56,6 +56,11 @@ describe("HomePage", () => {
     expect(imgElement).toHaveClass("w-32 md:w-56 h-auto");
   });
 
+  it("renders the Life at Cuckoo section", () => {
+    const titleText = screen.getByText("Properly good eggs");
+    expect(titleText).toBeInTheDocument();
+  });
+
   it("renders the Cuckoo Protect section", async () => {
     const imgElement = screen.getByAltText("Cuckoo protect logo");
     expect(imgElement).toBeInTheDocument();

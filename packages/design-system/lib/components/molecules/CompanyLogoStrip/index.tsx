@@ -1,4 +1,3 @@
-import { CompanyLogo } from "@components/atoms/CompanyLogo";
 import cx from "classnames";
 
 export interface CompanyLogoStripProps {
@@ -27,21 +26,39 @@ export const CompanyLogoStrip = ({
       <div className="hidden md:flex justify-around">
         {logos.map((logo: CompanyLogoProps, index: number) => (
           <div key={index} className="m-4 flex">
-            <CompanyLogo {...logo} />
+            <img
+              alt={logo.altText}
+              loading="lazy"
+              width={logo.width}
+              height={logo.height}
+              src={logo.imgSrc}
+            />
           </div>
         ))}
       </div>
       <div className="animate-marquee whitespace-nowrap flex justify-around md:hidden">
         {logos.map((logo: CompanyLogoProps, index: number) => (
           <div key={index} className="m-4 flex">
-            <CompanyLogo {...logo} />
+            <img
+              alt={logo.altText}
+              loading="lazy"
+              width={logo.width}
+              height={logo.height}
+              src={logo.imgSrc}
+            />
           </div>
         ))}
       </div>
       <div className="md:hidden absolute top-0 animate-marquee2 whitespace-nowrap flex justify-around">
         {logos.map((logo: CompanyLogoProps, index: number) => (
           <div key={index} className="m-4 flex">
-            <CompanyLogo {...logo} />
+            <img
+              alt={logo.altText}
+              loading="lazy"
+              width={logo.width}
+              height={logo.height}
+              src={logo.imgSrc}
+            />
           </div>
         ))}
       </div>

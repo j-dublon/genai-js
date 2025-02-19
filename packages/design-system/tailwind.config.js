@@ -17,6 +17,7 @@ export default {
       "core-pink": "#F3B0FF",
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
+      "ui-grey-100": "#F7F7F5",
       "ui-grey-200": "#F0F0E9",
       "ui-grey-300": "#D8D8D0",
       "ui-grey-500": "#565656",
