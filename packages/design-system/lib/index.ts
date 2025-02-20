@@ -26,6 +26,7 @@ import { Footer } from "@components/organisms/Footer";
 import { Guides } from "@components/organisms/Guides";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { MobileAppWithPhone } from "@components/organisms/MobileAppWithPhone";
+import { NavBar } from "@components/organisms/NavBar";
 
 import { Slider } from "./components/atoms/Slider";
 
@@ -47,6 +48,7 @@ export {
   InputBoxButton,
   MobileApp,
   MobileAppWithPhone,
+  NavBar,
   PostcodeChecker,
   ProductCard,
   Slider,

@@ -9,6 +9,7 @@ import { FooterWrapper } from "@/components/organisms/Footer";
 import { HeroBanner } from "@/components/organisms/HeroBanner";
 import { JoinTheFlock } from "@/components/organisms/JoinTheFlock";
 import { LifeAtCuckoo } from "@/components/organisms/LifeAtCuckoo";
+import { NavBarWrapper } from "@/components/organisms/NavBar";
 import { TrustPilotSliderWrapper } from "@/components/organisms/TrustPilotSlider";
 import { reviews } from "@/components/organisms/TrustPilotSlider/trustpilotSliderProps";
 import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
@@ -22,6 +23,7 @@ export const HomePage = () => {
 
   return (
     <div className="w-full">
+      <NavBarWrapper />
       <HeroBanner
         trustScore={trustpilotRating?.trustScore}
         numberOfReviews={trustpilotRating?.numberOfReviews}

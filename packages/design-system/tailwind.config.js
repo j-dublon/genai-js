@@ -6,12 +6,18 @@ import defaultTheme from "tailwindcss/defaultTheme";
 export default {
   ...sharedConfig,
   theme: {
+    screens: {
+      tablet: "960px",
+      ...defaultTheme.screens,
+    },
     colors: {
       currentColor: "currentColor",
       transparent: "transparent",
       "core-yellow": "#FCFF59",
       "core-blue": "#ACB9FE",
       "core-red": "#FF8A65",
+      "core-teal": "#C3F9FD",
+      "core-purple": "#5A06D8",
       "secondary-blue": "#6F89FF",
       "secondary-orange": "#FFC633",
       "core-pink": "#F3B0FF",
