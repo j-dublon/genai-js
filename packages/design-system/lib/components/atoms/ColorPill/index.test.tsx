@@ -6,6 +6,7 @@ describe("ColorPill Component", () => {
   const props: ColorPillProps = {
     colorPillText: "Test text",
     backgroundColor: "yellow",
+    size: "large",
     ariaLabel: "Custom aria label",
   };
 

@@ -1,11 +1,11 @@
-import { FeatureText } from "@react-component-library/ui";
+import { BACKGROUND_COLORS, FeatureText } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof FeatureText> = {
   component: FeatureText,
   argTypes: {
     backgroundColor: {
-      options: ["blue", "yellow"],
+      options: BACKGROUND_COLORS,
       control: { type: "select" },
     },
     textColor: {

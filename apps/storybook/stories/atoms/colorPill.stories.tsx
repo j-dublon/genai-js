@@ -1,3 +1,4 @@
+import { BACKGROUND_COLORS } from "@react-component-library/ui";
 import { ColorPill } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
@@ -5,7 +6,11 @@ const meta: Meta<typeof ColorPill> = {
   component: ColorPill,
   argTypes: {
     backgroundColor: {
-      options: ["yellow", "pink"],
+      options: BACKGROUND_COLORS,
+      control: { type: "select" },
+    },
+    size: {
+      options: ["small", "medium", "large"],
       control: { type: "select" },
     },
   },
@@ -21,5 +26,6 @@ export const Primary: Story = {
   args: {
     colorPillText: "Test",
     backgroundColor: "yellow",
+    size: "large",
   },
 };

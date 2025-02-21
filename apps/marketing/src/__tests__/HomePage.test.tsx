@@ -1,8 +1,12 @@
 import "@testing-library/jest-dom";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { vi } from "vitest";
 
+import {
+  guidesHeading,
+  guidesSubHeading,
+} from "../components/organisms/Guides/guidesProps";
 import { HomePage } from "../components/pages/HomePage";
 
 const mockedFetch = vi.fn(() =>
@@ -16,6 +20,12 @@ const mockedFetch = vi.fn(() =>
 );
 
 global.fetch = mockedFetch;
+
+global.ResizeObserver = vi.fn().mockImplementation(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
 
 describe("HomePage", () => {
   beforeEach(() => {
@@ -64,6 +74,20 @@ describe("HomePage", () => {
   it("renders the Cuckoo Protect section", async () => {
     const imgElement = screen.getByAltText("Cuckoo protect logo");
     expect(imgElement).toBeInTheDocument();
+  });
+
+  it("renders the Guides section", () => {
+    const guidesSection = screen.getByLabelText("Cuckoo Guides");
+    const headingElement = screen.getByText(guidesHeading);
+    const subHeading = screen.getByText(guidesSubHeading);
+    const slider = within(guidesSection).getByRole("region", {
+      name: "Scrollable content",
+    });
+
+    expect(guidesSection).toBeInTheDocument();
+    expect(headingElement).toBeInTheDocument();
+    expect(subHeading).toBeInTheDocument();
+    expect(slider).toBeInTheDocument();
   });
 
   it("renders the Footer section", async () => {

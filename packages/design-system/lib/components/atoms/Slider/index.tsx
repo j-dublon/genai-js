@@ -1,68 +1,104 @@
 import { useScrollable } from "@hooks/useScrollable";
-import React, { useRef } from "react";
+import cx from "classnames";
+import React, { useEffect, useRef, useState } from "react";
 
 export interface SliderProps {
   children: React.ReactNode;
   draggable?: boolean;
-  showScrollbar?: boolean;
+  margin?: string;
 }
 
 export const Slider = ({
   draggable = false,
-  showScrollbar = true,
+  margin = "",
   children,
 }: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
+  const [isScrollable, setIsScrollable] = useState(false);
 
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(ref);
 
-  const scrollbarStyles = showScrollbar
-    ? `
-      scrollbar scrollbar-thin scrollbar-thumb-core-black scrollbar-track-ui-grey-300
-      hover:scrollbar-thumb-core-black/90
-    `
-    : `scrollbar-none`;
+  useEffect(() => {
+    const slider = ref.current;
+    if (!slider) return;
 
-  const baseStyles = `
-    ${draggable ? "select-none user-select-none" : undefined}
-    flex overflow-x-auto relative md:h-[500px] h-fit
-    ${scrollbarStyles}
-  `;
+    const handleScrollAndCheck = () => {
+      const needsScrolling = slider.scrollWidth > slider.clientWidth;
+      setIsScrollable(needsScrolling);
 
-  const marginStyles = `
-    before:flex-none after:flex-none after:w-4
-    sm:before:w-6 sm:after:w-6
-    md:before:w-8 md:after:w-8
-    lg:before:w-2 lg:after:w-12
-  `;
+      if (needsScrolling) {
+        const scrollbar = document.querySelector('[role="scrollbar"]');
+        if (!scrollbar) return;
+
+        const available = slider.scrollWidth - slider.clientWidth;
+        const progress = available ? slider.scrollLeft / available : 0;
+        setScrollPosition(progress * (scrollbar.clientWidth - 368));
+      }
+    };
+
+    handleScrollAndCheck();
+    slider.addEventListener("scroll", handleScrollAndCheck);
+    const resizeObserver = new ResizeObserver(handleScrollAndCheck);
+    resizeObserver.observe(slider);
+
+    return () => {
+      slider.removeEventListener("scroll", handleScrollAndCheck);
+      resizeObserver.disconnect();
+    };
+  }, []);
+
+  const baseStyles = `${draggable ? "select-none user-select-none" : undefined}
+    flex overflow-x-auto relative h-fit scrollbar-none py-5 pl-5 lg:pl-36`;
+
+  const marginStyles = `before:flex-none after:flex-none after:w-4 lg:after:w-10 ${margin ?? ""}`;
 
   const dragStyles = isMouseDown ? "cursor-grabbing" : "cursor-grab";
 
   return (
-    <div
-      role="region"
-      aria-roledescription="slider"
-      aria-label="Scrollable content"
-      ref={ref}
-      className={`
-        ${baseStyles}
-        ${marginStyles}
-        ${draggable ? dragStyles : ""}
-      `}
-      onMouseDown={draggable ? onMouseDown : undefined}
-      onMouseUp={draggable ? onMouseUp : undefined}
-      onMouseMove={draggable ? onMouseMove : undefined}
-    >
-      {React.Children.map(children, (child, i) => (
-        <div
-          role="group"
-          aria-roledescription="slide"
-          className={`slider-item flex-none ${i === 0 ? "" : "ml-8"}`}
-        >
-          {child}
+    <div className="relative">
+      <div
+        role="region"
+        aria-roledescription="slider"
+        aria-label="Scrollable content"
+        ref={ref}
+        className={cx(baseStyles, marginStyles, draggable ? dragStyles : "")}
+        onMouseDown={draggable ? onMouseDown : undefined}
+        onMouseUp={draggable ? onMouseUp : undefined}
+        onMouseMove={draggable ? onMouseMove : undefined}
+      >
+        {React.Children.map(children, (child, i) => (
+          <div
+            role="group"
+            aria-roledescription="slide"
+            className={`slider-item ${i === 0 ? "" : "ml-4 md:ml-6"}`}
+          >
+            {child}
+          </div>
+        ))}
+      </div>
+
+      {isScrollable && (
+        <div className="md:pt-17 px-5 lg:px-36">
+          <div
+            role="scrollbar"
+            aria-orientation="horizontal"
+            aria-controls="slider"
+            aria-label="Scroll indicator"
+            className="h-1 bg-ui-grey-200 mx-auto md:max-w-[956px] lg:max-w-[1152px] hidden md:block relative"
+          >
+            <div
+              role="thumb"
+              aria-label="Scroll position"
+              className="bg-core-black h-1 w-[368px] rounded-full"
+              style={{
+                transform: `translateX(${scrollPosition}px)`,
+              }}
+            />
+          </div>
         </div>
-      ))}
+      )}
     </div>
   );
 };

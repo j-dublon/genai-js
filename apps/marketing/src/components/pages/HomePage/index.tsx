@@ -6,6 +6,12 @@ import { CardSectionWrapper } from "@/components/organisms/CardSectionWrapper";
 import { ClickSwitchDoneSection } from "@/components/organisms/ClickSwitchDoneSection";
 import { CuckooProtect } from "@/components/organisms/CuckooProtect";
 import { FooterWrapper } from "@/components/organisms/Footer";
+import { Guides } from "@/components/organisms/Guides";
+import {
+  guides,
+  guidesHeading,
+  guidesSubHeading,
+} from "@/components/organisms/Guides/guidesProps";
 import { HeroBanner } from "@/components/organisms/HeroBanner";
 import { JoinTheFlock } from "@/components/organisms/JoinTheFlock";
 import { LifeAtCuckoo } from "@/components/organisms/LifeAtCuckoo";
@@ -13,7 +19,6 @@ import { NavBarWrapper } from "@/components/organisms/NavBar";
 import { TrustPilotSliderWrapper } from "@/components/organisms/TrustPilotSlider";
 import { reviews } from "@/components/organisms/TrustPilotSlider/trustpilotSliderProps";
 import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
-
 export const HomePage = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const broadbandOffer = true;
@@ -45,6 +50,11 @@ export const HomePage = () => {
       />
       <LifeAtCuckoo />
       <HowFastCanYouGoWrapper />
+      <Guides
+        guides={guides}
+        guidesHeading={guidesHeading}
+        guidesSubHeading={guidesSubHeading}
+      />
       <FooterWrapper trustScore={trustpilotRating?.trustScore} />
     </div>
   );

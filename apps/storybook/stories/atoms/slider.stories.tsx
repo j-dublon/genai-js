@@ -53,12 +53,9 @@ const slides = Array.from({ length: 5 }, (_, i) => (
 ));
 
 export const Primary: Story = {
-  args: { draggable: true, showScrollbar: true },
+  args: { draggable: true },
   argTypes: {
     draggable: {
-      control: { type: "boolean" },
-    },
-    showScrollbar: {
       control: { type: "boolean" },
     },
   },

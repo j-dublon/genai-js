@@ -57,7 +57,7 @@ export const InfoCard = ({
               <ColorPill
                 colorPillText={colorPillText}
                 backgroundColor={colorPillBackgroundColor}
-                className="md:text-4xl text-[26px]"
+                size="large"
               />
             </div>
           </div>
@@ -72,7 +72,7 @@ export const InfoCard = ({
               <ColorPill
                 colorPillText={colorPillText}
                 backgroundColor={colorPillBackgroundColor}
-                className="md:text-4xl text-[26px]"
+                size="large"
               />
             </div>
 

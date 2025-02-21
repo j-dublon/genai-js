@@ -1,4 +1,4 @@
-import { GuideCard } from "@react-component-library/ui";
+import { BACKGROUND_COLORS, GuideCard } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof GuideCard> = {
@@ -34,7 +34,7 @@ const meta: Meta<typeof GuideCard> = {
           summary: "Tag[]",
           detail: `Array<{
             text: string;
-            backgroundColor: string;
+            backgroundColor: ${BACKGROUND_COLORS.join(" | ")};
           }>`,
         },
       },
@@ -56,7 +56,7 @@ export const Primary: Story = {
   render: (props) => <GuideCard {...props} />,
   name: "GuideCard",
   args: {
-    title: "Cuckoo partners with  the UK's biggest energy company",
+    title: "Cuckoo partners with the UK's biggest energy company",
     image: {
       src: "../../assets/images/guide-1.svg",
       alt: "guide 1 image",

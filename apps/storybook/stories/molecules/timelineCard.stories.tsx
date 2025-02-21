@@ -1,4 +1,4 @@
-import { TimelineCard } from "@react-component-library/ui";
+import { BACKGROUND_COLORS, TimelineCard } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof TimelineCard> = {
@@ -6,13 +6,7 @@ const meta: Meta<typeof TimelineCard> = {
   argTypes: {
     backgroundColor: {
       control: { type: "radio" },
-      options: [
-        "bg-core-black",
-        "bg-ui-grey-200",
-        "bg-core-yellow",
-        "bg-core-white",
-        "bg-core-pink",
-      ],
+      options: BACKGROUND_COLORS,
     },
   },
 };

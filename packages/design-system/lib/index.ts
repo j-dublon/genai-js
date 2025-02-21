@@ -7,6 +7,7 @@ import { FeatureText } from "@components/atoms/FeatureText";
 import { GuideCard } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
 import { InputBoxButton } from "@components/atoms/InputBoxButton";
+import { Slider } from "@components/atoms/Slider";
 import { TextWithTick } from "@components/atoms/TextWithTick";
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { AccordionSection } from "@components/molecules/AccordionSection";
@@ -23,12 +24,9 @@ import { TrustpilotHorizontal } from "@components/molecules/TrustpilotHorizontal
 import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { CardSection } from "@components/organisms/CardSection";
 import { Footer } from "@components/organisms/Footer";
-import { Guides } from "@components/organisms/Guides";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { MobileAppWithPhone } from "@components/organisms/MobileAppWithPhone";
 import { NavBar } from "@components/organisms/NavBar";
-
-import { Slider } from "./components/atoms/Slider";
 
 export {
   AccordionSection,
@@ -41,7 +39,6 @@ export {
   FeatureText,
   Footer,
   GuideCard,
-  Guides,
   Heading,
   HowFastCanYouGo,
   InfoCard,

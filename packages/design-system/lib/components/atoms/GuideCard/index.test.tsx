@@ -123,7 +123,7 @@ describe("GuideCard", () => {
 
     const container = screen.getByRole("button");
     expect(container.className).toContain(
-      "flex flex-col sm:w-[466px] w-[292px] h-[310px]",
+      "flex flex-col sm:w-[466px] w-[292px] h-fit",
     );
   });
 
@@ -131,9 +131,7 @@ describe("GuideCard", () => {
     render(<GuideCard {...defaultProps} />);
 
     const title = screen.getByRole("heading", { level: 3 });
-    expect(title.className).toContain(
-      "mt-2 text-[20px] md:text-[26px] font-bold",
-    );
+    expect(title.className).toContain("mt-2 text-xl md:text-[26px] font-bold");
   });
 
   it("renders tags with correct layout", () => {

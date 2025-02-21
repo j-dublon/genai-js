@@ -1,8 +1,10 @@
+import { bgColorVariants } from "./variants";
+
 export interface Image {
   src: string;
   alt: string;
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }
 
 export interface Tag {
@@ -10,11 +12,8 @@ export interface Tag {
   backgroundColor: BackgroundColors;
 }
 
-export type BackgroundColors =
-  | "yellow"
-  | "pink"
-  | "grey"
-  | "orange"
-  | "blue"
-  | "red"
-  | "white";
+export const BACKGROUND_COLORS = Object.keys(
+  bgColorVariants,
+) as (keyof typeof bgColorVariants)[];
+
+export type BackgroundColors = keyof typeof bgColorVariants;

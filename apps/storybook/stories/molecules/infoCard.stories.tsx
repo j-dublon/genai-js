@@ -1,15 +1,15 @@
-import { InfoCard } from "@react-component-library/ui";
+import { BACKGROUND_COLORS, InfoCard } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof InfoCard> = {
   component: InfoCard,
   argTypes: {
     colorPillBackgroundColor: {
-      options: ["yellow", "pink", "grey", "orange"],
+      options: BACKGROUND_COLORS,
       control: { type: "select" },
     },
     infoCardBackgroundColor: {
-      options: ["yellow", "pink", "grey", "orange"],
+      options: BACKGROUND_COLORS,
       control: { type: "select" },
     },
   },

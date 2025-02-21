@@ -7,7 +7,7 @@ import { AccountAppButton } from "./components/atoms/AccountAppButton";
 import { Button } from "./components/atoms/Button";
 import { ColorPill } from "./components/atoms/ColorPill";
 import { FeatureText } from "./components/atoms/FeatureText";
-import { GuideCard } from "./components/atoms/GuideCard";
+import { GuideCard, GuideCardProps } from "./components/atoms/GuideCard";
 import { Heading } from "./components/atoms/Heading";
 import { InputBoxButton } from "./components/atoms/InputBoxButton";
 import { Slider } from "./components/atoms/Slider";
@@ -27,15 +27,16 @@ import { TrustpilotHorizontal } from "./components/molecules/TrustpilotHorizonta
 import { TrustpilotVertical } from "./components/molecules/TrustpilotVertical";
 import { CardSection } from "./components/organisms/CardSection";
 import { Footer } from "./components/organisms/Footer";
-import { Guides } from "./components/organisms/Guides";
 import { HowFastCanYouGo } from "./components/organisms/HowFastCanYouGo";
 import { MobileAppWithPhone } from "./components/organisms/MobileAppWithPhone";
 import { NavBar } from "./components/organisms/NavBar";
+import { BACKGROUND_COLORS, BackgroundColors } from "./types";
 
 export {
   AccordionSection,
   AccountAppButton,
   ArticleCard,
+  BACKGROUND_COLORS,
   Button,
   CardSection,
   ColorPill,
@@ -43,7 +44,6 @@ export {
   FeatureText,
   Footer,
   GuideCard,
-  Guides,
   Heading,
   HowFastCanYouGo,
   ImageMarquee,
@@ -63,3 +63,5 @@ export {
   TrustpilotStars,
   TrustpilotVertical,
 };
+
+export type { BackgroundColors, GuideCardProps };

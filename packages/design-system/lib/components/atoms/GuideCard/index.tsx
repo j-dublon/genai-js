@@ -24,10 +24,7 @@ export const GuideCard = ({ title, image, tags, onClick }: GuideCardProps) => {
     : {};
 
   return (
-    <div
-      className="flex flex-col sm:w-[466px] w-[292px] h-[310px]"
-      {...cardProps}
-    >
+    <div className="flex flex-col sm:w-[466px] w-[292px] h-fit" {...cardProps}>
       <div className="relative w-full aspect-video">
         <img
           src={image.src}
@@ -47,12 +44,13 @@ export const GuideCard = ({ title, image, tags, onClick }: GuideCardProps) => {
             <ColorPill
               colorPillText={t.text}
               backgroundColor={t.backgroundColor}
+              size="small"
             />
           </div>
         ))}
       </div>
 
-      <h3 className="mt-2 text-[20px] md:text-[26px] font-bold">{title}</h3>
+      <h3 className="mt-2 text-xl md:text-[26px] font-bold">{title}</h3>
     </div>
   );
 };

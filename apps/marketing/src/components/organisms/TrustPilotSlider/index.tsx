@@ -43,11 +43,11 @@ export const TrustPilotSlider = ({
 }: TrustPilotSliderProps) => {
   return (
     <section
-      className="bg-ui-grey-200 sm:py-24 pl-4 sm:pl-12 py-12 flex flex-col justify-center"
+      className="bg-ui-grey-200 pb-12 lg:pb-40"
       aria-labelledby="trust-pilot-heading"
     >
-      <div className=" md:max-w-[1152px] overflow-x-auto">
-        <div className="mb-12 md:px-0 px-8">
+      <div className="py-12 px-5 lg:px-36 lg:pt-40">
+        <div className="max-w-[1152px] mx-auto">
           <h2
             id="trust-pilot-heading"
             className="sm:text-5xl text-3xl font-semibold"
@@ -56,12 +56,13 @@ export const TrustPilotSlider = ({
           </h2>
           <p className="sm:text-4xl text-2xl font-semibold">{subtitle}</p>
         </div>
-        <div className="pl-8 sm:pl-0"></div>
       </div>
+
       <Slider
         draggable
         aria-label="Customer reviews"
         aria-roledescription="carousel"
+        margin="xl:before:w-[calc((100vw-1280px)/3)] xl:after:w-16 2xl:before:w-[calc((100vw-1536px)/1.75)]"
       >
         {reviews.map((r: ReviewCardProps, i) => (
           <div
@@ -79,8 +80,8 @@ export const TrustPilotSlider = ({
         ))}
       </Slider>
 
-      <div className="md:pt-4 md:max-w-[1152px] overflow-x-auto">
-        <div className="flex flex-row gap-4 mt-4 sm:mt-0 items-center px-4 md:px-0">
+      <div className="md:pt-4 px-5 lg:px-36">
+        <div className="max-w-[1152px] mx-auto flex flex-row gap-4 mt-4 sm:mt-0 items-center px-4 md:px-0">
           <picture>
             <source
               media="(min-width: 640px)"

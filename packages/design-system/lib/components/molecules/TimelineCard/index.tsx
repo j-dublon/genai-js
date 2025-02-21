@@ -6,7 +6,6 @@ export interface TimelineCardProps {
   backgroundColor: BackgroundColors;
   subtitleText: string;
   subHeading: string;
-  className?: string;
 }
 
 export const TimelineCard = ({
@@ -14,7 +13,6 @@ export const TimelineCard = ({
   backgroundColor,
   subtitleText,
   subHeading,
-  className,
 }: TimelineCardProps) => {
   return (
     <div className="p-5 bg-ui-grey-200 rounded-lg md:w-[30%]">
@@ -22,7 +20,7 @@ export const TimelineCard = ({
         <ColorPill
           colorPillText={colorPillText}
           backgroundColor={backgroundColor}
-          className={className}
+          size="medium"
         />
       </div>
       <div className="flex flex-col gap-2.5">
