@@ -7,6 +7,7 @@ function getAbsolutePath(value) {
 const config = {
   stories: ["../stories/*.stories.tsx", "../stories/**/*.stories.tsx"],
   addons: [
+    getAbsolutePath("@storybook/addon-viewport"),
     getAbsolutePath("@storybook/addon-links"),
     getAbsolutePath("@storybook/addon-essentials"),
   ],
@@ -18,12 +19,15 @@ const config = {
   core: {},
 
   async viteFinal(config, { configType }) {
-    // customize the Vite config here
     return {
       ...config,
       define: { "process.env": {} },
       resolve: {
         alias: [
+          {
+            find: "@hooks",
+            replacement: resolve(__dirname, "../hooks"),
+          },
           {
             find: "ui",
             replacement: resolve(__dirname, "../../../packages/ui/"),

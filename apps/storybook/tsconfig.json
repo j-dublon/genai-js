@@ -15,9 +15,12 @@
     "skipLibCheck": true,
     "strict": true,
     "jsx": "react-jsx",
-    "lib": ["dom", "ES2015"],
+    "lib": ["dom", "ES2015", "esnext"],
     "module": "ESNext",
-    "target": "es6"
+    "target": "es6",
+    "paths": {
+      "@hooks/*": ["./hooks/*"]
+    }
   },
   "exclude": ["node_modules"]
 }

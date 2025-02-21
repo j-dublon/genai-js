@@ -1,6 +1,6 @@
 import { HamburgerButton } from "@components/atoms/HamburgerButton";
 import Link from "next/link";
-import { JSX, useEffect, useRef, useState } from "react";
+import { Dispatch, JSX, RefObject, SetStateAction } from "react";
 
 import { CTA } from "./CTA";
 import { DropdownMenu } from "./DropdownMenu";
@@ -13,9 +13,19 @@ interface NavBarProps {
     dropdownLinks?: { name: string; href?: string; external?: boolean }[];
   }[];
   signupText: string;
+  toggled: boolean;
+  setToggled: Dispatch<SetStateAction<boolean>>;
+  openDropdown: string | null;
+  setOpenDropdown: Dispatch<SetStateAction<string | null>>;
+  drawerRef: RefObject<HTMLDivElement>;
+  useDropdown: (
+    name: string,
+    openDropdown: string | null,
+    setOpenDropdown: (name: string | null) => void,
+  ) => { isOpen: boolean; dropdownRef: RefObject<HTMLDivElement> };
 }
 
-//TODO: This needs be a reusable button with animation used site wide
+//TODO: This needs to be a reusable button with animation used site-wide
 export const SignupButton = ({ text }: { text: string }) => (
   <Link href="/join/find-your-address" passHref>
     <button
@@ -27,40 +37,17 @@ export const SignupButton = ({ text }: { text: string }) => (
   </Link>
 );
 
-export const NavBar = ({ logo, links, signupText }: NavBarProps) => {
-  const [toggled, setToggled] = useState(false);
-  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const drawerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        drawerRef.current &&
-        !drawerRef.current.contains(event.target as Node)
-      ) {
-        setToggled(false);
-        setOpenDropdown(null);
-      }
-    }
-
-    function handleEscapeKey(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setToggled(false);
-        setOpenDropdown(null);
-      }
-    }
-
-    if (toggled || openDropdown) {
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("keydown", handleEscapeKey);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscapeKey);
-    };
-  }, [toggled, openDropdown]);
-
+export const NavBar = ({
+  logo,
+  links,
+  signupText,
+  toggled,
+  setToggled,
+  openDropdown,
+  setOpenDropdown,
+  drawerRef,
+  useDropdown,
+}: NavBarProps) => {
   return (
     <header className="w-full top-0 z-50 transition-all duration-300 bg-white shadow-md">
       <CTA>
@@ -76,10 +63,17 @@ export const NavBar = ({ logo, links, signupText }: NavBarProps) => {
         </p>
       </CTA>
 
-      <div className="flex bg-core-yellow justify-between items-center h-[80px] py-[15px] md:px-[48px] px-[24px] w-full border-b border-core-black/10">
-        {logo && <div>{logo}</div>}
+      <div
+        ref={drawerRef}
+        className="flex bg-core-yellow justify-between items-center h-[80px] py-[15px] md:px-[48px] px-[24px] w-full border-b border-core-black/10"
+      >
+        {logo && (
+          <Link href="/" passHref>
+            <div className="cursor-pointer">{logo}</div>
+          </Link>
+        )}
         <div className="flex items-center md:gap-4 gap-8">
-          <nav className="hidden justify-end items-center tablet:flex">
+          <nav className="hidden tablet:flex justify-end items-center">
             {links.map(({ name, href, dropdownLinks }) =>
               dropdownLinks ? (
                 <DropdownMenu
@@ -88,6 +82,7 @@ export const NavBar = ({ logo, links, signupText }: NavBarProps) => {
                   dropdownLinks={dropdownLinks}
                   openDropdown={openDropdown}
                   setOpenDropdown={setOpenDropdown}
+                  useDropdown={useDropdown}
                 />
               ) : (
                 <Link key={name} href={href ?? "#"}>

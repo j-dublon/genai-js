@@ -1,4 +1,5 @@
 import js from "@eslint/js";
+import globals from "globals";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import typescript from "@typescript-eslint/eslint-plugin";
@@ -15,8 +16,14 @@ export default [
         ecmaVersion: "latest",
         sourceType: "module",
       },
+      globals: {
+        ...globals.browser,
+        React: true,
+      },
     },
     plugins: {
+      react,
+      "react-hooks": reactHooks,
       "@typescript-eslint": typescript,
       "simple-import-sort": simpleImportSort,
     },

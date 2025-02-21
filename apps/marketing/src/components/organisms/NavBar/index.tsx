@@ -1,6 +1,12 @@
 import { NavBar } from "@react-component-library/ui";
 
+import { useDropdown } from "@/hooks/useDropdown";
+import { useNavBarHandlers } from "@/hooks/useNavBarHandlers";
+
 export const NavBarWrapper = () => {
+  const { toggled, setToggled, openDropdown, setOpenDropdown, drawerRef } =
+    useNavBarHandlers();
+
   return (
     <NavBar
       logo={
@@ -47,6 +53,12 @@ export const NavBarWrapper = () => {
         },
       ]}
       signupText="Sign up"
+      toggled={toggled}
+      setToggled={setToggled}
+      openDropdown={openDropdown}
+      setOpenDropdown={setOpenDropdown}
+      drawerRef={drawerRef}
+      useDropdown={useDropdown}
     />
   );
 };

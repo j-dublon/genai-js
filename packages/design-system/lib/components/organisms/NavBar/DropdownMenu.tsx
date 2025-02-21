@@ -1,12 +1,16 @@
 import { ChevronVertical } from "@icons/ChevronVertical";
 import Link from "next/link";
-import { useEffect, useRef } from "react";
 
 interface DropdownMenuProps {
   name: string;
   dropdownLinks: { name: string; href?: string; external?: boolean }[];
   openDropdown: string | null;
   setOpenDropdown: (name: string | null) => void;
+  useDropdown: (
+    name: string,
+    openDropdown: string | null,
+    setOpenDropdown: (name: string | null) => void,
+  ) => { isOpen: boolean; dropdownRef: React.RefObject<HTMLDivElement> };
 }
 
 export const DropdownMenu = ({
@@ -14,28 +18,13 @@ export const DropdownMenu = ({
   dropdownLinks,
   openDropdown,
   setOpenDropdown,
+  useDropdown,
 }: DropdownMenuProps) => {
-  const isOpen = openDropdown === name;
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setOpenDropdown(null);
-      }
-    }
-
-    if (isOpen) {
-      document.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [isOpen]);
+  const { isOpen, dropdownRef } = useDropdown(
+    name,
+    openDropdown,
+    setOpenDropdown,
+  );
 
   return (
     <div className="relative flex items-center" ref={dropdownRef}>
