@@ -15,6 +15,7 @@ import {
 import { HeroBanner } from "@/components/organisms/HeroBanner";
 import { JoinTheFlock } from "@/components/organisms/JoinTheFlock";
 import { LifeAtCuckoo } from "@/components/organisms/LifeAtCuckoo";
+import { MobileAppWrapper } from "@/components/organisms/MobileAppWrapper";
 import { NavBarWrapper } from "@/components/organisms/NavBar";
 import { TrustPilotSliderWrapper } from "@/components/organisms/TrustPilotSlider";
 import { reviews } from "@/components/organisms/TrustPilotSlider/trustpilotSliderProps";
@@ -48,6 +49,7 @@ export const HomePage = () => {
         trustScore={Number(trustpilotRating?.trustScore)}
         reviews={reviews}
       />
+      <MobileAppWrapper />
       <LifeAtCuckoo />
       <HowFastCanYouGoWrapper />
       <Guides

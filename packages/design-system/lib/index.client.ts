@@ -2,6 +2,7 @@
 import "./index.css";
 
 import { ImageMarquee } from "@components/molecules/ImageMarquee";
+import { MobilePhone } from "@components/molecules/MobilePhone";
 
 import { AccountAppButton } from "./components/atoms/AccountAppButton";
 import { Button } from "./components/atoms/Button";
@@ -28,7 +29,6 @@ import { TrustpilotVertical } from "./components/molecules/TrustpilotVertical";
 import { CardSection } from "./components/organisms/CardSection";
 import { Footer } from "./components/organisms/Footer";
 import { HowFastCanYouGo } from "./components/organisms/HowFastCanYouGo";
-import { MobileAppWithPhone } from "./components/organisms/MobileAppWithPhone";
 import { NavBar } from "./components/organisms/NavBar";
 import { BACKGROUND_COLORS, BackgroundColors } from "./types";
 
@@ -50,7 +50,7 @@ export {
   InfoCard,
   InputBoxButton,
   MobileApp,
-  MobileAppWithPhone,
+  MobilePhone,
   NavBar,
   PostcodeChecker,
   ProductCard,

@@ -1,34 +1,44 @@
 import { AccountAppButton } from "@components/atoms/AccountAppButton";
-import { Heading } from "@components/atoms/Heading";
 import { TextWithTick } from "@components/atoms/TextWithTick";
+import cx from "classnames";
 
 export interface MobileAppProps {
   headingText: string;
   textItems: MobileAppTextItemsProps[];
+  selectedTextIndex: number;
+  setSelectedTextIndex: (index: number) => void;
 }
 
 type MobileAppTextItemsProps = {
   itemText: string;
 };
 
-export const MobileApp = ({ headingText, textItems }: MobileAppProps) => {
-  return (
-    <div className="md:py-12 md:px-10 p-6 bg-core-white md:rounded-lg md:w-[35%]">
-      <div className="md:pr-12">
-        <Heading headingText={headingText} />
-      </div>
+export const MobileApp = ({
+  headingText,
+  textItems,
+  selectedTextIndex,
+  setSelectedTextIndex,
+}: MobileAppProps) => {
+  const handleItemClick = (index: number) => {
+    setSelectedTextIndex(index);
+  };
 
-      <div className="py-10 md:flex flex-col gap-[10px] hidden">
+  return (
+    <div className="md:py-[50px] md:px-10 p-6 bg-core-white md:rounded-lg w-full">
+      <h2 className="md:text-5xl text-3xl font-semibold">{headingText}</h2>
+
+      <div className="py-10 flex flex-col gap-[10px]">
         {textItems.map((item, index) => (
-          <div key={index} className={index === 0 ? "font-bold" : ""}>
+          <div
+            key={`${item.itemText}${index}`}
+            className={cx(
+              "cursor-pointer",
+              `${selectedTextIndex === index ? "font-bold" : ""}`,
+            )}
+            onClick={() => handleItemClick(index)}
+          >
             <TextWithTick key={index} textInput={item.itemText} />
           </div>
-        ))}
-      </div>
-
-      <div className="md:hidden py-6 flex flex-col gap-4">
-        {textItems.map((item, index) => (
-          <TextWithTick key={index} textInput={item.itemText} />
         ))}
       </div>
 

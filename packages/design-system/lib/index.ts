@@ -15,6 +15,7 @@ import { ArticleCard } from "@components/molecules/ArticleCard";
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
 import { InfoCard } from "@components/molecules/InfoCard";
 import { MobileApp } from "@components/molecules/MobileApp";
+import { MobilePhone } from "@components/molecules/MobilePhone";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
 import { ProductCard } from "@components/molecules/ProductCard";
 import { TextWithTickList } from "@components/molecules/TextWithTickList";
@@ -25,7 +26,6 @@ import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { CardSection } from "@components/organisms/CardSection";
 import { Footer } from "@components/organisms/Footer";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
-import { MobileAppWithPhone } from "@components/organisms/MobileAppWithPhone";
 import { NavBar } from "@components/organisms/NavBar";
 
 export {
@@ -44,7 +44,7 @@ export {
   InfoCard,
   InputBoxButton,
   MobileApp,
-  MobileAppWithPhone,
+  MobilePhone,
   NavBar,
   PostcodeChecker,
   ProductCard,

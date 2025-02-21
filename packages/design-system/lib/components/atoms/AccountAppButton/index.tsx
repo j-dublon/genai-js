@@ -10,7 +10,7 @@ const Apple = () => (
 
 const Google = () => (
   <Link
-    href="https://play.google.com/store/apps/details?id=co.cuckoo.neo"
+    href="https://play.google.com/store/apps/details?id=co.cuckoo.neo.prod&hl=en"
     target="_blank"
   >
     <GooglePlay aria-label="Download the app from the Google Play Store" />

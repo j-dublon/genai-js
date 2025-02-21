@@ -1,5 +1,6 @@
 import { MobileApp } from "@components/molecules/MobileApp";
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
 describe("MobileApp Component", () => {
   const mockProps = {
@@ -9,6 +10,8 @@ describe("MobileApp Component", () => {
         itemText: "Manage your order and installation",
       },
     ],
+    selectedTextIndex: 0,
+    setSelectedTextIndex: vi.fn(),
   };
   it("renders the component", () => {
     render(<MobileApp {...mockProps} />);
