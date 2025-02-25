@@ -6,10 +6,17 @@ export interface PostcodeCheckerProps {
   placeholderText?: string;
   inputBoxButtonText?: string;
   isChevron?: boolean;
+  onClickFunction?: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 export const PostcodeChecker = (props: PostcodeCheckerProps) => {
-  const { titleText, placeholderText, inputBoxButtonText, isChevron } = props;
+  const {
+    titleText,
+    placeholderText,
+    inputBoxButtonText,
+    isChevron,
+    onClickFunction,
+  } = props;
 
   return (
     <>
@@ -19,7 +26,10 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
         </h2>
       )}
       <div className="flex rounded-lg bg-core-white border-2 border-outline-ui-grey-300 p-2 pl-5 pr-4 md:pr-2  items-center justify-between h-[74px] transition-colors duration-400 w-full z-1">
-        <form className="flex flex-2 flex-row w-full">
+        <form
+          className="flex flex-2 flex-row w-full"
+          onSubmit={onClickFunction}
+        >
           <input
             aria-labelledby="input"
             placeholder={placeholderText}

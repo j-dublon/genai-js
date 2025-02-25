@@ -38,7 +38,8 @@
   },
   "dependencies": {
     "classnames": "2.5.1",
-    "framer-motion": "12.4.4"
+    "framer-motion": "12.4.4",
+    "posthog-js": "1.222.0"
   },
   "peerDependencies": {
     "react": "^19.0.0",

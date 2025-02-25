@@ -5,6 +5,7 @@ import {
   TextWithTickList,
   TrustpilotHorizontal,
 } from "@react-component-library/ui";
+import { usePostHog } from "posthog-js/react";
 import { ComponentProps } from "react";
 
 interface HeroBannerProps {
@@ -17,6 +18,7 @@ export const HeroBanner = ({
   trustScore,
   numberOfReviews = 0,
 }: HeroBannerProps) => {
+  const posthog = usePostHog();
   const TextItemList: ComponentProps<typeof TextWithTickList> = {
     TextWithTickList: [
       { textInput: "Lorem ipsum dolor sit", broadbandOffer: true },
@@ -25,6 +27,13 @@ export const HeroBanner = ({
       { textInput: "Free* eero Pro 6E router, worth £249.99**" },
     ],
   };
+
+  // TODO: This is just an example replace when actual button logic is added
+  const onClick = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    posthog?.capture("user_clicked_check_postcode_button");
+  };
+
   return (
     <div className="flex justify-center" data-testid="hero-banner">
       <video
@@ -50,6 +59,7 @@ export const HeroBanner = ({
             <PostcodeChecker
               placeholderText="Pop in your address"
               inputBoxButtonText="Let's go"
+              onClickFunction={onClick}
             />
           </div>
           {trustScore !== undefined && (

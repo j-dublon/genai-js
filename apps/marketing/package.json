@@ -21,6 +21,8 @@
     "next": "15.1.0",
     "pino": "9.6.0",
     "pino-pretty": "13.0.0",
+    "posthog-js": "1.222.0",
+    "posthog-node": "4.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
@@ -30,6 +32,7 @@
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.2.0",
+    "@types/gtag.js": "0.0.20",
     "@types/jest": "^29.5.14",
     "@types/node": "^20",
     "@types/react": "^19",
