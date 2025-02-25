@@ -40,6 +40,7 @@ export const Guides = ({
             <GuideCard
               image={g.image}
               tags={g.tags}
+              url={g.url}
               title={g.title}
               onClick={g.onClick}
             />

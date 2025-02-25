@@ -1,5 +1,5 @@
 import { BackgroundColors } from "@lib/types";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -35,6 +35,7 @@ describe("GuideCard", () => {
   const defaultProps = {
     title: "Test Guide",
     image: mockImage,
+    url: "https://example.com",
     tags: mockTags,
     onClick: vi.fn(),
   };
@@ -54,8 +55,11 @@ describe("GuideCard", () => {
     expect(image).toHaveAttribute("loading", "lazy");
 
     // Check title
-    expect(screen.getByRole("heading", { level: 3 })).toHaveTextContent(
-      "Test Guide",
+    const heading = screen.getByRole("heading", { level: 3 });
+    expect(heading).toHaveTextContent("Test Guide");
+    expect(within(heading).getByRole("link")).toHaveAttribute(
+      "href",
+      defaultProps.url,
     );
 
     // Check tags
@@ -123,7 +127,7 @@ describe("GuideCard", () => {
 
     const container = screen.getByRole("button");
     expect(container.className).toContain(
-      "flex flex-col sm:w-[466px] w-[292px] h-fit",
+      "flex flex-col sm:w-[466px] w-[292px] group",
     );
   });
 
@@ -144,7 +148,16 @@ describe("GuideCard", () => {
   it("maintains image aspect ratio", () => {
     render(<GuideCard {...defaultProps} />);
 
-    const imageContainer = screen.getByRole("img").parentElement;
+    const imageContainer = screen.getByRole("img").parentElement?.parentElement;
     expect(imageContainer?.className).toContain("relative w-full aspect-video");
+  });
+
+  it("applies hover scale animation to the image", () => {
+    const { getByRole } = render(<GuideCard {...defaultProps} />);
+
+    const image = getByRole("img");
+    expect(image.className).toContain(
+      "transition-transform duration-500 group-hover:scale-105",
+    );
   });
 });

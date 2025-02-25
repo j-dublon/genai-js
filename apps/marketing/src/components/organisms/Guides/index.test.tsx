@@ -16,18 +16,21 @@ describe("Guides", () => {
       title: "Guide 1",
       tags: [{ text: "Tag 1", backgroundColor: "yellow" as BackgroundColors }],
       image: { src: "image1.jpg", alt: "Image 1", width: 300, height: 100 },
+      url: "https://www.example.com",
       onClick: vi.fn(),
     },
     {
       title: "Guide 2",
       tags: [{ text: "Tag 2", backgroundColor: "pink" as BackgroundColors }],
       image: { src: "image2.jpg", alt: "Image 2", width: 300, height: 100 },
+      url: "https://www.example.com",
       onClick: vi.fn(),
     },
     {
       title: "Guide 3",
       tags: [{ text: "Tag 3", backgroundColor: "pink" as BackgroundColors }],
       image: { src: "image3.jpg", alt: "Image 3", width: 300, height: 100 },
+      url: "https://www.example.com",
       onClick: vi.fn(),
     },
   ];

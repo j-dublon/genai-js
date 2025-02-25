@@ -26,6 +26,13 @@ const meta: Meta<typeof GuideCard> = {
         },
       },
     },
+    url: {
+      description: "URL to link to",
+      control: "text",
+      table: {
+        type: { summary: "string" },
+      },
+    },
     tags: {
       description: "Array of tags to display on the guide card",
       control: "object",

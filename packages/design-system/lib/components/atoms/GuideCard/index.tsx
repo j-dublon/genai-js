@@ -4,11 +4,18 @@ import { ColorPill } from "../ColorPill";
 export interface GuideCardProps {
   title: string;
   image: Image;
+  url: string;
   tags: Tag[];
   onClick?: () => void;
 }
 
-export const GuideCard = ({ title, image, tags, onClick }: GuideCardProps) => {
+export const GuideCard = ({
+  title,
+  image,
+  url,
+  tags,
+  onClick,
+}: GuideCardProps) => {
   const cardProps = onClick
     ? {
         role: "button",
@@ -24,15 +31,17 @@ export const GuideCard = ({ title, image, tags, onClick }: GuideCardProps) => {
     : {};
 
   return (
-    <div className="flex flex-col sm:w-[466px] w-[292px] h-fit" {...cardProps}>
+    <div className="flex flex-col sm:w-[466px] w-[292px] group" {...cardProps}>
       <div className="relative w-full aspect-video">
-        <img
-          src={image.src}
-          className="rounded-md object-cover"
-          draggable={false}
-          alt={image.alt}
-          loading="lazy"
-        />
+        <div className="rounded-md overflow-hidden">
+          <img
+            src={image.src}
+            className="object-cover transition-transform duration-500 group-hover:scale-105 h-[173px] sm:h-[262px] w-full"
+            draggable={false}
+            alt={image.alt}
+            loading="lazy"
+          />
+        </div>
       </div>
       <div
         className="flex flex-row mt-2 gap-2 pl-0"
@@ -50,7 +59,11 @@ export const GuideCard = ({ title, image, tags, onClick }: GuideCardProps) => {
         ))}
       </div>
 
-      <h3 className="mt-2 text-xl md:text-[26px] font-bold">{title}</h3>
+      <h3 className="mt-2 text-xl md:text-[26px] font-bold">
+        <a href={url} className="text-inherit">
+          {title}
+        </a>
+      </h3>
     </div>
   );
 };
