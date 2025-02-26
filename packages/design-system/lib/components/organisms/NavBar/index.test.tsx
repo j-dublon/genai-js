@@ -45,15 +45,22 @@ const testLinks = [
   },
 ];
 
-const renderNavBar = (openDropdown: string | null = null) => {
+const renderNavBar = (options = {}) => {
+  const defaultProps = {
+    toggled: false,
+    openDropdown: null,
+  };
+
+  const props = { ...defaultProps, ...options };
+
   return render(
     <NavBar
       logo={<h1>LOGO</h1>}
       links={testLinks}
       signupText="Sign up"
-      toggled={false}
+      toggled={props.toggled}
       setToggled={mockSetToggled}
-      openDropdown={openDropdown}
+      openDropdown={props.openDropdown}
       setOpenDropdown={mockSetOpenDropdown}
       drawerRef={{ current: document.createElement("div") }}
       useDropdown={(name, currentOpenDropdown) => ({
@@ -76,8 +83,8 @@ describe("NavBar", () => {
     });
   });
 
-  it("toggles dropdown on click", async () => {
-    renderNavBar("About");
+  it("toggles dropdown on click when not toggled", async () => {
+    renderNavBar({ openDropdown: "About" });
 
     const aboutButton = screen.getByText("About");
     fireEvent.click(aboutButton);
@@ -88,8 +95,15 @@ describe("NavBar", () => {
     });
   });
 
+  it("does not show dropdown content when toggled is true", async () => {
+    renderNavBar({ toggled: true, openDropdown: "About" });
+
+    expect(screen.queryByText("About Cuckoo")).not.toBeInTheDocument();
+    expect(screen.queryByText("Blog")).not.toBeInTheDocument();
+  });
+
   it("closes dropdown when clicking elsewhere", async () => {
-    renderNavBar("About");
+    renderNavBar({ openDropdown: "About" });
 
     const aboutButton = screen.getByText("About");
     fireEvent.click(aboutButton);
@@ -104,7 +118,7 @@ describe("NavBar", () => {
   });
 
   it("closes dropdown when pressing Escape key", async () => {
-    renderNavBar("About");
+    renderNavBar({ openDropdown: "About" });
 
     const aboutButton = screen.getByText("About");
     fireEvent.click(aboutButton);
@@ -120,11 +134,47 @@ describe("NavBar", () => {
 
   it("renders sign up button with correct text", () => {
     renderNavBar();
-    expect(screen.getByText("Sign up")).toBeInTheDocument();
+    const signUpButtons = screen.getAllByText("Sign up");
+    expect(signUpButtons.length).toBeGreaterThan(0);
   });
 
   it("renders logo", () => {
     renderNavBar();
     expect(screen.getByText("LOGO")).toBeInTheDocument();
+  });
+
+  it("renders sign up button in desktop nav when toggled is true", () => {
+    renderNavBar({ toggled: true });
+
+    const signUpButtons = screen.getAllByText("Sign up");
+    expect(signUpButtons.length).toBeGreaterThan(0);
+
+    const desktopNavContainer = document.querySelector(".hidden.tablet\\:flex");
+    expect(desktopNavContainer).toBeInTheDocument();
+    expect(desktopNavContainer).toContainHTML("Sign up");
+  });
+
+  it("does not render CTA when toggled is true", () => {
+    renderNavBar({ toggled: true });
+    expect(screen.queryByText("Click. Switch. Done.")).not.toBeInTheDocument();
+  });
+
+  it("renders CTA when toggled is false", () => {
+    renderNavBar({ toggled: false });
+    expect(screen.getByText("Click. Switch. Done.")).toBeInTheDocument();
+  });
+
+  it("renders mobile menu when toggled is true", () => {
+    renderNavBar({ toggled: true });
+
+    const mobileMenu = document.querySelector("aside");
+    expect(mobileMenu).toBeInTheDocument();
+  });
+
+  it("does not render mobile menu when toggled is false", () => {
+    renderNavBar({ toggled: false });
+
+    const mobileMenu = document.querySelector("aside");
+    expect(mobileMenu).not.toBeInTheDocument();
   });
 });

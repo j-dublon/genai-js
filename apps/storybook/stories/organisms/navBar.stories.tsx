@@ -2,6 +2,17 @@ import { useDropdown } from "@hooks/useDropdown";
 import { useNavBarHandlers } from "@hooks/useNavBarHandlers";
 import { NavBar } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
+import { JSX } from "react";
+
+type NavBarStoryProps = {
+  logo?: JSX.Element;
+  links: {
+    name: string;
+    href?: string;
+    dropdownLinks?: { name: string; href?: string; external?: boolean }[];
+  }[];
+  signupText: string;
+};
 
 const navBarProps = {
   logo: (
@@ -41,14 +52,15 @@ const navBarProps = {
           external: true,
         },
         { name: "Guides", href: "/guide" },
+        { name: "FAQs", href: "/faqs" },
       ],
     },
-    { name: "Log in" },
+    { name: "Log in", href: "/login" },
   ],
   signupText: "Sign up",
 };
 
-const NavBarWithHooks = (args: any) => {
+const NavBarWithHooks = (args: NavBarStoryProps) => {
   const { toggled, setToggled, openDropdown, setOpenDropdown, drawerRef } =
     useNavBarHandlers();
 
@@ -66,6 +78,7 @@ const NavBarWithHooks = (args: any) => {
 };
 
 const meta = {
+  title: "Organisms/NavBar",
   component: NavBarWithHooks,
   parameters: {
     layout: "fullscreen",
@@ -73,12 +86,28 @@ const meta = {
   tags: ["autodocs"],
   argTypes: {
     logo: {
-      control: "boolean",
-      description: "Toggle logo visibility",
+      control: "object",
+      description: "Logo element to display in the navigation bar",
+      table: {
+        type: { summary: "JSX.Element" },
+      },
+    },
+    links: {
+      control: "object",
+      description: "Array of navigation links with optional dropdown menus",
+      table: {
+        type: {
+          summary:
+            "Array<{name: string, href?: string, dropdownLinks?: Array<{name: string, href?: string, external?: boolean}>}>",
+        },
+      },
     },
     signupText: {
       control: "text",
       description: "Text to display on the signup button",
+      table: {
+        defaultValue: { summary: "Sign up" },
+      },
     },
   },
 } satisfies Meta<typeof NavBarWithHooks>;

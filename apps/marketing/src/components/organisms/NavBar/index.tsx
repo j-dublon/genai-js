@@ -12,9 +12,9 @@ export const NavBarWrapper = () => {
       logo={
         <img
           alt="Cuckoo"
-          width="130"
-          height="50"
-          src="https://s3-eu-west-1.amazonaws.com/tpd/logos/5e3e9035c429e50001a0589f/0x0.png"
+          width={130}
+          height={50}
+          src="https://images.prismic.io/cuckoo-egg/a9ba79c9-aa03-46c5-9555-811affbaf7c3_cuckoo_logo_official.png?auto=compress,format&rect=0,0,1000,326&w=368&h=120"
         />
       }
       links={[
@@ -50,6 +50,11 @@ export const NavBarWrapper = () => {
         },
         {
           name: "Log in",
+          href: "/account/login",
+        },
+        {
+          name: "Sign up",
+          href: "/join/find-your-address",
         },
       ]}
       signupText="Sign up"
