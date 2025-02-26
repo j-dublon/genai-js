@@ -8,7 +8,11 @@ import {
   useState,
 } from "react";
 
-import { getStorageValue, useBrowserStorage } from "../hooks/useBrowserStorage";
+import {
+  getStorageValue,
+  useBrowserStorage,
+} from "../../hooks/useBrowserStorage";
+import { defaultChoices } from "./defaultChoices";
 
 export enum CookieState {
   Chosen = "CHOSEN",
@@ -40,18 +44,6 @@ interface CookieNoticeContextProps {
    */
   state: CookieState;
 }
-
-const defaultChoices: ConsentParams = {
-  functionality_storage: "granted",
-  security_storage: "granted",
-
-  ad_storage: "denied",
-  ad_user_data: "denied",
-  ad_personalization: "denied",
-  analytics_storage: "denied",
-  personalization_storage: "denied",
-  ads_backend_tracking: "denied",
-};
 
 const CookieNoticeContext = createContext<CookieNoticeContextProps>({
   choices: defaultChoices,
@@ -95,7 +87,7 @@ export function CookieNoticeProvider(props: CookieNoticeProviderProps) {
       setState(CookieState.Chosen);
       return;
     }
-  }, []);
+  }, [setChoices]);
 
   const save: CookieNoticeContextProps["save"] = (nextChoices) => {
     gtag("consent", "update", nextChoices);
@@ -114,41 +106,6 @@ export function CookieNoticeProvider(props: CookieNoticeProviderProps) {
   return (
     <CookieNoticeContext.Provider value={{ choices, save, state }}>
       {children}
-      {/*
-      This is a little odd to follow when you're looking at much of the
-      documentation for gtag.js vs Google Tag Manager. It comes down to us
-      having our own consent banner so we signal that to Google with standard
-      mechanisms in `gtag` but we otherwise load the Google Tag Manager snippet
-      and manage all our tags there.
-
-      `gtag('consent', 'default', ...` must be called with default deny. Then
-      `gtag('consent', 'update', ...` must then be called once the banner has
-      been interacted with and on all subsequent visits with the value we set
-      in `localStorage`. If you modify any of this, you will want to verify the
-      result with Tag Manager Assistant.
-
-      Note that the below inline script has an `id` prop which is important
-      for Next to track this script between renders.
-
-      See: https://nextjs.org/docs/app/api-reference/components/script
-      See: https://tagassistant.google.com/
-      See: https://developers.google.com/tag-platform/security/guides/consent?consentmode=basic#tag-manager
-       */}
-      <Script
-        id="gtm-init"
-        // We want this snippet to appear early on so other items that depend
-        // on `gtag` do not need to re-create the function. `beforeInteractive`
-        // will pop this code directly in the <head> of the HTML response from
-        // Next
-        strategy="beforeInteractive"
-        dangerouslySetInnerHTML={{
-          __html: `
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-
-      gtag('consent', 'default', ${JSON.stringify(defaultChoices)});`,
-        }}
-      />
       {/*
       We're using what Google refers to as 'Basic consent mode' which means we
       do not load any of the Google Tag Manager code until after we gain the

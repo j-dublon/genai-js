@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 
-import { ConsentParams, useCookieNotice } from "@/contexts/cookieNotice";
+import { ConsentParams, useCookieNotice } from "@/contexts/CookieNotice";
 
 export default function Banner() {
   const [showBanner, setShowBanner] = useState(true);

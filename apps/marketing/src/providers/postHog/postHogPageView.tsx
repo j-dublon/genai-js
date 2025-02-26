@@ -4,7 +4,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
 import { Suspense, useEffect } from "react";
 
-import { useCookieNotice } from "@/contexts/cookieNotice";
+import { useCookieNotice } from "@/contexts/CookieNotice";
 
 function PostHogPageView(): null {
   const pathname = usePathname();
