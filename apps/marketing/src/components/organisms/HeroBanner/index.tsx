@@ -31,6 +31,12 @@ export const HeroBanner = ({
     ],
   };
 
+  const enableTermsAndConditionsText =
+    process.env.NEXT_PUBLIC_ENABLE_TERMS_AND_CONDITIONS;
+
+  const termsAndConditionsText =
+    "*Lorem ipsum dolor sit amet consectetur. Diam ullamcorper felis at vel amet nunc sed phasellus. Odio rhoncus.";
+
   // TODO: This is just an example replace when actual button logic is added
   const onClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -53,35 +59,42 @@ export const HeroBanner = ({
           type="video/mp4"
         />
       </video>
-      <div className="flex md:flex-row flex-col p-5 pb-10 md:pt-20 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
-        <div className="flex-1 flex flex-col md:pr-10 pb-10 md:pb-36">
-          <Heading headingText="Ridiculously fast full fibre broadband" />
-          <p className="pb-5 font-garnett text-[26px] font-normal leading-[1.5]">
-            Stream, game and WFH, all at the same time, with no drop-offs.
-          </p>
-          <div className="pb-16">
-            <PostcodeChecker
-              placeholderText="Pop in your address"
-              inputBoxButtonText="Let's go"
-              postcode={postcode}
-              setPostcode={setPostcode}
-              onClickFunction={onClick}
-            />
+      <div className="flex flex-col">
+        <div className="flex md:flex-row flex-col p-5 pb-10 md:pt-20 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
+          <div className="flex-1 flex flex-col md:pr-10 pb-10 md:pb-36">
+            <Heading headingText="Ridiculously fast full fibre broadband" />
+            <p className="pb-5 font-garnett text-[26px] font-normal leading-[1.5]">
+              Stream, game and WFH, all at the same time, with no drop-offs.
+            </p>
+            <div className="pb-16">
+              <PostcodeChecker
+                placeholderText="Pop in your address"
+                inputBoxButtonText="Let's go"
+                postcode={postcode}
+                setPostcode={setPostcode}
+                onClickFunction={onClick}
+              />
+            </div>
+            {trustScore !== undefined && (
+              <TrustpilotHorizontal
+                trustScore={trustScore}
+                numberOfReviews={numberOfReviews}
+              />
+            )}
           </div>
-          {trustScore !== undefined && (
-            <TrustpilotHorizontal
-              trustScore={trustScore}
-              numberOfReviews={numberOfReviews}
-            />
-          )}
-        </div>
-        <div className="flex md:w-[85%] w-full h-[85%]">
-          <div className="flex-1 flex flex-col gap-2 font-bold justify-start">
-            <TextWithTickList
-              TextWithTickList={TextItemList.TextWithTickList}
-            />
+          <div className="flex md:w-[85%] w-full h-[85%]">
+            <div className="flex-1 flex flex-col gap-2 font-bold justify-start">
+              <TextWithTickList
+                TextWithTickList={TextItemList.TextWithTickList}
+              />
+            </div>
           </div>
         </div>
+        {enableTermsAndConditionsText && (
+          <div className="px-5 py-1.75 text-xs font-normal md:block hidden">
+            {termsAndConditionsText}
+          </div>
+        )}
       </div>
     </div>
   );
