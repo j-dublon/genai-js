@@ -1,0 +1,19 @@
+{
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "applications": {
+    "marketing": {
+      "development": {
+        "fallback": "nextjs-multizone-demo-nine.vercel.app"
+      },
+      "projectId": "prj_UMzWEDQ3G8oxxR0lS2cGkEXd3xeb"
+    },
+    "join-flow": {
+      "routing": [
+        {
+          "paths": ["/join-flow/:path*"]
+        }
+      ],
+      "projectId": "prj_KaHc9KGvb7inmn6KN0mYMInLv6kq"
+    }
+  }
+}
