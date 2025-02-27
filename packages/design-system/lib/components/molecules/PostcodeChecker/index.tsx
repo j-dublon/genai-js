@@ -1,4 +1,4 @@
-import { InputBoxButton } from "@components/atoms/InputBoxButton";
+import { Button } from "@components/atoms/Button";
 import { ChevronRightWithCircle } from "@icons/ChevronRightWithCircle";
 
 export interface PostcodeCheckerProps {
@@ -43,11 +43,20 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
                   <ChevronRightWithCircle />
                 </div>
                 <div className="hidden md:flex w-full">
-                  <InputBoxButton inputBoxButtonText={inputBoxButtonText} />
+                  <Button
+                    type="submit"
+                    variant="solid"
+                    className="h-[60px]"
+                    fullWidth
+                  >
+                    {inputBoxButtonText}
+                  </Button>
                 </div>
               </>
             ) : (
-              <InputBoxButton inputBoxButtonText={inputBoxButtonText} />
+              <Button type="submit" variant="solid" className="h-[60px]">
+                {inputBoxButtonText}
+              </Button>
             )}
           </div>
         </form>

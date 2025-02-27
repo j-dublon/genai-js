@@ -1,3 +1,4 @@
+import { Button } from "@components/atoms/Button";
 import { ColorPill } from "@components/atoms/ColorPill";
 import { FeatureText, FeatureTextProps } from "@components/atoms/FeatureText";
 import { BackgroundColors } from "@lib/types";
@@ -98,12 +99,9 @@ export const InfoCard = ({
               {additionalText}
             </p>
             {buttonText && (
-              <button
-                className="rounded-md border-2 border-core-black p-4 font-bold md:text-[20px] text-[15px]"
-                aria-label={`Open ${buttonText} page`}
-              >
+              <Button aria-label={`Open ${buttonText} page`}>
                 {buttonText}
-              </button>
+              </Button>
             )}
           </div>
         )}

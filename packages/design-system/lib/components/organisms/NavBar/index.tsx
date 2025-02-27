@@ -1,3 +1,4 @@
+import { Button } from "@components/atoms/Button";
 import { HamburgerButton } from "@components/atoms/HamburgerButton";
 import { ChevronVerticalAnimated } from "@components/molecules/ChevronVerticalAnimated";
 import Link from "next/link";
@@ -32,17 +33,6 @@ interface NavBarProps {
     setOpenDropdown: (name: string | null) => void,
   ) => { isOpen: boolean; dropdownRef: RefObject<HTMLDivElement> };
 }
-
-export const SignupButton = ({ text }: { text: string }) => (
-  <Link href="/join/find-your-address">
-    <button
-      className="inline-flex items-center justify-center text-core-white bg-core-black px-4 py-2 text-sm font-bold rounded-[12px] cursor-pointer transition-transform duration-200 ease-in-out transform hover:scale-105"
-      aria-label="Sign up button"
-    >
-      {text}
-    </button>
-  </Link>
-);
 
 export const NavBar = ({
   logo,
@@ -124,11 +114,15 @@ export const NavBar = ({
                   ),
                 )}
             </div>
-            <SignupButton text={signupText} />
+            <Button variant="solid" size="small" href="/join/find-your-address">
+              {signupText}
+            </Button>
           </div>
 
           <div className="flex items-center gap-4 tablet:hidden">
-            <SignupButton text={signupText} />
+            <Button variant="solid" size="small" href="/join/find-your-address">
+              {signupText}
+            </Button>
             <HamburgerButton
               className="tablet:hidden"
               active={toggled}

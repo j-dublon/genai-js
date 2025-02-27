@@ -43,7 +43,8 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
                 as="a"
                 href={question.button_link}
                 variant="outline"
-                size={"medium"}
+                size="medium"
+                tint="white"
               >
                 {question.button_text}
               </Button>

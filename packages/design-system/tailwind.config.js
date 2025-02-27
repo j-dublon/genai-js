@@ -111,5 +111,13 @@ export default {
     },
   },
 
+  safelist: [
+    "before:border-core-black",
+    "before:border-core-yellow",
+    "before:border-core-white",
+    "before:border-secondary-blue",
+    "before:border-ui-grey-300",
+  ],
+
   plugins: [require("tailwind-scrollbar")],
 };

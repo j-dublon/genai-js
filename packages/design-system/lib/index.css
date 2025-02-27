@@ -2,12 +2,18 @@
 
 @config '../tailwind.config.js';
 
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+@layer utilities {
+
+  .button-animate:hover {
+    border-radius: 50px;
+  }
+  
+  .button-animate::before {
+    border-radius: 22px;
+  }
+  
+  .button-animate:hover::before {
+    inset: -4px;
+    border-radius: 30px;
   }
 }

@@ -1,83 +1,96 @@
-import { type ButtonHTMLAttributes, forwardRef } from "react";
+import { type ButtonHTMLAttributes, Ref } from "react";
 
-export type Size = "small" | "medium" | "large";
+export type Size = "small" | "medium";
 export type Tint = "black" | "yellow" | "white" | "blue";
 export type Variant = "solid" | "outline";
-export type justify = "center" | "end";
 
-export interface IProps extends ButtonHTMLAttributes<HTMLElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLElement> {
   as?: React.ElementType;
-  isDisabled?: boolean;
   href?: string;
   onClick?: (event?: React.SyntheticEvent) => void;
-  size?: Size | Size[];
+  size?: Size;
   tint?: Tint;
-  outlineColor?: Tint;
   variant?: Variant;
-  justifyContent?: justify;
+  rel?: string;
+  target?: string;
+  textColor?: Tint;
+  ref?: Ref<HTMLElement>;
+  fullWidth?: boolean;
 }
 
-export const Button = forwardRef(
-  (
-    {
-      as: Component = "button",
-      isDisabled = false,
-      href,
-      onClick,
-      size = "medium",
-      tint,
-      variant,
-      children,
-      type,
-      id,
-      outlineColor,
-      justifyContent = "center",
-      ...props
-    }: IProps,
-    ref,
-  ) => {
-    const isOutline = variant === "outline";
-    const buttonClasses = `
-    inline-flex items-center justify-${justifyContent} 
-    transition-all duration-300 ease-in 
-    ${isDisabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
-    ${isOutline ? "border-2" : "bg-transparent border-0"}
-    ${
-      isOutline
-        ? outlineColor === "blue"
-          ? "border-blue-500 text-blue-500"
-          : "border-ui-grey-300 text-gray-800"
-        : "text-white"
-    }
-    ${
-      size === "small"
-        ? "py-2 px-3 text-sm rounded-md"
-        : size === "large"
-          ? "py-4 px-6 text-lg rounded-lg"
-          : "py-3 px-4 text-base rounded-md"
-    }
-    hover:${isOutline ? "bg-opacity-10" : "bg-gray-700"} 
-    hover:border-gray-400
-    hover:rounded-xl
-    hover:py-3 hover:px-4 
-    w-64
-  `;
+export const Button = ({
+  as: Component = "button",
+  href,
+  onClick,
+  size = "medium",
+  tint = "black",
+  variant = "outline",
+  children,
+  type,
+  id,
+  rel,
+  target,
+  disabled,
+  className,
+  textColor,
+  ref,
+  fullWidth,
+  ...props
+}: ButtonProps) => {
+  // if href provided it should always be an anchor
+  if (href) Component = "a";
+  const isLink = Component === "a";
+  const isButton = Component === "button";
+  const isOutline = variant === "outline";
+  const isWhite = tint === "white";
+  const isYellow = tint === "yellow";
 
-    return (
-      <Component
-        ref={ref}
-        disabled={isDisabled}
-        href={href}
-        onClick={onClick}
-        type={type}
-        id={id}
-        className={buttonClasses}
-        {...props}
-      >
-        {children}
-      </Component>
-    );
-  },
-);
+  const colors = {
+    black: "core-black",
+    yellow: "core-yellow",
+    white: "core-white",
+    blue: "secondary-blue",
+    grey: "ui-grey-300",
+  };
 
-Button.displayName = "Button";
+  const { grey, white, black } = colors;
+
+  const sizes = {
+    small: "py-2 px-4 text-xs md:text-sm",
+    medium: "py-3 md:py-5 px-5 md:px-8 text-sm md:text-md",
+  };
+
+  const buttonClasses = `
+      relative z-1 inline-flex items-center justify-center font-bold text-nowrap
+      before:content[''] before:absolute before:inset-0 before:bg-inherit before:border-2 before:z-[-1]
+      before:transition-all before:duration-200 before:ease-in-out
+      before:border-${isWhite ? (isOutline ? grey : white) : colors[tint]}
+      button-animate
+      ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} 
+      ${sizes[size]} rounded-md
+      ${isOutline ? "bg-transparent" : `bg-${colors[tint]}`} 
+      hover:${isOutline ? "bg-opacity-10" : "bg-gray-700"}       
+      text-${textColor ? colors[textColor] : isOutline || isWhite ? black : isYellow ? black : white}
+      ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`;
+
+  return (
+    <>
+      <div className={`relative inline-block ${fullWidth ? "w-full" : ""}`}>
+        <Component
+          ref={ref}
+          disabled={isButton ? disabled : undefined}
+          href={href}
+          onClick={onClick}
+          type={isButton ? type : undefined}
+          id={id}
+          className={buttonClasses}
+          rel={isLink ? rel : undefined}
+          target={isLink ? target : undefined}
+          {...props}
+        >
+          {children}
+        </Component>
+      </div>
+    </>
+  );
+};

@@ -10,7 +10,6 @@ import { ColorPill } from "./components/atoms/ColorPill";
 import { FeatureText } from "./components/atoms/FeatureText";
 import { GuideCard, GuideCardProps } from "./components/atoms/GuideCard";
 import { Heading } from "./components/atoms/Heading";
-import { InputBoxButton } from "./components/atoms/InputBoxButton";
 import { Slider } from "./components/atoms/Slider";
 import { TextWithTick } from "./components/atoms/TextWithTick";
 import { TrustpilotStars } from "./components/atoms/TrustpilotStars";
@@ -48,7 +47,6 @@ export {
   HowFastCanYouGo,
   ImageMarquee,
   InfoCard,
-  InputBoxButton,
   MobileApp,
   MobilePhone,
   NavBar,
