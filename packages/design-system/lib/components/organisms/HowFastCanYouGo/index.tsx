@@ -1,14 +1,25 @@
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
+import { Dispatch, SetStateAction } from "react";
 
-export const HowFastCanYouGo = () => {
+interface HowFastCanYouGoProps {
+  postcode: string;
+  setPostcode: Dispatch<SetStateAction<string>>;
+}
+
+export const HowFastCanYouGo = ({
+  postcode,
+  setPostcode,
+}: HowFastCanYouGoProps) => {
   return (
     <div className="relative pb-16 px-5 gap-0 grid bg-[#f4f3ef] md:[grid-template-rows:160px_auto_160px] md:pb-0 md:items-center">
       <div className="rounded-lg p-6 md:p-10 bg-core-white drop-shadow-lg w-full h-fit order-2 md:order-none md:col-start-1 md:col-span-6 md:row-start-2 md:z-[1] md:max-w-[565px] md:ml-12 lg:ml-32">
         <PostcodeChecker
-          titleText="How fast can you go?"
+          titleText="Ready for ridiculously fast full fibre?"
           inputBoxButtonText="Let's go"
-          placeholderText="Enter postcode"
+          placeholderText="Pop in your postcode"
           isChevron={true}
+          postcode={postcode}
+          setPostcode={setPostcode}
         />
       </div>
       <video

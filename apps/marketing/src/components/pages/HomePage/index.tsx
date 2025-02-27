@@ -51,12 +51,12 @@ export const HomePage = () => {
       />
       <MobileAppWrapper />
       <LifeAtCuckoo />
-      <HowFastCanYouGoWrapper />
       <Guides
         guides={guides}
         guidesHeading={guidesHeading}
         guidesSubHeading={guidesSubHeading}
       />
+      <HowFastCanYouGoWrapper />
       <FooterWrapper trustScore={trustpilotRating?.trustScore} />
     </div>
   );

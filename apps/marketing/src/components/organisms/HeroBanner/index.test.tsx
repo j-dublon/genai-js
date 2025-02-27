@@ -1,8 +1,16 @@
 import "@testing-library/jest-dom";
 
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
 import { HeroBanner } from ".";
+
+vi.mock("@/hooks/usePostcode", () => ({
+  usePostcode: () => ({
+    postcode: "" as string,
+    setPostcode: vi.fn() as React.Dispatch<React.SetStateAction<string>>,
+  }),
+}));
 
 describe("HeroBanner", () => {
   beforeEach(() => {

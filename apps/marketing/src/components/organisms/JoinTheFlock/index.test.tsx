@@ -1,8 +1,17 @@
 import "@testing-library/jest-dom";
 
 import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 
 import { JoinTheFlock } from ".";
+
+vi.mock("@/hooks/usePostcode", () => ({
+  usePostcode: () => ({
+    handleFormSubmit: vi.fn() as (e: React.FormEvent) => void,
+    postcode: "" as string,
+    setPostcode: vi.fn() as React.Dispatch<React.SetStateAction<string>>,
+  }),
+}));
 
 describe("JoinTheFlock", () => {
   it("renders the section", () => {

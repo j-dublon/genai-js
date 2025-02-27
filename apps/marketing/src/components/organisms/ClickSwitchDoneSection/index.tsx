@@ -1,5 +1,6 @@
 "use client";
 import { Button, TimelineCardList } from "@react-component-library/ui";
+import Link from "next/link";
 
 import { timelineCardProps } from "./clickSwitchDoneProps";
 
@@ -30,17 +31,19 @@ export const ClickSwitchDoneSection = () => {
         <div className="flex md:flex-row flex-col">
           <TimelineCardList timelineCardProps={timelineCardProps} />
         </div>
-        <Button
-          variant="outline"
-          size="medium"
-          tint="white"
-          aria-label={`Open website page`}
-        >
-          <span className="block md:hidden">Find out more</span>
-          <span className="hidden md:block">
-            Find out more about how switching to Cuckoo
-          </span>
-        </Button>
+        <Link href="/switching" passHref>
+          <Button
+            variant="outline"
+            size="medium"
+            tint="white"
+            aria-label={`Open website page`}
+          >
+            <span className="block md:hidden">Find out more</span>
+            <span className="hidden md:block">
+              Find out more about how switching to Cuckoo
+            </span>
+          </Button>
+        </Link>
       </div>
     </div>
   );

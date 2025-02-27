@@ -3,20 +3,20 @@ import { AccordionSection } from "@react-component-library/ui";
 
 const questionsArr = [
   {
-    dropdown_header: "Why should I choose cuckoo",
+    dropdown_header: "Why should I choose Cuckoo?",
     dropdown_content: [
       "There's no one good reason to join Cuckoo. There are four: We only offer full fibre broadband which can easily handle all the streaming, gaming and WFHing you can throw at it. And is amazingly reliable too.",
     ],
     button_text: "Discover feel good broadband",
-    button_link: "www.test.com",
+    button_link: "/broadband",
   },
   {
-    dropdown_header: "Isn't switching a challenge?",
+    dropdown_header: "Isn't switching a hassle?",
     dropdown_content: [
       "We’ve made the whole thing oh-so-simple. Just pop in your postcode at the top of the page, pick your speed and contract length, and then choose a start date. Our friendly, UK-based Customer Care team will guide you every step of the way and answer any questions you have. For more info, our switching page shows you just how easy it is.",
     ],
     button_text: "Make the switch",
-    button_link: "www.test.com",
+    button_link: "/switching",
   },
   {
     dropdown_header: "Can I sign up over the phone?",
@@ -49,7 +49,6 @@ export const FAQSection = () => {
   return (
     <AccordionSection
       heading="Questions about full fibre, broadband, or anything else at all?"
-      subText="Lorem ipsum dolor sit amet consectetur. Varius tellus id risus quam a tortor phasellus."
       questionsArr={questionsArr}
     />
   );

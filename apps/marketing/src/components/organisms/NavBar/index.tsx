@@ -41,7 +41,7 @@ export const NavBarWrapper = () => {
           name: "Support",
           dropdownLinks: [
             {
-              name: "Help center",
+              name: "Help centre",
               href: "https://help.cuckoo.co/en/",
               external: true,
             },

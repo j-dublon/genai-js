@@ -4,7 +4,10 @@ import {
   TextWithTickList,
   TrustpilotHorizontal,
 } from "@react-component-library/ui";
+import { usePostHog } from "posthog-js/react";
 import { ComponentProps } from "react";
+
+import { usePostcode } from "@/hooks/usePostcode";
 
 interface JoinTheFlockProps {
   trustScore?: number;
@@ -15,6 +18,8 @@ export const JoinTheFlock = ({
   trustScore,
   numberOfReviews,
 }: JoinTheFlockProps) => {
+  const { handleFormSubmit, postcode, setPostcode } = usePostcode();
+  const posthog = usePostHog();
   const TextItemList: ComponentProps<typeof TextWithTickList> = {
     TextWithTickList: [
       {
@@ -31,6 +36,12 @@ export const JoinTheFlock = ({
         backgroundColor: "yellow",
       },
     ],
+  };
+
+  const onClick = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    posthog?.capture("user_clicked_check_postcode_button");
+    handleFormSubmit(event);
   };
 
   return (
@@ -60,6 +71,9 @@ export const JoinTheFlock = ({
               <PostcodeChecker
                 placeholderText="Pop in your address"
                 inputBoxButtonText="Let's go"
+                postcode={postcode}
+                setPostcode={setPostcode}
+                onClickFunction={onClick}
               />
             </div>
             {trustScore && numberOfReviews && (

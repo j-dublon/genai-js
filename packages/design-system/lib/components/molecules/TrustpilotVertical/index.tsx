@@ -1,6 +1,7 @@
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { TrustpilotLogo } from "@icons/TrustpilotLogo";
 import cx from "classnames";
+import Link from "next/link";
 
 interface TrustpilotVerticalProps {
   width: number;
@@ -18,15 +19,17 @@ export const TrustpilotVertical = ({
   maxHeight = 72,
 }: TrustpilotVerticalProps) => {
   return (
-    <div
-      className={cx(
-        "flex flex-col items-start",
-        { [`max-w-${maxWidth}`]: maxWidth },
-        { [`max-h-${maxHeight}`]: maxHeight },
-      )}
-    >
-      <TrustpilotLogo width={width} height={height} />
-      <TrustpilotStars trustScore={trustScore} width={width} height={20} />
-    </div>
+    <Link href="https://uk.trustpilot.com/review/cuckoo.co">
+      <div
+        className={cx(
+          "flex flex-col items-start",
+          { [`max-w-${maxWidth}`]: maxWidth },
+          { [`max-h-${maxHeight}`]: maxHeight },
+        )}
+      >
+        <TrustpilotLogo width={width} height={height} />
+        <TrustpilotStars trustScore={trustScore} width={width} height={20} />
+      </div>
+    </Link>
   );
 };

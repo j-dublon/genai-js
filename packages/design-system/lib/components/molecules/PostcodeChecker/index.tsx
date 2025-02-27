@@ -1,11 +1,14 @@
 import { Button } from "@components/atoms/Button";
 import { ChevronRightWithCircle } from "@icons/ChevronRightWithCircle";
+import { Dispatch, SetStateAction } from "react";
 
 export interface PostcodeCheckerProps {
   titleText?: string;
   placeholderText?: string;
   inputBoxButtonText?: string;
   isChevron?: boolean;
+  postcode: string;
+  setPostcode: Dispatch<SetStateAction<string>>;
   onClickFunction?: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
@@ -15,6 +18,8 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
     placeholderText,
     inputBoxButtonText,
     isChevron,
+    postcode,
+    setPostcode,
     onClickFunction,
   } = props;
 
@@ -35,6 +40,8 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
             placeholder={placeholderText}
             name="postcode-checker"
             className="md:text-md flex-3 text-base mr-1 min-w-[196px]"
+            value={postcode}
+            onChange={(e) => setPostcode(e.target.value)}
           />
           <div className="flex flex-2 justify-end">
             {isChevron ? (

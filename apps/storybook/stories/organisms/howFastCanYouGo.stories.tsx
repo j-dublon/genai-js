@@ -1,16 +1,23 @@
+import { usePostcode } from "@hooks/usePostcode";
 import { HowFastCanYouGo } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof HowFastCanYouGo> = {
-  component: HowFastCanYouGo,
+const HowFastCanYouGoWithHooks = () => {
+  const { postcode, setPostcode } = usePostcode();
+
+  return <HowFastCanYouGo postcode={postcode} setPostcode={setPostcode} />;
+};
+
+const meta: Meta<typeof HowFastCanYouGoWithHooks> = {
+  component: HowFastCanYouGoWithHooks,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof HowFastCanYouGo>;
+type Story = StoryObj<typeof HowFastCanYouGoWithHooks>;
 
 export const Primary: Story = {
-  render: () => <HowFastCanYouGo />,
+  render: () => <HowFastCanYouGoWithHooks />,
   name: "How Fast Can You Go",
   args: {},
 };

@@ -8,6 +8,8 @@ import {
 import { usePostHog } from "posthog-js/react";
 import { ComponentProps } from "react";
 
+import { usePostcode } from "@/hooks/usePostcode";
+
 interface HeroBannerProps {
   trustScore?: number;
   numberOfReviews?: number;
@@ -18,6 +20,7 @@ export const HeroBanner = ({
   trustScore,
   numberOfReviews = 0,
 }: HeroBannerProps) => {
+  const { handleFormSubmit, postcode, setPostcode } = usePostcode();
   const posthog = usePostHog();
   const TextItemList: ComponentProps<typeof TextWithTickList> = {
     TextWithTickList: [
@@ -32,6 +35,7 @@ export const HeroBanner = ({
   const onClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     posthog?.capture("user_clicked_check_postcode_button");
+    handleFormSubmit(event);
   };
 
   return (
@@ -59,6 +63,8 @@ export const HeroBanner = ({
             <PostcodeChecker
               placeholderText="Pop in your address"
               inputBoxButtonText="Let's go"
+              postcode={postcode}
+              setPostcode={setPostcode}
               onClickFunction={onClick}
             />
           </div>

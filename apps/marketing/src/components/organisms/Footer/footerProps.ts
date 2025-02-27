@@ -11,7 +11,7 @@ export const props = {
       header: "Company",
       links: [
         { label: "About", href: "https://www.cuckoo.co/about" },
-        { label: "Careers", href: "careers.cuckoo.co/" },
+        { label: "Careers", href: "https://careers.cuckoo.co/" },
         {
           label: "Cuckoo Compass",
           href: "https://www.cuckoo.co/partner-with-us",

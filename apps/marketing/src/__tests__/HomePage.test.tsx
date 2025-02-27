@@ -6,8 +6,15 @@ import { vi } from "vitest";
 import {
   guidesHeading,
   guidesSubHeading,
-} from "../components/organisms/Guides/guidesProps";
-import { HomePage } from "../components/pages/HomePage";
+} from "@/components/organisms/Guides/guidesProps";
+import { HomePage } from "@/components/pages/HomePage";
+
+vi.mock("@/hooks/usePostcode", () => ({
+  usePostcode: () => ({
+    postcode: "" as string,
+    setPostcode: vi.fn() as React.Dispatch<React.SetStateAction<string>>,
+  }),
+}));
 
 const mockedFetch = vi.fn(() =>
   Promise.resolve({
