@@ -48,6 +48,11 @@ describe("HomePage", () => {
     expect(heading).toBeInTheDocument();
   });
 
+  it("renders the Eero card section", async () => {
+    const heading = await screen.findByText("A genuinely amazing connection");
+    expect(heading).toBeInTheDocument();
+  });
+
   it("renders the join the flock section section", () => {
     screen.getByText("Join the flock today");
   });

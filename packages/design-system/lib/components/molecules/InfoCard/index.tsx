@@ -14,6 +14,7 @@ export interface InfoCardProps {
   additionalText?: string;
   buttonText?: string;
   featureTextProps?: FeatureTextProps;
+  listItems?: string[];
 }
 
 export const InfoCard = ({
@@ -25,64 +26,87 @@ export const InfoCard = ({
   additionalText,
   buttonText,
   featureTextProps,
+  listItems,
 }: InfoCardProps) => {
   return (
     <div
-      className={`${additionalText || featureTextProps ? "md:max-w-[1152px] md:min-w-[564px] min-w-[350px] min-h-sm" : "flex flex-col"}`}
+      className={`${additionalText || featureTextProps ? "md:max-w-[1152px] md:min-w-[564px] min-w-[350px] min-h-sm" : "md:flex md:flex-col md:w-1/2"}`}
     >
       {featureTextProps && <FeatureText {...featureTextProps} />}
 
       <div
         className={cx(
-          `p-5 ${featureTextProps ? "rounded-b-lg" : "rounded-lg"} ${additionalText && "flex md:flex-row flex-col md:gap-16 gap-5"} ${bgColorVariants[infoCardBackgroundColor]}`,
+          {
+            "md:px-10 px-5 md:py-15 py-6": additionalText,
+            "p-6": !additionalText,
+            "rounded-b-lg": featureTextProps,
+            "rounded-lg": !featureTextProps,
+            "flex md:flex-row flex-col md:gap-6 gap-5": additionalText,
+          },
+          bgColorVariants[infoCardBackgroundColor],
           `md:w-${additionalText ? "" : "fit"} flex-1`,
         )}
       >
         {titleText && subHeading ? (
-          <div className={`md:p-5 ${additionalText && "md:w-[55%]"}`}>
-            <h1 className="font-bold md:text-5xl text-4xl md:pb-7 pb-4">
-              {titleText}
-            </h1>
-            <div>
-              <p
-                className={
-                  titleText
-                    ? "md:text-[26px] text-[16px] md:font-light font-semibold"
-                    : "md:text-5xl text-4xl font-semibold"
-                }
-              >
-                {subHeading}
-              </p>
-            </div>
-            <div className="md:pt-5 pb-2 w-fit">
-              <ColorPill
-                colorPillText={colorPillText}
-                backgroundColor={colorPillBackgroundColor}
-                size="large"
-              />
+          <div
+            className={`flex flex-col md:gap-10 gap-4 ${additionalText && "md:w-[50%]"}`}
+          >
+            <h1 className="font-bold md:text-5xl text-4xl">{titleText}</h1>
+            <div className="flex flex-col gap-3">
+              <div className="pb-2 w-fit">
+                <ColorPill
+                  colorPillText={colorPillText}
+                  backgroundColor={colorPillBackgroundColor}
+                  size="medium"
+                />
+              </div>
+              <div>
+                <p
+                  className={
+                    titleText
+                      ? "md:text-[26px] text-md font-semibold"
+                      : "md:text-5xl text-4xl font-semibold"
+                  }
+                >
+                  {subHeading}
+                </p>
+              </div>
             </div>
           </div>
         ) : (
-          <div className={`md:p-5 ${additionalText && "md:w-[50%]"}`}>
+          <div {...(additionalText ? { className: "md:w-[50%]" } : {})}>
             {titleText && (
-              <h1 className="font-bold md:text-5xl text-4xl md:pb-7 pb-4">
+              <h1 className="font-bold md:text-5xl text-4xl md:pb-7 pb-4 w-3/4">
                 {titleText}
               </h1>
             )}
-            <div className="md:pt-5 pb-7 w-fit">
+            <div className="pb-5 w-fit">
               <ColorPill
                 colorPillText={colorPillText}
                 backgroundColor={colorPillBackgroundColor}
-                size="large"
+                size="medium"
               />
             </div>
+
+            {listItems && (
+              <ul className="list-disc pl-5">
+                {listItems.map((item, index) => (
+                  <li
+                    key={`${item}${index}`}
+                    className="md:font-medium font-semibold md:text-md text-[16px] mb-2"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            )}
 
             <div>
               {subHeading && (
                 <p
                   className={
                     titleText
-                      ? "md:text-[26px] text-[16px] md:font-light font-semibold"
+                      ? "md:text-[26px] text-md md:font-light font-semibold"
                       : "md:text-5xl text-4xl font-semibold"
                   }
                 >
@@ -94,8 +118,8 @@ export const InfoCard = ({
         )}
 
         {additionalText && (
-          <div className="md:p-5 md:w-[75%]">
-            <p className="pb-5 md:text-[26px] text-[16px] font-normal whitespace-pre-line">
+          <div className="md:w-[55%]">
+            <p className="pb-9 md:text-[20px] text-[16px] font-normal whitespace-pre-line">
               {additionalText}
             </p>
             {buttonText && (

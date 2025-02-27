@@ -9,7 +9,7 @@ const sizeVariants = {
   },
   medium: {
     container: "px-3 md:px-4 py-1",
-    text: "text-sm md:text-[26px]",
+    text: "text-md md:text-[26px]",
   },
   large: {
     container: "px-5 py-1 md:py-2",

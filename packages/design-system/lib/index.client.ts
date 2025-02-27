@@ -25,7 +25,6 @@ import { TimelineCard } from "./components/molecules/TimelineCard";
 import { TimelineCardList } from "./components/molecules/TimelineCardList";
 import { TrustpilotHorizontal } from "./components/molecules/TrustpilotHorizontal";
 import { TrustpilotVertical } from "./components/molecules/TrustpilotVertical";
-import { CardSection } from "./components/organisms/CardSection";
 import { Footer } from "./components/organisms/Footer";
 import { HowFastCanYouGo } from "./components/organisms/HowFastCanYouGo";
 import { NavBar } from "./components/organisms/NavBar";
@@ -37,7 +36,6 @@ export {
   ArticleCard,
   BACKGROUND_COLORS,
   Button,
-  CardSection,
   ColorPill,
   CompanyLogoStrip,
   FeatureText,

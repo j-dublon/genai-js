@@ -3,6 +3,7 @@ export const bgColorVariants = {
   yellow: "bg-core-yellow",
   pink: "bg-core-pink",
   grey: "bg-ui-grey-300",
+  "light-grey": "bg-ui-grey-200",
   orange: "bg-secondary-orange",
   red: "bg-core-red",
   white: "bg-core-white",
