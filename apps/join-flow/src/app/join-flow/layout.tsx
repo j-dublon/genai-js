@@ -1,5 +1,10 @@
 import "@react-component-library/ui/ui.css";
 
+import {
+  PrefetchCrossZoneLinks,
+  PrefetchCrossZoneLinksProvider,
+} from "@vercel/microfrontends/next/client";
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -16,7 +21,12 @@ export default function RootLayout({
           }
         `}</style>
       </head>
-      <body className="font-garnett">{children}</body>
+      <body className="font-garnett">
+        <PrefetchCrossZoneLinksProvider>
+          {children}
+        </PrefetchCrossZoneLinksProvider>
+        <PrefetchCrossZoneLinks />
+      </body>
     </html>
   );
 }

@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
+import { withMicrofrontends } from "@vercel/microfrontends/next/config";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  assetPrefix: "/join-flow",
   serverExternalPackages: ["pino", "pino-pretty"],
 };
 
-export default nextConfig;
+export default withMicrofrontends(nextConfig);

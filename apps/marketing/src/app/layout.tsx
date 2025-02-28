@@ -1,6 +1,10 @@
 import "../../fonts.css";
 import "@react-component-library/ui/ui.css";
 
+import {
+  PrefetchCrossZoneLinks,
+  PrefetchCrossZoneLinksProvider,
+} from "@vercel/microfrontends/next/client";
 import type { Metadata } from "next";
 import Script from "next/script";
 
@@ -111,12 +115,15 @@ export default function RootLayout({
         />
       </head>
       <body className="font-garnett">
-        <CookieNoticeProvider gtmId={process.env.GTM_ID}>
-          <PostHogProvider>
-            <Banner />
-            {children}
-          </PostHogProvider>
-        </CookieNoticeProvider>
+        <PrefetchCrossZoneLinksProvider>
+          <CookieNoticeProvider gtmId={process.env.GTM_ID}>
+            <PostHogProvider>
+              <Banner />
+              {children}
+            </PostHogProvider>
+          </CookieNoticeProvider>
+        </PrefetchCrossZoneLinksProvider>
+        <PrefetchCrossZoneLinks />
       </body>
     </html>
   );
