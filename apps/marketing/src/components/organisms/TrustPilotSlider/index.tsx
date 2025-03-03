@@ -136,18 +136,9 @@ export const TrustPilotSlider = ({
               className="w-20 sm:w-[105px] h-auto"
             />
           </picture>
-          <TrustpilotStars
-            aria-label={`Trust score: ${trustScore} out of 5`}
-            trustScore={trustScore}
-            width={
-              typeof window !== "undefined" && window.innerWidth < 640
-                ? 80
-                : 105
-            }
-            height={
-              typeof window !== "undefined" && window.innerWidth < 640 ? 20 : 26
-            }
-          />
+          <div className="w-26 h-7 sm:w-[105px] sm:h-[26px] flex items-center justify-center overflow-hidden">
+            <TrustpilotStars trustScore={trustScore} width={105} height={26} />
+          </div>
           <span className="md:text-sm text-xs">
             Based on <strong>{reviewCount.toLocaleString()}</strong> reviews
           </span>
