@@ -8,6 +8,7 @@ import { FeatureText } from "@components/atoms/FeatureText";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
+import { SectionHeading } from "@components/atoms/SectionHeading";
 import { Slider } from "@components/atoms/Slider";
 import { TextWithTick } from "@components/atoms/TextWithTick";
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
@@ -52,6 +53,7 @@ export {
   PostcodeChecker,
   ProductCard,
   ReviewCard,
+  SectionHeading,
   Slider,
   TextWithTick,
   TextWithTickList,

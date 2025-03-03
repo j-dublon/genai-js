@@ -1,5 +1,5 @@
 export const mobileAppProps = {
-  headingText: "Plus, a really, really, really handy app",
+  headingText: "Plus, a really, really handy app",
   textItems: [
     {
       itemText: "Track your broadband order",

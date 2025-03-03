@@ -20,7 +20,7 @@ export const ClickSwitchDoneSection = () => {
             />
           </div>
 
-          <p className="md:text-[26px] text-xl font-normal">
+          <p className="md:text-[26px] text-md font-normal">
             In literally just one click, we’ll handle the whole broadband move
             for you. That’s right – you won’t have to get in touch with your
             current provider at all. And if you prefer doing things over the

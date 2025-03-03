@@ -16,7 +16,7 @@ export const TrustpilotHorizontal = ({
     <Link href="https://uk.trustpilot.com/review/cuckoo.co">
       <div
         className={cx(
-          "flex flex-col md:flex-row items-center space-x-2 space-y-2 lg:space-x-4 ",
+          "flex flex-col md:flex-row items-center space-x-1 space-y-2 lg:space-x-4 ",
         )}
       >
         <div className="flex flex-row space-x-2">

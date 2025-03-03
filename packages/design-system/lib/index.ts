@@ -6,6 +6,7 @@ import { ColorPill } from "@components/atoms/ColorPill";
 import { FeatureText } from "@components/atoms/FeatureText";
 import { GuideCard } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
+import { SectionHeading } from "@components/atoms/SectionHeading";
 import { Slider } from "@components/atoms/Slider";
 import { TextWithTick } from "@components/atoms/TextWithTick";
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
@@ -44,6 +45,7 @@ export {
   NavBar,
   PostcodeChecker,
   ProductCard,
+  SectionHeading,
   Slider,
   TextWithTick,
   TextWithTickList,

@@ -27,7 +27,7 @@ export const HeroBanner = ({
       { textInput: "Lorem ipsum dolor sit", broadbandOffer: true },
       { textInput: "Full fibre speeds up to 900Mbps" },
       { textInput: "UK’s most reliable broadband technology" },
-      { textInput: "Free* eero Pro 6E router, worth £249.99**" },
+      { textInput: "eero Pro 6E router with every plan" },
     ],
   };
 
@@ -63,10 +63,10 @@ export const HeroBanner = ({
         <div className="flex md:flex-row flex-col p-5 pb-10 md:pt-20 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
           <div className="flex-1 flex flex-col md:pr-10 pb-10 md:pb-36">
             <Heading headingText="Ridiculously fast full fibre broadband" />
-            <p className="pb-5 font-garnett text-[26px] font-normal leading-[1.5]">
+            <p className="md:pb-7 pb-6 font-garnett text-md font-normal leading-[1.5]">
               Stream, game and WFH, all at the same time, with no drop-offs.
             </p>
-            <div className="pb-16">
+            <div className="md:pb-16">
               <PostcodeChecker
                 placeholderText="Pop in your address"
                 inputBoxButtonText="Let's go"
@@ -75,19 +75,35 @@ export const HeroBanner = ({
                 onClickFunction={onClick}
               />
             </div>
+            <div
+              className="md:block hidden"
+              data-testid="trustpilot-horizontal-component-desktop"
+            >
+              {trustScore !== undefined && (
+                <TrustpilotHorizontal
+                  trustScore={trustScore}
+                  numberOfReviews={numberOfReviews}
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex md:w-[85%] w-full h-[85%]">
+            <div className="flex-1 flex flex-col gap-3 font-bold justify-start md:pb-0 pb-12">
+              <TextWithTickList
+                TextWithTickList={TextItemList.TextWithTickList}
+              />
+            </div>
+          </div>
+          <div
+            className="md:hidden"
+            data-testid="trustpilot-horizontal-component-mobile"
+          >
             {trustScore !== undefined && (
               <TrustpilotHorizontal
                 trustScore={trustScore}
                 numberOfReviews={numberOfReviews}
               />
             )}
-          </div>
-          <div className="flex md:w-[85%] w-full h-[85%]">
-            <div className="flex-1 flex flex-col gap-2 font-bold justify-start">
-              <TextWithTickList
-                TextWithTickList={TextItemList.TextWithTickList}
-              />
-            </div>
           </div>
         </div>
         {enableTermsAndConditionsText && (

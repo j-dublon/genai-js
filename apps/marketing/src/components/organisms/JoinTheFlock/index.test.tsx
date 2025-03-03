@@ -29,8 +29,8 @@ describe("JoinTheFlock", () => {
 
   it("renders TrustpilotVertical component", async () => {
     render(<JoinTheFlock trustScore={100} numberOfReviews={100} />);
-    const logo = await screen.findByLabelText("TrustPilot Logo");
-    expect(logo).toBeInTheDocument();
+    const logo = await screen.findAllByLabelText("TrustPilot Logo");
+    expect(logo[0]).toBeInTheDocument();
   });
 
   test("does not render TrustpilotHorizontal when trustScore and numberOfReviews are not provided", () => {

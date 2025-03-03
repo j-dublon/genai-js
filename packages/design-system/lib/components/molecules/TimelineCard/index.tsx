@@ -25,7 +25,7 @@ export const TimelineCard = ({
       </div>
       <div className="flex flex-col gap-2.5">
         <p className="text-md font-bold">{subtitleText}</p>
-        <p className="text-md font-normal">{subHeading}</p>
+        <p className="md:text-md text-[16px] font-normal">{subHeading}</p>
       </div>
     </div>
   );

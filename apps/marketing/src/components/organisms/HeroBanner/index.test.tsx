@@ -42,9 +42,15 @@ describe("HeroBanner", () => {
     expect(input).toBeInTheDocument();
   });
 
-  it("renders TrustpilotVertical component", async () => {
-    const logo = await screen.findByLabelText("TrustPilot Logo");
-    expect(logo).toBeInTheDocument();
+  it("renders TrustpilotHorizontal desktop component", async () => {
+    const trustPilotDesktop = screen.getByTestId(
+      "trustpilot-horizontal-component-desktop",
+    );
+    const trustPilotMobile = screen.queryByTestId(
+      "trustpilot-horizontal-component-mobile",
+    );
+    expect(trustPilotDesktop).toHaveClass("md:block hidden");
+    expect(trustPilotMobile).toHaveClass("md:hidden");
   });
 
   it("renders all TextWithTick items", async () => {
@@ -52,9 +58,7 @@ describe("HeroBanner", () => {
     const item2 = await screen.findByText(
       "UK’s most reliable broadband technology",
     );
-    const item3 = await screen.findByText(
-      "Free* eero Pro 6E router, worth £249.99**",
-    );
+    const item3 = await screen.findByText("eero Pro 6E router with every plan");
 
     expect(item1).toBeInTheDocument();
     expect(item2).toBeInTheDocument();

@@ -12,7 +12,7 @@ describe("MobileAppWrapper", () => {
 
   it("renders the heading", () => {
     expect(
-      screen.getByText("Plus, a really, really, really handy app"),
+      screen.getByText("Plus, a really, really handy app"),
     ).toBeInTheDocument();
   });
 

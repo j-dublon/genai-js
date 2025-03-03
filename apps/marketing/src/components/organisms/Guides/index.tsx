@@ -1,7 +1,7 @@
 import {
   GuideCard,
   GuideCardProps,
-  Heading,
+  SectionHeading,
   Slider,
 } from "@react-component-library/ui";
 
@@ -19,8 +19,8 @@ export const Guides = ({
     <section aria-label="Cuckoo Guides" className="h-fit pb-12 lg:pb-40">
       <div className="pt-12 px-5 lg:px-36 lg:pt-40">
         <div className="max-w-[1152px] mx-auto">
-          <Heading headingText={guidesHeading} />
-          <p className="pb-6 md:text-[26px] text-[16px] font-normal whitespace-pre-line">
+          <SectionHeading headingText={guidesHeading} />
+          <p className="pb-6 md:text-[26px] text-md font-normal whitespace-pre-line">
             {guidesSubHeading}
           </p>
         </div>

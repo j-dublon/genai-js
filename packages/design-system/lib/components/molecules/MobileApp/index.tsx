@@ -27,7 +27,7 @@ export const MobileApp = ({
     <div className="md:py-[50px] md:px-10 p-6 bg-core-white md:rounded-lg w-full">
       <h2 className="md:text-5xl text-3xl font-semibold">{headingText}</h2>
 
-      <div className="py-10 flex flex-col gap-[10px]">
+      <div className="py-5 flex flex-col gap-[10px]">
         {textItems.map((item, index) => (
           <div
             key={`${item.itemText}${index}`}

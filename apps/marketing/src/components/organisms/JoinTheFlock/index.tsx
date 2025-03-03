@@ -60,10 +60,12 @@ export const JoinTheFlock = ({
         />
       </video>
       <div className="z-20 flex flex-col items-center p-5 md:p-20 md:justify-between w-full md:gap-14 bg-cover bg-center md:py-40">
-        <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 px-4 md:px-10 py-16">
+        <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 px-5 md:px-10 md:py-16 py-6">
           <div className="flex-2 flex flex-col md:pr-10 min-w-0 pb-5">
-            <h2 className="text-5xl font-bold pb-5">Join the flock today </h2>
-            <p className="text-[26px] pb-10">
+            <h2 className="md:text-5xl text-4xl font-bold pb-5">
+              Join the flock today{" "}
+            </h2>
+            <p className="md:text-[26px] text-[16px] md:pb-10 pb-6">
               Get full fibre speeds, actually amazing signal, plus aaall this
               too...
             </p>
@@ -76,17 +78,27 @@ export const JoinTheFlock = ({
                 onClickFunction={onClick}
               />
             </div>
+            <div className="md:block hidden">
+              {trustScore && numberOfReviews && (
+                <TrustpilotHorizontal
+                  trustScore={trustScore}
+                  numberOfReviews={numberOfReviews}
+                />
+              )}
+            </div>
+          </div>
+          <div className="flex-2 flex flex-col gap-2 font-bold min-w-0 pb-12 md:pb-0">
+            <TextWithTickList
+              TextWithTickList={TextItemList.TextWithTickList}
+            />
+          </div>
+          <div className="md:hidden">
             {trustScore && numberOfReviews && (
               <TrustpilotHorizontal
                 trustScore={trustScore}
                 numberOfReviews={numberOfReviews}
               />
             )}
-          </div>
-          <div className="flex-2 flex flex-col gap-2 font-bold min-w-0">
-            <TextWithTickList
-              TextWithTickList={TextItemList.TextWithTickList}
-            />
           </div>
         </div>
       </div>
