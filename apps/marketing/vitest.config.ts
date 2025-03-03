@@ -17,7 +17,7 @@ export default defineConfig({
     testTransformMode: {
       web: [".tsx", ".ts"],
     },
-    exclude: ["node_modules", ".next", "dist"],
+    exclude: ["e2e/**/*", "node_modules", ".next", "dist"],
     alias: {
       "@": resolve(__dirname, "src"),
     },

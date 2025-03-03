@@ -6,12 +6,14 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "start:e2e": "next start -p 3004",
     "lint": "next lint",
     "sort": "npx eslint src --fix --rule simple-import-sort/imports:error",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
+    "e2e": "playwright test",
     "prepare": "cd .. && husky marketing/.husky",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next && rm -rf coverage && rm -rf tsconfig.tsbuildinfo"
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "1.50.1",
     "@tailwindcss/vite": "4.0.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "6.6.3",

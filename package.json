@@ -4,6 +4,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "check-types": "turbo run check-types",
+    "e2e": "turbo run e2e",
     "test": "turbo run test",
     "lint": "turbo run lint",
     "sort": "turbo run sort",

@@ -26,9 +26,42 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Get installed Playwright version
+        id: playwright-version
+        run: echo "version=$(npx playwright --version | cut -d' ' -f2)" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright browsers and system dependencies
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            /var/lib/apt/lists
+            /home/runner/.npm/_npx
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright browsers and dependencies
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npx playwright install --with-deps
+
       - name: Run Build Task
         run: npx turbo run build
 
       - name: Run Lint, Check-Types, and Test
-        run: |
-          npx turbo run lint check-types test
+        run: npx turbo run lint check-types test
+
+      - name: Run Marketing E2E Tests
+        working-directory: ./apps/marketing
+        run: npm run e2e || echo "Marketing E2E tests failed but continuing"
+
+      # - name: Run Join-flow E2E Tests
+      #   working-directory: ./apps/join-flow
+      #   run: npm run e2e || echo "Join-flow E2E tests failed but continuing"
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/**/playwright-report/
+          retention-days: 30

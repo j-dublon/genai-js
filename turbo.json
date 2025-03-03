@@ -29,6 +29,11 @@
     "format": {
       "cache": false,
       "persistent": false
+    },
+    "e2e": {
+      "dependsOn": ["^build", "build"],
+      "outputs": ["playwright-report/**"],
+      "env": ["CI"]
     }
   }
 }
