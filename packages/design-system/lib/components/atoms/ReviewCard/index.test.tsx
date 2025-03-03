@@ -19,6 +19,7 @@ vi.mock("../TrustpilotStars", () => ({
 
 describe("ReviewCard", () => {
   const defaultProps = {
+    id: "123",
     title: "Great Service",
     starRating: 5,
     reviewText: "Amazing experience with this company!",
@@ -55,5 +56,16 @@ describe("ReviewCard", () => {
     render(<ReviewCard {...longReviewProps} />);
     expect(screen.getByText("A".repeat(300))).toBeInTheDocument();
     expect(screen.getByRole("article")).toHaveClass("flex", "flex-col");
+  });
+
+  it("renders the review card with the correct link to trustpilow review", () => {
+    render(<ReviewCard {...defaultProps} />);
+    const link = screen.getByRole("link");
+    expect(link).toHaveAttribute(
+      "href",
+      `https://www.trustpilot.com/reviews/${defaultProps.id}`,
+    );
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
 });

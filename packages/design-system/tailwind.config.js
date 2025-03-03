@@ -83,6 +83,7 @@ export default {
       scaleOpen: "scaleOpen 0.1s forwards",
       marquee: "marquee 25s linear infinite",
       marquee2: "marquee2 25s linear infinite",
+      shimmer: 'shimmer 1.5s infinite ease-in-out',
     },
     keyframes: {
       marquee: {
@@ -92,6 +93,11 @@ export default {
       marquee2: {
         "0%": { transform: "translateX(100%)" },
         "100%": { transform: "translateX(0%)" },
+      },
+      shimmer: {
+        '0%': { opacity: '0.5' },
+        '50%': { opacity: '1' },
+        '100%': { opacity: '0.5' },
       },
     },
     text: {

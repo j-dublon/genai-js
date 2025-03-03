@@ -1,4 +1,4 @@
-import { ReviewCard } from "@react-component-library/ui/server";
+import { ReviewCard } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ReviewCard> = {
@@ -40,6 +40,10 @@ const meta: Meta<typeof ReviewCard> = {
       description: "Name of the review author",
       control: "text",
     },
+    id: {
+      description: "Trustpilot review ID",
+      control: "text",
+    },
   },
 };
 
@@ -58,6 +62,7 @@ export const Primary: Story = {
     reviewText:
       "I work from home so having good WiFi was really important to me.",
     author: "John Smith",
+    id: "123",
   },
 };
 
@@ -73,6 +78,7 @@ export const LongReview: Story = {
     reviewText:
       "I've been using this product for over 6 months now and I can't imagine going back. The customer service team has been incredibly helpful whenever I've had questions. The interface is intuitive and the performance is consistently great. Would highly recommend to anyone looking for a reliable solution.",
     author: "Sarah Johnson",
+    id: "123",
   },
 };
 
@@ -88,6 +94,7 @@ export const ShortTitle: Story = {
     reviewText:
       "Quick delivery, great product quality, and excellent customer support. Everything worked perfectly right out of the box.",
     author: "Mike Wilson",
+    id: "123",
   },
 };
 
@@ -103,6 +110,7 @@ export const LowerRating: Story = {
     reviewText:
       "The product works as advertised, but the setup process could be more streamlined. Once configured, it performs well.",
     author: "Emily Davis",
+    id: "123",
   },
 };
 
@@ -117,5 +125,6 @@ export const MinimalContent: Story = {
     starRating: 4,
     reviewText: "Does the job well.",
     author: "P. Thompson",
+    id: "123",
   },
 };

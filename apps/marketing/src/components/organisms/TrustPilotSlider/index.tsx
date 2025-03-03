@@ -1,8 +1,14 @@
-import { Slider, TrustpilotStars } from "@react-component-library/ui";
 import {
   ReviewCard,
   ReviewCardProps,
-} from "@react-component-library/ui/server";
+  Slider,
+  TrustpilotStars,
+} from "@react-component-library/ui";
+import { ReviewCardSkeleton } from "@react-component-library/ui/server";
+
+import { useTrustpilotReviews } from "@/hooks/useTrustpilotReviews";
+
+import { reviewIds } from "./trustpilotSliderProps";
 
 interface TrustPilotSliderProps {
   title: string;
@@ -10,26 +16,37 @@ interface TrustPilotSliderProps {
   reviewCount: number;
   trustScore: number;
   reviews: ReviewCardProps[];
+  isLoading?: boolean;
 }
 
 export const TrustPilotSliderWrapper = ({
   reviewCount,
   trustScore,
-  reviews,
 }: {
   reviewCount: number;
   trustScore: number;
-  reviews: ReviewCardProps[];
 }) => {
   const title = "Lovely things our flock say";
   const subtitle = "(Not that we're bragging)";
+  const {
+    data: reviews,
+    loading: reviewsLoading,
+    error,
+  } = useTrustpilotReviews(reviewIds);
+
+  // if there's no reviews, don't render the review section
+  if (error) {
+    return null;
+  }
+
   return (
     <TrustPilotSlider
       title={title}
       subtitle={subtitle}
       reviewCount={reviewCount}
       trustScore={trustScore}
-      reviews={reviews}
+      reviews={reviews || []}
+      isLoading={reviewsLoading || !reviews}
     />
   );
 };
@@ -40,6 +57,7 @@ export const TrustPilotSlider = ({
   reviewCount,
   trustScore,
   reviews,
+  isLoading,
 }: TrustPilotSliderProps) => {
   return (
     <section
@@ -58,26 +76,43 @@ export const TrustPilotSlider = ({
         </div>
       </div>
 
+      <div className="px-5 lg:px-36">
+        <p className="max-w-[1152px] mx-auto text-md md:text-lg">
+          Showing our 5-star reviews
+        </p>
+      </div>
+
       <Slider
         draggable
         aria-label="Customer reviews"
         aria-roledescription="carousel"
         margin="xl:before:w-[calc((100vw-1280px)/3)] xl:after:w-16 2xl:before:w-[calc((100vw-1536px)/1.75)]"
       >
-        {reviews.map((r: ReviewCardProps, i) => (
-          <div
-            key={r.author + r.title}
-            aria-roledescription="slide"
-            aria-label={`Review ${i + 1} of ${reviews.length}`}
-          >
-            <ReviewCard
-              author={r.author}
-              reviewText={r.reviewText}
-              starRating={r.starRating}
-              title={r.title}
-            />
-          </div>
-        ))}
+        {isLoading
+          ? Array.from({ length: 5 }).map((_, i) => (
+              <div
+                key={`skeleton-${i}`}
+                aria-roledescription="slide"
+                aria-label={`Loading review ${i + 1} of 5`}
+              >
+                <ReviewCardSkeleton />
+              </div>
+            ))
+          : reviews.map((r: ReviewCardProps, i) => (
+              <div
+                key={r.author + r.title}
+                aria-roledescription="slide"
+                aria-label={`Review ${i + 1} of ${reviews.length}`}
+              >
+                <ReviewCard
+                  author={r.author}
+                  reviewText={r.reviewText}
+                  starRating={r.starRating}
+                  title={r.title}
+                  id={r.id}
+                />
+              </div>
+            ))}
       </Slider>
 
       <div className="md:pt-4 px-5 lg:px-36">

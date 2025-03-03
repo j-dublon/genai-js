@@ -1,5 +1,4 @@
-import { ReviewCard } from "./components/atoms/ReviewCard";
-import { ServerTest } from "./components/atoms/ServerTest";
+import { ReviewCardSkeleton } from "@components/atoms/ReviewCardSkeleton";
+import { ServerTest } from "@components/atoms/ServerTest";
 
-export { ReviewCard, ServerTest };
-export type { ReviewCardProps } from "./components/atoms/ReviewCard";
+export { ReviewCardSkeleton, ServerTest };

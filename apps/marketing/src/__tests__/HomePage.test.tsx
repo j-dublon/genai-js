@@ -16,6 +16,37 @@ vi.mock("@/hooks/usePostcode", () => ({
   }),
 }));
 
+vi.mock("@/hooks/useTrustpilotScore", () => ({
+  useTrustpilotScore: () => ({
+    data: { trustScore: 4.5, numberOfReviews: 100 },
+    loading: false,
+    error: null,
+  }),
+}));
+
+vi.mock("@/hooks/useTrustpilotReviews", () => ({
+  useTrustpilotReviews: () => ({
+    data: [
+      {
+        id: "review1",
+        title: "Great Service",
+        reviewText: "Amazing experience!",
+        author: "John Doe",
+        starRating: 5,
+      },
+      {
+        id: "review2",
+        title: "Excellent",
+        reviewText: "Very satisfied with the service",
+        author: "Jane Smith",
+        starRating: 4,
+      },
+    ],
+    loading: false,
+    error: null,
+  }),
+}));
+
 const mockedFetch = vi.fn(() =>
   Promise.resolve({
     ok: true,
@@ -104,6 +135,11 @@ describe("HomePage", () => {
 
   it("renders the Footer section", async () => {
     const heading = await screen.findByText("Fast, fair, feel-good broadband");
+    expect(heading).toBeInTheDocument();
+  });
+
+  it("renders the TrustPilot section", async () => {
+    const heading = await screen.findByText("Great Service");
     expect(heading).toBeInTheDocument();
   });
 });

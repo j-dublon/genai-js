@@ -18,8 +18,8 @@ import { LifeAtCuckoo } from "@/components/organisms/LifeAtCuckoo";
 import { MobileAppWrapper } from "@/components/organisms/MobileAppWrapper";
 import { NavBarWrapper } from "@/components/organisms/NavBar";
 import { TrustPilotSliderWrapper } from "@/components/organisms/TrustPilotSlider";
-import { reviews } from "@/components/organisms/TrustPilotSlider/trustpilotSliderProps";
 import { useTrustpilotScore } from "@/hooks/useTrustpilotScore";
+
 export const HomePage = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const broadbandOffer = true;
@@ -47,7 +47,6 @@ export const HomePage = () => {
       <TrustPilotSliderWrapper
         reviewCount={Number(trustpilotRating?.numberOfReviews)}
         trustScore={Number(trustpilotRating?.trustScore)}
-        reviews={reviews}
       />
       <MobileAppWrapper />
       <LifeAtCuckoo />
