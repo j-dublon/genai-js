@@ -1,0 +1,20 @@
+name: Build apps
+description: Build and cache the output of `next build` for use in later jobs
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache .next
+      uses: actions/cache@v4
+      id: ENSURE_NEXTJS_CACHE
+      with:
+        path: |
+          apps/marketing/.next
+          apps/join-flow/.next
+        key: COMMIT-${{ runner.os }}-${{ github.sha }}-apps
+
+    - name: Build .next
+      shell: bash
+      if: steps.ENSURE_NEXTJS_CACHE.outputs.cache-hit != 'true'
+      run: npx turbo run build
+      working-directory: ${{ github.workspace }}

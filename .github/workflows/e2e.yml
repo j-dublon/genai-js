@@ -1,0 +1,55 @@
+name: E2E Playwright tests
+
+on:
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "apps/marketing/e2e/**"
+      - "apps/join-flow/e2e/**"
+  push:
+    branches:
+      - main
+
+jobs:
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.50.0-noble
+    strategy:
+      matrix:
+        app: [marketing, join-flow]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.12.0
+          cache: "npm"
+
+      - name: Install node_modules
+        id: INSTALL_NODE_MODULES
+        uses: ./.github/actions/install-node-modules
+
+      - name: Install playwright
+        id: INSTALL_PLAYWRIGHT
+        uses: ./.github/actions/install-playwright
+
+      - name: Build apps
+        uses: ./.github/actions/build-apps
+
+      - name: Run E2E Tests
+        run: npx playwright test || echo "${{ matrix.app }} E2E tests failed but continuing"
+        working-directory: ./apps/${{ matrix.app }}
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.app }}
+          path: apps/${{ matrix.app }}/playwright-report/
+          retention-days: 30

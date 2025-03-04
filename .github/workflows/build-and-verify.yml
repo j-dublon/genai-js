@@ -1,0 +1,34 @@
+name: Build and verify
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  setup:
+    name: Build and verify Turbo Repo CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.12.0
+          cache: "npm"
+
+      - name: Install node_modules
+        id: INSTALL_NODE_MODULES
+        uses: ./.github/actions/install-node-modules
+
+      - name: Build apps
+        uses: ./.github/actions/build-apps
+
+      - name: Run Lint, Check-Types, and Test
+        run: npx turbo run lint check-types test

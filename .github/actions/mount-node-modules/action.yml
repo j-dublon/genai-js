@@ -1,0 +1,20 @@
+name: Mount node_modules
+description: Mount the output of an `npm install` we ran in an earlier job
+
+inputs:
+  LOCKFILE_CONTENTS_HASH:
+    description: Unique hash based on the contents of package-lock.json files
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Mount node_modules
+      id: RESTORE_NODE_MODULES_CACHE
+      uses: actions/cache/restore@v4
+      with:
+        fail-on-cache-miss: true
+        path: |
+          node_modules
+          apps/*/node_modules
+        key: NODE_MODULES-${{ runner.os }}-${{ inputs.LOCKFILE_CONTENTS_HASH }}

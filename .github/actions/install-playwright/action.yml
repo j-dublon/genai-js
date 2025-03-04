@@ -1,0 +1,27 @@
+name: Install playwright
+description: Install and Cache playwright for use in later jobs
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get installed Playwright version
+      id: playwright-version
+      shell: bash
+      run: echo "version=$(npx playwright --version | cut -d' ' -f2)" >> $GITHUB_OUTPUT
+
+    - name: Cache Playwright browsers and system dependencies
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: |
+          ~/.cache/ms-playwright
+          /var/lib/apt/lists
+          /home/runner/.npm/_npx
+        key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-
+
+    - name: Install Playwright
+      shell: bash
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      run: npx playwright install

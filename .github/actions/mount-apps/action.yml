@@ -1,0 +1,14 @@
+name: Mount apps
+description: Mount the output of `next build` we built in an earlier job
+
+runs:
+  using: "composite"
+  steps:
+    - name: Mount .next
+      uses: actions/cache/restore@v4
+      with:
+        fail-on-cache-miss: true
+        path: |
+          apps/marketing/.next
+          apps/join-flow/.next
+        key: COMMIT-${{ runner.os }}-${{ github.sha }}-apps

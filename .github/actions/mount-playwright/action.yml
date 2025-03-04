@@ -1,0 +1,15 @@
+name: Mount playwright
+description: Mount the output of a playwright install we ran in an earlier job
+
+runs:
+  using: "composite"
+  steps:
+    - name: Mount playwright
+      uses: actions/cache/restore@v4
+      with:
+        fail-on-cache-miss: true
+        path: |
+          ~/.cache/ms-playwright
+           /var/lib/apt/lists
+          /home/runner/.npm/_npx
+        key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
