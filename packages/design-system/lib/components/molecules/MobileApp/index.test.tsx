@@ -1,6 +1,5 @@
 import { MobileApp } from "@components/molecules/MobileApp";
 import { render, screen } from "@testing-library/react";
-import { vi } from "vitest";
 
 describe("MobileApp Component", () => {
   const mockProps = {

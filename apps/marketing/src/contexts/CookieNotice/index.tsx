@@ -25,7 +25,7 @@ export function shouldShowCookieNotice(state: CookieState): boolean {
 }
 
 export interface ConsentParams extends Gtag.ConsentParams {
-  ads_backend_tracking?: "granted" | "denied" | undefined;
+  ads_backend_tracking?: "granted" | "denied";
 }
 
 interface CookieNoticeContextProps {

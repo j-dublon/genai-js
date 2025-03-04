@@ -4,7 +4,7 @@ import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import * as tsEslint from "@typescript-eslint/eslint-plugin";
 import parser from "@typescript-eslint/parser";
-import jest from "eslint-plugin-jest";
+import vitest from "@vitest/eslint-plugin";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 
 export default [
@@ -49,14 +49,15 @@ export default [
     files: ["**/*.{test,spec}.{js,ts,tsx}"],
     languageOptions: {
       globals: {
-        ...globals.jest,
+        ...globals.vitest,
+        vi: true,
       },
     },
     plugins: {
-      jest,
+      vitest,
     },
     rules: {
-      ...jest.configs.recommended.rules,
+      ...vitest.configs.recommended.rules,
     },
   },
   {

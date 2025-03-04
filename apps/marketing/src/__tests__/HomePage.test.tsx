@@ -1,7 +1,6 @@
 import "@testing-library/jest-dom";
 
 import { render, screen, within } from "@testing-library/react";
-import { vi } from "vitest";
 
 import {
   guidesHeading,
@@ -85,7 +84,7 @@ describe("HomePage", () => {
   });
 
   it("renders the join the flock section section", () => {
-    screen.getByText("Join the flock today");
+    expect(screen.getByText("Join the flock today")).toBeInTheDocument();
   });
 
   it("renders the FAQ section", async () => {

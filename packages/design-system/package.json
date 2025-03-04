@@ -57,6 +57,7 @@
     "@types/react-dom": "^19.0.2",
     "@typescript-eslint/eslint-plugin": "8.21.0",
     "@typescript-eslint/parser": "8.21.0",
+    "@vitest/eslint-plugin": "1.1.36",
     "@vitejs/plugin-react": "^4.2.1",
     "@vitejs/plugin-react-swc": "3.7.2",
     "@vitest/coverage-v8": "3.0.5",

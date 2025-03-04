@@ -26,6 +26,7 @@ export default {
       "ui-grey-100": "#F7F7F5",
       "ui-grey-200": "#F0F0E9",
       "ui-grey-300": "#D8D8D0",
+      "ui-grey-400": "#818181",
       "ui-grey-500": "#565656",
       "outline-ui-grey-300": "#DBD8D0",
       "link-ui": "#5A06D8",
@@ -122,6 +123,7 @@ export default {
     "before:border-core-yellow",
     "before:border-core-white",
     "before:border-secondary-blue",
+    "before:border-secondary-blue-dark",
     "before:border-ui-grey-300",
   ],
 

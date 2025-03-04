@@ -8,7 +8,7 @@ import {
 import type { Metadata } from "next";
 import Script from "next/script";
 
-import Banner from "@/components/molecules/CookieBanner";
+import { DynamicCookieNotice } from "@/components/molecules/CookieNotice";
 import { CookieNoticeProvider } from "@/contexts/CookieNotice";
 import { defaultChoices } from "@/contexts/CookieNotice/defaultChoices";
 import { PostHogProvider } from "@/providers/postHog/postHogProvider";
@@ -118,7 +118,7 @@ export default function RootLayout({
         <PrefetchCrossZoneLinksProvider>
           <CookieNoticeProvider gtmId={process.env.GTM_ID}>
             <PostHogProvider>
-              <Banner />
+              <DynamicCookieNotice />
               {children}
             </PostHogProvider>
           </CookieNoticeProvider>

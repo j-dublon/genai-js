@@ -1,7 +1,7 @@
 import { type ButtonHTMLAttributes, Ref } from "react";
 
 export type Size = "small" | "medium";
-export type Tint = "black" | "yellow" | "white" | "blue";
+export type Tint = "black" | "yellow" | "white" | "blue" | "grey";
 export type Variant = "solid" | "outline";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLElement> {
