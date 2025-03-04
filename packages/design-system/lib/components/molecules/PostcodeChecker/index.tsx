@@ -30,30 +30,27 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
           {titleText}
         </h2>
       )}
-      <div className="flex rounded-lg bg-core-white border-2 border-outline-ui-grey-300 p-2 pl-5 pr-4 md:pr-2  items-center justify-between h-[74px] transition-colors duration-400 w-full z-1">
-        <form
-          className="flex flex-2 flex-row w-full"
-          onSubmit={onClickFunction}
-        >
+      <div className="flex rounded-lg bg-core-white border-2 border-outline-ui-grey-300 p-2 pl-1 sm:pl-3 items-center justify-between h-[74px] transition-colors duration-400 w-full z-1">
+        <form className="flex flex-row w-full" onSubmit={onClickFunction}>
           <input
             aria-labelledby="input"
             placeholder={placeholderText}
             name="postcode-checker"
-            className="md:text-md flex-3 text-base mr-1 min-w-[196px]"
+            className="sm:text-md flex-1 text-base px-1 mr-1 min-w-[160px] md:min-w-[205px]"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
-          <div className="flex flex-2 justify-end">
+          <div className="shrink">
             {isChevron ? (
               <>
-                <div className="block md:hidden">
+                <div className="block sm:hidden">
                   <ChevronRightWithCircle />
                 </div>
-                <div className="hidden md:flex w-full">
+                <div className="hidden sm:flex w-full">
                   <Button
                     type="submit"
                     variant="solid"
-                    className="h-[60px]"
+                    className="h-[60px] md:!px-4 lg:!px-8"
                     fullWidth
                   >
                     {inputBoxButtonText}
@@ -61,7 +58,11 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
                 </div>
               </>
             ) : (
-              <Button type="submit" variant="solid" className="h-[60px]">
+              <Button
+                type="submit"
+                variant="solid"
+                className="h-[60px] sm:text-md md:!px-4 lg:!px-8"
+              >
                 {inputBoxButtonText}
               </Button>
             )}

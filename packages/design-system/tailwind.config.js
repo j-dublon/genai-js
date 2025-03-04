@@ -7,8 +7,11 @@ export default {
   ...sharedConfig,
   theme: {
     screens: {
-      tablet: "960px",
-      ...defaultTheme.screens,
+      sm: "600px",
+      md: "960px",
+      lg: "1152px",
+      xl: "1440px",
+      "2xl": "1750px",
     },
     colors: {
       currentColor: "currentColor",

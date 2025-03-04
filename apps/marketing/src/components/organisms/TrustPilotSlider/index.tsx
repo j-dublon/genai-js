@@ -86,7 +86,7 @@ export const TrustPilotSlider = ({
         draggable
         aria-label="Customer reviews"
         aria-roledescription="carousel"
-        margin="xl:before:w-[calc((100vw-1280px)/3)] xl:after:w-16 2xl:before:w-[calc((100vw-1536px)/1.75)]"
+        margin="before:ml-5 before:lg:ml-36 before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
       >
         {isLoading
           ? Array.from({ length: 5 }).map((_, i) => (

@@ -50,9 +50,9 @@ export const Slider = ({
   }, []);
 
   const baseStyles = `${draggable ? "select-none user-select-none" : undefined}
-    flex overflow-x-auto relative h-fit scrollbar-none py-5 pl-5 lg:pl-36`;
+    flex overflow-x-auto relative h-fit scrollbar-none py-5`;
 
-  const marginStyles = `before:flex-none after:flex-none after:w-4 lg:after:w-10 ${margin ?? ""}`;
+  const marginStyles = `${margin ?? ""} after:flex-none after:w-10`;
 
   const dragStyles = isMouseDown ? "cursor-grabbing" : "cursor-grab";
 

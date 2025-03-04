@@ -88,7 +88,7 @@ export const NavBar = ({
             </Link>
           )}
           <div
-            className={`hidden tablet:flex items-center justify-end gap-4 ${
+            className={`hidden md:flex items-center justify-end gap-4 ${
               toggled ? "bg-core-white" : "bg-core-yellow"
             }`}
           >
@@ -119,12 +119,12 @@ export const NavBar = ({
             </Button>
           </div>
 
-          <div className="flex items-center gap-4 tablet:hidden">
+          <div className="flex items-center gap-4 md:hidden">
             <Button variant="solid" size="small" href="/join/find-your-address">
               {signupText}
             </Button>
             <HamburgerButton
-              className="tablet:hidden"
+              className="md:hidden"
               active={toggled}
               setActive={setToggled}
               aria-expanded={toggled}
@@ -159,7 +159,7 @@ export const NavBar = ({
                             prev === link.name ? null : link.name,
                           );
                         }}
-                        className={`tablet:hidden hover:underline flex items-center py-4 justify-between min-h-[3.5rem] w-full text-[26px] font-bold border-t border-t-outline-ui-grey-300 cursor-pointer transition-colors duration-200 group ${
+                        className={`md:hidden hover:underline flex items-center py-4 justify-between min-h-[3.5rem] w-full text-[26px] font-bold border-t border-t-outline-ui-grey-300 cursor-pointer transition-colors duration-200 group ${
                           openDropdownMobile === link.name
                             ? "underline"
                             : "text-core-black"
@@ -188,7 +188,7 @@ export const NavBar = ({
                       {openDropdownMobile === link.name && (
                         <div
                           id={`dropdown-${link.name.toLowerCase().replace(/\s+/g, "-")}`}
-                          className="space-y-2 mb-4 tablet:hidden"
+                          className="space-y-2 mb-4 md:hidden"
                         >
                           {link.dropdownLinks.map((subLink) => (
                             <Link key={subLink.name} href={subLink.href ?? "#"}>
