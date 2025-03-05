@@ -25,8 +25,11 @@ export const MobileAppWrapper = () => {
     setIsManualSelection(true);
   };
   return (
-    <div className="md:flex bg-core-yellow md:px-36 justify-center">
-      <div className="md:max-w-[1152px] flex flex-col md:flex-row items-center md:gap-20 bg-core-yellow">
+    <section
+      aria-label="Mobile App Wrapper"
+      className="bg-core-yellow md:px-36 flex justify-center"
+    >
+      <div className="flex flex-col items-center md:flex-row md:max-w-[1152px] md:gap-5 md:justify-between bg-core-yellow w-full">
         <MobilePhone selectedTextIndex={selectedTextIndex} />
 
         <MobileApp
@@ -35,6 +38,6 @@ export const MobileAppWrapper = () => {
           setSelectedTextIndex={handleManualSelection}
         />
       </div>
-    </div>
+    </section>
   );
 };

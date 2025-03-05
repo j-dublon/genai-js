@@ -6,7 +6,7 @@ export const PlanDetailsPhone = ({ ariaLabel }: { ariaLabel: string }) => {
       viewBox="0 0 464 829"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="md:w-[464px] md:h-[829px] w-[250px] h-[498px]"
+      className="w-[250px] h-[498px] lg:w-[370px] lg:h-[660px] xl:w-[464px] xl:h-[829px]"
       aria-label={ariaLabel}
     >
       <rect y="100.5" width="464" height="963.019" rx="70" fill="#1F1F1F" />

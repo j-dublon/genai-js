@@ -6,8 +6,8 @@ import { timelineCardProps } from "./clickSwitchDoneProps";
 
 export const ClickSwitchDoneSection = () => {
   return (
-    <div className="bg-core-white flex justify-center items-center lg:py-40 lg:px-36">
-      <div className="py-14 px-5 lg:p-0 flex flex-col md:gap-16 gap-8 max-w-[1152px]">
+    <div className="bg-core-white flex justify-center items-center md:py-40 md:px-36">
+      <div className="py-14 px-5 md:p-0 flex flex-col md:gap-16 gap-8 max-w-[1152px]">
         <div className="max-w-[956px]">
           <div className="flex items-center md:pb-7 pb-8 gap-2">
             <h2 className="md:text-5xl text-[28px] font-bold md:pb-5 pb-3">

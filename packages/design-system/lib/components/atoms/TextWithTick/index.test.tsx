@@ -21,4 +21,19 @@ describe("TextWithTick Component", () => {
     );
     expect(textWithTick).toBeInTheDocument();
   });
+
+  it("applies padding by default and removes it when noPadding is true", () => {
+    const { rerender } = render(<TextWithTick {...props} />);
+
+    let container = screen.getByLabelText(
+      "Text with tick with the statement Test text",
+    );
+    expect(container).toHaveClass("px-6", "py-3");
+
+    rerender(<TextWithTick {...props} noPadding />);
+    container = screen.getByLabelText(
+      "Text with tick with the statement Test text",
+    );
+    expect(container).not.toHaveClass("px-6", "py-3");
+  });
 });

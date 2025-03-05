@@ -24,10 +24,12 @@ export const MobileApp = ({
   };
 
   return (
-    <div className="md:py-[50px] md:px-10 p-6 bg-core-white md:rounded-lg w-full">
-      <h2 className="md:text-5xl text-3xl font-semibold">{headingText}</h2>
+    <div className="lg:py-[50px] lg:px-10 p-6 bg-core-white md:rounded-lg w-full md:max-w-[564px]">
+      <h2 className="lg:text-5xl md:text-4xl text-3xl font-semibold">
+        {headingText}
+      </h2>
 
-      <div className="py-5 flex flex-col gap-[10px]">
+      <div className="py-5 flex flex-col md:gap-[16px]">
         {textItems.map((item, index) => (
           <div
             key={`${item.itemText}${index}`}
@@ -37,7 +39,7 @@ export const MobileApp = ({
             )}
             onClick={() => handleItemClick(index)}
           >
-            <TextWithTick key={index} textInput={item.itemText} />
+            <TextWithTick key={index} textInput={item.itemText} noPadding />
           </div>
         ))}
       </div>

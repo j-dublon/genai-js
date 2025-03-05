@@ -61,10 +61,10 @@ export const TrustPilotSlider = ({
 }: TrustPilotSliderProps) => {
   return (
     <section
-      className="bg-ui-grey-200 pb-12 lg:pb-40"
+      className="bg-ui-grey-200 pb-12 md:pb-40"
       aria-labelledby="trust-pilot-heading"
     >
-      <div className="py-12 px-5 lg:px-36 lg:pt-40">
+      <div className="py-12 px-5 md:px-36 md:pt-40">
         <div className="max-w-[1152px] mx-auto">
           <h2
             id="trust-pilot-heading"
@@ -76,7 +76,7 @@ export const TrustPilotSlider = ({
         </div>
       </div>
 
-      <div className="px-5 lg:px-36">
+      <div className="px-5 md:px-36">
         <h4 className="max-w-[1152px] mx-auto text-md md:text-lg">
           Showing our 5-star reviews
         </h4>
@@ -86,7 +86,7 @@ export const TrustPilotSlider = ({
         draggable
         aria-label="Customer reviews"
         aria-roledescription="carousel"
-        margin="before:ml-5 before:lg:ml-36 before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
+        margin="before:ml-5 before:md:ml-36 before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
       >
         {isLoading
           ? Array.from({ length: 5 }).map((_, i) => (
@@ -115,7 +115,7 @@ export const TrustPilotSlider = ({
             ))}
       </Slider>
 
-      <div className="md:pt-4 px-5 lg:px-36">
+      <div className="md:pt-4 px-5 md:px-36">
         <div className="max-w-[1152px] mx-auto flex flex-row gap-4 mt-4 sm:mt-0 items-center px-4 md:px-0">
           <picture>
             <source

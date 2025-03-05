@@ -7,7 +7,7 @@ export const EeroScreenPhone = ({ ariaLabel }: { ariaLabel: string }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      className="md:w-[464px] md:h-[829px] w-[250px] h-[498px]"
+      className="w-[250px] h-[498px] lg:w-[370px] lg:h-[660px] xl:w-[464px] xl:h-[829px]"
       aria-label={ariaLabel}
     >
       <rect y="100.5" width="464" height="963.019" rx="70" fill="#1F1F1F" />

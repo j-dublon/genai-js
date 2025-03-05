@@ -52,7 +52,7 @@ export const Slider = ({
   const baseStyles = `${draggable ? "select-none user-select-none" : undefined}
     flex overflow-x-auto relative h-fit scrollbar-none py-5`;
 
-  const marginStyles = `${margin ?? ""} after:flex-none after:w-10`;
+  const marginStyles = cx(margin, "after:flex-none after:w-10");
 
   const dragStyles = isMouseDown ? "cursor-grabbing" : "cursor-grab";
 
@@ -80,7 +80,7 @@ export const Slider = ({
       </div>
 
       {isScrollable && (
-        <div className="md:pt-17 px-5 lg:px-36">
+        <div className="md:pt-17 px-5 md:px-36">
           <div
             role="scrollbar"
             aria-orientation="horizontal"

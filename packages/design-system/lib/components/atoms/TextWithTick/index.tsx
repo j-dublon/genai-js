@@ -9,24 +9,27 @@ export interface TextWithTickProps {
   backgroundColor?: BackgroundColors;
   ariaLabel?: string;
   broadbandOffer?: boolean;
+  noPadding?: boolean;
 }
 
 export const TextWithTick = ({
   textInput,
   backgroundColor = "white",
   broadbandOffer = false,
+  noPadding = false,
 }: TextWithTickProps) => {
   return (
     <div
       className={cx(
-        "flex items-center gap-2.5 p-3 rounded-full",
+        "flex items-center gap-2.5 rounded-full",
+        !noPadding && "px-6 py-3",
         `${broadbandOffer ? "bg-offer-gradient" : bgColorVariants[backgroundColor]}`,
       )}
       aria-label={`Text with tick with the statement ${textInput}`}
     >
       <span>{broadbandOffer ? <OfferIcon /> : <Tick />}</span>
 
-      <p className="md:text-md text-[14px] md:font-medium">{textInput}</p>
+      <p className="md:text-md text-[16px]">{textInput}</p>
     </div>
   );
 };
