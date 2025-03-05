@@ -55,7 +55,7 @@ describe("GuideCard", () => {
     expect(image).toHaveAttribute("loading", "lazy");
 
     // Check title
-    const heading = screen.getByRole("heading", { level: 3 });
+    const heading = screen.getByRole("heading", { level: 2 });
     expect(heading).toHaveTextContent("Test Guide");
     expect(within(heading).getByRole("link")).toHaveAttribute(
       "href",
@@ -134,7 +134,7 @@ describe("GuideCard", () => {
   it("renders title with correct font size classes", () => {
     render(<GuideCard {...defaultProps} />);
 
-    const title = screen.getByRole("heading", { level: 3 });
+    const title = screen.getByRole("heading", { level: 2 });
     expect(title.className).toContain("mt-2 text-xl md:text-[26px] font-bold");
   });
 

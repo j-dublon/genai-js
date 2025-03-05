@@ -22,7 +22,7 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
       <Collapser
         toggle={
           <div className="flex items-center justify-between cursor-pointer px-4 lg:px-8 py-3">
-            <p className="font-bold md:text-xl">{question.dropdown_header}</p>
+            <h2 className="font-bold md:text-xl">{question.dropdown_header}</h2>
             <div className="flex justify-center items-center border-2 rounded-full border-ui-grey-200 w-10 h-10 lg:w-16 lg:h-16">
               <ChevronVerticalWithCircle DropdownOpen={FAQDropdownOpen} />
             </div>

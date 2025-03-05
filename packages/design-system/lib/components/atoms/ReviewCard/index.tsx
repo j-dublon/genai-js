@@ -63,7 +63,7 @@ export const ReviewCard = ({
         {isOverflowing && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="font-thin mt-2 text-ui-grey-300 hover:underline cursor-pointer text-sm"
+            className="font-thin mt-2 text-ui-grey-500 hover:underline cursor-pointer text-sm"
             aria-label="Expand review"
           >
             {isExpanded ? "Read less" : "Read more"}

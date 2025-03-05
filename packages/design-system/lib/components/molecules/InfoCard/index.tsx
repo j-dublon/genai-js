@@ -61,7 +61,7 @@ export const InfoCard = ({
                 />
               </div>
               <div>
-                <p
+                <h2
                   className={
                     titleText
                       ? "md:text-[26px] text-md font-semibold"
@@ -69,7 +69,7 @@ export const InfoCard = ({
                   }
                 >
                   {subHeading}
-                </p>
+                </h2>
               </div>
             </div>
           </div>

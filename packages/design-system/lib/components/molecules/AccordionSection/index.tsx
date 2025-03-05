@@ -1,4 +1,4 @@
-import { AccordionItem, QuestionsArrProps } from "../../atoms/Accordion";
+import { AccordionItem, QuestionsArrProps } from "../../atoms/AccordionItem";
 
 interface Props {
   heading: string;

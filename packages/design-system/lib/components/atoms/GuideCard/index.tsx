@@ -59,11 +59,11 @@ export const GuideCard = ({
         ))}
       </div>
 
-      <h3 className="mt-2 text-xl md:text-[26px] font-bold">
+      <h2 className="mt-2 text-xl md:text-[26px] font-bold">
         <a href={url} className="text-inherit">
           {title}
         </a>
-      </h3>
+      </h2>
     </div>
   );
 };

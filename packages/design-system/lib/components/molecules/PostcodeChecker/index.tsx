@@ -33,7 +33,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
       <div className="flex rounded-lg bg-core-white border-2 border-outline-ui-grey-300 p-2 pl-1 sm:pl-3 items-center justify-between h-[74px] transition-colors duration-400 w-full z-1">
         <form className="flex flex-row w-full" onSubmit={onClickFunction}>
           <input
-            aria-labelledby="input"
+            aria-label="enter your postcode or address"
             placeholder={placeholderText}
             name="postcode-checker"
             className="sm:text-md flex-1 text-base px-1 mr-1 min-w-[160px] md:min-w-[205px]"

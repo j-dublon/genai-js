@@ -41,26 +41,30 @@ export const Footer = ({
               <a
                 className="flex items-end"
                 href="https://twitter.com/cuckoointernet"
+                aria-label="Go to our twitter account"
               >
-                <TwitterIcon aria-label="Twitter" />
+                <TwitterIcon />
               </a>
               <a
                 className="flex items-end"
                 href="https://www.instagram.com/cuckoobroadband/"
+                aria-label="Go to our Instagram account"
               >
-                <InstagramIcon aria-label="Instagram" />
+                <InstagramIcon />
               </a>
               <a
                 className="flex items-end"
                 href="https://www.facebook.com/cuckoointernet/"
+                aria-label="Go to our Facebook account"
               >
                 <FacebookIcon aria-label="Facebook" />
               </a>
               <a
                 className="flex items-end"
                 href="https://www.linkedin.com/company/19113678/"
+                aria-label="Go to our Linkedin account"
               >
-                <LinkedInIcon aria-label="LinkedIn" />
+                <LinkedInIcon />
               </a>
             </div>
           </div>
