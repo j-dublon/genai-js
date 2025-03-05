@@ -9,21 +9,27 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Get lockfiles contents hash
-      id: GET_LOCKFILE_CONTENTS_HASH
-      shell: bash
-      run: echo "lockfile_contents_hash=${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+    # Commenting out for now whilst the caching issue is being investigated
 
-    - name: Cache node_modules
-      uses: actions/cache@v4
-      id: ENSURE_NODE_MODULES_CACHE
-      with:
-        path: |
-          node_modules
-          apps/*/node_modules
-        key: NODE_MODULES-${{ runner.os }}-${{ steps.GET_LOCKFILE_CONTENTS_HASH.outputs.lockfile_contents_hash }}
+    # - name: Get lockfiles contents hash
+    #   id: GET_LOCKFILE_CONTENTS_HASH
+    #   shell: bash
+    #   run: echo "lockfile_contents_hash=${{ hashFiles('package-lock.json') }}" >> $GITHUB_OUTPUT
+
+    # - name: Cache node_modules
+    #   uses: actions/cache@v4
+    #   id: ENSURE_NODE_MODULES_CACHE
+    #   with:
+    #     path: |
+    #       node_modules
+    #       apps/*/node_modules
+    #     key: NODE_MODULES-${{ runner.os }}-${{ steps.GET_LOCKFILE_CONTENTS_HASH.outputs.lockfile_contents_hash }}
+
+    # - name: Install node_modules
+    #   shell: bash
+    #   if: steps.ENSURE_NODE_MODULES_CACHE.outputs.cache-hit != 'true'
+    #   run: npm ci --prefer-offline --progress=false --audit=false --fund=false --send-metrics=false
 
     - name: Install node_modules
       shell: bash
-      if: steps.ENSURE_NODE_MODULES_CACHE.outputs.cache-hit != 'true'
-      run: npm ci --prefer-offline --progress=false --audit=false --fund=false --send-metrics=false
+      run: npm install
