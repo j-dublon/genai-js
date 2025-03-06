@@ -64,7 +64,7 @@ export const CardSectionWrapper = () => {
           infoCardBackgroundColor={detailedCardContent.infoCardBackgroundColor}
           additionalText={detailedCardContent.additionalText}
           buttonText={detailedCardContent.buttonText}
-          featureTextProps={detailedCardContent.featureTextProps}
+          featureImageProps={detailedCardContent.featureImageProps}
         />
       )}
     </div>

@@ -31,18 +31,16 @@ export const Primary: Story = {
     additionalText:
       "TrueMesh technology, built-in security, and signal and coverage literally everywhere in your home? Yep, we’d say that’s very fancy indeed. ",
     buttonText: "Tell me more",
-    featureTextProps: {
-      topText: "Whooooo",
-      bottomText: "ooooosh",
+    featureImageProps: {
       backgroundColor: "blue",
-      textColor: "white",
-      textScale: 3,
-      textGap: "medium",
       infoCard: true,
-
-      image: {
+      backgroundImage: {
+        url: "/assets/images/whooosh.svg",
+        alt: "Background with whoosh text",
+      },
+      overlayImage: {
         url: "/assets/images/eero.svg",
-        alt: "Picture of an eero router on a background called whoosh",
+        alt: "Picture of an eero router",
       },
     },
   },

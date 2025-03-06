@@ -1,6 +1,9 @@
 import { Button } from "@components/atoms/Button";
 import { ColorPill } from "@components/atoms/ColorPill";
-import { FeatureText, FeatureTextProps } from "@components/atoms/FeatureText";
+import {
+  FeatureImage,
+  FeatureImageProps,
+} from "@components/atoms/FeatureImage";
 import { BackgroundColors } from "@lib/types";
 import { bgColorVariants } from "@lib/variants";
 import cx from "classnames";
@@ -13,7 +16,7 @@ export interface InfoCardProps {
   subHeading?: string;
   additionalText?: string;
   buttonText?: string;
-  featureTextProps?: FeatureTextProps;
+  featureImageProps?: FeatureImageProps;
   listItems?: string[];
 }
 
@@ -25,22 +28,26 @@ export const InfoCard = ({
   subHeading,
   additionalText,
   buttonText,
-  featureTextProps,
+  featureImageProps,
   listItems,
 }: InfoCardProps) => {
   return (
     <div
-      className={`${additionalText || featureTextProps ? "md:max-w-[1152px] md:min-w-[564px] min-w-[350px] min-h-sm" : "md:flex md:flex-col md:w-1/2"}`}
+      className={`${
+        additionalText || featureImageProps
+          ? "md:max-w-[1152px] md:min-w-[564px] min-w-0"
+          : "md:flex md:flex-col md:w-1/2"
+      }`}
     >
-      {featureTextProps && <FeatureText {...featureTextProps} />}
+      {featureImageProps && <FeatureImage {...featureImageProps} />}
 
       <div
         className={cx(
           {
             "md:px-10 px-5 md:py-15 py-6": additionalText,
             "p-6": !additionalText,
-            "rounded-b-lg": featureTextProps,
-            "rounded-lg": !featureTextProps,
+            "rounded-b-lg": featureImageProps,
+            "rounded-lg": !featureImageProps,
             "flex md:flex-row flex-col md:gap-6 gap-5": additionalText,
           },
           bgColorVariants[infoCardBackgroundColor],

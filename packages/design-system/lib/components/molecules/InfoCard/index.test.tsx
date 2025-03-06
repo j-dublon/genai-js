@@ -11,16 +11,15 @@ describe("InfoCard Component", () => {
     subHeading: "Test lighter text",
     additionalText: "Test additional text",
     buttonText: "Test button text",
-    featureTextProps: {
-      topText: "Whooooo",
-      bottomText: "ooooosh",
+    featureImageProps: {
       backgroundColor: "blue",
-      textColor: "white",
-      textScale: 1.8,
-      textGap: "medium",
-      image: {
+      backgroundImage: {
         url: "/test-asset.png",
         alt: "Test image alt text",
+      },
+      overlayImage: {
+        url: "/test-overlay.png",
+        alt: "Test overlay image alt text",
       },
     },
   };
@@ -28,16 +27,15 @@ describe("InfoCard Component", () => {
     render(
       <InfoCard
         {...baseProps}
-        featureTextProps={{
-          topText: "Whooooo",
-          bottomText: "ooooosh",
+        featureImageProps={{
           backgroundColor: "blue",
-          textColor: "white",
-          textScale: 1.8,
-          textGap: "medium",
-          image: {
+          backgroundImage: {
             url: "/test-asset.png",
             alt: "Test image alt text",
+          },
+          overlayImage: {
+            url: "/test-overlay.png",
+            alt: "Test overlay image alt text",
           },
         }}
       />,
@@ -57,6 +55,9 @@ describe("InfoCard Component", () => {
     expect(screen.getByText("Test button text")).toBeInTheDocument();
 
     expect(screen.getByAltText("Test image alt text")).toBeInTheDocument();
+    expect(
+      screen.getByAltText("Test overlay image alt text"),
+    ).toBeInTheDocument();
   });
 
   it("doesn't render the additional text if additionalText prop isn't set", () => {
@@ -69,10 +70,10 @@ describe("InfoCard Component", () => {
     expect(screen.queryByText("Test additional text")).not.toBeInTheDocument();
   });
 
-  it("doesn't render the image if featureTextProps prop isn't set", () => {
+  it("doesn't render the image if featureImageProps prop isn't set", () => {
     const newProps = {
       ...baseProps,
-      featureTextProps: undefined, // Override the imgProps prop
+      featureImageProps: undefined, // Override the imgProps prop
     };
     render(<InfoCard {...newProps} />);
 

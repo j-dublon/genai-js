@@ -38,17 +38,16 @@ export const props: {
     additionalText:
       "Our seriously powerful eero router boosts your Wi-Fi throughout your home, so you're always connected. It can even detect interference from walls and radios, directing signal straight to your devices.",
     buttonText: "Oooh, tell me more",
-    featureTextProps: {
-      topText: "Whooooo",
-      bottomText: "ooooosh",
+    featureImageProps: {
       backgroundColor: "blue",
-      textColor: "white",
-      textScale: 3,
-      textGap: "medium",
       infoCard: true,
-      image: {
+      backgroundImage: {
+        url: "/assets/images/whooosh.svg",
+        alt: "Whooosh text",
+      },
+      overlayImage: {
         url: "/assets/images/eero.svg",
-        alt: "It's an image of an eero router",
+        alt: "Eero router",
       },
     },
   },
@@ -62,15 +61,14 @@ export interface InfoCardProps {
   subHeading?: string;
   additionalText?: string;
   buttonText?: string;
-  featureTextProps?: {
-    topText: string;
-    bottomText: string;
+  featureImageProps?: {
     backgroundColor: BackgroundColors;
-    textColor: TextColorList;
-    textScale: number;
-    textGap: TextGapList;
     infoCard: boolean;
-    image: {
+    backgroundImage: {
+      url: string;
+      alt: string;
+    };
+    overlayImage: {
       url: string;
       alt: string;
     };
@@ -86,7 +84,3 @@ export type BackgroundColors =
   | "orange"
   | "blue"
   | "red";
-
-export type TextColorList = "indigo" | "black" | "white" | "grey";
-
-export type TextGapList = "small" | "medium" | "large";
