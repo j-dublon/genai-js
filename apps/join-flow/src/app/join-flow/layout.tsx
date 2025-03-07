@@ -16,8 +16,8 @@ export default function RootLayout({
       <head>
         <style>{`
           :root {
-            --font-url-garnett-regular: "${baseUrl}/fonts/Garnett-Regular.woff2";
-            --font-url-garnett-semibold: "${baseUrl}/fonts/Garnett-SemiBold.woff2";
+            --font-url-garnett-regular: "${baseUrl}/vc-ap-marketing/fonts/Garnett-Regular.woff2";
+            --font-url-garnett-semibold: "${baseUrl}/vc-ap-marketing/fonts/Garnett-SemiBold.woff2";
           }
         `}</style>
       </head>

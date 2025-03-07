@@ -45,21 +45,33 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: "/favicon/favicon.ico", sizes: "any", type: "image/x-icon" },
-      { url: "/favicon/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       {
-        url: "/favicon/android-chrome-192x192.png",
+        url: "/vc-ap-marketing/favicon.ico",
+        sizes: "any",
+        type: "image/x-icon",
+      },
+      {
+        url: "/vc-ap-marketing/favicon/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+      {
+        url: "/vc-ap-marketing/favicon/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+      {
+        url: "/vc-ap-marketing/favicon/android-chrome-192x192.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        url: "/favicon/android-chrome-512x512.png",
+        url: "/vc-ap-marketing/favicon/android-chrome-512x512.png",
         sizes: "512x512",
         type: "image/png",
       },
     ],
-    apple: "/favicon/apple-touch-icon.png",
+    apple: "/vc-ap-marketing/favicon/apple-touch-icon.png",
   },
 };
 
@@ -75,8 +87,8 @@ export default function RootLayout({
       <head>
         <style>{`
           :root {
-            --font-url-garnett-regular: "${baseUrl}/fonts/Garnett-Regular.woff2";
-            --font-url-garnett-semibold: "${baseUrl}/fonts/Garnett-SemiBold.woff2";
+            --font-url-garnett-regular: "${baseUrl}/vc-ap-marketing/fonts/Garnett-Regular.woff2";
+            --font-url-garnett-semibold: "${baseUrl}/vc-ap-marketing/fonts/Garnett-SemiBold.woff2";
             }
         `}</style>
         {/*

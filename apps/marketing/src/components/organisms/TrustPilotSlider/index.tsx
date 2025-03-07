@@ -7,6 +7,7 @@ import {
 import { ReviewCardSkeleton } from "@react-component-library/ui/server";
 
 import { useTrustpilotReviews } from "@/hooks/useTrustpilotReviews";
+import { getAssetPath } from "@/lib/get-asset-path";
 
 import { reviewIds } from "./trustpilotSliderProps";
 
@@ -120,18 +121,18 @@ export const TrustPilotSlider = ({
           <picture>
             <source
               media="(min-width: 640px)"
-              srcSet="assets/images/trustpilot-logo.svg"
+              srcSet={getAssetPath("images/trustpilot-logo.svg")}
               width="105"
               height="26"
             />
             <source
               media="(max-width: 639px)"
-              srcSet="assets/images/trustpilot-logo.svg"
+              srcSet={getAssetPath("images/trustpilot-logo.svg")}
               width="80"
               height="20"
             />
             <img
-              src="assets/images/trustpilot-logo.svg"
+              src={getAssetPath("images/trustpilot-logo.svg")}
               alt="Trustpilot logo"
               className="w-20 sm:w-[105px] h-auto"
             />
