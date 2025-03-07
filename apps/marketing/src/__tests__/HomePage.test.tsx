@@ -7,6 +7,7 @@ import {
   guidesSubHeading,
 } from "@/components/organisms/Guides/guidesProps";
 import { HomePage } from "@/components/pages/HomePage";
+import { getAssetPath } from "@/lib/get-asset-path";
 
 vi.mock("@/hooks/usePostcode", () => ({
   usePostcode: () => ({
@@ -101,7 +102,10 @@ describe("HomePage", () => {
     );
     expect(titleText).toBeInTheDocument();
     expect(imgElement).toBeInTheDocument();
-    expect(imgElement).toHaveAttribute("src", "/assets/images/done_button.svg");
+    expect(imgElement).toHaveAttribute(
+      "src",
+      getAssetPath("/images/done_button.svg"),
+    );
     expect(imgElement).toHaveClass("w-32 md:w-56 h-auto");
   });
 

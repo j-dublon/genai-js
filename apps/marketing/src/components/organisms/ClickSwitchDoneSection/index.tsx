@@ -2,6 +2,8 @@
 import { Button, TimelineCardList } from "@react-component-library/ui";
 import Link from "next/link";
 
+import { getAssetPath } from "@/lib/get-asset-path";
+
 import { timelineCardProps } from "./clickSwitchDoneProps";
 
 export const ClickSwitchDoneSection = () => {
@@ -14,7 +16,7 @@ export const ClickSwitchDoneSection = () => {
               Click. Switch.
             </h2>
             <img
-              src="/assets/images/done_button.svg"
+              src={getAssetPath("/images/done_button.svg")}
               alt="Done text in a pink coloured pill with an arrow icon pointing at it"
               className="w-32 md:w-56 h-auto"
             />

@@ -1,3 +1,5 @@
+import { getAssetPath } from "@/lib/get-asset-path";
+
 export const props: {
   cardSectionHeading: string;
   cardSectionText: string;
@@ -42,11 +44,11 @@ export const props: {
       backgroundColor: "blue",
       infoCard: true,
       backgroundImage: {
-        url: "/assets/images/whooosh.svg",
+        url: getAssetPath("/images/whooosh.svg"),
         alt: "Whooosh text",
       },
       overlayImage: {
-        url: "/assets/images/eero.svg",
+        url: getAssetPath("/images/eero.svg"),
         alt: "Eero router",
       },
     },

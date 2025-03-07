@@ -1,6 +1,8 @@
 "use client";
 import { InfoCard } from "@react-component-library/ui";
 
+import { getAssetPath } from "@/lib/get-asset-path";
+
 import { InfoCardProps, props } from "./cardSectionWrapperProps";
 
 export interface CardSectionProps {
@@ -34,7 +36,7 @@ export const CardSectionWrapper = () => {
 
         <div className="absolute top-0 right-0 h-full overflow-hidden hidden md:block">
           <img
-            src="/assets/images/3d_evolve.svg"
+            src={getAssetPath("/images/3d_evolve.svg")}
             alt="Egg slices with white and pink colours"
             className="w-full h-full object-cover"
           />
