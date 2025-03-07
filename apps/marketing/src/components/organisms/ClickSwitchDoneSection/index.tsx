@@ -14,7 +14,7 @@ export const ClickSwitchDoneSection = () => {
               Click. Switch.
             </h2>
             <img
-              src={`../../assets/images/done_button.svg`}
+              src="/assets/images/done_button.svg"
               alt="Done text in a pink coloured pill with an arrow icon pointing at it"
               className="w-32 md:w-56 h-auto"
             />

@@ -101,10 +101,7 @@ describe("HomePage", () => {
     );
     expect(titleText).toBeInTheDocument();
     expect(imgElement).toBeInTheDocument();
-    expect(imgElement).toHaveAttribute(
-      "src",
-      "../../assets/images/done_button.svg",
-    );
+    expect(imgElement).toHaveAttribute("src", "/assets/images/done_button.svg");
     expect(imgElement).toHaveClass("w-32 md:w-56 h-auto");
   });
 

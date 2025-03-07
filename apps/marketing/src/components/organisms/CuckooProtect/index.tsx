@@ -44,7 +44,7 @@ export const CuckooProtect = () => {
         <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 md:px-10 md:py-16 gap-7 py-6 px-5">
           <div className="flex-2 flex flex-col gap-7 min-w-0">
             <img
-              src={`../../assets/images/cuckoo_protect_logo.svg`}
+              src="/assets/images/cuckoo_protect_logo.svg"
               alt="Cuckoo protect logo"
               className="md:w-[337px] w-[250px]"
             />

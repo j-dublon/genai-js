@@ -34,7 +34,7 @@ export const CardSectionWrapper = () => {
 
         <div className="absolute top-0 right-0 h-full overflow-hidden hidden md:block">
           <img
-            src={`../../assets/images/3d_evolve.svg`}
+            src="/assets/images/3d_evolve.svg"
             alt="Egg slices with white and pink colours"
             className="w-full h-full object-cover"
           />
