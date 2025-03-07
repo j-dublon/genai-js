@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@react-component-library/ui": "*",
+    "@tailwindcss/postcss": "4.0.12",
     "@vercel/microfrontends": "1.0.0",
     "@vercel/speed-insights": "1.2.0",
     "next": "15.1.2",
