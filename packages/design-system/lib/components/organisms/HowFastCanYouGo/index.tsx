@@ -11,7 +11,7 @@ export const HowFastCanYouGo = ({
   setPostcode,
 }: HowFastCanYouGoProps) => {
   return (
-    <div className="ds:relative ds:pb-16 ds:px-5 ds:bg-[#f4f3ef] ds:flex ds:flex-col-reverse ds:items-center ds:md:py-36 ds:md:px-5">
+    <div className="ds:relative ds:pb-16 ds:px-5 ds:md:py-36 ds:md:px-5 ds:md:pl-36 ds:bg-[#f4f3ef] ds:flex ds:flex-col-reverse ds:items-center">
       <div className="ds:relative ds:flex ds:flex-col ds:md:flex-row ds:items-center ds:w-full ds:max-w-[1152px] ds:gap-0 ds:z-10">
         <div className="ds:rounded-lg ds:p-6 ds:md:p-10 ds:bg-core-white ds:w-full ds:h-fit ds:order-2 ds:md:order-none ds:md:z-[1] ds:md:max-w-[565px]">
           <PostcodeChecker

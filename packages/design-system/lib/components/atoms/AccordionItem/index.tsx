@@ -22,7 +22,7 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
       <Collapser
         toggle={
           <div className="ds:flex ds:items-center ds:justify-between ds:cursor-pointer ds:px-4 ds:lg:px-8 ds:py-3">
-            <h2 className="ds:font-bold ds:md:text-xl">
+            <h2 className="ds:font-semibold ds:md:text-[26px] ds:text-left ds:text-core-black">
               {question.dropdown_header}
             </h2>
             <div className="ds:flex ds:justify-center ds:items-center ds:border-2 ds:rounded-full ds:border-ui-grey-200 ds:w-10 ds:h-10 ds:lg:w-16 ds:lg:h-16">
@@ -33,10 +33,13 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
         FAQDropdownOpen={FAQDropdownOpen}
         setFAQDropdownOpen={setFAQDropdownOpen}
       >
-        <div className="ds:text-container ds:pt-4">
+        <div className="ds:text-container ds:pt-1">
           <div className="ds:flex ds:flex-col ds:gap-4 ds:px-4 ds:lg:px-8 ds:py-3">
             {question.dropdown_content.map((content, index) => (
-              <span key={index} className="ds:block ds:lg:text-2xl">
+              <span
+                key={index}
+                className="ds:block ds:text-sm ds:md:text-[26px] ds:text-core-black"
+              >
                 {content}
               </span>
             ))}

@@ -42,7 +42,7 @@ export const HeroBanner = ({
   };
 
   return (
-    <div className="flex justify-center" data-testid="hero-banner">
+    <div className="relative flex justify-center" data-testid="hero-banner">
       <video
         data-test-id="hero-banner-video"
         autoPlay
