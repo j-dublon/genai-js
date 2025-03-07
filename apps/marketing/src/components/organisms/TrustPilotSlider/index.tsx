@@ -2,12 +2,10 @@ import {
   ReviewCard,
   ReviewCardProps,
   Slider,
-  TrustpilotStars,
 } from "@react-component-library/ui";
 import { ReviewCardSkeleton } from "@react-component-library/ui/server";
 
 import { useTrustpilotReviews } from "@/hooks/useTrustpilotReviews";
-import { getAssetPath } from "@/lib/get-asset-path";
 
 import { reviewIds } from "./trustpilotSliderProps";
 
@@ -88,6 +86,8 @@ export const TrustPilotSlider = ({
         aria-label="Customer reviews"
         aria-roledescription="carousel"
         margin="before:ml-5 before:md:ml-36 before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
+        trustScore={trustScore}
+        numberOfReviews={reviewCount}
       >
         {isLoading
           ? Array.from({ length: 5 }).map((_, i) => (
@@ -115,36 +115,6 @@ export const TrustPilotSlider = ({
               </div>
             ))}
       </Slider>
-
-      <div className="md:pt-4 px-5 md:px-36">
-        <div className="max-w-[1152px] mx-auto flex flex-row gap-4 mt-4 sm:mt-0 items-center px-4 md:px-0">
-          <picture>
-            <source
-              media="(min-width: 640px)"
-              srcSet={getAssetPath("images/trustpilot-logo.svg")}
-              width="105"
-              height="26"
-            />
-            <source
-              media="(max-width: 639px)"
-              srcSet={getAssetPath("images/trustpilot-logo.svg")}
-              width="80"
-              height="20"
-            />
-            <img
-              src={getAssetPath("images/trustpilot-logo.svg")}
-              alt="Trustpilot logo"
-              className="w-20 sm:w-[105px] h-auto"
-            />
-          </picture>
-          <div className="w-26 h-7 sm:w-[105px] sm:h-[26px] flex items-center justify-center overflow-hidden">
-            <TrustpilotStars trustScore={trustScore} width={105} height={26} />
-          </div>
-          <span className="md:text-sm text-xs">
-            Based on <strong>{reviewCount.toLocaleString()}</strong> reviews
-          </span>
-        </div>
-      </div>
     </section>
   );
 };

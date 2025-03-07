@@ -1,4 +1,5 @@
 "use client";
+import { TermsAndConditions } from "@/components/atoms/TermsAndConditions";
 import { CompanyLogoStripWrapper } from "@/components/molecules/CompanyLogoStrip";
 import { FAQSection } from "@/components/molecules/FAQSection";
 import { HowFastCanYouGoWrapper } from "@/components/molecules/HowFastCanYouGo";
@@ -27,6 +28,12 @@ export const HomePage = () => {
   const enableCuckooProtect =
     process.env.NEXT_PUBLIC_ENABLE_CUCKOO_PROTECT === "true";
 
+  const enableTermsAndConditionsText =
+    process.env.NEXT_PUBLIC_ENABLE_TERMS_AND_CONDITIONS === "true";
+
+  const termsAndConditionsText =
+    "*Lorem ipsum dolor sit amet consectetur. Diam ullamcorper felis at vel amet nunc sed phasellus. Odio rhoncus.";
+
   return (
     <div className="w-full">
       <NavBarWrapper />
@@ -34,8 +41,13 @@ export const HomePage = () => {
         trustScore={trustpilotRating?.trustScore}
         numberOfReviews={trustpilotRating?.numberOfReviews}
         broadbandOffer={broadbandOffer}
+        enableTermsAndConditionsText={enableTermsAndConditionsText}
+        termsAndConditionsText={termsAndConditionsText}
       />
       <CardSectionWrapper />
+      {enableTermsAndConditionsText && (
+        <TermsAndConditions termsAndConditionsText={termsAndConditionsText} />
+      )}
       <CompanyLogoStripWrapper />
       <JoinTheFlock
         trustScore={trustpilotRating?.trustScore}

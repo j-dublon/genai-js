@@ -14,28 +14,25 @@ interface HeroBannerProps {
   trustScore?: number;
   numberOfReviews?: number;
   broadbandOffer?: boolean;
+  enableTermsAndConditionsText?: boolean;
+  termsAndConditionsText?: string;
 }
 
 export const HeroBanner = ({
   trustScore,
   numberOfReviews = 0,
+  enableTermsAndConditionsText,
+  termsAndConditionsText = "",
 }: HeroBannerProps) => {
   const { handleFormSubmit, postcode, setPostcode } = usePostcode();
   const posthog = usePostHog();
   const TextItemList: ComponentProps<typeof TextWithTickList> = {
     TextWithTickList: [
-      { textInput: "Lorem ipsum dolor sit", broadbandOffer: true },
       { textInput: "Full fibre speeds up to 900Mbps" },
       { textInput: "UK’s most reliable broadband technology" },
       { textInput: "eero Pro 6E router with every plan" },
     ],
   };
-
-  const enableTermsAndConditionsText =
-    process.env.NEXT_PUBLIC_ENABLE_TERMS_AND_CONDITIONS;
-
-  const termsAndConditionsText =
-    "*Lorem ipsum dolor sit amet consectetur. Diam ullamcorper felis at vel amet nunc sed phasellus. Odio rhoncus.";
 
   // TODO: This is just an example replace when actual button logic is added
   const onClick = (event: React.FormEvent<HTMLFormElement>) => {
@@ -68,7 +65,7 @@ export const HeroBanner = ({
             </p>
             <div className="md:pb-16">
               <PostcodeChecker
-                placeholderText="Pop in your address"
+                placeholderText="Pop in your postcode"
                 inputBoxButtonText="Let's go"
                 postcode={postcode}
                 setPostcode={setPostcode}
@@ -88,7 +85,7 @@ export const HeroBanner = ({
             </div>
           </div>
           <div className="flex md:w-[85%] w-full h-[85%]">
-            <div className="flex-1 flex flex-col gap-3 font-bold justify-start md:pb-0 pb-12">
+            <div className="flex-1 flex flex-col gap-3 font-medium justify-start md:pb-0 pb-12">
               <TextWithTickList
                 TextWithTickList={TextItemList.TextWithTickList}
               />

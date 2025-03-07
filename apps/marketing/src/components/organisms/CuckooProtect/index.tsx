@@ -60,7 +60,7 @@ export const CuckooProtect = () => {
               staying safe online.
             </p>
           </div>
-          <div className="flex-2 flex flex-col gap-2 min-w-0 font-semibold">
+          <div className="flex-2 flex flex-col gap-2 min-w-0 font-medium">
             <TextWithTickList
               TextWithTickList={TextItemList.TextWithTickList}
             />

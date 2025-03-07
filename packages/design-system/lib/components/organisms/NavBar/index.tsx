@@ -63,10 +63,11 @@ export const NavBar = ({
               We'll handle the whole broadband move for you
               <Link
                 href="/switching"
-                className="ds:text-core-purple ds:font-normal ds:rounded ds:ml-1"
+                className="ds:text-core-purple ds:font-medium ds:underline ds:rounded ds:ml-1"
               >
-                in just one click.
+                just one click
               </Link>
+              .
             </p>
           </CTA>
         )}

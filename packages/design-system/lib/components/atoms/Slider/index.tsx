@@ -1,4 +1,5 @@
 import { useScrollable } from "@hooks/useScrollable";
+import { TrustpilotHorizontal } from "@lib/index.client";
 import cx from "classnames";
 import React, { useEffect, useRef, useState } from "react";
 
@@ -6,11 +7,15 @@ export interface SliderProps {
   children: React.ReactNode;
   draggable?: boolean;
   margin?: string;
+  trustScore?: number;
+  numberOfReviews?: number;
 }
 
 export const Slider = ({
   draggable = false,
   margin = "",
+  trustScore = undefined,
+  numberOfReviews = undefined,
   children,
 }: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -78,6 +83,17 @@ export const Slider = ({
           </div>
         ))}
       </div>
+
+      {trustScore !== undefined && (
+        <div className="ds:px-5 ds:md:px-36">
+          <div className="ds:md:pt-16 ds:max-w-[1152px] ds:mx-auto">
+            <TrustpilotHorizontal
+              trustScore={trustScore}
+              numberOfReviews={numberOfReviews}
+            />
+          </div>
+        </div>
+      )}
 
       {isScrollable && (
         <div className="ds:md:pt-17 ds:px-5 ds:md:px-36">

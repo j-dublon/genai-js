@@ -22,7 +22,7 @@ describe("JoinTheFlock", () => {
   it("renders the PostcodeChecker with correct placeholder and button text", () => {
     render(<JoinTheFlock />);
     expect(
-      screen.getByPlaceholderText("Pop in your address"),
+      screen.getByPlaceholderText("Pop in your postcode"),
     ).toBeInTheDocument();
     expect(screen.getByRole("button")).toHaveTextContent("Let's go");
   });

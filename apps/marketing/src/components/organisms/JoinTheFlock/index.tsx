@@ -71,7 +71,7 @@ export const JoinTheFlock = ({
             </p>
             <div className="pb-10 lg:pr-20 ">
               <PostcodeChecker
-                placeholderText="Pop in your address"
+                placeholderText="Pop in your postcode"
                 inputBoxButtonText="Let's go"
                 postcode={postcode}
                 setPostcode={setPostcode}
@@ -87,7 +87,7 @@ export const JoinTheFlock = ({
               )}
             </div>
           </div>
-          <div className="flex-2 flex flex-col gap-2 font-bold min-w-0 pb-12 md:pb-0">
+          <div className="flex-2 flex flex-col gap-2 font-medium min-w-0 pb-12 md:pb-0">
             <TextWithTickList
               TextWithTickList={TextItemList.TextWithTickList}
             />

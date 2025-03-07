@@ -25,13 +25,22 @@ vi.mock("@react-component-library/ui", () => ({
     "aria-roledescription"?: string;
     draggable?: boolean;
     margin?: string;
+    trustScore?: number;
+    numberOfReviews?: number;
   }) => (
     <div data-testid="slider" {...props}>
       {children}
+      <div data-testid="trustpilot-horizontal">
+        <img alt="Trustpilot logo" className="w-20 sm:w-[105px] h-auto" />
+        <div className="w-26 h-7 sm:w-[105px] sm:h-[26px] flex items-center justify-center overflow-hidden">
+          <div data-testid="trustpilot-stars" />
+        </div>
+        <span>
+          Based on <strong>{mockProps.reviewCount.toLocaleString()}</strong>{" "}
+          reviews
+        </span>
+      </div>
     </div>
-  ),
-  TrustpilotStars: ({ trustScore }: { trustScore: number }) => (
-    <div data-testid="trustpilot-stars">Rating: {trustScore}</div>
   ),
 }));
 
@@ -107,6 +116,26 @@ describe("TrustPilotSlider", () => {
     expect(slider).toHaveAttribute("aria-roledescription", "carousel");
   });
 
+  it("renders review slides with correct accessibility attributes", () => {
+    render(<TrustPilotSlider {...mockProps} isLoading={false} />);
+
+    mockProps.reviews.forEach((_, index) => {
+      const slide = screen.getByLabelText(
+        `Review ${index + 1} of ${mockProps.reviews.length}`,
+      );
+      expect(slide).toHaveAttribute("aria-roledescription", "slide");
+    });
+  });
+
+  it("renders loading slides with correct accessibility attributes", () => {
+    render(<TrustPilotSlider {...mockProps} isLoading={true} />);
+
+    Array.from({ length: 5 }).forEach((_, index) => {
+      const slide = screen.getByLabelText(`Loading review ${index + 1} of 5`);
+      expect(slide).toHaveAttribute("aria-roledescription", "slide");
+    });
+  });
+
   it("renders the TrustPilot logo and score", () => {
     render(<TrustPilotSlider {...mockProps} isLoading={false} />);
 
@@ -127,26 +156,6 @@ describe("TrustPilotSlider", () => {
     expect(reviewsText).toHaveTextContent(
       `Based on ${mockProps.reviewCount.toLocaleString()} reviews`,
     );
-  });
-
-  it("renders review slides with correct accessibility attributes", () => {
-    render(<TrustPilotSlider {...mockProps} isLoading={false} />);
-
-    mockProps.reviews.forEach((_, index) => {
-      const slide = screen.getByLabelText(
-        `Review ${index + 1} of ${mockProps.reviews.length}`,
-      );
-      expect(slide).toHaveAttribute("aria-roledescription", "slide");
-    });
-  });
-
-  it("renders loading slides with correct accessibility attributes", () => {
-    render(<TrustPilotSlider {...mockProps} isLoading={true} />);
-
-    Array.from({ length: 5 }).forEach((_, index) => {
-      const slide = screen.getByLabelText(`Loading review ${index + 1} of 5`);
-      expect(slide).toHaveAttribute("aria-roledescription", "slide");
-    });
   });
 
   it("handles mobile TrustPilot logo sizing", () => {

@@ -38,7 +38,7 @@ describe("HeroBanner", () => {
   });
 
   it("renders PostcodeChecker input", async () => {
-    const input = await screen.findByPlaceholderText("Pop in your address");
+    const input = await screen.findByPlaceholderText("Pop in your postcode");
     expect(input).toBeInTheDocument();
   });
 
