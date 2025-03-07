@@ -6,6 +6,7 @@ import {
   PrefetchCrossZoneLinks,
   PrefetchCrossZoneLinksProvider,
 } from "@vercel/microfrontends/next/client";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import Script from "next/script";
 
@@ -137,6 +138,7 @@ export default function RootLayout({
           </CookieNoticeProvider>
         </PrefetchCrossZoneLinksProvider>
         <PrefetchCrossZoneLinks />
+        <SpeedInsights />
       </body>
     </html>
   );

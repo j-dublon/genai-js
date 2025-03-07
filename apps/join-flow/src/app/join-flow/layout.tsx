@@ -4,6 +4,7 @@ import {
   PrefetchCrossZoneLinks,
   PrefetchCrossZoneLinksProvider,
 } from "@vercel/microfrontends/next/client";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({
   children,
@@ -26,6 +27,7 @@ export default function RootLayout({
           {children}
         </PrefetchCrossZoneLinksProvider>
         <PrefetchCrossZoneLinks />
+        <SpeedInsights />
       </body>
     </html>
   );
