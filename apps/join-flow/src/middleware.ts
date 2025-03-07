@@ -1,10 +1,13 @@
-import type { NextRequest } from "next/server";
 import { runMicrofrontendsMiddleware } from "@vercel/microfrontends/next/middleware";
+import type { NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
   const response = await runMicrofrontendsMiddleware({
     request: request,
-    fromApp: "marketing",
+    fromApp: "join-flow",
+    flagValues: {
+      homepage: async () => false,
+    },
   });
   if (response) {
     return response;
