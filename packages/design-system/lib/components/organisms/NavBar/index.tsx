@@ -79,7 +79,7 @@ export const NavBar = ({
             ${
               toggled
                 ? "ds:bg-core-white"
-                : "ds:bg-core-yellow ds:border-b ds:border-core-black/10"
+                : "ds:bg-core-yellow ds:border-b ds:border-[#1f1f1f1a]"
             }
           `}
         >
