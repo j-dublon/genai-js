@@ -19,8 +19,8 @@ export const ChevronVerticalWithCircle = ({
       viewBox="0 0 64 65"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className={`transition-transform duration-300 ${
-        DropdownOpen ? "rotate-180" : ""
+      className={`ds:transition-transform ds:duration-300 ${
+        DropdownOpen ? "ds:rotate-180" : ""
       }`}
       aria-label="arrow with circle icon"
     >

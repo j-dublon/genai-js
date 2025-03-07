@@ -24,7 +24,7 @@ const Google = () => (
 
 export const AccountAppButton = () => {
   return (
-    <div className="flex flex-wrap gap-4 justify-center sm:justify-start">
+    <div className="ds:flex ds:flex-wrap ds:gap-4 ds:justify-center ds:sm:justify-start">
       <Apple />
       <Google />
     </div>

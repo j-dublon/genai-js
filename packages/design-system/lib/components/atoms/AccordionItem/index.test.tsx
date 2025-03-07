@@ -51,14 +51,14 @@ describe("Accordion Component", () => {
     const content = screen.getByTestId("collapser-content");
 
     // Instead of checking visibility, check if it has the "hidden" class or attribute
-    expect(content).toHaveClass("hidden");
+    expect(content).toHaveClass("ds:hidden");
 
     const header = screen.getByText("testing header");
     fireEvent.click(header);
 
     // Wait for transition effect to apply changes
     await waitFor(() => {
-      expect(content).not.toHaveClass("hidden");
+      expect(content).not.toHaveClass("ds:hidden");
       expect(content).toBeVisible();
     });
   });

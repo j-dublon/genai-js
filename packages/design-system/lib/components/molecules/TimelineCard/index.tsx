@@ -15,17 +15,19 @@ export const TimelineCard = ({
   subHeading,
 }: TimelineCardProps) => {
   return (
-    <div className="p-5 bg-ui-grey-200 rounded-lg md:w-[30%]">
-      <div className="md:pb-10 pb-5">
+    <div className="ds:p-5 ds:bg-ui-grey-200 ds:rounded-lg ds:md:w-[30%]">
+      <div className="ds:md:pb-10 ds:pb-5">
         <ColorPill
           colorPillText={colorPillText}
           backgroundColor={backgroundColor}
           size="medium"
         />
       </div>
-      <div className="flex flex-col gap-2.5">
-        <h2 className="text-md font-bold">{subtitleText}</h2>
-        <p className="md:text-md text-[16px] font-normal">{subHeading}</p>
+      <div className="ds:flex ds:flex-col ds:gap-2.5">
+        <h2 className="ds:text-md ds:font-bold">{subtitleText}</h2>
+        <p className="ds:md:text-md ds:text-[16px] ds:font-normal">
+          {subHeading}
+        </p>
       </div>
     </div>
   );

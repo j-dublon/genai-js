@@ -18,12 +18,14 @@ interface FaqItemProps {
 export const AccordionItem = ({ question }: FaqItemProps) => {
   const [FAQDropdownOpen, setFAQDropdownOpen] = useState(false);
   return (
-    <div className="bg-core-white rounded-lg">
+    <div className="ds:bg-core-white ds:rounded-lg">
       <Collapser
         toggle={
-          <div className="flex items-center justify-between cursor-pointer px-4 lg:px-8 py-3">
-            <h2 className="font-bold md:text-xl">{question.dropdown_header}</h2>
-            <div className="flex justify-center items-center border-2 rounded-full border-ui-grey-200 w-10 h-10 lg:w-16 lg:h-16">
+          <div className="ds:flex ds:items-center ds:justify-between ds:cursor-pointer ds:px-4 ds:lg:px-8 ds:py-3">
+            <h2 className="ds:font-bold ds:md:text-xl">
+              {question.dropdown_header}
+            </h2>
+            <div className="ds:flex ds:justify-center ds:items-center ds:border-2 ds:rounded-full ds:border-ui-grey-200 ds:w-10 ds:h-10 ds:lg:w-16 ds:lg:h-16">
               <ChevronVerticalWithCircle DropdownOpen={FAQDropdownOpen} />
             </div>
           </div>
@@ -31,10 +33,10 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
         FAQDropdownOpen={FAQDropdownOpen}
         setFAQDropdownOpen={setFAQDropdownOpen}
       >
-        <div className="text-container pt-4">
-          <div className="flex flex-col gap-4 px-4 lg:px-8 py-3">
+        <div className="ds:text-container ds:pt-4">
+          <div className="ds:flex ds:flex-col ds:gap-4 ds:px-4 ds:lg:px-8 ds:py-3">
             {question.dropdown_content.map((content, index) => (
-              <span key={index} className="block lg:text-2xl">
+              <span key={index} className="ds:block ds:lg:text-2xl">
                 {content}
               </span>
             ))}

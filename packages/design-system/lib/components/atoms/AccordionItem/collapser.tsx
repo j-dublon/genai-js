@@ -19,7 +19,7 @@ export const Collapser = ({
     <>
       <button
         onClick={() => setFAQDropdownOpen(!FAQDropdownOpen)}
-        className="bg-transparent border-none cursor-pointer w-full"
+        className="ds:bg-transparent ds:border-none ds:cursor-pointer ds:w-full"
         type="button"
         aria-label={`${FAQDropdownOpen ? "close" : "open"} faq section`}
       >
@@ -27,15 +27,15 @@ export const Collapser = ({
       </button>
       <div
         data-testid="collapser-content"
-        className={`transition-all duration-500 ease-in-out overflow-hidden ${
+        className={`ds:transition-all ds:duration-500 ds:ease-in-out ds:overflow-hidden ${
           FAQDropdownOpen
-            ? "max-h-[1000px] opacity-100 visible"
-            : "max-h-0 opacity-0 hidden"
+            ? "ds:max-h-[1000px] ds:opacity-100 ds:visible"
+            : "ds:max-h-0 ds:opacity-0 ds:hidden"
         }`}
       >
         {close && (
           <div
-            className="cursor-pointer float-right"
+            className="ds:cursor-pointer ds:float-right"
             onClick={() => setFAQDropdownOpen(!FAQDropdownOpen)}
             aria-label="close faq section"
           >

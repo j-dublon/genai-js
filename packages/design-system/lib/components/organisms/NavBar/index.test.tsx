@@ -149,7 +149,9 @@ describe("NavBar", () => {
     const signUpButtons = screen.getAllByText("Sign up");
     expect(signUpButtons.length).toBeGreaterThan(0);
 
-    const desktopNavContainer = document.querySelector(".hidden.md\\:flex");
+    const desktopNavContainer = document.querySelector(
+      ".ds\\:hidden.ds\\:md\\:flex",
+    );
     expect(desktopNavContainer).toBeInTheDocument();
     expect(desktopNavContainer).toContainHTML("Sign up");
   });

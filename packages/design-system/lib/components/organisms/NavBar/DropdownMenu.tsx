@@ -27,13 +27,13 @@ export const DropdownMenu = ({
   );
 
   return (
-    <div className="relative flex items-center" ref={dropdownRef}>
+    <div className="ds:relative ds:flex ds:items-center" ref={dropdownRef}>
       <button
         onClick={(e) => {
           e.stopPropagation();
           setOpenDropdown(isOpen ? null : name);
         }}
-        className="py-2 px-4 rounded-md text-[16px] font-semibold leading-[26px] text-black transition-colors duration-200 flex items-center gap-2 hover:text-gray-600"
+        className="ds:py-2 ds:px-4 ds:rounded-md ds:text-[16px] ds:font-semibold ds:leading-[26px] ds:text-black ds:transition-colors ds:duration-200 ds:flex ds:items-center ds:gap-2 ds:hover:text-gray-600"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -41,17 +41,17 @@ export const DropdownMenu = ({
         <ChevronVertical
           width={14}
           height={26}
-          className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}
+          className={`ds:transition-transform ds:duration-300 ${isOpen ? "ds:rotate-180" : ""}`}
         />
       </button>
 
       {isOpen && (
         <div
-          className="bg-ui-grey-200 block rounded-[12px] p-[16px] 
-          absolute left-1/2 top-full min-w-[180px] max-w-[400px] z-[100] 
-          transform -translate-x-1/2 transition-opacity duration-100 ease-in delay-[10ms]"
+          className="ds:bg-ui-grey-200 ds:block ds:rounded-[12px] ds:p-[16px] 
+          ds:absolute ds:left-1/2 ds:top-full ds:min-w-[180px] ds:max-w-[400px] ds:z-[100] 
+          ds:transform ds:-translate-x-1/2 ds:transition-opacity ds:duration-100 ds:ease-in ds:delay-[10ms]"
         >
-          <div className="flex flex-col text-left whitespace-nowrap font-bold">
+          <div className="ds:flex ds:flex-col ds:text-left ds:whitespace-nowrap ds:font-bold">
             {dropdownLinks.map(({ name: subName, href, external }) =>
               external ? (
                 <a
@@ -59,7 +59,7 @@ export const DropdownMenu = ({
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block py-2 px-4 text-gray-800 hover:bg-gray-100"
+                  className="ds:block ds:py-2 ds:px-4 ds:text-gray-800 ds:hover:bg-gray-100"
                 >
                   {subName}
                 </a>
@@ -67,7 +67,7 @@ export const DropdownMenu = ({
                 <Link
                   key={subName}
                   href={href ?? "#"}
-                  className="block py-2 px-4 text-gray-800 hover:bg-gray-100"
+                  className="ds:block ds:py-2 ds:px-4 ds:text-gray-800 ds:hover:bg-gray-100"
                 >
                   {subName}
                 </Link>

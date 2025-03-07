@@ -24,18 +24,18 @@ export const MobileApp = ({
   };
 
   return (
-    <div className="lg:py-[50px] lg:px-10 p-6 bg-core-white md:rounded-lg w-full md:max-w-[564px]">
-      <h2 className="lg:text-5xl md:text-4xl text-3xl font-semibold">
+    <div className="ds:lg:py-[50px] ds:lg:px-10 ds:p-6 ds:bg-core-white ds:md:rounded-lg ds:w-full ds:md:max-w-[564px]">
+      <h2 className="ds:lg:text-5xl ds:md:text-4xl ds:text-3xl ds:font-semibold">
         {headingText}
       </h2>
 
-      <div className="py-5 flex flex-col md:gap-[16px]">
+      <div className="ds:py-5 ds:flex ds:flex-col ds:md:gap-[16px]">
         {textItems.map((item, index) => (
           <div
             key={`${item.itemText}${index}`}
             className={cx(
-              "cursor-pointer",
-              `${selectedTextIndex === index ? "font-bold" : ""}`,
+              "ds:cursor-pointer",
+              `${selectedTextIndex === index ? "ds:font-bold" : ""}`,
             )}
             onClick={() => handleItemClick(index)}
           >

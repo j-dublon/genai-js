@@ -1,7 +1,7 @@
 export const AppStore = () => {
   return (
     <svg
-      className="w-[120px] h-[40px] md:w-[150px] md:h-[50px]"
+      className="ds:w-[120px] ds:h-[40px] ds:md:w-[150px] ds:md:h-[50px]"
       viewBox="0 0 150 50"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

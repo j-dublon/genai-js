@@ -17,7 +17,7 @@ describe("FeatureText", () => {
     const container = screen.getByRole("region", {
       name: "Feature image display",
     });
-    expect(container).toHaveClass("bg-core-yellow");
+    expect(container).toHaveClass("ds:bg-core-yellow");
   });
 
   it("renders background image", () => {

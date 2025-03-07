@@ -43,6 +43,16 @@ import { ServerComponent } from "@react-component-library/ui/server";
 import "@react-component-library/ui/ui.css";
 ```
 
+When writing tailwind classes, make sure to use the `ds:` prefix:
+
+```jsx
+// Like this
+<div className="ds:w-full ds:block" />
+
+// Not this
+<div className="w-full block" />
+```
+
 ## Available Scripts
 
 - **build**  

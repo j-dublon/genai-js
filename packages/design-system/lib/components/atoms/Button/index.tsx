@@ -56,26 +56,28 @@ export const Button = ({
   const { grey, white, black } = colors;
 
   const sizes = {
-    small: "py-2 px-4 text-xs md:text-sm",
-    medium: "py-3 md:py-5 px-5 md:px-8 text-sm md:text-md",
+    small: "ds:py-2 ds:px-4 ds:text-xs ds:md:text-sm",
+    medium: "ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:text-sm ds:md:text-md",
   };
 
-  const buttonClasses = `
-      relative z-1 inline-flex items-center justify-center font-bold text-nowrap
-      before:content[''] before:absolute before:inset-0 before:bg-inherit before:border-2 before:z-[-1]
-      before:transition-all before:duration-200 before:ease-in-out
-      before:border-${isWhite ? (isOutline ? grey : white) : colors[tint]}
+  const classNames = `
+      ds:relative ds:z-1 ds:inline-flex ds:items-center ds:justify-center ds:font-bold ds:text-nowrap
+      ds:before:content[''] ds:before:absolute ds:before:inset-0 ds:before:bg-inherit ds:before:border-2 ds:before:z-[-1]
+      ds:before:transition-all ds:before:duration-200 ds:before:ease-in-out
+      ds:before:border-${isWhite ? (isOutline ? grey : white) : colors[tint]}
       button-animate
-      ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} 
-      ${sizes[size]} rounded-md
-      ${isOutline ? "bg-transparent" : `bg-${colors[tint]}`} 
-      hover:${isOutline ? "bg-opacity-10" : "bg-gray-700"}       
-      text-${textColor ? colors[textColor] : isOutline || isWhite ? black : isYellow ? black : white}
-      ${fullWidth ? "w-full" : "w-fit"} ${className ?? ""}`;
+      ${disabled ? "ds:cursor-not-allowed ds:opacity-50" : "ds:cursor-pointer"}
+      ${sizes[size]} ds:rounded-md
+      ${isOutline ? "ds:bg-transparent" : `ds:bg-${colors[tint]}`}
+      ds:hover:${isOutline ? "bg-opacity-10" : "bg-gray-700"}
+      ds:text-${textColor ? colors[textColor] : isOutline || isWhite ? black : isYellow ? black : white}
+      ${fullWidth ? "ds:w-full" : "ds:w-fit"} ${className ?? ""}`;
 
   return (
     <>
-      <div className={`relative inline-block ${fullWidth ? "w-full" : ""}`}>
+      <div
+        className={`ds:relative ds:inline-block ${fullWidth ? "ds:w-full" : ""}`}
+      >
         <Component
           ref={ref}
           disabled={isButton ? disabled : undefined}
@@ -83,7 +85,7 @@ export const Button = ({
           onClick={onClick}
           type={isButton ? type : undefined}
           id={id}
-          className={buttonClasses}
+          className={classNames}
           rel={isLink ? rel : undefined}
           target={isLink ? target : undefined}
           {...props}

@@ -4,16 +4,16 @@ import cx from "classnames";
 
 const sizeVariants = {
   small: {
-    container: "px-2 md:px-3 py-1",
-    text: "text-xs md:text-sm",
+    container: "ds:px-2 ds:md:px-3 ds:py-1",
+    text: "ds:text-xs ds:md:text-sm",
   },
   medium: {
-    container: "px-3 md:px-4 py-1",
-    text: "text-md md:text-[26px]",
+    container: "ds:px-3 ds:md:px-4 ds:py-1",
+    text: "ds:text-md ds:md:text-[26px]",
   },
   large: {
-    container: "px-5 py-1 md:py-2",
-    text: "md:text-5xl text-2xl",
+    container: "ds:px-5 ds:py-1 ds:md:py-2",
+    text: "ds:md:text-5xl ds:text-2xl",
   },
 };
 
@@ -33,14 +33,14 @@ export const ColorPill = ({
   return (
     <div
       className={cx(
-        "flex items-center rounded-xl w-fit",
+        "ds:flex ds:items-center ds:rounded-xl ds:w-fit",
         sizeVariants[size].container,
         `${bgColorVariants[backgroundColor]}`,
       )}
       aria-label={`Color pill with the text ${colorPillText}`}
     >
       <h1
-        className={cx("font-semibold", sizeVariants[size].text)}
+        className={cx("ds:font-semibold", sizeVariants[size].text)}
         aria-label={ariaLabel ? ariaLabel : `Color pill text ${colorPillText}`}
       >
         {colorPillText}

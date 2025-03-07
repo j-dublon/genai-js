@@ -2,8 +2,5 @@ import sharedConfig from "../../packages/tailwind-config/tailwind.config";
 
 export default {
   ...sharedConfig,
-  theme: {
-    extend: {},
-  },
-  plugins: [],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
 };

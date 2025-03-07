@@ -53,17 +53,17 @@ export const NavBar = ({
   return (
     <>
       <header
-        className="w-full top-0 z-50 transition-all duration-300 bg-core-white"
+        className="ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ds:bg-core-white"
         role="banner"
       >
         {!toggled && (
           <CTA>
-            <p className="text-xs leading-[160%] text-core-black">
-              <span className="font-semibold">Click. Switch. Done.</span> We'll
-              handle the whole broadband move for you
+            <p className="ds:text-xs ds:leading-[160%] ds:text-core-black">
+              <span className="ds:font-semibold">Click. Switch. Done.</span>{" "}
+              We'll handle the whole broadband move for you
               <Link
                 href="/switching"
-                className="text-core-purple font-normal rounded ml-1"
+                className="ds:text-core-purple ds:font-normal ds:rounded ds:ml-1"
               >
                 in just one click.
               </Link>
@@ -74,25 +74,25 @@ export const NavBar = ({
         <nav
           ref={drawerRef}
           aria-label="Main navigation"
-          className={`flex justify-between items-center h-[80px] py-[15px] px-[24px] w-full relative z-50
+          className={`ds:flex ds:justify-between ds:items-center ds:h-[80px] ds:py-[15px] ds:px-[24px] ds:w-full ds:relative ds:z-50
             ${
               toggled
-                ? "bg-core-white"
-                : "bg-core-yellow border-b border-core-black/10"
+                ? "ds:bg-core-white"
+                : "ds:bg-core-yellow ds:border-b ds:border-core-black/10"
             }
           `}
         >
           {logo && (
             <Link href="/" passHref>
-              <div className="cursor-pointer">{logo}</div>
+              <div className="ds:cursor-pointer">{logo}</div>
             </Link>
           )}
           <div
-            className={`hidden md:flex items-center justify-end gap-4 ${
-              toggled ? "bg-core-white" : "bg-core-yellow"
+            className={`ds:hidden ds:md:flex ds:items-center ds:justify-end ds:gap-4 ${
+              toggled ? "ds:bg-core-white" : "ds:bg-core-yellow"
             }`}
           >
-            <div className="flex justify-end items-center">
+            <div className="ds:flex ds:justify-end ds:items-center">
               {links
                 .filter(({ name }) => name !== "Sign up")
                 .map(({ name, href, dropdownLinks }) =>
@@ -107,7 +107,7 @@ export const NavBar = ({
                     />
                   ) : (
                     <Link key={name} href={href ?? "#"}>
-                      <span className="py-2 px-4 rounded-md text-sm font-semibold leading-[26px] text-black transition-colors duration-200 hover:text-gray-600 cursor-pointer">
+                      <span className="ds:py-2 ds:px-4 ds:rounded-md ds:text-sm ds:font-semibold ds:leading-[26px] ds:text-black ds:transition-colors ds:duration-200 ds:hover:text-gray-600 ds:cursor-pointer">
                         {name}
                       </span>
                     </Link>
@@ -119,12 +119,12 @@ export const NavBar = ({
             </Button>
           </div>
 
-          <div className="flex items-center gap-4 md:hidden">
+          <div className="ds:flex ds:items-center ds:gap-4 ds:md:hidden">
             <Button variant="solid" size="small" href="/join/find-your-address">
               {signupText}
             </Button>
             <HamburgerButton
-              className="md:hidden"
+              className="ds:md:hidden"
               active={toggled}
               setActive={setToggled}
               aria-expanded={toggled}
@@ -138,13 +138,13 @@ export const NavBar = ({
         <aside
           ref={mobileNavRef}
           aria-label="Mobile navigation menu"
-          className="fixed top-[80px] left-0 right-0 bottom-0 z-40 flex flex-col bg-core-white h-[calc(100vh-80px)] overflow-y-auto"
+          className="ds:fixed ds:top-[80px] ds:left-0 ds:right-0 ds:bottom-0 ds:z-40 ds:flex ds:flex-col ds:bg-core-white ds:h-[calc(100vh-80px)] ds:overflow-y-auto"
         >
-          <div className="flex flex-col flex-grow p-4 space-y-0 bg-core-white">
+          <div className="ds:flex ds:flex-col ds:flex-grow ds:p-4 ds:space-y-0 ds:bg-core-white">
             {links.map((link, index) => {
               const isLast = index === links.length - 1;
               const containerClass = isLast
-                ? "border-b border-b-outline-ui-grey-300"
+                ? "ds:border-b ds:border-b-outline-ui-grey-300"
                 : "";
 
               return (
@@ -159,10 +159,10 @@ export const NavBar = ({
                             prev === link.name ? null : link.name,
                           );
                         }}
-                        className={`md:hidden hover:underline flex items-center py-4 justify-between min-h-[3.5rem] w-full text-[26px] font-bold border-t border-t-outline-ui-grey-300 cursor-pointer transition-colors duration-200 group ${
+                        className={`ds:md:hidden ds:hover:underline ds:flex ds:items-center ds:py-4 ds:justify-between ds:min-h-[3.5rem] ds:w-full ds:text-[26px] ds:font-bold ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer ds:transition-colors ds:duration-200 ds:group ${
                           openDropdownMobile === link.name
-                            ? "underline"
-                            : "text-core-black"
+                            ? "ds:underline"
+                            : "ds:text-core-black"
                         }`}
                         aria-expanded={openDropdownMobile === link.name}
                         aria-controls={`dropdown-${link.name.toLowerCase().replace(/\s+/g, "-")}`}
@@ -188,11 +188,11 @@ export const NavBar = ({
                       {openDropdownMobile === link.name && (
                         <div
                           id={`dropdown-${link.name.toLowerCase().replace(/\s+/g, "-")}`}
-                          className="space-y-2 mb-4 md:hidden"
+                          className="ds:space-y-2 ds:mb-4 ds:md:hidden"
                         >
                           {link.dropdownLinks.map((subLink) => (
                             <Link key={subLink.name} href={subLink.href ?? "#"}>
-                              <span className="block text-[20px] font-bold text-core-black cursor-pointer hover:underline py-2 px-0">
+                              <span className="ds:block ds:text-[20px] ds:font-bold ds:text-core-black ds:cursor-pointer ds:hover:underline ds:py-2 ds:px-0">
                                 {subLink.name}
                               </span>
                             </Link>
@@ -201,8 +201,8 @@ export const NavBar = ({
                       )}
                     </>
                   ) : (
-                    <Link href={link.href ?? "#"} passHref className="block">
-                      <span className="flex items-center hover:underline justify-between min-h-[3.5rem] py-4 w-full text-[26px] font-bold text-core-black bg-core-white border-t border-t-outline-ui-grey-300 cursor-pointer">
+                    <Link href={link.href ?? "#"} passHref className="ds:block">
+                      <span className="ds:flex ds:items-center ds:hover:underline ds:justify-between ds:min-h-[3.5rem] ds:py-4 ds:w-full ds:text-[26px] ds:font-bold ds:text-core-black ds:bg-core-white ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer">
                         {link.name}
                       </span>
                     </Link>

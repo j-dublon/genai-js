@@ -53,7 +53,7 @@ describe("Guides", () => {
       name: "Scrollable content",
     });
     expect(slider).toHaveAttribute("aria-roledescription", "slider");
-    expect(slider).toHaveClass("cursor-grab");
+    expect(slider).toHaveClass("ds:cursor-grab");
   });
 
   it("renders correct number of guide cards with proper slide labeling", () => {

@@ -26,31 +26,34 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
   return (
     <>
       {titleText && (
-        <h2 className="w-full font-bold mb-5 md:text-5xl text-[26px]">
+        <h2 className="ds:w-full ds:font-bold ds:mb-5 ds:md:text-5xl ds:text-[26px]">
           {titleText}
         </h2>
       )}
-      <div className="flex rounded-lg bg-core-white border-2 border-outline-ui-grey-300 p-2 pl-1 sm:pl-3 items-center justify-between h-[74px] transition-colors duration-400 w-full z-1">
-        <form className="flex flex-row w-full" onSubmit={onClickFunction}>
+      <div className="ds:flex ds:rounded-lg ds:bg-core-white ds:border-2 ds:border-outline-ui-grey-300 ds:p-2 ds:pl-1 ds:sm:pl-3 ds:items-center ds:justify-between ds:h-[74px] ds:transition-colors ds:duration-400 ds:w-full ds:z-1">
+        <form
+          className="ds:flex ds:flex-row ds:w-full"
+          onSubmit={onClickFunction}
+        >
           <input
             aria-label="enter your postcode or address"
             placeholder={placeholderText}
             name="postcode-checker"
-            className="sm:text-md flex-1 text-base px-1 mr-1 min-w-[160px] md:min-w-[205px]"
+            className="ds:sm:text-md ds:flex-1 ds:text-base ds:px-1 ds:mr-1 ds:min-w-[160px] ds:md:min-w-[205px]"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
           />
-          <div className="shrink">
+          <div className="ds:shrink">
             {isChevron ? (
               <>
-                <div className="block sm:hidden">
+                <div className="ds:block ds:sm:hidden">
                   <ChevronRightWithCircle />
                 </div>
-                <div className="hidden sm:flex w-full">
+                <div className="ds:hidden ds:sm:flex ds:w-full">
                   <Button
                     type="submit"
                     variant="solid"
-                    className="h-[60px] md:!px-4 lg:!px-8"
+                    className="ds:h-[60px] ds:md:!px-4 ds:lg:!px-8"
                     fullWidth
                   >
                     {inputBoxButtonText}
@@ -61,7 +64,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
               <Button
                 type="submit"
                 variant="solid"
-                className="h-[60px] sm:text-md md:!px-4 lg:!px-8"
+                className="ds:h-[60px] ds:sm:text-md ds:md:!px-4 ds:lg:!px-8"
               >
                 {inputBoxButtonText}
               </Button>

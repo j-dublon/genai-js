@@ -19,7 +19,7 @@ describe("Button Component", () => {
     const button = screen.getByRole("button", { name: /click me/i });
     expect(button).toBeInTheDocument();
     expect(button).toBeDisabled();
-    expect(button).toHaveClass("cursor-not-allowed opacity-50");
+    expect(button).toHaveClass("ds:cursor-not-allowed ds:opacity-50");
   });
 
   it("supports other button attributes", () => {
@@ -50,10 +50,10 @@ describe("Button Component", () => {
   });
 
   it.each([
-    ["solid", "black", "bg-core-black text-core-white"],
-    ["solid", "white", "bg-core-white text-core-black"],
-    ["outline", "black", "before:border-core-black text-core-black"],
-    ["outline", "white", "before:border-ui-grey-300 text-core-black"],
+    ["solid", "black", "ds:bg-core-black ds:text-core-white"],
+    ["solid", "white", "ds:bg-core-white ds:text-core-black"],
+    ["outline", "black", "ds:before:border-core-black ds:text-core-black"],
+    ["outline", "white", "ds:before:border-ui-grey-300 ds:text-core-black"],
   ])(
     "applies correct class names for %s variant with %s tint",
     (variant, tint, expectedClass) => {
@@ -69,8 +69,11 @@ describe("Button Component", () => {
   );
 
   it.each([
-    ["small", "py-2 px-4 text-xs md:text-sm"],
-    ["medium", "py-3 md:py-5 px-5 md:px-8 text-sm md:text-md"],
+    ["small", "ds:py-2 ds:px-4 ds:text-xs ds:md:text-sm"],
+    [
+      "medium",
+      "ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:text-sm ds:md:text-md",
+    ],
   ])(
     "applies padding and font size classes for %s size",
     (size, expectedClass) => {
@@ -85,7 +88,7 @@ describe("Button Component", () => {
     render(<Button>Click Me</Button>);
 
     const button = screen.getByRole("button", { name: /click me/i });
-    expect(button).toHaveClass("button-animate hover:bg-opacity-10");
+    expect(button).toHaveClass("button-animate ds:hover:bg-opacity-10");
   });
 
   it("defaults to black outline medium button", () => {
@@ -93,7 +96,7 @@ describe("Button Component", () => {
 
     const button = screen.getByRole("button", { name: /click me/i });
     expect(button).toHaveClass(
-      "before:border-core-black text-core-black py-3 md:py-5 px-5 md:px-8 text-sm md:text-md",
+      "ds:before:border-core-black ds:text-core-black ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:text-sm ds:md:text-md",
     );
   });
 
@@ -108,6 +111,6 @@ describe("Button Component", () => {
     render(<Button textColor="blue">Click Me</Button>);
 
     const button = screen.getByRole("button", { name: /click me/i });
-    expect(button).toHaveClass("text-secondary-blue");
+    expect(button).toHaveClass("ds:text-secondary-blue");
   });
 });

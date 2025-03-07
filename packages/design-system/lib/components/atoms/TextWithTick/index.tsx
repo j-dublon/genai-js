@@ -21,15 +21,15 @@ export const TextWithTick = ({
   return (
     <div
       className={cx(
-        "flex items-center gap-2.5 rounded-full",
-        !noPadding && "px-6 py-3",
-        `${broadbandOffer ? "bg-offer-gradient" : bgColorVariants[backgroundColor]}`,
+        "ds:flex ds:items-center ds:gap-2.5 ds:rounded-full",
+        !noPadding && "ds:px-6 ds:py-3",
+        `${broadbandOffer ? "ds:bg-offer-gradient" : bgColorVariants[backgroundColor]}`,
       )}
       aria-label={`Text with tick with the statement ${textInput}`}
     >
       <span>{broadbandOffer ? <OfferIcon /> : <Tick />}</span>
 
-      <p className="md:text-md text-[16px]">{textInput}</p>
+      <p className="ds:md:text-md ds:text-[16px]">{textInput}</p>
     </div>
   );
 };

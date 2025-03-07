@@ -35,8 +35,8 @@ export const InfoCard = ({
     <div
       className={`${
         additionalText || featureImageProps
-          ? "md:max-w-[1152px] md:min-w-[564px] min-w-0"
-          : "md:flex md:flex-col md:w-1/2"
+          ? "ds:md:max-w-[1152px] ds:md:min-w-[564px] ds:min-w-0"
+          : "ds:md:flex ds:md:flex-col ds:md:w-1/2"
       }`}
     >
       {featureImageProps && <FeatureImage {...featureImageProps} />}
@@ -44,23 +44,26 @@ export const InfoCard = ({
       <div
         className={cx(
           {
-            "md:px-10 px-5 md:py-15 py-6": additionalText,
-            "p-6": !additionalText,
-            "rounded-b-lg": featureImageProps,
-            "rounded-lg": !featureImageProps,
-            "flex md:flex-row flex-col md:gap-6 gap-5": additionalText,
+            "ds:md:px-10 ds:px-5 ds:md:py-15 ds:py-6": additionalText,
+            "ds:p-6": !additionalText,
+            "ds:rounded-b-lg": featureImageProps,
+            "ds:rounded-lg": !featureImageProps,
+            "ds:flex ds:md:flex-row ds:flex-col ds:md:gap-6 ds:gap-5":
+              additionalText,
           },
           bgColorVariants[infoCardBackgroundColor],
-          `md:w-${additionalText ? "" : "fit"} flex-1`,
+          `ds:md:w-${additionalText ? "" : "fit"} ds:flex-1`,
         )}
       >
         {titleText && subHeading ? (
           <div
-            className={`flex flex-col md:gap-10 gap-4 ${additionalText && "md:w-[50%]"}`}
+            className={`ds:flex ds:flex-col ds:md:gap-10 ds:gap-4 ${additionalText && "ds:md:w-[50%]"}`}
           >
-            <h1 className="font-bold md:text-5xl text-4xl">{titleText}</h1>
-            <div className="flex flex-col gap-3">
-              <div className="pb-2 w-fit">
+            <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl">
+              {titleText}
+            </h1>
+            <div className="ds:flex ds:flex-col ds:gap-3">
+              <div className="ds:pb-2 ds:w-fit">
                 <ColorPill
                   colorPillText={colorPillText}
                   backgroundColor={colorPillBackgroundColor}
@@ -71,8 +74,8 @@ export const InfoCard = ({
                 <h2
                   className={
                     titleText
-                      ? "md:text-[26px] text-md font-semibold"
-                      : "md:text-5xl text-4xl font-semibold"
+                      ? "ds:md:text-[26px] ds:text-md ds:font-semibold"
+                      : "ds:md:text-5xl ds:text-4xl ds:font-semibold"
                   }
                 >
                   {subHeading}
@@ -81,13 +84,13 @@ export const InfoCard = ({
             </div>
           </div>
         ) : (
-          <div {...(additionalText ? { className: "md:w-[50%]" } : {})}>
+          <div {...(additionalText ? { className: "ds:md:w-[50%]" } : {})}>
             {titleText && (
-              <h1 className="font-bold md:text-5xl text-4xl md:pb-7 pb-4 w-3/4">
+              <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl ds:md:pb-7 ds:pb-4 ds:w-3/4">
                 {titleText}
               </h1>
             )}
-            <div className="pb-5 w-fit">
+            <div className="ds:pb-5 ds:w-fit">
               <ColorPill
                 colorPillText={colorPillText}
                 backgroundColor={colorPillBackgroundColor}
@@ -96,11 +99,11 @@ export const InfoCard = ({
             </div>
 
             {listItems && (
-              <ul className="list-disc pl-5">
+              <ul className="ds:list-disc ds:pl-5">
                 {listItems.map((item, index) => (
                   <li
                     key={`${item}${index}`}
-                    className="md:font-medium font-semibold md:text-md text-[16px] mb-2"
+                    className="ds:md:font-medium ds:font-semibold ds:md:text-md ds:text-[16px] ds:mb-2"
                   >
                     {item}
                   </li>
@@ -113,8 +116,8 @@ export const InfoCard = ({
                 <p
                   className={
                     titleText
-                      ? "md:text-[26px] text-md md:font-light font-semibold"
-                      : "md:text-5xl text-4xl font-semibold"
+                      ? "ds:md:text-[26px] ds:text-md ds:md:font-light ds:font-semibold"
+                      : "ds:md:text-5xl ds:text-4xl ds:font-semibold"
                   }
                 >
                   {subHeading}
@@ -125,8 +128,8 @@ export const InfoCard = ({
         )}
 
         {additionalText && (
-          <div className="md:w-[55%]">
-            <p className="pb-9 md:text-[20px] text-[16px] font-normal whitespace-pre-line">
+          <div className="ds:md:w-[55%]">
+            <p className="ds:pb-9 ds:md:text-[20px] ds:text-[16px] ds:font-normal ds:whitespace-pre-line">
               {additionalText}
             </p>
             {buttonText && (

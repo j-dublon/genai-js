@@ -22,17 +22,17 @@ export const ImageMarquee = ({ images }: ImageMarqueeProps) => {
       }}
       initial={{ translateX: 0 }}
       animate={{ translateX: "-50%" }}
-      className="flex gap-[30px] will-change-transform"
+      className="ds:flex ds:gap-[30px] ds:will-change-transform"
     >
       {images.map((image: ImageProps, index: number) => (
-        <div key={`${image.altText}${index}`} className="flex">
+        <div key={`${image.altText}${index}`} className="ds:flex">
           <img
             alt={image.altText}
             loading="lazy"
             width={image.width}
             height={image.height}
             src={image.imgSrc}
-            className="object-scale-down md:max-w-none max-w-[40vw]"
+            className="ds:object-scale-down ds:md:max-w-none ds:max-w-[40vw]"
           />
         </div>
       ))}

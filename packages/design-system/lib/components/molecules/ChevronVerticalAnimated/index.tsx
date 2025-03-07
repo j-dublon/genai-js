@@ -28,10 +28,10 @@ export const ChevronVerticalAnimated = ({
       tabIndex={0}
       onClick={(e) => onClick?.(e)}
       onKeyDown={handleKeyDown}
-      className={`relative flex items-center justify-center w-9 h-9 rounded-full border-2 border-ui-grey-200 
-        transition-colors duration-300
-        ${isOpen ? "bg-core-black text-core-white" : "bg-core-white text-gray-900"}
-        hover:bg-ui-grey-200 cursor-pointer`}
+      className={`ds:relative ds:flex ds:items-center ds:justify-center ds:w-9 ds:h-9 ds:rounded-full ds:border-2 ds:border-ui-grey-200 
+        ds:transition-colors ds:duration-300
+        ${isOpen ? "ds:bg-core-black ds:text-core-white" : "ds:bg-core-white ds:text-gray-900"}
+        ds:hover:bg-ui-grey-200 ds:cursor-pointer`}
       aria-hidden="true"
       aria-expanded={isOpen}
       aria-label={ariaLabel}
@@ -39,14 +39,14 @@ export const ChevronVerticalAnimated = ({
       id={buttonId}
     >
       <span
-        className={`inline-block w-4 h-4 transition-transform duration-500 ${
-          isOpen ? "rotate-180" : ""
+        className={`ds:inline-block ds:w-4 ds:h-4 ds:transition-transform ds:duration-500 ${
+          isOpen ? "ds:rotate-180" : ""
         }`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 12 12"
-          className="w-full h-full"
+          className="ds:w-full ds:h-full"
         >
           <path
             d="M12,3.64l-6,6-6-6L1.28,2.36,6,7.09l4.73-4.73Z"

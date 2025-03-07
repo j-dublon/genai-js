@@ -19,13 +19,13 @@ export const CompanyLogoStrip = ({
   return (
     <div
       className={cx(
-        "relative overflow-x-hidden md:py-5 md:px-10 w-full",
+        "ds:relative ds:overflow-x-hidden ds:md:py-5 ds:md:px-10 ds:w-full",
         backgroundColor,
       )}
     >
-      <div className="hidden md:flex justify-around">
+      <div className="ds:hidden ds:md:flex ds:justify-around">
         {logos.map((logo: CompanyLogoProps, index: number) => (
-          <div key={index} className="m-4 flex">
+          <div key={index} className="ds:m-4 ds:flex">
             <img
               alt={logo.altText}
               loading="lazy"
@@ -36,9 +36,9 @@ export const CompanyLogoStrip = ({
           </div>
         ))}
       </div>
-      <div className="animate-marquee whitespace-nowrap flex justify-around md:hidden">
+      <div className="ds:animate-marquee ds:whitespace-nowrap ds:flex ds:justify-around ds:md:hidden">
         {logos.map((logo: CompanyLogoProps, index: number) => (
-          <div key={index} className="m-4 flex">
+          <div key={index} className="ds:m-4 ds:flex">
             <img
               alt={logo.altText}
               loading="lazy"
@@ -49,9 +49,9 @@ export const CompanyLogoStrip = ({
           </div>
         ))}
       </div>
-      <div className="md:hidden absolute top-0 animate-marquee2 whitespace-nowrap flex justify-around">
+      <div className="ds:md:hidden ds:absolute ds:top-0 ds:animate-marquee2 ds:whitespace-nowrap ds:flex ds:justify-around">
         {logos.map((logo: CompanyLogoProps, index: number) => (
-          <div key={index} className="m-4 flex">
+          <div key={index} className="ds:m-4 ds:flex">
             <img
               alt={logo.altText}
               loading="lazy"

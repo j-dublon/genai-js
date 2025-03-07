@@ -21,15 +21,17 @@ export const Footer = ({
   footerDisclaimerText,
 }: FooterProps) => {
   return (
-    <footer className="bg-core-yellow flex md:justify-center md:items-center px-10 py-10 md:pt-14 lg:py-20 lg:px-36  md:py-7">
-      <div className="flex flex-col md:flex-row md:justify-between w-full md:max-w-[1152px]">
-        <div className="flex flex-col md:flex-auto md:justify-between md:w-1/2">
-          <div className="md:max-w-[313px]">
-            <h2 className="font-bold text-4xl md:text-5xl">{titleText}</h2>
+    <footer className="ds:bg-core-yellow ds:flex ds:md:justify-center ds:md:items-center ds:px-10 ds:py-10 ds:md:pt-14 ds:lg:py-20 ds:lg:px-36 ds:md:py-7">
+      <div className="ds:flex ds:flex-col ds:md:flex-row ds:md:justify-between ds:w-full ds:md:max-w-[1152px]">
+        <div className="ds:flex ds:flex-col ds:md:flex-auto ds:md:justify-between ds:md:w-1/2">
+          <div className="ds:md:max-w-[313px]">
+            <h2 className="ds:font-bold ds:text-4xl ds:md:text-5xl">
+              {titleText}
+            </h2>
           </div>
-          <div className="flex items-end space-x-12 pt-10 md:pb-0 md:pt-5 pb-10">
+          <div className="ds:flex ds:items-end ds:space-x-12 ds:pt-10 ds:md:pb-0 ds:md:pt-5 ds:pb-10">
             {trustScore !== undefined && (
-              <div className="hidden md:block">
+              <div className="ds:hidden ds:md:block">
                 <TrustpilotVertical
                   width={100}
                   height={36}
@@ -37,30 +39,30 @@ export const Footer = ({
                 />
               </div>
             )}
-            <div className="flex space-x-8">
+            <div className="ds:flex ds:space-x-8">
               <a
-                className="flex items-end"
+                className="ds:flex ds:items-end"
                 href="https://twitter.com/cuckoointernet"
                 aria-label="Go to our twitter account"
               >
                 <TwitterIcon />
               </a>
               <a
-                className="flex items-end"
+                className="ds:flex ds:items-end"
                 href="https://www.instagram.com/cuckoobroadband/"
                 aria-label="Go to our Instagram account"
               >
                 <InstagramIcon />
               </a>
               <a
-                className="flex items-end"
+                className="ds:flex ds:items-end"
                 href="https://www.facebook.com/cuckoointernet/"
                 aria-label="Go to our Facebook account"
               >
                 <FacebookIcon aria-label="Facebook" />
               </a>
               <a
-                className="flex items-end"
+                className="ds:flex ds:items-end"
                 href="https://www.linkedin.com/company/19113678/"
                 aria-label="Go to our Linkedin account"
               >
@@ -69,10 +71,10 @@ export const Footer = ({
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-between md:w-1/2 space-y-8">
+        <div className="ds:flex ds:flex-col ds:justify-between ds:md:w-1/2 ds:space-y-8">
           <FooterLinks sections={footerSections} />
           {trustScore && (
-            <div className="visible md:invisible">
+            <div className="ds:visible ds:md:invisible">
               <TrustpilotVertical
                 width={100}
                 height={36}

@@ -7,16 +7,16 @@ interface Props {
 }
 
 export const AccordionSection = ({ heading, questionsArr, subText }: Props) => (
-  <div className="bg-core-pink py-12 px-5 md:px-36 md:py-40">
-    <div className="grid grid-cols-1 md:grid-cols-1 gap-6 md:gap-16 max-w-[1152px] justify-center items-center mx-auto">
-      <div className="flex flex-col gap-4">
-        <h2 className="font-semibold text-[26px] sm:text-3xl lg:text-5xl">
+  <div className="ds:bg-core-pink ds:py-12 ds:px-5 ds:md:px-36 ds:md:py-40">
+    <div className="ds:grid ds:grid-cols-1 ds:md:grid-cols-1 ds:gap-6 ds:md:gap-16 ds:max-w-[1152px] ds:justify-center ds:items-center ds:mx-auto">
+      <div className="ds:flex ds:flex-col ds:gap-4">
+        <h2 className="ds:font-semibold ds:text-[26px] ds:sm:text-3xl ds:lg:text-5xl">
           {heading}
         </h2>
-        {subText && <p className="text-xl md:text-[26px]">{subText}</p>}
+        {subText && <p className="ds:text-xl ds:md:text-[26px]">{subText}</p>}
       </div>
       <div>
-        <div className="flex flex-col gap-4 md:gap-5">
+        <div className="ds:flex ds:flex-col ds:gap-4 ds:md:gap-5">
           {questionsArr.map((question, index) => (
             <AccordionItem key={`faq-question-${index}`} question={question} />
           ))}

@@ -16,19 +16,19 @@ export const TrustpilotHorizontal = ({
     <Link href="https://uk.trustpilot.com/review/cuckoo.co">
       <div
         className={cx(
-          "flex flex-col md:flex-row items-center space-x-1 space-y-2 lg:space-x-4 ",
+          "ds:flex ds:flex-col ds:md:flex-row ds:items-center ds:space-x-1 ds:space-y-2 ds:lg:space-x-4",
         )}
       >
-        <div className="flex flex-row space-x-2">
-          <div className="flex-shrink-0">
+        <div className="ds:flex ds:flex-row ds:space-x-2">
+          <div className="ds:flex-shrink-0">
             <TrustpilotLogo />
           </div>
-          <div className="flex-shrink-0">
+          <div className="ds:flex-shrink-0">
             <TrustpilotStars trustScore={trustScore} />
           </div>
         </div>
         {numberOfReviews && (
-          <div className={cx("whitespace-nowrap", "text-18px")}>
+          <div className={cx("ds:whitespace-nowrap", "ds:text-18px")}>
             Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
           </div>
         )}

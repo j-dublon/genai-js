@@ -10,7 +10,7 @@ export const ScrollerVertical = (props: ScrollerVerticalProps) => {
 
   return (
     <div
-      className="-ml-1 -mr-2 overflow-y-scroll overscroll-y-contain px-1 [&::-webkit-scrollbar-thumb]:w-[4px] [&::-webkit-scrollbar-thumb]:rounded-[50px] [&::-webkit-scrollbar-thumb]:bg-core-black [&::-webkit-scrollbar-track]:w-[4px] [&::-webkit-scrollbar-track]:rounded-[50px] [&::-webkit-scrollbar-track]:bg-ui-grey-300 [&::-webkit-scrollbar]:w-[4px]"
+      className="ds:-ml-1 ds:-mr-2 ds:overflow-y-scroll ds:overscroll-y-contain ds:px-1 ds:[&::-webkit-scrollbar-thumb]:w-[4px] ds:[&::-webkit-scrollbar-thumb]:rounded-[50px] ds[&::-webkit-scrollbar-thumb]:bg-core-black ds:[&::-webkit-scrollbar-track]:w-[4px] ds:[&::-webkit-scrollbar-track]:rounded-[50px] ds:[&::-webkit-scrollbar-track]:bg-ui-grey-300 ds:[&::-webkit-scrollbar]:w-[4px]"
       style={{ maxHeight }}
     >
       {children}

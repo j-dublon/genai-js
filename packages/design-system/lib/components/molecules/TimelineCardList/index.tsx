@@ -27,7 +27,7 @@ export const TimelineCardList = ({
           <TimelineCard {...timelineCardProp} />
 
           {index < timelineCardProps.length - 1 && (
-            <div className="flex items-center md:px-1 py-5  justify-center">
+            <div className="ds:flex ds:items-center ds:md:px-1 ds:py-5 ds:justify-center">
               {isMobile ? <ChevronVertical /> : <ChevronRight />}
             </div>
           )}

@@ -1,5 +1,6 @@
 import "../../fonts.css";
 import "@react-component-library/ui/ui.css";
+import "./globals.css";
 
 import {
   PrefetchCrossZoneLinks,

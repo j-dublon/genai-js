@@ -32,44 +32,46 @@ export const ReviewCard = ({
   return (
     <article
       role="article"
-      className={`flex flex-col bg-core-white w-[290px] md:w-[368px] rounded-sm sm:rounded-md px-4 py-6 ${isExpanded ? "h-fit" : "h-[340px] md:h-[380px]"}`}
+      className={`ds:flex ds:flex-col ds:bg-core-white ds:w-[290px] ds:md:w-[368px] ds:rounded-sm ds:sm:rounded-md ds:px-4 ds:py-6 ${isExpanded ? "ds:h-fit" : "ds:h-[340px] ds:md:h-[380px]"}`}
     >
-      <div className="md:h-16 h-auto leading-10">
+      <div className="ds:md:h-16 ds:h-auto ds:leading-10">
         <a
           href={`https://www.trustpilot.com/reviews/${id}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <h3 className="md:text-2xl text-[26px] font-semibold line-clamp-2">
+          <h3 className="ds:md:text-2xl ds:text-[26px] ds:font-semibold ds:line-clamp-2">
             {title}
           </h3>
         </a>
       </div>
       <span
         role="img"
-        className="sr-only"
+        className="ds:sr-only"
         aria-label={`Rating: ${starRating} out of 5 stars`}
       />
-      <div className="mt-6 md:mt-12" aria-hidden="true">
+      <div className="ds:mt-6 ds:md:mt-12" aria-hidden="true">
         <TrustpilotStars trustScore={starRating} height={28} />
       </div>
-      <blockquote className="mt-6 md:text-md text-sm">
+      <blockquote className="ds:mt-6 ds:md:text-md ds:text-sm">
         <div
           ref={textRef}
-          className={`font-thin transition-all duration-300 ${isExpanded ? "" : "max-h-[90px] line-clamp-3"}`}
+          className={`ds:font-thin ds:transition-all ds:duration-300 ${isExpanded ? "" : "ds:max-h-[90px] ds:line-clamp-3"}`}
         >
           {reviewText}
         </div>
         {isOverflowing && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="font-thin mt-2 text-ui-grey-500 hover:underline cursor-pointer text-sm"
+            className="ds:font-thin ds:mt-2 ds:text-ui-grey-500 ds:hover:underline ds:cursor-pointer ds:text-sm"
             aria-label="Expand review"
           >
             {isExpanded ? "Read less" : "Read more"}
           </button>
         )}
-        <div className="mt-4 md:text-md text-sm font-bold">{author}</div>
+        <div className="ds:mt-4 ds:md:text-md ds:text-sm ds:font-bold">
+          {author}
+        </div>
       </blockquote>
     </article>
   );

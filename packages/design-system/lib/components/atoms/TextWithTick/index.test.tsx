@@ -28,12 +28,12 @@ describe("TextWithTick Component", () => {
     let container = screen.getByLabelText(
       "Text with tick with the statement Test text",
     );
-    expect(container).toHaveClass("px-6", "py-3");
+    expect(container).toHaveClass("ds:px-6", "ds:py-3");
 
     rerender(<TextWithTick {...props} noPadding />);
     container = screen.getByLabelText(
       "Text with tick with the statement Test text",
     );
-    expect(container).not.toHaveClass("px-6", "py-3");
+    expect(container).not.toHaveClass("ds:px-6", "ds:py-3");
   });
 });

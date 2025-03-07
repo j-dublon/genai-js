@@ -22,7 +22,7 @@ export const FeatureImage = ({
   overlayImage,
 }: FeatureImageProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const containerClasses = `${bgColorVariants[backgroundColor]} ${infoCard ? "rounded-t-lg" : "rounded-lg"} flex flex-col overflow-hidden w-full h-auto min-w-0`;
+  const containerClasses = `${bgColorVariants[backgroundColor]} ${infoCard ? "ds:rounded-t-lg" : "ds:rounded-lg"} ds:flex ds:flex-col ds:overflow-hidden ds:w-full ds:h-auto ds:min-w-0`;
 
   return (
     <div
@@ -31,21 +31,21 @@ export const FeatureImage = ({
       aria-label="Feature image display"
       className={containerClasses}
     >
-      <div className="relative w-full h-full">
-        <div className="w-full min-w-0">
+      <div className="ds:relative ds:w-full ds:h-full">
+        <div className="ds:w-full ds:min-w-0">
           <img
             src={backgroundImage.url}
             alt={backgroundImage.alt}
-            className="w-full h-auto min-w-0 transform scale-110 origin-center"
+            className="ds:w-full ds:h-auto ds:min-w-0 ds:transform ds:scale-110 ds:origin-center"
           />
         </div>
         {overlayImage && (
-          <div className="absolute inset-0 z-10 flex justify-center items-center">
-            <div className="w-[40vw] h-[40vw] max-w-[400px] max-h-[400px] lg:max-w-[550px] lg:max-h-[550px]">
+          <div className="ds:absolute ds:inset-0 ds:z-10 ds:flex ds:justify-center ds:items-center">
+            <div className="ds:w-[40vw] ds:h-[40vw] ds:max-w-[400px] ds:max-h-[400px] ds:lg:max-w-[550px] ds:lg:max-h-[550px]">
               <img
                 src={overlayImage.url}
                 alt={overlayImage.alt}
-                className="w-full h-full object-contain"
+                className="ds:w-full ds:h-full ds:object-contain"
               />
             </div>
           </div>

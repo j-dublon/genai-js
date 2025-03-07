@@ -55,7 +55,7 @@ describe("ReviewCard", () => {
 
     render(<ReviewCard {...longReviewProps} />);
     expect(screen.getByText("A".repeat(300))).toBeInTheDocument();
-    expect(screen.getByRole("article")).toHaveClass("flex", "flex-col");
+    expect(screen.getByRole("article")).toHaveClass("ds:flex", "ds:flex-col");
   });
 
   it("renders the review card with the correct link to trustpilow review", () => {

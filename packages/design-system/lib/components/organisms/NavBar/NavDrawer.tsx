@@ -8,13 +8,13 @@ interface NavDrawerProps {
 export const NavDrawer = ({ openState, children }: NavDrawerProps) => {
   return (
     <aside
-      className={`fixed inset-0 bg-white h-screen overflow-auto transition-transform duration-300 ${
+      className={`ds:fixed ds:te ds:inset-0 ds:bg-core-white ds:h-screen ds:overflow-auto ds:transition-transform ds:duration-300 ${
         openState === "Opening"
-          ? "translate-x-0 opacity-100"
-          : "translate-x-full opacity-0"
+          ? "ds:translate-x-0 ds:opacity-100"
+          : "ds:translate-x-full ds:opacity-0"
       }`}
     >
-      <div className="p-6">{children}</div>
+      <div className="ds:p-6">{children}</div>
     </aside>
   );
 };

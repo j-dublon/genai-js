@@ -31,12 +31,15 @@ export const GuideCard = ({
     : {};
 
   return (
-    <div className="flex flex-col sm:w-[466px] w-[292px] group" {...cardProps}>
-      <div className="relative w-full aspect-video">
-        <div className="rounded-md overflow-hidden">
+    <div
+      className="ds:flex ds:flex-col ds:sm:w-[466px] ds:w-[292px] ds:group"
+      {...cardProps}
+    >
+      <div className="ds:relative ds:w-full ds:aspect-video">
+        <div className="ds:rounded-md ds:overflow-hidden">
           <img
             src={image.src}
-            className="object-cover transition-transform duration-500 group-hover:scale-105 h-[173px] sm:h-[262px] w-full"
+            className="ds:object-cover ds:transition-transform ds:duration-500 ds:group-hover:scale-105 ds:h-[173px] ds:sm:h-[262px] ds:w-full"
             draggable={false}
             alt={image.alt}
             loading="lazy"
@@ -44,7 +47,7 @@ export const GuideCard = ({
         </div>
       </div>
       <div
-        className="flex flex-row mt-2 gap-2 pl-0"
+        className="ds:flex ds:flex-row ds:mt-2 ds:gap-2 ds:pl-0"
         role="list"
         aria-label="Tags"
       >
@@ -59,8 +62,8 @@ export const GuideCard = ({
         ))}
       </div>
 
-      <h2 className="mt-2 text-xl md:text-[26px] font-bold">
-        <a href={url} className="text-inherit">
+      <h2 className="ds:mt-2 ds:text-xl ds:md:text-[26px] ds:font-bold">
+        <a href={url} className="ds:text-inherit">
           {title}
         </a>
       </h2>

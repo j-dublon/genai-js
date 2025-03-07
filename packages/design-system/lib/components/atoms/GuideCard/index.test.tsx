@@ -127,7 +127,7 @@ describe("GuideCard", () => {
 
     const container = screen.getByRole("button");
     expect(container.className).toContain(
-      "flex flex-col sm:w-[466px] w-[292px] group",
+      "ds:flex ds:flex-col ds:sm:w-[466px] ds:w-[292px] ds:group",
     );
   });
 
@@ -135,21 +135,27 @@ describe("GuideCard", () => {
     render(<GuideCard {...defaultProps} />);
 
     const title = screen.getByRole("heading", { level: 2 });
-    expect(title.className).toContain("mt-2 text-xl md:text-[26px] font-bold");
+    expect(title.className).toContain(
+      "ds:mt-2 ds:text-xl ds:md:text-[26px] ds:font-bold",
+    );
   });
 
   it("renders tags with correct layout", () => {
     render(<GuideCard {...defaultProps} />);
 
     const tagContainer = screen.getByRole("list");
-    expect(tagContainer.className).toContain("flex flex-row mt-2 gap-2 pl-0");
+    expect(tagContainer.className).toContain(
+      "ds:flex ds:flex-row ds:mt-2 ds:gap-2 ds:pl-0",
+    );
   });
 
   it("maintains image aspect ratio", () => {
     render(<GuideCard {...defaultProps} />);
 
     const imageContainer = screen.getByRole("img").parentElement?.parentElement;
-    expect(imageContainer?.className).toContain("relative w-full aspect-video");
+    expect(imageContainer?.className).toContain(
+      "ds:relative ds:w-full ds:aspect-video",
+    );
   });
 
   it("applies hover scale animation to the image", () => {
@@ -157,7 +163,7 @@ describe("GuideCard", () => {
 
     const image = getByRole("img");
     expect(image.className).toContain(
-      "transition-transform duration-500 group-hover:scale-105",
+      "ds:transition-transform ds:duration-500 ds:group-hover:scale-105",
     );
   });
 });

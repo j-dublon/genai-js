@@ -35,22 +35,22 @@ describe("ChevronVerticalAnimated", () => {
     render(<ChevronVerticalAnimated isOpen={false} />);
 
     const chevronSpan = screen.getByRole("button", { hidden: true });
-    expect(chevronSpan).toHaveClass("bg-core-white");
-    expect(chevronSpan).toHaveClass("text-gray-900");
+    expect(chevronSpan).toHaveClass("ds:bg-core-white");
+    expect(chevronSpan).toHaveClass("ds:text-gray-900");
 
     const innerSpan = chevronSpan.querySelector("span");
-    expect(innerSpan).not.toHaveClass("rotate-180");
+    expect(innerSpan).not.toHaveClass("ds:rotate-180");
   });
 
   test("applies correct styles when open", () => {
     render(<ChevronVerticalAnimated isOpen={true} />);
 
     const chevronSpan = screen.getByRole("button", { hidden: true });
-    expect(chevronSpan).toHaveClass("bg-core-black");
-    expect(chevronSpan).toHaveClass("text-core-white");
+    expect(chevronSpan).toHaveClass("ds:bg-core-black");
+    expect(chevronSpan).toHaveClass("ds:text-core-white");
 
     const innerSpan = chevronSpan.querySelector("span");
-    expect(innerSpan).toHaveClass("rotate-180");
+    expect(innerSpan).toHaveClass("ds:rotate-180");
   });
 
   test("calls onClick when clicked", () => {

@@ -22,9 +22,9 @@ export const TrustpilotVertical = ({
     <Link href="https://uk.trustpilot.com/review/cuckoo.co">
       <div
         className={cx(
-          "flex flex-col items-start",
-          { [`max-w-${maxWidth}`]: maxWidth },
-          { [`max-h-${maxHeight}`]: maxHeight },
+          "ds:flex ds:flex-col ds:items-start",
+          { [`ds:max-w-${maxWidth}`]: maxWidth },
+          { [`ds:max-h-${maxHeight}`]: maxHeight },
         )}
       >
         <TrustpilotLogo width={width} height={height} />

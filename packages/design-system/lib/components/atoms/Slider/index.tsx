@@ -49,15 +49,15 @@ export const Slider = ({
     };
   }, []);
 
-  const baseStyles = `${draggable ? "select-none user-select-none" : undefined}
-    flex overflow-x-auto relative h-fit scrollbar-none py-5`;
+  const baseStyles = `${draggable ? "ds:select-none ds:user-select-none" : undefined}
+    ds:flex ds:overflow-x-auto ds:relative ds:h-fit ds:scrollbar-none ds:py-5`;
 
-  const marginStyles = cx(margin, "after:flex-none after:w-10");
+  const marginStyles = cx(margin, "ds:after:flex-none ds:after:w-10");
 
-  const dragStyles = isMouseDown ? "cursor-grabbing" : "cursor-grab";
+  const dragStyles = isMouseDown ? "ds:cursor-grabbing" : "ds:cursor-grab";
 
   return (
-    <div className="relative">
+    <div className="ds:relative">
       <div
         role="region"
         aria-roledescription="slider"
@@ -72,7 +72,7 @@ export const Slider = ({
           <div
             role="group"
             aria-roledescription="slide"
-            className={`slider-item ${i === 0 ? "" : "ml-4 md:ml-6"}`}
+            className={`slider-item ${i === 0 ? "" : "ds:ml-4 ds:md:ml-6"}`}
           >
             {child}
           </div>
@@ -80,18 +80,18 @@ export const Slider = ({
       </div>
 
       {isScrollable && (
-        <div className="md:pt-17 px-5 md:px-36">
+        <div className="ds:md:pt-17 ds:px-5 ds:md:px-36">
           <div
             role="scrollbar"
             aria-orientation="horizontal"
             aria-controls="slider"
             aria-label="Scroll indicator"
-            className="h-1 bg-ui-grey-200 mx-auto md:max-w-[956px] lg:max-w-[1152px] hidden md:block relative"
+            className="ds:h-1 ds:bg-ui-grey-200 ds:mx-auto ds:md:max-w-[956px] ds:lg:max-w-[1152px] ds:hidden ds:md:block ds:relative"
           >
             <div
               role="thumb"
               aria-label="Scroll position"
-              className="bg-core-black h-1 w-[368px] rounded-full"
+              className="ds:bg-core-black ds:h-1 ds:w-[368px] ds:rounded-full"
               style={{
                 transform: `translateX(${scrollPosition}px)`,
               }}

@@ -4,7 +4,7 @@ interface CTAProps {
 
 export const CTA = ({ children }: CTAProps) => {
   return (
-    <div className="flex justify-center items-center gap-[10px] self-stretch p-4 md:p-2 bg-core-teal">
+    <div className="ds:flex ds:justify-center ds:items-center ds:gap-[10px] ds:self-stretch ds:p-4 ds:md:p-2 ds:bg-core-teal">
       {children}
     </div>
   );

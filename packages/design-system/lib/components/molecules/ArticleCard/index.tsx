@@ -10,28 +10,28 @@ export const ArticleCard = (props: ArticleCardProps) => {
   const { imageAlt, imageUrl, title, slug, primaryTag } = props;
 
   return (
-    <div className="mr-2 space-y-4 md:mr-6 snap-center max-w-[700px] group cursor-pointer">
+    <div className="ds:mr-2 ds:space-y-4 ds:md:mr-6 ds:snap-center ds:max-w-[700px] ds:group ds:cursor-pointer">
       <figure
-        className="relative m-0 overflow-hidden bg-transparent rounded-sm"
+        className="ds:relative ds:m-0 ds:overflow-hidden ds:bg-transparent ds:rounded-sm"
         role="img"
         aria-label={imageAlt}
       >
-        <picture className="block w-full h-full">
+        <picture className="ds:block ds:w-full ds:h-full">
           <img
-            className="transition-transform duration-500 ease-in-out origin-center scale-100 group-hover:scale-110"
+            className="ds:transition-transform ds:duration-500 ds:ease-in-out ds:origin-center ds:scale-100 ds:group-hover:scale-110"
             src={imageUrl}
             alt={imageAlt}
             aria-hidden="false"
           />
         </picture>
       </figure>
-      <div className="flex flex-col mt-6 space-y-4">
-        <p className="px-3 py-1 font-bold bg-core-pink w-fit rounded-xl">
+      <div className="ds:flex ds:flex-col ds:mt-6 ds:space-y-4">
+        <p className="ds:px-3 ds:py-1 ds:font-bold ds:bg-core-pink ds:w-fit ds:rounded-xl">
           {primaryTag}
         </p>
         <a
           href={slug}
-          className="text-xl font-semibold md:text-[26px] hover:underline"
+          className="ds:text-xl ds:font-semibold ds:md:text-[26px] ds:hover:underline"
         >
           {title}
         </a>
