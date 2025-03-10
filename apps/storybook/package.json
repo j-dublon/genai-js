@@ -28,7 +28,7 @@
     "@typescript-eslint/eslint-plugin": "8.26.0",
     "@typescript-eslint/parser": "8.26.0",
     "@vitejs/plugin-react": "^4.2.1",
-    "autoprefixer": "10.4.20",
+    "autoprefixer": "10.4.21",
     "eslint": "^9",
     "eslint-plugin-mdx": "3.1.5",
     "eslint-plugin-simple-import-sort": "12.1.1",
