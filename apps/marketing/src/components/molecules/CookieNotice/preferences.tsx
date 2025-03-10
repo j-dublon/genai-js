@@ -54,7 +54,7 @@ export const Preferences = (props: PreferencesProps) => {
       </Details.Summary>
       <Details.Content className="mx-2 mb-2 md:mx-2 md:mb-2">
         <div className="mt-2 space-y-2 md:space-y-4">
-          <p className="text-[12px]]">{body}</p>
+          <p className="text-[12px]">{body}</p>
         </div>
       </Details.Content>
     </Details.Root>
