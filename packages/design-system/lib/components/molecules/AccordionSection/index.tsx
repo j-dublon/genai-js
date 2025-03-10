@@ -17,8 +17,11 @@ export const AccordionSection = ({ heading, questionsArr, subText }: Props) => (
       </div>
       <div>
         <div className="ds:flex ds:flex-col ds:gap-4 ds:md:gap-5">
-          {questionsArr.map((question, index) => (
-            <AccordionItem key={`faq-question-${index}`} question={question} />
+          {questionsArr.map((question) => (
+            <AccordionItem
+              key={`faq-question-${question.dropdown_header}`}
+              question={question}
+            />
           ))}
         </div>
       </div>

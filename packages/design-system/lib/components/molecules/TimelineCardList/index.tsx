@@ -23,7 +23,7 @@ export const TimelineCardList = ({
   return (
     <>
       {timelineCardProps.map((timelineCardProp, index) => (
-        <React.Fragment key={`${timelineCardProp.subHeading}${index}`}>
+        <React.Fragment key={timelineCardProp.subHeading}>
           <TimelineCard {...timelineCardProp} />
 
           {index < timelineCardProps.length - 1 && (

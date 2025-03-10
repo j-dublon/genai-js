@@ -43,9 +43,9 @@ export const CardSectionWrapper = () => {
         </div>
 
         <div className="relative flex flex-col bg-core-pink md:bg-transparent md:flex-row md:gap-6 md:px-6 z-20 rounded-lg">
-          {infoCardContent.map((card, index) => (
+          {infoCardContent.map((card) => (
             <InfoCard
-              key={`${card.titleText}${index}`}
+              key={`${card.titleText} ?? ${card.colorPillText}`}
               colorPillText={card.colorPillText}
               colorPillBackgroundColor={card.colorPillBackgroundColor}
               infoCardBackgroundColor={card.infoCardBackgroundColor}

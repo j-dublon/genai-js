@@ -100,9 +100,9 @@ export const InfoCard = ({
 
             {listItems && (
               <ul className="ds:list-disc ds:pl-5">
-                {listItems.map((item, index) => (
+                {listItems.map((item) => (
                   <li
-                    key={`${item}${index}`}
+                    key={item}
                     className="ds:md:font-medium ds:font-semibold ds:md:text-md ds:text-[16px] ds:mb-2"
                   >
                     {item}

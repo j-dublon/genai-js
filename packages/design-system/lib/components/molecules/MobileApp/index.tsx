@@ -32,7 +32,7 @@ export const MobileApp = ({
       <div className="ds:py-5 ds:flex ds:flex-col ds:md:gap-[16px]">
         {textItems.map((item, index) => (
           <div
-            key={`${item.itemText}${index}`}
+            key={item.itemText}
             className={cx(
               "ds:cursor-pointer",
               `${selectedTextIndex === index ? "ds:font-bold" : ""}`,
