@@ -15,7 +15,7 @@
     "prepare": "husky",
     "clean": "turbo run clean && rm -rf node_modules && rm -rf .turbo"
   },
-  "packageManager": "npm@10.2.0",
+  "packageManager": "npm@10.9.2",
   "devDependencies": {
     "@types/node": "22.13.10",
     "husky": "9.1.7",
