@@ -52,7 +52,7 @@ export const InfoCard = ({
               additionalText,
           },
           bgColorVariants[infoCardBackgroundColor],
-          `${additionalText ? "" : "ds:md:w-fit"} ds:flex-1`,
+          "ds:flex-1",
         )}
       >
         {titleText && subHeading ? (
