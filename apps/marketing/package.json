@@ -27,7 +27,7 @@
     "pino": "9.6.0",
     "pino-pretty": "13.0.0",
     "postcss": "8.5.3",
-    "posthog-js": "1.222.0",
+    "posthog-js": "1.230.0",
     "posthog-node": "4.7.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
