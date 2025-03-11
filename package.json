@@ -31,5 +31,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "optionalDependencies": {
+    "@esbuild/linux-x64": "latest",
+    "@rollup/rollup-linux-x64-gnu": "latest"
+  }
 }

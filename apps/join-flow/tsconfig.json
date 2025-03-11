@@ -19,7 +19,11 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@graphql/*": ["./src/graphql/*"],
+      "@store/*": ["./src/store/*"],
+      "@schema/*": ["./src/schema/*"],
+      "@validation/*": ["./src/validation/*"]
     },
     "types": ["vitest/globals"]
   },
