@@ -1,6 +1,13 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "enabled": false
+    },
+    {
+      "matchUpdateTypes": ["minor", "major"],
+      "enabled": true
+    }
   ]
 }
