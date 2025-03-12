@@ -3,6 +3,9 @@ npm run format
 npm run sort
 npm run lint
 
+echo "Running GraphQL codegen..."
+npx turbo run build:codegen
+
 echo "Running type-check for all workspaces..."
 npx turbo run check-types
 

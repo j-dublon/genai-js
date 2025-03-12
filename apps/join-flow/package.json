@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "build:codegen": "dotenv -e .env.local -- npx graphql-codegen",
+    "dev": "npm run build:codegen && next dev --turbopack",
+    "build": "npm run build:codegen && next build",
+    "build:codegen": "graphql-codegen",
+    "update-schema": "npm run ts-node fetch-graphql-schema.ts",
     "start": "next start",
     "start:e2e": "next start -p 3003",
     "test": "vitest",
@@ -55,6 +56,7 @@
     "eslint-plugin-simple-import-sort": "12.1.1",
     "prettier": "3.5.3",
     "tailwindcss": "4.0.12",
+    "ts-node": "^10.9.2",
     "typescript": "^5",
     "vitest": "3.0.8"
   }

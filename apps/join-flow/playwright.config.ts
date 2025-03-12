@@ -22,9 +22,9 @@ export default defineConfig({
 
   // Commented out now so tests can pass. Can be uncommented when join flow is further developed
 
-  // webServer: {
-  //   command: "npm run start:e2e",
-  //   url: "http://localhost:3003",
-  //   reuseExistingServer: !process.env.CI,
-  // },
+  webServer: {
+    command: "npm run start:e2e",
+    url: "http://localhost:3003",
+    reuseExistingServer: !process.env.CI,
+  },
 });

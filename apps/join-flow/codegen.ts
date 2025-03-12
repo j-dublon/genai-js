@@ -1,18 +1,8 @@
 import type { CodegenConfig } from "@graphql-codegen/cli";
-
-const graphEndpoint =
-  process.env.NEXT_PUBLIC_CUCKOO_GRAPH_ENDPOINT ||
-  "https://stage.graph.cuckoo.co/graphql";
-const graphApiKey = process.env.NEXT_PUBLIC_CUCKOO_GRAPH_APIKEY || "";
+import path from "path";
 
 const config: CodegenConfig = {
-  schema: {
-    [graphEndpoint]: {
-      headers: {
-        "x-api-key": graphApiKey as string,
-      },
-    },
-  },
+  schema: path.resolve(__dirname, "schema.json"),
   documents: ["./src/**/*.{ts,tsx}"],
   generates: {
     "./src/__generated__/": {
