@@ -56,7 +56,7 @@ export const ReviewCard = ({
       <blockquote className="ds:mt-6 ds:md:text-md ds:text-sm">
         <div
           ref={textRef}
-          className={`ds:font-thin ds:transition-all ds:duration-300 ${isExpanded ? "" : "ds:max-h-[90px] ds:line-clamp-3"}`}
+          className={`ds:font-thin ds:text-ui-grey-500 ds:transition-all ds:duration-300 ${isExpanded ? "" : "ds:max-h-[90px] ds:line-clamp-3"}`}
         >
           {reviewText}
         </div>

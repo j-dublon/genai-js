@@ -33,7 +33,7 @@ export const DropdownMenu = ({
           e.stopPropagation();
           setOpenDropdown(isOpen ? null : name);
         }}
-        className="ds:py-2 ds:px-4 ds:rounded-md ds:text-[16px] ds:font-semibold ds:leading-[26px] ds:text-black ds:transition-colors ds:duration-200 ds:flex ds:items-center ds:gap-2 ds:hover:text-gray-600"
+        className="ds:py-2 ds:px-4 ds:rounded-md ds:text-[16px] ds:font-semibold ds:leading-[26px] ds:text-core-black ds:transition-colors ds:duration-200 ds:flex ds:items-center ds:gap-2 ds:hover:text-gray-600"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >

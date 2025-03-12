@@ -35,7 +35,9 @@ export const MobileApp = ({
             key={item.itemText}
             className={cx(
               "ds:cursor-pointer",
-              `${selectedTextIndex === index ? "ds:font-bold" : ""}`,
+              selectedTextIndex === index
+                ? "ds:font-bold ds:text-core-black"
+                : "ds:text-ui-grey-500",
             )}
             onClick={() => handleItemClick(index)}
           >

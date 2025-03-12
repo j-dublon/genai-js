@@ -106,7 +106,7 @@ export const Slider = ({
             aria-controls="slider"
             aria-label="Scroll indicator"
             aria-valuenow={scrollPosition}
-            className="ds:h-1 ds:bg-ui-grey-200 ds:mx-auto ds:md:max-w-[956px] ds:lg:max-w-[1152px] ds:hidden ds:md:block ds:relative"
+            className="ds:h-1 ds:bg-ui-grey-300 ds:mx-auto ds:md:max-w-[956px] ds:lg:max-w-[1152px] ds:hidden ds:md:block ds:relative"
           >
             <div
               aria-hidden="true"

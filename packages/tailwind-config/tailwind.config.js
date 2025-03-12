@@ -126,5 +126,11 @@ export default {
     "before:border-secondary-blue-dark",
     "before:border-ui-grey-300",
   ],
-  plugins: [],
+  plugins: [
+    function ({ addBase, theme }) {
+      addBase({
+        html: { color: theme("colors.core-black") },
+      });
+    }
+  ],
 };

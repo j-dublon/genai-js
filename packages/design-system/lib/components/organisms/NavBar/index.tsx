@@ -108,7 +108,7 @@ export const NavBar = ({
                     />
                   ) : (
                     <Link key={name} href={href ?? "#"}>
-                      <span className="ds:py-2 ds:px-4 ds:rounded-md ds:text-sm ds:font-semibold ds:leading-[26px] ds:text-black ds:transition-colors ds:duration-200 ds:hover:text-gray-600 ds:cursor-pointer">
+                      <span className="ds:py-2 ds:px-4 ds:rounded-md ds:text-sm ds:font-semibold ds:leading-[26px] ds:text-core-black ds:transition-colors ds:duration-200 ds:hover:text-gray-600 ds:cursor-pointer">
                         {name}
                       </span>
                     </Link>

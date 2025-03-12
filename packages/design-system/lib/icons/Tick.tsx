@@ -7,7 +7,7 @@ interface TickIconProps {
 export const Tick = ({
   width = 20,
   height = 20,
-  fill = "#1F1F1F",
+  fill = "currentColor",
 }: TickIconProps) => {
   return (
     <svg

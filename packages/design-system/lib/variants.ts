@@ -10,7 +10,7 @@ export const bgColorVariants = {
 };
 export const textColorVariants = {
   indigo: "ds:text-indigo-300",
-  black: "ds:text-black",
+  black: "ds:text-core-black",
   white: "ds:text-core-white",
   grey: "ds:text-ui-grey-300",
 };
