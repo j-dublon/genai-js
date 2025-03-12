@@ -50,7 +50,7 @@ describe("Guides", () => {
     const section = screen.getByLabelText("Cuckoo Guides");
     expect(section).toBeInTheDocument();
     const slider = within(section).getByRole("region", {
-      name: "Scrollable content",
+      name: "Scrollable content for Guides",
     });
     expect(slider).toHaveAttribute("aria-roledescription", "slider");
     expect(slider).toHaveClass("ds:cursor-grab");
@@ -67,7 +67,7 @@ describe("Guides", () => {
 
     const section = screen.getByLabelText("Cuckoo Guides");
     const carousel = within(section).getByRole("region", {
-      name: "Scrollable content",
+      name: "Scrollable content for Guides",
     });
     const slides = Array.from(carousel.children).filter(
       (child) => child.tagName === "DIV",
@@ -97,7 +97,7 @@ describe("Guides", () => {
 
     const section = screen.getByLabelText("Cuckoo Guides");
     const slider = within(section).getByRole("region", {
-      name: "Scrollable content",
+      name: "Scrollable content for Guides",
     });
     expect(slider).toBeInTheDocument();
     expect(screen.queryAllByRole("group")).toHaveLength(0);

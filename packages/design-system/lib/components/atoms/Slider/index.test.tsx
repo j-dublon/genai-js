@@ -83,7 +83,9 @@ describe("Slider", () => {
       </Slider>,
     );
 
-    const slider = screen.getByRole("region", { name: "Scrollable content" });
+    const slider = screen.getByRole("region", {
+      name: "Scrollable content for slider",
+    });
     expect(slider).toHaveClass("xl:before:w-10");
   });
 });

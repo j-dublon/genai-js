@@ -88,6 +88,7 @@ export const TrustPilotSlider = ({
         margin="before:ml-5 before:md:ml-36 before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
         trustScore={trustScore}
         numberOfReviews={reviewCount}
+        sectionName="Customer reviews"
       >
         {isLoading
           ? Array.from({ length: 5 }).map((_, i) => (

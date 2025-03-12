@@ -36,7 +36,7 @@ export const MobilePhone = ({
   }
 
   return (
-    <div className="relative" aria-label={screenLabel}>
+    <div className="relative" role="none" data-testid={screenLabel}>
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={selectedTextIndex}

@@ -29,6 +29,7 @@ export const Guides = ({
       <Slider
         draggable
         margin="before:ml-5 before:md:ml-36 before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
+        sectionName="Guides"
       >
         {guides.map((g, i) => (
           <div

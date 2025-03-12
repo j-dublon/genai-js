@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
 
 test.describe("Home Page Desktop", () => {
   test.use({ viewport: { width: 1280, height: 720 } });
@@ -17,6 +18,25 @@ test.describe("Home Page Desktop", () => {
 
     const ctaButton = heroBanner.locator("a, button").first();
     await expect(ctaButton).toBeVisible();
+  });
+
+  test("should not have any automatically detectable accessibility issues", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags([
+        "wcag2a",
+        "wcag2aa",
+        "wcag21a",
+        "wcag21aa",
+        "wcag22a",
+        "wcag22aa",
+      ])
+      .analyze();
+
+    expect(accessibilityScanResults.violations).toEqual([]);
   });
 });
 

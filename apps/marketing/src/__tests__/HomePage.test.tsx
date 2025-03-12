@@ -124,7 +124,7 @@ describe("HomePage", () => {
     const headingElement = screen.getByText(guidesHeading);
     const subHeading = screen.getByText(guidesSubHeading);
     const slider = within(guidesSection).getByRole("region", {
-      name: "Scrollable content",
+      name: "Scrollable content for Guides",
     });
 
     expect(guidesSection).toBeInTheDocument();

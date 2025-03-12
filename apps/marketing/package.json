@@ -19,6 +19,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next && rm -rf coverage && rm -rf tsconfig.tsbuildinfo"
   },
   "dependencies": {
+    "@axe-core/playwright": "4.10.1",
     "@react-component-library/ui": "*",
     "@tailwindcss/postcss": "4.0.12",
     "@vercel/microfrontends": "1.0.0",

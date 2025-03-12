@@ -37,37 +37,39 @@ export const HomePage = () => {
   return (
     <div className="w-full">
       <NavBarWrapper />
-      <HeroBanner
-        trustScore={trustpilotRating?.trustScore}
-        numberOfReviews={trustpilotRating?.numberOfReviews}
-        broadbandOffer={broadbandOffer}
-        enableTermsAndConditionsText={enableTermsAndConditionsText}
-        termsAndConditionsText={termsAndConditionsText}
-      />
-      <CardSectionWrapper />
-      {enableTermsAndConditionsText && (
-        <TermsAndConditions termsAndConditionsText={termsAndConditionsText} />
-      )}
-      <CompanyLogoStripWrapper />
-      <JoinTheFlock
-        trustScore={trustpilotRating?.trustScore}
-        numberOfReviews={trustpilotRating?.numberOfReviews}
-      />
-      <FAQSection />
-      <ClickSwitchDoneSection />
-      {enableCuckooProtect && <CuckooProtect />}
-      <TrustPilotSliderWrapper
-        reviewCount={Number(trustpilotRating?.numberOfReviews)}
-        trustScore={Number(trustpilotRating?.trustScore)}
-      />
-      <MobileAppWrapper />
-      <LifeAtCuckoo />
-      <Guides
-        guides={guides}
-        guidesHeading={guidesHeading}
-        guidesSubHeading={guidesSubHeading}
-      />
-      <HowFastCanYouGoWrapper />
+      <main>
+        <HeroBanner
+          trustScore={trustpilotRating?.trustScore}
+          numberOfReviews={trustpilotRating?.numberOfReviews}
+          broadbandOffer={broadbandOffer}
+          enableTermsAndConditionsText={enableTermsAndConditionsText}
+          termsAndConditionsText={termsAndConditionsText}
+        />
+        <CardSectionWrapper />
+        {enableTermsAndConditionsText && (
+          <TermsAndConditions termsAndConditionsText={termsAndConditionsText} />
+        )}
+        <CompanyLogoStripWrapper />
+        <JoinTheFlock
+          trustScore={trustpilotRating?.trustScore}
+          numberOfReviews={trustpilotRating?.numberOfReviews}
+        />
+        <FAQSection />
+        <ClickSwitchDoneSection />
+        {enableCuckooProtect && <CuckooProtect />}
+        <TrustPilotSliderWrapper
+          reviewCount={Number(trustpilotRating?.numberOfReviews)}
+          trustScore={Number(trustpilotRating?.trustScore)}
+        />
+        <MobileAppWrapper />
+        <LifeAtCuckoo />
+        <Guides
+          guides={guides}
+          guidesHeading={guidesHeading}
+          guidesSubHeading={guidesSubHeading}
+        />
+        <HowFastCanYouGoWrapper />
+      </main>
       <FooterWrapper trustScore={trustpilotRating?.trustScore} />
     </div>
   );

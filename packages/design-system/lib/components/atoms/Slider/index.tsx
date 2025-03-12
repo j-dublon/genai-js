@@ -9,6 +9,7 @@ export interface SliderProps {
   margin?: string;
   trustScore?: number;
   numberOfReviews?: number;
+  sectionName?: string;
 }
 
 export const Slider = ({
@@ -17,6 +18,7 @@ export const Slider = ({
   trustScore = undefined,
   numberOfReviews = undefined,
   children,
+  sectionName = "slider",
 }: SliderProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -64,9 +66,10 @@ export const Slider = ({
   return (
     <div className="ds:relative">
       <div
+        id="slider"
         role="region"
         aria-roledescription="slider"
-        aria-label="Scrollable content"
+        aria-label={"Scrollable content for " + sectionName}
         ref={ref}
         className={cx(baseStyles, marginStyles, draggable ? dragStyles : "")}
         onMouseDown={draggable ? onMouseDown : undefined}
@@ -102,11 +105,11 @@ export const Slider = ({
             aria-orientation="horizontal"
             aria-controls="slider"
             aria-label="Scroll indicator"
+            aria-valuenow={scrollPosition}
             className="ds:h-1 ds:bg-ui-grey-200 ds:mx-auto ds:md:max-w-[956px] ds:lg:max-w-[1152px] ds:hidden ds:md:block ds:relative"
           >
             <div
-              role="thumb"
-              aria-label="Scroll position"
+              aria-hidden="true"
               className="ds:bg-core-black ds:h-1 ds:w-[368px] ds:rounded-full"
               style={{
                 transform: `translateX(${scrollPosition}px)`,

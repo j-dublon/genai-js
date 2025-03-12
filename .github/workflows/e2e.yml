@@ -44,7 +44,7 @@ jobs:
         uses: ./.github/actions/build-apps
 
       - name: Run E2E Tests
-        run: npx playwright test || echo "${{ matrix.app }} E2E tests failed but continuing"
+        run: npx playwright test
         working-directory: ./apps/${{ matrix.app }}
 
       - name: Upload Playwright report
