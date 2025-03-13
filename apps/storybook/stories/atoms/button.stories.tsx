@@ -23,11 +23,11 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: "select",
-      options: ["small", "medium"],
+      options: ["small", "medium", "large"],
       description: "Controls the size of the button",
       table: {
-        type: { summary: '"small" | "medium"' },
-        defaultValue: { summary: "medium" },
+        type: { summary: '"small" | "medium" | "large"' },
+        defaultValue: { summary: "large" },
       },
     },
     tint: {

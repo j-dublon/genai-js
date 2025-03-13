@@ -1,6 +1,6 @@
 import { type ButtonHTMLAttributes, Ref } from "react";
 
-export type Size = "small" | "medium";
+export type Size = "small" | "medium" | "large";
 export type Tint = "black" | "yellow" | "white" | "blue" | "grey";
 export type Variant = "solid" | "outline";
 
@@ -22,7 +22,7 @@ export const Button = ({
   as: Component = "button",
   href,
   onClick,
-  size = "medium",
+  size = "large",
   tint = "black",
   variant = "outline",
   children,
@@ -56,8 +56,9 @@ export const Button = ({
   const { grey, white, black } = colors;
 
   const sizes = {
-    small: "ds:py-2 ds:px-4 ds:text-xs ds:md:text-sm",
-    medium: "ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:text-sm ds:md:text-md",
+    small: `${fullWidth ? "ds:w-full" : "ds:w-fit"} ds:py-2 ds:px-4 ds:text-xs ds:md:text-sm ds:rounded-sm ds:before:rounded-sm ds:hover:before:rounded-md ds:hover:before:-inset-[2px]`,
+    medium: `${fullWidth ? "ds:w-full" : "ds:w-[120px] ds:lg:w-[200px]"} ds:h-[60px] ds:text-sm ds:sm:text-md ds:py-4 ds:md:px-4 ds:lg:px-8 ds:rounded-md ds:before:rounded-md ds:hover:before:rounded-lg ds:hover:before:-inset-[2px]`,
+    large: `${fullWidth ? "ds:w-full" : "ds:w-fit"} ds:text-sm ds:sm:text-md ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:rounded-md ds:before:rounded-md ds:hover:before:rounded-lg ds:hover:before:-inset-[4px]`,
   };
 
   const classNames = `
@@ -65,13 +66,11 @@ export const Button = ({
       ds:before:content[''] ds:before:absolute ds:before:inset-0 ds:before:bg-inherit ds:before:border-2 ds:before:z-[-1]
       ds:before:transition-all ds:before:duration-200 ds:before:ease-in-out
       ds:before:border-${isWhite ? (isOutline ? grey : white) : colors[tint]}
-      button-animate
       ${disabled ? "ds:cursor-not-allowed ds:opacity-50" : "ds:cursor-pointer"}
-      ${sizes[size]} ds:rounded-md
+      ${sizes[size]}
       ${isOutline ? "ds:bg-transparent" : `ds:bg-${colors[tint]}`}
-      ds:hover:${isOutline ? "bg-opacity-10" : "bg-gray-700"}
       ds:text-${textColor ? colors[textColor] : isOutline || isWhite ? black : isYellow ? black : white}
-      ${fullWidth ? "ds:w-full" : "ds:w-fit"} ${className ?? ""}`;
+      ${className ?? ""}`;
 
   return (
     <>

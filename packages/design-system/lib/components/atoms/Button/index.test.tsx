@@ -72,8 +72,9 @@ describe("Button Component", () => {
     ["small", "ds:py-2 ds:px-4 ds:text-xs ds:md:text-sm"],
     [
       "medium",
-      "ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:text-sm ds:md:text-md",
+      "ds:h-[60px] ds:text-sm ds:sm:text-md  ds:py-4 ds:md:px-4 ds:lg:px-8",
     ],
+    ["large", "ds:text-sm ds:sm:text-md ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8"],
   ])(
     "applies padding and font size classes for %s size",
     (size, expectedClass) => {
@@ -84,19 +85,32 @@ describe("Button Component", () => {
     },
   );
 
-  it("applies correct hover styles", () => {
-    render(<Button>Click Me</Button>);
+  it.each([
+    [
+      "small",
+      "ds:rounded-sm ds:before:rounded-sm ds:hover:before:rounded-md ds:hover:before:-inset-[2px]",
+    ],
+    [
+      "medium",
+      "ds:rounded-md ds:before:rounded-md ds:hover:before:rounded-lg ds:hover:before:-inset-[2px]",
+    ],
+    [
+      "large",
+      "ds:rounded-md ds:before:rounded-md ds:hover:before:rounded-lg ds:hover:before:-inset-[4px]",
+    ],
+  ])("applies correct hover styles for %s size", (size, expectedClass) => {
+    render(<Button size={size as Size}>Click Me</Button>);
 
     const button = screen.getByRole("button", { name: /click me/i });
-    expect(button).toHaveClass("button-animate ds:hover:bg-opacity-10");
+    expect(button).toHaveClass(expectedClass);
   });
 
-  it("defaults to black outline medium button", () => {
+  it("defaults to black outline large button", () => {
     render(<Button>Click Me</Button>);
 
     const button = screen.getByRole("button", { name: /click me/i });
     expect(button).toHaveClass(
-      "ds:before:border-core-black ds:text-core-black ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:text-sm ds:md:text-md",
+      "ds:before:border-core-black ds:text-core-black ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:text-sm ds:sm:text-md",
     );
   });
 

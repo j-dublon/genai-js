@@ -18,7 +18,6 @@ export const HowFastCanYouGo = ({
             titleText="Ready for ridiculously fast full fibre?"
             inputBoxButtonText="Let's go"
             placeholderText="Pop in your postcode"
-            isChevron={true}
             postcode={postcode}
             setPostcode={setPostcode}
           />

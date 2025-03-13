@@ -36,7 +36,7 @@ export const ClickSwitchDoneSection = () => {
         <Link href="/switching" passHref>
           <Button
             variant="outline"
-            size="medium"
+            size="large"
             tint="white"
             aria-label={`Open website page`}
           >
