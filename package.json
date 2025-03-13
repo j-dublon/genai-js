@@ -16,7 +16,7 @@
     "prepare": "husky",
     "clean": "turbo run clean && rm -rf node_modules && rm -rf .turbo"
   },
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@11.2.0",
   "dependencies": {
     "@vercel/microfrontends": "1.0.0",
     "@vercel/speed-insights": "1.2.0",
