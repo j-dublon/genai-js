@@ -129,7 +129,11 @@ export default {
   plugins: [
     function ({ addBase, theme }) {
       addBase({
-        html: { color: theme("colors.core-black") },
+        html: { 
+          color: theme("colors.core-black"),
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+        },
       });
     }
   ],
