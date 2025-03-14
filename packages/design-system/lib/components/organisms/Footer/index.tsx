@@ -21,7 +21,7 @@ export const Footer = ({
   footerDisclaimerText,
 }: FooterProps) => {
   return (
-    <footer className="ds:bg-core-yellow ds:flex ds:md:justify-center ds:md:items-center ds:px-5 ds:py-10 ds:md:py-14 ds:md:px-36">
+    <footer className="ds:bg-core-yellow ds:flex ds:md:justify-center ds:md:items-center ds:py-10 ds:md:py-14 ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop">
       <div className="ds:flex ds:flex-col ds:md:flex-row ds:md:justify-between ds:w-full ds:md:max-w-[1152px]">
         <div className="ds:flex ds:flex-col ds:md:flex-auto ds:md:justify-between ds:md:w-1/2">
           <div className="ds:max-w-[313px] ds:lg:max-w-[50%]">

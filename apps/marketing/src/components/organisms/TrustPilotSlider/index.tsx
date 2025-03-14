@@ -63,7 +63,7 @@ export const TrustPilotSlider = ({
       className="bg-ui-grey-200 pb-12 md:pb-40"
       aria-labelledby="trust-pilot-heading"
     >
-      <div className="py-12 px-5 md:px-36 md:pt-40">
+      <div className="py-12 px-mobile sm:px-tablet lg:px-desktop md:pt-40">
         <div className="max-w-[1152px] mx-auto">
           <h2
             id="trust-pilot-heading"
@@ -75,7 +75,7 @@ export const TrustPilotSlider = ({
         </div>
       </div>
 
-      <div className="px-5 md:px-36">
+      <div className="px-mobile sm:px-tablet lg:px-desktop">
         <h4 className="max-w-[1152px] mx-auto text-md md:text-lg">
           Showing our 5-star reviews
         </h4>
@@ -85,7 +85,7 @@ export const TrustPilotSlider = ({
         draggable
         aria-label="Customer reviews"
         aria-roledescription="carousel"
-        margin="before:ml-5 before:md:ml-36 before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
+        margin="before:ml-mobile before:sm:ml-tablet before:lg:ml-desktop before:xl:ml-[calc(((100vw-1152px)/3)+5vw)] before:2xl:ml-[calc(((100vw-1152px)/2.5)+5vw)]"
         trustScore={trustScore}
         numberOfReviews={reviewCount}
         sectionName="Customer reviews"

@@ -27,7 +27,7 @@ export const MobileAppWrapper = () => {
   return (
     <section
       aria-label="Mobile App Wrapper"
-      className="bg-core-yellow md:px-36 flex justify-center"
+      className="bg-core-yellow md:px-desktop flex justify-center"
     >
       <div className="flex flex-col items-center md:flex-row md:max-w-[1152px] md:gap-5 md:justify-between bg-core-yellow w-full">
         <MobilePhone selectedTextIndex={selectedTextIndex} />

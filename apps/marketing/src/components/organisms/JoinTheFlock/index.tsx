@@ -59,7 +59,7 @@ export const JoinTheFlock = ({
           type="video/mp4"
         />
       </video>
-      <div className="z-20 flex flex-col items-center p-5 md:p-20 md:justify-between w-full md:gap-14 bg-cover bg-center md:py-40">
+      <div className="z-20 flex flex-col items-center px-mobile sm:px-tablet lg:px-desktop py-5 md:py-40 md:justify-between w-full">
         <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 px-5 md:px-10 md:py-16 py-6">
           <div className="flex-2 flex flex-col md:pr-10 min-w-0 pb-5">
             <h2 className="md:text-5xl text-4xl font-bold pb-5">

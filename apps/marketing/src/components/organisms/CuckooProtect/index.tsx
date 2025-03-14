@@ -42,7 +42,7 @@ export const CuckooProtect = () => {
           type="video/mp4"
         />
       </video>
-      <div className="z-20 flex flex-col items-center p-10 md:justify-between w-full md:gap-14 bg-cover bg-center md:py-40 md:px-36">
+      <div className="z-20 flex flex-col items-center py-10 md:justify-between w-full md:gap-14 md:py-40 px-mobile sm:px-tablet lg:px-desktop">
         <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 md:px-10 md:py-16 gap-7 py-6 px-5">
           <div className="flex-2 flex flex-col gap-7 min-w-0">
             <img

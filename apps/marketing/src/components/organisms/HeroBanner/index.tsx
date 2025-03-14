@@ -56,8 +56,8 @@ export const HeroBanner = ({
           type="video/mp4"
         />
       </video>
-      <div className="flex flex-col">
-        <div className="flex md:flex-row flex-col p-5 pb-10 md:pt-20 md:justify-end items-center max-w-[1152px] md:gap-[64px]">
+      <div className="flex flex-col px-mobile sm:px-tablet lg:px-desktop">
+        <div className="flex md:flex-row flex-col pb-10 md:pt-20 md:justify-end items-center max-w-[1152px]">
           <div className="flex-1 flex flex-col md:pr-10 pb-10 md:pb-36">
             <Heading headingText="Ridiculously fast full fibre broadband" />
             <p className="md:pb-7 pb-6 font-garnett text-md font-normal leading-[1.5]">

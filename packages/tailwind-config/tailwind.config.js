@@ -24,6 +24,7 @@ export default {
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
       "ui-grey-100": "#F7F7F5",
+      "ui-grey-150": "#f4f3ef",
       "ui-grey-200": "#F0F0E9",
       "ui-grey-300": "#D8D8D0",
       "ui-grey-400": "#818181",
@@ -44,6 +45,18 @@ export default {
       lg: "22px",
       xl: "34px",
       full: "9999px",
+    },
+    padding: {
+      ...defaultTheme.padding,
+      mobile: "20px",
+      tablet: "64px",
+      desktop: "144px",
+    },
+    margin: {
+      ...defaultTheme.margin,
+      mobile: "20px",
+      tablet: "64px",
+      desktop: "144px",
     },
     fontFamily: {
       ...defaultTheme.fontFamily,
@@ -129,12 +142,12 @@ export default {
   plugins: [
     function ({ addBase, theme }) {
       addBase({
-        html: { 
+        html: {
           color: theme("colors.core-black"),
-          WebkitFontSmoothing: 'antialiased',
-          MozOsxFontSmoothing: 'grayscale',
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
         },
       });
-    }
+    },
   ],
 };

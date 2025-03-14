@@ -88,7 +88,7 @@ export const Slider = ({
       </div>
 
       {trustScore !== undefined && (
-        <div className="ds:px-5 ds:md:px-36">
+        <div className="ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop">
           <div className="ds:md:pt-16 ds:max-w-[1152px] ds:mx-auto">
             <TrustpilotHorizontal
               trustScore={trustScore}
@@ -99,7 +99,7 @@ export const Slider = ({
       )}
 
       {isScrollable && (
-        <div className="ds:md:pt-17 ds:px-5 ds:md:px-36">
+        <div className="ds:md:pt-17 ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop">
           <div
             role="scrollbar"
             aria-orientation="horizontal"
