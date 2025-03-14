@@ -14,7 +14,6 @@
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
     "e2e": "playwright test",
-    "prepare": "cd .. && husky marketing/.husky",
     "check-types": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next && rm -rf coverage && rm -rf tsconfig.tsbuildinfo"
   },

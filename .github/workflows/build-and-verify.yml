@@ -12,6 +12,8 @@ jobs:
   setup:
     name: Build and verify Turbo Repo CI
     runs-on: ubuntu-latest
+    env:
+      CI: true
 
     steps:
       - name: Checkout code
@@ -35,3 +37,11 @@ jobs:
 
       - name: Run Lint, Check-Types, and Test
         run: npx turbo run lint check-types test
+
+      - name: Install Playwright browsers
+        uses: ./.github/actions/install-playwright
+
+      - name: Run E2E tests
+        run: |
+          cd apps/join-flow
+          npx playwright test

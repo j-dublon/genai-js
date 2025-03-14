@@ -23,5 +23,4 @@ runs:
 
     - name: Install Playwright
       shell: bash
-      if: steps.playwright-cache.outputs.cache-hit != 'true'
-      run: npx playwright install
+      run: npx playwright install --with-deps chromium
