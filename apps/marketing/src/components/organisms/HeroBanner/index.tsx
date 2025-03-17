@@ -8,7 +8,7 @@ import {
 import { usePostHog } from "posthog-js/react";
 import { ComponentProps } from "react";
 
-import { usePostcode } from "@/hooks/usePostcode";
+import { usePostcode } from "@/hooks";
 
 interface HeroBannerProps {
   trustScore?: number;
@@ -57,8 +57,8 @@ export const HeroBanner = ({
         />
       </video>
       <div className="flex flex-col px-mobile sm:px-tablet lg:px-desktop">
-        <div className="flex md:flex-row flex-col pb-10 md:pt-20 md:justify-end items-center max-w-[1152px]">
-          <div className="flex-1 flex flex-col md:pr-10 pb-10 md:pb-36">
+        <div className="flex md:flex-row flex-col py-9 md:pb-35 md:pt-[90px] md:justify-end items-center max-w-[1152px]">
+          <div className="flex-1 flex flex-col pb-10 md:pb-0 md:pr-10">
             <Heading headingText="Ridiculously fast full fibre broadband" />
             <p className="md:pb-7 pb-6 font-garnett text-md font-normal leading-[1.5]">
               Stream, game and WFH, all at the same time, with no drop-offs.

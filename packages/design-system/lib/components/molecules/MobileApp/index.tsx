@@ -29,7 +29,7 @@ export const MobileApp = ({
         {headingText}
       </h2>
 
-      <div className="ds:py-5 ds:flex ds:flex-col ds:md:gap-[16px]">
+      <div className="ds:pt-5 ds:pb-8 ds:md:py-10 ds:flex ds:flex-col ds:gap-1 ds:md:gap-4">
         {textItems.map((item, index) => (
           <div
             key={item.itemText}

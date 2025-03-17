@@ -1,5 +1,3 @@
-import { useEffect, useRef, useState } from "react";
-
 import { TrustpilotStars } from "../TrustpilotStars";
 
 export interface ReviewCardProps {
@@ -8,6 +6,9 @@ export interface ReviewCardProps {
   reviewText: string;
   author: string;
   id: string;
+  isExpanded?: boolean;
+  onToggleExpand?: () => void;
+  hasOverflow?: boolean;
 }
 
 export const ReviewCard = ({
@@ -16,55 +17,50 @@ export const ReviewCard = ({
   reviewText,
   author,
   id,
+  isExpanded = false,
+  onToggleExpand = () => {},
+  hasOverflow = true,
 }: ReviewCardProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isOverflowing, setIsOverflowing] = useState(false);
-  const textRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (textRef.current) {
-      setIsOverflowing(
-        textRef.current.scrollHeight > textRef.current.clientHeight,
-      );
-    }
-  }, [reviewText]);
-
   return (
     <article
       role="article"
-      className={`ds:flex ds:flex-col ds:bg-core-white ds:w-[290px] ds:md:w-[368px] ds:rounded-sm ds:sm:rounded-md ds:px-4 ds:py-6 ${isExpanded ? "ds:h-fit" : "ds:h-[340px] ds:md:h-[380px]"}`}
+      className={`ds:flex ds:flex-col ds:bg-core-white ds:w-[290px] ds:md:w-[368px] ds:rounded-sm ds:sm:rounded-md ds:p-8 ${
+        isExpanded ? "ds:h-auto" : "ds:h-[410px] ds:md:h-[460px]"
+      } ds:overflow-hidden ds:transition-all ds:duration-300`}
     >
-      <div className="ds:md:h-16 ds:h-auto ds:leading-10">
+      <div className="ds:h-[120px] ds:md:h-[160px] ds:mb-4">
         <a
           href={`https://www.trustpilot.com/reviews/${id}`}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <h3 className="ds:md:text-2xl ds:text-[26px] ds:font-semibold ds:line-clamp-2">
+          <h3 className="ds:md:text-3xl ds:text-[26px] ds:font-semibold ds:line-clamp-3">
             {title}
           </h3>
         </a>
       </div>
-      <span
-        role="img"
-        className="ds:sr-only"
-        aria-label={`Rating: ${starRating} out of 5 stars`}
-      />
-      <div className="ds:mt-6 ds:md:mt-12" aria-hidden="true">
+      <div className="ds:mb-6">
+        <span
+          className="ds:sr-only"
+          aria-label={`Rating: ${starRating} out of 5 stars`}
+        />
         <TrustpilotStars trustScore={starRating} height={28} />
       </div>
-      <blockquote className="ds:mt-6 ds:md:text-md ds:text-sm">
+      <blockquote className="ds:md:text-md ds:text-sm ds:flex-grow">
         <div
-          ref={textRef}
-          className={`ds:font-thin ds:text-ui-grey-500 ds:transition-all ds:duration-300 ${isExpanded ? "" : "ds:max-h-[90px] ds:line-clamp-3"}`}
+          className={`ds:font-thin ds:text-ui-grey-500 ds:transition-all ds:duration-300 ${
+            isExpanded ? "" : "ds:max-h-[100px] ds:line-clamp-3"
+          }`}
         >
           {reviewText}
         </div>
-        {isOverflowing && (
+        {hasOverflow && (
           <button
-            onClick={() => setIsExpanded(!isExpanded)}
+            onClick={onToggleExpand}
             className="ds:font-thin ds:mt-2 ds:text-ui-grey-500 ds:hover:underline ds:cursor-pointer ds:text-sm"
-            aria-label="Expand review"
+            aria-label={
+              isExpanded ? "Show less of the review" : "Show more of the review"
+            }
           >
             {isExpanded ? "Read less" : "Read more"}
           </button>

@@ -145,7 +145,7 @@ describe("GuideCard", () => {
 
     const tagContainer = screen.getByRole("list");
     expect(tagContainer.className).toContain(
-      "ds:flex ds:flex-row ds:mt-2 ds:gap-2 ds:pl-0",
+      "ds:flex ds:flex-row ds:pt-6 ds:gap-2 ds:pl-0",
     );
   });
 

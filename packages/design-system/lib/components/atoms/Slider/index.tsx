@@ -57,7 +57,7 @@ export const Slider = ({
   }, []);
 
   const baseStyles = `${draggable ? "ds:select-none ds:user-select-none" : undefined}
-    ds:flex ds:overflow-x-auto ds:relative ds:h-fit ds:scrollbar-none ds:py-5`;
+    ds:flex ds:overflow-x-auto ds:relative ds:h-fit ds:scrollbar-none`;
 
   const marginStyles = cx(margin, "ds:after:flex-none ds:after:w-10");
 
@@ -89,7 +89,7 @@ export const Slider = ({
 
       {trustScore !== undefined && (
         <div className="ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop">
-          <div className="ds:md:pt-16 ds:max-w-[1152px] ds:mx-auto">
+          <div className="ds:pt-8 ds:md:pt-16 ds:max-w-[1152px] ds:mx-auto">
             <TrustpilotHorizontal
               trustScore={trustScore}
               numberOfReviews={numberOfReviews}
@@ -99,7 +99,7 @@ export const Slider = ({
       )}
 
       {isScrollable && (
-        <div className="ds:md:pt-17 ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop">
+        <div className="ds:md:pt-16 ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop">
           <div
             role="scrollbar"
             aria-orientation="horizontal"

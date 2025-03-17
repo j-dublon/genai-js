@@ -5,7 +5,7 @@ import {
 } from "@react-component-library/ui";
 import { ReviewCardSkeleton } from "@react-component-library/ui/server";
 
-import { useTrustpilotReviews } from "@/hooks/useTrustpilotReviews";
+import { useReviewCardExpansion, useTrustpilotReviews } from "@/hooks";
 
 import { reviewIds } from "./trustpilotSliderProps";
 
@@ -58,12 +58,15 @@ export const TrustPilotSlider = ({
   reviews,
   isLoading,
 }: TrustPilotSliderProps) => {
+  const { expandedStates, toggleExpand, hasOverflow } =
+    useReviewCardExpansion(reviews);
+
   return (
     <section
       className="bg-ui-grey-200 pb-12 md:pb-40"
       aria-labelledby="trust-pilot-heading"
     >
-      <div className="py-12 px-mobile sm:px-tablet lg:px-desktop md:pt-40">
+      <div className="py-12 px-mobile sm:px-tablet lg:px-desktop md:pt-40 md:pb-16">
         <div className="max-w-[1152px] mx-auto">
           <h2
             id="trust-pilot-heading"
@@ -71,11 +74,11 @@ export const TrustPilotSlider = ({
           >
             {title}
           </h2>
-          <h3 className="sm:text-4xl text-2xl font-semibold">{subtitle}</h3>
+          <h3 className="md:text-3xl text-[26px] font-semibold">{subtitle}</h3>
         </div>
       </div>
 
-      <div className="px-mobile sm:px-tablet lg:px-desktop">
+      <div className="px-mobile sm:px-tablet lg:px-desktop pb-9">
         <h4 className="max-w-[1152px] mx-auto text-md md:text-lg">
           Showing our 5-star reviews
         </h4>
@@ -100,18 +103,21 @@ export const TrustPilotSlider = ({
                 <ReviewCardSkeleton />
               </div>
             ))
-          : reviews.map((r: ReviewCardProps, i) => (
+          : reviews.map((review: ReviewCardProps, i) => (
               <div
-                key={r.author + r.title}
+                key={review.author + review.title}
                 aria-roledescription="slide"
                 aria-label={`Review ${i + 1} of ${reviews.length}`}
               >
                 <ReviewCard
-                  author={r.author}
-                  reviewText={r.reviewText}
-                  starRating={r.starRating}
-                  title={r.title}
-                  id={r.id}
+                  author={review.author}
+                  reviewText={review.reviewText}
+                  starRating={review.starRating}
+                  title={review.title}
+                  id={review.id}
+                  isExpanded={expandedStates[i]}
+                  onToggleExpand={() => toggleExpand(i)}
+                  hasOverflow={hasOverflow(review.reviewText)}
                 />
               </div>
             ))}

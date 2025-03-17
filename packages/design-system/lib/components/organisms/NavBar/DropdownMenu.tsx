@@ -1,4 +1,5 @@
 import { ChevronVertical } from "@icons/ChevronVertical";
+import cx from "classnames";
 import Link from "next/link";
 
 interface DropdownMenuProps {
@@ -47,19 +48,25 @@ export const DropdownMenu = ({
 
       {isOpen && (
         <div
-          className="ds:bg-ui-grey-200 ds:block ds:rounded-[12px] ds:p-[16px] 
-          ds:absolute ds:left-1/2 ds:top-full ds:min-w-[180px] ds:max-w-[400px] ds:z-[100] 
+          className="ds:bg-ui-grey-200 ds:block ds:rounded-sm ds:p-6 
+          ds:absolute ds:left-[60%] ds:top-full ds:w-fit ds:z-[100] 
           ds:transform ds:-translate-x-1/2 ds:transition-opacity ds:duration-100 ds:ease-in ds:delay-[10ms]"
         >
           <div className="ds:flex ds:flex-col ds:text-left ds:whitespace-nowrap ds:font-bold">
-            {dropdownLinks.map(({ name: subName, href, external }) =>
-              external ? (
+            {dropdownLinks.map(({ name: subName, href, external }, index) => {
+              const notFirstItem = index !== 0;
+              return external ? (
                 <a
                   key={subName}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="ds:block ds:py-2 ds:px-4 ds:text-gray-800 ds:hover:bg-gray-100"
+                  className={cx(
+                    "ds:block ds:text-gray-800 ds:hover:bg-gray-100",
+                    {
+                      "ds:mt-4": notFirstItem,
+                    },
+                  )}
                 >
                   {subName}
                 </a>
@@ -67,12 +74,17 @@ export const DropdownMenu = ({
                 <Link
                   key={subName}
                   href={href ?? "#"}
-                  className="ds:block ds:py-2 ds:px-4 ds:text-gray-800 ds:hover:bg-gray-100"
+                  className={cx(
+                    "ds:block ds:text-gray-800 ds:hover:bg-gray-100",
+                    {
+                      "ds:mt-4": notFirstItem,
+                    },
+                  )}
                 >
                   {subName}
                 </Link>
-              ),
-            )}
+              );
+            })}
           </div>
         </div>
       )}

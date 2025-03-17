@@ -1,7 +1,6 @@
 import { NavBar } from "@react-component-library/ui";
 
-import { useDropdown } from "@/hooks/useDropdown";
-import { useNavBarHandlers } from "@/hooks/useNavBarHandlers";
+import { useDropdown, useNavBarHandlers } from "@/hooks";
 
 export const NavBarWrapper = () => {
   const { toggled, setToggled, openDropdown, setOpenDropdown, drawerRef } =

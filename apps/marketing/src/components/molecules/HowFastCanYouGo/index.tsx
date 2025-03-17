@@ -1,7 +1,7 @@
 "use client";
 import { HowFastCanYouGo } from "@react-component-library/ui";
 
-import { usePostcode } from "@/hooks/usePostcode";
+import { usePostcode } from "@/hooks";
 
 export const HowFastCanYouGoWrapper = () => {
   const { postcode, setPostcode } = usePostcode();

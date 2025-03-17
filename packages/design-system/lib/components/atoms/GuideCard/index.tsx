@@ -47,7 +47,7 @@ export const GuideCard = ({
         </div>
       </div>
       <div
-        className="ds:flex ds:flex-row ds:mt-2 ds:gap-2 ds:pl-0"
+        className="ds:flex ds:flex-row ds:pt-6 ds:gap-2 ds:pl-0"
         role="list"
         aria-label="Tags"
       >

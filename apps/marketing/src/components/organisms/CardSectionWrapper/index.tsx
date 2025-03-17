@@ -21,8 +21,8 @@ export const CardSectionWrapper = () => {
   } = props;
 
   return (
-    <div className="flex flex-col md:items-center bg-core-white py-22 md:py-36 px-mobile sm:px-tablet lg:px-desktop gap-6">
-      <div className="relative flex flex-col bg-ui-grey-200 justify-between md:gap-12 gap-6 md:max-w-[1152px] md:pb-6.5 md:pt-6 pt-5 items-stretch rounded-lg">
+    <div className="flex flex-col md:items-center bg-core-white py-12 gap-6 px-mobile sm:px-tablet lg:px-desktop">
+      <div className="relative flex flex-col bg-ui-grey-200 justify-between md:gap-12 gap-6 md:max-w-[1152px] md:pb-6.5 md:pt-12 pt-6 items-stretch rounded-lg">
         <div className="md:px-10 px-5 flex gap-6 relative z-10">
           <div className="flex flex-col gap-6 md:w-1/2">
             <h1 className="font-semibold md:text-5xl text-4xl">

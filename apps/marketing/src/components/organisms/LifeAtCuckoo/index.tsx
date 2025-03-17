@@ -7,7 +7,7 @@ export const LifeAtCuckoo = () => {
   return (
     <div className="bg-ui-grey-100 py-14 md:py-40">
       <div className="flex justify-center items-center md:pb-16 pb-10 px-mobile sm:px-tablet lg:px-desktop">
-        <div className="pb-10 md:pb-16 w-full lg:max-w-[1152px]">
+        <div className="w-full lg:max-w-[1152px]">
           <div className="md:max-w-[760px] w-full">
             <h2 className="md:text-5xl text-3xl font-semibold md:pb-5 pb-3">
               {imageMarqueeProps.headingText}
@@ -19,7 +19,7 @@ export const LifeAtCuckoo = () => {
           </div>
         </div>
       </div>
-      <div className="md:py-5 md:px-10 w-full overflow-hidden flex">
+      <div className="md:px-10 w-full overflow-hidden flex">
         <ImageMarquee images={imageMarqueeProps.images} />
       </div>
     </div>

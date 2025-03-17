@@ -8,10 +8,8 @@ import {
   useState,
 } from "react";
 
-import {
-  getStorageValue,
-  useBrowserStorage,
-} from "../../hooks/useBrowserStorage";
+import { getStorageValue, useBrowserStorage } from "@/hooks";
+
 import { defaultChoices } from "./defaultChoices";
 
 export enum CookieState {

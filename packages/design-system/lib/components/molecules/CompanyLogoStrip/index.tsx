@@ -19,11 +19,11 @@ export const CompanyLogoStrip = ({
   return (
     <div
       className={cx(
-        "ds:relative ds:overflow-x-hidden ds:pt-4 ds:pb-[40px] ds:md:pt-[30px] ds:md:px-36 ds:w-full",
+        "ds:relative ds:overflow-x-hidden ds:pt-4 ds:pb-[40px] ds:md:pt-[30px] ds:lg:px-desktop ds:w-full",
         backgroundColor,
       )}
     >
-      <p className="ds:max-w-[1152px] ds:mx-auto ds:px-5 ds:md:px-0 ds:font-semibold ds:text-core-black">
+      <p className="ds:max-w-[1152px] ds:px-mobile ds:sm:px-tablet ds:lg:px-0 ds:lg:mx-auto ds:font-semibold ds:text-core-black">
         Trusted by
       </p>
       <div className="ds:hidden ds:md:flex ds:justify-between ds:gap-3 ds:max-w-[1152px] ds:mx-auto ds:mt-1 ds:opacity-70">

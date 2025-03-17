@@ -75,7 +75,7 @@ export const NavBar = ({
         <nav
           ref={drawerRef}
           aria-label="Main navigation"
-          className={`ds:flex ds:justify-between ds:items-center ds:h-[80px] ds:py-[15px] ds:px-[24px] ds:w-full ds:relative ds:z-50
+          className={`ds:flex ds:justify-between ds:items-center ds:h-[80px] ds:py-[15px] ds:px-5 ds:md:px-12 ds:w-full ds:relative ds:z-50
             ${
               toggled
                 ? "ds:bg-core-white"
@@ -108,7 +108,10 @@ export const NavBar = ({
                     />
                   ) : (
                     <Link key={name} href={href ?? "#"}>
-                      <span className="ds:py-2 ds:px-4 ds:rounded-md ds:text-sm ds:font-semibold ds:leading-[26px] ds:text-core-black ds:transition-colors ds:duration-200 ds:hover:text-gray-600 ds:cursor-pointer">
+                      <span
+                        className="ds:py-2 ds:px-4 ds:rounded-md ds:text-sm ds:font-semibold ds:leading-[26px] ds:text-core-black 
+                        ds:transition-colors ds:duration-200 ds:hover:text-gray-600 ds:cursor-pointer"
+                      >
                         {name}
                       </span>
                     </Link>
@@ -160,11 +163,13 @@ export const NavBar = ({
                             prev === link.name ? null : link.name,
                           );
                         }}
-                        className={`ds:md:hidden ds:hover:underline ds:flex ds:items-center ds:py-4 ds:justify-between ds:min-h-[3.5rem] ds:w-full ds:text-[26px] ds:font-bold ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer ds:transition-colors ds:duration-200 ds:group ${
-                          openDropdownMobile === link.name
-                            ? "ds:underline"
-                            : "ds:text-core-black"
-                        }`}
+                        className={`ds:md:hidden ds:hover:underline ds:flex ds:items-center ds:py-4 ds:justify-between ds:min-h-[3.5rem] ds:w-full ds:text-[26px] 
+                          ds:font-bold ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer ds:transition-colors ds:duration-200 ds:group 
+                          ${
+                            openDropdownMobile === link.name
+                              ? "ds:underline"
+                              : "ds:text-core-black"
+                          }`}
                         aria-expanded={openDropdownMobile === link.name}
                         aria-controls={`dropdown-${link.name.toLowerCase().replace(/\s+/g, "-")}`}
                       >
@@ -203,7 +208,10 @@ export const NavBar = ({
                     </>
                   ) : (
                     <Link href={link.href ?? "#"} passHref className="ds:block">
-                      <span className="ds:flex ds:items-center ds:hover:underline ds:justify-between ds:min-h-[3.5rem] ds:py-4 ds:w-full ds:text-[26px] ds:font-bold ds:text-core-black ds:bg-core-white ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer">
+                      <span
+                        className="ds:flex ds:items-center ds:hover:underline ds:justify-between ds:min-h-[3.5rem] ds:py-4 ds:w-full ds:text-[26px] ds:font-bold 
+                      ds:text-core-black ds:bg-core-white ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer"
+                      >
                         {link.name}
                       </span>
                     </Link>
