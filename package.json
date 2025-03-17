@@ -18,7 +18,7 @@
   },
   "packageManager": "npm@11.2.0",
   "dependencies": {
-    "@vercel/microfrontends": "1.0.0",
+    "@vercel/microfrontends": "1.1.0",
     "@vercel/speed-insights": "1.2.0",
     "next": "15.2.1",
     "pino": "9.6.0",
