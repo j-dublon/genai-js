@@ -6,10 +6,9 @@ const steps = [
   { id: 1, label: "Eero Selection" },
   { id: 2, label: "Switching" },
   { id: 3, label: "Go Live Date" },
-  { id: 4, label: "Payment" },
 ];
 
-const DemoStepper = () => {
+const Stepper = () => {
   const { currentStep, setCurrentStep } = useJoinFlowStore();
 
   const activeStep = Math.max(0, currentStep - 1);
@@ -70,4 +69,4 @@ const DemoStepper = () => {
   );
 };
 
-export default DemoStepper;
+export default Stepper;

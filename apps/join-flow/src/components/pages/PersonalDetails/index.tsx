@@ -6,7 +6,7 @@ import useJoinFlowStore, { Address } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import DemoStepper from "@/components/molecules/DemoStepper";
+import Stepper from "@/components/molecules/Stepper";
 
 const PersonalDetails = () => {
   const router = useRouter();
@@ -92,7 +92,7 @@ const PersonalDetails = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <DemoStepper />
+      <Stepper />
 
       <div className="max-w-2xl mx-auto p-8 rounded-lg">
         <h1 className="text-2xl font-bold mb-6">Personal Details</h1>

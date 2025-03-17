@@ -2,15 +2,14 @@
 
 import { Button } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-import DemoStepper from "@/components/molecules/DemoStepper";
+import Stepper from "@/components/molecules/Stepper";
 import { usePaymentForm } from "@/hooks/usePaymentForm";
 import { PaymentDetailsFormValues } from "@/validation/join-flow-schema";
 
-export const PaymentDetails = () => {
+export const PaymentDetails = ({ onGoBack }: { onGoBack?: () => void }) => {
   const router = useRouter();
   const { selectedPackage, eeroSelection, setCurrentStep } = useJoinFlowStore();
 
@@ -29,12 +28,16 @@ export const PaymentDetails = () => {
   };
 
   const handleBack = () => {
-    setCurrentStep(4);
+    if (onGoBack && typeof onGoBack === "function") {
+      onGoBack();
+    } else {
+      setCurrentStep(4);
+    }
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <DemoStepper />
+      <Stepper />
 
       <div className="max-w-4xl mx-auto">
         <div className="bg-core-white p-8 rounded-md">
@@ -145,11 +148,9 @@ export const PaymentDetails = () => {
                 </div>
 
                 <div className="flex justify-between mt-8">
-                  <Link href="/join-flow/one-touch-switching">
-                    <Button onClick={handleBack} tint="white" variant="outline">
-                      Back
-                    </Button>
-                  </Link>
+                  <Button onClick={handleBack} tint="white" variant="outline">
+                    Back
+                  </Button>
 
                   <Button type="submit" tint="yellow" variant="solid">
                     Review Everything and Checkout

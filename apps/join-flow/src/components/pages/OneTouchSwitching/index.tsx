@@ -6,7 +6,7 @@ import useJoinFlowStore, { SwitchingDetails } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import DemoStepper from "@/components/molecules/DemoStepper";
+import Stepper from "@/components/molecules/Stepper";
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
@@ -66,7 +66,7 @@ export const OneTouchSwitching = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <DemoStepper />
+      <Stepper />
 
       <div className="max-w-3xl mx-auto">
         <div className="bg-core-white p-8 rounded-md">

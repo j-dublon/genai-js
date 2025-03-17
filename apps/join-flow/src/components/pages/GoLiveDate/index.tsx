@@ -6,7 +6,9 @@ import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
-import DemoStepper from "@/components/molecules/DemoStepper";
+import Stepper from "@/components/molecules/Stepper";
+import PaymentDetails from "@/components/pages/PaymentDetails/index";
+import { formatDisplayDate } from "@/lib/formatDate";
 
 export const GoLiveDate = () => {
   const router = useRouter();
@@ -16,6 +18,8 @@ export const GoLiveDate = () => {
   const [selectedDate, setSelectedDate] = useState(
     goLiveDetails?.selectedDate || "",
   );
+
+  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
 
   useEffect(() => {
     if (selectedDate && !goLiveDetails?.engineerSlot?.timeSlot) {
@@ -59,28 +63,27 @@ export const GoLiveDate = () => {
       },
     });
 
-    setCurrentStep(5);
-    router.push("/join-flow/payment-details");
+    setCurrentStep(4);
+    setShowPaymentDetails(true);
   };
 
   const handleBack = () => {
+    if (showPaymentDetails) {
+      setShowPaymentDetails(false);
+      return;
+    }
+
     setCurrentStep(3);
     router.push("/join-flow/one-touch-switching");
   };
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-GB", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  };
+  if (showPaymentDetails) {
+    return <PaymentDetails />;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <DemoStepper />
+      <Stepper />
 
       <div className="max-w-3xl mx-auto">
         <div className="bg-core-white p-8 rounded-md">
@@ -103,8 +106,8 @@ export const GoLiveDate = () => {
                 </option>
                 {availableInstallationDates.map((dateOption) => (
                   <option key={dateOption.date} value={dateOption.date}>
-                    {formatDate(dateOption.date)} ({dateOption.slots.length}{" "}
-                    slots available)
+                    {formatDisplayDate(dateOption.date)} (
+                    {dateOption.slots.length} slots available)
                   </option>
                 ))}
               </select>

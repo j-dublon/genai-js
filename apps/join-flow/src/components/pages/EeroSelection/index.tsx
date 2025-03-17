@@ -7,7 +7,7 @@ import { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-import DemoStepper from "@/components/molecules/DemoStepper";
+import Stepper from "@/components/molecules/Stepper";
 
 const EeroSelection = () => {
   const router = useRouter();
@@ -36,7 +36,7 @@ const EeroSelection = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <DemoStepper />
+      <Stepper />
 
       <div className="max-w-4xl mx-auto">
         <div className="p-8 rounded-md">
