@@ -79,7 +79,9 @@ describe("NavBar", () => {
   it("renders links correctly", () => {
     renderNavBar();
     testLinks.forEach((link) => {
-      expect(screen.getByText(link.name)).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: link.name }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -90,16 +92,21 @@ describe("NavBar", () => {
     fireEvent.click(aboutButton);
 
     await waitFor(() => {
-      expect(screen.getByText("About Cuckoo")).toBeInTheDocument();
-      expect(screen.getByText("Blog")).toBeInTheDocument();
+      const dropdown = document.getElementById("dropdown-about");
+      expect(dropdown).toBeInTheDocument();
+      expect(dropdown?.getAttribute("aria-hidden")).toBe("false");
+      expect(dropdown).toHaveClass("ds:visible");
     });
   });
 
-  it("does not show dropdown content when toggled is true", async () => {
+  it("hides dropdown content when toggled is true", async () => {
     renderNavBar({ toggled: true, openDropdown: "About" });
 
-    expect(screen.queryByText("About Cuckoo")).not.toBeInTheDocument();
-    expect(screen.queryByText("Blog")).not.toBeInTheDocument();
+    const dropdown = document.getElementById("dropdown-about");
+    expect(dropdown).not.toBeNull();
+
+    expect(dropdown?.getAttribute("aria-hidden")).toBe("true");
+    expect(dropdown).toHaveClass("ds:invisible");
   });
 
   it("closes dropdown when clicking elsewhere", async () => {
@@ -109,7 +116,10 @@ describe("NavBar", () => {
     fireEvent.click(aboutButton);
 
     await waitFor(() => {
-      expect(screen.getByText("About Cuckoo")).toBeInTheDocument();
+      const dropdown = document.getElementById("dropdown-about");
+      expect(dropdown).toBeInTheDocument();
+      expect(dropdown?.getAttribute("aria-hidden")).toBe("false");
+      expect(dropdown).toHaveClass("ds:visible");
     });
 
     fireEvent.mouseDown(document.body);
@@ -124,7 +134,10 @@ describe("NavBar", () => {
     fireEvent.click(aboutButton);
 
     await waitFor(() => {
-      expect(screen.getByText("About Cuckoo")).toBeInTheDocument();
+      const dropdown = document.getElementById("dropdown-about");
+      expect(dropdown).toBeInTheDocument();
+      expect(dropdown?.getAttribute("aria-hidden")).toBe("false");
+      expect(dropdown).toHaveClass("ds:visible");
     });
 
     fireEvent.keyDown(document, { key: "Escape", code: "Escape" });

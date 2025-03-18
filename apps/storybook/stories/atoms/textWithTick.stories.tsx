@@ -7,7 +7,8 @@ const meta: Meta<typeof TextWithTick> = {
     textInput: { control: "text" },
     backgroundColor: { control: "select" },
     broadbandOffer: { control: "boolean" },
-    noPadding: { control: "boolean" },
+    padding: { control: "select", options: ["none", "default", "large"] },
+    iconSize: { control: "number" },
   },
 };
 
@@ -25,7 +26,7 @@ export const Default: Story = {
 export const NoPadding: Story = {
   args: {
     textInput: "This is an example with no background color or padding",
-    noPadding: true,
+    padding: "none",
   },
 };
 

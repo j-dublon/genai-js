@@ -10,7 +10,10 @@ import { Heading } from "@components/atoms/Heading";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
 import { SectionHeading } from "@components/atoms/SectionHeading";
 import { Slider } from "@components/atoms/Slider";
-import { TextWithTick } from "@components/atoms/TextWithTick";
+import {
+  TextWithTick,
+  TextWithTickProps,
+} from "@components/atoms/TextWithTick";
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ArticleCard } from "@components/molecules/ArticleCard";
@@ -64,4 +67,9 @@ export {
   TrustpilotVertical,
 };
 
-export type { BackgroundColors, GuideCardProps, ReviewCardProps };
+export type {
+  BackgroundColors,
+  GuideCardProps,
+  ReviewCardProps,
+  TextWithTickProps,
+};

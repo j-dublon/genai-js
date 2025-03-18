@@ -1,32 +1,11 @@
 "use client";
 import { TextWithTickList } from "@react-component-library/ui";
-import { ComponentProps } from "react";
 
 import { getAssetPath } from "@/lib/get-asset-path";
 
-export const CuckooProtect = () => {
-  const TextItemList: ComponentProps<typeof TextWithTickList> = {
-    TextWithTickList: [
-      {
-        textInput: "Included for free (worth £XX/month)",
-        broadbandOffer: true,
-      },
-      {
-        textInput: "Parental controls",
-        backgroundColor: "yellow",
-      },
-      {
-        textInput: "Guest networks",
-        backgroundColor: "yellow",
-      },
-      { textInput: "Ad and app blocking", backgroundColor: "yellow" },
-      {
-        textInput: "Automatic security updates",
-        backgroundColor: "yellow",
-      },
-    ],
-  };
+import { textItems } from "./cuckooProtectProps";
 
+export const CuckooProtect = () => {
   return (
     <div className="relative z-10 order-none">
       <video
@@ -61,9 +40,7 @@ export const CuckooProtect = () => {
             </p>
           </div>
           <div className="flex-2 flex flex-col gap-2 min-w-0 font-medium">
-            <TextWithTickList
-              TextWithTickList={TextItemList.TextWithTickList}
-            />
+            <TextWithTickList textItems={textItems} />
           </div>
         </div>
       </div>

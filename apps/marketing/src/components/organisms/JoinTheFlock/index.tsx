@@ -5,9 +5,10 @@ import {
   TrustpilotHorizontal,
 } from "@react-component-library/ui";
 import { usePostHog } from "posthog-js/react";
-import { ComponentProps } from "react";
 
 import { usePostcode } from "@/hooks";
+
+import { textItems } from "./joinTheFlockProps";
 
 interface JoinTheFlockProps {
   trustScore?: number;
@@ -20,23 +21,6 @@ export const JoinTheFlock = ({
 }: JoinTheFlockProps) => {
   const { handleFormSubmit, postcode, setPostcode } = usePostcode();
   const posthog = usePostHog();
-  const TextItemList: ComponentProps<typeof TextWithTickList> = {
-    TextWithTickList: [
-      {
-        textInput: "UK-based Customer Care team",
-        backgroundColor: "yellow",
-      },
-      {
-        textInput: "Ridiculously easy switching",
-        backgroundColor: "yellow",
-      },
-      { textInput: "Free setup and installation", backgroundColor: "yellow" },
-      {
-        textInput: "Handy app to manage your account",
-        backgroundColor: "yellow",
-      },
-    ],
-  };
 
   const onClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -88,9 +72,7 @@ export const JoinTheFlock = ({
             </div>
           </div>
           <div className="flex-2 flex flex-col gap-2 font-medium min-w-0 pb-12 md:pb-0">
-            <TextWithTickList
-              TextWithTickList={TextItemList.TextWithTickList}
-            />
+            <TextWithTickList textItems={textItems} />
           </div>
           <div className="md:hidden">
             {trustScore && numberOfReviews && (

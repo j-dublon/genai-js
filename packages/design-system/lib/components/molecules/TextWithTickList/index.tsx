@@ -4,12 +4,10 @@ import {
 } from "@components/atoms/TextWithTick";
 
 export interface TextWithTickListProps {
-  TextWithTickList: TextWithTickProps[];
+  textItems: TextWithTickProps[];
 }
 
-export const TextWithTickList = ({ TextWithTickList }: TextWithTickListProps) =>
-  TextWithTickList.map((TextWithTickItem) => {
-    return (
-      <TextWithTick key={TextWithTickItem.textInput} {...TextWithTickItem} />
-    );
+export const TextWithTickList = ({ textItems }: TextWithTickListProps) =>
+  textItems.map((each) => {
+    return <TextWithTick key={each.textInput} {...each} />;
   });

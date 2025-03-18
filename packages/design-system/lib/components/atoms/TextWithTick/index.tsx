@@ -9,27 +9,46 @@ export interface TextWithTickProps {
   backgroundColor?: BackgroundColors;
   ariaLabel?: string;
   broadbandOffer?: boolean;
-  noPadding?: boolean;
+  padding?: "none" | "default" | "large";
+  iconSize?: number;
 }
 
 export const TextWithTick = ({
   textInput,
   backgroundColor = "white",
   broadbandOffer = false,
-  noPadding = false,
+  padding = "default",
+  iconSize = 20,
+  ariaLabel,
 }: TextWithTickProps) => {
+  const paddingClass = {
+    none: "",
+    default: "ds:px-6 ds:py-3",
+    large: "ds:px-6 ds:py-4",
+  };
+
   return (
     <div
       className={cx(
         "ds:flex ds:items-center ds:gap-2.5 ds:rounded-full",
-        !noPadding && "ds:px-6 ds:py-3",
-        `${broadbandOffer ? "ds:bg-offer-gradient" : bgColorVariants[backgroundColor]}`,
+        paddingClass[padding],
+        `${broadbandOffer ? "ds:bg-offer-gradient ds:font-semibold" : bgColorVariants[backgroundColor]}`,
       )}
-      aria-label={`Text with tick with the statement ${textInput}`}
+      aria-label={`${ariaLabel ?? `Text with tick with the statement ${textInput}`}`}
     >
-      <span>{broadbandOffer ? <OfferIcon /> : <Tick />}</span>
+      <div className="ds:flex ds:items-center">
+        {broadbandOffer ? (
+          <OfferIcon height={iconSize} width={iconSize} />
+        ) : (
+          <Tick height={iconSize} width={iconSize} />
+        )}
+      </div>
 
-      <p className="ds:md:text-md ds:text-[16px]">{textInput}</p>
+      <p
+        className={`${broadbandOffer ? "ds:md:text-[26px]" : "ds:md:text-md"} ds:text-[16px]`}
+      >
+        {textInput}
+      </p>
     </div>
   );
 };

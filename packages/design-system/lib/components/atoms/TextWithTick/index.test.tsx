@@ -22,18 +22,43 @@ describe("TextWithTick Component", () => {
     expect(textWithTick).toBeInTheDocument();
   });
 
-  it("applies padding by default and removes it when noPadding is true", () => {
-    const { rerender } = render(<TextWithTick {...props} />);
+  it.each([
+    {
+      padding: "default",
+      expectedClasses: ["ds:px-6", "ds:py-3"],
+      notExpectedClasses: ["ds:py-4"],
+    },
+    {
+      padding: "large",
+      expectedClasses: ["ds:px-6", "ds:py-4"],
+      notExpectedClasses: ["ds:py-3"],
+    },
+    {
+      padding: "none",
+      expectedClasses: [],
+      notExpectedClasses: ["ds:px-6", "ds:py-3", "ds:py-4"],
+    },
+  ])(
+    "applies correct padding when padding is $padding",
+    ({ padding, expectedClasses, notExpectedClasses }) => {
+      render(
+        <TextWithTick
+          {...props}
+          padding={padding as "default" | "large" | "none"}
+        />,
+      );
 
-    let container = screen.getByLabelText(
-      "Text with tick with the statement Test text",
-    );
-    expect(container).toHaveClass("ds:px-6", "ds:py-3");
+      const container = screen.getByLabelText(
+        "Text with tick with the statement Test text",
+      );
 
-    rerender(<TextWithTick {...props} noPadding />);
-    container = screen.getByLabelText(
-      "Text with tick with the statement Test text",
-    );
-    expect(container).not.toHaveClass("ds:px-6", "ds:py-3");
-  });
+      expectedClasses.forEach((className) => {
+        expect(container).toHaveClass(className);
+      });
+
+      notExpectedClasses.forEach((className) => {
+        expect(container).not.toHaveClass(className);
+      });
+    },
+  );
 });

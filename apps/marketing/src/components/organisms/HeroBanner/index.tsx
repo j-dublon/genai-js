@@ -6,9 +6,10 @@ import {
   TrustpilotHorizontal,
 } from "@react-component-library/ui";
 import { usePostHog } from "posthog-js/react";
-import { ComponentProps } from "react";
 
 import { usePostcode } from "@/hooks";
+
+import { textItems } from "./heroBannerProps";
 
 interface HeroBannerProps {
   trustScore?: number;
@@ -26,13 +27,6 @@ export const HeroBanner = ({
 }: HeroBannerProps) => {
   const { handleFormSubmit, postcode, setPostcode } = usePostcode();
   const posthog = usePostHog();
-  const TextItemList: ComponentProps<typeof TextWithTickList> = {
-    TextWithTickList: [
-      { textInput: "Full fibre speeds up to 900Mbps" },
-      { textInput: "UK’s most reliable broadband technology" },
-      { textInput: "eero Pro 6E router with every plan" },
-    ],
-  };
 
   // TODO: This is just an example replace when actual button logic is added
   const onClick = (event: React.FormEvent<HTMLFormElement>) => {
@@ -42,14 +36,17 @@ export const HeroBanner = ({
   };
 
   return (
-    <div className="relative flex justify-center" data-testid="hero-banner">
+    <div
+      className="relative flex justify-center overflow-clip"
+      data-testid="hero-banner"
+    >
       <video
         data-test-id="hero-banner-video"
         autoPlay
         playsInline
         loop
         muted
-        className="absolute order-1 h-full w-full object-cover col-start-5 col-span-8 row-start-1 row-span-3 -z-10"
+        className="absolute order-1 h-full w-full object-cover col-start-5 col-span-8 row-start-1 row-span-3 -z-10 scale-101"
       >
         <source
           src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/Z7SYdZ7c43Q3f64O_Hero_motion_banner.mp4"
@@ -57,10 +54,10 @@ export const HeroBanner = ({
         />
       </video>
       <div className="flex flex-col px-mobile sm:px-tablet lg:px-desktop">
-        <div className="flex md:flex-row flex-col py-9 md:pb-35 md:pt-[90px] md:justify-end items-center max-w-[1152px]">
-          <div className="flex-1 flex flex-col pb-10 md:pb-0 md:pr-10">
+        <div className="flex md:flex-row flex-col py-9 md:pb-35 md:pt-[90px] md:items-start items-center max-w-[1152px]">
+          <div className="flex-1 flex flex-col pb-12 md:pb-0 md:pr-10">
             <Heading headingText="Ridiculously fast full fibre broadband" />
-            <p className="md:pb-7 pb-6 font-garnett text-md font-normal leading-[1.5]">
+            <p className="text-md md:text-[26px] md:pb-7 pb-6 font-garnett font-normal leading-[1.5]">
               Stream, game and WFH, all at the same time, with no drop-offs.
             </p>
             <div className="md:pb-16">
@@ -86,9 +83,7 @@ export const HeroBanner = ({
           </div>
           <div className="flex md:w-[85%] w-full h-[85%]">
             <div className="flex-1 flex flex-col gap-3 font-medium justify-start md:pb-0 pb-12">
-              <TextWithTickList
-                TextWithTickList={TextItemList.TextWithTickList}
-              />
+              <TextWithTickList textItems={textItems} />
             </div>
           </div>
           <div

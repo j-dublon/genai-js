@@ -41,7 +41,11 @@ export const MobileApp = ({
             )}
             onClick={() => handleItemClick(index)}
           >
-            <TextWithTick key={index} textInput={item.itemText} noPadding />
+            <TextWithTick
+              key={index}
+              textInput={item.itemText}
+              padding="none"
+            />
           </div>
         ))}
       </div>

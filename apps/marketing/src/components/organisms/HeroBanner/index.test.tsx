@@ -54,14 +54,16 @@ describe("HeroBanner", () => {
   });
 
   it("renders all TextWithTick items", async () => {
-    const item1 = await screen.findByText("Full fibre speeds up to 900Mbps");
-    const item2 = await screen.findByText(
-      "UK’s most reliable broadband technology",
+    const item1 = await screen.findByText("Get 900Mbps for £38/month");
+    const item2 = await screen.findByText("£0 set-up and installation");
+    const item3 = await screen.findByText(
+      "UK's most reliable broadband technology",
     );
-    const item3 = await screen.findByText("eero Pro 6E router with every plan");
+    const item4 = await screen.findByText("eero Pro 6E router with every plan");
 
     expect(item1).toBeInTheDocument();
     expect(item2).toBeInTheDocument();
     expect(item3).toBeInTheDocument();
+    expect(item4).toBeInTheDocument();
   });
 });

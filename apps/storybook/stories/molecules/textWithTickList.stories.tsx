@@ -17,7 +17,7 @@ export const Primary: Story = {
   ),
   name: "Text With Tick",
   args: {
-    TextWithTickList: [
+    textItems: [
       {
         textInput: "This is an example bit of text with an offer",
         broadbandOffer: true,
