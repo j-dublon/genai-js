@@ -59,7 +59,7 @@ export const InfoCard = ({
           <div
             className={`ds:flex ds:flex-col ds:md:gap-10 ds:gap-4 ${additionalText && "ds:md:w-[50%]"}`}
           >
-            <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl">
+            <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl ds:md:pl-3">
               {titleText}
             </h1>
             <div className="ds:flex ds:flex-col ds:gap-3">
@@ -70,7 +70,7 @@ export const InfoCard = ({
                   size="medium"
                 />
               </div>
-              <div>
+              <div className="ds:md:pl-5">
                 <h2
                   className={
                     titleText
@@ -86,7 +86,7 @@ export const InfoCard = ({
         ) : (
           <div {...(additionalText ? { className: "ds:md:w-[50%]" } : {})}>
             {titleText && (
-              <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl ds:md:pb-7 ds:pb-4 ds:w-3/4">
+              <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl ds:md:pb-7 ds:pb-4 ds:w-3/4 ds:md:pl-3">
                 {titleText}
               </h1>
             )}
@@ -111,7 +111,7 @@ export const InfoCard = ({
               </ul>
             )}
 
-            <div>
+            <div className="ds:md:pl-5">
               {subHeading && (
                 <p
                   className={

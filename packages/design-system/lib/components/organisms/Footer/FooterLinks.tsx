@@ -10,15 +10,15 @@ export const FooterLinks = ({ sections }: FooterLinksProps) => {
     <div className="ds:flex ds:flex-col ds:sm:flex-row ds:space-y-8 ds:sm:space-y-0 ds:sm:space-x-8">
       {sections.map((section, index) => (
         <div key={index} className="ds:flex-1">
-          <h3 className="ds:text-xs ds:text-ui-grey-500 ds:text-left">
+          <h3 className="ds:text-[12px] ds:text-ui-grey-500 ds:text-left">
             {section.header}
           </h3>
-          <ul className="ds:mt-4 ds:space-y-4">
+          <ul className="ds:mt-4 ds:space-y-3">
             {section.links.map((link, linkIndex) => (
               <li key={linkIndex}>
                 <a
                   href={link.href}
-                  className="ds:text-sm ds:text-left ds:no-underline ds:hover:underline ds:underline-offset-2"
+                  className="ds:text-[14px] ds:leading-[1.6] ds:text-left ds:no-underline ds:hover:underline ds:underline-offset-2"
                 >
                   {link.label}
                 </a>

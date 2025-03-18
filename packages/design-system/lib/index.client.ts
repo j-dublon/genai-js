@@ -7,6 +7,7 @@ import { ColorPill } from "@components/atoms/ColorPill";
 import { FeatureImage } from "@components/atoms/FeatureImage";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
+import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
 import { SectionHeading } from "@components/atoms/SectionHeading";
 import { Slider } from "@components/atoms/Slider";
@@ -53,6 +54,7 @@ export {
   MobileApp,
   MobilePhone,
   NavBar,
+  PhoneTextContent,
   PostcodeChecker,
   ProductCard,
   ReviewCard,

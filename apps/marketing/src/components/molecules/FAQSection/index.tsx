@@ -13,7 +13,7 @@ const questionsArr = [
   {
     dropdown_header: "Isn't switching a hassle?",
     dropdown_content: [
-      "We’ve made the whole thing oh-so-simple. Just pop in your postcode at the top of the page, pick your speed and contract length, and then choose a start date. Our friendly, UK-based Customer Care team will guide you every step of the way and answer any questions you have. For more info, our switching page shows you just how easy it is.",
+      "We've made the whole thing oh-so-simple. Just pop in your postcode at the top of the page, pick your speed and contract length, and then choose a start date. Our friendly, UK-based Customer Care team will guide you every step of the way and answer any questions you have. For more info, our switching page shows you just how easy it is.",
     ],
     button_text: "Make the switch",
     button_link: "/switching",
@@ -22,14 +22,14 @@ const questionsArr = [
     dropdown_header: "Can I sign up over the phone?",
     dropdown_content: [
       "Yes! We understand that everyone does things differently, so our friendly team are always happy to help.",
-      `You can sign up by calling us directly on: 0330 912 9955`,
+      "You can sign up by calling us directly on: 0330 912 9955",
     ],
   },
   {
     dropdown_header: "What are the benefits of full fibre?",
     dropdown_content: [
       "Full fibre gives you brilliantly fast, brilliantly reliable speeds of up to 900Mbps, all thanks to a fibre optic cable that connects directly to your home. ",
-      "Unlike some providers, we don’t use the older, copper wire connections from those green cabinets on the street. Not only are they much, much slower and more likely to break, they also force you to share the bandwidth with your neighbours (which is what causes the dreaded buffering). ",
+      "Unlike some providers, we don't use the older, copper wire connections from those green cabinets on the street. Not only are they much, much slower and more likely to break, they also force you to share the bandwidth with your neighbours (which is what causes the dreaded buffering). ",
       "With Cuckoo, you have your very own future-proof connection. ",
     ],
     button_text: "Learn more",

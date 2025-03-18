@@ -23,8 +23,8 @@ export const TextWithTick = ({
 }: TextWithTickProps) => {
   const paddingClass = {
     none: "",
-    default: "ds:px-6 ds:py-3",
-    large: "ds:px-6 ds:py-4",
+    default: "ds:px-3 ds:md:px-6 ds:py-[10px] ds:md:py-3",
+    large: "ds:px-3 ds:md:px-6 ds:py-[10px] ds:md:py-4",
   };
 
   return (
@@ -32,7 +32,7 @@ export const TextWithTick = ({
       className={cx(
         "ds:flex ds:items-center ds:gap-2.5 ds:rounded-full",
         paddingClass[padding],
-        `${broadbandOffer ? "ds:bg-offer-gradient ds:font-semibold" : bgColorVariants[backgroundColor]}`,
+        `${broadbandOffer ? "ds:bg-offer-gradient" : bgColorVariants[backgroundColor]}`,
       )}
       aria-label={`${ariaLabel ?? `Text with tick with the statement ${textInput}`}`}
     >
@@ -45,7 +45,10 @@ export const TextWithTick = ({
       </div>
 
       <p
-        className={`${broadbandOffer ? "ds:md:text-[26px]" : "ds:md:text-md"} ds:text-[16px]`}
+        className={cx(
+          `${broadbandOffer ? "ds:md:text-[26px] ds:font-semibold" : "ds:md:text-md ds:font-semibold ds:md:font-medium"}`,
+          "ds:text-[14px] ds:leading-[1.6] ds:md:leading-[1.5]",
+        )}
       >
         {textInput}
       </p>

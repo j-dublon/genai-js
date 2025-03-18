@@ -40,13 +40,14 @@ describe("JoinTheFlock", () => {
 
   test("renders the text with ticks list", () => {
     render(<JoinTheFlock />);
-    const textItems = [
+    const listItems = [
+      "£0 set-up & installation",
       "UK-based Customer Care team",
       "Ridiculously easy switching",
-      "Free setup and installation",
       "Handy app to manage your account",
+      "Cuckoo Protect (worth £199.98)",
     ];
-    textItems.forEach((item) => {
+    listItems.forEach((item) => {
       expect(screen.getByText(item)).toBeInTheDocument();
     });
   });

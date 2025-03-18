@@ -25,7 +25,7 @@ export const CardSectionWrapper = () => {
       <div className="relative flex flex-col bg-ui-grey-200 justify-between md:gap-12 gap-6 md:max-w-[1152px] md:pb-6.5 md:pt-12 pt-6 items-stretch rounded-lg">
         <div className="md:px-10 px-5 flex gap-6 relative z-10">
           <div className="flex flex-col gap-6 md:w-1/2">
-            <h1 className="font-semibold md:text-5xl text-4xl">
+            <h1 className="font-semibold md:text-5xl text-4xl leading-[1.2]">
               {cardSectionHeading}
             </h1>
             <p className="font-normal md:text-md text-[16px]">

@@ -24,7 +24,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
   return (
     <>
       {titleText && (
-        <h2 className="ds:w-full ds:font-bold ds:mb-5 ds:md:text-5xl ds:text-[26px]">
+        <h2 className="ds:w-full ds:font-semibold ds:mb-5 ds:md:text-5xl ds:text-[26px] ds:leading-[1.5] ds:md:leading-[1.2]">
           {titleText}
         </h2>
       )}
