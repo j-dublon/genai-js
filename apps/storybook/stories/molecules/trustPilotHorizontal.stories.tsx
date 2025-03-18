@@ -6,6 +6,7 @@ const meta: Meta<typeof TrustpilotHorizontal> = {
   argTypes: {
     trustScore: { control: "number" },
     numberOfReviews: { control: "number" },
+    flexDirection: { type: "string" },
   },
 };
 
@@ -16,6 +17,7 @@ type Story = StoryObj<typeof TrustpilotHorizontal>;
 interface TrustpilotHorizontalProps {
   trustScore: number;
   numberOfReviews?: number;
+  flexDirection?: string;
 }
 
 export const Primary: Story = {
@@ -28,5 +30,6 @@ export const Primary: Story = {
   args: {
     trustScore: 4.5,
     numberOfReviews: 1234,
+    flexDirection: "flex-row",
   },
 };

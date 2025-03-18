@@ -98,7 +98,7 @@ describe("HomePage", () => {
   it("renders the Click Switch Done section", () => {
     const titleText = screen.getByText("Click. Switch.");
     const imgElement = screen.getByAltText(
-      "Done text in a pink coloured pill with an arrow icon pointing at it",
+      "The word done in a pink coloured pill with an arrow icon pointing at it",
     );
     expect(titleText).toBeInTheDocument();
     expect(imgElement).toBeInTheDocument();

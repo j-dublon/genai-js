@@ -136,7 +136,7 @@ describe("GuideCard", () => {
 
     const title = screen.getByRole("heading", { level: 2 });
     expect(title.className).toContain(
-      "ds:mt-2 ds:text-xl ds:md:text-[26px] ds:font-bold",
+      "ds:mt-2 ds:text-md ds:md:text-[26px] ds:font-bold",
     );
   });
 

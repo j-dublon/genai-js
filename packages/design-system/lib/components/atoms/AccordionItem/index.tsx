@@ -25,7 +25,7 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
             <h2 className="ds:font-semibold ds:md:text-[26px] ds:text-left ds:text-core-black">
               {question.dropdown_header}
             </h2>
-            <div className="ds:flex ds:justify-center ds:items-center ds:border-2 ds:rounded-full ds:border-ui-grey-200 ds:w-10 ds:h-10 ds:lg:w-16 ds:lg:h-16">
+            <div className="ds:flex ds:justify-center ds:items-center ds:border-2 ds:rounded-full ds:border-ui-grey-200 ds:w-10 ds:h-10 ds:md:w-16 ds:md:h-16">
               <ChevronVerticalWithCircle DropdownOpen={FAQDropdownOpen} />
             </div>
           </div>

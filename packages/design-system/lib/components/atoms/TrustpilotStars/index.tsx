@@ -6,23 +6,18 @@ interface TrustpilotStarsProps {
   height?: number;
 }
 
-export const TrustpilotStars = ({
-  trustScore,
-  width = 140,
-  height = 25,
-}: TrustpilotStarsProps) => {
+export const TrustpilotStars = ({ trustScore }: TrustpilotStarsProps) => {
   const { full, half } = getTrustpilotStarStatus(trustScore);
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 520 96"
-      width={width}
-      height={height}
       role="img"
       aria-label={`Trustpilot stars: ${full} full star(s)${
         half ? " and a half-star" : ""
       }`}
+      className="ds:w-full ds:h-5 ds:md:h-[25px]"
     >
       <defs>
         <mask id="half-mask">

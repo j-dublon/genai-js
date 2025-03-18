@@ -24,7 +24,7 @@ export const MobileApp = ({
   };
 
   return (
-    <div className="ds:lg:py-[50px] ds:sm:px-tablet ds:md:px-5 ds:lg:px-10 ds:p-6 ds:bg-core-white ds:md:rounded-lg ds:w-full ds:md:max-w-[564px] ">
+    <div className="ds:lg:py-[50px] ds:sm:px-tablet ds:md:px-5 ds:lg:px-10 ds:p-6 ds:pb-10 ds:bg-core-white ds:md:rounded-lg ds:w-full ds:md:max-w-[564px] ">
       <h2 className="ds:lg:text-5xl ds:md:text-4xl ds:text-3xl ds:font-semibold">
         {headingText}
       </h2>
@@ -44,6 +44,7 @@ export const MobileApp = ({
             <TextWithTick
               key={index}
               textInput={item.itemText}
+              iconSize={24}
               padding="none"
             />
           </div>

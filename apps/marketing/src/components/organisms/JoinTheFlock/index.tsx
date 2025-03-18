@@ -79,6 +79,7 @@ export const JoinTheFlock = ({
               <TrustpilotHorizontal
                 trustScore={trustScore}
                 numberOfReviews={numberOfReviews}
+                flexDirection="flex-col"
               />
             )}
           </div>

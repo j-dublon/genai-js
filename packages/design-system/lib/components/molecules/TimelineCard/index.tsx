@@ -15,7 +15,7 @@ export const TimelineCard = ({
   subHeading,
 }: TimelineCardProps) => {
   return (
-    <div className="ds:p-5 ds:bg-ui-grey-200 ds:rounded-lg ds:md:w-[30%]">
+    <div className="ds:p-4 ds:pb-8 ds:md:p-6 ds:bg-ui-grey-200 ds:rounded-lg ds:md:w-[30%]">
       <div className="ds:md:pb-10 ds:pb-5">
         <ColorPill
           colorPillText={colorPillText}

@@ -62,7 +62,7 @@ export const GuideCard = ({
         ))}
       </div>
 
-      <h2 className="ds:mt-2 ds:text-xl ds:md:text-[26px] ds:font-bold">
+      <h2 className="ds:mt-2 ds:text-md ds:md:text-[26px] ds:font-bold">
         <a href={url} className="ds:text-inherit">
           {title}
         </a>

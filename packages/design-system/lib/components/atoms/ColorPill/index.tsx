@@ -5,7 +5,7 @@ import cx from "classnames";
 const sizeVariants = {
   small: {
     container: "ds:px-2 ds:md:px-3 ds:py-1",
-    text: "ds:text-xs ds:md:text-sm",
+    text: "ds:text-sm",
   },
   medium: {
     container: "ds:px-4 ds:md:px-6 ds:py-2",

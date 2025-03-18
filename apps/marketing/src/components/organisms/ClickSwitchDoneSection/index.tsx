@@ -17,7 +17,7 @@ export const ClickSwitchDoneSection = () => {
             </h2>
             <img
               src={getAssetPath("/images/done_button.svg")}
-              alt="Done text in a pink coloured pill with an arrow icon pointing at it"
+              alt="The word done in a pink coloured pill with an arrow icon pointing at it"
               className="w-32 md:w-56 h-auto"
             />
           </div>
