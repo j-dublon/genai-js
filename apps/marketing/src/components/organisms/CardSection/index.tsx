@@ -3,7 +3,7 @@ import { InfoCard } from "@react-component-library/ui";
 
 import { getAssetPath } from "@/lib/get-asset-path";
 
-import { InfoCardProps, props } from "./cardSectionWrapperProps";
+import { InfoCardProps, props } from "./cardSectionProps";
 
 export interface CardSectionProps {
   cardSectionHeading: string;
@@ -12,7 +12,7 @@ export interface CardSectionProps {
   detailedCardContent?: InfoCardProps;
 }
 
-export const CardSectionWrapper = () => {
+export const CardSection = () => {
   const {
     cardSectionHeading,
     cardSectionText,

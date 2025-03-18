@@ -3,7 +3,7 @@ import { TermsAndConditions } from "@/components/atoms/TermsAndConditions";
 import { CompanyLogoStripWrapper } from "@/components/molecules/CompanyLogoStrip";
 import { FAQSection } from "@/components/molecules/FAQSection";
 import { HowFastCanYouGoWrapper } from "@/components/molecules/HowFastCanYouGo";
-import { CardSectionWrapper } from "@/components/organisms/CardSectionWrapper";
+import { CardSection } from "@/components/organisms/CardSection";
 import { ClickSwitchDoneSection } from "@/components/organisms/ClickSwitchDoneSection";
 import { CuckooProtect } from "@/components/organisms/CuckooProtect";
 import { FooterWrapper } from "@/components/organisms/Footer";
@@ -45,7 +45,7 @@ export const HomePage = () => {
           enableTermsAndConditionsText={enableTermsAndConditionsText}
           termsAndConditionsText={termsAndConditionsText}
         />
-        <CardSectionWrapper />
+        <CardSection />
         {enableTermsAndConditionsText && (
           <TermsAndConditions termsAndConditionsText={termsAndConditionsText} />
         )}

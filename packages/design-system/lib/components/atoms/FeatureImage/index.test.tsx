@@ -72,4 +72,40 @@ describe("FeatureText", () => {
     const image = screen.queryByAltText("Test overlay image");
     expect(image).not.toBeInTheDocument();
   });
+
+  it("renders promotion image when provided", () => {
+    render(
+      <FeatureImage
+        backgroundColor="yellow"
+        backgroundImage={{
+          url: "/test-image.jpg",
+          alt: "Test image",
+        }}
+        promotionImage={{
+          url: "/test-promotion-image.jpg",
+          alt: "Test promotion image",
+        }}
+      />,
+    );
+
+    const image = screen.getByAltText("Test promotion image");
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute("src", "/test-promotion-image.jpg");
+    expect(image).toHaveAttribute("alt", "Test promotion image");
+  });
+
+  it("does not render promotion image when not provided", () => {
+    render(
+      <FeatureImage
+        backgroundColor="yellow"
+        backgroundImage={{
+          url: "/test-image.jpg",
+          alt: "Test image",
+        }}
+      />,
+    );
+
+    const image = screen.queryByAltText("Test promotion image");
+    expect(image).not.toBeInTheDocument();
+  });
 });

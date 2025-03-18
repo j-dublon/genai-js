@@ -51,9 +51,18 @@ export const props: {
         url: getAssetPath("/images/eero.svg"),
         alt: "Eero router",
       },
+      promotionImage: {
+        url: getAssetPath("/images/cuckooProtectEgg.svg"),
+        alt: "cuckoo protect offer image with the text: Pssst... advanced security and privacy features worth £199.98 come built-in with every one of our plans, too.",
+      },
     },
   },
 };
+
+interface image {
+  url: string;
+  alt: string;
+}
 
 export interface InfoCardProps {
   titleText?: string;
@@ -66,14 +75,9 @@ export interface InfoCardProps {
   featureImageProps?: {
     backgroundColor: BackgroundColors;
     infoCard: boolean;
-    backgroundImage: {
-      url: string;
-      alt: string;
-    };
-    overlayImage: {
-      url: string;
-      alt: string;
-    };
+    backgroundImage: image;
+    overlayImage: image;
+    promotionImage: image;
   };
   listItems?: string[];
 }

@@ -13,6 +13,10 @@ export interface FeatureImageProps {
     url: string;
     alt: string;
   };
+  promotionImage?: {
+    url: string;
+    alt: string;
+  };
 }
 
 export const FeatureImage = ({
@@ -20,9 +24,12 @@ export const FeatureImage = ({
   infoCard = false,
   backgroundImage,
   overlayImage,
+  promotionImage,
 }: FeatureImageProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const containerClasses = `${bgColorVariants[backgroundColor]} ${infoCard ? "ds:rounded-t-lg" : "ds:rounded-lg"} ds:flex ds:flex-col ds:overflow-hidden ds:w-full ds:h-auto ds:min-w-0`;
+  console.log("hello");
+  console.log(promotionImage?.url);
 
   return (
     <div
@@ -41,10 +48,21 @@ export const FeatureImage = ({
         </div>
         {overlayImage && (
           <div className="ds:absolute ds:inset-0 ds:z-10 ds:flex ds:justify-center ds:items-center">
-            <div className="ds:w-[40vw] ds:h-[40vw] ds:max-w-[400px] ds:max-h-[400px] ds:lg:max-w-[550px] ds:lg:max-h-[550px]">
+            <div className="ds:w-[38vw] ds:h-[38vw] ds:max-w-[400px] ds:max-h-[400px] ds:lg:max-w-[425px] ds:lg:max-h-[425]">
               <img
                 src={overlayImage.url}
                 alt={overlayImage.alt}
+                className="ds:w-full ds:h-full ds:object-contain"
+              />
+            </div>
+          </div>
+        )}
+        {promotionImage && (
+          <div className="ds:hidden ds:md:inline ds:md:absolute ds:md:inset-0 ds:md:-right-2 ds:md:z-10">
+            <div className="">
+              <img
+                src={promotionImage.url}
+                alt={promotionImage.alt}
                 className="ds:w-full ds:h-full ds:object-contain"
               />
             </div>

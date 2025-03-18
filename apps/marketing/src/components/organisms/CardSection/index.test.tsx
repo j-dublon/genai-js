@@ -2,8 +2,8 @@ import "@testing-library/jest-dom";
 
 import { render, screen } from "@testing-library/react";
 
-import { CardSectionWrapper } from ".";
-import { props } from "./cardSectionWrapperProps";
+import { CardSection } from ".";
+import { props } from "./cardSectionProps";
 
 describe("CardSectionWrapper", () => {
   const {
@@ -15,15 +15,15 @@ describe("CardSectionWrapper", () => {
 
   describe("First section of Card Section", () => {
     it("renders the heading", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       expect(screen.getByText(cardSectionHeading)).toBeInTheDocument();
     });
     it("renders the paragraph", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       expect(screen.getByText(cardSectionText)).toBeInTheDocument();
     });
     it("renders the first card with list items", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       expect(
         screen.getByText(infoCardContent[0].colorPillText),
       ).toBeInTheDocument();
@@ -34,7 +34,7 @@ describe("CardSectionWrapper", () => {
       }
     });
     it("renders the second card with list items", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       expect(
         screen.getByText(infoCardContent[1].colorPillText),
       ).toBeInTheDocument();
@@ -48,7 +48,7 @@ describe("CardSectionWrapper", () => {
 
   describe("Second section of Card Section", () => {
     it("renders the heading", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       if (detailedCardContent?.titleText) {
         expect(
           screen.getByText(detailedCardContent.titleText),
@@ -57,7 +57,7 @@ describe("CardSectionWrapper", () => {
     });
 
     it("renders the color pill", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       if (detailedCardContent?.colorPillText) {
         expect(
           screen.getByText(detailedCardContent.colorPillText),
@@ -66,7 +66,7 @@ describe("CardSectionWrapper", () => {
     });
 
     it("renders the subheading", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       if (detailedCardContent?.subHeading) {
         expect(
           screen.getByText(detailedCardContent.subHeading),
@@ -75,7 +75,7 @@ describe("CardSectionWrapper", () => {
     });
 
     it("renders the additional text", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       if (detailedCardContent?.additionalText) {
         expect(
           screen.getByText(detailedCardContent.additionalText),
@@ -84,7 +84,7 @@ describe("CardSectionWrapper", () => {
     });
 
     it("renders the button", () => {
-      render(<CardSectionWrapper />);
+      render(<CardSection />);
       if (detailedCardContent?.buttonText) {
         expect(
           screen.getByText(detailedCardContent.buttonText),

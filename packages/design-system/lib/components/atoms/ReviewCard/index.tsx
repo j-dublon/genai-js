@@ -39,7 +39,7 @@ export const ReviewCard = ({
           </h3>
         </a>
       </div>
-      <div className="ds:mb-6">
+      <div className="ds:mb-6 ds:w-[140px]">
         <span
           className="ds:sr-only"
           aria-label={`Rating: ${starRating} out of 5 stars`}
