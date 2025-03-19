@@ -48,7 +48,7 @@ export const FeatureImage = ({
         </div>
         {overlayImage && (
           <div className="ds:absolute ds:inset-0 ds:z-10 ds:flex ds:justify-center ds:items-center">
-            <div className="ds:w-[38vw] ds:h-[38vw] ds:max-w-[400px] ds:max-h-[400px] ds:lg:max-w-[425px] ds:lg:max-h-[425]">
+            <div className="ds:w-[38vw] ds:h-[38vw] ds:max-w-[400px] ds:max-h-[400px] ds:lg:max-w-[425px] ds:lg:max-h-[425px]">
               <img
                 src={overlayImage.url}
                 alt={overlayImage.alt}
