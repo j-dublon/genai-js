@@ -28,8 +28,6 @@ export const FeatureImage = ({
 }: FeatureImageProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const containerClasses = `${bgColorVariants[backgroundColor]} ${infoCard ? "ds:rounded-t-lg" : "ds:rounded-lg"} ds:flex ds:flex-col ds:overflow-hidden ds:w-full ds:h-auto ds:min-w-0`;
-  console.log("hello");
-  console.log(promotionImage?.url);
 
   return (
     <div
