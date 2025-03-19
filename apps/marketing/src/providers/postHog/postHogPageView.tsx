@@ -1,14 +1,11 @@
 "use client";
 
-import { usePathname, useSearchParams } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
 import { Suspense, useEffect } from "react";
 
 import { useCookieNotice } from "@/contexts/CookieNotice";
 
 function PostHogPageView(): null {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
   const posthog = usePostHog();
   const cookieNotice = useCookieNotice();
 
@@ -20,18 +17,6 @@ function PostHogPageView(): null {
         : "opt_out_capturing"
     ]();
   }, [cookieNotice?.choices?.analytics_storage, posthog]);
-
-  // Track pageviews
-  useEffect(() => {
-    if (pathname && posthog) {
-      let url = window.origin + pathname;
-      if (searchParams.toString()) {
-        url = url + `?${searchParams.toString()}`;
-      }
-
-      posthog.capture("$pageview", { $current_url: url });
-    }
-  }, [pathname, searchParams, posthog]);
 
   return null;
 }
