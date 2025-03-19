@@ -25,7 +25,7 @@ export const Footer = ({
       <div className="ds:flex ds:flex-col ds:md:flex-row ds:md:justify-between ds:w-full ds:md:max-w-[1152px]">
         <div className="ds:flex ds:flex-col ds:md:flex-auto ds:md:justify-between ds:md:w-1/2">
           <div className="ds:max-w-[313px] ds:lg:max-w-[50%]">
-            <h2 className="ds:font-bold ds:text-4xl ds:md:text-5xl">
+            <h2 className="ds:font-bold ds:text-4xl ds:md:text-5xl ds:leading-[1.4] ds:md:leading-[1.2]">
               {titleText}
             </h2>
           </div>

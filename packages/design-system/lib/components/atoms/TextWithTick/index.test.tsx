@@ -25,18 +25,24 @@ describe("TextWithTick Component", () => {
   it.each([
     {
       padding: "default",
-      expectedClasses: ["ds:px-6", "ds:py-3"],
-      notExpectedClasses: ["ds:py-4"],
+      expectedClasses: ["ds:px-3", "ds:md:px-6", "ds:py-[10px]", "ds:md:py-3"],
+      notExpectedClasses: ["ds:md:py-4"],
     },
     {
       padding: "large",
-      expectedClasses: ["ds:px-6", "ds:py-4"],
-      notExpectedClasses: ["ds:py-3"],
+      expectedClasses: ["ds:px-3", "ds:md:px-6", "ds:py-[10px]", "ds:md:py-4"],
+      notExpectedClasses: ["ds:md:py-3"],
     },
     {
       padding: "none",
       expectedClasses: [],
-      notExpectedClasses: ["ds:px-6", "ds:py-3", "ds:py-4"],
+      notExpectedClasses: [
+        "ds:px-3",
+        "ds:md:px-6",
+        "ds:py-[10px]",
+        "ds:md:py-3",
+        "ds:md:py-4",
+      ],
     },
   ])(
     "applies correct padding when padding is $padding",

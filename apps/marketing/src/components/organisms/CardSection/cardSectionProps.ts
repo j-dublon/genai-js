@@ -8,37 +8,37 @@ export const props: {
 } = {
   cardSectionHeading: "A genuinely amazing connection",
   cardSectionText:
-    "Our full fibre makes a huge difference when it comes to things like watching TV, gaming online or downloading big files. It’s all thanks to those clever fibre optic cables, which are loads speedier and sturdier than copper-based setups.",
+    "Our full fibre makes a huge difference when it comes to things like watching TV, gaming online or downloading big files. It's all thanks to those clever fibre optic cables, which are loads speedier and sturdier than copper-based setups.",
   infoCardContent: [
     {
       colorPillText: "15x faster",
       colorPillBackgroundColor: "yellow",
       infoCardBackgroundColor: "pink",
       listItems: [
-        "Instant downloads and uploads",
+        "Lightning-quick downloads and uploads",
         "Lag-free, ping-free gaming",
         "Stream in ultra-HD, all the time",
       ],
     },
     {
-      colorPillText: "5x more reliable",
+      colorPillText: "Loaaads more reliable",
       colorPillBackgroundColor: "yellow",
       infoCardBackgroundColor: "orange",
       listItems: [
-        "No drop-offs on video calls",
-        "Buffer-free streaming and gaming",
-        "Keep all your devices connected",
+        "Amazing connection even during peak times",
+        "Next to no drop-offs on video calls",
+        "Super smooth streaming and gaming",
       ],
     },
   ],
   detailedCardContent: {
     titleText: "Meet your new super eero",
-    colorPillText: "included with every plan*",
+    colorPillText: "included with every plan",
     colorPillBackgroundColor: "yellow",
     infoCardBackgroundColor: "light-grey",
-    subHeading: "worth £249.99**",
+    subHeading: "worth £249.99",
     additionalText:
-      "Our seriously powerful eero router boosts your Wi-Fi throughout your home, so you're always connected. It can even detect interference from walls and radios, directing signal straight to your devices.",
+      "Our powerful eero router boosts signal throughout your home, so all your devices stay connected. It can even detect interference from walls and radios, re-directing Wi-Fi where it's actually needed.",
     buttonText: "Oooh, tell me more",
     featureImageProps: {
       backgroundColor: "blue",

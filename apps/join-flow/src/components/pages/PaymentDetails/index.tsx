@@ -3,15 +3,22 @@
 import { Button } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 import Stepper from "@/components/molecules/Stepper";
 import { usePaymentForm } from "@/hooks/usePaymentForm";
-import { PaymentDetailsFormValues } from "@/validation/join-flow-schema";
+import { PaymentFormValues } from "@/hooks/usePaymentForm";
 
-export const PaymentDetails = ({ onGoBack }: { onGoBack?: () => void }) => {
+export const PaymentDetails = ({
+  onGoBack,
+  onComplete,
+}: {
+  onGoBack?: () => void;
+  onComplete?: () => void;
+}) => {
   const router = useRouter();
   const { selectedPackage, eeroSelection, setCurrentStep } = useJoinFlowStore();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { register, handleSubmit, errors, savePaymentDetails } =
     usePaymentForm();
@@ -20,20 +27,42 @@ export const PaymentDetails = ({ onGoBack }: { onGoBack?: () => void }) => {
   const monthlyEeroPrice = eeroSelection?.price || 0;
   const monthlyTotal = monthlyPackagePrice + monthlyEeroPrice;
 
-  const onSubmit = (data: PaymentDetailsFormValues) => {
-    savePaymentDetails(data);
-    setCurrentStep(5);
-    router.push("/join-flow/order-summary");
-    return true;
-  };
+  const handleFormSubmit = useCallback(
+    (data: PaymentFormValues) => {
+      setIsSubmitting(true);
 
-  const handleBack = () => {
-    if (onGoBack && typeof onGoBack === "function") {
-      onGoBack();
-    } else {
-      setCurrentStep(4);
-    }
-  };
+      try {
+        savePaymentDetails(data);
+
+        if (onComplete && typeof onComplete === "function") {
+          onComplete();
+        } else {
+          setCurrentStep(5);
+          router.push("/join-flow/order-summary");
+        }
+      } catch (error) {
+        console.error("Error processing payment details:", error);
+        setIsSubmitting(false);
+      }
+    },
+    [savePaymentDetails, onComplete, setCurrentStep, router],
+  );
+
+  const handleBackClick = useCallback(
+    (event?: React.SyntheticEvent) => {
+      if (event) {
+        event.preventDefault();
+      }
+
+      if (onGoBack && typeof onGoBack === "function") {
+        onGoBack();
+      } else {
+        setCurrentStep(3);
+        router.push("/join-flow/one-touch-switching");
+      }
+    },
+    [onGoBack, setCurrentStep, router],
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -66,7 +95,7 @@ export const PaymentDetails = ({ onGoBack }: { onGoBack?: () => void }) => {
 
           <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
             <div>
-              <form onSubmit={handleSubmit(onSubmit)}>
+              <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
                 <div className="mb-6">
                   <label
                     className="block text-core-black mb-2"
@@ -96,7 +125,6 @@ export const PaymentDetails = ({ onGoBack }: { onGoBack?: () => void }) => {
                   <input
                     {...register("accountNumber", {
                       required: true,
-                      maxLength: 8,
                       pattern: /^\d{8}$/,
                     })}
                     id="accountNumber"
@@ -120,7 +148,6 @@ export const PaymentDetails = ({ onGoBack }: { onGoBack?: () => void }) => {
                   <input
                     {...register("sortCode", {
                       required: true,
-                      maxLength: 8,
                       pattern: /^\d{2}-\d{2}-\d{2}$/,
                     })}
                     id="sortCode"
@@ -148,12 +175,24 @@ export const PaymentDetails = ({ onGoBack }: { onGoBack?: () => void }) => {
                 </div>
 
                 <div className="flex justify-between mt-8">
-                  <Button onClick={handleBack} tint="white" variant="outline">
+                  <Button
+                    onClick={handleBackClick}
+                    tint="white"
+                    variant="outline"
+                    type="button"
+                  >
                     Back
                   </Button>
 
-                  <Button type="submit" tint="yellow" variant="solid">
-                    Review Everything and Checkout
+                  <Button
+                    type="submit"
+                    tint="yellow"
+                    variant="solid"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting
+                      ? "Processing..."
+                      : "Review Everything and Checkout"}
                   </Button>
                 </div>
               </form>

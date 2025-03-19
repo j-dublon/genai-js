@@ -8,7 +8,7 @@ export const guides: GuideCardProps[] = [
       alt: "What is full fibre?",
     },
     url: "/guide/what-is-full-fibre",
-    tags: [{ text: "Cuckoo's Guide", backgroundColor: "pink" }],
+    tags: [{ text: "Guide", backgroundColor: "pink" }],
   },
   {
     title: "How is full fibre installed?",
@@ -16,7 +16,7 @@ export const guides: GuideCardProps[] = [
       src: "https://images.prismic.io/cuckoo-egg/ZogCgB5LeNNTw0wo_69e7e0dd-4f4d-4921-9e40-668b7bbfeaed.png?auto=format,compress",
       alt: "How is full fibre installed?",
     },
-    tags: [{ text: "Cuckoo's Guide", backgroundColor: "pink" }],
+    tags: [{ text: "Guide", backgroundColor: "pink" }],
     url: "/guide/how-is-full-fibre-installed",
   },
   {
@@ -25,7 +25,7 @@ export const guides: GuideCardProps[] = [
       src: "https://images.prismic.io/cuckoo-egg/ZuLM8RoQrfVKmA3q_OneTouchSwitch_Guide_header_0824_v02.png?auto=format,compress",
       alt: "What is One Touch switch?",
     },
-    tags: [{ text: "Cuckoo's Guide", backgroundColor: "pink" }],
+    tags: [{ text: "Guide", backgroundColor: "pink" }],
     url: "/guide/one-touch-switch",
   },
   {
@@ -34,7 +34,7 @@ export const guides: GuideCardProps[] = [
       src: "https://images.prismic.io/cuckoo-egg/9f645765-23d7-4d4b-ac8d-eacacd3a0826_How+to+boost+your+Wi-Fi+signal+in+the+home+V02.png?auto=compress,format",
       alt: "How to boost your wifi signal in your home",
     },
-    tags: [{ text: "Cuckoo's Guide", backgroundColor: "pink" }],
+    tags: [{ text: "Guide", backgroundColor: "pink" }],
     url: "/guide/how-to-boost-your-wifi-signal-in-your-home",
   },
   {
@@ -43,7 +43,7 @@ export const guides: GuideCardProps[] = [
       src: "https://images.prismic.io/cuckoo-egg/659d4d41531ac2845a273fff_SpeedTest.png?auto=format,compress",
       alt: "How to run an accurate broadband speed test",
     },
-    tags: [{ text: "Cuckoo's Guide", backgroundColor: "pink" }],
+    tags: [{ text: "Guide", backgroundColor: "pink" }],
     url: "/guide/broadband-speed-test",
   },
   {
@@ -52,7 +52,7 @@ export const guides: GuideCardProps[] = [
       src: "https://images.prismic.io/cuckoo-egg/Zh_xWvPdc1huKlIP_Mesh_blogheader.png?auto=format,compress",
       alt: "What's mesh wifi when it's actually at home?",
     },
-    tags: [{ text: "Cuckoo's Guide", backgroundColor: "pink" }],
+    tags: [{ text: "Guide", backgroundColor: "pink" }],
     url: "/guide/what-is-mesh-wifi",
   },
 ];
