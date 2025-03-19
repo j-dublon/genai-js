@@ -1,6 +1,7 @@
 "use client";
 import { InfoCard } from "@react-component-library/ui";
 
+import { CuckooProtectInfoCard } from "@/components/molecules/CuckooProtectInfoCard";
 import { getAssetPath } from "@/lib/get-asset-path";
 
 import { InfoCardProps, props } from "./cardSectionProps";
@@ -68,6 +69,9 @@ export const CardSection = () => {
           buttonText={detailedCardContent.buttonText}
           featureImageProps={detailedCardContent.featureImageProps}
         />
+      )}
+      {detailedCardContent?.featureImageProps?.promotionImage && (
+        <CuckooProtectInfoCard />
       )}
     </div>
   );

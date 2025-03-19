@@ -5,7 +5,7 @@ import { render, screen } from "@testing-library/react";
 import { CardSection } from ".";
 import { props } from "./cardSectionProps";
 
-describe("CardSectionWrapper", () => {
+describe("CardSection", () => {
   const {
     cardSectionHeading,
     cardSectionText,
