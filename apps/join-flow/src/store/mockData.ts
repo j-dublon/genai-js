@@ -14,7 +14,7 @@ export const broadbandPackages: BroadbandPackage[] = [
       upload: 30,
     },
     price: {
-      monthly: 29.99,
+      monthly: 32,
       setup: 0,
     },
     contractLength: 12,
@@ -28,15 +28,15 @@ export const broadbandPackages: BroadbandPackage[] = [
       upload: 20,
     },
     price: {
-      monthly: 24.99,
+      monthly: 37,
       setup: 0,
     },
     contractLength: 12,
     description: "Full fibre speeds",
   },
   {
-    id: "c-1000",
-    name: "C-1000",
+    id: "c-900",
+    name: "C-900",
     speed: {
       download: 1000,
       upload: 100,

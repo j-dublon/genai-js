@@ -6,8 +6,12 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
 import Stepper from "@/components/molecules/Stepper";
+import PaymentConfirmation from "@/components/pages/PaymentDetails/PaymentConfirmation";
+import PaymentSummary from "@/components/pages/PaymentDetails/PaymentSummary";
 import { usePaymentForm } from "@/hooks/usePaymentForm";
 import { PaymentFormValues } from "@/hooks/usePaymentForm";
+
+import { paymentDetailsText } from "./PaymentDetailsProps";
 
 export const PaymentDetails = ({
   onGoBack,
@@ -17,15 +21,51 @@ export const PaymentDetails = ({
   onComplete?: () => void;
 }) => {
   const router = useRouter();
-  const { selectedPackage, eeroSelection, setCurrentStep } = useJoinFlowStore();
+  const { setCurrentStep } = useJoinFlowStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const [isAccountHolderNameValid, setIsAccountHolderNameValid] =
+    useState(false);
+  const [isAccountNumberValid, setIsAccountNumberValid] = useState(false);
+  const [isSortCodeValid, setIsSortCodeValid] = useState(false);
 
   const { register, handleSubmit, errors, savePaymentDetails } =
     usePaymentForm();
 
-  const monthlyPackagePrice = selectedPackage?.price.monthly || 0;
-  const monthlyEeroPrice = eeroSelection?.price || 0;
-  const monthlyTotal = monthlyPackagePrice + monthlyEeroPrice;
+  const {
+    title,
+    paymentDetailsTitle,
+    directDebitDetailsTitle,
+    monthlyPaymentTitle,
+    totalMonthlyPaymentTitle,
+    futurePriceIncreaseText,
+    accountHolderNamePlaceholder,
+    accountHolderNameError,
+    accountNumberPlaceholder,
+    accountNumberError,
+    sortCodePlaceholder,
+    sortCodeError,
+    backButtonText,
+    submitButtonText,
+    submittingButtonText,
+  } = paymentDetailsText;
+
+  const handleAccountHolderNameChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setIsAccountHolderNameValid(e.target.value.trim().length > 0);
+  };
+
+  const handleAccountNumberChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setIsAccountNumberValid(/^\d{8}$/.test(e.target.value));
+  };
+
+  const handleSortCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setIsSortCodeValid(/^\d{2}-\d{2}-\d{2}$/.test(e.target.value));
+  };
 
   const handleFormSubmit = useCallback(
     (data: PaymentFormValues) => {
@@ -33,19 +73,14 @@ export const PaymentDetails = ({
 
       try {
         savePaymentDetails(data);
-
-        if (onComplete && typeof onComplete === "function") {
-          onComplete();
-        } else {
-          setCurrentStep(5);
-          router.push("/join-flow/order-summary");
-        }
+        setIsSubmitting(false);
+        setShowConfirmation(true);
       } catch (error) {
         console.error("Error processing payment details:", error);
         setIsSubmitting(false);
       }
     },
-    [savePaymentDetails, onComplete, setCurrentStep, router],
+    [savePaymentDetails],
   );
 
   const handleBackClick = useCallback(
@@ -64,114 +99,141 @@ export const PaymentDetails = ({
     [onGoBack, setCurrentStep, router],
   );
 
+  const handleConfirmationBack = useCallback(() => {
+    setShowConfirmation(false);
+  }, []);
+
+  const handleComplete = useCallback(() => {
+    if (onComplete && typeof onComplete === "function") {
+      onComplete();
+    } else {
+      setCurrentStep(5);
+      router.push("/join-flow/order-summary");
+    }
+  }, [onComplete, setCurrentStep, router]);
+
+  if (showConfirmation) {
+    return (
+      <PaymentConfirmation
+        onGoBack={handleConfirmationBack}
+        onComplete={handleComplete}
+      />
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Stepper />
 
       <div className="max-w-4xl mx-auto">
         <div className="bg-core-white p-8 rounded-md">
-          <h1 className="text-2xl font-bold mb-6">Payment Details</h1>
+          <h1 className="text-2xl font-bold mb-6">{title}</h1>
 
-          <div className="mb-6 bg-ui-grey-100 p-6 rounded-md border border-ui-grey-300">
-            <div className="flex justify-between items-center">
-              <div>
-                <h2 className="font-bold text-lg">{selectedPackage?.name}</h2>
-                <p className="text-ui-grey-500">
-                  {selectedPackage?.speed.download} Mbps download /{" "}
-                  {selectedPackage?.speed.upload} Mbps upload
-                </p>
-                {eeroSelection && eeroSelection.price > 0 && (
-                  <p className="text-ui-grey-500 mt-1">
-                    + {eeroSelection.name}
-                  </p>
-                )}
-              </div>
-              <div className="text-right">
-                <p className="text-3xl font-bold">£{monthlyTotal.toFixed(2)}</p>
-                <p className="text-ui-grey-500">per month</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div>
+              <p className="text-md font-bold mb-6">{paymentDetailsTitle}</p>
               <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
                 <div className="mb-6">
-                  <label
-                    className="block text-core-black mb-2"
-                    htmlFor="accountHolderName"
-                  >
-                    Account Holder Name
-                  </label>
-                  <input
-                    {...register("accountHolderName", { required: true })}
-                    id="accountHolderName"
-                    className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
-                  />
+                  <div className="relative">
+                    <input
+                      {...register("accountHolderName", { required: true })}
+                      id="accountHolderName"
+                      placeholder={accountHolderNamePlaceholder}
+                      className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
+                      onChange={handleAccountHolderNameChange}
+                    />
+                    {isAccountHolderNameValid && (
+                      <svg
+                        className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </div>
                   {errors.accountHolderName && (
                     <p className="text-red-500 text-sm mt-1">
-                      Account holder name is required
+                      {accountHolderNameError}
                     </p>
                   )}
                 </div>
 
                 <div className="mb-6">
-                  <label
-                    className="block text-core-black mb-2"
-                    htmlFor="accountNumber"
-                  >
-                    Account Number
-                  </label>
-                  <input
-                    {...register("accountNumber", {
-                      required: true,
-                      pattern: /^\d{8}$/,
-                    })}
-                    id="accountNumber"
-                    placeholder="12345678"
-                    className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
-                  />
+                  <div className="relative">
+                    <input
+                      {...register("accountNumber", {
+                        required: true,
+                        pattern: /^\d{8}$/,
+                      })}
+                      id="accountNumber"
+                      placeholder={accountNumberPlaceholder}
+                      className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
+                      onChange={handleAccountNumberChange}
+                    />
+                    {isAccountNumberValid && (
+                      <svg
+                        className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </div>
                   {errors.accountNumber && (
                     <p className="text-red-500 text-sm mt-1">
-                      Valid 8-digit account number is required
+                      {accountNumberError}
                     </p>
                   )}
                 </div>
 
                 <div className="mb-6">
-                  <label
-                    className="block text-core-black mb-2"
-                    htmlFor="sortCode"
-                  >
-                    Sort Code
-                  </label>
-                  <input
-                    {...register("sortCode", {
-                      required: true,
-                      pattern: /^\d{2}-\d{2}-\d{2}$/,
-                    })}
-                    id="sortCode"
-                    placeholder="12-34-56"
-                    className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
-                  />
-                  {errors.sortCode && (
-                    <p className="text-red-500 text-sm mt-1">
-                      Valid sort code (xx-xx-xx) is required
-                    </p>
-                  )}
-                </div>
-
-                <div className="mb-6">
-                  <label className="flex items-center">
+                  <div className="relative">
                     <input
-                      type="checkbox"
-                      {...register("sameAsServiceAddress")}
-                      className="mr-2"
+                      {...register("sortCode", {
+                        required: true,
+                        pattern: /^\d{2}-\d{2}-\d{2}$/,
+                      })}
+                      id="sortCode"
+                      placeholder={sortCodePlaceholder}
+                      className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
+                      onChange={handleSortCodeChange}
                     />
-                    <span className="text-core-black">
-                      Use service address as billing address
-                    </span>
-                  </label>
+                    {isSortCodeValid && (
+                      <svg
+                        className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </svg>
+                    )}
+                  </div>
+                  {errors.sortCode && (
+                    <p className="text-red-500 text-sm mt-1">{sortCodeError}</p>
+                  )}
                 </div>
 
                 <div className="flex justify-between mt-8">
@@ -181,7 +243,7 @@ export const PaymentDetails = ({
                     variant="outline"
                     type="button"
                   >
-                    Back
+                    {backButtonText}
                   </Button>
 
                   <Button
@@ -190,12 +252,24 @@ export const PaymentDetails = ({
                     variant="solid"
                     disabled={isSubmitting}
                   >
-                    {isSubmitting
-                      ? "Processing..."
-                      : "Review Everything and Checkout"}
+                    {isSubmitting ? submittingButtonText : submitButtonText}
                   </Button>
                 </div>
               </form>
+            </div>
+
+            <div>
+              <p className="text-md font-bold mb-6">
+                {directDebitDetailsTitle}
+              </p>
+
+              <div className="mb-6">
+                <PaymentSummary
+                  monthlyPaymentTitle={monthlyPaymentTitle}
+                  totalMonthlyPaymentTitle={totalMonthlyPaymentTitle}
+                  futurePriceIncreaseText={futurePriceIncreaseText}
+                />
+              </div>
             </div>
           </div>
         </div>

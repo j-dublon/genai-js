@@ -2,10 +2,10 @@ import useJoinFlowStore from "@store/useJoinFlowStore";
 import React from "react";
 
 const steps = [
-  { id: 0, label: "Personal Details" },
-  { id: 1, label: "Eero Selection" },
-  { id: 2, label: "Switching" },
-  { id: 3, label: "Go Live Date" },
+  { id: 0, label: "Your information" },
+  { id: 1, label: "Choose your routers" },
+  { id: 2, label: "Switching & go live" },
+  { id: 3, label: "Pay and join Cuckoo" },
 ];
 
 const Stepper = () => {

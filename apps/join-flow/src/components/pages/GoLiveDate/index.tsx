@@ -18,7 +18,7 @@ interface GoLiveDateFormData {
   timeSlot: string;
 }
 
-export const GoLiveDate = () => {
+export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
   const {
     title,
     subtitle,
@@ -59,14 +59,17 @@ export const GoLiveDate = () => {
         timeSlot: data.timeSlot,
       },
     });
-
     setCurrentStep(4);
     setShowPaymentDetails(true);
+    router.push("/join-flow/payment-details");
   };
 
   const handleBack = () => {
-    setCurrentStep(3);
-    router.push("/join-flow/one-touch-switching");
+    if (onBack && typeof onBack === "function") {
+      onBack();
+    } else {
+      router.push("/join-flow/one-touch-switching");
+    }
   };
 
   const handlePaymentDetailsBack = () => {

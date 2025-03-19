@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import Stepper from "@/components/molecules/Stepper";
+import { GoLiveDate } from "@/components/pages/GoLiveDate";
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ export const OneTouchSwitching = () => {
   );
 
   const [isFetchingData, setIsFetchingData] = useState(false);
+  const [showGoLiveDate, setShowGoLiveDate] = useState(false);
 
   const handleProviderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedProvider(e.target.value);
@@ -55,14 +57,21 @@ export const OneTouchSwitching = () => {
     }
 
     setSwitchingDetails(switchData);
-    setCurrentStep(4);
-    router.push("/join-flow/go-live-date");
+    setShowGoLiveDate(true);
   };
 
   const handleBack = () => {
     setCurrentStep(2);
     router.push("/join-flow/eero-selection");
   };
+
+  const handleGoLiveDateBack = () => {
+    setShowGoLiveDate(false);
+  };
+
+  if (showGoLiveDate) {
+    return <GoLiveDate onBack={handleGoLiveDateBack} />;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
