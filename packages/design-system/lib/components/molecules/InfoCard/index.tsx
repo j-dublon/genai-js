@@ -135,7 +135,11 @@ export const InfoCard = ({
               {additionalText}
             </p>
             {buttonText && (
-              <Button aria-label={`Open ${buttonText} page`} href={buttonLink}>
+              <Button
+                aria-label={`Open ${buttonText} page`}
+                href={buttonLink}
+                className="ds:w-full ds:break-words ds:whitespace-normal ds:text-center"
+              >
                 {buttonText}
               </Button>
             )}
