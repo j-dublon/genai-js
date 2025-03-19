@@ -57,7 +57,7 @@ export const Button = ({
 
   const sizes = {
     small: `${fullWidth ? "ds:w-full" : "ds:w-fit"} ds:py-2 ds:px-4 ds:text-xs ds:md:text-sm ds:rounded-sm ds:before:rounded-sm ds:hover:before:rounded-md ds:hover:before:-inset-[2px]`,
-    medium: `${fullWidth ? "ds:w-full" : "ds:w-[120px] ds:lg:w-[200px]"} ds:h-[60px] ds:text-sm ds:sm:text-md ds:py-4 ds:md:px-4 ds:lg:px-8 ds:rounded-md ds:before:rounded-md ds:hover:before:rounded-lg ds:hover:before:-inset-[2px]`,
+    medium: `${fullWidth ? "ds:w-full" : "ds:w-[120px] ds:lg:w-[200px]"} ds:h-15 ds:text-sm ds:sm:text-md ds:py-4 ds:md:px-4 ds:lg:px-8 ds:rounded-md ds:before:rounded-md ds:hover:before:rounded-lg ds:hover:before:-inset-[2px]`,
     large: `${fullWidth ? "ds:w-full" : "ds:w-fit"} ds:text-sm ds:sm:text-md ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8 ds:rounded-md ds:before:rounded-md ds:hover:before:rounded-lg ds:hover:before:-inset-[4px]`,
   };
 

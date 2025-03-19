@@ -72,7 +72,7 @@ describe("Button Component", () => {
     ["small", "ds:py-2 ds:px-4 ds:text-xs ds:md:text-sm"],
     [
       "medium",
-      "ds:h-[60px] ds:text-sm ds:sm:text-md  ds:py-4 ds:md:px-4 ds:lg:px-8",
+      "ds:h-15 ds:text-sm ds:sm:text-md  ds:py-4 ds:md:px-4 ds:lg:px-8",
     ],
     ["large", "ds:text-sm ds:sm:text-md ds:py-3 ds:md:py-5 ds:px-5 ds:md:px-8"],
   ])(
