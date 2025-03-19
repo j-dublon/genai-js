@@ -3,7 +3,7 @@ import { getAssetPath } from "@/lib/get-asset-path";
 export const imageMarqueeProps = {
   headingText: "Properly good eggs",
   paragraphText:
-    "Our yellow-obsessed flock are here to make the internet better for everyone. Hear from a few of them on what makes Cuckoo so Cuckoo.",
+    "Our yellow-obsessed flock are here to make the internet better for everyone. Take a peek at what makes Cuckoo so Cuckoo.",
   images: [
     {
       altText: "Life at Cuckoo 1",
