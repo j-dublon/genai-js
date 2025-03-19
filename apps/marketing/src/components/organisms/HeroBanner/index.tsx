@@ -58,7 +58,8 @@ export const HeroBanner = ({
           <div className="flex-1 flex flex-col pb-12 md:pb-0 md:pr-10">
             <Heading headingText="Ridiculously fast full fibre broadband" />
             <p className="text-md md:text-[26px] md:pb-7 pb-6 font-garnett font-normal leading-[1.5]">
-              Stream, game and WFH, all at the same time, with no drop-offs.
+              For all the streaming, gaming and WFHing you can possibly throw at
+              it.
             </p>
             <div className="md:pb-16">
               <PostcodeChecker

@@ -32,7 +32,7 @@ describe("HeroBanner", () => {
 
   it("renders the description text", async () => {
     const description = await screen.findByText(
-      "Stream, game and WFH, all at the same time, with no drop-offs.",
+      "For all the streaming, gaming and WFHing you can possibly throw at it.",
     );
     expect(description).toBeInTheDocument();
   });

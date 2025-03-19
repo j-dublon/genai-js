@@ -19,10 +19,12 @@ export const Guides = ({
     <section aria-label="Cuckoo Guides" className="h-fit pb-12 md:pb-40">
       <div className="px-mobile sm:px-tablet lg:px-desktop pt-12 md:pt-40">
         <div className="max-w-[1152px] mx-auto pb-6 md:pb-16">
-          <SectionHeading headingText={guidesHeading} />
-          <p className="md:text-[26px] text-md font-normal whitespace-pre-line">
-            {guidesSubHeading}
-          </p>
+          <div className="max-w-[1152px]">
+            <SectionHeading headingText={guidesHeading} />
+            <p className="md:text-[26px] text-md font-normal whitespace-pre-line">
+              {guidesSubHeading}
+            </p>
+          </div>
         </div>
       </div>
 

@@ -21,7 +21,7 @@ const mockTimelineCardProps: TimelineCardProps[] = [
   {
     colorPillText: "Day 14",
     backgroundColor: "pink",
-    subtitleText: "We get you connected",
+    subtitleText: "We aim to get you connected",
     subHeading: "If you need an engineer, they'll pop by and get you set up",
   },
 ];
