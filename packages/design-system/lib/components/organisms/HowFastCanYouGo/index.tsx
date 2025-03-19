@@ -4,11 +4,13 @@ import { Dispatch, SetStateAction } from "react";
 interface HowFastCanYouGoProps {
   postcode: string;
   setPostcode: Dispatch<SetStateAction<string>>;
+  onPostcodeSubmit: (event: React.FormEvent) => void;
 }
 
 export const HowFastCanYouGo = ({
   postcode,
   setPostcode,
+  onPostcodeSubmit,
 }: HowFastCanYouGoProps) => {
   return (
     <div className="ds:relative ds:pb-16 ds:md:py-36 ds:bg-ui-grey-150 ds:flex ds:flex-col-reverse ds:md:items-center ds:px-mobile ds:sm:pl-tablet ds:lg:px-desktop">
@@ -20,6 +22,7 @@ export const HowFastCanYouGo = ({
             placeholderText="Pop in your postcode"
             postcode={postcode}
             setPostcode={setPostcode}
+            onClickFunction={onPostcodeSubmit}
           />
         </div>
       </div>

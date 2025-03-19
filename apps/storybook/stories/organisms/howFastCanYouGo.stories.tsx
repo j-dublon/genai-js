@@ -5,7 +5,13 @@ import type { Meta, StoryObj } from "@storybook/react";
 const HowFastCanYouGoWithHooks = () => {
   const { postcode, setPostcode } = usePostcode();
 
-  return <HowFastCanYouGo postcode={postcode} setPostcode={setPostcode} />;
+  return (
+    <HowFastCanYouGo
+      postcode={postcode}
+      setPostcode={setPostcode}
+      onPostcodeSubmit={() => {}}
+    />
+  );
 };
 
 const meta: Meta<typeof HowFastCanYouGoWithHooks> = {
