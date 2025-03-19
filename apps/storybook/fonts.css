@@ -7,6 +7,13 @@
 
 @font-face {
     font-family: "Garnett";
+    src: url("../../packages/design-system/lib/fonts/Garnett-Medium.woff2") format("woff2");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Garnett";
     src: url("../../packages/design-system/lib/fonts/Garnett-SemiBold.woff2") format("woff2");
     font-weight: 700;
     font-style: normal;

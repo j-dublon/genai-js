@@ -11,6 +11,7 @@ export interface TextWithTickProps {
   broadbandOffer?: boolean;
   padding?: "none" | "default" | "large";
   iconSize?: number;
+  className?: string;
 }
 
 export const TextWithTick = ({
@@ -20,6 +21,7 @@ export const TextWithTick = ({
   padding = "default",
   iconSize = 20,
   ariaLabel,
+  className,
 }: TextWithTickProps) => {
   const paddingClass = {
     none: "",
@@ -32,7 +34,8 @@ export const TextWithTick = ({
       className={cx(
         "ds:flex ds:items-center ds:gap-2.5 ds:rounded-full",
         paddingClass[padding],
-        `${broadbandOffer ? "ds:bg-offer-gradient" : bgColorVariants[backgroundColor]}`,
+        `${broadbandOffer ? "ds:bg-offer-gradient ds:text-[14px] ds:md:text-[26px] ds:font-semibold" : bgColorVariants[backgroundColor] + " ds:text-[14px] ds:md:text-md ds:font-semibold ds:md:font-medium"}`,
+        className,
       )}
       aria-label={`${ariaLabel ?? `Text with tick with the statement ${textInput}`}`}
     >
@@ -44,12 +47,7 @@ export const TextWithTick = ({
         )}
       </div>
 
-      <p
-        className={cx(
-          `${broadbandOffer ? "ds:md:text-[26px] ds:font-semibold" : "ds:md:text-md ds:font-semibold ds:md:font-medium"}`,
-          "ds:text-[14px] ds:leading-[1.6] ds:md:leading-[1.5]",
-        )}
-      >
+      <p className="ds:leading-[1.6] ds:md:leading-[1.5] ds:font-inherit">
         {textInput}
       </p>
     </div>

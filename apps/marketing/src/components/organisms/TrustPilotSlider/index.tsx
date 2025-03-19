@@ -70,11 +70,13 @@ export const TrustPilotSlider = ({
         <div className="max-w-[1152px] mx-auto">
           <h2
             id="trust-pilot-heading"
-            className="sm:text-5xl text-3xl font-semibold"
+            className="sm:text-5xl text-3xl font-semibold leading-[1.4] md:leading-[1.2]"
           >
             {title}
           </h2>
-          <h3 className="md:text-3xl text-[26px] font-semibold">{subtitle}</h3>
+          <h3 className="md:text-3xl text-[26px] font-semibold md:leading-[1.2]">
+            {subtitle}
+          </h3>
         </div>
       </div>
 

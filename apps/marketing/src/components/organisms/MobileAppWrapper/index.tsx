@@ -15,7 +15,7 @@ export const MobileAppWrapper = () => {
       setSelectedTextIndex((prevText) =>
         prevText !== null ? (prevText + 1) % 4 : 0,
       );
-    }, 2000);
+    }, 3500);
 
     return () => clearInterval(interval);
   }, [isManualSelection]);

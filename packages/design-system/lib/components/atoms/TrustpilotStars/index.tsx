@@ -2,11 +2,13 @@ import { getTrustpilotStarStatus } from "@lib/hooks/getTrustpilotStarStatus";
 
 interface TrustpilotStarsProps {
   trustScore: number;
-  width?: number;
-  height?: number;
+  className?: string;
 }
 
-export const TrustpilotStars = ({ trustScore }: TrustpilotStarsProps) => {
+export const TrustpilotStars = ({
+  trustScore,
+  className,
+}: TrustpilotStarsProps) => {
   const { full, half } = getTrustpilotStarStatus(trustScore);
 
   return (
@@ -17,7 +19,7 @@ export const TrustpilotStars = ({ trustScore }: TrustpilotStarsProps) => {
       aria-label={`Trustpilot stars: ${full} full star(s)${
         half ? " and a half-star" : ""
       }`}
-      className="ds:w-full ds:h-5 ds:md:h-[25px]"
+      className={`ds:h-5 ds:md:h-[25px] ${className}`}
     >
       <defs>
         <mask id="half-mask">

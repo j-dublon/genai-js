@@ -4,7 +4,7 @@ export interface SectionHeadingProps {
 
 export const SectionHeading = ({ headingText }: SectionHeadingProps) => {
   return (
-    <h2 className="ds:md:text-5xl ds:text-3xl ds:font-bold ds:md:pb-4 ds:pb-3">
+    <h2 className="ds:md:text-5xl ds:text-3xl ds:font-bold ds:md:pb-4 ds:pb-3 ds:leading-[1.4] ds:md:leading-[1.2]">
       {headingText}
     </h2>
   );

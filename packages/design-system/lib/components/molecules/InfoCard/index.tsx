@@ -16,6 +16,7 @@ export interface InfoCardProps {
   subHeading?: string;
   additionalText?: string;
   buttonText?: string;
+  buttonLink?: string;
   featureImageProps?: FeatureImageProps;
   listItems?: string[];
 }
@@ -28,6 +29,7 @@ export const InfoCard = ({
   subHeading,
   additionalText,
   buttonText,
+  buttonLink,
   featureImageProps,
   listItems,
 }: InfoCardProps) => {
@@ -59,7 +61,7 @@ export const InfoCard = ({
           <div
             className={`ds:flex ds:flex-col ds:md:gap-10 ds:gap-4 ${additionalText && "ds:md:w-[50%]"}`}
           >
-            <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl ds:md:pl-3">
+            <h1 className="ds:font-bold ds:md:text-5xl ds:text-4xl ds:md:pl-3 ds:leading-[1.4] ds:md:leading-[1.2]">
               {titleText}
             </h1>
             <div className="ds:flex ds:flex-col ds:gap-3">
@@ -133,7 +135,7 @@ export const InfoCard = ({
               {additionalText}
             </p>
             {buttonText && (
-              <Button aria-label={`Open ${buttonText} page`}>
+              <Button aria-label={`Open ${buttonText} page`} href={buttonLink}>
                 {buttonText}
               </Button>
             )}

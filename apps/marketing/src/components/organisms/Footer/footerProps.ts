@@ -7,7 +7,7 @@ export const props = {
     imgSrc: getAssetPath("/images/trustpilot-logo.svg"),
   },
   footerDisclaimerText:
-    "© 2021 Cuckoo Internet Ltd is a company registered in England and Wales (No 11926742). \n Our registered address is 68 Hanbury Street, Spitalfields, London E1 5JL. \n Our VAT number is 341752118. \n Cuckoo Internet Ltd is regulated by Ofcom.",
+    "© 2025 Cuckoo Fibre Ltd is a company registered in England and Wales (No 15060036). \n Our registered address is Milford House, Pynes Hill, Exeter, EX2 5AZ. \n Our VAT number is 451054916. \n Cuckoo Fibre Ltd is regulated by Ofcom.",
   footerSections: [
     {
       header: "Company",
@@ -15,7 +15,7 @@ export const props = {
         { label: "About", href: "https://www.cuckoo.co/about" },
         { label: "Careers", href: "https://careers.cuckoo.co/" },
         {
-          label: "Cuckoo Compass",
+          label: "Cuckoo Community Referral Scheme",
           href: "https://www.cuckoo.co/partner-with-us",
         },
       ],
@@ -25,9 +25,15 @@ export const props = {
       links: [
         {
           label: "Support",
-          href: "https://help.cuckoo.co/en/?_gl=1*16vod1b*_gcl_au*NDk1OTA4MTM2LjE3Mzg4Mzg1Mjk.*_ga*ODE1MTk4MjQzLjE3Mjc3MTEwMDg.*_ga_ELMR5YY5JW*MTczODgzODUyOS4xMS4wLjE3Mzg4Mzg1MjkuNjAuMC4w",
+          href: "https://help.cuckoo.co/en/",
         },
+        {
+          label: "Contact Us",
+          href: "https://help.cuckoo.co/en/articles/9123655-contact-the-team",
+        },
+        { label: "Blog", href: "https://www.cuckoo.co/blog" },
         { label: "Press", href: "mailto:press@cuckoo.co" },
+        { label: "999 Emergency (BSL)", href: "https://999bsl.co.uk/" },
       ],
     },
     {
@@ -38,7 +44,11 @@ export const props = {
           href: "https://www.cuckoo.co/legal/terms",
         },
         {
-          label: "Privacy Policy",
+          label: "Promotional Terms & Conditions",
+          href: "https://www.cuckoo.co/legal/promotional-terms",
+        },
+        {
+          label: "Privacy Notice",
           href: "https://www.cuckoo.co/legal/privacy",
         },
         {
@@ -52,6 +62,26 @@ export const props = {
         {
           label: "Prices & Charge List",
           href: "https://www.cuckoo.co/legal/price-list",
+        },
+        {
+          label: "Vulnerable Customer Policy",
+          href: "https://www.cuckoo.co/legal/vulnerable-customer-policy",
+        },
+        {
+          label: "Acceptable Use Policy",
+          href: "https://www.cuckoo.co/legal/fair-usage-policy",
+        },
+        {
+          label: "Website Acceptable Use",
+          href: "https://www.cuckoo.co/legal/website-acceptable-use",
+        },
+        {
+          label: "Website Terms",
+          href: "https://www.cuckoo.co/legal/website-terms",
+        },
+        {
+          label: "Cookie Preferences",
+          href: "https://www.cuckoo.co/index#cookie-notice",
         },
       ],
     },

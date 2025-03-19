@@ -27,7 +27,7 @@ export const TrustpilotVertical = ({
         }}
       >
         <TrustpilotLogo width={width} height={height} />
-        <TrustpilotStars trustScore={trustScore} width={width} height={20} />
+        <TrustpilotStars trustScore={trustScore} />
       </div>
     </Link>
   );

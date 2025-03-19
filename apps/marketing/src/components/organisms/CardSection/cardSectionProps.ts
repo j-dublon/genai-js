@@ -39,7 +39,8 @@ export const props: {
     subHeading: "worth £249.99",
     additionalText:
       "Our powerful eero router boosts signal throughout your home, so all your devices stay connected. It can even detect interference from walls and radios, re-directing Wi-Fi where it's actually needed.",
-    buttonText: "Oooh, tell me more",
+    buttonText: "Pop in your postcode to learn more",
+    buttonLink: "/join/find-your-address",
     featureImageProps: {
       backgroundColor: "blue",
       infoCard: true,
@@ -72,6 +73,7 @@ export interface InfoCardProps {
   subHeading?: string;
   additionalText?: string;
   buttonText?: string;
+  buttonLink?: string;
   featureImageProps?: {
     backgroundColor: BackgroundColors;
     infoCard: boolean;

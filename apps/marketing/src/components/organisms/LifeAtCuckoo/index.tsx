@@ -9,7 +9,7 @@ export const LifeAtCuckoo = () => {
       <div className="flex justify-center items-center md:pb-16 pb-10 px-mobile sm:px-tablet lg:px-desktop">
         <div className="w-full lg:max-w-[1152px]">
           <div className="md:max-w-[760px] w-full">
-            <h2 className="md:text-5xl text-3xl font-semibold md:pb-5 pb-3">
+            <h2 className="md:text-5xl text-3xl font-semibold md:pb-5 pb-3 leading-[1.4] md:leading-[1.2]">
               {imageMarqueeProps.headingText}
             </h2>
 

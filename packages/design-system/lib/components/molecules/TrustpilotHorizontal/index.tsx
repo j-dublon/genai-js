@@ -26,8 +26,11 @@ export const TrustpilotHorizontal = ({
           <div className="ds:flex-shrink-0 ds:w-[77px] ds:md:w-[97px]">
             <TrustpilotLogo />
           </div>
-          <div className="ds:flex-shrink-0 ds:w-[109px] ds:md:w-[149px]">
-            <TrustpilotStars trustScore={trustScore} />
+          <div className="ds:flex-shrink-0">
+            <TrustpilotStars
+              trustScore={trustScore}
+              className="ds:w-[109px] ds:md:w-[149px]"
+            />
           </div>
         </div>
         {numberOfReviews && (

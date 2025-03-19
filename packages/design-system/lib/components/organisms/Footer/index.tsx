@@ -43,7 +43,7 @@ export const Footer = ({
               <a
                 className="ds:flex ds:items-end"
                 href="https://twitter.com/cuckoointernet"
-                aria-label="Go to our twitter account"
+                aria-label="Go to our X (formerly twitter) account"
               >
                 <TwitterIcon />
               </a>
