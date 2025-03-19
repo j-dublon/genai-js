@@ -29,10 +29,10 @@ export const guides: GuideCardProps[] = [
     url: "/guide/one-touch-switch",
   },
   {
-    title: "How to boost your wifi signal in your home",
+    title: "How to boost your wi-fi signal in your home",
     image: {
       src: "https://images.prismic.io/cuckoo-egg/9f645765-23d7-4d4b-ac8d-eacacd3a0826_How+to+boost+your+Wi-Fi+signal+in+the+home+V02.png?auto=compress,format",
-      alt: "How to boost your wifi signal in your home",
+      alt: "How to boost your wi-fi signal in your home",
     },
     tags: [{ text: "Guide", backgroundColor: "pink" }],
     url: "/guide/how-to-boost-your-wifi-signal-in-your-home",
@@ -47,10 +47,10 @@ export const guides: GuideCardProps[] = [
     url: "/guide/broadband-speed-test",
   },
   {
-    title: "What's mesh wifi when it's actually at home?",
+    title: "What's mesh wi-fi when it's actually at home?",
     image: {
       src: "https://images.prismic.io/cuckoo-egg/Zh_xWvPdc1huKlIP_Mesh_blogheader.png?auto=format,compress",
-      alt: "What's mesh wifi when it's actually at home?",
+      alt: "What's mesh wi-fi when it's actually at home?",
     },
     tags: [{ text: "Guide", backgroundColor: "pink" }],
     url: "/guide/what-is-mesh-wifi",

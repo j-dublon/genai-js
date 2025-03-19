@@ -44,8 +44,8 @@ export const JoinTheFlock = ({
         />
       </video>
       <div className="z-20 flex flex-col items-center px-mobile sm:px-tablet lg:px-desktop py-5 md:py-40 md:justify-between w-full">
-        <div className="flex flex-col md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 px-5 md:px-10 md:py-16 py-6">
-          <div className="flex-2 flex flex-col md:pr-10 min-w-0 pb-5 md:pb-0">
+        <div className="flex flex-col justify-between md:flex-row rounded-[22px] bg-core-white w-full md:max-w-[1152px] h-fit md:col-start-1 md:col-span-6 md:row-start-2 px-5 md:px-10 md:py-16 py-6">
+          <div className="flex flex-col  min-w-0 pb-5 md:pr-4 md:pb-0 md:max-w-[500px] lg:max-w-[500px]">
             <h2 className="md:text-5xl text-4xl font-bold pb-5 leading-[1.4] md:leading-[1.2]">
               Join the flock today{" "}
             </h2>
@@ -71,7 +71,7 @@ export const JoinTheFlock = ({
               )}
             </div>
           </div>
-          <div className="flex-2 flex flex-col gap-2 font-medium min-w-0 pb-12 md:pb-0">
+          <div className="flex flex-col gap-2 font-medium min-w-0 pb-12 md:pb-0">
             <TextWithTickList textItems={textItems} />
           </div>
           <div className="md:hidden">
