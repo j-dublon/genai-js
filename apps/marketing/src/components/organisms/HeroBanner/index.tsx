@@ -28,7 +28,6 @@ export const HeroBanner = ({
   const { handleFormSubmit, postcode, setPostcode } = usePostcode();
   const posthog = usePostHog();
 
-  // TODO: This is just an example replace when actual button logic is added
   const onClick = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     posthog?.capture("user_clicked_check_postcode_button");
@@ -36,20 +35,17 @@ export const HeroBanner = ({
   };
 
   return (
-    <div
-      className="relative flex justify-center overflow-clip"
-      data-testid="hero-banner"
-    >
+    <div className="relative flex justify-center" data-testid="hero-banner">
       <video
         data-test-id="hero-banner-video"
         autoPlay
         playsInline
         loop
         muted
-        className="absolute order-1 h-full w-full object-cover col-start-5 col-span-8 row-start-1 row-span-3 -z-10 scale-101"
+        className="absolute order-1 h-full w-full object-cover col-start-5 col-span-8 row-start-1 row-span-3 -z-10"
       >
         <source
-          src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/Z7SYdZ7c43Q3f64O_Hero_motion_banner.mp4"
+          src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/Z9vpgDiBA97Gisse_0325_MarketingWebsite_Homepage_3DWorld_Animation.mp4"
           type="video/mp4"
         />
       </video>
