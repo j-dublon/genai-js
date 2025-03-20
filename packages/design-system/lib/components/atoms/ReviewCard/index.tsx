@@ -40,10 +40,7 @@ export const ReviewCard = ({
         </a>
       </div>
       <div className="ds:mb-6">
-        <span
-          className="ds:sr-only"
-          aria-label={`Rating: ${starRating} out of 5 stars`}
-        />
+        <span className="ds:sr-only">{`Rating: ${starRating} out of 5 stars`}</span>
         <TrustpilotStars
           trustScore={starRating}
           className="ds:w-[150px] ds:h-[28px] ds:md:h-[28px]"

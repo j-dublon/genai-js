@@ -41,6 +41,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
             autoComplete="off"
+            type="search"
           />
           <div className="ds:shrink">
             <div className="ds:block ds:sm:hidden">

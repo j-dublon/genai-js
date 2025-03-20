@@ -44,7 +44,6 @@ export const CookieNotice = () => {
     <aside
       className="fixed bottom-6 right-1/2 z-[99] w-[23rem] translate-x-1/2 rounded-sm border-2 border-ui-grey-200 bg-ui-grey-100 p-6 sm:right-12 sm:translate-x-0 md:rounded-md"
       data-testid="cookie-notice"
-      role="dialog"
     >
       {checkCookies ? (
         <>
@@ -109,7 +108,10 @@ export const CookieNotice = () => {
         </>
       ) : (
         <>
-          <h1 className="text-sm md:text-md mb-2 font-semibold">
+          <h1
+            id="cookieNoticeHeader"
+            className="text-sm md:text-md mb-2 font-semibold"
+          >
             {cookieBannerProps.cookie_header_one}
           </h1>
           <div className="text-xxs md:text-xxs space-y-2 text-ui-grey-500 md:space-y-4">

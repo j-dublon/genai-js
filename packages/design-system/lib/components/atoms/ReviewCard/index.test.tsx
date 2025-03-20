@@ -42,7 +42,7 @@ describe("ReviewCard", () => {
   it("displays star rating with correct aria-label", () => {
     render(<ReviewCard {...defaultProps} />);
 
-    const ratingContainer = screen.getByLabelText("Rating: 5 out of 5 stars");
+    const ratingContainer = screen.getByText("Rating: 5 out of 5 stars");
     expect(ratingContainer).toBeInTheDocument();
     expect(screen.getByTestId("mock-trustpilot-stars")).toBeInTheDocument();
   });

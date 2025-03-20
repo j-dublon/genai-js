@@ -43,7 +43,6 @@ describe("CookieNotice Component", () => {
   it("renders the cookie notice with the correct header and message", () => {
     render(<CookieNotice />);
 
-    expect(screen.getByRole("dialog")).toBeInTheDocument();
     expect(
       screen.getByText(cookieBannerProps.cookie_header_one),
     ).toBeInTheDocument();
