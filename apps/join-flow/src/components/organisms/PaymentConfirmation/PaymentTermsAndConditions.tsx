@@ -2,33 +2,31 @@
 
 import React, { useEffect, useState } from "react";
 
+import { paymentConfirmationText } from "./PaymentConfirmationProps";
+
 interface PaymentTermsAndConditionsProps {
   onChange: (allChecked: boolean) => void;
-  termsAndConditionsTitle: string;
-  termsCheckboxText: string;
-  directDebitCheckboxText: string;
-  creditSearchCheckboxText: string;
 }
 
 export const PaymentTermsAndConditions = ({
   onChange,
-  termsAndConditionsTitle,
-  termsCheckboxText,
-  directDebitCheckboxText,
-  creditSearchCheckboxText,
 }: PaymentTermsAndConditionsProps) => {
   const [termsChecked, setTermsChecked] = useState(false);
   const [directDebitChecked, setDirectDebitChecked] = useState(false);
   const [creditSearchChecked, setCreditSearchChecked] = useState(false);
+
+  const {
+    termsCheckboxText,
+    directDebitCheckboxText,
+    creditSearchCheckboxText,
+  } = paymentConfirmationText;
 
   useEffect(() => {
     onChange(termsChecked && directDebitChecked && creditSearchChecked);
   }, [termsChecked, directDebitChecked, creditSearchChecked, onChange]);
 
   return (
-    <div className="bg-ui-grey-100 p-6 rounded-md border border-ui-grey-300">
-      <h3 className="font-bold mb-4">{termsAndConditionsTitle}</h3>
-
+    <div className="bg-ui-grey-100 p-6 rounded-md">
       <div className="space-y-4">
         <div className="flex items-start">
           <input

@@ -75,6 +75,11 @@ export type BroadbandPackage = {
   features?: string[];
 };
 
+export type PriceIncreaseInfo = {
+  nextYearIncrease: number;
+  followingYearIncrease: number;
+};
+
 export type JoinFlowState = {
   currentStep: number;
   selectedPackage: BroadbandPackage | null;
@@ -83,6 +88,7 @@ export type JoinFlowState = {
   switchingDetails: SwitchingDetails | null;
   paymentDetails: PaymentDetails | null;
   goLiveDetails: GoLiveDetails | null;
+  priceIncreaseInfo: PriceIncreaseInfo | null;
 
   // Actions
   setCurrentStep: (step: number) => void;
@@ -92,6 +98,7 @@ export type JoinFlowState = {
   setSwitchingDetails: (details: SwitchingDetails) => void;
   setPaymentDetails: (details: PaymentDetails) => void;
   setGoLiveDetails: (details: GoLiveDetails) => void;
+  setPriceIncreaseInfo: (info: PriceIncreaseInfo) => void;
   resetFlow: () => void;
 };
 
@@ -106,6 +113,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       switchingDetails: null,
       paymentDetails: null,
       goLiveDetails: null,
+      priceIncreaseInfo: null,
 
       // Actions
       setCurrentStep: (step) => set({ currentStep: step }),
@@ -115,6 +123,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setSwitchingDetails: (details) => set({ switchingDetails: details }),
       setPaymentDetails: (details) => set({ paymentDetails: details }),
       setGoLiveDetails: (details) => set({ goLiveDetails: details }),
+      setPriceIncreaseInfo: (info) => set({ priceIncreaseInfo: info }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -124,6 +133,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           switchingDetails: null,
           paymentDetails: null,
           goLiveDetails: null,
+          priceIncreaseInfo: null,
         }),
     }),
     {

@@ -3,40 +3,49 @@
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import React from "react";
 
-interface PaymentSummaryProps {
-  monthlyPaymentTitle: string;
-  totalMonthlyPaymentTitle: string;
-  futurePriceIncreaseText?: string;
-}
+import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
-export const PaymentSummary = ({
-  monthlyPaymentTitle,
-  totalMonthlyPaymentTitle,
-  futurePriceIncreaseText,
-}: PaymentSummaryProps) => {
-  const { selectedPackage, eeroSelection } = useJoinFlowStore();
+export const PaymentSummary = () => {
+  const { selectedPackage, eeroSelection, priceIncreaseInfo } =
+    useJoinFlowStore();
 
-  const monthlyPackagePrice = selectedPackage?.price.monthly || 0;
-  const monthlyEeroPrice = eeroSelection?.price || 0;
+  const {
+    monthlyPaymentTitle,
+    totalMonthlyPaymentTitle,
+    nextYearPriceIncreaseText,
+    followingYearPriceIncreaseText,
+  } = paymentConfirmationText;
+
+  //TO DO: we need confirmation on how to redirect a user
+  if (!selectedPackage) {
+    return (
+      <div className="bg-ui-grey-100 p-6 rounded-md">
+        <p>Oops have you selected a package</p>
+      </div>
+    );
+  }
+
+  const monthlyPackagePrice = selectedPackage.price.monthly;
+  const monthlyEeroPrice = eeroSelection ? eeroSelection.price : 0;
   const monthlyTotal = monthlyPackagePrice + monthlyEeroPrice;
 
-  const predictedIncreaseInNextYear = "3.00";
-  const predictedTotalNextYear = monthlyTotal + 3;
+  const nextYearIncrease = priceIncreaseInfo
+    ? priceIncreaseInfo.nextYearIncrease
+    : 3.0;
+  const followingYearIncrease = priceIncreaseInfo
+    ? priceIncreaseInfo.followingYearIncrease
+    : 3.0;
 
-  const predictedIncreaseInFollowingYear = "3.00";
-  const predictedTotalFollowingYear = predictedTotalNextYear + 3;
+  const predictedTotalNextYear = monthlyTotal + nextYearIncrease;
+  const predictedTotalFollowingYear = monthlyTotal + followingYearIncrease;
 
   return (
-    <div className="bg-ui-grey-100 p-6 rounded-md border border-ui-grey-300">
+    <div className="bg-ui-grey-100 p-6 rounded-md">
       <h3 className="font-bold mb-4">{monthlyPaymentTitle}</h3>
 
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h3 className="font-medium">{selectedPackage?.name}</h3>
-          <p className="text-sm text-ui-grey-500">
-            {selectedPackage?.speed.download} Mbps download /{" "}
-            {selectedPackage?.speed.upload} Mbps upload
-          </p>
+          <h3 className="font-medium">{selectedPackage.name}</h3>
         </div>
         <div className="text-right">
           <p className="font-bold">£{monthlyPackagePrice.toFixed(2)}</p>
@@ -71,16 +80,10 @@ export const PaymentSummary = ({
       <div className="border-t border-ui-grey-300 pt-4 mt-4">
         <div className="flex justify-between items-center mb-2">
           <p className="text-sm text-ui-grey-500">
-            {futurePriceIncreaseText && (
+            {nextYearPriceIncreaseText && (
               <>
-                {futurePriceIncreaseText.replace("{year}", "2026")}
-                {predictedIncreaseInNextYear}
-              </>
-            )}
-            {!futurePriceIncreaseText && (
-              <>
-                {futurePriceIncreaseText}
-                {predictedIncreaseInNextYear}
+                {nextYearPriceIncreaseText.replace("{year}", "2026")}
+                {nextYearIncrease.toFixed(2)}
               </>
             )}
           </p>
@@ -89,16 +92,10 @@ export const PaymentSummary = ({
 
         <div className="flex justify-between items-center">
           <p className="text-sm text-ui-grey-500">
-            {futurePriceIncreaseText && (
+            {followingYearPriceIncreaseText && (
               <>
-                {futurePriceIncreaseText.replace("{year}", "2027")}
-                {predictedIncreaseInFollowingYear}
-              </>
-            )}
-            {!futurePriceIncreaseText && (
-              <>
-                {futurePriceIncreaseText}
-                {predictedIncreaseInFollowingYear}
+                {followingYearPriceIncreaseText.replace("{year}", "2027")}
+                {followingYearIncrease.toFixed(2)}
               </>
             )}
           </p>

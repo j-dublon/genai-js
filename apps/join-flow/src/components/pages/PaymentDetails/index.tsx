@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
 import Stepper from "@/components/molecules/Stepper";
-import PaymentConfirmation from "@/components/pages/PaymentDetails/PaymentConfirmation";
-import PaymentSummary from "@/components/pages/PaymentDetails/PaymentSummary";
+import PaymentConfirmation from "@/components/organisms/PaymentConfirmation";
+import PaymentSummary from "@/components/organisms/PaymentConfirmation/PaymentSummary";
 import { usePaymentForm } from "@/hooks/usePaymentForm";
 import { PaymentFormValues } from "@/hooks/usePaymentForm";
 
@@ -37,9 +37,6 @@ export const PaymentDetails = ({
     title,
     paymentDetailsTitle,
     directDebitDetailsTitle,
-    monthlyPaymentTitle,
-    totalMonthlyPaymentTitle,
-    futurePriceIncreaseText,
     accountHolderNamePlaceholder,
     accountHolderNameError,
     accountNumberPlaceholder,
@@ -264,11 +261,7 @@ export const PaymentDetails = ({
               </p>
 
               <div className="mb-6">
-                <PaymentSummary
-                  monthlyPaymentTitle={monthlyPaymentTitle}
-                  totalMonthlyPaymentTitle={totalMonthlyPaymentTitle}
-                  futurePriceIncreaseText={futurePriceIncreaseText}
-                />
+                <PaymentSummary />
               </div>
             </div>
           </div>

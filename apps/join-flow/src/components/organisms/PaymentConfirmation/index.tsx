@@ -7,7 +7,10 @@ import React, { useCallback, useState } from "react";
 
 import Stepper from "@/components/molecules/Stepper";
 
-import { paymentDetailsText } from "./PaymentDetailsProps";
+import PaymentAccountDetails from "./PaymentAccountDetails";
+import PaymentAddressDetails from "./PaymentAddressDetails";
+import { paymentConfirmationText } from "./PaymentConfirmationProps";
+import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
 import PaymentSummary from "./PaymentSummary";
 import PaymentTermsAndConditions from "./PaymentTermsAndConditions";
 
@@ -24,17 +27,14 @@ export const PaymentConfirmation = ({
 
   const {
     title,
-    monthlyPaymentTitle,
-    totalMonthlyPaymentTitle,
+    addressDetailsTitle,
+    accountDetailsTitle,
+    goLiveDetailsTitle,
     directDebitDetailsTitle,
     backButtonText,
     signUpText,
-    futurePriceIncreaseText,
     termsAndConditionsTitle,
-    termsCheckboxText,
-    directDebitCheckboxText,
-    creditSearchCheckboxText,
-  } = paymentDetailsText;
+  } = paymentConfirmationText;
 
   const handleBack = useCallback(
     (event?: React.SyntheticEvent) => {
@@ -76,21 +76,25 @@ export const PaymentConfirmation = ({
           <p className="text-md font-bold mb-6">{directDebitDetailsTitle}</p>
 
           <div className="mb-6">
-            <PaymentSummary
-              monthlyPaymentTitle={monthlyPaymentTitle}
-              totalMonthlyPaymentTitle={totalMonthlyPaymentTitle}
-              futurePriceIncreaseText={futurePriceIncreaseText}
-            />
+            <PaymentSummary />
+          </div>
+          <p className="text-md font-bold mb-6">{accountDetailsTitle}</p>
+          <div className="mb-6">
+            <PaymentAccountDetails />
           </div>
 
+          <p className="text-md font-bold mb-6">{goLiveDetailsTitle}</p>
           <div className="mb-6">
-            <PaymentTermsAndConditions
-              onChange={handleTermsChange}
-              termsAndConditionsTitle={termsAndConditionsTitle}
-              termsCheckboxText={termsCheckboxText}
-              directDebitCheckboxText={directDebitCheckboxText}
-              creditSearchCheckboxText={creditSearchCheckboxText}
-            />
+            <PaymentGoLiveDetails />
+          </div>
+
+          <p className="text-md font-bold mb-6">{addressDetailsTitle}</p>
+          <div className="mb-6">
+            <PaymentAddressDetails />
+          </div>
+          <p className="text-md font-bold mb-6">{termsAndConditionsTitle}</p>
+          <div className="mb-6">
+            <PaymentTermsAndConditions onChange={handleTermsChange} />
           </div>
 
           <div className="mt-8">
