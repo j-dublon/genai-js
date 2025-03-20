@@ -20,7 +20,9 @@
   "dependencies": {
     "@axe-core/playwright": "4.10.1",
     "@react-component-library/ui": "*",
+    "@types/jsonwebtoken": "9.0.9",
     "cookie": "1.0.2",
+    "jsonwebtoken": "9.0.2",
     "posthog-node": "4.7.0"
   },
   "devDependencies": {

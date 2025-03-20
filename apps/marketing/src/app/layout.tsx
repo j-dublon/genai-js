@@ -11,8 +11,10 @@ import type { Metadata } from "next";
 import Script from "next/script";
 
 import { DynamicCookieNotice } from "@/components/molecules/CookieNotice";
+import SalesWidget from "@/components/molecules/SalesAgentWidget";
 import { CookieNoticeProvider } from "@/contexts/CookieNotice";
 import { defaultChoices } from "@/contexts/CookieNotice/defaultChoices";
+import { SalesAgentProvider } from "@/contexts/SalesAgent";
 import { PostHogProvider } from "@/providers/postHog/postHogProvider";
 
 const SITE_TITLE = "Cuckoo Broadband";
@@ -131,10 +133,13 @@ export default function RootLayout({
       <body className="font-garnett">
         <PrefetchCrossZoneLinksProvider>
           <CookieNoticeProvider gtmId={process.env.GTM_ID}>
-            <PostHogProvider>
-              <DynamicCookieNotice />
-              {children}
-            </PostHogProvider>
+            <SalesAgentProvider>
+              <PostHogProvider>
+                <DynamicCookieNotice />
+                {children}
+                <SalesWidget />
+              </PostHogProvider>
+            </SalesAgentProvider>
           </CookieNoticeProvider>
         </PrefetchCrossZoneLinksProvider>
         <PrefetchCrossZoneLinks />

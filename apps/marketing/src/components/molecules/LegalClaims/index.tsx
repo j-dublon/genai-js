@@ -1,6 +1,8 @@
 import Link from "next/link";
-const linkClass = "text-core-purple font-medium underline ml-1";
+
 export const LegalClaims = () => {
+  const linkClass = "text-core-purple font-medium underline ml-1";
+
   return (
     <div className="relative flex justify-center sm:px-tablet px-mobile  lg:px-desktop">
       <div className="flex flex-col py-6 md:py-15 max-w-[1152px] w-full">
