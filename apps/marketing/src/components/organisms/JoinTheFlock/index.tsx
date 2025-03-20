@@ -53,7 +53,7 @@ export const JoinTheFlock = ({
               Get full fibre speeds, actually amazing signal, plus aaall this
               too...
             </p>
-            <div className="pb-10 lg:pr-20 ">
+            <div className="pb-10">
               <PostcodeChecker
                 placeholderText="Pop in your postcode"
                 inputBoxButtonText="Let's go"

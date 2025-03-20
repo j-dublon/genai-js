@@ -33,6 +33,9 @@ export const InfoCard = ({
   featureImageProps,
   listItems,
 }: InfoCardProps) => {
+  const bulletStyling =
+    "ds:absolute ds:w-[5px] ds:h-[5px] ds:rounded-full ds:bg-current ds:left-1 ds:top-[0.6em] ds:md:top-[0.75em]";
+
   return (
     <div
       className={`${
@@ -101,13 +104,16 @@ export const InfoCard = ({
             </div>
 
             {listItems && (
-              <ul className="ds:list-disc ds:pl-5">
+              <ul>
                 {listItems.map((item) => (
                   <li
                     key={item}
-                    className="ds:md:font-medium ds:font-semibold ds:md:text-md ds:text-[16px] ds:mb-2"
+                    className="ds:mb-2 ds:pl-4 ds:md:pl-6 ds:relative ds:list-none"
                   >
-                    {item}
+                    <span className={bulletStyling} />
+                    <span className="ds:md:font-medium ds:font-semibold ds:md:text-md ds:text-[16px]">
+                      {item}
+                    </span>
                   </li>
                 ))}
               </ul>
