@@ -17,11 +17,17 @@ describe("ImageMarquee Component", () => {
         imgSrc: "test-src-2.png",
       },
     ],
-    backgroundColor: "bg-ui-grey-100",
   };
 
-  it("renders the correct number of logos", () => {
+  it("renders all images in the DOM", () => {
+    const { container } = render(<ImageMarquee {...props} />);
+    const allImages = container.querySelectorAll("img");
+    expect(allImages).toHaveLength(4); // 2 images × 2 sets
+  });
+
+  it("makes only first set of images available to screen readers", () => {
     render(<ImageMarquee {...props} />);
-    expect(screen.getAllByRole("img")).toHaveLength(2);
+    const accessibleImages = screen.getAllByRole("img");
+    expect(accessibleImages).toHaveLength(2);
   });
 });

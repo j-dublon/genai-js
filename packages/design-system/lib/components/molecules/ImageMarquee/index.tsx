@@ -1,6 +1,3 @@
-import { motion } from "framer-motion";
-import React from "react";
-
 export interface ImageProps extends React.ImgHTMLAttributes<ImageBitmap> {
   altText: string;
   width: string;
@@ -12,30 +9,41 @@ export interface ImageMarqueeProps {
   images: ImageProps[];
 }
 
-export const ImageMarquee = ({ images }: ImageMarqueeProps) => {
+const ImageSet = ({
+  images,
+  keyPrefix,
+}: ImageMarqueeProps & { keyPrefix: "set1" | "set2" }) => {
+  const WRAPPER_CLASSES =
+    "ds:flex ds:items-center ds:justify-center ds:md:justify-start ds:animate-marquee-slow ds:gap-6 ds:md:gap-[30px] ds:mr-6 ds:md:mr-[30px]";
+  const IMAGE_CLASSES =
+    "ds:w-[inherit] ds:h-[inherit] ds:max-w-[329px] ds:md:max-w-[485px] ds:max-h-[330px] ds:md:max-h-[495px] ds:rounded-lg";
+
   return (
-    <motion.div
-      transition={{
-        duration: 50,
-        ease: "linear",
-        repeat: Infinity,
-      }}
-      initial={{ translateX: 0 }}
-      animate={{ translateX: "-50%" }}
-      className="ds:flex ds:gap-[30px] ds:will-change-transform"
-    >
-      {images.map((image: ImageProps) => (
-        <div key={`${image.altText}`} className="ds:flex ds:items-center">
+    <div className={WRAPPER_CLASSES} aria-hidden={keyPrefix === "set2"}>
+      {images.map(({ altText, width, height, imgSrc }: ImageProps) => (
+        <div
+          key={`${keyPrefix}-${altText}`}
+          className="ds:flex ds:items-center"
+        >
           <img
-            alt={image.altText}
+            alt={altText}
             loading="lazy"
-            width={image.width}
-            height={image.height}
-            src={image.imgSrc}
-            className="ds:object-scale-down ds:max-w-[40vw] ds:md:max-w-none ds:rounded-lg"
+            width={width}
+            height={height}
+            src={imgSrc}
+            className={IMAGE_CLASSES}
           />
         </div>
       ))}
-    </motion.div>
+    </div>
+  );
+};
+
+export const ImageMarquee = ({ images }: ImageMarqueeProps) => {
+  return (
+    <div className="ds:w-full ds:inline-flex ds:flex-nowrap ds:overflow-hidden">
+      <ImageSet images={images} keyPrefix="set1" />
+      <ImageSet images={images} keyPrefix="set2" />
+    </div>
   );
 };

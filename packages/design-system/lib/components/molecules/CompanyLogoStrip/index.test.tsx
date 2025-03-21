@@ -1,5 +1,5 @@
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 
 describe("CompanyLogoStrip Component", () => {
   const props = {
@@ -20,18 +20,23 @@ describe("CompanyLogoStrip Component", () => {
     backgroundColor: "bg-gray-100",
   };
 
-  it("renders the component", () => {
-    render(<CompanyLogoStrip {...props} />);
-    expect(
-      screen.getAllByRole("img", { name: "Test Alt Text 1" }),
-    ).toHaveLength(3);
-    expect(
-      screen.getAllByRole("img", { name: "Test Alt Text 2" }),
-    ).toHaveLength(3);
+  it("renders all logo images in the DOM", () => {
+    const { container } = render(<CompanyLogoStrip {...props} />);
+    const allImages = container.querySelectorAll("img");
+    expect(allImages).toHaveLength(6); // 2 logos × 3 sets (desktop, mobile-1, mobile-2)
   });
 
-  it("renders the correct number of logos", () => {
-    render(<CompanyLogoStrip {...props} />);
-    expect(screen.getAllByRole("img")).toHaveLength(6);
+  it("properly hides duplicate content from screen readers", () => {
+    const { container } = render(<CompanyLogoStrip {...props} />);
+    const hiddenElements = container.querySelectorAll('[aria-hidden="true"]');
+    expect(hiddenElements).toHaveLength(1); // mobile-2 container should be hidden
+  });
+
+  it("will hide desktop marquee when in mobile view and vice versa", () => {
+    const { getByTestId } = render(<CompanyLogoStrip {...props} />);
+    const mobileContainer = getByTestId("mobile-logo-container");
+    const desktopContainer = getByTestId("desktop-logo-container");
+    expect(mobileContainer).toHaveClass("ds:md:hidden");
+    expect(desktopContainer).toHaveClass("ds:hidden");
   });
 });

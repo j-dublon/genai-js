@@ -19,9 +19,7 @@ export const LifeAtCuckoo = () => {
           </div>
         </div>
       </div>
-      <div className="md:px-10 w-full overflow-hidden flex">
-        <ImageMarquee images={imageMarqueeProps.images} />
-      </div>
+      <ImageMarquee images={imageMarqueeProps.images} />
     </div>
   );
 };
