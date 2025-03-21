@@ -42,7 +42,7 @@ export const ClickSwitchDoneSection = () => {
           >
             <span className="block md:hidden">Find out more</span>
             <span className="hidden md:block">
-              Find out more about how switching to Cuckoo
+              Find out more about switching to Cuckoo
             </span>
           </Button>
         </Link>
