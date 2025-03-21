@@ -37,7 +37,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
             aria-label="enter your postcode or address"
             placeholder={placeholderText}
             name="postcode-checker"
-            className="ds:text-sm ds:sm:text-md ds:flex-1 ds:px-1 ds:mr-1 ds:min-w-[160px] ds:md:min-w-[205px] ds:focus:outline-none"
+            className="ds:text-sm ds:sm:text-md ds:flex-1 ds:px-1 ds:mr-1 ds:min-w-[160px] ds:md:min-w-[205px] ds:focus:outline-none ds:[&::-webkit-search-cancel-button]:hidden"
             value={postcode}
             onChange={(e) => setPostcode(e.target.value)}
             autoComplete="off"
