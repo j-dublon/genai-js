@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { vi } from "vitest";
 
 import { JoinTheFlock } from ".";
@@ -24,7 +24,15 @@ describe("JoinTheFlock", () => {
     expect(
       screen.getByPlaceholderText("Pop in your postcode"),
     ).toBeInTheDocument();
-    expect(screen.getByRole("button")).toHaveTextContent("Let's go");
+    const desktopSubmitButton = screen.getByTestId("desktop-submit");
+    expect(desktopSubmitButton).toHaveClass("ds:hidden", "ds:sm:flex");
+    expect(within(desktopSubmitButton).getByRole("button")).toHaveTextContent(
+      "Let's go",
+    );
+    expect(screen.getByTestId("mobile-submit")).toHaveClass(
+      "ds:block",
+      "ds:sm:hidden",
+    );
   });
 
   it("renders TrustpilotVertical component", async () => {
