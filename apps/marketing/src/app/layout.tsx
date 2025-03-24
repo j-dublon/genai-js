@@ -16,6 +16,7 @@ import { CookieNoticeProvider } from "@/contexts/CookieNotice";
 import { defaultChoices } from "@/contexts/CookieNotice/defaultChoices";
 import { SalesAgentProvider } from "@/contexts/SalesAgent";
 import { PostHogProvider } from "@/providers/postHog/postHogProvider";
+import { UserTrackingProvider } from "@/providers/userTracking/userTrackingProvider";
 
 const SITE_TITLE = "Cuckoo Broadband";
 const SITE_DESCRIPTION =
@@ -131,19 +132,21 @@ export default function RootLayout({
         />
       </head>
       <body className="font-garnett">
-        <PrefetchCrossZoneLinksProvider>
-          <CookieNoticeProvider gtmId={process.env.GTM_ID}>
-            <SalesAgentProvider>
-              <PostHogProvider>
-                <DynamicCookieNotice />
-                {children}
-                <SalesWidget />
-              </PostHogProvider>
-            </SalesAgentProvider>
-          </CookieNoticeProvider>
-        </PrefetchCrossZoneLinksProvider>
-        <PrefetchCrossZoneLinks />
-        <SpeedInsights />
+        <UserTrackingProvider>
+          <PrefetchCrossZoneLinksProvider>
+            <CookieNoticeProvider gtmId={process.env.GTM_ID}>
+              <SalesAgentProvider>
+                <PostHogProvider>
+                  <DynamicCookieNotice />
+                  {children}
+                  <SalesWidget />
+                </PostHogProvider>
+              </SalesAgentProvider>
+            </CookieNoticeProvider>
+          </PrefetchCrossZoneLinksProvider>
+          <PrefetchCrossZoneLinks />
+          <SpeedInsights />
+        </UserTrackingProvider>
       </body>
     </html>
   );
