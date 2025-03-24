@@ -44,9 +44,13 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
             type="search"
           />
           <div className="ds:shrink">
-            <div className="ds:block ds:sm:hidden">
+            <button
+              type="submit"
+              className="ds:p-0 ds:bg-transparent ds:border-0 ds:block ds:sm:hidden"
+            >
               <ChevronRightWithCircle />
-            </div>
+            </button>
+
             <div className="ds:hidden ds:sm:flex">
               <Button type="submit" variant="solid" size="medium">
                 {inputBoxButtonText}
