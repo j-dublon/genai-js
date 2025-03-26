@@ -69,7 +69,7 @@ describe("HeroBanner", () => {
 
   it("has a yellow background colour for when the video is loading", async () => {
     const heroBanner = await screen.findByTestId("hero-banner");
-    expect(heroBanner).toHaveClass("bg-core-yellow", "-z-1");
+    expect(heroBanner).toHaveClass("bg-core-yellow", "z-0");
   });
 
   it("has a video element", async () => {

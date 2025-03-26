@@ -36,7 +36,7 @@ export const HeroBanner = ({
 
   return (
     <div
-      className="relative flex justify-center bg-core-yellow -z-1"
+      className="relative flex justify-center bg-core-yellow z-0"
       data-testid="hero-banner"
     >
       <video
@@ -45,14 +45,14 @@ export const HeroBanner = ({
         playsInline
         loop
         muted
-        className="absolute order-1 h-full w-full object-cover col-start-5 col-span-8 row-start-1 row-span-3 -z-10"
+        className="absolute order-1 h-full w-full object-cover col-start-5 col-span-8 row-start-1 row-span-3 z-1"
       >
         <source
           src="https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/Z9vpgDiBA97Gisse_0325_MarketingWebsite_Homepage_3DWorld_Animation.mp4"
           type="video/mp4"
         />
       </video>
-      <div className="flex flex-col px-mobile sm:px-tablet lg:px-desktop">
+      <div className="flex flex-col px-mobile sm:px-tablet lg:px-desktop z-10">
         <div className="flex md:flex-row flex-col py-9 md:pb-35 md:pt-[90px] md:items-start items-center max-w-[1152px]">
           <div className="flex-1 flex flex-col pb-12 md:pb-0 md:pr-10">
             <Heading headingText="Ridiculously fast full fibre broadband" />
