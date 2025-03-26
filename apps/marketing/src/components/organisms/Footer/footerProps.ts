@@ -18,6 +18,10 @@ export const props = {
           label: "Cuckoo Community Referral Scheme",
           href: "https://www.cuckoo.co/partner-with-us",
         },
+        {
+          label: "Gender Pay Gap Report",
+          href: "https://cuckoo-egg.cdn.prismic.io/cuckoo-egg/Z-MGundAxsiBv5lD_GenderPayGapreport25031.pdf",
+        },
       ],
     },
     {
