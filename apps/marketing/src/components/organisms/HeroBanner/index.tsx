@@ -35,9 +35,12 @@ export const HeroBanner = ({
   };
 
   return (
-    <div className="relative flex justify-center" data-testid="hero-banner">
+    <div
+      className="relative flex justify-center bg-core-yellow -z-1"
+      data-testid="hero-banner"
+    >
       <video
-        data-test-id="hero-banner-video"
+        data-testid="hero-banner-video"
         autoPlay
         playsInline
         loop

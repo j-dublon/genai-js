@@ -9,7 +9,7 @@ export const CuckooProtect = () => {
   return (
     <div className="relative z-10 order-none">
       <video
-        data-test-id="cuckoo-protect-video"
+        data-testid="cuckoo-protect-video"
         autoPlay
         playsInline
         loop

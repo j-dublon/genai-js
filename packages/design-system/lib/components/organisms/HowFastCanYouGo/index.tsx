@@ -28,7 +28,7 @@ export const HowFastCanYouGo = ({
       </div>
       <div className="ds:md:absolute ds:md:top-0 ds:md:right-0 ds:w-full ds:md:h-full ds:z-0 ds:md:w-[calc(100%-565px)]">
         <video
-          data-test-id="how-fast-can-you-go-video"
+          data-testid="how-fast-can-you-go-video"
           autoPlay
           playsInline
           loop

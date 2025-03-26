@@ -31,7 +31,7 @@ export const JoinTheFlock = ({
   return (
     <div className="relative z-10 order-none">
       <video
-        data-test-id="join-the-flock-video"
+        data-testid="join-the-flock-video"
         autoPlay
         playsInline
         loop

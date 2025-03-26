@@ -66,4 +66,14 @@ describe("HeroBanner", () => {
     expect(item3).toBeInTheDocument();
     expect(item4).toBeInTheDocument();
   });
+
+  it("has a yellow background colour for when the video is loading", async () => {
+    const heroBanner = await screen.findByTestId("hero-banner");
+    expect(heroBanner).toHaveClass("bg-core-yellow", "-z-1");
+  });
+
+  it("has a video element", async () => {
+    const video = await screen.findByTestId("hero-banner-video");
+    expect(video).toBeInTheDocument();
+  });
 });
