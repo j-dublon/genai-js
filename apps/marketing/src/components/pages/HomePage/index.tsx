@@ -1,4 +1,5 @@
 "use client";
+
 import { TermsAndConditions } from "@/components/atoms/TermsAndConditions";
 import { CompanyLogoStripWrapper } from "@/components/molecules/CompanyLogoStrip";
 import { FAQSection } from "@/components/molecules/FAQSection";
@@ -25,7 +26,6 @@ import { useTrustpilotScore } from "@/hooks";
 export const HomePage = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const broadbandOffer = true;
-
   const enableCuckooProtect =
     process.env.NEXT_PUBLIC_ENABLE_CUCKOO_PROTECT === "true";
 
@@ -36,43 +36,47 @@ export const HomePage = () => {
     "*Lorem ipsum dolor sit amet consectetur. Diam ullamcorper felis at vel amet nunc sed phasellus. Odio rhoncus.";
 
   return (
-    <div className="w-full">
-      <NavBarWrapper />
-      <main>
-        <HeroBanner
-          trustScore={trustpilotRating?.trustScore}
-          numberOfReviews={trustpilotRating?.numberOfReviews}
-          broadbandOffer={broadbandOffer}
-          enableTermsAndConditionsText={enableTermsAndConditionsText}
-          termsAndConditionsText={termsAndConditionsText}
-        />
-        <CardSection />
-        {enableTermsAndConditionsText && (
-          <TermsAndConditions termsAndConditionsText={termsAndConditionsText} />
-        )}
-        <CompanyLogoStripWrapper />
-        <JoinTheFlock
-          trustScore={trustpilotRating?.trustScore}
-          numberOfReviews={trustpilotRating?.numberOfReviews}
-        />
-        <FAQSection />
-        <ClickSwitchDoneSection />
-        {enableCuckooProtect && <CuckooProtect />}
-        <TrustPilotSliderWrapper
-          reviewCount={Number(trustpilotRating?.numberOfReviews)}
-          trustScore={Number(trustpilotRating?.trustScore)}
-        />
-        <MobileAppWrapper />
-        <LifeAtCuckoo />
-        <Guides
-          guides={guides}
-          guidesHeading={guidesHeading}
-          guidesSubHeading={guidesSubHeading}
-        />
-        <HowFastCanYouGoWrapper />
-        <LegalClaims />
-      </main>
-      <FooterWrapper trustScore={trustpilotRating?.trustScore} />
-    </div>
+    <>
+      <div className="w-full">
+        <NavBarWrapper />
+        <main>
+          <HeroBanner
+            trustScore={trustpilotRating?.trustScore}
+            numberOfReviews={trustpilotRating?.numberOfReviews}
+            broadbandOffer={broadbandOffer}
+            enableTermsAndConditionsText={enableTermsAndConditionsText}
+            termsAndConditionsText={termsAndConditionsText}
+          />
+          <CardSection />
+          {enableTermsAndConditionsText && (
+            <TermsAndConditions
+              termsAndConditionsText={termsAndConditionsText}
+            />
+          )}
+          <CompanyLogoStripWrapper />
+          <JoinTheFlock
+            trustScore={trustpilotRating?.trustScore}
+            numberOfReviews={trustpilotRating?.numberOfReviews}
+          />
+          <FAQSection />
+          <ClickSwitchDoneSection />
+          {enableCuckooProtect && <CuckooProtect />}
+          <TrustPilotSliderWrapper
+            reviewCount={Number(trustpilotRating?.numberOfReviews)}
+            trustScore={Number(trustpilotRating?.trustScore)}
+          />
+          <MobileAppWrapper />
+          <LifeAtCuckoo />
+          <Guides
+            guides={guides}
+            guidesHeading={guidesHeading}
+            guidesSubHeading={guidesSubHeading}
+          />
+          <HowFastCanYouGoWrapper />
+          <LegalClaims />
+        </main>
+        <FooterWrapper trustScore={trustpilotRating?.trustScore} />
+      </div>
+    </>
   );
 };
