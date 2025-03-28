@@ -2739,6 +2739,18 @@
             "deprecationReason": null
           },
           {
+            "name": "network",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "quotedSpeed",
             "description": null,
             "args": [],
@@ -2902,6 +2914,26 @@
               "kind": "OBJECT",
               "name": "SpeedProductPromotion",
               "ofType": null
+            },
+            "isDeprecated": true,
+            "deprecationReason": "Use promotions instead"
+          },
+          {
+            "name": "promotions",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "LIST",
+              "name": null,
+              "ofType": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SpeedProductPromotion",
+                  "ofType": null
+                }
+              }
             },
             "isDeprecated": false,
             "deprecationReason": null
@@ -4252,8 +4284,8 @@
                 "name": "network",
                 "description": null,
                 "type": {
-                  "kind": "ENUM",
-                  "name": "Network",
+                  "kind": "SCALAR",
+                  "name": "String",
                   "ofType": null
                 },
                 "defaultValue": null
@@ -5211,6 +5243,33 @@
             "type": {
               "kind": "OBJECT",
               "name": "UpdateDirectDebitMandateResponse",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updateDirectDebitPaymentDay",
+            "description": null,
+            "args": [
+              {
+                "name": "input",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "UpdateDirectDebitPaymentDayInput",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
+            "type": {
+              "kind": "OBJECT",
+              "name": "UpdateDirectDebitPaymentDayResponse",
               "ofType": null
             },
             "isDeprecated": false,
@@ -6176,6 +6235,84 @@
       },
       {
         "kind": "OBJECT",
+        "name": "UpdateDirectDebitPaymentDayResponse",
+        "description": null,
+        "fields": [
+          {
+            "name": "error",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "success",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "INPUT_OBJECT",
+        "name": "UpdateDirectDebitPaymentDayInput",
+        "description": null,
+        "fields": null,
+        "inputFields": [
+          {
+            "name": "accountNumber",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          },
+          {
+            "name": "newPaymentDay",
+            "description": null,
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              }
+            },
+            "defaultValue": null
+          }
+        ],
+        "interfaces": null,
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "CustomerComplaintResponse",
         "description": null,
         "fields": [
@@ -6961,29 +7098,6 @@
           },
           {
             "name": "STOP_SELL_ROI",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "possibleTypes": null
-      },
-      {
-        "kind": "ENUM",
-        "name": "Network",
-        "description": null,
-        "fields": null,
-        "inputFields": null,
-        "interfaces": null,
-        "enumValues": [
-          {
-            "name": "CF",
-            "description": null,
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "BT",
             "description": null,
             "isDeprecated": false,
             "deprecationReason": null
@@ -9915,68 +10029,6 @@
         "possibleTypes": null
       },
       {
-        "kind": "OBJECT",
-        "name": "EmailAvailability",
-        "description": null,
-        "fields": [
-          {
-            "name": "available",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "NON_NULL",
-              "name": null,
-              "ofType": {
-                "kind": "SCALAR",
-                "name": "Boolean",
-                "ofType": null
-              }
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
-        "kind": "OBJECT",
-        "name": "WifiInfo",
-        "description": null,
-        "fields": [
-          {
-            "name": "ssid",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          },
-          {
-            "name": "password",
-            "description": null,
-            "args": [],
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "isDeprecated": false,
-            "deprecationReason": null
-          }
-        ],
-        "inputFields": null,
-        "interfaces": [],
-        "enumValues": null,
-        "possibleTypes": null
-      },
-      {
         "kind": "ENUM",
         "name": "ComplaintSubType",
         "description": null,
@@ -10366,6 +10418,33 @@
         "possibleTypes": null
       },
       {
+        "kind": "OBJECT",
+        "name": "EmailAvailability",
+        "description": null,
+        "fields": [
+          {
+            "name": "available",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "Boolean",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
         "kind": "ENUM",
         "name": "ProductCode",
         "description": null,
@@ -10392,6 +10471,41 @@
             "deprecationReason": null
           }
         ],
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
+        "name": "WifiInfo",
+        "description": null,
+        "fields": [
+          {
+            "name": "ssid",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "password",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "String",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
         "possibleTypes": null
       },
       {
@@ -11267,10 +11381,18 @@
         "args": []
       },
       {
-        "name": "aws_cognito_user_pools",
-        "description": "Tells the service this field/object has access authorized by a Cognito User Pools token.",
+        "name": "aws_iam",
+        "description": "Tells the service this field/object has access authorized by sigv4 signing.",
         "locations": [
           "OBJECT",
+          "FIELD_DEFINITION"
+        ],
+        "args": []
+      },
+      {
+        "name": "aws_auth",
+        "description": "Directs the schema to enforce authorization on a field",
+        "locations": [
           "FIELD_DEFINITION"
         ],
         "args": [
@@ -11291,9 +11413,10 @@
         ]
       },
       {
-        "name": "aws_auth",
-        "description": "Directs the schema to enforce authorization on a field",
+        "name": "aws_cognito_user_pools",
+        "description": "Tells the service this field/object has access authorized by a Cognito User Pools token.",
         "locations": [
+          "OBJECT",
           "FIELD_DEFINITION"
         ],
         "args": [
@@ -11337,33 +11460,6 @@
         ]
       },
       {
-        "name": "aws_iam",
-        "description": "Tells the service this field/object has access authorized by sigv4 signing.",
-        "locations": [
-          "OBJECT",
-          "FIELD_DEFINITION"
-        ],
-        "args": []
-      },
-      {
-        "name": "aws_oidc",
-        "description": "Tells the service this field/object has access authorized by an OIDC token.",
-        "locations": [
-          "OBJECT",
-          "FIELD_DEFINITION"
-        ],
-        "args": []
-      },
-      {
-        "name": "aws_api_key",
-        "description": "Tells the service this field/object has access authorized by an API key.",
-        "locations": [
-          "OBJECT",
-          "FIELD_DEFINITION"
-        ],
-        "args": []
-      },
-      {
         "name": "deprecated",
         "description": null,
         "locations": [
@@ -11382,6 +11478,15 @@
             "defaultValue": "\"No longer supported\""
           }
         ]
+      },
+      {
+        "name": "aws_api_key",
+        "description": "Tells the service this field/object has access authorized by an API key.",
+        "locations": [
+          "OBJECT",
+          "FIELD_DEFINITION"
+        ],
+        "args": []
       },
       {
         "name": "aws_subscribe",
@@ -11405,6 +11510,15 @@
             "defaultValue": null
           }
         ]
+      },
+      {
+        "name": "aws_oidc",
+        "description": "Tells the service this field/object has access authorized by an OIDC token.",
+        "locations": [
+          "OBJECT",
+          "FIELD_DEFINITION"
+        ],
+        "args": []
       },
       {
         "name": "aws_lambda",

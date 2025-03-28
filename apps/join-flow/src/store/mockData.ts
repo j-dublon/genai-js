@@ -4,7 +4,6 @@ import {
   EeroProduct,
 } from "../store/useJoinFlowStore";
 
-// Broadband packages based on current Cuckoo offerings
 export const broadbandPackages: BroadbandPackage[] = [
   {
     id: "c-150",
@@ -16,6 +15,10 @@ export const broadbandPackages: BroadbandPackage[] = [
     price: {
       monthly: 32,
       setup: 0,
+    },
+    priceIncrease: {
+      nextYearIncrease: 3.0,
+      followingYearIncrease: 3.0,
     },
     contractLength: 12,
     description: "Full fibre speeds",
@@ -31,6 +34,10 @@ export const broadbandPackages: BroadbandPackage[] = [
       monthly: 37,
       setup: 0,
     },
+    priceIncrease: {
+      nextYearIncrease: 3.0,
+      followingYearIncrease: 3.0,
+    },
     contractLength: 12,
     description: "Full fibre speeds",
   },
@@ -44,6 +51,10 @@ export const broadbandPackages: BroadbandPackage[] = [
     price: {
       monthly: 54.99,
       setup: 0,
+    },
+    priceIncrease: {
+      nextYearIncrease: 3.0,
+      followingYearIncrease: 3.0,
     },
     contractLength: 12,
     description: "Full fibre speeds",

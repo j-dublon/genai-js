@@ -16,7 +16,7 @@ import {
 
 const PackageSelection = () => {
   const router = useRouter();
-  const { selectPackage, setPriceIncreaseInfo } = useJoinFlowStore();
+  const { selectPackage } = useJoinFlowStore();
 
   const {
     selectedAddress,
@@ -44,11 +44,6 @@ const PackageSelection = () => {
     );
 
     if (selectedPackage) {
-      setPriceIncreaseInfo({
-        nextYearIncrease: 3.0,
-        followingYearIncrease: 3.0,
-      });
-
       selectPackage(selectedPackage);
       router.push("/join-flow/personal-details");
     }

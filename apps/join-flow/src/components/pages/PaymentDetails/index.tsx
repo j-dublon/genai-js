@@ -9,7 +9,7 @@ import Stepper from "@/components/molecules/Stepper";
 import PaymentConfirmation from "@/components/organisms/PaymentConfirmation";
 import PaymentSummary from "@/components/organisms/PaymentConfirmation/PaymentSummary";
 import { usePaymentForm } from "@/hooks/usePaymentForm";
-import { PaymentFormValues } from "@/hooks/usePaymentForm";
+import { type PaymentFormValues } from "@/hooks/usePaymentForm";
 
 import { paymentDetailsText } from "./PaymentDetailsProps";
 
@@ -25,7 +25,7 @@ export const PaymentDetails = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
 
-  const [isAccountHolderNameValid, setIsAccountHolderNameValid] =
+  const [isaccountholderNameValid, setIsaccountholderNameValid] =
     useState(false);
   const [isAccountNumberValid, setIsAccountNumberValid] = useState(false);
   const [isSortCodeValid, setIsSortCodeValid] = useState(false);
@@ -37,8 +37,8 @@ export const PaymentDetails = ({
     title,
     paymentDetailsTitle,
     directDebitDetailsTitle,
-    accountHolderNamePlaceholder,
-    accountHolderNameError,
+    accountholderNamePlaceholder,
+    accountholderNameError,
     accountNumberPlaceholder,
     accountNumberError,
     sortCodePlaceholder,
@@ -48,10 +48,10 @@ export const PaymentDetails = ({
     submittingButtonText,
   } = paymentDetailsText;
 
-  const handleAccountHolderNameChange = (
+  const handleaccountholderNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    setIsAccountHolderNameValid(e.target.value.trim().length > 0);
+    setIsaccountholderNameValid(e.target.value.trim().length > 0);
   };
 
   const handleAccountNumberChange = (
@@ -133,13 +133,13 @@ export const PaymentDetails = ({
                 <div className="mb-6">
                   <div className="relative">
                     <input
-                      {...register("accountHolderName", { required: true })}
-                      id="accountHolderName"
-                      placeholder={accountHolderNamePlaceholder}
+                      {...register("accountholderName", { required: true })}
+                      id="accountholderName"
+                      placeholder={accountholderNamePlaceholder}
                       className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
-                      onChange={handleAccountHolderNameChange}
+                      onChange={handleaccountholderNameChange}
                     />
-                    {isAccountHolderNameValid && (
+                    {isaccountholderNameValid && (
                       <svg
                         className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
                         fill="none"
@@ -156,9 +156,9 @@ export const PaymentDetails = ({
                       </svg>
                     )}
                   </div>
-                  {errors.accountHolderName && (
+                  {errors.accountholderName && (
                     <p className="text-red-500 text-sm mt-1">
-                      {accountHolderNameError}
+                      {accountholderNameError}
                     </p>
                   )}
                 </div>

@@ -6,8 +6,8 @@ export interface PaymentDetailsProps {
   monthlyPaymentTitle: string;
   monthlyLabel: string;
   totalMonthlyPaymentTitle: string;
-  accountHolderNamePlaceholder: string;
-  accountHolderNameError: string;
+  accountholderNamePlaceholder: string;
+  accountholderNameError: string;
   accountNumberPlaceholder: string;
   accountNumberError: string;
   futurePriceIncreaseText: string;
@@ -26,8 +26,8 @@ export const paymentDetailsText: PaymentDetailsProps = {
   monthlyPaymentTitle: "Your monthly payment",
   monthlyLabel: "per month",
   totalMonthlyPaymentTitle: "Your total monthly payment",
-  accountHolderNamePlaceholder: "Account holder name",
-  accountHolderNameError: "Account holder name is required",
+  accountholderNamePlaceholder: "Account holder name",
+  accountholderNameError: "Account holder name is required",
   accountNumberPlaceholder: "Account number",
   accountNumberError: "Valid 8-digit account number is required",
   futurePriceIncreaseText: "From April 1 2026 an increase of £",

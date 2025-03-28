@@ -1,6 +1,8 @@
 import "@react-component-library/ui/ui.css";
 import "../globals.css";
 
+import RouteGuard from "@/validation/routeGuard";
+
 const JoinFlowLayout = ({
   children,
 }: Readonly<{ children: React.ReactNode }>) => {
@@ -14,7 +16,9 @@ const JoinFlowLayout = ({
         --font-url-garnett-semibold: "${baseUrl}/vc-ap-marketing/fonts/Garnett-SemiBold.woff2";
         }
       `}</style>
-      <div className="font-garnett">{children}</div>
+      <div className="font-garnett">
+        <RouteGuard>{children}</RouteGuard>
+      </div>
     </div>
   );
 };

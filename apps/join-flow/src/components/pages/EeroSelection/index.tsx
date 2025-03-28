@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 import Stepper from "@/components/molecules/Stepper";
+import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
 const EeroSelection = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const EeroSelection = () => {
   const [selectedEero, setSelectedEero] = useState<EeroProduct | null>(
     eeroSelection || eeroProducts.find((p) => p.id === "no-eero") || null,
   );
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSelectEero = (product: EeroProduct) => {
     const updatedProduct = {
@@ -24,13 +26,23 @@ const EeroSelection = () => {
       isSelected: true,
     };
     setSelectedEero(updatedProduct);
+    setValidationError(null);
   };
 
   const handleContinue = () => {
-    if (selectedEero) {
+    if (!selectedEero) {
+      setValidationError("Please select an eero product");
+      return;
+    }
+
+    try {
+      eeroSelectionSchema.parse(selectedEero);
+
       selectEeroProduct(selectedEero);
       setCurrentStep(3);
       router.push("/join-flow/one-touch-switching");
+    } catch {
+      setValidationError("Please select a valid eero product");
     }
   };
 
@@ -45,6 +57,15 @@ const EeroSelection = () => {
             Enhance your broadband with an eero mesh WiFi system for whole-home
             coverage
           </p>
+
+          {validationError && (
+            <div
+              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+              role="alert"
+            >
+              <span className="block sm:inline">{validationError}</span>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             {eeroProducts.map((product) => (

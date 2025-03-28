@@ -15,7 +15,7 @@ export const PaymentAccountDetails = ({}) => {
     <div className="bg-ui-grey-100 p-6 rounded-md">
       <h3 className="mb-2">
         <span className="font-bold">{accountHolderLabel}</span>{" "}
-        <span className="font-normal">{paymentDetails?.cardholderName}</span>
+        <span className="font-normal">{paymentDetails?.accountholderName}</span>
       </h3>
 
       <h3 className="mb-2">

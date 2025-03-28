@@ -43,12 +43,16 @@ export type SwitchingDetails = {
 };
 
 export type PaymentDetails = {
-  cardholderName: string;
+  accountholderName: string;
   cardToken: string;
   accountNumber?: string;
   sortCode?: string;
   billingAddress: Address | null;
   sameAsServiceAddress?: boolean;
+  termsAgreed: boolean;
+  directDebitAgreed: boolean;
+  creditSearchAgreed: boolean;
+  allTermsAgreed: boolean;
 };
 
 export type GoLiveDetails = {
@@ -70,17 +74,17 @@ export type BroadbandPackage = {
     monthly: number;
     setup: number;
   };
+  priceIncrease: {
+    nextYearIncrease: number;
+    followingYearIncrease: number;
+  };
   contractLength: number;
   description: string;
   features?: string[];
 };
 
-export type PriceIncreaseInfo = {
-  nextYearIncrease: number;
-  followingYearIncrease: number;
-};
-
 export type JoinFlowState = {
+  _hasHydrated: boolean;
   currentStep: number;
   selectedPackage: BroadbandPackage | null;
   personalDetails: PersonalDetails | null;
@@ -88,9 +92,9 @@ export type JoinFlowState = {
   switchingDetails: SwitchingDetails | null;
   paymentDetails: PaymentDetails | null;
   goLiveDetails: GoLiveDetails | null;
-  priceIncreaseInfo: PriceIncreaseInfo | null;
 
   // Actions
+  setHasHydrated: (state: boolean) => void;
   setCurrentStep: (step: number) => void;
   selectPackage: (pkg: BroadbandPackage) => void;
   setPersonalDetails: (details: PersonalDetails) => void;
@@ -98,7 +102,6 @@ export type JoinFlowState = {
   setSwitchingDetails: (details: SwitchingDetails) => void;
   setPaymentDetails: (details: PaymentDetails) => void;
   setGoLiveDetails: (details: GoLiveDetails) => void;
-  setPriceIncreaseInfo: (info: PriceIncreaseInfo) => void;
   resetFlow: () => void;
 };
 
@@ -106,6 +109,7 @@ export type JoinFlowState = {
 const useJoinFlowStore = create<JoinFlowState>()(
   persist(
     (set) => ({
+      _hasHydrated: false,
       currentStep: 0,
       selectedPackage: null,
       personalDetails: null,
@@ -113,9 +117,9 @@ const useJoinFlowStore = create<JoinFlowState>()(
       switchingDetails: null,
       paymentDetails: null,
       goLiveDetails: null,
-      priceIncreaseInfo: null,
 
       // Actions
+      setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
       selectPackage: (pkg) => set({ selectedPackage: pkg, currentStep: 1 }),
       setPersonalDetails: (details) => set({ personalDetails: details }),
@@ -123,7 +127,6 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setSwitchingDetails: (details) => set({ switchingDetails: details }),
       setPaymentDetails: (details) => set({ paymentDetails: details }),
       setGoLiveDetails: (details) => set({ goLiveDetails: details }),
-      setPriceIncreaseInfo: (info) => set({ priceIncreaseInfo: info }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -133,11 +136,15 @@ const useJoinFlowStore = create<JoinFlowState>()(
           switchingDetails: null,
           paymentDetails: null,
           goLiveDetails: null,
-          priceIncreaseInfo: null,
         }),
     }),
     {
       name: "cuckoo-join-flow-storage",
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          useJoinFlowStore.setState({ _hasHydrated: true });
+        }
+      },
     },
   ),
 );

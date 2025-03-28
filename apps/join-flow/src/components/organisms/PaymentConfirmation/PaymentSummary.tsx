@@ -6,8 +6,7 @@ import React from "react";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
 export const PaymentSummary = () => {
-  const { selectedPackage, eeroSelection, priceIncreaseInfo } =
-    useJoinFlowStore();
+  const { selectedPackage, eeroSelection } = useJoinFlowStore();
 
   const {
     monthlyPaymentTitle,
@@ -29,15 +28,10 @@ export const PaymentSummary = () => {
   const monthlyEeroPrice = eeroSelection ? eeroSelection.price : 0;
   const monthlyTotal = monthlyPackagePrice + monthlyEeroPrice;
 
-  const nextYearIncrease = priceIncreaseInfo
-    ? priceIncreaseInfo.nextYearIncrease
-    : 3.0;
-  const followingYearIncrease = priceIncreaseInfo
-    ? priceIncreaseInfo.followingYearIncrease
-    : 3.0;
-
-  const predictedTotalNextYear = monthlyTotal + nextYearIncrease;
-  const predictedTotalFollowingYear = monthlyTotal + followingYearIncrease;
+  const predictedTotalNextYear =
+    monthlyTotal + selectedPackage.priceIncrease.nextYearIncrease;
+  const predictedTotalFollowingYear =
+    monthlyTotal + selectedPackage.priceIncrease.followingYearIncrease;
 
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md">
@@ -83,7 +77,7 @@ export const PaymentSummary = () => {
             {nextYearPriceIncreaseText && (
               <>
                 {nextYearPriceIncreaseText.replace("{year}", "2026")}
-                {nextYearIncrease.toFixed(2)}
+                {selectedPackage.priceIncrease.nextYearIncrease.toFixed(2)}
               </>
             )}
           </p>
@@ -95,7 +89,7 @@ export const PaymentSummary = () => {
             {followingYearPriceIncreaseText && (
               <>
                 {followingYearPriceIncreaseText.replace("{year}", "2027")}
-                {followingYearIncrease.toFixed(2)}
+                {selectedPackage.priceIncrease.followingYearIncrease.toFixed(2)}
               </>
             )}
           </p>

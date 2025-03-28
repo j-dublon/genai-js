@@ -1,8 +1,13 @@
 import { render, screen } from "@testing-library/react";
-import { ReactNode } from "react";
-import { describe, expect, it, vi } from "vitest";
+import { vi } from "vitest";
 
-import JoinFlowPage from "@/app/join-flow/page";
+import PackageSelection from "@/components/pages/PackageSelection";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+}));
 
 vi.mock("@store/useJoinFlowStore", () => ({
   default: () => ({
@@ -28,51 +33,83 @@ vi.mock("@store/mockData", () => ({
       contractLength: 12,
       description: "Great for streaming and gaming",
     },
+    {
+      id: "premium",
+      name: "Premium Package",
+      speed: { download: 900, upload: 100 },
+      price: { monthly: 45, setup: 0 },
+      contractLength: 18,
+      description: "Ultimate performance for power users",
+    },
   ],
 }));
 
-vi.mock("next/link", () => ({
-  default: ({ children, href }: { children: ReactNode; href: string }) => (
-    <a href={href}>{children}</a>
-  ),
-}));
-
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-    replace: vi.fn(),
-    prefetch: vi.fn(),
-  }),
-  useSearchParams: () => new URLSearchParams(),
-  usePathname: () => "",
-}));
-
+const mockSetValue = vi.fn();
+const mockHandleSubmit = vi.fn();
 vi.mock("react-hook-form", () => ({
   useForm: () => ({
-    handleSubmit:
-      (cb: (data: Record<string, unknown>) => void) =>
-      (e?: React.BaseSyntheticEvent) => {
+    handleSubmit: (cb: (data: { packageId: string }) => void) => {
+      mockHandleSubmit.mockImplementation((e?: React.BaseSyntheticEvent) => {
         e?.preventDefault?.();
-        return cb({});
-      },
-    setValue: vi.fn(),
+        return cb({ packageId: "basic" });
+      });
+      return mockHandleSubmit;
+    },
+    setValue: mockSetValue,
     formState: { errors: {} },
   }),
 }));
 
 vi.mock("@hookform/resolvers/zod", () => ({
-  zodResolver: vi.fn(() => ({})),
+  zodResolver: vi.fn(),
 }));
 
-describe("JoinFlowPage", () => {
-  it("renders the package selection page", () => {
-    render(<JoinFlowPage />);
+vi.mock("@/hooks/useAddress", () => ({
+  useAddress: vi.fn().mockImplementation(({ initialPostcode }) => {
+    if (initialPostcode === "ERROR") {
+      return {
+        selectedAddress: null,
+        loading: false,
+        error: "Failed to load address",
+      };
+    } else if (initialPostcode === "LOADING") {
+      return {
+        selectedAddress: null,
+        loading: true,
+        error: null,
+      };
+    } else {
+      return {
+        selectedAddress: {
+          line1: "10 Downing Street",
+          line2: "Westminster",
+          line3: "London",
+          postcode: "SW1A 2AA",
+        },
+        loading: false,
+        error: null,
+      };
+    }
+  }),
+}));
+
+describe("PackageSelection Component", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("renders the component with title and packages", () => {
+    render(<PackageSelection />);
 
     expect(
       screen.getByText("Choose Your Broadband Package"),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText("Select the package that suits your needs"),
+    ).toBeInTheDocument();
 
     expect(screen.getByText("Basic Package")).toBeInTheDocument();
     expect(screen.getByText("Standard Package")).toBeInTheDocument();
+    expect(screen.getByText("Premium Package")).toBeInTheDocument();
   });
 });

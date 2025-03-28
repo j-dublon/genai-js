@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export type PaymentFormValues = {
-  accountHolderName: string;
+  accountholderName: string;
   accountNumber: string;
   sortCode: string;
   sameAsServiceAddress?: boolean;
@@ -21,8 +21,8 @@ export const usePaymentForm = () => {
     formState: { errors },
   } = useForm<PaymentFormValues>({
     defaultValues: {
-      accountHolderName:
-        paymentDetails?.cardholderName ||
+      accountholderName:
+        paymentDetails?.accountholderName ||
         (personalDetails
           ? `${personalDetails.firstName} ${personalDetails.lastName}`
           : ""),
@@ -49,7 +49,7 @@ export const usePaymentForm = () => {
     const useSameAddress = data.sameAsServiceAddress ?? true;
 
     setPaymentDetails({
-      cardholderName: data.accountHolderName,
+      accountholderName: data.accountholderName,
       cardToken: "bank_account",
       accountNumber: data.accountNumber,
       sortCode: data.sortCode,
@@ -57,6 +57,10 @@ export const usePaymentForm = () => {
         ? personalDetails?.address || null
         : billingAddress,
       sameAsServiceAddress: useSameAddress,
+      termsAgreed: paymentDetails?.termsAgreed || false,
+      directDebitAgreed: paymentDetails?.directDebitAgreed || false,
+      creditSearchAgreed: paymentDetails?.creditSearchAgreed || false,
+      allTermsAgreed: paymentDetails?.allTermsAgreed || false,
     });
 
     return true;

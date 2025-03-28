@@ -5,15 +5,34 @@ import React, { useEffect, useState } from "react";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
 interface PaymentTermsAndConditionsProps {
-  onChange: (allChecked: boolean) => void;
+  onChange: (
+    allChecked: boolean,
+    termState: {
+      termsAgreed: boolean;
+      directDebitAgreed: boolean;
+      creditSearchAgreed: boolean;
+    },
+  ) => void;
+  initialState?: {
+    termsAgreed: boolean;
+    directDebitAgreed: boolean;
+    creditSearchAgreed: boolean;
+  };
 }
 
 export const PaymentTermsAndConditions = ({
   onChange,
+  initialState,
 }: PaymentTermsAndConditionsProps) => {
-  const [termsChecked, setTermsChecked] = useState(false);
-  const [directDebitChecked, setDirectDebitChecked] = useState(false);
-  const [creditSearchChecked, setCreditSearchChecked] = useState(false);
+  const [termsChecked, setTermsChecked] = useState(
+    initialState?.termsAgreed || false,
+  );
+  const [directDebitChecked, setDirectDebitChecked] = useState(
+    initialState?.directDebitAgreed || false,
+  );
+  const [creditSearchChecked, setCreditSearchChecked] = useState(
+    initialState?.creditSearchAgreed || false,
+  );
 
   const {
     termsCheckboxText,
@@ -22,7 +41,13 @@ export const PaymentTermsAndConditions = ({
   } = paymentConfirmationText;
 
   useEffect(() => {
-    onChange(termsChecked && directDebitChecked && creditSearchChecked);
+    const allChecked =
+      termsChecked && directDebitChecked && creditSearchChecked;
+    onChange(allChecked, {
+      termsAgreed: termsChecked,
+      directDebitAgreed: directDebitChecked,
+      creditSearchAgreed: creditSearchChecked,
+    });
   }, [termsChecked, directDebitChecked, creditSearchChecked, onChange]);
 
   return (

@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
@@ -10,13 +11,12 @@ import Stepper from "@/components/molecules/Stepper";
 import DatePicker from "@/components/organisms/DatePicker";
 import PaymentDetails from "@/components/pages/PaymentDetails/index";
 import { formatDisplayDate } from "@/lib/formatDate";
+import {
+  GoLiveDateFormValues,
+  goLiveDateSchema,
+} from "@/validation/join-flow-schema";
 
 import { goLiveDateText } from "./GoLiveDateProps";
-
-interface GoLiveDateFormData {
-  selectedDate: string;
-  timeSlot: string;
-}
 
 export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
   const {
@@ -40,7 +40,8 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<GoLiveDateFormData>({
+  } = useForm<GoLiveDateFormValues>({
+    resolver: zodResolver(goLiveDateSchema),
     defaultValues: {
       selectedDate: goLiveDetails?.selectedDate || "",
       timeSlot: goLiveDetails?.engineerSlot?.timeSlot || "",
@@ -51,7 +52,7 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
 
   const timeSlots = ["8am - 1pm", "1pm - 6pm"];
 
-  const onSubmit = (data: GoLiveDateFormData) => {
+  const onSubmit = (data: GoLiveDateFormValues) => {
     setGoLiveDetails({
       selectedDate: data.selectedDate,
       engineerSlot: {
@@ -109,7 +110,6 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
                 <Controller
                   name="selectedDate"
                   control={control}
-                  rules={{ required: true }}
                   render={({ field }) => (
                     <DatePicker
                       selectedDate={field.value}
@@ -121,7 +121,7 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
                 />
                 {errors.selectedDate && (
                   <p className="text-core-red text-sm mt-1">
-                    Please select a date
+                    {errors.selectedDate.message}
                   </p>
                 )}
               </div>
@@ -132,7 +132,6 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
                   <Controller
                     name="timeSlot"
                     control={control}
-                    rules={{ required: true }}
                     render={({ field }) => (
                       <div className="relative">
                         <button
@@ -175,7 +174,7 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
                   />
                   {errors.timeSlot && (
                     <p className="text-core-red text-sm mt-1">
-                      Please select a time slot
+                      {errors.timeSlot.message}
                     </p>
                   )}
                 </div>

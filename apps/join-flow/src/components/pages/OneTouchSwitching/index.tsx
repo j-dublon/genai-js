@@ -50,14 +50,15 @@ export const OneTouchSwitching = () => {
           switchOrderReference: mockSwitchingResponse.switchOrderReference,
         };
       }
+
+      setSwitchingDetails(switchData);
+      setCurrentStep(3);
+      setShowGoLiveDate(true);
     } catch (error) {
       console.error("Error fetching switching data:", error);
     } finally {
       setIsFetchingData(false);
     }
-
-    setSwitchingDetails(switchData);
-    setShowGoLiveDate(true);
   };
 
   const handleBack = () => {
