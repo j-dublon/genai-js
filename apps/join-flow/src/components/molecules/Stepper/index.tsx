@@ -1,4 +1,5 @@
 import useJoinFlowStore from "@store/useJoinFlowStore";
+import { usePathname } from "next/navigation";
 import React from "react";
 
 const steps = [
@@ -8,10 +9,22 @@ const steps = [
   { id: 3, label: "Pay and join Cuckoo" },
 ];
 
-const Stepper = () => {
-  const { currentStep, setCurrentStep } = useJoinFlowStore();
+const pathToStepperIndex = {
+  "/join-flow": 0,
+  "/join-flow/personal-details": 0,
+  "/join-flow/eero-selection": 1,
+  "/join-flow/one-touch-switching": 2,
+  "/join-flow/go-live-date": 2,
+  "/join-flow/payment-details": 3,
+  "/join-flow/order-summary": 3,
+};
 
-  const activeStep = Math.max(0, currentStep - 1);
+const Stepper = () => {
+  const pathname = usePathname();
+  const { setCurrentStep } = useJoinFlowStore();
+
+  const activeStep =
+    pathToStepperIndex[pathname as keyof typeof pathToStepperIndex] || 0;
 
   return (
     <div className="w-full max-w-[600px] mx-auto py-4">
@@ -28,9 +41,7 @@ const Stepper = () => {
                       : "bg-ui-grey-200 text-core-black"
                 } transition-all duration-300 cursor-pointer`}
               onClick={() => {
-                if (index <= activeStep) {
-                  setCurrentStep(index + 1);
-                }
+                setCurrentStep(index + 1);
               }}
             >
               {index < activeStep ? (
