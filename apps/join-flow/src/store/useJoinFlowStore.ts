@@ -16,10 +16,11 @@ export type Address = {
 export type PersonalDetails = {
   firstName: string;
   lastName: string;
-  email: string;
   phone: string;
-  address: Address | null;
-  selectedAddressId?: string;
+  hasSmartphone: string;
+  email: string;
+  confirmEmail: string;
+  marketingConsent?: boolean;
 };
 
 export type EeroProduct = {

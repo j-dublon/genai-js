@@ -46,20 +46,21 @@ export const paymentDetailsSchema = z.object({
   allTermsAgreed: z.boolean().default(false),
 });
 
-export const personalDetailsSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Please enter a valid email"),
-  phone: z.string().min(1, "Phone number is required"),
-  address: z
-    .object({
-      line1: z.string().min(1, "Address line 1 is required"),
-      postcode: z.string().min(1, "Postcode is required"),
-      addressKey: z.string().min(1, "Address key is required"),
-      addressKeyType: z.string().min(1, "Address key type is required"),
-    })
-    .nullable(),
-});
+export const personalDetailsSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    phone: z.string().min(1, "Phone number is required"),
+    hasSmartphone: z.enum(["yes", "no"], {
+      required_error: "Please select if you have a smartphone",
+    }),
+    email: z.string().email("Please enter a valid email"),
+    confirmEmail: z.string().email("Please confirm your email"),
+  })
+  .refine((data) => data.email === data.confirmEmail, {
+    message: "Email addresses must match",
+    path: ["confirmEmail"],
+  });
 
 export type PackageSelectionFormValues = z.infer<typeof packageSelectionSchema>;
 export type PersonalDetailsFormValues = z.infer<typeof personalDetailsSchema>;

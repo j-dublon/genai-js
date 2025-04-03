@@ -1,76 +1,90 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@react-component-library/ui";
-import { mockAddressLookupResponse } from "@store/mockData";
-import useJoinFlowStore, { Address } from "@store/useJoinFlowStore";
+import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
+import FormInput from "@/components/atoms/FormInput";
 import Stepper from "@/components/molecules/Stepper";
+
+import { personalDetailsProps } from "./personalDetailsProps";
+
+const createPersonalDetailsSchema = (props: typeof personalDetailsProps) => {
+  return z
+    .object({
+      firstName: z.string().min(1, props.validationMessages.firstNameRequired),
+      lastName: z.string().min(1, props.validationMessages.lastNameRequired),
+      phone: z.string().min(1, props.validationMessages.phoneRequired),
+      hasSmartphone: z
+        .string({
+          required_error: props.validationMessages.smartphoneConfirmation,
+          invalid_type_error: props.validationMessages.smartphoneConfirmation,
+        })
+        .refine((val) => val === "yes" || val === "no", {
+          message: props.validationMessages.smartphoneConfirmation,
+        }),
+      email: z.string().email(props.validationMessages.emailInvalid),
+      confirmEmail: z
+        .string()
+        .email(props.validationMessages.emailConfirmation),
+      marketingConsent: z.boolean().optional(),
+    })
+    .refine((data) => data.email === data.confirmEmail, {
+      message: props.validationMessages.emailsMustMatch,
+      path: ["confirmEmail"],
+    });
+};
+
+type FormValues = z.infer<ReturnType<typeof createPersonalDetailsSchema>>;
 
 const PersonalDetails = () => {
   const router = useRouter();
   const { setPersonalDetails, personalDetails, setCurrentStep } =
     useJoinFlowStore();
 
-  const [formData, setFormData] = useState({
-    firstName: personalDetails?.firstName || "",
-    lastName: personalDetails?.lastName || "",
-    email: personalDetails?.email || "",
-    phone: personalDetails?.phone || "",
-    postcode: personalDetails?.address?.postcode || "",
+  const personalDetailsSchema =
+    createPersonalDetailsSchema(personalDetailsProps);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
+    resolver: zodResolver(personalDetailsSchema),
+    defaultValues: {
+      firstName: personalDetails?.firstName || "",
+      lastName: personalDetails?.lastName || "",
+      phone: personalDetails?.phone || "",
+      hasSmartphone: (personalDetails?.hasSmartphone as "yes" | "no") || "",
+      email: personalDetails?.email || "",
+      confirmEmail: personalDetails?.confirmEmail || "",
+      marketingConsent:
+        typeof personalDetails?.marketingConsent === "boolean"
+          ? personalDetails.marketingConsent
+          : false,
+    },
   });
 
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [selectedAddressId, setSelectedAddressId] = useState<
-    string | undefined
-  >(personalDetails?.selectedAddressId);
-  const [showAddresses, setShowAddresses] = useState(false);
-  const [addressWarning, setAddressWarning] = useState(false);
+  const hasSmartphoneValue = watch("hasSmartphone");
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleFindAddress = () => {
-    setAddressWarning(false);
-    setTimeout(() => {
-      setAddresses(mockAddressLookupResponse.addresses);
-      setShowAddresses(true);
-    }, 500);
-  };
-
-  const handleSelectAddress = (addressId: string) => {
-    setSelectedAddressId(addressId);
-    setAddressWarning(false);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!selectedAddressId && showAddresses) {
-      setAddressWarning(true);
-      return;
+  useEffect(() => {
+    if (hasSmartphoneValue === "no") {
+      alert(personalDetailsProps.smartphoneSection.noSmartphoneAlertText);
     }
+  }, [hasSmartphoneValue]);
 
-    const selectedAddress = addresses.find(
-      (addr) => addr.addressKey === selectedAddressId,
-    );
+  const onSubmit = (data: FormValues) => {
+    setPersonalDetails({
+      ...data,
+    });
 
-    if (selectedAddress) {
-      setPersonalDetails({
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        address: selectedAddress,
-        selectedAddressId,
-      });
-
-      setCurrentStep(2);
-      router.push("/join-flow/eero-selection");
-    }
+    setCurrentStep(2);
+    router.push("/join-flow/eero-selection");
   };
 
   const handleBack = () => {
@@ -78,16 +92,25 @@ const PersonalDetails = () => {
     router.push("/join-flow");
   };
 
-  const handleContinueClick = () => {
-    if (showAddresses && !selectedAddressId) {
-      setAddressWarning(true);
-      return;
-    }
+  const renderMarketingText = () => {
+    const text = personalDetailsProps.marketingSection.text;
+    const parts = text.split("Privacy Notice");
 
-    const form = document.querySelector("form");
-    if (form) {
-      form.requestSubmit();
-    }
+    return (
+      <>
+        {parts[0]}
+        <a
+          href={personalDetailsProps.marketingSection.privacyNoticeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-core-purple underline hover:text-core-purple-dark cursor-pointer"
+          style={{ transition: "color 0.2s ease" }}
+        >
+          {personalDetailsProps.marketingSection.privacyNoticeText}
+        </a>
+        {parts[1]}
+      </>
+    );
   };
 
   return (
@@ -95,131 +118,111 @@ const PersonalDetails = () => {
       <Stepper />
 
       <div className="max-w-2xl mx-auto p-8 rounded-lg">
-        <h1 className="text-2xl font-bold mb-6">Personal Details</h1>
+        <h1 className="text-2xl text-center font-bold mb-6">
+          {personalDetailsProps.pageTitle}
+        </h1>
+        <h2 className="text-md font-bold mb-6">
+          {personalDetailsProps.sectionTitle}
+        </h2>
+        <p className="text-md mb-4">
+          {personalDetailsProps.requiredFieldsText}
+        </p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <div>
-              <label className="block mb-2" htmlFor="firstName">
-                First Name
-              </label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-                required
-              />
-            </div>
+            <FormInput
+              id="firstName"
+              placeholder={personalDetailsProps.fieldPlaceholders.firstName}
+              error={errors.firstName}
+              {...register("firstName")}
+            />
 
-            <div>
-              <label className="block mb-2" htmlFor="lastName">
-                Last Name
-              </label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                className="w-full px-4 py-2 border rounded-md"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="mb-6">
-            <label className="block mb-2" htmlFor="email">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md"
-              required
+            <FormInput
+              id="lastName"
+              placeholder={personalDetailsProps.fieldPlaceholders.lastName}
+              error={errors.lastName}
+              {...register("lastName")}
             />
           </div>
-
           <div className="mb-6">
-            <label className="block mb-2" htmlFor="phone">
-              Phone Number
-            </label>
-            <input
-              type="tel"
+            <FormInput
               id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border rounded-md"
-              required
+              type="tel"
+              placeholder={personalDetailsProps.fieldPlaceholders.phone}
+              error={errors.phone}
+              {...register("phone")}
             />
           </div>
+          <div className="mb-6">
+            <p className="text-md mb-4">
+              {personalDetailsProps.smartphoneSection.mainText}
+              <span className="text-core-purple">
+                {" "}
+                {personalDetailsProps.smartphoneSection.whyText}
+              </span>
+            </p>
+            <div className="flex flex-col gap-2">
+              {personalDetailsProps.smartphoneSection.options.map((option) => (
+                <label key={option.value} className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    value={option.value}
+                    {...register("hasSmartphone")}
+                    className="mr-2"
+                  />
+                  {option.label}
+                </label>
+              ))}
+            </div>
+            {errors.hasSmartphone && (
+              <p className="text-core-red text-sm mt-1">
+                {errors.hasSmartphone.message}
+              </p>
+            )}
+          </div>
+          <div className="mb-6">
+            <FormInput
+              id="email"
+              type="email"
+              placeholder={personalDetailsProps.fieldPlaceholders.email}
+              error={errors.email}
+              {...register("email")}
+            />
+          </div>
+          <div className="mb-6">
+            <FormInput
+              id="confirmEmail"
+              type="email"
+              placeholder={personalDetailsProps.fieldPlaceholders.confirmEmail}
+              error={errors.confirmEmail}
+              {...register("confirmEmail")}
+            />
+          </div>
+          <div className="mb-4">{renderMarketingText()}</div>
 
           <div className="mb-6">
-            <label className="block mb-2" htmlFor="postcode">
-              Postcode
-            </label>
-            <div className="flex">
+            <label className="inline-flex items-center cursor-pointer">
               <input
-                type="text"
-                id="postcode"
-                name="postcode"
-                value={formData.postcode}
-                onChange={handleChange}
-                className="flex-1 px-4 py-2 border rounded-l-md focus:outline-none"
-                required
+                type="checkbox"
+                className="mr-2 h-5 w-5 cursor-pointer"
+                {...register("marketingConsent")}
               />
-              <Button
-                onClick={handleFindAddress}
-                tint="white"
-                variant="outline"
-                className="rounded-l-none"
-              >
-                Find Address
-              </Button>
-            </div>
+              <span>{personalDetailsProps.marketingSection.consentText}</span>
+            </label>
           </div>
-          {addressWarning && (
-            <div className="mb-6 p-4 text-core-red rounded-md">
-              Please select an address before continuing.
-            </div>
-          )}
-          {showAddresses && (
-            <div className="mb-6">
-              <label className="block mb-2">Select Your Address</label>
-              <div className="border rounded-md divide-y">
-                {addresses.map((address) => (
-                  <div
-                    key={address.addressKey}
-                    className={`p-3 cursor-pointer ${
-                      selectedAddressId === address.addressKey
-                        ? "bg-core-yellow"
-                        : ""
-                    }`}
-                    onClick={() => handleSelectAddress(address.addressKey)}
-                  >
-                    <p>{address.line1}</p>
-                    {address.line2 && <p>{address.line2}</p>}
-                    {address.line3 && <p>{address.line3}</p>}
-                    <p>{address.postcode}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
 
           <div className="flex justify-between mt-8">
-            <Button onClick={handleBack} tint="white" variant="outline">
-              Back
+            <Button
+              onClick={handleBack}
+              tint="white"
+              variant="outline"
+              type="button"
+            >
+              {personalDetailsProps.buttons.back}
             </Button>
 
-            <Button onClick={handleContinueClick} tint="yellow" variant="solid">
-              Continue
+            <Button tint="yellow" variant="solid" type="submit">
+              {personalDetailsProps.buttons.continue}
             </Button>
           </div>
         </form>

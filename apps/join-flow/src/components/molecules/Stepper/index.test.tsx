@@ -1,7 +1,7 @@
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { render, screen } from "@testing-library/react";
 import { usePathname } from "next/navigation";
-import { beforeEach,describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import Stepper from "./index";
 

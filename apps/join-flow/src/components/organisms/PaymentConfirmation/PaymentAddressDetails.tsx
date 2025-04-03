@@ -1,13 +1,10 @@
 "use client";
 
-import useJoinFlowStore from "@store/useJoinFlowStore";
 import React from "react";
 
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
 export const PaymentAddressDetails = () => {
-  const { personalDetails } = useJoinFlowStore();
-
   const { addressDetailsLabel, billingAddressLabel } = paymentConfirmationText;
 
   return (
@@ -16,9 +13,8 @@ export const PaymentAddressDetails = () => {
 
       <div className="flex justify-between items-center">
         <div>
-          <p className="text-sm text-ui-grey-500">
-            {personalDetails?.address?.line1}
-          </p>
+          {/* TO DO: This needs to come from getAddresses  */}
+          <p className="text-sm text-ui-grey-500">Address from api</p>
         </div>
       </div>
 
@@ -29,9 +25,7 @@ export const PaymentAddressDetails = () => {
       </div>
 
       <div>
-        <p className="text-sm text-ui-grey-500 ">
-          {personalDetails?.address?.line1}
-        </p>
+        <p className="text-sm text-ui-grey-500 ">Address line 1 from api</p>
       </div>
       {/* TO DO: Change this logic after spike for redirection and confirmation from design */}
       <span className="font-normal text-core-red">Change</span>

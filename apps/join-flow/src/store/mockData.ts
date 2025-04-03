@@ -1,3 +1,5 @@
+//TO DO: DEPRECATE THIS AND COLOCATE THEM NEXT TO THEIR INDIVIDUAL PAGES AS PROPS
+
 import {
   BroadbandPackage,
   BroadbandProvider,
