@@ -34,7 +34,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
       >
         <form className="flex flex-row w-full" onSubmit={onClickFunction}>
           <input
-            aria-label="enter your postcode or address"
+            aria-label="enter your postcode"
             placeholder={placeholderText}
             name="postcode-checker"
             className="ds:text-sm ds:sm:text-md ds:flex-1 ds:px-1 ds:mr-1 ds:min-w-[160px] ds:md:min-w-[205px] ds:focus:outline-none ds:[&::-webkit-search-cancel-button]:hidden"
@@ -47,6 +47,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
             <button
               type="submit"
               data-testid="mobile-submit"
+              aria-label="Check postcode"
               className="ds:p-0 ds:bg-transparent ds:border-0 ds:block ds:sm:hidden"
             >
               <ChevronRightWithCircle />

@@ -19,7 +19,11 @@ const ImageSet = ({
     "ds:w-[inherit] ds:h-[inherit] ds:max-w-[329px] ds:md:max-w-[485px] ds:max-h-[330px] ds:md:max-h-[495px] ds:rounded-lg";
 
   return (
-    <div className={WRAPPER_CLASSES} aria-hidden={keyPrefix === "set2"}>
+    <div
+      className={WRAPPER_CLASSES}
+      aria-hidden={keyPrefix === "set2"}
+      data-testid="image-marquee-set"
+    >
       {images.map(({ altText, width, height, imgSrc }: ImageProps) => (
         <div
           key={`${keyPrefix}-${altText}`}

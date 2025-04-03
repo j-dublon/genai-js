@@ -29,7 +29,7 @@ export const JoinTheFlock = ({
   };
 
   return (
-    <div className="relative z-10 order-none">
+    <section aria-label="Join The Flock" className="relative z-10 order-none">
       <video
         data-testid="join-the-flock-video"
         autoPlay
@@ -85,6 +85,6 @@ export const JoinTheFlock = ({
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

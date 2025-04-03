@@ -34,7 +34,7 @@ export const AccordionItem = ({ question }: FaqItemProps) => {
         FAQDropdownOpen={FAQDropdownOpen}
         setFAQDropdownOpen={setFAQDropdownOpen}
       >
-        <div className="ds:text-container">
+        <div data-testid="accordion-content" className="ds:text-container">
           <div className="ds:flex ds:flex-col ds:gap-6 ds:px-4 ds:md:px-8 ds:pt-3 ds:pb-6 ds:md:pb-8">
             {question.dropdown_content.map((content, index) => (
               <p

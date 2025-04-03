@@ -7,7 +7,10 @@ import { textItems } from "./cuckooProtectProps";
 
 export const CuckooProtect = () => {
   return (
-    <div className="relative z-10 order-none">
+    <section
+      aria-label="Cuckoo Protect Section"
+      className="relative z-10 order-none"
+    >
       <video
         data-testid="cuckoo-protect-video"
         autoPlay
@@ -44,6 +47,6 @@ export const CuckooProtect = () => {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };

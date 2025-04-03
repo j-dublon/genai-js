@@ -7,7 +7,10 @@ export interface FooterLinksProps {
 
 export const FooterLinks = ({ sections }: FooterLinksProps) => {
   return (
-    <div className="ds:flex ds:flex-col ds:sm:flex-row ds:space-y-8 ds:sm:space-y-0 ds:sm:space-x-8">
+    <div
+      className="ds:flex ds:flex-col ds:sm:flex-row ds:space-y-8 ds:sm:space-y-0 ds:sm:space-x-8"
+      data-testid="footer-links"
+    >
       {sections.map((section, index) => (
         <div key={index} className="ds:flex-1">
           <h3 className="ds:text-[12px] ds:text-ui-grey-500 ds:text-left">

@@ -4,7 +4,10 @@ export const LegalClaims = () => {
   const linkClass = "text-core-purple font-medium underline ml-1";
 
   return (
-    <div className="relative flex justify-center sm:px-tablet px-mobile  lg:px-desktop">
+    <section
+      aria-label="Legal"
+      className="relative flex justify-center sm:px-tablet px-mobile  lg:px-desktop"
+    >
       <div className="flex flex-col py-6 md:py-15 max-w-[1152px] w-full">
         <h2 className="text-xs md:text-sm font-semibold">Stats and claims</h2>
         <ul className="text-xs md:text-sm list-disc list-inside marker:text-xs">
@@ -69,6 +72,6 @@ export const LegalClaims = () => {
           </li>
         </ul>
       </div>
-    </div>
+    </section>
   );
 };

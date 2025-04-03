@@ -14,12 +14,52 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
   },
-  projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
-    // { name: "firefox", use: { ...devices["Desktop Firefox"] } },
-    // { name: "webkit", use: { ...devices["Desktop Safari"] } },
-    // commented out Firefox as it was causing multiple issues and failing tests. This should be revisted when we add more tests
-  ],
+  // run all tests except lighthouse and core as those are handled in the config below
+  testMatch: /^(?!.*(lighthouse|core)\.spec\.ts$).*\.spec\.ts$/,
+  projects: process.env.CI
+    ? [
+        // CI-only: core tests on mobile-chrome
+        {
+          name: "mobile-chrome",
+          use: { ...devices["Pixel 5"] },
+          testMatch: /core\.spec\.ts$/,
+        },
+      ]
+    : [
+        // Lighthouse tests only on desktop chrome
+        {
+          name: "lighthouse",
+          use: {
+            ...devices["Desktop Chrome"],
+            launchOptions: { args: ["--remote-debugging-port=9222"] },
+          },
+          testMatch: /lighthouse\.spec\.ts$/,
+        },
+        {
+          name: "mobile-chrome",
+          use: { ...devices["Pixel 5"] },
+        },
+        {
+          name: "chromium",
+          use: { ...devices["Desktop Chrome"] },
+        },
+        {
+          name: "webkit",
+          use: { ...devices["Desktop Safari"] },
+        },
+        {
+          name: "mobile-safari",
+          use: { ...devices["iPhone 12"] },
+        },
+        {
+          name: "firefox",
+          use: { ...devices["Desktop Firefox"] },
+        },
+        {
+          name: "edge",
+          use: { ...devices["Desktop Edge"] },
+        },
+      ],
   webServer: {
     command: "npm run start:e2e",
     url: "http://localhost:3004",

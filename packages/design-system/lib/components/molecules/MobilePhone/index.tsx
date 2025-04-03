@@ -36,7 +36,7 @@ export const MobilePhone = ({
   }
 
   return (
-    <div className="relative" role="none" data-testid={screenLabel}>
+    <div className="relative" role="none" data-testid="mobile-screen">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={selectedTextIndex}
@@ -45,6 +45,7 @@ export const MobilePhone = ({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
           className="absolute top-0 left-0"
+          data-testid={screenLabel}
         >
           <MobileScreen />
         </motion.div>

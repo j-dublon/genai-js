@@ -13,7 +13,10 @@ export const HowFastCanYouGo = ({
   onPostcodeSubmit,
 }: HowFastCanYouGoProps) => {
   return (
-    <div className="ds:relative ds:pb-16 ds:md:py-36 ds:bg-ui-grey-150 ds:flex ds:flex-col-reverse ds:md:items-center ds:px-mobile ds:sm:pl-tablet ds:lg:px-desktop">
+    <section
+      aria-label="How Fast Can You Go"
+      className="ds:relative ds:pb-16 ds:md:py-36 ds:bg-ui-grey-150 ds:flex ds:flex-col-reverse ds:md:items-center ds:px-mobile ds:sm:pl-tablet ds:lg:px-desktop"
+    >
       <div className="ds:relative ds:flex ds:flex-col ds:md:flex-row ds:items-center ds:w-full ds:max-w-[1152px] ds:gap-0 ds:z-10">
         <div className="ds:rounded-lg ds:p-6 ds:md:p-10 ds:-mt-16 ds:md:mt-0 ds:bg-core-white ds:w-full ds:h-fit  ds:order-2 ds:md:order-none ds:md:z-[1] ds:md:max-w-[565px]">
           <PostcodeChecker
@@ -45,6 +48,6 @@ export const HowFastCanYouGo = ({
           />
         </video>
       </div>
-    </div>
+    </section>
   );
 };

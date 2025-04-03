@@ -43,7 +43,8 @@ export const CompanyLogoStrip = ({
   backgroundColor,
 }: CompanyLogoStripProps) => {
   return (
-    <div
+    <section
+      aria-label="Company Logo Strip"
       className={cx(
         "ds:relative ds:overflow-x-hidden ds:pt-4 ds:pb-10 ds:md:pt-[30px] ds:md:px-tablet ds:lg:px-desktop ds:w-full",
         backgroundColor,
@@ -71,6 +72,6 @@ export const CompanyLogoStrip = ({
           <LogoSet logos={logos} keyPrefix="mobile-2" />
         </div>
       </div>
-    </div>
+    </section>
   );
 };

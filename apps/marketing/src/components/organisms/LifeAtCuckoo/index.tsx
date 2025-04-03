@@ -5,7 +5,10 @@ import { imageMarqueeProps } from "./imageMarqueeProps";
 
 export const LifeAtCuckoo = () => {
   return (
-    <div className="bg-ui-grey-100 py-14 md:py-40">
+    <section
+      aria-label="Life at Cuckoo"
+      className="bg-ui-grey-100 py-14 md:py-40"
+    >
       <div className="flex justify-center items-center md:pb-16 pb-10 px-mobile sm:px-tablet lg:px-desktop">
         <div className="w-full lg:max-w-[1152px]">
           <div className="md:max-w-[760px] w-full">
@@ -20,6 +23,6 @@ export const LifeAtCuckoo = () => {
         </div>
       </div>
       <ImageMarquee images={imageMarqueeProps.images} />
-    </div>
+    </section>
   );
 };
