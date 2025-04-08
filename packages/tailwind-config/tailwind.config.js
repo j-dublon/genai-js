@@ -21,6 +21,7 @@ export default {
       "core-purple": "#5A06D8",
       "secondary-blue": "#6F89FF",
       "secondary-orange": "#FFC633",
+      "secondary-teal": "#C3F9FD",
       "core-pink": "#F3B0FF",
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
@@ -34,7 +35,6 @@ export default {
       "outline-ui-grey-300": "#DBD8D0",
       "link-ui": "#5A06D8",
       "light-green": "#A4FFA7",
-      "light-blue": "#C3F9FD",
     },
     backgroundImage: {
       "offer-gradient": "linear-gradient(227deg, #A4FFA7 25%, #C3F9FD 74%)",

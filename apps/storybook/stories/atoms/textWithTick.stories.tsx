@@ -1,14 +1,18 @@
-import { TextWithTick } from "@react-component-library/ui";
+import { BACKGROUND_COLORS, TextWithTick } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof TextWithTick> = {
   component: TextWithTick,
   argTypes: {
     textInput: { control: "text" },
-    backgroundColor: { control: "select" },
+    backgroundColor: {
+      options: BACKGROUND_COLORS,
+      control: { type: "select" },
+    },
     broadbandOffer: { control: "boolean" },
     padding: { control: "select", options: ["none", "default", "large"] },
     iconSize: { control: "number" },
+    outline: { control: "boolean" },
   },
 };
 
@@ -34,5 +38,12 @@ export const BroadbandOffer: Story = {
   args: {
     textInput: "Special broadband offer",
     broadbandOffer: true,
+  },
+};
+
+export const Outline: Story = {
+  args: {
+    textInput: "This is an outlined version",
+    outline: true,
   },
 };

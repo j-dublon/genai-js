@@ -12,6 +12,7 @@ export interface TextWithTickProps {
   padding?: "none" | "default" | "large";
   iconSize?: number;
   className?: string;
+  outline?: boolean;
 }
 
 export const TextWithTick = ({
@@ -22,6 +23,7 @@ export const TextWithTick = ({
   iconSize = 20,
   ariaLabel,
   className,
+  outline = false,
 }: TextWithTickProps) => {
   const paddingClass = {
     none: "",
@@ -35,6 +37,7 @@ export const TextWithTick = ({
         "ds:flex ds:items-center ds:gap-2.5 ds:rounded-full",
         paddingClass[padding],
         `${broadbandOffer ? "ds:bg-offer-gradient ds:text-[14px] ds:md:text-[26px] ds:font-semibold" : bgColorVariants[backgroundColor] + " ds:text-[14px] ds:md:text-md ds:font-semibold ds:md:font-medium"}`,
+        outline && "ds:border-2 ds:border-ui-grey-300",
         className,
       )}
       aria-label={`${ariaLabel ?? `Text with tick with the statement ${textInput}`}`}

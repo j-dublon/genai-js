@@ -67,4 +67,26 @@ describe("TextWithTick Component", () => {
       });
     },
   );
+
+  it("applies border styling when outline is true", () => {
+    render(<TextWithTick {...props} outline={true} />);
+
+    const container = screen.getByLabelText(
+      "Text with tick with the statement Test text",
+    );
+
+    expect(container).toHaveClass("ds:border-2");
+    expect(container).toHaveClass("ds:border-ui-grey-300");
+  });
+
+  it("does not apply border styling when outline is false", () => {
+    render(<TextWithTick {...props} outline={false} />);
+
+    const container = screen.getByLabelText(
+      "Text with tick with the statement Test text",
+    );
+
+    expect(container).not.toHaveClass("ds:border-2");
+    expect(container).not.toHaveClass("ds:border-ui-grey-300");
+  });
 });

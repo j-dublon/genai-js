@@ -2,7 +2,7 @@ import { getAssetPath } from "@/lib/get-asset-path";
 
 export const CuckooProtectInfoCard = () => {
   return (
-    <div className="px-5 pt-6 pb-4 rounded-lg bg-core-teal md:hidden">
+    <div className="px-5 pt-6 pb-4 rounded-lg bg-secondary-teal md:hidden">
       <img
         src={getAssetPath("/images/cuckoo_protect_logo.svg")}
         alt="Cuckoo protect logo on info card"
