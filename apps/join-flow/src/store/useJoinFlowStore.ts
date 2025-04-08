@@ -17,10 +17,17 @@ export type PersonalDetails = {
   firstName: string;
   lastName: string;
   phone: string;
-  hasSmartphone: string;
+  hasSmartphone: "yes" | "no"; //Keep this as a string due to react hook form needing string values
   email: string;
   confirmEmail: string;
   marketingConsent?: boolean;
+  verificationCode: string;
+  dobDay: string;
+  dobMonth: string;
+  dobYear: string;
+  residencyDuration: "over-year" | "under-year";
+  personalDetailsStep: "details" | "verification" | "additional";
+  personalDetailsCompleted?: boolean;
 };
 
 export type EeroProduct = {

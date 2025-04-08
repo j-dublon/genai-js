@@ -23,7 +23,8 @@ const findNextRequiredStep = (storeState: JoinFlowState): string => {
   switch (true) {
     case !storeState.selectedPackage:
       return "/join-flow";
-    case !storeState.personalDetails:
+    case !storeState.personalDetails ||
+      !storeState.personalDetails.personalDetailsCompleted:
       return "/join-flow/personal-details";
     case !storeState.eeroSelection:
       return "/join-flow/eero-selection";

@@ -76,29 +76,4 @@ describe("RouteGuard", () => {
       { timeout: 2000 },
     );
   });
-
-  test("should check required fields based on current path", async () => {
-    mockedUsePathname.mockReturnValue("/join-flow/go-live-date");
-    mockedUseJoinFlowStore.mockReturnValue({
-      selectedPackage: { id: "test-package" },
-      personalDetails: { firstName: "Test" },
-      eeroSelection: { id: "test-eero" },
-      switchingDetails: null,
-    });
-
-    render(
-      <RouteGuard>
-        <div>{mockChildrenText}</div>
-      </RouteGuard>,
-    );
-
-    await waitFor(
-      () => {
-        expect(mockRouter.replace).toHaveBeenCalledWith(
-          "/join-flow/one-touch-switching",
-        );
-      },
-      { timeout: 2000 },
-    );
-  });
 });

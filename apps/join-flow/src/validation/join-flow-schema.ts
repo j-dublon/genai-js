@@ -51,11 +51,17 @@ export const personalDetailsSchema = z
     firstName: z.string().min(1, "First name is required"),
     lastName: z.string().min(1, "Last name is required"),
     phone: z.string().min(1, "Phone number is required"),
-    hasSmartphone: z.enum(["yes", "no"], {
-      required_error: "Please select if you have a smartphone",
-    }),
+    hasSmartphone: z.enum(["yes", "no"]).default("yes"),
     email: z.string().email("Please enter a valid email"),
     confirmEmail: z.string().email("Please confirm your email"),
+    marketingConsent: z.boolean().optional(),
+    verificationCode: z.string().min(6, "Verification code is required"),
+    dobDay: z.string().min(1, "Day is required"),
+    dobMonth: z.string().min(1, "Month is required"),
+    dobYear: z.string().min(1, "Year is required"),
+    residencyDuration: z.enum(["over-year", "under-year"], {
+      required_error: "Please select how long you've lived at this address",
+    }),
   })
   .refine((data) => data.email === data.confirmEmail, {
     message: "Email addresses must match",

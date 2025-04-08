@@ -2,94 +2,244 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@react-component-library/ui";
+import type { PersonalDetails } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import FormInput from "@/components/atoms/FormInput";
 import Stepper from "@/components/molecules/Stepper";
+import AdditionalPersonalDetailsForm from "@/components/pages/PersonalDetails/forms/additionalPersonalDetailsForm";
+import EmailVerificationForm from "@/components/pages/PersonalDetails/forms/emailVerificationForm";
+import InitialPersonalDetailsForm from "@/components/pages/PersonalDetails/forms/initialPersonalDetailsForm";
 
+import {
+  AdditionalPersonalDetailsFormProps,
+  createStepBasedPersonalDetailsSchema,
+  EmailVerificationFormProps,
+  InitialPersonalDetailsProps,
+} from "./forms/formValues";
 import { personalDetailsProps } from "./personalDetailsProps";
-
-const createPersonalDetailsSchema = (props: typeof personalDetailsProps) => {
-  return z
-    .object({
-      firstName: z.string().min(1, props.validationMessages.firstNameRequired),
-      lastName: z.string().min(1, props.validationMessages.lastNameRequired),
-      phone: z.string().min(1, props.validationMessages.phoneRequired),
-      hasSmartphone: z
-        .string({
-          required_error: props.validationMessages.smartphoneConfirmation,
-          invalid_type_error: props.validationMessages.smartphoneConfirmation,
-        })
-        .refine((val) => val === "yes" || val === "no", {
-          message: props.validationMessages.smartphoneConfirmation,
-        }),
-      email: z.string().email(props.validationMessages.emailInvalid),
-      confirmEmail: z
-        .string()
-        .email(props.validationMessages.emailConfirmation),
-      marketingConsent: z.boolean().optional(),
-    })
-    .refine((data) => data.email === data.confirmEmail, {
-      message: props.validationMessages.emailsMustMatch,
-      path: ["confirmEmail"],
-    });
-};
-
-type FormValues = z.infer<ReturnType<typeof createPersonalDetailsSchema>>;
 
 const PersonalDetails = () => {
   const router = useRouter();
   const { setPersonalDetails, personalDetails, setCurrentStep } =
     useJoinFlowStore();
 
-  const personalDetailsSchema =
-    createPersonalDetailsSchema(personalDetailsProps);
+  const initialStep = personalDetails?.personalDetailsStep || "details";
+  const [currentFormStep, setCurrentFormStep] = useState<
+    "details" | "verification" | "additional"
+  >(initialStep);
+
+  const [isEmailVerified, setIsEmailVerified] = useState(
+    Boolean(personalDetails?.verificationCode === "123456"),
+  );
+  const [previousEmail, setPreviousEmail] = useState<string | undefined>(
+    personalDetails?.email,
+  );
+
+  const getStepSchema = () => {
+    return createStepBasedPersonalDetailsSchema(
+      personalDetailsProps,
+      currentFormStep,
+    ) as z.ZodType<PersonalDetails>;
+  };
 
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormValues>({
-    resolver: zodResolver(personalDetailsSchema),
+    reset,
+    getValues,
+  } = useForm<PersonalDetails>({
+    resolver: zodResolver(getStepSchema()),
     defaultValues: {
       firstName: personalDetails?.firstName || "",
       lastName: personalDetails?.lastName || "",
       phone: personalDetails?.phone || "",
-      hasSmartphone: (personalDetails?.hasSmartphone as "yes" | "no") || "",
+      hasSmartphone: (personalDetails?.hasSmartphone as "yes" | "no") || "yes",
       email: personalDetails?.email || "",
       confirmEmail: personalDetails?.confirmEmail || "",
-      marketingConsent:
-        typeof personalDetails?.marketingConsent === "boolean"
-          ? personalDetails.marketingConsent
-          : false,
+      verificationCode: personalDetails?.verificationCode || "",
+      dobDay: personalDetails?.dobDay || "",
+      dobMonth: personalDetails?.dobMonth || "",
+      dobYear: personalDetails?.dobYear || "",
+      residencyDuration: personalDetails?.residencyDuration || undefined,
+      marketingConsent: personalDetails?.marketingConsent ?? false,
+      personalDetailsStep: personalDetails?.personalDetailsStep || "details",
+      personalDetailsCompleted:
+        personalDetails?.personalDetailsCompleted || false,
     },
+    mode: "onChange",
   });
 
+  useEffect(() => {
+    reset(
+      {
+        ...(personalDetails || {}),
+        personalDetailsStep: currentFormStep,
+      },
+      {
+        keepValues: true,
+        keepDefaultValues: true,
+        keepDirty: false,
+      },
+    );
+  }, [currentFormStep, reset, personalDetails]);
+
   const hasSmartphoneValue = watch("hasSmartphone");
+  const verificationCode = watch("verificationCode");
+  const dobDay = watch("dobDay");
+  const dobMonth = watch("dobMonth");
+  const dobYear = watch("dobYear");
+  const residencyDuration = watch("residencyDuration");
+  const currentEmail = watch("email");
 
   useEffect(() => {
-    if (hasSmartphoneValue === "no") {
-      alert(personalDetailsProps.smartphoneSection.noSmartphoneAlertText);
+    if (previousEmail && previousEmail !== currentEmail) {
+      setIsEmailVerified(false);
+      setPreviousEmail(currentEmail);
     }
-  }, [hasSmartphoneValue]);
+  }, [currentEmail, previousEmail]);
 
-  const onSubmit = (data: FormValues) => {
-    setPersonalDetails({
-      ...data,
-    });
+  useEffect(() => {
+    if (personalDetails?.verificationCode === "123456") {
+      setIsEmailVerified(true);
+    }
+  }, [personalDetails]);
 
-    setCurrentStep(2);
-    router.push("/join-flow/eero-selection");
+  const handleContinueFromDetails = () => {
+    try {
+      const formValues = getValues();
+
+      const nextStep = isEmailVerified ? "additional" : "verification";
+
+      const updatedDetails: PersonalDetails = {
+        ...personalDetails,
+        firstName: formValues.firstName || "",
+        lastName: formValues.lastName || "",
+        phone: formValues.phone || "",
+        hasSmartphone: formValues.hasSmartphone || "yes",
+        email: formValues.email || "",
+        confirmEmail: formValues.confirmEmail || "",
+        marketingConsent:
+          formValues.marketingConsent !== undefined
+            ? formValues.marketingConsent
+            : false,
+        personalDetailsStep: nextStep,
+        personalDetailsCompleted: false,
+        verificationCode: isEmailVerified ? "123456" : "",
+        dobDay: personalDetails?.dobDay || "",
+        dobMonth: personalDetails?.dobMonth || "",
+        dobYear: personalDetails?.dobYear || "",
+        residencyDuration: personalDetails?.residencyDuration || "over-year",
+      } as PersonalDetails;
+
+      setPersonalDetails(updatedDetails);
+      setCurrentFormStep(nextStep);
+    } catch (error) {
+      //Keep this for now while we're dev-ing
+      console.log(error);
+    }
   };
 
+  const handleVerification = () => {
+    if (verificationCode === "123456") {
+      if (personalDetails) {
+        const updatedDetails: PersonalDetails = {
+          ...personalDetails,
+          verificationCode: "123456",
+          personalDetailsStep: "additional",
+          personalDetailsCompleted: false,
+          marketingConsent: personalDetails.marketingConsent,
+        } as PersonalDetails;
+
+        setPersonalDetails(updatedDetails);
+      }
+      setIsEmailVerified(true);
+      setPreviousEmail(currentEmail); // Update previousEmail with the verified email
+      setCurrentFormStep("additional");
+    } else {
+      alert(personalDetailsProps.verificationSection.invalidCodeText);
+    }
+  };
+
+  const onVerificationSuccess = () => {
+    if (personalDetails) {
+      const updatedDetails: PersonalDetails = {
+        ...personalDetails,
+        personalDetailsStep: "additional",
+      } as PersonalDetails;
+      setPersonalDetails(updatedDetails);
+    }
+    setCurrentFormStep("additional");
+  };
+
+  const onEmailChanged = () => {
+    setIsEmailVerified(false);
+  };
+
+  const onSubmitAdditionalDetails = handleSubmit(() => {
+    if (
+      !dobDay ||
+      !dobMonth ||
+      !dobYear ||
+      !residencyDuration ||
+      !personalDetails
+    ) {
+      return;
+    }
+
+    const updatedDetails: PersonalDetails = {
+      ...personalDetails,
+      dobDay,
+      dobMonth,
+      dobYear,
+      residencyDuration,
+      personalDetailsCompleted: true,
+      marketingConsent: personalDetails.marketingConsent,
+      personalDetailsStep: "additional",
+    } as PersonalDetails;
+
+    setPersonalDetails(updatedDetails);
+    setCurrentStep(2);
+    router.push("/join-flow/eero-selection");
+  });
+
   const handleBack = () => {
-    setCurrentStep(0);
-    router.push("/join-flow");
+    if (currentFormStep === "verification") {
+      if (personalDetails) {
+        const updatedDetails: PersonalDetails = {
+          ...personalDetails,
+          personalDetailsStep: "details",
+          marketingConsent: personalDetails.marketingConsent,
+          personalDetailsCompleted:
+            personalDetails.personalDetailsCompleted ?? false,
+          verificationCode: personalDetails.verificationCode || "",
+        } as PersonalDetails;
+        setPersonalDetails(updatedDetails);
+      }
+      setCurrentFormStep("details");
+    } else if (currentFormStep === "additional") {
+      if (personalDetails) {
+        const updatedDetails: PersonalDetails = {
+          ...personalDetails,
+          personalDetailsStep: "details",
+          marketingConsent: personalDetails.marketingConsent,
+          personalDetailsCompleted:
+            personalDetails.personalDetailsCompleted ?? false,
+
+          verificationCode: personalDetails.verificationCode || "",
+        } as PersonalDetails;
+        setPersonalDetails(updatedDetails);
+      }
+      setCurrentFormStep("details");
+    } else {
+      setCurrentStep(0);
+      router.push("/join-flow");
+    }
   };
 
   const renderMarketingText = () => {
@@ -113,6 +263,15 @@ const PersonalDetails = () => {
     );
   };
 
+  const InitialPersonalDetailsComponent =
+    InitialPersonalDetailsForm as React.ComponentType<InitialPersonalDetailsProps>;
+
+  const EmailVerificationFormComponent =
+    EmailVerificationForm as React.ComponentType<EmailVerificationFormProps>;
+
+  const AdditionalFormComponent =
+    AdditionalPersonalDetailsForm as React.ComponentType<AdditionalPersonalDetailsFormProps>;
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Stepper />
@@ -121,111 +280,104 @@ const PersonalDetails = () => {
         <h1 className="text-2xl text-center font-bold mb-6">
           {personalDetailsProps.pageTitle}
         </h1>
-        <h2 className="text-md font-bold mb-6">
-          {personalDetailsProps.sectionTitle}
-        </h2>
-        <p className="text-md mb-4">
-          {personalDetailsProps.requiredFieldsText}
-        </p>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <FormInput
-              id="firstName"
-              placeholder={personalDetailsProps.fieldPlaceholders.firstName}
-              error={errors.firstName}
-              {...register("firstName")}
-            />
+        {currentFormStep === "verification" && isEmailVerified && (
+          <p className="text-center mb-4">Email is verified</p>
+        )}
 
-            <FormInput
-              id="lastName"
-              placeholder={personalDetailsProps.fieldPlaceholders.lastName}
-              error={errors.lastName}
-              {...register("lastName")}
-            />
-          </div>
-          <div className="mb-6">
-            <FormInput
-              id="phone"
-              type="tel"
-              placeholder={personalDetailsProps.fieldPlaceholders.phone}
-              error={errors.phone}
-              {...register("phone")}
-            />
-          </div>
-          <div className="mb-6">
+        {currentFormStep === "details" && (
+          <>
+            <h2 className="text-md font-bold mb-6">
+              {personalDetailsProps.sectionTitle}
+            </h2>
             <p className="text-md mb-4">
-              {personalDetailsProps.smartphoneSection.mainText}
-              <span className="text-core-purple">
-                {" "}
-                {personalDetailsProps.smartphoneSection.whyText}
-              </span>
+              {personalDetailsProps.requiredFieldsText}
             </p>
-            <div className="flex flex-col gap-2">
-              {personalDetailsProps.smartphoneSection.options.map((option) => (
-                <label key={option.value} className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    value={option.value}
-                    {...register("hasSmartphone")}
-                    className="mr-2"
-                  />
-                  {option.label}
-                </label>
-              ))}
-            </div>
-            {errors.hasSmartphone && (
-              <p className="text-core-red text-sm mt-1">
-                {errors.hasSmartphone.message}
-              </p>
-            )}
-          </div>
-          <div className="mb-6">
-            <FormInput
-              id="email"
-              type="email"
-              placeholder={personalDetailsProps.fieldPlaceholders.email}
-              error={errors.email}
-              {...register("email")}
+            <InitialPersonalDetailsComponent
+              register={register}
+              errors={errors}
+              hasSmartphoneValue={hasSmartphoneValue}
+              personalDetailsProps={personalDetailsProps}
+              renderMarketingText={renderMarketingText}
             />
-          </div>
-          <div className="mb-6">
-            <FormInput
-              id="confirmEmail"
-              type="email"
-              placeholder={personalDetailsProps.fieldPlaceholders.confirmEmail}
-              error={errors.confirmEmail}
-              {...register("confirmEmail")}
-            />
-          </div>
-          <div className="mb-4">{renderMarketingText()}</div>
+          </>
+        )}
 
-          <div className="mb-6">
-            <label className="inline-flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                className="mr-2 h-5 w-5 cursor-pointer"
-                {...register("marketingConsent")}
-              />
-              <span>{personalDetailsProps.marketingSection.consentText}</span>
-            </label>
-          </div>
+        {currentFormStep === "verification" && !isEmailVerified && (
+          <EmailVerificationFormComponent
+            register={register}
+            errors={errors}
+            personalDetailsProps={personalDetailsProps}
+            isVerified={isEmailVerified}
+            onVerificationSuccess={onVerificationSuccess}
+            onEmailChanged={onEmailChanged}
+            currentEmail={currentEmail}
+            previousEmail={previousEmail}
+          />
+        )}
 
-          <div className="flex justify-between mt-8">
+        {currentFormStep === "additional" && (
+          <AdditionalFormComponent
+            register={register}
+            errors={errors}
+            personalDetailsProps={personalDetailsProps}
+          />
+        )}
+        <div className="flex justify-between mt-8">
+          <Button
+            onClick={handleBack}
+            tint="white"
+            variant="outline"
+            type="button"
+          >
+            {personalDetailsProps.buttons.back}
+          </Button>
+
+          {currentFormStep === "details" && (
             <Button
-              onClick={handleBack}
-              tint="white"
-              variant="outline"
+              tint="yellow"
+              variant="solid"
               type="button"
+              onClick={handleContinueFromDetails}
             >
-              {personalDetailsProps.buttons.back}
-            </Button>
-
-            <Button tint="yellow" variant="solid" type="submit">
               {personalDetailsProps.buttons.continue}
             </Button>
-          </div>
-        </form>
+          )}
+
+          {currentFormStep === "verification" && !isEmailVerified && (
+            <Button
+              tint="yellow"
+              variant="solid"
+              type="button"
+              onClick={handleVerification}
+              disabled={!verificationCode}
+            >
+              {personalDetailsProps.buttons.verify}
+            </Button>
+          )}
+
+          {currentFormStep === "verification" && isEmailVerified && (
+            <Button
+              tint="yellow"
+              variant="solid"
+              type="button"
+              onClick={onVerificationSuccess}
+            >
+              {personalDetailsProps.buttons.continue}
+            </Button>
+          )}
+
+          {currentFormStep === "additional" && (
+            <Button
+              tint="yellow"
+              variant="solid"
+              type="button"
+              onClick={onSubmitAdditionalDetails}
+            >
+              {personalDetailsProps.buttons.continue}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );
