@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@axe-core/playwright": "4.10.1",
-    "@hookform/resolvers": "4.1.3",
+    "@hookform/resolvers": "5.0.1",
     "@react-component-library/ui": "*",
     "graphql": "16.10.0",
     "graphql-request": "7.1.2",
