@@ -75,7 +75,7 @@ export const NavBar = ({
         <nav
           ref={drawerRef}
           aria-label="Main navigation"
-          className={`ds:flex ds:justify-between ds:items-center ds:h-[80px] ds:py-[15px] ds:px-5 ds:md:px-12 ds:w-full ds:relative ds:z-50
+          className={`ds:flex ds:justify-between ds:items-center ds:h-20 ds:py-[15px] ds:px-5 ds:md:px-12 ds:w-full ds:relative ds:z-50
             ${
               toggled
                 ? "ds:bg-core-white"

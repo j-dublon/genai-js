@@ -54,7 +54,7 @@ const InitialPersonalDetailsForm = ({
           ))}
         </div>
         {hasSmartphoneValue === "no" && (
-          <p className="text-sm mt-2 text-core-red">
+          <p className="text-sm mt-2 text-ui-error">
             You&apos;ll need a smartphone to get Cuckoo. We can&apos;t provide
             our service without a smartphone.
           </p>

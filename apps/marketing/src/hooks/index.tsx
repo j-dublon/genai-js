@@ -6,7 +6,6 @@ import { usePostcode } from "./usePostcode";
 import { useReviewCardExpansion } from "./useReviewCardExpansion";
 import { useScrollLock } from "./useScrollLock";
 import { useTrustpilotReviews } from "./useTrustpilotReviews";
-import { useTrustpilotScore } from "./useTrustpilotScore";
 
 export {
   getStorageValue,
@@ -18,5 +17,4 @@ export {
   useReviewCardExpansion,
   useScrollLock,
   useTrustpilotReviews,
-  useTrustpilotScore,
 };

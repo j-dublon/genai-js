@@ -28,7 +28,7 @@ export const PaymentAccountDetails = ({}) => {
         <span className="font-normal">{paymentDetails?.sortCode}</span>
       </h3>
       {/* TO DO: Change this logic after spike for redirection and confirmation from design */}
-      <p className="mt-4 text-core-red">Change my details</p>
+      <p className="mt-4 text-ui-error">Change my details</p>
     </div>
   );
 };

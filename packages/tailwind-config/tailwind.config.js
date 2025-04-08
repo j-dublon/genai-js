@@ -16,7 +16,7 @@ export default {
       "core-yellow": "#FCFF59",
       "core-blue": "#ACB9FE",
       "core-peach": "#FF8A65",
-      "core-red": "#DB3737",
+      "ui-error": "#DB3737",
       "core-teal": "#C3F9FD",
       "core-purple": "#5A06D8",
       "secondary-blue": "#6F89FF",
@@ -30,6 +30,7 @@ export default {
       "ui-grey-300": "#D8D8D0",
       "ui-grey-400": "#818181",
       "ui-grey-500": "#565656",
+      "ui-error": "#DB3737",
       "outline-ui-grey-300": "#DBD8D0",
       "link-ui": "#5A06D8",
       "light-green": "#A4FFA7",
@@ -95,12 +96,14 @@ export default {
       },
     },
     animation: {
+      ...defaultTheme.animation,
       scaleOpen: "scaleOpen 0.1s forwards",
       marquee: "marquee 25s linear infinite",
       "marquee-slow": "marquee 70s linear infinite",
       shimmer: "shimmer 1.5s infinite ease-in-out",
     },
     keyframes: {
+      ...defaultTheme.keyframes,
       marquee: {
         "0%": { transform: "translateX(0%)" },
         "100%": { transform: "translateX(-100%)" },

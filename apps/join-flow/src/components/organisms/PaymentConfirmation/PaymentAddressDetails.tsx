@@ -28,7 +28,7 @@ export const PaymentAddressDetails = () => {
         <p className="text-sm text-ui-grey-500 ">Address line 1 from api</p>
       </div>
       {/* TO DO: Change this logic after spike for redirection and confirmation from design */}
-      <span className="font-normal text-core-red">Change</span>
+      <span className="font-normal text-ui-error">Change</span>
     </div>
   );
 };

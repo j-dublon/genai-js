@@ -17,7 +17,7 @@ export const PaymentGoLiveDetails = ({}) => {
       <h3>
         <span className="font-bold">{formattedSchedule}</span>{" "}
         {/* TO DO: Change this logic after spike for redirection and confirmation from design */}
-        <span className="font-normal text-core-red">Change</span>
+        <span className="font-normal text-ui-error">Change</span>
       </h3>
     </div>
   );

@@ -5,7 +5,13 @@ import { useTrustpilotScore } from ".";
 
 const mockedFetch = vi.fn() as MockedFunction<typeof fetch>;
 
-global.fetch = mockedFetch;
+declare global {
+  interface Window {
+    fetch: typeof fetch;
+  }
+}
+
+window.fetch = mockedFetch;
 
 describe("useTrustpilotScore", () => {
   afterEach(() => {

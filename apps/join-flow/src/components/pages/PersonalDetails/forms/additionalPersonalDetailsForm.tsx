@@ -65,7 +65,7 @@ const AdditionalPersonalDetailsForm = ({
           )}
         </div>
         {errors.residencyDuration && (
-          <p className="text-core-red text-sm mt-1">
+          <p className="text-ui-error text-sm mt-1">
             {errors.residencyDuration.message}
           </p>
         )}

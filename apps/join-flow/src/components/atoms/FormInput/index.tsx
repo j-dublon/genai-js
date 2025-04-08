@@ -13,11 +13,11 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
         <input
           id={id}
           ref={ref}
-          className={`w-full px-4 py-2 h-[62px] border-2 ${error ? "border-core-red" : "border-ui-grey-300"} rounded-[8px] placeholder-black ${className || ""}`}
+          className={`w-full px-4 py-2 h-[62px] border-2 ${error ? "border-ui-error" : "border-ui-grey-300"} rounded-[8px] placeholder-black ${className || ""}`}
           aria-invalid={error ? "true" : "false"}
           {...props}
         />
-        {error && <p className="text-core-red text-sm mt-1">{error.message}</p>}
+        {error && <p className="text-ui-error text-sm mt-1">{error.message}</p>}
       </div>
     );
   },

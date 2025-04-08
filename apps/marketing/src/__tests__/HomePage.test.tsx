@@ -16,13 +16,17 @@ vi.mock("@/hooks/usePostcode", () => ({
   }),
 }));
 
-vi.mock("@/hooks/useTrustpilotScore", () => ({
-  useTrustpilotScore: () => ({
-    data: { trustScore: 4.5, numberOfReviews: 100 },
-    loading: false,
-    error: null,
-  }),
-}));
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    useTrustpilotScore: () => ({
+      data: { trustScore: 4.5, numberOfReviews: 100 },
+      loading: false,
+      error: null,
+    }),
+  };
+});
 
 vi.mock("@/hooks/useTrustpilotReviews", () => ({
   useTrustpilotReviews: () => ({

@@ -1,5 +1,7 @@
 "use client";
 
+import { useTrustpilotScore } from "@react-component-library/ui";
+
 import { TermsAndConditions } from "@/components/atoms/TermsAndConditions";
 import { CompanyLogoStripWrapper } from "@/components/molecules/CompanyLogoStrip";
 import { FAQSection } from "@/components/molecules/FAQSection";
@@ -21,8 +23,6 @@ import { LifeAtCuckoo } from "@/components/organisms/LifeAtCuckoo";
 import { MobileAppWrapper } from "@/components/organisms/MobileAppWrapper";
 import { NavBarWrapper } from "@/components/organisms/NavBar";
 import { TrustPilotSliderWrapper } from "@/components/organisms/TrustPilotSlider";
-import { useTrustpilotScore } from "@/hooks";
-
 export const HomePage = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const broadbandOffer = true;

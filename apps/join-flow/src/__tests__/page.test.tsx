@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
 import PackageSelection from "@/components/pages/PackageSelection";
@@ -43,6 +43,21 @@ vi.mock("@store/mockData", () => ({
     },
   ],
 }));
+
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    useTrustpilotScore: () => ({
+      data: {
+        trustScore: 4.8,
+        numberOfReviews: 1234,
+      },
+      isLoading: false,
+      error: null,
+    }),
+  };
+});
 
 const mockSetValue = vi.fn();
 const mockHandleSubmit = vi.fn();
@@ -98,8 +113,10 @@ describe("PackageSelection Component", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the component with title and packages", () => {
-    render(<PackageSelection />);
+  it("renders the component with title and packages", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
 
     expect(
       screen.getByText("Choose Your Broadband Package"),

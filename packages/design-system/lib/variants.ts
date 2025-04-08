@@ -5,7 +5,7 @@ export const bgColorVariants = {
   grey: "ds:bg-ui-grey-300",
   "light-grey": "ds:bg-ui-grey-200",
   orange: "ds:bg-secondary-orange",
-  red: "ds:bg-core-red",
+  red: "ds:bg-ui-error",
   white: "ds:bg-core-white",
 };
 export const textColorVariants = {

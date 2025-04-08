@@ -120,7 +120,7 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
                   )}
                 />
                 {errors.selectedDate && (
-                  <p className="text-core-red text-sm mt-1">
+                  <p className="text-ui-error text-sm mt-1">
                     {errors.selectedDate.message}
                   </p>
                 )}
@@ -173,7 +173,7 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
                     )}
                   />
                   {errors.timeSlot && (
-                    <p className="text-core-red text-sm mt-1">
+                    <p className="text-ui-error text-sm mt-1">
                       {errors.timeSlot.message}
                     </p>
                   )}

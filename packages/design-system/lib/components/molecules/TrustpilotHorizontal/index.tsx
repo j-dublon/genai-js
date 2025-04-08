@@ -34,7 +34,7 @@ export const TrustpilotHorizontal = ({
           </div>
         </div>
         {numberOfReviews && (
-          <div className="ds:whitespace-nowrap ds:text-[12px] ds:sm:text-[18px]">
+          <div className="ds:whitespace-nowrap ds:text-[12px] ds:md:text-[18px]">
             Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
           </div>
         )}

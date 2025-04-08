@@ -10,6 +10,7 @@ import { Heading } from "@components/atoms/Heading";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
 import { SectionHeading } from "@components/atoms/SectionHeading";
+import { SimpleNavBar } from "@components/atoms/SimpleNavBar";
 import { Slider } from "@components/atoms/Slider";
 import {
   TextWithTick,
@@ -21,6 +22,7 @@ import { ArticleCard } from "@components/molecules/ArticleCard";
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
 import { ImageMarquee } from "@components/molecules/ImageMarquee";
 import { InfoCard } from "@components/molecules/InfoCard";
+import { InfoModal } from "@components/molecules/InfoModal";
 import { MobileApp } from "@components/molecules/MobileApp";
 import { MobilePhone } from "@components/molecules/MobilePhone";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
@@ -33,6 +35,8 @@ import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { Footer } from "@components/organisms/Footer";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { NavBar } from "@components/organisms/NavBar";
+import { useClickOutside } from "@hooks/useClickOutside";
+import { useTrustpilotScore } from "@hooks/useTrustPilotScore";
 
 import { BACKGROUND_COLORS, BackgroundColors } from "./types";
 
@@ -51,6 +55,7 @@ export {
   HowFastCanYouGo,
   ImageMarquee,
   InfoCard,
+  InfoModal,
   MobileApp,
   MobilePhone,
   NavBar,
@@ -59,6 +64,7 @@ export {
   ProductCard,
   ReviewCard,
   SectionHeading,
+  SimpleNavBar,
   Slider,
   TextWithTick,
   TextWithTickList,
@@ -67,6 +73,8 @@ export {
   TrustpilotHorizontal,
   TrustpilotStars,
   TrustpilotVertical,
+  useClickOutside,
+  useTrustpilotScore,
 };
 
 export type {
