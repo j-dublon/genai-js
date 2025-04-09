@@ -1,9 +1,5 @@
 import { z } from "zod";
 
-export const packageSelectionSchema = z.object({
-  packageId: z.string().min(1, "Please select a package"),
-});
-
 const addressSchema = z.object({
   line1: z.string().min(1, "Address line 1 is required"),
   line2: z.string().optional(),
@@ -12,6 +8,11 @@ const addressSchema = z.object({
   addressKey: z.string().min(1, "Address key is required"),
   addressKeyType: z.string().min(1, "Address key type is required"),
   naduprn: z.string().optional(),
+});
+
+export const packageSelectionSchema = z.object({
+  packageId: z.string().min(1, "Please select a package"),
+  serviceAddress: addressSchema,
 });
 
 export const eeroSelectionSchema = z.object({

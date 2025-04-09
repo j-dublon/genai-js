@@ -2,28 +2,64 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTrustpilotScore } from "@react-component-library/ui";
-import { broadbandPackages } from "@store/mockData";
-import type { BroadbandPackage } from "@store/useJoinFlowStore";
+import type { Address, BroadbandPackage } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import React from "react";
 import { useForm } from "react-hook-form";
 
 import { HeroBanner } from "@/components/molecules/HeroBanner";
 import { NavWrapper } from "@/components/molecules/NavWrapper";
 import { Reminders } from "@/components/organisms/Reminders";
+import { useAddress } from "@/hooks/useAddress";
 import {
   PackageSelectionFormValues,
   packageSelectionSchema,
 } from "@/validation/join-flow-schema";
 
+import ChooseYourPackage from "./ChooseYourPackage";
+import {
+  broadbandPackages,
+  packageSelectionPageText,
+} from "./packageSelectionProps";
+
+const MOCK_ADDRESS: Address = {
+  line1: "Test Address Line 1",
+  line2: "Test Address Line 2",
+  line3: "London",
+  postcode: "SW1A 2AA",
+  addressKey: "A00063116639",
+  addressKeyType: "NAD",
+};
+
 const PackageSelection = () => {
+  const { errorMessage } = packageSelectionPageText;
   const router = useRouter();
   const { data: trustpilotRating } = useTrustpilotScore();
-  const { selectPackage } = useJoinFlowStore();
+  const { selectPackage, setServiceAddress } = useJoinFlowStore();
+
+  const { selectedAddress } = useAddress({
+    initialPostcode: "SW1A 2AA",
+    autoFetch: true,
+  });
+
+  useEffect(() => {
+    if (selectedAddress) {
+      const addressToSave: Address = {
+        line1: selectedAddress.line1 || "",
+        line2: selectedAddress.line2 || undefined,
+        line3: selectedAddress.line3 || undefined,
+        postcode: selectedAddress.postcode || "",
+        addressKey: selectedAddress.addressKey || "",
+        addressKeyType: selectedAddress.addressKeyType || "NAD",
+      };
+
+      setServiceAddress(addressToSave);
+    }
+  }, [selectedAddress, setServiceAddress]);
 
   const {
-    handleSubmit,
     setValue,
     formState: { errors },
   } = useForm<PackageSelectionFormValues>({
@@ -33,20 +69,25 @@ const PackageSelection = () => {
     },
   });
 
-  const onSubmit = (data: PackageSelectionFormValues) => {
+  const handlePackageSelection = (packageId: string) => {
     const selectedPackage = broadbandPackages.find(
-      (pkg) => pkg.id === data.packageId,
+      (pkg) => pkg.id === packageId,
     );
 
     if (selectedPackage) {
       selectPackage(selectedPackage);
+
+      if (!selectedAddress) {
+        setServiceAddress(MOCK_ADDRESS);
+      }
+
       router.push("/join-flow/personal-details");
     }
   };
 
   const handlePackageClick = (pkg: BroadbandPackage) => {
     setValue("packageId", pkg.id);
-    handleSubmit(onSubmit)();
+    handlePackageSelection(pkg.id);
   };
 
   return (
@@ -56,66 +97,11 @@ const PackageSelection = () => {
         trustScore={trustpilotRating?.trustScore}
         numberOfReviews={trustpilotRating?.numberOfReviews}
       />
-      <section className="bg-ui-grey-100 px-mobile sm:px-tablet lg:px-desktop py-12">
-        <div className="md:max-w-[1152px] mx-auto">
-          <h1 className="text-3xl font-bold text-center mb-2">
-            Choose Your Broadband Package
-          </h1>
-          <p className="text-center mb-8">
-            Select the package that suits your needs
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {broadbandPackages.map((pkg) => (
-              <div
-                key={pkg.id}
-                className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
-              >
-                <div className="p-6">
-                  <h2 className="text-xl font-bold">{pkg.name}</h2>
-                  <div className="mt-2">
-                    <span className="text-3xl font-bold">
-                      £{pkg.price.monthly}
-                    </span>
-                    <span className="text-sm">/month</span>
-                  </div>
-                  <p className="mt-2 text-sm">
-                    {pkg.contractLength} month contract
-                  </p>
-                </div>
-
-                <div className="p-6">
-                  <div className="flex items-center mb-4">
-                    <div>
-                      <p className="font-bold">{pkg.speed.download} Mbps</p>
-                      <p className="text-sm">Download</p>
-                    </div>
-                    <div className="ml-auto">
-                      <p className="font-bold">{pkg.speed.upload} Mbps</p>
-                      <p className="text-sm">Upload</p>
-                    </div>
-                  </div>
-
-                  <p className="mb-4">{pkg.description}</p>
-
-                  <button
-                    onClick={() => handlePackageClick(pkg)}
-                    className="w-full py-3 font-bold rounded-md transition-colors"
-                  >
-                    Add to basket
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {errors.packageId && (
-            <p className="text-core-red mt-4 text-center">
-              {errors.packageId.message}
-            </p>
-          )}
-        </div>
-      </section>
+      <ChooseYourPackage
+        errorMessage={errorMessage}
+        hasError={!!errors.packageId}
+        onPackageSelect={handlePackageClick}
+      />
       <Reminders />
     </>
   );

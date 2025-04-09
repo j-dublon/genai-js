@@ -95,6 +95,7 @@ export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
   selectedPackage: BroadbandPackage | null;
+  serviceAddress: Address | null;
   personalDetails: PersonalDetails | null;
   eeroSelection: EeroProduct | null;
   switchingDetails: SwitchingDetails | null;
@@ -105,6 +106,7 @@ export type JoinFlowState = {
   setHasHydrated: (state: boolean) => void;
   setCurrentStep: (step: number) => void;
   selectPackage: (pkg: BroadbandPackage) => void;
+  setServiceAddress: (address: Address) => void;
   setPersonalDetails: (details: PersonalDetails) => void;
   selectEeroProduct: (product: EeroProduct) => void;
   setSwitchingDetails: (details: SwitchingDetails) => void;
@@ -120,6 +122,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       _hasHydrated: false,
       currentStep: 0,
       selectedPackage: null,
+      serviceAddress: null,
       personalDetails: null,
       eeroSelection: null,
       switchingDetails: null,
@@ -130,6 +133,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
       selectPackage: (pkg) => set({ selectedPackage: pkg, currentStep: 1 }),
+      setServiceAddress: (address) => set({ serviceAddress: address }),
       setPersonalDetails: (details) => set({ personalDetails: details }),
       selectEeroProduct: (product) => set({ eeroSelection: product }),
       setSwitchingDetails: (details) => set({ switchingDetails: details }),
@@ -139,6 +143,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
         set({
           currentStep: 0,
           selectedPackage: null,
+          serviceAddress: null,
           personalDetails: null,
           eeroSelection: null,
           switchingDetails: null,

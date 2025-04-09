@@ -1,67 +1,6 @@
 //TO DO: DEPRECATE THIS AND COLOCATE THEM NEXT TO THEIR INDIVIDUAL PAGES AS PROPS
 
-import {
-  BroadbandPackage,
-  BroadbandProvider,
-  EeroProduct,
-} from "../store/useJoinFlowStore";
-
-export const broadbandPackages: BroadbandPackage[] = [
-  {
-    id: "c-150",
-    name: "C-150",
-    speed: {
-      download: 150,
-      upload: 30,
-    },
-    price: {
-      monthly: 32,
-      setup: 0,
-    },
-    priceIncrease: {
-      nextYearIncrease: 3.0,
-      followingYearIncrease: 3.0,
-    },
-    contractLength: 12,
-    description: "Full fibre speeds",
-  },
-  {
-    id: "c-500",
-    name: "C-500",
-    speed: {
-      download: 500,
-      upload: 20,
-    },
-    price: {
-      monthly: 37,
-      setup: 0,
-    },
-    priceIncrease: {
-      nextYearIncrease: 3.0,
-      followingYearIncrease: 3.0,
-    },
-    contractLength: 12,
-    description: "Full fibre speeds",
-  },
-  {
-    id: "c-900",
-    name: "C-900",
-    speed: {
-      download: 1000,
-      upload: 100,
-    },
-    price: {
-      monthly: 54.99,
-      setup: 0,
-    },
-    priceIncrease: {
-      nextYearIncrease: 3.0,
-      followingYearIncrease: 3.0,
-    },
-    contractLength: 12,
-    description: "Full fibre speeds",
-  },
-];
+import { BroadbandProvider, EeroProduct } from "../store/useJoinFlowStore";
 
 export const eeroProducts: EeroProduct[] = [
   {
@@ -99,30 +38,6 @@ export const broadbandProviders: BroadbandProvider[] = [
   { id: "shell", name: "Shell Energy", description: "Shell Energy Broadband" },
   { id: "other", name: "Other", description: "Other broadband provider" },
 ];
-
-// Mock response for address lookup
-export const mockAddressLookupResponse = {
-  addresses: [
-    {
-      line1: "10 Downing Street",
-      line2: "",
-      line3: "",
-      postcode: "SW1A 2AA",
-      addressKey: "UPRN10000000001",
-      addressKeyType: "UPRN",
-      naduprn: "10000000001",
-    },
-    {
-      line1: "11 Downing Street",
-      line2: "",
-      line3: "",
-      postcode: "SW1A 2AB",
-      addressKey: "UPRN10000000002",
-      addressKeyType: "UPRN",
-      naduprn: "10000000002",
-    },
-  ],
-};
 
 // Mock available installation dates
 export const availableInstallationDates = [
