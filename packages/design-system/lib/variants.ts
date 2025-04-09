@@ -4,6 +4,7 @@ export const bgColorVariants = {
   pink: "ds:bg-core-pink",
   grey: "ds:bg-ui-grey-300",
   "light-grey": "ds:bg-ui-grey-200",
+  "lightest-grey": "ds:bg-ui-grey-100",
   orange: "ds:bg-secondary-orange",
   red: "ds:bg-ui-error",
   white: "ds:bg-core-white",

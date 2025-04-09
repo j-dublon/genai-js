@@ -7,6 +7,7 @@ import { ColorPill } from "@components/atoms/ColorPill";
 import { FeatureImage } from "@components/atoms/FeatureImage";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
+import { LegalClaims } from "@components/atoms/LegalClaims";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
 import { SectionHeading } from "@components/atoms/SectionHeading";
@@ -56,6 +57,7 @@ export {
   ImageMarquee,
   InfoCard,
   InfoModal,
+  LegalClaims,
   MobileApp,
   MobilePhone,
   NavBar,

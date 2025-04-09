@@ -8,7 +8,7 @@ import { featureImage, heading, reminders } from "./RemindersProps";
 export const Reminders = () => {
   return (
     <section
-      className="bg-core-white px-mobile sm:px-tablet lg:px-desktop py-10 md:pt-17 md:pb-12"
+      className="bg-core-white px-mobile sm:px-tablet lg:px-desktop py-10 md:py-17"
       aria-label="Reminders section"
     >
       <div className="md:max-w-[1152px] mx-auto">

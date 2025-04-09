@@ -1,5 +1,4 @@
 import { render, screen } from "@testing-library/react";
-import React from "react";
 
 import { LegalClaims } from "./";
 
@@ -36,5 +35,17 @@ describe("LegalClaims", () => {
       "href",
       "https://www.cuckoo.co/legal/terms",
     );
+  });
+
+  test("applies the correct background color class when specified", () => {
+    const { container } = render(<LegalClaims backgroundColor="blue" />);
+    const section = container.querySelector("section");
+    expect(section).toHaveClass("ds:bg-secondary-blue");
+  });
+
+  test("applies the default white background color class when not specified", () => {
+    const { container } = render(<LegalClaims />);
+    const section = container.querySelector("section");
+    expect(section).toHaveClass("ds:bg-core-white");
   });
 });

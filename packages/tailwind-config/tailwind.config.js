@@ -16,7 +16,6 @@ export default {
       "core-yellow": "#FCFF59",
       "core-blue": "#ACB9FE",
       "core-peach": "#FF8A65",
-      "ui-error": "#DB3737",
       "core-teal": "#C3F9FD",
       "core-purple": "#5A06D8",
       "secondary-blue": "#6F89FF",
