@@ -6,7 +6,7 @@ const meta: Meta<typeof ProductCard> = {
   argTypes: {
     accentColor: {
       control: { type: "radio" },
-      options: ["blue", "yellow", "pink"],
+      options: ["secondary-blue", "yellow", "pink"],
     },
   },
 };

@@ -1,3 +1,4 @@
+import { bgColorVariants } from "@lib/variants";
 import { render, screen } from "@testing-library/react";
 
 import { LegalClaims } from "./";
@@ -38,14 +39,16 @@ describe("LegalClaims", () => {
   });
 
   test("applies the correct background color class when specified", () => {
-    const { container } = render(<LegalClaims backgroundColor="blue" />);
+    const { container } = render(
+      <LegalClaims backgroundColor="secondary-blue" />,
+    );
     const section = container.querySelector("section");
-    expect(section).toHaveClass("ds:bg-secondary-blue");
+    expect(section).toHaveClass(bgColorVariants["secondary-blue"]);
   });
 
   test("applies the default white background color class when not specified", () => {
     const { container } = render(<LegalClaims />);
     const section = container.querySelector("section");
-    expect(section).toHaveClass("ds:bg-core-white");
+    expect(section).toHaveClass(bgColorVariants["white"]);
   });
 });

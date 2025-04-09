@@ -63,7 +63,7 @@ export const TrustPilotSlider = ({
 
   return (
     <section
-      className="bg-ui-grey-200 pb-12 md:pb-40"
+      className="bg-core-grey-200 pb-12 md:pb-40"
       aria-labelledby="trust-pilot-heading"
     >
       <div className="py-12 px-mobile sm:px-tablet lg:px-desktop md:pt-40 md:pb-16">

@@ -26,13 +26,13 @@ export const Primary: Story = {
     titleText: "A proper fancy router",
     colorPillText: "worth £249.99*",
     colorPillBackgroundColor: "yellow",
-    infoCardBackgroundColor: "grey",
+    infoCardBackgroundColor: "grey-300",
     subHeading: "Free eero Pro 6E router",
     additionalText:
       "TrueMesh technology, built-in security, and signal and coverage literally everywhere in your home? Yep, we’d say that’s very fancy indeed. ",
     buttonText: "Tell me more",
     featureImageProps: {
-      backgroundColor: "blue",
+      backgroundColor: "secondary-blue",
       infoCard: true,
       backgroundImage: {
         url: "/assets/images/whooosh.svg",

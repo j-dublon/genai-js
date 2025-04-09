@@ -26,7 +26,7 @@ export const Primary: Story = {
         textInput: "This is an example bit of text without",
         backgroundColor: "yellow",
       },
-      { textInput: "This is more text", backgroundColor: "blue" },
+      { textInput: "This is more text", backgroundColor: "secondary-blue" },
       { textInput: "And even more!", backgroundColor: "pink" },
     ],
   },

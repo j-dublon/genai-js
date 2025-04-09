@@ -9,7 +9,7 @@ interface Props {
 export const AccordionSection = ({ heading, questionsArr, subText }: Props) => (
   <section
     aria-label="Accordion Section"
-    className="ds:bg-core-pink ds:py-12 ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop ds:md:py-40"
+    className="ds:bg-secondary-pink ds:py-12 ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop ds:md:py-40"
   >
     <div className="ds:grid ds:grid-cols-1 ds:md:grid-cols-1 ds:gap-6 ds:md:gap-16 ds:max-w-[1152px] ds:justify-center ds:items-center ds:mx-auto">
       <div className="ds:flex ds:flex-col ds:gap-4">

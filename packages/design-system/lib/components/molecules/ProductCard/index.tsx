@@ -56,7 +56,7 @@ export const ProductCard = (props: ProductCardProps) => {
               <p className="ds:text-blackbird">No phone line needed</p>
             </div>
           </div>
-          <a className="ds:text-link-ui" href="www.test.com">
+          <a className="ds:text-ui-link" href="www.test.com">
             Learn more{" "}
           </a>
         </div>

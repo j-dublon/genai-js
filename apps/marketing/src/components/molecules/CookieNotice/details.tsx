@@ -179,7 +179,7 @@ export const IndicatorArrow = (props: IndicatorArrowProps) => {
       aria-hidden
       className={cx(
         // base, pointing down
-        "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-ui-grey-300 bg-core-white focus:border-secondary-blue-dark",
+        "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-ui-grey-300 bg-core-white focus:border-tertiary-blue-dark",
         // pointing up, black background
         "transition-all group-open/Details:border-core-black group-open/Details:bg-core-black group-open/Details:text-core-white group-data-[open=false]/Details:border-ui-grey-300 group-data-[open=false]/Details:bg-transparent group-data-[open=false]/Details:text-core-black",
         // large variant styles

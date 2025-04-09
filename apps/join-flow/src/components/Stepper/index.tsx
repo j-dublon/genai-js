@@ -38,7 +38,7 @@ const Stepper = () => {
                     ? "bg-core-yellow text-core-black"
                     : index === activeStep
                       ? "bg-core-yellow text-core-black"
-                      : "bg-ui-grey-200 text-core-black"
+                      : "bg-core-grey-200 text-core-black"
                 } transition-all duration-300 cursor-pointer`}
               onClick={() => {
                 setCurrentStep(index + 1);
@@ -69,7 +69,7 @@ const Stepper = () => {
               <div
                 className={`flex-1 h-0.5
                   ${
-                    index < activeStep ? "bg-core-black" : "bg-ui-grey-200"
+                    index < activeStep ? "bg-core-black" : "bg-core-grey-200"
                   } transition-all duration-300`}
               />
             )}

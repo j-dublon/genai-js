@@ -8,7 +8,7 @@ export default {
     "before:border-core-yellow",
     "before:border-core-white",
     "before:border-secondary-blue",
-    "before:border-secondary-blue-dark",
+    "before:border-tertiary-blue-dark",
     "before:border-ui-grey-300",
   ],
 };

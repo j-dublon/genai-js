@@ -253,7 +253,7 @@ const PersonalDetails = () => {
           href={personalDetailsProps.marketingSection.privacyNoticeUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-core-purple underline hover:text-core-purple-dark cursor-pointer"
+          className="text-ui-link underline hover:text-tertiary-purple cursor-pointer"
           style={{ transition: "color 0.2s ease" }}
         >
           {personalDetailsProps.marketingSection.privacyNoticeText}

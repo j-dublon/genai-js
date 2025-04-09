@@ -1,10 +1,10 @@
 "use client";
-import { InfoCard } from "@react-component-library/ui";
+import { InfoCard, InfoCardProps } from "@react-component-library/ui";
 
 import { CuckooProtectInfoCard } from "@/components/molecules/CuckooProtectInfoCard";
 import { getAssetPath } from "@/lib/get-asset-path";
 
-import { InfoCardProps, props } from "./cardSectionProps";
+import { props } from "./cardSectionProps";
 
 export interface CardSectionProps {
   cardSectionHeading: string;
@@ -26,7 +26,7 @@ export const CardSection = () => {
       aria-label="Card Section"
       className="flex flex-col md:items-center bg-core-white py-12 md:py-36 gap-6 px-mobile sm:px-tablet lg:px-desktop"
     >
-      <div className="relative flex flex-col bg-ui-grey-200 justify-between md:gap-12 gap-6 md:max-w-[1152px] md:pb-6.5 md:pt-12 pt-6 items-stretch rounded-lg">
+      <div className="relative flex flex-col bg-core-grey-200 justify-between md:gap-12 gap-6 md:max-w-[1152px] md:pb-6.5 md:pt-12 pt-6 items-stretch rounded-lg">
         <div className="md:px-10 px-5 flex gap-6 relative z-10">
           <div className="flex flex-col gap-6 md:w-1/2">
             <h1 className="font-semibold md:text-5xl text-4xl leading-[1.4] md:leading-[1.2]">
@@ -46,7 +46,7 @@ export const CardSection = () => {
           />
         </div>
 
-        <div className="relative flex flex-col bg-core-pink md:bg-transparent md:flex-row md:gap-6 md:px-6 z-20 rounded-lg">
+        <div className="relative flex flex-col bg-secondary-pink md:bg-transparent md:flex-row md:gap-6 md:px-6 z-20 rounded-lg">
           {infoCardContent.map((card) => (
             <InfoCard
               key={`${card.titleText} ?? ${card.colorPillText}`}

@@ -8,7 +8,7 @@ const meta: Meta<typeof CompanyLogoStrip> = {
       control: { type: "radio" },
       options: [
         "bg-core-black",
-        "bg-ui-grey-200",
+        "bg-core-grey-200",
         "bg-core-yellow",
         "bg-core-white",
       ],
@@ -56,6 +56,6 @@ export const Primary: Story = {
         imgSrc: "/assets/images/which.svg",
       },
     ],
-    backgroundColor: "bg-ui-grey-200",
+    backgroundColor: "bg-core-grey-200",
   },
 };

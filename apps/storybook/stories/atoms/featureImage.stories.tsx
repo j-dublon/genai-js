@@ -33,7 +33,7 @@ export const Primary: Story = {
   name: "Scaled Image",
 
   args: {
-    backgroundColor: "blue",
+    backgroundColor: "secondary-blue",
     backgroundImage: {
       url: "../../assets/images/whooosh.svg",
       alt: "its an image",
@@ -54,7 +54,7 @@ export const Secondary: Story = {
   name: "No overlay image",
 
   args: {
-    backgroundColor: "blue",
+    backgroundColor: "secondary-blue",
     backgroundImage: {
       url: "../../assets/images/whooosh.svg",
       alt: "whoosh",

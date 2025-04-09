@@ -7,7 +7,7 @@ export const LegalClaims = ({
 }: {
   backgroundColor?: BackgroundColors;
 }) => {
-  const linkClass = "ds:text-core-purple ds:font-medium ds:underline ds:ml-1";
+  const linkClass = "ds:text-ui-link ds:font-medium ds:underline ds:ml-1";
 
   return (
     <section

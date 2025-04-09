@@ -103,7 +103,7 @@ const PackageSelection = () => {
         onPackageSelect={handlePackageClick}
       />
       <Reminders />
-      <LegalClaims backgroundColor="lightest-grey" />
+      <LegalClaims backgroundColor="grey-100" />
     </>
   );
 };

@@ -20,7 +20,7 @@ export interface FeatureImageProps {
 }
 
 export const FeatureImage = ({
-  backgroundColor = "blue",
+  backgroundColor = "secondary-blue",
   infoCard = false,
   backgroundImage,
   overlayImage,

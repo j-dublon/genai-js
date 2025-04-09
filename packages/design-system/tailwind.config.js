@@ -10,7 +10,7 @@ export default {
     "ds:before:border-core-yellow",
     "ds:before:border-core-white",
     "ds:before:border-secondary-blue",
-    "ds:before:border-secondary-blue-dark",
+    "ds:before:border-tertiary-blue-dark",
     "ds:before:border-ui-grey-300",
   ],
 

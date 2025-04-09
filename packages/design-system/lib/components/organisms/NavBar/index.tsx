@@ -63,7 +63,7 @@ export const NavBar = ({
               We'll handle the whole broadband move for you
               <Link
                 href="/switching"
-                className="ds:text-core-purple ds:font-medium ds:underline ds:rounded ds:ml-1"
+                className="ds:text-ui-link ds:font-medium ds:underline ds:rounded ds:ml-1"
               >
                 just one click
               </Link>
@@ -148,7 +148,7 @@ export const NavBar = ({
             {links.map((link, index) => {
               const isLast = index === links.length - 1;
               const containerClass = isLast
-                ? "ds:border-b ds:border-b-outline-ui-grey-300"
+                ? "ds:border-b ds:border-b-ui-grey-300"
                 : "";
 
               return (
@@ -164,7 +164,7 @@ export const NavBar = ({
                           );
                         }}
                         className={`ds:md:hidden ds:hover:underline ds:flex ds:items-center ds:py-4 ds:justify-between ds:min-h-[3.5rem] ds:w-full ds:text-[26px] 
-                          ds:font-bold ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer ds:transition-colors ds:duration-200 ds:group 
+                          ds:font-bold ds:border-t ds:border-t-ui-grey-300 ds:cursor-pointer ds:transition-colors ds:duration-200 ds:group 
                           ${
                             openDropdownMobile === link.name
                               ? "ds:underline"
@@ -210,7 +210,7 @@ export const NavBar = ({
                     <Link href={link.href ?? "#"} passHref className="ds:block">
                       <span
                         className="ds:flex ds:items-center ds:hover:underline ds:justify-between ds:min-h-[3.5rem] ds:py-4 ds:w-full ds:text-[26px] ds:font-bold 
-                      ds:text-core-black ds:bg-core-white ds:border-t ds:border-t-outline-ui-grey-300 ds:cursor-pointer"
+                      ds:text-core-black ds:bg-core-white ds:border-t ds:border-t-ui-grey-300 ds:cursor-pointer"
                       >
                         {link.name}
                       </span>

@@ -22,7 +22,7 @@ export const InfoModal = ({
   return (
     <dialog
       ref={modalRef}
-      className="ds:bg-core-white ds:w-[90vw] ds:sm:w-[65vw] ds:md:w-[45vw] ds:md:max-w-[652px] ds:justify-self-center ds:self-center ds:p-6 ds:pb-4 ds:md:p-8 ds:rounded-md ds:md:rounded-lg ds:border-2 ds:border-ui-grey-200 ds:[&::backdrop]:bg-core-black ds:[&::backdrop]:opacity-40"
+      className="ds:bg-core-white ds:w-[90vw] ds:sm:w-[65vw] ds:md:w-[45vw] ds:md:max-w-[652px] ds:justify-self-center ds:self-center ds:p-6 ds:pb-4 ds:md:p-8 ds:rounded-md ds:md:rounded-lg ds:border-2 ds:border-core-grey-200 ds:[&::backdrop]:bg-core-black ds:[&::backdrop]:opacity-40"
       role="dialog"
       aria-labelledby="modal-title"
       aria-describedby={

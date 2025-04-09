@@ -30,7 +30,7 @@ export const SimpleNavBar = ({
           {infoText && (
             <button
               onClick={onInfoClick}
-              className="ds:leading-[1.6] ds:underline ds:cursor-pointer ds:text-core-purple"
+              className="ds:leading-[1.6] ds:underline ds:cursor-pointer ds:text-ui-link"
             >
               {infoText}
             </button>

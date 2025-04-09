@@ -38,7 +38,7 @@ describe("Timeline Card List Component", () => {
 
     expect(screen.getByText(colorPillWithText)).toBeInTheDocument();
     expect(screen.getByText(colorPillWithText)).toHaveStyle(
-      "background-color: bg-core-pink",
+      "background-color: bg-secondary-pink",
     );
     expect(screen.getByText(subtitleText)).toBeInTheDocument();
     expect(screen.getByText(subHeading)).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe("Timeline Card List Component", () => {
 
     expect(screen.getByText(colorPillWithText)).toBeInTheDocument();
     expect(screen.getByText(colorPillWithText)).toHaveStyle(
-      "background-color: bg-core-pink",
+      "background-color: bg-secondary-pink",
     );
     expect(screen.getByText(subtitleText)).toBeInTheDocument();
     expect(screen.getByText(subHeading)).toBeInTheDocument();
@@ -64,7 +64,7 @@ describe("Timeline Card List Component", () => {
 
     expect(screen.getByText(colorPillWithText)).toBeInTheDocument();
     expect(screen.getByText(colorPillWithText)).toHaveStyle(
-      "background-color: bg-core-pink",
+      "background-color: bg-secondary-pink",
     );
     expect(screen.getByText(subtitleText)).toBeInTheDocument();
     expect(screen.getByText(subHeading)).toBeInTheDocument();

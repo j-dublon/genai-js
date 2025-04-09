@@ -21,7 +21,7 @@ export const Address = () => {
           className="flex items-center justify-center space-x-3"
           role="status"
         >
-          <div className="h-4 w-4 rounded-full border-2 border-core-purple border-t-transparent animate-spin"></div>
+          <div className="h-4 w-4 rounded-full border-2 border-ui-link border-t-transparent animate-spin"></div>
           <p>Loading your address...</p>
         </div>
       );
@@ -63,7 +63,7 @@ export const Address = () => {
   const changeAddressLink = (
     <Link
       href="/"
-      className="underline text-core-purple text-sm font-medium leading-[1.4] md:text-sm md:leading-[1.6]"
+      className="underline text-ui-link text-sm font-medium leading-[1.4] md:text-sm md:leading-[1.6]"
     >
       Change my address
     </Link>

@@ -42,7 +42,7 @@ export const CookieNotice = () => {
 
   return (
     <aside
-      className="fixed bottom-6 right-1/2 z-[99] w-[23rem] translate-x-1/2 rounded-sm border-2 border-ui-grey-200 bg-ui-grey-100 p-6 sm:right-12 sm:translate-x-0 md:rounded-md"
+      className="fixed bottom-6 right-1/2 z-[99] w-[23rem] translate-x-1/2 rounded-sm border-2 border-core-grey-200 bg-ui-grey-100 p-6 sm:right-12 sm:translate-x-0 md:rounded-md"
       data-testid="cookie-notice"
     >
       {checkCookies ? (
@@ -54,7 +54,7 @@ export const CookieNotice = () => {
             <p className="text-xxs mt-2 text-ui-grey-500">
               {cookieBannerProps.cookie_message_two}
               <a
-                className="text-link-ui"
+                className="text-ui-link"
                 href="https://cuckoo.co/legal/cookie-policy"
               >
                 {" "}

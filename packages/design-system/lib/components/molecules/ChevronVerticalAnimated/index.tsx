@@ -28,10 +28,10 @@ export const ChevronVerticalAnimated = ({
       tabIndex={0}
       onClick={(e) => onClick?.(e)}
       onKeyDown={handleKeyDown}
-      className={`ds:relative ds:flex ds:items-center ds:justify-center ds:w-9 ds:h-9 ds:rounded-full ds:border-2 ds:border-ui-grey-200 
+      className={`ds:relative ds:flex ds:items-center ds:justify-center ds:w-9 ds:h-9 ds:rounded-full ds:border-2 ds:border-core-grey-200 
         ds:transition-colors ds:duration-300
         ${isOpen ? "ds:bg-core-black ds:text-core-white" : "ds:bg-core-white ds:text-gray-900"}
-        ds:hover:bg-ui-grey-200 ds:cursor-pointer`}
+        ds:hover:bg-core-grey-200 ds:cursor-pointer`}
       aria-hidden="true"
       aria-expanded={isOpen}
       aria-label={ariaLabel}

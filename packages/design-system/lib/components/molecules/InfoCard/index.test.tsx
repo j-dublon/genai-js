@@ -7,12 +7,12 @@ describe("InfoCard Component", () => {
     titleText: "Test title",
     colorPillText: "Test color pill text",
     colorPillBackgroundColor: "yellow",
-    infoCardBackgroundColor: "grey",
+    infoCardBackgroundColor: "grey-300",
     subHeading: "Test lighter text",
     additionalText: "Test additional text",
     buttonText: "Test button text",
     featureImageProps: {
-      backgroundColor: "blue",
+      backgroundColor: "secondary-blue",
       backgroundImage: {
         url: "/test-asset.png",
         alt: "Test image alt text",
@@ -28,7 +28,7 @@ describe("InfoCard Component", () => {
       <InfoCard
         {...baseProps}
         featureImageProps={{
-          backgroundColor: "blue",
+          backgroundColor: "secondary-blue",
           backgroundImage: {
             url: "/test-asset.png",
             alt: "Test image alt text",

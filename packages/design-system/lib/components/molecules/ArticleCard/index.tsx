@@ -26,7 +26,7 @@ export const ArticleCard = (props: ArticleCardProps) => {
         </picture>
       </figure>
       <div className="ds:flex ds:flex-col ds:mt-6 ds:space-y-4">
-        <p className="ds:px-3 ds:py-1 ds:font-bold ds:bg-core-pink ds:w-fit ds:rounded-xl">
+        <p className="ds:px-3 ds:py-1 ds:font-bold ds:bg-secondary-pink ds:w-fit ds:rounded-xl">
           {primaryTag}
         </p>
         <a

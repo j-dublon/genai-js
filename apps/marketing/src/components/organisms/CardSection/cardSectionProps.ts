@@ -1,5 +1,6 @@
-import { getAssetPath } from "@/lib/get-asset-path";
+import { InfoCardProps } from "@react-component-library/ui";
 
+import { getAssetPath } from "@/lib/get-asset-path";
 export const props: {
   cardSectionHeading: string;
   cardSectionText: string;
@@ -35,14 +36,14 @@ export const props: {
     titleText: "Meet your new super eero",
     colorPillText: "included with every plan",
     colorPillBackgroundColor: "yellow",
-    infoCardBackgroundColor: "light-grey",
+    infoCardBackgroundColor: "grey-200",
     subHeading: "worth £249.99",
     additionalText:
       "Our powerful eero router boosts signal throughout your home, so all your devices stay connected. It can even detect interference from walls and radios, re-directing Wi-Fi where it's actually needed.",
     buttonText: "Pop in your postcode to learn more",
     buttonLink: "/join/find-your-address",
     featureImageProps: {
-      backgroundColor: "blue",
+      backgroundColor: "tertiary-blue-dark",
       infoCard: true,
       backgroundImage: {
         url: getAssetPath("/images/whooosh.svg"),
@@ -59,36 +60,3 @@ export const props: {
     },
   },
 };
-
-interface image {
-  url: string;
-  alt: string;
-}
-
-export interface InfoCardProps {
-  titleText?: string;
-  colorPillText: string;
-  colorPillBackgroundColor: BackgroundColors;
-  infoCardBackgroundColor: BackgroundColors;
-  subHeading?: string;
-  additionalText?: string;
-  buttonText?: string;
-  buttonLink?: string;
-  featureImageProps?: {
-    backgroundColor: BackgroundColors;
-    infoCard: boolean;
-    backgroundImage: image;
-    overlayImage: image;
-    promotionImage: image;
-  };
-  listItems?: string[];
-}
-
-export type BackgroundColors =
-  | "yellow"
-  | "pink"
-  | "grey"
-  | "light-grey"
-  | "orange"
-  | "blue"
-  | "red";

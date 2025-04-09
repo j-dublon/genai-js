@@ -17,12 +17,13 @@ import {
   TextWithTick,
   TextWithTickProps,
 } from "@components/atoms/TextWithTick";
+import { TipCard, tipCardColors } from "@components/atoms/TipCard";
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ArticleCard } from "@components/molecules/ArticleCard";
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
 import { ImageMarquee } from "@components/molecules/ImageMarquee";
-import { InfoCard } from "@components/molecules/InfoCard";
+import { InfoCard, InfoCardProps } from "@components/molecules/InfoCard";
 import { InfoModal } from "@components/molecules/InfoModal";
 import { MobileApp } from "@components/molecules/MobileApp";
 import { MobilePhone } from "@components/molecules/MobilePhone";
@@ -39,7 +40,12 @@ import { NavBar } from "@components/organisms/NavBar";
 import { useClickOutside } from "@hooks/useClickOutside";
 import { useTrustpilotScore } from "@hooks/useTrustPilotScore";
 
-import { BACKGROUND_COLORS, BackgroundColors } from "./types";
+import {
+  BACKGROUND_COLORS,
+  BackgroundColors,
+  TEXT_COLORS,
+  TextColors,
+} from "./types";
 
 export {
   AccordionSection,
@@ -68,10 +74,13 @@ export {
   SectionHeading,
   SimpleNavBar,
   Slider,
+  TEXT_COLORS,
   TextWithTick,
   TextWithTickList,
   TimelineCard,
   TimelineCardList,
+  TipCard,
+  tipCardColors,
   TrustpilotHorizontal,
   TrustpilotStars,
   TrustpilotVertical,
@@ -82,6 +91,8 @@ export {
 export type {
   BackgroundColors,
   GuideCardProps,
+  InfoCardProps,
   ReviewCardProps,
+  TextColors,
   TextWithTickProps,
 };

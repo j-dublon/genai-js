@@ -29,7 +29,7 @@ export const PostcodeChecker = (props: PostcodeCheckerProps) => {
         </h2>
       )}
       <div
-        className="ds:flex ds:rounded-lg ds:bg-core-white ds:border-2 ds:border-outline-ui-grey-300 ds:p-4 ds:sm:p-2 ds:md:pl-5
+        className="ds:flex ds:rounded-lg ds:bg-core-white ds:border-2 ds:border-ui-grey-300 ds:p-4 ds:sm:p-2 ds:md:pl-5
         ds:items-center ds:justify-between ds:h-[78px] ds:w-full ds:lg:w-[466px] ds:isolate ds:[&:focus-within]:border-core-black"
       >
         <form className="flex flex-row w-full" onSubmit={onClickFunction}>

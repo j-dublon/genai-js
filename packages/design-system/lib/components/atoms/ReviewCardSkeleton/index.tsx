@@ -5,7 +5,7 @@ interface SkeletonLineProps {
 
 const SkeletonLine = ({ width, height }: SkeletonLineProps) => (
   <div
-    className={`${width} ${height} ds:bg-ui-grey-200 ds:rounded ds:animate-shimmer`}
+    className={`${width} ${height} ds:bg-core-grey-200 ds:rounded ds:animate-shimmer`}
   />
 );
 

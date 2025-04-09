@@ -58,7 +58,7 @@ export const DropdownMenu = ({
         role="menu"
         aria-hidden={!isOpen}
         tabIndex={isOpen ? 0 : -1}
-        className={`ds:bg-ui-grey-200 ds:rounded-sm ds:p-6 
+        className={`ds:bg-core-grey-200 ds:rounded-sm ds:p-6 
         ds:absolute ds:left-1/2 ds:top-full ds:w-fit ds:z-[100] 
         ds:transform ds:-translate-x-1/2 ds:transition-all ds:duration-300
         ${
