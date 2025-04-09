@@ -1,4 +1,4 @@
-import OneTouchSwitching from "@/components/pages/OneTouchSwitching";
+import OneTouchSwitching from "@/screens/OneTouchSwitching";
 
 const OneTouchSwitchingPage = () => {
   return <OneTouchSwitching />;

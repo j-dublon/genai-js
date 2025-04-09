@@ -1,4 +1,4 @@
-import PaymentDetails from "@/components/pages/PaymentDetails";
+import PaymentDetails from "@/screens/PaymentDetails";
 
 const PaymentDetailsPage = () => {
   return <PaymentDetails />;

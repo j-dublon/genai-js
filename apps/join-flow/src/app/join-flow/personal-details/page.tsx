@@ -1,4 +1,4 @@
-import PersonalDetails from "@/components/pages/PersonalDetails";
+import PersonalDetails from "@/screens/PersonalDetails";
 
 const PersonalDetailsPage = () => {
   return <PersonalDetails />;

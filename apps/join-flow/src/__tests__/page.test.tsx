@@ -1,11 +1,11 @@
 import { act, render, screen } from "@testing-library/react";
 import { vi } from "vitest";
 
-import PackageSelection from "@/components/pages/PackageSelection";
+import PackageSelection from "@/screens/PackageSelection";
 import {
   broadbandPackages,
   packageSelectionPageText,
-} from "@/components/pages/PackageSelection/packageSelectionProps";
+} from "@/screens/PackageSelection/components/ChooseYourPackage/ChooseYourPackageProps";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({

@@ -1,4 +1,4 @@
-import GoLiveDate from "@/components/pages/GoLiveDate";
+import GoLiveDate from "@/screens/GoLiveDate";
 
 const GoLiveDatePage = () => {
   return <GoLiveDate />;

@@ -1,4 +1,4 @@
-import EeroSelection from "@/components/pages/EeroSelection";
+import EeroSelection from "@/screens/EeroSelection";
 
 const EeroSelectionPage = () => {
   return <EeroSelection />;

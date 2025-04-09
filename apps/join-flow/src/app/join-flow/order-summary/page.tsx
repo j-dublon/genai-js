@@ -1,4 +1,4 @@
-import OrderSummary from "@/components/pages/OrderSummary";
+import OrderSummary from "@/screens/OrderSummary";
 
 const OrderSummaryPage = () => {
   return <OrderSummary />;

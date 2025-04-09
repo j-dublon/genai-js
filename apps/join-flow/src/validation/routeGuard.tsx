@@ -42,7 +42,12 @@ const findNextRequiredStep = (storeState: JoinFlowState): string => {
   }
 };
 
-const isPathAllowed = (path: string, nextRequiredStep: string): boolean => {
+const isPathAllowed = (
+  path: string | null,
+  nextRequiredStep: string,
+): boolean => {
+  if (path === null) return false;
+
   const pathIndex = FLOW_STEPS.find((step) => step.path === path)?.index ?? -1;
   const requiredStepIndex =
     FLOW_STEPS.find((step) => step.path === nextRequiredStep)?.index ?? -1;

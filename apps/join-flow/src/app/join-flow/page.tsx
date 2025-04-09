@@ -1,4 +1,4 @@
-import PackageSelection from "@/components/pages/PackageSelection";
+import PackageSelection from "@/screens/PackageSelection";
 
 const JoinFlowPage = () => {
   return <PackageSelection />;
