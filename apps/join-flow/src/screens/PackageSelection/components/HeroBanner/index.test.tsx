@@ -9,10 +9,17 @@ vi.mock("@/screens/PackageSelection/components/Address", () => ({
   Address: () => <div data-testid="address-mock">Address Mock</div>,
 }));
 
+const mockUseTrustpilotScore = vi.fn().mockReturnValue({
+  data: null,
+  loading: false,
+  error: null,
+});
+
 vi.mock("@react-component-library/ui", () => ({
   TrustpilotHorizontal: () => (
     <div data-testid="trustpilot-mock">Trustpilot Mock</div>
   ),
+  useTrustpilotScore: () => mockUseTrustpilotScore(),
 }));
 
 vi.mock("@/lib/get-asset-path", () => ({
@@ -22,6 +29,11 @@ vi.mock("@/lib/get-asset-path", () => ({
 describe("HeroBanner", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUseTrustpilotScore.mockReturnValue({
+      data: null,
+      loading: false,
+      error: null,
+    });
   });
 
   it("renders the banner title", () => {
@@ -51,7 +63,13 @@ describe("HeroBanner", () => {
   });
 
   it("renders the Trustpilot component when trustScore is provided", () => {
-    render(<HeroBanner trustScore={4.5} numberOfReviews={100} />);
+    mockUseTrustpilotScore.mockReturnValue({
+      data: { trustScore: 4.5, numberOfReviews: 100 },
+      loading: false,
+      error: null,
+    });
+
+    render(<HeroBanner />);
     expect(screen.getByTestId("trustpilot-mock")).toBeInTheDocument();
   });
 

@@ -48,6 +48,13 @@ const meta = {
         defaultValue: { summary: "black" },
       },
     },
+    className: {
+      control: "text",
+      description: "Additional CSS classes to apply to the card",
+      table: {
+        type: { summary: "string" },
+      },
+    },
     children: {
       description: "Content for the tip card",
       table: {

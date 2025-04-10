@@ -15,10 +15,13 @@ export const TrustpilotHorizontal = ({
   flexDirection = "flex-row",
 }: TrustpilotHorizontalProps) => {
   return (
-    <Link href="https://uk.trustpilot.com/review/cuckoo.co">
+    <Link
+      href="https://uk.trustpilot.com/review/cuckoo.co"
+      data-testid="trustpilot-link"
+    >
       <div
         className={cx(
-          "ds:flex ds:md:flex-row ds:items-center ds:sm:space-x-4 ds:space-x-1 ds:md:space-y-0",
+          "ds:flex ds:md:flex-row ds:items-center ds:lg:space-x-3 ds:space-x-2 ds:md:space-y-0",
           `ds:${flexDirection}`,
         )}
       >
@@ -34,8 +37,12 @@ export const TrustpilotHorizontal = ({
           </div>
         </div>
         {numberOfReviews && (
-          <div className="ds:whitespace-nowrap ds:text-[12px] ds:md:text-[18px]">
-            Based on <strong>{numberOfReviews.toLocaleString()}</strong> reviews
+          <div className="ds:whitespace-nowrap ds:text-[12px] ds:md:text-[14px] ds:lg:text-[16px] ds:font-normal ds:leading-[1.4]">
+            Based on{" "}
+            <span className="ds:font-semibold">
+              {numberOfReviews.toLocaleString()}
+            </span>{" "}
+            reviews
           </div>
         )}
       </div>

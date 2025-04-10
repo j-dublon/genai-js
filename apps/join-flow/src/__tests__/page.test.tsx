@@ -1,4 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import { vi } from "vitest";
 
 import PackageSelection from "@/screens/PackageSelection";
@@ -6,6 +6,8 @@ import {
   broadbandPackages,
   packageSelectionPageText,
 } from "@/screens/PackageSelection/components/ChooseYourPackage/ChooseYourPackageProps";
+import { bannerTitle } from "@/screens/PackageSelection/components/HeroBanner/HeroBannerProps";
+import { heading as remindersHeading } from "@/screens/PackageSelection/components/Reminders/RemindersProps";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -62,6 +64,10 @@ vi.mock("@/hooks/useAddress", () => ({
   }),
 }));
 
+vi.mock("@/screens/PackageSelection/components/Address", () => ({
+  Address: () => <div data-testid="address-mock">Address Mock</div>,
+}));
+
 describe("PackageSelection Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -83,5 +89,52 @@ describe("PackageSelection Component", () => {
     broadbandPackages.forEach((pkg) => {
       expect(screen.getByText(pkg.name)).toBeInTheDocument();
     });
+  });
+
+  it("renders NavWrapper component", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
+
+    const navElement = screen.getByRole("navigation");
+    expect(navElement).toBeInTheDocument();
+    const logo = screen.getByAltText("Cuckoo");
+    expect(logo).toBeInTheDocument();
+  });
+
+  it("renders HeroBanner component", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
+
+    expect(screen.getByText(bannerTitle)).toBeInTheDocument();
+    const addressComponent = screen.getByTestId("address-mock");
+    expect(addressComponent).toBeInTheDocument();
+  });
+
+  it("renders Reminders component", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
+
+    const remindersSection = screen.getByRole("region", {
+      name: "Reminders section",
+    });
+    expect(screen.getByText(remindersHeading)).toBeInTheDocument();
+    expect(remindersSection).toBeInTheDocument();
+  });
+
+  it("renders LegalClaims component", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
+
+    const legalClaimsHeading = screen.getByText("Stats and claims");
+    expect(legalClaimsHeading).toBeInTheDocument();
+    const legalClaimsSection = screen.getByRole("region", { name: "Legal" });
+    const legalList = within(legalClaimsSection).getByRole("list");
+    const legalItems = within(legalList).getAllByRole("listitem");
+    expect(legalList).toBeInTheDocument();
+    expect(legalItems.length).toBeGreaterThan(0);
   });
 });

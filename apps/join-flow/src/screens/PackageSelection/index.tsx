@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LegalClaims, useTrustpilotScore } from "@react-component-library/ui";
+import { LegalClaims } from "@react-component-library/ui";
 import type { Address, BroadbandPackage } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
@@ -36,7 +36,6 @@ const MOCK_ADDRESS: Address = {
 const PackageSelection = () => {
   const { errorMessage } = packageSelectionPageText;
   const router = useRouter();
-  const { data: trustpilotRating } = useTrustpilotScore();
   const { selectPackage, setServiceAddress } = useJoinFlowStore();
 
   const { selectedAddress } = useAddress({
@@ -93,10 +92,7 @@ const PackageSelection = () => {
   return (
     <>
       <NavWrapper />
-      <HeroBanner
-        trustScore={trustpilotRating?.trustScore}
-        numberOfReviews={trustpilotRating?.numberOfReviews}
-      />
+      <HeroBanner />
       <ChooseYourPackage
         errorMessage={errorMessage}
         hasError={!!errors.packageId}

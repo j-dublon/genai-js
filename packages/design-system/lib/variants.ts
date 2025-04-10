@@ -10,6 +10,7 @@ export const bgColorVariants = {
   red: "ds:bg-ui-error",
   white: "ds:bg-core-white",
   "secondary-teal": "ds:bg-secondary-teal",
+  "tertiary-pink-light": "ds:bg-tertiary-pink-light",
 };
 export const textColorVariants = {
   black: "ds:text-core-black",

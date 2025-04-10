@@ -18,6 +18,7 @@ interface TipCardProps {
   };
   backgroundColor?: keyof typeof tipCardColors;
   subtitleColor?: TextColors;
+  className?: string;
 }
 
 export const TipCard = ({
@@ -26,10 +27,11 @@ export const TipCard = ({
   image,
   backgroundColor = "white",
   subtitleColor = "black",
+  className,
 }: PropsWithChildren<TipCardProps>) => {
   return (
     <div
-      className={`ds:rounded-lg ds:px-4 ds:py-3 ds:md:p-6 ds:flex ds:gap-3 ds:sm:max-w-[505px] ${tipCardColors[backgroundColor]}`}
+      className={`ds:rounded-md ds:px-4 ds:py-3 ds:md:p-6 ds:flex ds:gap-3 ds:sm:max-w-[505px] ${tipCardColors[backgroundColor]} ${className}`}
       aria-label="Tip card"
     >
       {image && (

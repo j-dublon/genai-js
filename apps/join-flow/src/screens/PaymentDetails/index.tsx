@@ -5,6 +5,7 @@ import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
+import { Footer } from "@/components/Footer";
 import Stepper from "@/components/Stepper";
 import { usePaymentForm } from "@/hooks/usePaymentForm";
 import { type PaymentFormValues } from "@/hooks/usePaymentForm";
@@ -119,155 +120,160 @@ export const PaymentDetails = ({
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Stepper />
+    <>
+      <div className="container mx-auto px-4 py-8">
+        <Stepper />
 
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-core-white p-8 rounded-md">
-          <h1 className="text-2xl font-bold mb-6">{title}</h1>
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-core-white p-8 rounded-md">
+            <h1 className="text-2xl font-bold mb-6">{title}</h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <div>
-              <p className="text-md font-bold mb-6">{paymentDetailsTitle}</p>
-              <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
-                <div className="mb-6">
-                  <div className="relative">
-                    <input
-                      {...register("accountholderName", { required: true })}
-                      id="accountholderName"
-                      placeholder={accountholderNamePlaceholder}
-                      className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
-                      onChange={handleaccountholderNameChange}
-                    />
-                    {isaccountholderNameValid && (
-                      <svg
-                        className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div>
+                <p className="text-md font-bold mb-6">{paymentDetailsTitle}</p>
+                <form onSubmit={handleSubmit(handleFormSubmit)} noValidate>
+                  <div className="mb-6">
+                    <div className="relative">
+                      <input
+                        {...register("accountholderName", { required: true })}
+                        id="accountholderName"
+                        placeholder={accountholderNamePlaceholder}
+                        className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
+                        onChange={handleaccountholderNameChange}
+                      />
+                      {isaccountholderNameValid && (
+                        <svg
+                          className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    {errors.accountholderName && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {accountholderNameError}
+                      </p>
                     )}
                   </div>
-                  {errors.accountholderName && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {accountholderNameError}
-                    </p>
-                  )}
-                </div>
 
-                <div className="mb-6">
-                  <div className="relative">
-                    <input
-                      {...register("accountNumber", {
-                        required: true,
-                        pattern: /^\d{8}$/,
-                      })}
-                      id="accountNumber"
-                      placeholder={accountNumberPlaceholder}
-                      className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
-                      onChange={handleAccountNumberChange}
-                    />
-                    {isAccountNumberValid && (
-                      <svg
-                        className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
+                  <div className="mb-6">
+                    <div className="relative">
+                      <input
+                        {...register("accountNumber", {
+                          required: true,
+                          pattern: /^\d{8}$/,
+                        })}
+                        id="accountNumber"
+                        placeholder={accountNumberPlaceholder}
+                        className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
+                        onChange={handleAccountNumberChange}
+                      />
+                      {isAccountNumberValid && (
+                        <svg
+                          className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    {errors.accountNumber && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {accountNumberError}
+                      </p>
                     )}
                   </div>
-                  {errors.accountNumber && (
-                    <p className="text-red-500 text-sm mt-1">
-                      {accountNumberError}
-                    </p>
-                  )}
-                </div>
 
-                <div className="mb-6">
-                  <div className="relative">
-                    <input
-                      {...register("sortCode", {
-                        required: true,
-                        pattern: /^\d{2}-\d{2}-\d{2}$/,
-                      })}
-                      id="sortCode"
-                      placeholder={sortCodePlaceholder}
-                      className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
-                      onChange={handleSortCodeChange}
-                    />
-                    {isSortCodeValid && (
-                      <svg
-                        className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
+                  <div className="mb-6">
+                    <div className="relative">
+                      <input
+                        {...register("sortCode", {
+                          required: true,
+                          pattern: /^\d{2}-\d{2}-\d{2}$/,
+                        })}
+                        id="sortCode"
+                        placeholder={sortCodePlaceholder}
+                        className="w-full px-4 py-2 border border-ui-grey-300 rounded-md focus:outline-none"
+                        onChange={handleSortCodeChange}
+                      />
+                      {isSortCodeValid && (
+                        <svg
+                          className="w-5 h-5 text-green-500 absolute right-3 top-1/2 transform -translate-y-1/2"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      )}
+                    </div>
+                    {errors.sortCode && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {sortCodeError}
+                      </p>
                     )}
                   </div>
-                  {errors.sortCode && (
-                    <p className="text-red-500 text-sm mt-1">{sortCodeError}</p>
-                  )}
+
+                  <div className="flex justify-between mt-8">
+                    <Button
+                      onClick={handleBackClick}
+                      tint="white"
+                      variant="outline"
+                      type="button"
+                    >
+                      {backButtonText}
+                    </Button>
+
+                    <Button
+                      type="submit"
+                      tint="yellow"
+                      variant="solid"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? submittingButtonText : submitButtonText}
+                    </Button>
+                  </div>
+                </form>
+              </div>
+
+              <div>
+                <p className="text-md font-bold mb-6">
+                  {directDebitDetailsTitle}
+                </p>
+
+                <div className="mb-6">
+                  <PaymentSummary />
                 </div>
-
-                <div className="flex justify-between mt-8">
-                  <Button
-                    onClick={handleBackClick}
-                    tint="white"
-                    variant="outline"
-                    type="button"
-                  >
-                    {backButtonText}
-                  </Button>
-
-                  <Button
-                    type="submit"
-                    tint="yellow"
-                    variant="solid"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? submittingButtonText : submitButtonText}
-                  </Button>
-                </div>
-              </form>
-            </div>
-
-            <div>
-              <p className="text-md font-bold mb-6">
-                {directDebitDetailsTitle}
-              </p>
-
-              <div className="mb-6">
-                <PaymentSummary />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

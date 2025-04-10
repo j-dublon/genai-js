@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+import { Footer } from "@/components/Footer";
 import Stepper from "@/components/Stepper";
 import AdditionalPersonalDetailsForm from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
 import EmailVerificationForm from "@/screens/PersonalDetails/forms/emailVerificationForm";
@@ -296,113 +297,116 @@ const PersonalDetails = () => {
     AdditionalPersonalDetailsForm as React.ComponentType<AdditionalPersonalDetailsFormProps>;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Stepper />
+    <>
+      <div className="container mx-auto px-4 py-8">
+        <Stepper />
 
-      <div className="max-w-2xl mx-auto p-8 rounded-lg">
-        <h1 className="text-2xl text-center font-bold mb-6">
-          {personalDetailsProps.pageTitle}
-        </h1>
+        <div className="max-w-2xl mx-auto p-8 rounded-lg">
+          <h1 className="text-2xl text-center font-bold mb-6">
+            {personalDetailsProps.pageTitle}
+          </h1>
 
-        {currentFormStep === "verification" && isEmailVerified && (
-          <p className="text-center mb-4">Email is verified</p>
-        )}
-
-        {currentFormStep === "details" && (
-          <>
-            <h2 className="text-md font-bold mb-6">
-              {personalDetailsProps.sectionTitle}
-            </h2>
-            <p className="text-md mb-4">
-              {personalDetailsProps.requiredFieldsText}
-            </p>
-            <InitialPersonalDetailsComponent
-              register={register}
-              errors={errors}
-              hasSmartphoneValue={hasSmartphoneValue}
-              personalDetailsProps={personalDetailsProps}
-              renderMarketingText={renderMarketingText}
-            />
-          </>
-        )}
-
-        {currentFormStep === "verification" && !isEmailVerified && (
-          <EmailVerificationFormComponent
-            register={register}
-            errors={errors}
-            personalDetailsProps={personalDetailsProps}
-            isVerified={isEmailVerified}
-            onVerificationSuccess={onVerificationSuccess}
-            onEmailChanged={onEmailChanged}
-            currentEmail={currentEmail}
-            previousEmail={previousEmail}
-          />
-        )}
-
-        {currentFormStep === "additional" && (
-          <AdditionalFormComponent
-            register={register}
-            errors={errors}
-            personalDetailsProps={personalDetailsProps}
-          />
-        )}
-        <div className="flex justify-between mt-8">
-          <Button
-            onClick={handleBack}
-            tint="white"
-            variant="outline"
-            type="button"
-          >
-            {personalDetailsProps.buttons.back}
-          </Button>
+          {currentFormStep === "verification" && isEmailVerified && (
+            <p className="text-center mb-4">Email is verified</p>
+          )}
 
           {currentFormStep === "details" && (
-            <Button
-              tint="yellow"
-              variant="solid"
-              type="button"
-              onClick={handleContinueFromDetails}
-            >
-              {personalDetailsProps.buttons.continue}
-            </Button>
+            <>
+              <h2 className="text-md font-bold mb-6">
+                {personalDetailsProps.sectionTitle}
+              </h2>
+              <p className="text-md mb-4">
+                {personalDetailsProps.requiredFieldsText}
+              </p>
+              <InitialPersonalDetailsComponent
+                register={register}
+                errors={errors}
+                hasSmartphoneValue={hasSmartphoneValue}
+                personalDetailsProps={personalDetailsProps}
+                renderMarketingText={renderMarketingText}
+              />
+            </>
           )}
 
           {currentFormStep === "verification" && !isEmailVerified && (
-            <Button
-              tint="yellow"
-              variant="solid"
-              type="button"
-              onClick={handleVerification}
-              disabled={!verificationCode}
-            >
-              {personalDetailsProps.buttons.verify}
-            </Button>
-          )}
-
-          {currentFormStep === "verification" && isEmailVerified && (
-            <Button
-              tint="yellow"
-              variant="solid"
-              type="button"
-              onClick={onVerificationSuccess}
-            >
-              {personalDetailsProps.buttons.continue}
-            </Button>
+            <EmailVerificationFormComponent
+              register={register}
+              errors={errors}
+              personalDetailsProps={personalDetailsProps}
+              isVerified={isEmailVerified}
+              onVerificationSuccess={onVerificationSuccess}
+              onEmailChanged={onEmailChanged}
+              currentEmail={currentEmail}
+              previousEmail={previousEmail}
+            />
           )}
 
           {currentFormStep === "additional" && (
-            <Button
-              tint="yellow"
-              variant="solid"
-              type="button"
-              onClick={onSubmitAdditionalDetails}
-            >
-              {personalDetailsProps.buttons.continue}
-            </Button>
+            <AdditionalFormComponent
+              register={register}
+              errors={errors}
+              personalDetailsProps={personalDetailsProps}
+            />
           )}
+          <div className="flex justify-between mt-8">
+            <Button
+              onClick={handleBack}
+              tint="white"
+              variant="outline"
+              type="button"
+            >
+              {personalDetailsProps.buttons.back}
+            </Button>
+
+            {currentFormStep === "details" && (
+              <Button
+                tint="yellow"
+                variant="solid"
+                type="button"
+                onClick={handleContinueFromDetails}
+              >
+                {personalDetailsProps.buttons.continue}
+              </Button>
+            )}
+
+            {currentFormStep === "verification" && !isEmailVerified && (
+              <Button
+                tint="yellow"
+                variant="solid"
+                type="button"
+                onClick={handleVerification}
+                disabled={!verificationCode}
+              >
+                {personalDetailsProps.buttons.verify}
+              </Button>
+            )}
+
+            {currentFormStep === "verification" && isEmailVerified && (
+              <Button
+                tint="yellow"
+                variant="solid"
+                type="button"
+                onClick={onVerificationSuccess}
+              >
+                {personalDetailsProps.buttons.continue}
+              </Button>
+            )}
+
+            {currentFormStep === "additional" && (
+              <Button
+                tint="yellow"
+                variant="solid"
+                type="button"
+                onClick={onSubmitAdditionalDetails}
+              >
+                {personalDetailsProps.buttons.continue}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

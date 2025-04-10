@@ -72,6 +72,13 @@ describe("TipCard Component", () => {
     expect(subtitle).toHaveClass("ds:text-secondary-blue");
   });
 
+  it("applies custom className", () => {
+    render(<TipCard className="custom-class">Content</TipCard>);
+
+    const card = screen.getByLabelText("Tip card");
+    expect(card).toHaveClass("custom-class");
+  });
+
   it("renders with all optional props", () => {
     render(
       <TipCard
@@ -79,6 +86,7 @@ describe("TipCard Component", () => {
         image={{ src: "/test-image.jpg", alt: "Test image" }}
         backgroundColor="blue"
         subtitleColor="secondary-blue"
+        className="custom-class"
       >
         Full featured tip
       </TipCard>,
@@ -93,6 +101,7 @@ describe("TipCard Component", () => {
     expect(image).toBeInTheDocument();
     expect(card).toHaveClass(tipCardColors.blue);
     expect(subtitle).toHaveClass("ds:text-secondary-blue");
+    expect(card).toHaveClass("custom-class");
     expect(card).toHaveTextContent("Full featured tip");
   });
 
