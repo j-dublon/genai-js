@@ -25,7 +25,7 @@ export type PersonalDetails = {
   dobDay: string;
   dobMonth: string;
   dobYear: string;
-  residencyDuration: "over-year" | "under-year";
+  residencyDuration: "over-year" | "under-year" | null;
   personalDetailsStep: "details" | "verification" | "additional";
   personalDetailsCompleted?: boolean;
 };

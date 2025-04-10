@@ -22,7 +22,10 @@ export const createStepBasedPersonalDetailsSchema = (
     dobDay: z.string().optional(),
     dobMonth: z.string().optional(),
     dobYear: z.string().optional(),
-    residencyDuration: z.enum(["over-year", "under-year"]).optional(),
+    residencyDuration: z
+      .enum(["over-year", "under-year"])
+      .nullable()
+      .optional(),
     personalDetailsStep: z
       .enum(["details", "verification", "additional"])
       .optional(),
@@ -59,9 +62,16 @@ export const createStepBasedPersonalDetailsSchema = (
       dobDay: z.string().min(1, "Day is required"),
       dobMonth: z.string().min(1, "Month is required"),
       dobYear: z.string().min(1, "Year is required"),
-      residencyDuration: z.enum(["over-year", "under-year"], {
-        required_error: props.validationMessages.residencyDurationRequired,
-      }),
+      residencyDuration: z
+        .enum(["over-year", "under-year"], {
+          required_error: props.validationMessages.residencyDurationRequired,
+          invalid_type_error:
+            props.validationMessages.residencyDurationRequired,
+        })
+        .nullable()
+        .refine((val) => val !== null, {
+          message: props.validationMessages.residencyDurationRequired,
+        }),
     });
   }
 

@@ -48,11 +48,11 @@ const PersonalDetails = () => {
 
   const {
     register,
-    handleSubmit,
     watch,
     formState: { errors },
     reset,
     getValues,
+    trigger,
   } = useForm<PersonalDetails>({
     resolver: zodResolver(getStepSchema()),
     defaultValues: {
@@ -66,7 +66,7 @@ const PersonalDetails = () => {
       dobDay: personalDetails?.dobDay || "",
       dobMonth: personalDetails?.dobMonth || "",
       dobYear: personalDetails?.dobYear || "",
-      residencyDuration: personalDetails?.residencyDuration || undefined,
+      residencyDuration: personalDetails?.residencyDuration || null,
       marketingConsent: personalDetails?.marketingConsent ?? false,
       personalDetailsStep: personalDetails?.personalDetailsStep || "details",
       personalDetailsCompleted:
@@ -110,10 +110,15 @@ const PersonalDetails = () => {
     }
   }, [personalDetails]);
 
-  const handleContinueFromDetails = () => {
+  const handleContinueFromDetails = async () => {
     try {
-      const formValues = getValues();
+      const isFormValid = await trigger();
 
+      if (!isFormValid) {
+        return;
+      }
+
+      const formValues = getValues();
       const nextStep = isEmailVerified ? "additional" : "verification";
 
       const updatedDetails: PersonalDetails = {
@@ -134,7 +139,7 @@ const PersonalDetails = () => {
         dobDay: personalDetails?.dobDay || "",
         dobMonth: personalDetails?.dobMonth || "",
         dobYear: personalDetails?.dobYear || "",
-        residencyDuration: personalDetails?.residencyDuration || "over-year",
+        residencyDuration: personalDetails?.residencyDuration || null,
       } as PersonalDetails;
 
       setPersonalDetails(updatedDetails);
@@ -145,7 +150,13 @@ const PersonalDetails = () => {
     }
   };
 
-  const handleVerification = () => {
+  const handleVerification = async () => {
+    const isFormValid = await trigger();
+
+    if (!isFormValid) {
+      return;
+    }
+
     if (verificationCode === "123456") {
       if (personalDetails) {
         const updatedDetails: PersonalDetails = {
@@ -166,7 +177,13 @@ const PersonalDetails = () => {
     }
   };
 
-  const onVerificationSuccess = () => {
+  const onVerificationSuccess = async () => {
+    const isFormValid = await trigger();
+
+    if (!isFormValid) {
+      return;
+    }
+
     if (personalDetails) {
       const updatedDetails: PersonalDetails = {
         ...personalDetails,
@@ -181,7 +198,13 @@ const PersonalDetails = () => {
     setIsEmailVerified(false);
   };
 
-  const onSubmitAdditionalDetails = handleSubmit(() => {
+  const onSubmitAdditionalDetails = async () => {
+    const isFormValid = await trigger();
+
+    if (!isFormValid) {
+      return;
+    }
+
     if (
       !dobDay ||
       !dobMonth ||
@@ -206,7 +229,7 @@ const PersonalDetails = () => {
     setPersonalDetails(updatedDetails);
     setCurrentStep(2);
     router.push("/join-flow/eero-selection");
-  });
+  };
 
   const handleBack = () => {
     if (currentFormStep === "verification") {
