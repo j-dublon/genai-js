@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@react-component-library/ui";
-import { eeroProducts } from "@store/mockData";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
@@ -11,39 +10,71 @@ import { Footer } from "@/components/Footer";
 import Stepper from "@/components/Stepper";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
+import {
+  eeroChooseProductButtonText,
+  eeroContinueButtonText,
+  eeroPageContent,
+  eeroProducts,
+} from "./eeroSelectionProps";
+
 const EeroSelection = () => {
   const router = useRouter();
-  const { selectEeroProduct, eeroSelection, setCurrentStep } =
-    useJoinFlowStore();
+  const { eeroSelection, setCurrentStep } = useJoinFlowStore();
+
+  // TO DO: might need to come from api eventually, but to be reviewed
+  const noAdditionalEero = {
+    id: "no-additional-eero",
+    name: "No additional eero device",
+    description: "Just one eero provided by us.",
+    price: 0,
+    isSelected: true,
+  };
 
   const [selectedEero, setSelectedEero] = useState<EeroProduct | null>(
-    eeroSelection || eeroProducts.find((p) => p.id === "no-eero") || null,
+    eeroSelection ||
+      eeroProducts.find((p) => p.id === "no-eero") ||
+      noAdditionalEero,
   );
-  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSelectEero = (product: EeroProduct) => {
-    const updatedProduct = {
-      ...product,
-      isSelected: true,
-    };
-    setSelectedEero(updatedProduct);
-    setValidationError(null);
+    // If the product is already selected, reset to noEero
+    if (selectedEero?.id === product.id) {
+      setSelectedEero(noAdditionalEero);
+    } else {
+      const updatedProduct = {
+        ...product,
+        isSelected: true,
+      };
+      setSelectedEero(updatedProduct);
+    }
   };
 
   const handleContinue = () => {
-    if (!selectedEero) {
-      setValidationError("Please select an eero product");
-      return;
-    }
-
     try {
-      eeroSelectionSchema.parse(selectedEero);
+      if (!selectedEero) {
+        useJoinFlowStore.setState((state) => ({
+          ...state,
+          eeroSelection: noAdditionalEero,
+          currentStep: 3,
+          _hasHydrated: true,
+        }));
+      } else {
+        eeroSelectionSchema.parse(selectedEero);
 
-      selectEeroProduct(selectedEero);
-      setCurrentStep(3);
-      router.push("/join-flow/one-touch-switching");
-    } catch {
-      setValidationError("Please select a valid eero product");
+        useJoinFlowStore.setState((state) => ({
+          ...state,
+          eeroSelection: selectedEero,
+          currentStep: 3,
+          _hasHydrated: true,
+        }));
+      }
+
+      // Add a small delay to ensure store updates before navigation
+      setTimeout(() => {
+        router.replace("/join-flow/one-touch-switching");
+      }, 100);
+    } catch (error) {
+      console.error("Error in handleContinue:", error);
     }
   };
 
@@ -54,20 +85,10 @@ const EeroSelection = () => {
 
         <div className="max-w-4xl mx-auto">
           <div className="p-8 rounded-md">
-            <h1 className="text-2xl font-bold mb-2">Choose Your WiFi Router</h1>
+            <h1 className="text-2xl font-bold mb-2">{eeroPageContent.title}</h1>
             <p className="mb-6 text-ui-grey-500">
-              Enhance your broadband with an eero mesh WiFi system for
-              whole-home coverage
+              {eeroPageContent.description}
             </p>
-
-            {validationError && (
-              <div
-                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-                role="alert"
-              >
-                <span className="block sm:inline">{validationError}</span>
-              </div>
-            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               {eeroProducts.map((product) => (
@@ -84,10 +105,14 @@ const EeroSelection = () => {
                       <h3 className="text-lg font-bold">{product.name}</h3>
                       {product.price > 0 ? (
                         <p className="font-semibold">
-                          £{product.price.toFixed(2)}/month
+                          {eeroPageContent.currencySymbol}
+                          {product.price.toFixed(2)}
+                          {eeroPageContent.monthlyCostSuffix}
                         </p>
                       ) : (
-                        <p className="font-semibold">No additional cost</p>
+                        <p className="font-semibold">
+                          {eeroPageContent.noAdditionalCostText}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -103,8 +128,8 @@ const EeroSelection = () => {
                     size="small"
                   >
                     {selectedEero?.id === product.id
-                      ? "Selected"
-                      : "Select this option"}
+                      ? eeroChooseProductButtonText.remove
+                      : eeroChooseProductButtonText.choose}
                   </Button>
                 </div>
               ))}
@@ -119,16 +144,18 @@ const EeroSelection = () => {
                 tint="white"
                 variant="outline"
               >
-                Back
+                {eeroPageContent.backButtonText}
               </Button>
 
               <Button
-                onClick={handleContinue}
-                disabled={!selectedEero}
+                type="submit"
                 tint="yellow"
                 variant="solid"
+                onClick={handleContinue}
               >
-                Continue
+                {selectedEero && selectedEero.id !== "no-eero"
+                  ? eeroContinueButtonText.next
+                  : eeroContinueButtonText.continueButtonText}
               </Button>
             </div>
           </div>

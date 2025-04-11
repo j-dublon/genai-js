@@ -1,30 +1,6 @@
 //TO DO: DEPRECATE THIS AND COLOCATE THEM NEXT TO THEIR INDIVIDUAL PAGES AS PROPS
 
-import { BroadbandProvider, EeroProduct } from "../store/useJoinFlowStore";
-
-export const eeroProducts: EeroProduct[] = [
-  {
-    id: "eero-6",
-    name: "eero 6",
-    description: "Add one extra eero",
-    price: 5.0,
-    isSelected: false,
-  },
-  {
-    id: "eero-6-plus",
-    name: "eero 6 Plus",
-    description: "Add one two extra eeros",
-    price: 7.5,
-    isSelected: false,
-  },
-  {
-    id: "no-eero",
-    name: "No eero device",
-    description: "Use your own router with our service.",
-    price: 0,
-    isSelected: true,
-  },
-];
+import { BroadbandProvider } from "../store/useJoinFlowStore";
 
 // UK broadband providers for the switching service
 export const broadbandProviders: BroadbandProvider[] = [
