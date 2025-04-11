@@ -1,5 +1,4 @@
-import { BACKGROUND_COLORS } from "@react-component-library/ui";
-import { ColorPill } from "@react-component-library/ui";
+import { BACKGROUND_COLORS, ColorPill } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ColorPill> = {

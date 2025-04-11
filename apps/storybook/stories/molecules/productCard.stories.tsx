@@ -25,7 +25,7 @@ export const Primary: Story = {
       accentColor={props.accentColor}
       dataVideoIndex={1}
       active={true}
-    ></ProductCard>
+    />
   ),
   name: "Product Card",
   args: {

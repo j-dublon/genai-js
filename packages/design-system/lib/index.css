@@ -1,3 +1,5 @@
 @import "tailwindcss";
 
 @config '../tailwind.config.js';
+@import "react-datepicker/dist/react-datepicker.css";
+@import "./components/atoms/DatePicker/datepicker.css";

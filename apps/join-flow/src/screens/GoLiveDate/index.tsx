@@ -1,16 +1,14 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@react-component-library/ui";
+import { Button, DatePicker } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-import DatePicker from "@/components/DatePicker";
 import { Footer } from "@/components/Footer";
 import Stepper from "@/components/Stepper";
-import { formatDisplayDate } from "@/lib/formatDate";
 import PaymentDetails from "@/screens/PaymentDetails";
 import {
   GoLiveDateFormValues,
@@ -25,7 +23,6 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
     subtitle,
     availableDatesLabel,
     timeSlotLabel,
-    datePickerPlaceholder,
     backButtonText,
     continueButtonText,
   } = goLiveDateText;
@@ -92,6 +89,21 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
     );
   }
 
+  //TODO: Get real date range from graphQL
+  const getDates = (): Date[] => {
+    const dates = [];
+    const today = new Date();
+
+    for (let i = 3; i < 25; i++) {
+      const date = new Date(today);
+      date.setDate(today.getDate() + i);
+
+      dates.push(date);
+    }
+
+    return dates;
+  };
+
   return (
     <>
       <div className="container mx-auto px-4 py-8">
@@ -114,10 +126,9 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
                     control={control}
                     render={({ field }) => (
                       <DatePicker
+                        availableDates={getDates()}
                         selectedDate={field.value}
                         onDateSelect={(date) => field.onChange(date)}
-                        formatDisplayDate={formatDisplayDate}
-                        placeholderText={datePickerPlaceholder}
                       />
                     )}
                   />

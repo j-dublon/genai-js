@@ -4,6 +4,7 @@ import "./index.css";
 import { AccountAppButton } from "@components/atoms/AccountAppButton";
 import { Button } from "@components/atoms/Button";
 import { ColorPill } from "@components/atoms/ColorPill";
+import { DatePicker } from "@components/atoms/DatePicker";
 import { FeatureImage } from "@components/atoms/FeatureImage";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
@@ -55,6 +56,7 @@ export {
   Button,
   ColorPill,
   CompanyLogoStrip,
+  DatePicker,
   FeatureImage,
   Footer,
   GuideCard,

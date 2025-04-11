@@ -26,12 +26,14 @@ import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { Footer } from "@components/organisms/Footer";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { NavBar } from "@components/organisms/NavBar";
+import { ChevronVerticalWithCircle } from "@icons/ChevronVerticalWithCircle";
 
 export {
   AccordionSection,
   AccountAppButton,
   ArticleCard,
   Button,
+  ChevronVerticalWithCircle,
   ColorPill,
   CompanyLogoStrip,
   FeatureImage,
