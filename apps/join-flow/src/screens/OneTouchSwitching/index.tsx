@@ -1,79 +1,171 @@
 "use client";
 
 import { Button } from "@react-component-library/ui";
-import { broadbandProviders, mockSwitchingResponse } from "@store/mockData";
-import useJoinFlowStore, { SwitchingDetails } from "@store/useJoinFlowStore";
+import useJoinFlowStore, {
+  BroadbandProvider,
+  SwitchingDetails,
+} from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import Stepper from "@/components/Stepper";
-import { GoLiveDate } from "@/screens/GoLiveDate";
+import { accountNumberSchema } from "@/screens/OneTouchSwitching/forms/formValues";
+
+import { MatchResultType, OneTouchSwitchingFormData } from "./forms/formValues";
+import OneTouchSwitchingForm from "./forms/oneTouchSwitchingForm";
+import {
+  broadbandProviders,
+  oneTouchSwitchingText,
+} from "./oneTouchSwitchingProps";
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
   const { setSwitchingDetails, switchingDetails, setCurrentStep } =
     useJoinFlowStore();
 
-  const [selectedProvider, setSelectedProvider] = useState(
-    switchingDetails?.currentProvider?.id || "",
-  );
+  const [matchResult, setMatchResult] = useState<MatchResultType | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [isFetchingData, setIsFetchingData] = useState(false);
-  const [showGoLiveDate, setShowGoLiveDate] = useState(false);
-
-  const handleProviderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedProvider(e.target.value);
+  const formatProviderMessage = (
+    message: string,
+    provider?: BroadbandProvider,
+  ) => {
+    if (!provider) return message;
+    return message.replace("{provider}", provider.name);
   };
 
-  const handleContinue = async () => {
-    if (!selectedProvider) {
-      return;
+  const handleSubmit = async (data: OneTouchSwitchingFormData) => {
+    const isRetryingWithAccountNumber = matchResult && !matchResult.success;
+    setIsSubmitting(true);
+
+    if (data.accountNumber && data.accountNumber.trim().length > 0) {
+      const result = accountNumberSchema.safeParse(data.accountNumber);
+      if (!result.success) {
+        setMatchResult({
+          success: false,
+          message: result.error.errors[0].message,
+        });
+        setIsSubmitting(false);
+        return;
+      }
     }
-
-    setIsFetchingData(true);
-
-    let switchData: SwitchingDetails = {
-      isWillingToSwitch: true,
-    };
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      const provider = broadbandProviders.find(
-        (p) => p.id === selectedProvider,
-      );
+      if (
+        isRetryingWithAccountNumber ||
+        (data.accountNumber && data.accountNumber.trim().length > 0)
+      ) {
+        const provider = broadbandProviders.find((p) => p.id === data.provider);
 
-      if (provider) {
-        switchData = {
-          ...switchData,
-          currentProvider: provider,
-          switchOrderReference: mockSwitchingResponse.switchOrderReference,
-        };
+        // Success case - account number matches expected value
+        if (
+          data.accountNumber &&
+          data.accountNumber.trim() === "12345678" &&
+          provider
+        ) {
+          setMatchResult({
+            success: true,
+            message: formatProviderMessage(
+              oneTouchSwitchingText.matchSuccessMessage,
+              provider,
+            ),
+            provider,
+            hasUsedAccountNumber: true,
+          });
+
+          const switchData: SwitchingDetails = {
+            isWillingToSwitch: true,
+            currentProvider: provider,
+            switchOrderReference: "12345678",
+          };
+
+          setSwitchingDetails(switchData);
+          setCurrentStep(3);
+          router.push("/join-flow/go-live-date");
+        } else {
+          // Failed matching with account number - still proceed to next step
+          setMatchResult({
+            success: false,
+            message: oneTouchSwitchingText.accountNumberNotFoundMessage,
+          });
+
+          const switchData: SwitchingDetails = {
+            isWillingToSwitch: false,
+            currentProvider: {
+              id: "noProvider",
+              name: "noProvider",
+              description: "No provider was selected",
+            },
+            switchOrderReference: "FAILED_OTS",
+          };
+
+          setSwitchingDetails(switchData);
+          setCurrentStep(3);
+          router.push("/join-flow/go-live-date");
+        }
+      } else {
+        // First attempt without account number
+        setMatchResult({
+          success: false,
+          message: oneTouchSwitchingText.noMatchMessage,
+        });
+
+        // We don't redirect here, so the user can enter an account number
       }
-
-      setSwitchingDetails(switchData);
-      setCurrentStep(3);
-      setShowGoLiveDate(true);
     } catch (error) {
-      console.error("Error fetching switching data:", error);
+      console.error("Error matching provider details:", error);
+      setMatchResult({
+        success: false,
+        message: oneTouchSwitchingText.errorMessage,
+      });
+
+      if (
+        isRetryingWithAccountNumber ||
+        (data.accountNumber && data.accountNumber.trim().length > 0)
+      ) {
+        const switchData: SwitchingDetails = {
+          isWillingToSwitch: false,
+          currentProvider: {
+            id: "noProvider",
+            name: "noProvider",
+            description: "No provider was selected",
+          },
+          switchOrderReference: "FAILED_OTS",
+        };
+
+        setSwitchingDetails(switchData);
+        setCurrentStep(3);
+        router.push("/join-flow/go-live-date");
+      }
     } finally {
-      setIsFetchingData(false);
+      setIsSubmitting(false);
     }
   };
 
-  const handleBack = () => {
-    setCurrentStep(2);
-    router.push("/join-flow/eero-selection");
+  const handleSkip = () => {
+    const switchData: SwitchingDetails = {
+      isWillingToSwitch: false,
+      currentProvider: {
+        id: "noProvider",
+        name: "noProvider",
+        description: "No provider was selected",
+      },
+      switchOrderReference: "SKIPPED",
+    };
+
+    setSwitchingDetails(switchData);
+    setCurrentStep(3);
+    router.push("/join-flow/go-live-date");
   };
 
-  const handleGoLiveDateBack = () => {
-    setShowGoLiveDate(false);
+  const handleFormSubmit = () => {
+    document
+      .getElementById("oneTouchSwitchingForm")
+      ?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
   };
-
-  if (showGoLiveDate) {
-    return <GoLiveDate onBack={handleGoLiveDateBack} />;
-  }
 
   return (
     <>
@@ -82,55 +174,48 @@ export const OneTouchSwitching = () => {
 
         <div className="max-w-3xl mx-auto">
           <div className="bg-core-white p-8 rounded-md">
-            <h1 className="text-2xl font-bold mb-2">Click. Switch. Done.</h1>
+            <h1 className="text-2xl font-bold mb-2">
+              {oneTouchSwitchingText.title}
+            </h1>
             <p className="text-ui-grey-500 mb-6">
-              We&apos;ll let your provider know you&apos;ve switching to us so
-              you don&apos;t have to. They&apos;ll tell you if there&apos;s any
-              final charges or existing changes.
+              {oneTouchSwitchingText.subtitle}
             </p>
 
-            <div className="mb-8 p-5 border border-ui-grey-300 rounded-md bg-ui-grey-100">
-              <h3 className="font-medium mb-3 text-core-black">
-                Select your current broadband provider
-              </h3>
-              <select
-                value={selectedProvider}
-                onChange={handleProviderChange}
-                className="w-full p-3 border border-ui-grey-300 rounded-md"
-                required
-              >
-                <option value="" disabled>
-                  Select a provider...
-                </option>
-                {broadbandProviders.map((provider) => (
-                  <option key={provider.id} value={provider.id}>
-                    {provider.name}
-                  </option>
-                ))}
-              </select>
-              <p className="mt-3 text-sm text-ui-grey-500">
-                We&apos;ll use One Touch Switching to move your service to
-                Cuckoo
-              </p>
-            </div>
+            <OneTouchSwitchingForm
+              onSubmit={handleSubmit}
+              defaultProvider={switchingDetails?.currentProvider?.id || ""}
+              matchResult={matchResult}
+              setMatchResult={setMatchResult}
+              isSubmitting={isSubmitting}
+            />
 
             <div className="flex justify-between mt-8">
-              <Button onClick={handleBack} tint="white" variant="outline">
-                Back
+              <Button
+                onClick={handleSkip}
+                tint="white"
+                variant="outline"
+                type="button"
+                disabled={isSubmitting}
+              >
+                {oneTouchSwitchingText.skipButtonText}
               </Button>
 
               <Button
-                onClick={handleContinue}
-                disabled={!selectedProvider || isFetchingData}
+                onClick={handleFormSubmit}
                 tint="yellow"
                 variant="solid"
+                disabled={isSubmitting}
+                type="button"
               >
-                Continue
+                {isSubmitting
+                  ? oneTouchSwitchingText.loadingButtonText
+                  : oneTouchSwitchingText.submitButtonText}
               </Button>
             </div>
           </div>
         </div>
       </div>
+
       <Footer />
     </>
   );

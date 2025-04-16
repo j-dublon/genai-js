@@ -1,20 +1,5 @@
 //TO DO: DEPRECATE THIS AND COLOCATE THEM NEXT TO THEIR INDIVIDUAL PAGES AS PROPS
 
-import { BroadbandProvider } from "../store/useJoinFlowStore";
-
-// UK broadband providers for the switching service
-export const broadbandProviders: BroadbandProvider[] = [
-  { id: "bt", name: "BT", description: "British Telecom" },
-  { id: "sky", name: "Sky", description: "Sky Broadband" },
-  { id: "virgin", name: "Virgin Media", description: "Virgin Media Broadband" },
-  { id: "talktalk", name: "TalkTalk", description: "TalkTalk Broadband" },
-  { id: "vodafone", name: "Vodafone", description: "Vodafone Broadband" },
-  { id: "plusnet", name: "Plusnet", description: "Plusnet Broadband" },
-  { id: "ee", name: "EE", description: "EE Broadband" },
-  { id: "shell", name: "Shell Energy", description: "Shell Energy Broadband" },
-  { id: "other", name: "Other", description: "Other broadband provider" },
-];
-
 // Mock available installation dates
 export const availableInstallationDates = [
   {
@@ -43,17 +28,3 @@ export const availableInstallationDates = [
     ],
   },
 ];
-
-// Mock switching response
-export const mockSwitchingResponse = {
-  switchOrderReference: "SOR123456789",
-  services: [
-    {
-      type: "BROADBAND",
-      information: {
-        networkOperator: "BT",
-        description: "BT Superfast Fibre 2",
-      },
-    },
-  ],
-};

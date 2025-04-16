@@ -28,7 +28,7 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
   } = goLiveDateText;
 
   const router = useRouter();
-  const { setGoLiveDetails, goLiveDetails, setCurrentStep } =
+  const { setGoLiveDetails, goLiveDetails, setCurrentStep, switchingDetails } =
     useJoinFlowStore();
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [isTimeSlotDropdownOpen, setIsTimeSlotDropdownOpen] = useState(false);
@@ -111,6 +111,16 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
 
         <div className="max-w-3xl mx-auto">
           <div className="bg-core-white p-8 rounded-md">
+            {/* TO DO: pretty this up with styling */}
+            {switchingDetails?.switchOrderReference === "FAILED_OTS" && (
+              <p className="text-ui-error">
+                We couldn&apos;t find your current provider{" "}
+              </p>
+            )}
+
+            {switchingDetails?.switchOrderReference === "12345678" && (
+              <p className="mb-4">Switch successful!</p>
+            )}
             <h1 className="text-2xl font-bold mb-2">{title}</h1>
             <p className="text-ui-grey-500 mb-6">{subtitle}</p>
 

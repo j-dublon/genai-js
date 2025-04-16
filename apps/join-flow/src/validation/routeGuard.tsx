@@ -28,7 +28,8 @@ const findNextRequiredStep = (storeState: JoinFlowState): string => {
       return "/join-flow/personal-details";
     case !storeState.eeroSelection:
       return "/join-flow/eero-selection";
-    case !storeState.switchingDetails:
+    case !storeState.switchingDetails ||
+      storeState.switchingDetails.isWillingToSwitch === undefined:
       return "/join-flow/one-touch-switching";
     case !storeState.goLiveDetails:
       return "/join-flow/go-live-date";
