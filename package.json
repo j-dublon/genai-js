@@ -43,7 +43,7 @@
     "@types/react-dom": "^19",
     "@vitest/eslint-plugin": "1.1.36",
     "eslint": "^9",
-    "eslint-config-next": "15.2.1",
+    "eslint-config-next": "15.3.0",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "flat-cache": "6.1.7",
     "husky": "9.1.7",
