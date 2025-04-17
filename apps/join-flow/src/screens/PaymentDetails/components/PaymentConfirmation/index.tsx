@@ -8,7 +8,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Stepper from "@/components/Stepper";
 
 import PaymentAccountDetails from "./PaymentAccountDetails";
-import PaymentAddressDetails from "./PaymentAddressDetails";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
 import PaymentSummary from "./PaymentSummary";
@@ -44,7 +43,6 @@ export const PaymentConfirmation = ({
 
   const {
     title,
-    addressDetailsTitle,
     accountDetailsTitle,
     goLiveDetailsTitle,
     directDebitDetailsTitle,
@@ -134,10 +132,6 @@ export const PaymentConfirmation = ({
             <PaymentGoLiveDetails />
           </div>
 
-          <p className="text-md font-bold mb-6">{addressDetailsTitle}</p>
-          <div className="mb-6">
-            <PaymentAddressDetails />
-          </div>
           <p className="text-md font-bold mb-6">{termsAndConditionsTitle}</p>
           <div className="mb-6">
             <PaymentTermsAndConditions

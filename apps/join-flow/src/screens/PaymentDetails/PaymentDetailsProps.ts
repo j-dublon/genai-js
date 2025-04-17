@@ -1,25 +1,6 @@
-export interface PaymentDetailsProps {
-  title: string;
-  paymentDetailsTitle: string;
-  directDebitDetailsTitle: string;
-  packageSpeedLabel: string;
-  monthlyPaymentTitle: string;
-  monthlyLabel: string;
-  totalMonthlyPaymentTitle: string;
-  accountholderNamePlaceholder: string;
-  accountholderNameError: string;
-  accountNumberPlaceholder: string;
-  accountNumberError: string;
-  futurePriceIncreaseText: string;
-  sortCodePlaceholder: string;
-  sortCodeError: string;
-  backButtonText: string;
-  submitButtonText: string;
-  submittingButtonText: string;
-}
-
-export const paymentDetailsText: PaymentDetailsProps = {
+export const paymentDetailsText = {
   title: "Payment Details",
+  addressDetailsTitle: "Your addresses",
   paymentDetailsTitle: "Please enter your bank account details",
   directDebitDetailsTitle: "Your direct debit payment details",
   packageSpeedLabel: "Mbps download / Mbps upload",

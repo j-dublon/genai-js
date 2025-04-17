@@ -4,7 +4,7 @@ import React from "react";
 
 import useJoinFlowStore from "@/store/useJoinFlowStore";
 
-import { paymentConfirmationText } from "./PaymentConfirmationProps";
+import { paymentConfirmationText } from "./PaymentConfirmation/PaymentConfirmationProps";
 
 export const PaymentAddressDetails = () => {
   const { addressDetailsLabel, billingAddressLabel } = paymentConfirmationText;

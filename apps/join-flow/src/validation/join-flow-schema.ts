@@ -28,26 +28,6 @@ export const goLiveDateSchema = z.object({
   timeSlot: z.string().min(1, "Please select a time slot"),
 });
 
-export const paymentDetailsSchema = z.object({
-  accountholderName: z.string().min(1, "Account holder name is required"),
-  cardToken: z.string().min(1, "Token is required"),
-  accountNumber: z
-    .string()
-    .regex(/^\d{8}$/, "Valid 8-digit account number is required")
-    .optional(),
-  sortCode: z
-    .string()
-    .regex(/^\d{2}-\d{2}-\d{2}$/, "Valid sort code (xx-xx-xx) is required")
-    .optional(),
-  sameAsServiceAddress: z.boolean().optional(),
-  billingAddress: addressSchema.nullable().optional(),
-  termsAgreed: z.boolean().default(false),
-  directDebitAgreed: z.boolean().default(false),
-  creditSearchAgreed: z.boolean().default(false),
-  allTermsAgreed: z.boolean().default(false),
-});
-
 export type PackageSelectionFormValues = z.infer<typeof packageSelectionSchema>;
-export type PaymentDetailsFormValues = z.infer<typeof paymentDetailsSchema>;
 export type EeroSelectionFormValues = z.infer<typeof eeroSelectionSchema>;
 export type GoLiveDateFormValues = z.infer<typeof goLiveDateSchema>;

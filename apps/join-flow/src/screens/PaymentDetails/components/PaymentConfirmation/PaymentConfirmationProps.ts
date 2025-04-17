@@ -1,32 +1,8 @@
-export interface PaymentConfirmationProps {
-  title: string;
-  accountHolderLabel: string;
-  accountNumberLabel: string;
-  addressDetailsLabel: string;
-  addressDetailsTitle: string;
-  accountDetailsTitle: string;
-  billingAddressLabel: string;
-  goLiveDetailsTitle: string;
-  directDebitDetailsTitle: string;
-  monthlyPaymentTitle: string;
-  totalMonthlyPaymentTitle: string;
-  nextYearPriceIncreaseText: string;
-  followingYearPriceIncreaseText: string;
-  backButtonText: string;
-  sortCodeLabel: string;
-  signUpText: string;
-  termsAndConditionsTitle: string;
-  termsCheckboxText: string;
-  directDebitCheckboxText: string;
-  creditSearchCheckboxText: string;
-}
-
-export const paymentConfirmationText: PaymentConfirmationProps = {
+export const paymentConfirmationText = {
   title: "Pay and Join Cuckoo",
   accountHolderLabel: "Account holder",
   accountNumberLabel: "Account number",
   addressDetailsLabel: "Your home and installation address",
-  addressDetailsTitle: "Your addresses",
   accountDetailsTitle: "Your account details",
   billingAddressLabel: "Your billing address",
   goLiveDetailsTitle: "Your go live date",
