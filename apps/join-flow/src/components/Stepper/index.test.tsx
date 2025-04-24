@@ -32,11 +32,13 @@ describe("Stepper", () => {
 
     render(<Stepper />);
 
+    expect(screen.getByText("Your info")).toBeInTheDocument();
+
+    expect(screen.queryByText("Choose your routers")).not.toBeInTheDocument();
     expect(
-      screen.getAllByText(
-        /your information|choose your routers|switching & go live|pay and join cuckoo/i,
-      ),
-    ).toHaveLength(4);
+      screen.queryByText("Switching & going live"),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Pay and join Cuckoo")).not.toBeInTheDocument();
 
     const step1 = screen.getByText("1");
     const step1Container = step1.closest("div");
@@ -45,5 +47,26 @@ describe("Stepper", () => {
     const step2 = screen.getByText("2");
     const step2Container = step2.closest("div");
     expect(step2Container).toHaveClass("bg-core-grey-200");
+  });
+
+  test("displays labels when showLabels is true", () => {
+    mockedUsePathname.mockReturnValue("/join-flow/personal-details");
+
+    render(<Stepper showLabels={true} />);
+
+    expect(screen.getByText("Your info")).toBeInTheDocument();
+  });
+
+  test("hides labels when showLabels is false", () => {
+    mockedUsePathname.mockReturnValue("/join-flow/personal-details");
+
+    render(<Stepper showLabels={false} />);
+
+    expect(screen.queryByText("Your info")).not.toBeInTheDocument();
+    expect(screen.queryByText("Choose your routers")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Switching & going live"),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Pay and join Cuckoo")).not.toBeInTheDocument();
   });
 });

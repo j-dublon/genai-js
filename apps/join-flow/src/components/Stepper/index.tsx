@@ -2,10 +2,20 @@ import useJoinFlowStore from "@store/useJoinFlowStore";
 import { usePathname } from "next/navigation";
 import React from "react";
 
-const steps = [
-  { id: 0, label: "Your information" },
+type Step = {
+  id: number;
+  label?: string;
+};
+
+interface StepperProps {
+  showLabels?: boolean;
+  steps?: Step[];
+}
+
+const defaultSteps = [
+  { id: 0, label: "Your info" },
   { id: 1, label: "Choose your routers" },
-  { id: 2, label: "Switching & go live" },
+  { id: 2, label: "Switching & going live" },
   { id: 3, label: "Pay and join Cuckoo" },
 ];
 
@@ -19,7 +29,7 @@ const pathToStepperIndex = {
   "/join-flow/order-summary": 3,
 };
 
-const Stepper = () => {
+const Stepper = ({ showLabels = true, steps = defaultSteps }: StepperProps) => {
   const pathname = usePathname();
   const { setCurrentStep } = useJoinFlowStore();
 
@@ -60,17 +70,18 @@ const Stepper = () => {
                 <span>{index + 1}</span>
               )}
 
-              <span className="absolute -bottom-7 w-max text-xs text-center text-core-black">
-                {step.label}
-              </span>
+              {showLabels && step.label && index === activeStep && (
+                <span className="absolute -bottom-12 w-max text-xs text-center text-core-black px-2 py-1 rounded-md bg-core-yellow border-2 border-core-black">
+                  {step.label}
+                </span>
+              )}
             </div>
 
             {index < steps.length - 1 && (
               <div
-                className={`flex-1 h-0.5
-                  ${
-                    index < activeStep ? "bg-core-black" : "bg-core-grey-200"
-                  } transition-all duration-300`}
+                className="flex-1 h-0.5
+                 bg-core-black
+                transition-all duration-300"
               />
             )}
           </React.Fragment>
