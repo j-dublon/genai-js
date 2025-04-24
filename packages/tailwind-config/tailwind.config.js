@@ -26,11 +26,11 @@ export default {
       "tertiary-blue-dark": "#6F89FF",
       "tertiary-orange": "#FFC633",
       "tertiary-peach": "#FF8A65",
-      "tertiary-blue-light": "rgba(172, 185, 254, 0.30)",
-      "tertiary-pink-light": "rgba(243, 176, 255, 0.30)",
-      "tertiary-green-light": "rgba(205, 255, 207, 0.30)",
-      "tertiary-peach-light": "rgba(255, 138, 101, 0.30)",
-      "tertiary-orange-light": "rgba(255, 198, 51, 0.30)",
+      "tertiary-blue-light": "#E6EAFF",
+      "tertiary-pink-light": "#FBE7FF",
+      "tertiary-green-light": "#F0FFF1",
+      "tertiary-peach-light": "#FFDCD1",
+      "tertiary-orange-light": "#FFEEC2",
       "ui-yellow": "#FBFF42",
       "ui-link": "#5A06D8",
       "ui-teal": "#009EA8",
@@ -135,14 +135,7 @@ export default {
       "9xl": "8rem",
     },
   },
-  safelist: [
-    "before:border-core-black",
-    "before:border-core-yellow",
-    "before:border-core-white",
-    "before:border-secondary-blue",
-    "before:border-tertiary-blue-dark",
-    "before:border-ui-grey-300",
-  ],
+  safelist: [],
   plugins: [
     function ({ addBase, theme }) {
       addBase({

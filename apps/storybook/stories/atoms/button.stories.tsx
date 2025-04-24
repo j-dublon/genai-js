@@ -32,10 +32,13 @@ const meta: Meta<typeof Button> = {
     },
     tint: {
       control: "select",
-      options: ["black", "yellow", "white", "blue"],
+      options: ["black", "yellow", "white", "blue", "grey", "light-peach"],
       description: "Controls the color theme of the button",
       table: {
-        type: { summary: '"black" | "yellow" | "white" | "blue"' },
+        type: {
+          summary:
+            '"black" | "yellow" | "white" | "blue" | "grey" | "light-peach"',
+        },
         defaultValue: { summary: "black" },
       },
     },
