@@ -8,7 +8,6 @@ import { DatePicker } from "@components/atoms/DatePicker";
 import { FeatureImage } from "@components/atoms/FeatureImage";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
-import { LegalClaims } from "@components/atoms/LegalClaims";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
 import { SectionHeading } from "@components/atoms/SectionHeading";
@@ -19,6 +18,7 @@ import {
   TextWithTickProps,
 } from "@components/atoms/TextWithTick";
 import { TipCard, tipCardColors } from "@components/atoms/TipCard";
+import { ToggleSwitch } from "@components/atoms/ToggleSwitch";
 import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ArticleCard } from "@components/molecules/ArticleCard";
@@ -39,6 +39,7 @@ import { Footer } from "@components/organisms/Footer";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { NavBar } from "@components/organisms/NavBar";
 import { useClickOutside } from "@hooks/useClickOutside";
+import { useScrollable } from "@hooks/useScrollable";
 import { useTrustpilotScore } from "@hooks/useTrustPilotScore";
 
 import {
@@ -65,7 +66,6 @@ export {
   ImageMarquee,
   InfoCard,
   InfoModal,
-  LegalClaims,
   MobileApp,
   MobilePhone,
   NavBar,
@@ -83,10 +83,12 @@ export {
   TimelineCardList,
   TipCard,
   tipCardColors,
+  ToggleSwitch,
   TrustpilotHorizontal,
   TrustpilotStars,
   TrustpilotVertical,
   useClickOutside,
+  useScrollable,
   useTrustpilotScore,
 };
 

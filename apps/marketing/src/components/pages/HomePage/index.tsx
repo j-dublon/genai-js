@@ -1,6 +1,7 @@
 "use client";
 
-import { LegalClaims, useTrustpilotScore } from "@react-component-library/ui";
+import { useTrustpilotScore } from "@react-component-library/ui";
+import { LegalClaims } from "@react-component-library/ui/server";
 
 import { TermsAndConditions } from "@/components/atoms/TermsAndConditions";
 import { CompanyLogoStripWrapper } from "@/components/molecules/CompanyLogoStrip";

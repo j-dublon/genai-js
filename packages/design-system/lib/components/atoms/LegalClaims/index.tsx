@@ -1,6 +1,5 @@
 import { BackgroundColors } from "@lib/types";
 import { bgColorVariants } from "@lib/variants";
-import Link from "next/link";
 
 export const LegalClaims = ({
   backgroundColor = "white",
@@ -21,54 +20,48 @@ export const LegalClaims = ({
         <ul className="ds:text-xs ds:md:text-sm ds:list-disc ds:list-inside ds:marker:text-xs">
           <li>
             <b className="ds:font-medium">£0 set-up and installation:</b>
-            <Link
-              className={linkClass}
-              href="https://www.cuckoo.co/legal/terms"
-            >
+            <a className={linkClass} href="https://www.cuckoo.co/legal/terms">
               Terms apply
-            </Link>
+            </a>
           </li>
           <li>
             <b className="ds:font-medium">
               UK's most reliable broadband technology:
             </b>{" "}
             Ofcom
-            <Link
+            <a
               className={linkClass}
               href="https://www.ofcom.org.uk/siteassets/resources/documents/consultations/category-1-10-weeks/254969-improving-broadband-information-for-customers-/associated-documents/broadband-info-terminology-report.pdf?v=321949"
             >
               Broadband Terminology Research 2022
-            </Link>{" "}
+            </a>{" "}
             – Fibre to the premises (FTTP)
           </li>
           <li>
             <b className="ds:font-medium">15x faster:</b> Ofcom
-            <Link
+            <a
               className={linkClass}
               href="https://www.ofcom.org.uk/siteassets/resources/documents/research-and-data/multi-sector/infrastructure-research/connected-nations-2024/connected-nations-uk-report-2024.pdf?v=386497"
             >
               Connected Nations UK report 2024
-            </Link>{" "}
+            </a>{" "}
             – FTTC Average maximum download speed
           </li>
           <li>
             <b className="ds:font-medium">Cuckoo Protect worth £199.98:</b> When
             purchased as part of the
-            <Link className={linkClass} href="http://eero.com/eero-plus">
+            <a className={linkClass} href="http://eero.com/eero-plus">
               eero Plus service
-            </Link>{" "}
+            </a>{" "}
             on a 24-month plan
           </li>
           <li>
             <b className="ds:font-medium">
               eero Pro 6E included with every plan:
             </b>
-            <Link
-              className={linkClass}
-              href="https://www.cuckoo.co/legal/terms"
-            >
+            <a className={linkClass} href="https://www.cuckoo.co/legal/terms">
               Terms apply
-            </Link>
+            </a>
             . Use of eero for contract period only
           </li>
           <li>

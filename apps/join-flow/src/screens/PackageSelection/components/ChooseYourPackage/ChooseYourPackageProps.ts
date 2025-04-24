@@ -1,10 +1,13 @@
+import { Address, BroadbandPackage } from "@/store/useJoinFlowStore";
+
 export const packageSelectionPageText = {
-  pageTitle: "Choose Your Broadband Package",
-  pageSubtitle: "Select the package that suits your needs",
+  pageTitle: "Pick the speed you need",
+  pageSubtitle: "Your contract length",
   errorMessage: "Please select a package to continue",
+  buttonText: "Add to bag",
 };
 
-export const broadbandPackages = [
+export const broadbandPackages: BroadbandPackage[] = [
   {
     id: "c-150",
     name: "C-150",
@@ -21,14 +24,7 @@ export const broadbandPackages = [
       followingYearIncrease: 3.0,
     },
     contractLength: 12,
-    description: "Full fibre speeds",
-    texts: {
-      monthlyLabel: "/month",
-      contractLabel: "month contract",
-      downloadLabel: "Download",
-      uploadLabel: "Upload",
-      ctaButtonText: "Add to basket",
-    },
+    description: "Full fibre speed",
   },
   {
     id: "c-500",
@@ -46,24 +42,17 @@ export const broadbandPackages = [
       followingYearIncrease: 3.0,
     },
     contractLength: 12,
-    description: "Full fibre speeds",
-    texts: {
-      monthlyLabel: "/month",
-      contractLabel: "month contract",
-      downloadLabel: "Download",
-      uploadLabel: "Upload",
-      ctaButtonText: "Add to basket",
-    },
+    description: "Full fibre speed",
   },
   {
     id: "c-900",
     name: "C-900",
     speed: {
-      download: 1000,
+      download: 900,
       upload: 100,
     },
     price: {
-      monthly: 54.99,
+      monthly: 43,
       setup: 0,
     },
     priceIncrease: {
@@ -71,13 +60,69 @@ export const broadbandPackages = [
       followingYearIncrease: 3.0,
     },
     contractLength: 12,
-    description: "Full fibre speeds",
-    texts: {
-      monthlyLabel: "/month",
-      contractLabel: "month contract",
-      downloadLabel: "Download",
-      uploadLabel: "Upload",
-      ctaButtonText: "Add to basket",
+    description: "Full fibre speed",
+  },
+  {
+    id: "c-150",
+    name: "C-150",
+    speed: {
+      download: 150,
+      upload: 30,
     },
+    price: {
+      monthly: 30,
+      setup: 0,
+    },
+    priceIncrease: {
+      nextYearIncrease: 3.0,
+      followingYearIncrease: 3.0,
+    },
+    contractLength: 24,
+    description: "Full fibre speed",
+  },
+  {
+    id: "c-500",
+    name: "C-500",
+    speed: {
+      download: 500,
+      upload: 20,
+    },
+    price: {
+      monthly: 35,
+      setup: 0,
+    },
+    priceIncrease: {
+      nextYearIncrease: 3.0,
+      followingYearIncrease: 3.0,
+    },
+    contractLength: 24,
+    description: "Full fibre speed",
+  },
+  {
+    id: "c-900",
+    name: "C-900",
+    speed: {
+      download: 900,
+      upload: 100,
+    },
+    price: {
+      monthly: 41,
+      setup: 0,
+    },
+    priceIncrease: {
+      nextYearIncrease: 3.0,
+      followingYearIncrease: 3.0,
+    },
+    contractLength: 24,
+    description: "Full fibre speed",
   },
 ];
+
+export const MOCK_ADDRESS: Address = {
+  line1: "Test Address Line 1",
+  line2: "Test Address Line 2",
+  line3: "London",
+  postcode: "SW1A 2AA",
+  addressKey: "A00063116639",
+  addressKeyType: "NAD",
+};

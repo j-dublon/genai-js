@@ -16,6 +16,7 @@ import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
 import { InfoCard } from "@components/molecules/InfoCard";
 import { MobileApp } from "@components/molecules/MobileApp";
 import { MobilePhone } from "@components/molecules/MobilePhone";
+import { PackageCard } from "@components/molecules/PackageCard";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
 import { ProductCard } from "@components/molecules/ProductCard";
 import { TextWithTickList } from "@components/molecules/TextWithTickList";
@@ -45,6 +46,7 @@ export {
   MobileApp,
   MobilePhone,
   NavBar,
+  PackageCard,
   PostcodeChecker,
   ProductCard,
   SectionHeading,
