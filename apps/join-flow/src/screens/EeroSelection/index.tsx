@@ -153,9 +153,9 @@ const EeroSelection = () => {
                 variant="solid"
                 onClick={handleContinue}
               >
-                {selectedEero && selectedEero.id !== "no-eero"
-                  ? eeroContinueButtonText.next
-                  : eeroContinueButtonText.continueButtonText}
+                {selectedEero && selectedEero.id === "no-additional-eero"
+                  ? eeroContinueButtonText.continueButtonText
+                  : eeroContinueButtonText.next}
               </Button>
             </div>
           </div>
