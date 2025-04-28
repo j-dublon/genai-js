@@ -24,7 +24,7 @@
     "cookie": "1.0.2",
     "jsonwebtoken": "9.0.2",
     "playwright-lighthouse": "4.0.0",
-    "posthog-node": "4.13.0"
+    "posthog-node": "4.14.0"
   },
   "devDependencies": {
     "@types/gtag.js": "0.0.20"
