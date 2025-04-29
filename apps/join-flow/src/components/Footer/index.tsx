@@ -28,7 +28,7 @@ export const Footer = () => {
                   src: getAssetPath("/images/love.svg"),
                   alt: "Love heart speech bubble",
                 }}
-                className="mt-10 md:mt-0 mb-10 md:mb-12 bg-ui-grey-100 md:bg-core-white"
+                className="mt-10 md:mt-0 mb-10 md:mb-12 bg-ui-grey-100 md:bg-core-white ds:sm:max-w-[505px]"
               >
                 <ContactInfo
                   phoneNumber="0330 912 9955"

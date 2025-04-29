@@ -1,14 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, DatePicker } from "@react-component-library/ui";
+import { Button, DatePicker, TipCard } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Footer } from "@/components/Footer";
+import { FormDropdown } from "@/components/FormDropdown";
 import Stepper from "@/components/Stepper";
+import { getAssetPath } from "@/lib/get-asset-path";
 import PaymentDetails from "@/screens/PaymentDetails";
 import {
   GoLiveDateFormValues,
@@ -17,13 +19,15 @@ import {
 
 import { goLiveDateText } from "./GoLiveDateProps";
 
-export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
+export const GoLiveDate = () => {
   const {
     title,
     subtitle,
+    paragraph,
+    engineerLink,
     availableDatesLabel,
     timeSlotLabel,
-    backButtonText,
+    timeSlotPlaceHolder,
     continueButtonText,
   } = goLiveDateText;
 
@@ -31,7 +35,6 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
   const { setGoLiveDetails, goLiveDetails, setCurrentStep, switchingDetails } =
     useJoinFlowStore();
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
-  const [isTimeSlotDropdownOpen, setIsTimeSlotDropdownOpen] = useState(false);
 
   const {
     control,
@@ -44,6 +47,7 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
       selectedDate: goLiveDetails?.selectedDate || "",
       timeSlot: goLiveDetails?.engineerSlot?.timeSlot || "",
     },
+    mode: "onSubmit",
   });
 
   const selectedDate = watch("selectedDate");
@@ -61,14 +65,6 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
     setCurrentStep(4);
     setShowPaymentDetails(true);
     router.push("/join-flow/payment-details");
-  };
-
-  const handleBack = () => {
-    if (onBack && typeof onBack === "function") {
-      onBack();
-    } else {
-      router.push("/join-flow/one-touch-switching");
-    }
   };
 
   const handlePaymentDetailsBack = () => {
@@ -106,127 +102,100 @@ export const GoLiveDate = ({ onBack }: { onBack?: () => void }) => {
 
   return (
     <>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container md:max-w-[565px] mx-auto px-4 py-8">
         <Stepper />
+        {/* TO DO: pretty this up with styling */}
+        {switchingDetails?.switchOrderReference === "FAILED_OTS" && (
+          <p className="text-ui-error">
+            We couldn&apos;t find your current provider{" "}
+          </p>
+        )}
 
-        <div className="max-w-3xl mx-auto">
-          <div className="bg-core-white p-8 rounded-md">
-            {/* TO DO: pretty this up with styling */}
-            {switchingDetails?.switchOrderReference === "FAILED_OTS" && (
-              <p className="text-ui-error">
-                We couldn&apos;t find your current provider{" "}
-              </p>
-            )}
+        {switchingDetails?.switchOrderReference === "12345678" && (
+          <p className="mb-4">Switch successful!</p>
+        )}
 
-            {switchingDetails?.switchOrderReference === "12345678" && (
-              <p className="mb-4">Switch successful!</p>
-            )}
-            <h1 className="text-2xl font-bold mb-2">{title}</h1>
-            <p className="text-ui-grey-500 mb-6">{subtitle}</p>
+        <div className="max-w-3xl mx-auto pt-[38px]">
+          <h1 className="grid text-2xl font-bold pb-2 md:pb-16 justify-center">
+            {title}
+          </h1>
+          <TipCard
+            image={{
+              src: getAssetPath("/images/love.svg"),
+              alt: "Love heart speech bubble",
+            }}
+            className="mt-10 md:mt-0 mb-10 md:mb-6 bg-secondary-green justify-center md:w-full items-center"
+          >
+            Yay! We can get you live as early as{" "}
+            <span className="font-medium">
+              {getDates()[0].toLocaleDateString("en-GB", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </span>
+          </TipCard>
+          <p className="text-core-black text-sm leading-[26px] font-medium mb-3">
+            {subtitle}
+          </p>
+          <p className="text-ui-grey-500 text-sm leading-[26px] mb-3">
+            {paragraph}
+          </p>
+          <a
+            href=""
+            className="text-ui-link underline text-sm leading-[26px] font-medium pb-12"
+          >
+            {engineerLink}
+          </a>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <div className="mb-8">
-                <div className="mb-6">
-                  <h2 className="text-lg font-medium mb-4">
-                    {availableDatesLabel}
-                  </h2>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-8 pt-12">
+              <div className="mb-6">
+                <h2 className="text-md font-semibold mb-4">
+                  {availableDatesLabel}
+                </h2>
 
-                  <Controller
-                    name="selectedDate"
-                    control={control}
-                    render={({ field }) => (
-                      <DatePicker
-                        availableDates={getDates()}
-                        selectedDate={field.value}
-                        onDateSelect={(date) => field.onChange(date)}
-                      />
-                    )}
-                  />
-                  {errors.selectedDate && (
-                    <p className="text-ui-error text-sm mt-1">
-                      {errors.selectedDate.message}
-                    </p>
-                  )}
-                </div>
-
-                {selectedDate && (
-                  <div className="mb-6">
-                    <h2 className="text-lg font-medium mb-4">
-                      {timeSlotLabel}
-                    </h2>
-                    <Controller
-                      name="timeSlot"
-                      control={control}
-                      render={({ field }) => (
-                        <div className="relative">
-                          <button
-                            type="button"
-                            className="w-full p-3 border border-ui-grey-300 rounded-md text-left bg-core-white"
-                            onClick={() =>
-                              setIsTimeSlotDropdownOpen(!isTimeSlotDropdownOpen)
-                            }
-                          >
-                            <span className={field.value ? "font-medium" : ""}>
-                              {field.value || timeSlotLabel}
-                            </span>
-                          </button>
-
-                          {isTimeSlotDropdownOpen && (
-                            <div className="absolute z-10 mt-1 w-full bg-core-white border border-ui-grey-300 rounded-md shadow-lg">
-                              <div className="p-2">
-                                {timeSlots.map((slot) => (
-                                  <button
-                                    key={slot}
-                                    type="button"
-                                    className={`p-2 w-full text-left rounded-md hover:bg-ui-grey-100 ${
-                                      field.value === slot
-                                        ? "bg-secondary-yellow text-core-black font-medium"
-                                        : ""
-                                    }`}
-                                    onClick={() => {
-                                      field.onChange(slot);
-                                      setIsTimeSlotDropdownOpen(false);
-                                    }}
-                                  >
-                                    {slot}
-                                  </button>
-                                ))}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      )}
+                <Controller
+                  name="selectedDate"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      availableDates={getDates()}
+                      selectedDate={field.value}
+                      onDateSelect={(date) => field.onChange(date)}
                     />
-                    {errors.timeSlot && (
-                      <p className="text-ui-error text-sm mt-1">
-                        {errors.timeSlot.message}
-                      </p>
-                    )}
-                  </div>
+                  )}
+                />
+                {errors.selectedDate && (
+                  <p className="text-ui-error text-sm mt-1">
+                    {errors.selectedDate.message}
+                  </p>
                 )}
               </div>
 
-              <div className="flex justify-between mt-8">
-                <Button
-                  onClick={handleBack}
-                  tint="white"
-                  variant="outline"
-                  type="button"
-                >
-                  {backButtonText}
-                </Button>
+              {selectedDate && (
+                <FormDropdown
+                  dropdownLabel={timeSlotLabel}
+                  control={control}
+                  dropdownPlaceholder={timeSlotPlaceHolder}
+                  options={timeSlots}
+                  errorMessage={errors?.timeSlot?.message}
+                />
+              )}
+            </div>
 
-                <Button
-                  disabled={!selectedDate}
-                  tint="yellow"
-                  variant="solid"
-                  type="submit"
-                >
-                  {continueButtonText}
-                </Button>
-              </div>
-            </form>
-          </div>
+            <div className="flex mt-8">
+              <Button
+                disabled={!selectedDate}
+                tint="yellow"
+                variant="solid"
+                type="submit"
+                fullWidth={true}
+              >
+                {continueButtonText}
+              </Button>
+            </div>
+          </form>
         </div>
       </div>
       <Footer />

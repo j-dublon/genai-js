@@ -31,7 +31,7 @@ export const TipCard = ({
 }: PropsWithChildren<TipCardProps>) => {
   return (
     <div
-      className={`ds:rounded-md ds:px-4 ds:py-3 ds:md:p-6 ds:flex ds:gap-3 ds:sm:max-w-[505px] ${tipCardColors[backgroundColor]} ${className}`}
+      className={`ds:rounded-md ds:px-4 ds:py-3 ds:md:p-6 ds:flex ds:gap-3  ${tipCardColors[backgroundColor]} ${className}`}
       aria-label="Tip card"
     >
       {image && (

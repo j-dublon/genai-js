@@ -8,6 +8,11 @@ import { DatePicker } from "@components/atoms/DatePicker";
 import { FeatureImage } from "@components/atoms/FeatureImage";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
+import {
+  CustomInputProps,
+  DropdownInputField,
+} from "@components/atoms/InputField";
+import { LegalClaims } from "@components/atoms/LegalClaims";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
 import { SectionHeading } from "@components/atoms/SectionHeading";
@@ -66,6 +71,8 @@ export {
   ImageMarquee,
   InfoCard,
   InfoModal,
+  DropdownInputField as InputField,
+  LegalClaims,
   MobileApp,
   MobilePhone,
   NavBar,
@@ -94,6 +101,7 @@ export {
 
 export type {
   BackgroundColors,
+  CustomInputProps,
   GuideCardProps,
   InfoCardProps,
   ReviewCardProps,

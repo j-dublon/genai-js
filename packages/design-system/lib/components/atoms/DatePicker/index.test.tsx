@@ -55,12 +55,12 @@ describe("DatePick Component", () => {
     fireEvent.click(input);
 
     const icon = screen.getByTestId("arrow-icon");
-    expect(icon).not.toHaveClass("rotate-180");
+    expect(icon).toHaveClass("ds:rotate-180");
   });
 
   it("does not rotate the icon when the calendar is closed", () => {
     render(<DatePicker {...defaultProps} />);
     const icon = screen.getByTestId("arrow-icon");
-    expect(icon).toHaveClass("ds:rotate-180");
+    expect(icon).not.toHaveClass("ds:rotate-180");
   });
 });
