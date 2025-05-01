@@ -3,20 +3,45 @@ import useJoinFlowStore, { JoinFlowState } from "@store/useJoinFlowStore";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
-type FlowStep = {
+export type FlowStep = {
   path: string;
-  field: keyof JoinFlowState | null;
+  field: string | null;
   index: number;
+  name?: string;
 };
 
-const FLOW_STEPS: FlowStep[] = [
+export const FLOW_STEPS: FlowStep[] = [
   { path: "/join-flow", field: null, index: 0 },
-  { path: "/join-flow/personal-details", field: "selectedPackage", index: 1 },
-  { path: "/join-flow/eero-selection", field: "personalDetails", index: 2 },
-  { path: "/join-flow/one-touch-switching", field: "eeroSelection", index: 3 },
-  { path: "/join-flow/go-live-date", field: "switchingDetails", index: 4 },
-  { path: "/join-flow/payment-details", field: "goLiveDetails", index: 5 },
-  { path: "/join-flow/order-summary", field: "paymentDetails", index: 6 },
+  {
+    path: "/join-flow/personal-details",
+    field: "selectedPackage",
+    index: 1,
+  },
+  {
+    path: "/join-flow/eero-selection",
+    field: "personalDetails",
+    index: 2,
+  },
+  {
+    path: "/join-flow/one-touch-switching",
+    field: "eeroSelection",
+    index: 3,
+  },
+  {
+    path: "/join-flow/go-live-date",
+    field: "switchingDetails",
+    index: 4,
+  },
+  {
+    path: "/join-flow/payment-details",
+    field: "goLiveDetails",
+    index: 5,
+  },
+  {
+    path: "/join-flow/order-summary",
+    field: "paymentDetails",
+    index: 6,
+  },
 ];
 
 const findNextRequiredStep = (storeState: JoinFlowState): string => {

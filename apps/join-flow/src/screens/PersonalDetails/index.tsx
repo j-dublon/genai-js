@@ -303,7 +303,7 @@ const PersonalDetails = () => {
 
         <div className="max-w-2xl mx-auto p-8 rounded-lg">
           <h1 className="text-2xl text-center font-bold mb-6">
-            {personalDetailsProps.pageTitle}
+            {personalDetailsProps.pageTitle} {}
           </h1>
 
           {currentFormStep === "verification" && isEmailVerified && (

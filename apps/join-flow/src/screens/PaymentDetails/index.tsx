@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
 import { Footer } from "@/components/Footer";
+import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 
 import PaymentAddressDetails from "./components/PaymentAddressDetails";
@@ -87,6 +88,7 @@ export const PaymentDetails = ({
 
   return (
     <>
+      <ReviewYourBasket />
       <div className="container mx-auto px-4 py-8">
         <Stepper />
 

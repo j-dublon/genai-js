@@ -9,6 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { Footer } from "@/components/Footer";
 import { FormDropdown } from "@/components/FormDropdown";
+import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 import { getAssetPath } from "@/lib/get-asset-path";
 import PaymentDetails from "@/screens/PaymentDetails";
@@ -102,6 +103,7 @@ export const GoLiveDate = () => {
 
   return (
     <>
+      <ReviewYourBasket />
       <div className="container md:max-w-[565px] mx-auto px-4 py-8">
         <Stepper />
         {/* TO DO: pretty this up with styling */}

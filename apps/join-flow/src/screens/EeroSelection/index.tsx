@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Footer } from "@/components/Footer";
+import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
@@ -80,9 +81,9 @@ const EeroSelection = () => {
 
   return (
     <>
+      <ReviewYourBasket />
       <div className="container mx-auto px-4 py-8">
         <Stepper />
-
         <div className="max-w-4xl mx-auto">
           <div className="p-8 rounded-md">
             <h1 className="text-2xl font-bold mb-2">{eeroPageContent.title}</h1>

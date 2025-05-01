@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Footer } from "@/components/Footer";
+import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 import { accountNumberSchema } from "@/screens/OneTouchSwitching/forms/formValues";
 
@@ -169,6 +170,7 @@ export const OneTouchSwitching = () => {
 
   return (
     <>
+      <ReviewYourBasket />
       <div className="container mx-auto px-4 py-8">
         <Stepper />
 
