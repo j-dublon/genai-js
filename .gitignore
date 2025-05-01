@@ -16,3 +16,9 @@ storybook-static/
 /coverage
 
 tsconfig.buildinfo
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

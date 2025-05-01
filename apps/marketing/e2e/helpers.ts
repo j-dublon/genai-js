@@ -46,7 +46,7 @@ export const mockTrustpilotReviews = async (page: Page) => {
 };
 
 export const mockTrustpilotScore = async (page: Page) => {
-  await page.route("/api/trustpilot", async (route) => {
+  await page.route(/.*\/api\/trustpilot.*/i, async (route) => {
     await route.fulfill({
       status: 200,
       headers: { "content-type": "application/json" },
