@@ -1,15 +1,12 @@
 import { Button } from "@react-component-library/ui";
 import React, { useEffect, useRef } from "react";
 
-import { paymentDetailsText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
 import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 export const ReviewYourBasket = () => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
   const { selectedPackage, eeroSelection, serviceAddress } = useJoinFlowStore();
   const dialogRef = useRef<HTMLDialogElement>(null);
-
-  const {} = paymentDetailsText;
 
   useEffect(() => {
     if (isDialogOpen) {
