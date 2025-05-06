@@ -7,6 +7,12 @@ export const packageSelectionPageText = {
   buttonText: "Add to bag",
 };
 
+export const speedCalculatorText = {
+  title: "Not sure which speed to go for?",
+  subtitle:
+    "Our super handy calculator will tell you which of our speeds is best for your household.",
+};
+
 export const broadbandPackages: BroadbandPackage[] = [
   {
     id: "c-150",

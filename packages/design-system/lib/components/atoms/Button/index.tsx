@@ -85,7 +85,7 @@ export const Button = ({
   };
 
   const classNames = `
-      ds:relative ds:z-1 ds:inline-flex ds:items-center ds:justify-center ds:font-bold ds:text-nowrap
+      ds:relative ds:z-1 ds:inline-flex ds:items-center ds:justify-center ds:font-semibold ds:text-nowrap
       ds:before:content[''] ds:before:absolute ds:before:inset-0 ds:before:bg-inherit ds:before:border-2 ds:before:z-[-1]
       ds:before:transition-all ds:before:duration-200 ds:before:ease-in-out
       ${isWhite ? (isOutline ? borderColors.grey : borderColors.white) : borderColors[tint]}

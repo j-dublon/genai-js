@@ -35,45 +35,53 @@ const mockUseScrollable = {
   onMouseMove: vi.fn(),
 };
 
-vi.mock("@react-component-library/ui", () => ({
-  ToggleSwitch: ({
-    isOn,
-    onChange,
-  }: {
-    isOn: boolean;
-    onChange: (isOn: boolean) => void;
-  }) => (
-    <button
-      data-testid="toggle-switch"
-      onClick={() => onChange(!isOn)}
-      aria-pressed={isOn}
-    >
-      {isOn ? "24-months" : "12-months"}
-    </button>
-  ),
-  useScrollable: () => mockUseScrollable,
-}));
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    ToggleSwitch: ({
+      isOn,
+      onChange,
+    }: {
+      isOn: boolean;
+      onChange: (isOn: boolean) => void;
+    }) => (
+      <button
+        data-testid="toggle-switch"
+        onClick={() => onChange(!isOn)}
+        aria-pressed={isOn}
+      >
+        {isOn ? "24-months" : "12-months"}
+      </button>
+    ),
+    useScrollable: () => mockUseScrollable,
+  };
+});
 
-vi.mock("@react-component-library/ui/server", () => ({
-  PackageCard: ({
-    pkg,
-    onPackageSelect,
-    tint,
-    featurePackage,
-    promotion,
-  }: PackageCardProps) => (
-    <div data-testid="package-card" onClick={() => onPackageSelect(pkg)}>
-      <div>{pkg.name}</div>
-      <div>£{pkg.price.monthly}/month</div>
-      <div data-testid="contract-length">{pkg.contractLength}</div>
-      {featurePackage && (
-        <div data-testid="feature-package">Feature Package</div>
-      )}
-      {promotion && <div data-testid="promotion">{promotion}</div>}
-      <div data-testid="tint">{tint}</div>
-    </div>
-  ),
-}));
+vi.mock("@react-component-library/ui/server", async () => {
+  const actual = await vi.importActual("@react-component-library/ui/server");
+  return {
+    ...actual,
+    PackageCard: ({
+      pkg,
+      onPackageSelect,
+      tint,
+      featurePackage,
+      promotion,
+    }: PackageCardProps) => (
+      <div data-testid="package-card" onClick={() => onPackageSelect(pkg)}>
+        <div>{pkg.name}</div>
+        <div>£{pkg.price.monthly}/month</div>
+        <div data-testid="contract-length">{pkg.contractLength}</div>
+        {featurePackage && (
+          <div data-testid="feature-package">Feature Package</div>
+        )}
+        {promotion && <div data-testid="promotion">{promotion}</div>}
+        <div data-testid="tint">{tint}</div>
+      </div>
+    ),
+  };
+});
 
 vi.mock("@store/useJoinFlowStore", () => ({
   default: () => ({
@@ -99,8 +107,18 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
+vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
+  SpeedCalculator: () => (
+    <dialog data-testid="speed-calculator-mock">Speed Calculator Mock</dialog>
+  ),
+}));
+
 describe("ChooseYourPackage", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterAll(() => {
     vi.clearAllMocks();
   });
 
@@ -182,5 +200,17 @@ describe("ChooseYourPackage", () => {
 
     expect(helpLink).toBeInTheDocument();
     expect(helpLink).toHaveClass("text-ui-link", "underline", "cursor-pointer");
+  });
+
+  it("renders the speed calculator modal with correct props and opens when help link is clicked", async () => {
+    HTMLDialogElement.prototype.showModal = vi.fn();
+    render(<ChooseYourPackage />);
+    const modal = screen.getByLabelText("Speed calculator modal");
+    expect(modal).toBeInTheDocument();
+    expect(modal).toHaveAttribute("aria-modal", "true");
+    expect(modal).not.toHaveAttribute("open");
+    const helpLink = screen.getByText("I need help choosing");
+    await userEvent.click(helpLink);
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
   });
 });

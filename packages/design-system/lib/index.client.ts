@@ -28,6 +28,7 @@ import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ArticleCard } from "@components/molecules/ArticleCard";
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
+import { FullScreenModal } from "@components/molecules/FullScreenModal";
 import { ImageMarquee } from "@components/molecules/ImageMarquee";
 import { InfoCard, InfoCardProps } from "@components/molecules/InfoCard";
 import { InfoModal } from "@components/molecules/InfoModal";
@@ -65,6 +66,7 @@ export {
   DatePicker,
   FeatureImage,
   Footer,
+  FullScreenModal,
   GuideCard,
   Heading,
   HowFastCanYouGo,

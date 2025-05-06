@@ -3,6 +3,10 @@ import { bgColorVariants } from "@lib/variants";
 import cx from "classnames";
 
 const sizeVariants = {
+  extraSmall: {
+    container: "ds:px-2 ds:py-1",
+    text: "ds:text-xxs",
+  },
   small: {
     container: "ds:px-2 ds:md:px-3 ds:py-1",
     text: "ds:text-sm",
@@ -21,7 +25,11 @@ export interface ColorPillProps {
   colorPillText: string;
   backgroundColor: BackgroundColors;
   ariaLabel?: string;
-  size: "small" | "medium" | "large";
+  size: "extraSmall" | "small" | "medium" | "large";
+  className?: string;
+  whiteText?: boolean;
+  noPadding?: boolean;
+  icon?: React.ReactNode;
 }
 
 export const ColorPill = ({
@@ -29,18 +37,28 @@ export const ColorPill = ({
   backgroundColor,
   ariaLabel,
   size,
+  className,
+  whiteText = false,
+  noPadding = false,
+  icon,
 }: ColorPillProps) => {
   return (
     <div
       className={cx(
-        "ds:flex ds:items-center ds:rounded-xl ds:w-fit",
-        sizeVariants[size].container,
+        "ds:flex ds:flex-row ds:gap-1 ds:items-center ds:rounded-xl ds:w-fit",
+        !noPadding && sizeVariants[size].container,
         `${bgColorVariants[backgroundColor]}`,
+        className,
       )}
       aria-label={`Color pill with the text ${colorPillText}`}
     >
+      {icon && icon}
       <h1
-        className={cx("ds:font-semibold", sizeVariants[size].text)}
+        className={cx(
+          "ds:font-semibold",
+          sizeVariants[size].text,
+          whiteText ? "ds:text-core-white" : "ds:text-core-black",
+        )}
         aria-label={ariaLabel ? ariaLabel : `Color pill text ${colorPillText}`}
       >
         {colorPillText}

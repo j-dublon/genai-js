@@ -1,5 +1,6 @@
 "use client";
 
+import { FullScreenModal } from "@react-component-library/ui";
 import { ToggleSwitch, useScrollable } from "@react-component-library/ui";
 import { PackageCard } from "@react-component-library/ui/server";
 import useJoinFlowStore, {
@@ -10,11 +11,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { useAddress } from "@/hooks/useAddress";
+import { useClearFocus } from "@/hooks/useClearFocus";
 
+import { SpeedCalculator } from "../SpeedCalculator";
 import {
   broadbandPackages,
   MOCK_ADDRESS,
   packageSelectionPageText,
+  speedCalculatorText,
 } from "./ChooseYourPackageProps";
 
 export const ChooseYourPackage = () => {
@@ -66,6 +70,13 @@ export const ChooseYourPackage = () => {
     return cardColors[index % cardColors.length];
   };
 
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const filteredPackages = broadbandPackages.filter(
+    (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
+  );
+
+  useClearFocus(modalRef, "close");
+
   return (
     <section
       className="bg-ui-grey-100 py-10 md:py-20"
@@ -86,9 +97,20 @@ export const ChooseYourPackage = () => {
               isOn={is24Month}
               onChange={setIs24Month}
             />
-            <p className="text-ui-link underline cursor-pointer leading-[1.4] md:leading-[1.6] text-xs md:text-sm font-medium">
-              I need help choosing
-            </p>
+            {/* Only show the speed calculator button if there are multiple broadband packages available */}
+            {filteredPackages.filter(
+              (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
+            ).length > 1 && (
+              <button
+                onClick={() => {
+                  modalRef.current?.showModal();
+                }}
+                className="w-fit text-ui-link underline cursor-pointer leading-[1.4] md:leading-[1.6] text-xs md:text-sm font-medium bg-transparent border-0 p-0"
+                aria-label="Open speed calculator modal"
+              >
+                I need help choosing
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -99,10 +121,10 @@ export const ChooseYourPackage = () => {
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
       >
-        <div className="flex gap-3 md:gap-6 lg:gap-13 flex-row-reverse md:flex-row pr-mobile sm:pr-tablet md:pr-desktop mx-auto md:max-w-[1152px]">
-          {broadbandPackages
-            .filter((pkg) => pkg.contractLength === (is24Month ? 24 : 12))
-            .map((pkg, index) => (
+        <div className="mx-auto md:max-w-[1152px] w-full">
+          <div className="flex gap-3 md:gap-6 lg:gap-13 flex-row-reverse md:flex-row justify-end md:justify-start pr-mobile sm:pr-tablet md:pr-desktop">
+            <div className="pr-3 md:hidden block" />
+            {filteredPackages.map((pkg, index) => (
               <PackageCard
                 key={pkg.id}
                 pkg={pkg}
@@ -115,8 +137,17 @@ export const ChooseYourPackage = () => {
                 promotion={pkg.id === "c-900" ? "3 months free" : undefined}
               />
             ))}
+            <div className="md:pr-6 hidden md:block" />
+          </div>
         </div>
       </div>
+      <FullScreenModal title="Speed calculator" modalRef={modalRef}>
+        <SpeedCalculator
+          title={speedCalculatorText.title}
+          subtitle={speedCalculatorText.subtitle}
+          broadbandPackages={broadbandPackages}
+        />
+      </FullScreenModal>
     </section>
   );
 };

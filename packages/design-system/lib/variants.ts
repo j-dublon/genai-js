@@ -11,6 +11,7 @@ export const bgColorVariants = {
   white: "ds:bg-core-white",
   "secondary-teal": "ds:bg-secondary-teal",
   "tertiary-pink-light": "ds:bg-tertiary-pink-light",
+  "tertiary-purple": "ds:bg-tertiary-purple",
 };
 export const textColorVariants = {
   black: "ds:text-core-black",

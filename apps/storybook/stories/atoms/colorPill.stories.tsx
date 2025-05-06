@@ -9,8 +9,23 @@ const meta: Meta<typeof ColorPill> = {
       control: { type: "select" },
     },
     size: {
-      options: ["small", "medium", "large"],
+      options: ["extraSmall", "small", "medium", "large"],
       control: { type: "select" },
+    },
+    whiteText: {
+      control: "boolean",
+      description: "Whether to use white text instead of black",
+    },
+    className: {
+      control: "text",
+      description: "Additional CSS classes to apply to the component",
+    },
+    icon: {
+      description: "Optional icon to display next to the text",
+      table: {
+        type: { summary: "ReactNode" },
+        defaultValue: { summary: "undefined" },
+      },
     },
   },
 };

@@ -38,6 +38,7 @@ vi.mock("@react-component-library/ui", async () => {
 });
 
 const mockSetValue = vi.fn();
+
 vi.mock("react-hook-form", () => ({
   useForm: () => ({
     setValue: mockSetValue,
@@ -66,6 +67,12 @@ vi.mock("@/hooks/useAddress", () => ({
 
 vi.mock("@/screens/PackageSelection/components/Address", () => ({
   Address: () => <div data-testid="address-mock">Address Mock</div>,
+}));
+
+vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
+  SpeedCalculator: () => (
+    <dialog data-testid="speed-calculator-mock">Speed Calculator Mock</dialog>
+  ),
 }));
 
 describe("PackageSelection Component", () => {
@@ -112,6 +119,16 @@ describe("PackageSelection Component", () => {
     expect(addressComponent).toBeInTheDocument();
   });
 
+  it("renders ChooseYourPackage component", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
+
+    expect(
+      screen.getByText(packageSelectionPageText.pageTitle),
+    ).toBeInTheDocument();
+  });
+
   it("renders Reminders component", async () => {
     await act(async () => {
       render(<PackageSelection />);
@@ -136,5 +153,15 @@ describe("PackageSelection Component", () => {
     const legalItems = within(legalList).getAllByRole("listitem");
     expect(legalList).toBeInTheDocument();
     expect(legalItems.length).toBeGreaterThan(0);
+  });
+
+  it("renders SpeedCalculator component", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
+
+    const speedCalculatorMock = screen.getByTestId("speed-calculator-mock");
+    expect(speedCalculatorMock).toBeInTheDocument();
+    expect(speedCalculatorMock).toHaveTextContent("Speed Calculator Mock");
   });
 });

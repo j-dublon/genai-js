@@ -123,7 +123,7 @@ export const PackageCard = ({
 }: PackageCardProps) => {
   const getBorderClasses = (isFeaturePackage: boolean) =>
     isFeaturePackage
-      ? "ds:border-core-black ds:transition-shadow ds:duration-300 ds:hover:shadow-[10px_10px_15px_-5px_rgba(31,31,31,0.4)]"
+      ? "ds:border-core-black"
       : "ds:border-transparent ds:transition-colors ds:duration-300 ds:hover:border-core-black";
 
   const getBorderBottomClasses = (isFeaturePackage: boolean) =>
