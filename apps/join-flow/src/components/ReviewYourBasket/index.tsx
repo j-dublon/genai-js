@@ -16,6 +16,7 @@ export const ReviewYourBasket = () => {
     serviceAddress,
     selectPackage,
     selectEeroProduct,
+    resetFlow,
   } = useJoinFlowStore();
   const router = useRouter();
 
@@ -78,7 +79,8 @@ export const ReviewYourBasket = () => {
   };
 
   const handleAddressChange = () => {
-    router.push("/join-flow/address");
+    resetFlow();
+    router.push("/join-flow");
   };
 
   // Calculate pricing information to pass to BasketDialog
