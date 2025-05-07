@@ -3,6 +3,7 @@ interface ChevronVerticalWithCircleIconProps {
   height?: number;
   fill?: string;
   DropdownOpen?: boolean;
+  opacity?: string;
 }
 
 //This is a chevron that can be toggled up and down, and has a faint circle around it
@@ -11,6 +12,7 @@ export const ChevronVerticalWithCircle = ({
   height = 65,
   fill = "#1F1F1F",
   DropdownOpen = false,
+  opacity = "0.1",
 }: ChevronVerticalWithCircleIconProps) => {
   return (
     <svg
@@ -25,12 +27,12 @@ export const ChevronVerticalWithCircle = ({
       aria-label="arrow with circle icon"
     >
       <circle
-        opacity="0.1"
+        opacity={opacity}
         cx="32"
         cy="32.6458"
         r="31"
-        transform="rotate(90 32 32.6458)"
         stroke={fill}
+        transform="rotate(90 32 32.6458)"
         strokeWidth="2"
       />
       <path

@@ -3,7 +3,7 @@ import { Button } from "@react-component-library/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import { paymentDetailsText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
 import { BroadbandPackage } from "@/store/useJoinFlowStore";
 
 const planChangeSchema = z.object({
@@ -39,7 +39,7 @@ const PackageChangeForm = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4 p-5 border border-ui-grey-300 rounded-md bg-ui-grey-100">
           <h3 className="font-medium mb-3 text-core-black">
-            {paymentDetailsText.chooseDifferentPlan}
+            {reviewYourBasketText.chooseDifferentPlan}
           </h3>
 
           <select
@@ -49,17 +49,19 @@ const PackageChangeForm = ({
             } rounded-md`}
           >
             <option value="" disabled>
-              {paymentDetailsText.selectDifferentPlan}
+              {reviewYourBasketText.selectDifferentPlan}
             </option>
             {availablePackages.map((pkg) => (
               <option
                 key={`${pkg.id}-${pkg.contractLength}`}
                 value={`${pkg.id}-${pkg.contractLength}`}
               >
-                {pkg.name} {paymentDetailsText.fullFiber} - {pkg.speed.download}
+                {pkg.name} {reviewYourBasketText.fullFiber} -{" "}
+                {pkg.speed.download}
                 Mbps download, {pkg.speed.upload}Mbps upload - £
                 {pkg.price.monthly}
-                {paymentDetailsText.perMonth}
+                {reviewYourBasketText.perMonth} - {`${pkg.contractLength}`}{" "}
+                months
               </option>
             ))}
           </select>
@@ -78,10 +80,10 @@ const PackageChangeForm = ({
             type="button"
             onClick={onCancel}
           >
-            {paymentDetailsText.cancel}
+            {reviewYourBasketText.cancel}
           </Button>
           <Button variant="solid" size="small" tint="yellow" type="submit">
-            {paymentDetailsText.confirmChange}
+            {reviewYourBasketText.confirmChange}
           </Button>
         </div>
       </form>

@@ -1,7 +1,12 @@
-export const paymentDetailsText = {
+import { getAssetPath } from "@/lib/get-asset-path";
+
+export const reviewYourBasketText = {
+  eeroImage: getAssetPath("/images/x1_eeros.png"),
+  biDirectionalImage: getAssetPath("/images/biDirectionalArrows.png"),
+
   title: "Review my basket",
   viewBasketButton: "View Basket",
-  whatIsNext: "What's next:",
+  whatIsNext: "What's next?",
   oopsMessage: "Oops have you selected a package",
 
   yourAddress: "Your address:",

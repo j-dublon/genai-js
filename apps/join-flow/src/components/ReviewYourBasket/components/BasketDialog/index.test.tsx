@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { paymentDetailsText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
 import { BroadbandPackage, EeroProduct } from "@/store/useJoinFlowStore";
 
 import { BasketDialog } from "./index";
@@ -86,8 +86,6 @@ describe("BasketDialog", () => {
     line3: "Test City",
   };
 
-  const mockNextPage = { name: "Next Page" };
-
   const renderComponent = (
     props: Partial<Parameters<typeof BasketDialog>[0]> = {},
   ) => {
@@ -95,7 +93,6 @@ describe("BasketDialog", () => {
       <BasketDialog
         isOpen={true}
         onClose={mockOnClose}
-        nextPage={mockNextPage}
         selectedPackage={mockSelectedPackage}
         eeroSelection={mockEeroSelection}
         availablePackages={mockAvailablePackages}
@@ -105,6 +102,11 @@ describe("BasketDialog", () => {
         onEeroSelect={mockOnEeroSelect}
         onEeroRemove={mockOnEeroRemove}
         onAddressChange={mockOnAddressChange}
+        monthlyPackagePrice={32}
+        monthlyEeroPrice={0}
+        monthlyTotal={32}
+        predictedTotalNextYear={35}
+        predictedTotalFollowingYear={38}
         {...props}
       />,
     );
@@ -119,7 +121,6 @@ describe("BasketDialog", () => {
       <BasketDialog
         isOpen={false}
         onClose={mockOnClose}
-        nextPage={mockNextPage}
         selectedPackage={mockSelectedPackage}
         eeroSelection={mockEeroSelection}
         availablePackages={mockAvailablePackages}
@@ -129,6 +130,11 @@ describe("BasketDialog", () => {
         onEeroSelect={mockOnEeroSelect}
         onEeroRemove={mockOnEeroRemove}
         onAddressChange={mockOnAddressChange}
+        monthlyPackagePrice={32}
+        monthlyEeroPrice={0}
+        monthlyTotal={32}
+        predictedTotalNextYear={35}
+        predictedTotalFollowingYear={38}
       />,
     );
 
@@ -138,14 +144,14 @@ describe("BasketDialog", () => {
 
   it("should render the dialog title when open", () => {
     renderComponent();
-    expect(screen.getByText(paymentDetailsText.title)).toBeInTheDocument();
+    expect(screen.getByText(reviewYourBasketText.title)).toBeInTheDocument();
   });
 
   it("should display service address when provided", () => {
     renderComponent();
 
     expect(
-      screen.getByText(paymentDetailsText.yourAddress),
+      screen.getByText(reviewYourBasketText.yourAddress),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/123 Test Street, Test Area, Test City/),
@@ -156,13 +162,13 @@ describe("BasketDialog", () => {
     renderComponent();
     const user = userEvent.setup();
 
-    const changePlanButton = screen.getByText(paymentDetailsText.changePlan);
+    const changePlanButton = screen.getByText(reviewYourBasketText.changePlan);
     expect(changePlanButton).toBeInTheDocument();
 
     await user.click(changePlanButton);
 
     expect(
-      screen.getByText(paymentDetailsText.selectDifferentPlan),
+      screen.getByText(reviewYourBasketText.selectDifferentPlan),
     ).toBeInTheDocument();
   });
 
@@ -170,7 +176,7 @@ describe("BasketDialog", () => {
     renderComponent({ eeroSelection: null });
 
     expect(
-      screen.queryByText(paymentDetailsText.yourMeshNetwork),
+      screen.queryByText(reviewYourBasketText.yourMeshNetwork),
     ).not.toBeInTheDocument();
     expect(
       screen.queryByText("No additional eero device"),
@@ -181,10 +187,10 @@ describe("BasketDialog", () => {
     renderComponent({ eeroSelection: null });
 
     expect(
-      screen.queryByText(paymentDetailsText.yourSubtotal),
+      screen.queryByText(reviewYourBasketText.yourSubtotal),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText(paymentDetailsText.yourTotal),
+      screen.queryByText(reviewYourBasketText.yourTotal),
     ).not.toBeInTheDocument();
   });
 
@@ -203,12 +209,12 @@ describe("BasketDialog", () => {
     const user = userEvent.setup();
 
     const addMoreEerosButton = screen.getByText(
-      paymentDetailsText.addMoreEeros,
+      reviewYourBasketText.addMoreEeros,
     );
     await user.click(addMoreEerosButton);
 
     expect(
-      screen.getByText(paymentDetailsText.chooseEeroSetup),
+      screen.getByText(reviewYourBasketText.chooseEeroSetup),
     ).toBeInTheDocument();
   });
 
@@ -216,7 +222,7 @@ describe("BasketDialog", () => {
     renderComponent();
     const user = userEvent.setup();
 
-    const startAgainButton = screen.getByText(paymentDetailsText.startAgain);
+    const startAgainButton = screen.getByText(reviewYourBasketText.startAgain);
     await user.click(startAgainButton);
 
     expect(mockOnAddressChange).toHaveBeenCalledTimes(1);
@@ -227,7 +233,7 @@ describe("BasketDialog", () => {
     const user = userEvent.setup();
 
     const addMoreEerosButton = screen.getByText(
-      paymentDetailsText.addMoreEeros,
+      reviewYourBasketText.addMoreEeros,
     );
     await user.click(addMoreEerosButton);
 
@@ -246,7 +252,14 @@ describe("BasketDialog", () => {
       isSelected: true,
     };
 
-    renderComponent({ eeroSelection: premiumEero });
+    renderComponent({
+      eeroSelection: premiumEero,
+      monthlyPackagePrice: 32,
+      monthlyEeroPrice: 5,
+      monthlyTotal: 37,
+      predictedTotalNextYear: 40,
+      predictedTotalFollowingYear: 43,
+    });
 
     const eeroPrice = screen.getAllByText((content) =>
       content.includes("£5"),

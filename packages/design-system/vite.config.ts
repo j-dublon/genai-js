@@ -18,6 +18,7 @@ export default defineConfig(({ mode }) => {
         entry: {
           "index.client": resolve(__dirname, "./lib/index.client.ts"),
           "index.server": resolve(__dirname, "./lib/index.server.ts"),
+          "icons/index": resolve(__dirname, "./lib/icons/index.ts"),
         },
         name: "react-design-ui",
         fileName: (format, eN) => `${eN}.${format}.js`,
@@ -41,6 +42,7 @@ export default defineConfig(({ mode }) => {
         rollupTypes: !isDevMode,
         include: ["lib/**/*.ts", "lib/**/*.tsx"],
         insertTypesEntry: true,
+        copyDtsFiles: true,
       }),
     ],
     resolve: {

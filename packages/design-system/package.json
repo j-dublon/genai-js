@@ -20,6 +20,11 @@
       "import": "./dist/index.server.es.js",
       "require": "./dist/index.server.cjs.js"
     },
+    "./icons": {
+      "types": "./dist/icons/index.d.ts",
+      "import": "./dist/icons/index.es.js",
+      "require": "./dist/icons/index.cjs.js"
+    },
     "./ui.css": "./dist/ui.css"
   },
   "scripts": {

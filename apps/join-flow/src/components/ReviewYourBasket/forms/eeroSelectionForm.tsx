@@ -1,7 +1,7 @@
 import { Button } from "@react-component-library/ui";
 import React from "react";
 
-import { paymentDetailsText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
 import { EeroProduct } from "@/store/useJoinFlowStore";
 
 interface EeroSelectionFormProps {
@@ -33,7 +33,7 @@ const EeroSelectionForm = ({
     <div className="mt-4 mb-6">
       <div className="mb-4 p-5 border border-ui-grey-300 rounded-md bg-ui-grey-100">
         <h3 className="font-medium mb-3 text-core-black">
-          {paymentDetailsText.chooseEeroSetup}
+          {reviewYourBasketText.chooseEeroSetup}
         </h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -54,7 +54,7 @@ const EeroSelectionForm = ({
                 </p>
                 <p className="text-sm font-medium mt-2">
                   £{product.price}
-                  {paymentDetailsText.perMonth}
+                  {reviewYourBasketText.perMonth}
                 </p>
               </div>
             );
@@ -64,7 +64,7 @@ const EeroSelectionForm = ({
 
       <div className="flex gap-4">
         <Button variant="outline" size="small" type="button" onClick={onCancel}>
-          {paymentDetailsText.cancel}
+          {reviewYourBasketText.cancel}
         </Button>
       </div>
     </div>

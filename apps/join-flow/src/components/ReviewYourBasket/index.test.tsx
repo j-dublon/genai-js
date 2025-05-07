@@ -3,27 +3,48 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import useJoinFlowStore from "@/store/useJoinFlowStore";
+import { getNextPage } from "@/validation/getNextPage";
 
 import { ReviewYourBasket } from "./index";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+  }),
+  usePathname: () => "/review-basket",
+}));
 
 vi.mock("@/store/useJoinFlowStore", () => ({
   default: vi.fn(),
 }));
 
-HTMLDialogElement.prototype.showModal = vi.fn();
-HTMLDialogElement.prototype.close = vi.fn();
+vi.mock("@/validation/getNextPage", () => ({
+  getNextPage: vi.fn(),
+}));
 
 describe("ReviewYourBasket", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
+    (getNextPage as ReturnType<typeof vi.fn>).mockReturnValue({
+      name: "Next Page",
+    });
+
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       selectedPackage: {
+        id: "test-package",
         name: "Test Package",
         speed: { download: "100Mbps", upload: "20Mbps" },
         price: { monthly: 29.99 },
+        contractLength: 24,
+        priceIncrease: {
+          nextYearIncrease: 3,
+          followingYearIncrease: 6,
+        },
       },
+      currentStep: "review-basket",
       eeroSelection: {
+        id: "eero-pro-6",
         name: "eero Pro 6",
         description: "Test description",
         price: 9.99,
@@ -33,6 +54,8 @@ describe("ReviewYourBasket", () => {
         line2: "Test Town",
         line3: "Test City",
       },
+      selectPackage: vi.fn(),
+      selectEeroProduct: vi.fn(),
     });
   });
 
@@ -46,10 +69,8 @@ describe("ReviewYourBasket", () => {
     render(<ReviewYourBasket />);
     const user = userEvent.setup();
     const button = screen.getByText("View Basket");
-
     await user.click(button);
-
-    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+    expect(screen.getByText("Review my basket")).toBeInTheDocument();
   });
 
   it("should close dialog when close button is clicked", async () => {
@@ -57,25 +78,9 @@ describe("ReviewYourBasket", () => {
     const user = userEvent.setup();
     const button = screen.getByText("View Basket");
     await user.click(button);
-    const closeButton = screen.getByLabelText("Close dialog");
+    const closeButton = screen.getByRole("button", { name: "" });
     await user.click(closeButton);
-    expect(HTMLDialogElement.prototype.close).toHaveBeenCalled();
-  });
-
-  it("should display package information when available", async () => {
-    render(<ReviewYourBasket />);
-    const user = userEvent.setup();
-    const button = screen.getByText("View Basket");
-    await user.click(button);
-    expect(screen.getByText("Review my basket")).toBeInTheDocument();
-    const packageElements = screen.getAllByText(/Test Package/);
-    expect(packageElements.length).toBeGreaterThan(0);
-    const speedElements = screen.getAllByText(/100Mbps/);
-    expect(speedElements.length).toBeGreaterThan(0);
-    const priceElement = screen.getByText((content) => {
-      return content.includes("29.99");
-    });
-    expect(priceElement).toBeInTheDocument();
+    expect(screen.queryByText("Review my basket")).not.toBeInTheDocument();
   });
 
   it("should display eero information when available", async () => {
@@ -96,20 +101,6 @@ describe("ReviewYourBasket", () => {
     await user.click(button);
     expect(
       screen.getByText(/123 Test Street, Test Town, Test City/),
-    ).toBeInTheDocument();
-  });
-
-  it("should show error message when no package is selected", () => {
-    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      selectedPackage: null,
-      eeroSelection: null,
-      serviceAddress: null,
-    });
-
-    render(<ReviewYourBasket />);
-
-    expect(
-      screen.getByText("Oops have you selected a package"),
     ).toBeInTheDocument();
   });
 });

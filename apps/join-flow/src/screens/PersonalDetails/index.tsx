@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Footer } from "@/components/Footer";
+import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 import AdditionalPersonalDetailsForm from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
 import EmailVerificationForm from "@/screens/PersonalDetails/forms/emailVerificationForm";
@@ -298,12 +299,13 @@ const PersonalDetails = () => {
 
   return (
     <>
+      <ReviewYourBasket />
       <div className="container mx-auto px-4 py-8">
         <Stepper />
 
         <div className="max-w-2xl mx-auto p-8 rounded-lg">
           <h1 className="text-2xl text-center font-bold mb-6">
-            {personalDetailsProps.pageTitle} {}
+            {personalDetailsProps.pageTitle}
           </h1>
 
           {currentFormStep === "verification" && isEmailVerified && (
