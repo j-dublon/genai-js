@@ -10,6 +10,7 @@ import { useRef, useState } from "react";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
 
+import { FibreModalContents } from "./FibreModalContents";
 import { props } from "./NavWrapperProps";
 
 export const NavWrapper = () => {
@@ -54,14 +55,13 @@ export const NavWrapper = () => {
           setIsModalOpen(true);
         }}
       />
-      <InfoModal
-        title={title}
-        subtitle={subtitle}
-        content={content}
-        image={image}
-        modalRef={modalRef}
-        buttonText={buttonText}
-      />
+      <InfoModal title={title} modalRef={modalRef} buttonText={buttonText}>
+        <FibreModalContents
+          subtitle={subtitle}
+          content={content}
+          image={image}
+        />
+      </InfoModal>
     </>
   );
 };

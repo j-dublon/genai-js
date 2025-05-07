@@ -1,5 +1,5 @@
 import { CloseIcon } from "@icons/CloseIcon";
-import { JSX, RefObject } from "react";
+import { RefObject } from "react";
 interface FullScreenModalProps {
   title: string;
   modalRef: RefObject<HTMLDialogElement | null>;
@@ -9,7 +9,7 @@ export const FullScreenModal = ({
   title,
   modalRef,
   children,
-}: React.PropsWithChildren<FullScreenModalProps>): JSX.Element => {
+}: React.PropsWithChildren<FullScreenModalProps>) => {
   return (
     <dialog
       ref={modalRef}
