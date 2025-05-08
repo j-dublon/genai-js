@@ -3,14 +3,18 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export type AddressIdentifier = {
+  value: string;
+  scheme: string;
+  id: string;
+};
+
 export type Address = {
   line1: string;
-  line2?: string;
-  line3?: string;
+  line2: string;
+  line3: string;
   postcode: string;
-  addressKey: string;
-  addressKeyType: string;
-  naduprn?: string;
+  identifiers: AddressIdentifier[];
 };
 
 export type PersonalDetails = {

@@ -1,13 +1,17 @@
 import { z } from "zod";
 
-const addressSchema = z.object({
+export const addressSchema = z.object({
   line1: z.string().min(1, "Address line 1 is required"),
-  line2: z.string().optional(),
-  line3: z.string().optional(),
+  line2: z.string().min(1, "Address line 2 is required"),
+  line3: z.string().min(1, "Address line 3 is required"),
   postcode: z.string().min(1, "Postcode is required"),
-  addressKey: z.string().min(1, "Address key is required"),
-  addressKeyType: z.string().min(1, "Address key type is required"),
-  naduprn: z.string().optional(),
+  identifiers: z.array(
+    z.object({
+      value: z.string(),
+      scheme: z.string(),
+      id: z.string(),
+    }),
+  ),
 });
 
 export const packageSelectionSchema = z.object({

@@ -2,13 +2,13 @@ import type {
   JoinServicesGetAddressesQuery,
   JoinServicesGetAddressesQueryVariables,
 } from "@/__generated__/graphql";
-import type { GetAddressesResponse } from "@/__generated__/graphql";
 import { makeGraphQLRequest } from "@/graphql/client";
 import { GET_ADDRESSES } from "@/graphql/queries";
+import { Address } from "@/store/useJoinFlowStore";
 
 export const getAddressesByPostcode = async (
   postcode: string,
-): Promise<GetAddressesResponse[] | null> => {
+): Promise<Address[]> => {
   try {
     const variables: JoinServicesGetAddressesQueryVariables = { postcode };
     const response = await makeGraphQLRequest<JoinServicesGetAddressesQuery>(
@@ -18,14 +18,20 @@ export const getAddressesByPostcode = async (
     );
 
     if (!response?.getAddresses) {
-      return null;
+      return [];
     }
 
-    const addresses: GetAddressesResponse[] = [];
+    const addresses: Address[] = [];
 
     response.getAddresses.forEach((address) => {
       if (address !== null) {
-        addresses.push(address);
+        addresses.push({
+          line1: address.line1 || "",
+          line2: address.line2 || "",
+          line3: address.line3 || "",
+          postcode: address.postcode || "",
+          identifiers: [],
+        });
       }
     });
 

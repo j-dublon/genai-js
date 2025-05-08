@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-import type { GetAddressesResponse } from "@/__generated__/graphql";
 import { getAddressesByPostcode } from "@/graphql/helpers/addresses";
+import type { Address } from "@/store/useJoinFlowStore";
 
 interface UseAddressProps {
   initialPostcode?: string;
@@ -11,23 +11,20 @@ interface UseAddressProps {
 }
 
 interface UseAddressResult {
-  selectedAddress: GetAddressesResponse | null;
-  addresses: GetAddressesResponse[] | null;
+  selectedAddress: Address | null;
+  addresses: Address[] | null;
   loading: boolean;
   error: string | null;
   fetchAddresses: (postcode: string) => Promise<void>;
-  selectAddress: (address: GetAddressesResponse) => void;
+  selectAddress: (address: Address) => void;
 }
 
 export const useAddress = ({
   initialPostcode = "",
   autoFetch = true,
 }: UseAddressProps = {}): UseAddressResult => {
-  const [selectedAddress, setSelectedAddress] =
-    useState<GetAddressesResponse | null>(null);
-  const [addresses, setAddresses] = useState<GetAddressesResponse[] | null>(
-    null,
-  );
+  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [addresses, setAddresses] = useState<Address[] | null>(null);
   const [loading, setLoading] = useState(autoFetch && initialPostcode !== "");
   const [error, setError] = useState<string | null>(null);
 
@@ -43,12 +40,23 @@ export const useAddress = ({
 
       const fetchedAddresses = await getAddressesByPostcode(postcode);
 
-      setAddresses(fetchedAddresses);
+      if (Array.isArray(fetchedAddresses)) {
+        setAddresses(fetchedAddresses);
 
-      if (fetchedAddresses && fetchedAddresses.length > 0) {
-        setSelectedAddress(fetchedAddresses[0]);
+        if (fetchedAddresses.length > 0) {
+          setSelectedAddress(fetchedAddresses[0]);
+        } else {
+          setError("No addresses found for this postcode");
+        }
       } else {
-        setError("No addresses found for this postcode");
+        const addressArray = fetchedAddresses ? [fetchedAddresses] : [];
+        setAddresses(addressArray);
+
+        if (fetchedAddresses) {
+          setSelectedAddress(fetchedAddresses);
+        } else {
+          setError("No addresses found for this postcode");
+        }
       }
     } catch (err) {
       console.error("Failed to fetch addresses:", err);
@@ -62,7 +70,7 @@ export const useAddress = ({
     }
   };
 
-  const selectAddress = (address: GetAddressesResponse) => {
+  const selectAddress = (address: Address) => {
     setSelectedAddress(address);
   };
 

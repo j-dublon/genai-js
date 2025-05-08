@@ -129,6 +129,11 @@ export const MOCK_ADDRESS: Address = {
   line2: "Test Address Line 2",
   line3: "London",
   postcode: "SW1A 2AA",
-  addressKey: "A00063116639",
-  addressKeyType: "NAD",
+  identifiers: [
+    {
+      value: "100023297500",
+      scheme: "OSS_IDENTIFIER",
+      id: "6819e3b812ed0117a8374d36",
+    },
+  ],
 };

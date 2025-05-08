@@ -38,11 +38,10 @@ export const ChooseYourPackage = () => {
     if (selectedAddress) {
       const addressToSave: Address = {
         line1: selectedAddress.line1 || "",
-        line2: selectedAddress.line2 || undefined,
-        line3: selectedAddress.line3 || undefined,
+        line2: selectedAddress.line2 || "",
+        line3: selectedAddress.line3 || "",
         postcode: selectedAddress.postcode || "",
-        addressKey: selectedAddress.addressKey || "",
-        addressKeyType: selectedAddress.addressKeyType || "NAD",
+        identifiers: selectedAddress.identifiers || [],
       };
 
       setServiceAddress(addressToSave);
