@@ -6,6 +6,7 @@ import { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+import { EeroCard } from "@/components/EeroCard";
 import { Footer } from "@/components/Footer";
 import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
@@ -26,7 +27,10 @@ const EeroSelection = () => {
   const noAdditionalEero = {
     id: "no-additional-eero",
     name: "No additional eero device",
-    description: "Just one eero provided by us.",
+    heading: "No additional Eero needed",
+    imageURL: "",
+    description: <span>Just one eero provided by us.</span>,
+    totalCount: 0,
     price: 0,
     isSelected: true,
   };
@@ -82,61 +86,31 @@ const EeroSelection = () => {
   return (
     <>
       <ReviewYourBasket />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container px-4 py-8 mx-auto">
         <Stepper />
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto mt-16">
           <div className="p-8 rounded-md">
-            <h1 className="text-2xl font-bold mb-2">{eeroPageContent.title}</h1>
-            <p className="mb-6 text-ui-grey-500">
-              {eeroPageContent.description}
-            </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              {eeroProducts.map((product) => (
-                <div
-                  key={product.id}
-                  className={`border rounded-md p-6 transition-all ${
-                    selectedEero?.id === product.id
-                      ? "border-2 border-core-yellow bg-ui-grey-100"
-                      : "hover:border-ui-grey-300"
-                  }`}
-                >
-                  <div className="flex items-center mb-4">
-                    <div>
-                      <h3 className="text-lg font-bold">{product.name}</h3>
-                      {product.price > 0 ? (
-                        <p className="font-semibold">
-                          {eeroPageContent.currencySymbol}
-                          {product.price.toFixed(2)}
-                          {eeroPageContent.monthlyCostSuffix}
-                        </p>
-                      ) : (
-                        <p className="font-semibold">
-                          {eeroPageContent.noAdditionalCostText}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-
-                  <p className="mb-4 text-ui-grey-500">{product.description}</p>
-
-                  <Button
-                    onClick={() => handleSelectEero(product)}
-                    tint={selectedEero?.id === product.id ? "yellow" : "white"}
-                    variant={
-                      selectedEero?.id === product.id ? "solid" : "outline"
-                    }
-                    size="small"
-                  >
-                    {selectedEero?.id === product.id
-                      ? eeroChooseProductButtonText.remove
-                      : eeroChooseProductButtonText.choose}
-                  </Button>
-                </div>
-              ))}
+            <div className="flex flex-col items-center">
+              <h1 className="mb-8 text-3xl font-semibold text-center [text-wrap:balance]">
+                {eeroPageContent.title}
+              </h1>
+              <p className="mb-6 text-center text-ui-grey-500 max-w-[700px]">
+                {eeroPageContent.description}
+              </p>
             </div>
 
-            <div className="flex justify-between mt-8">
+            <div className="grid grid-cols-1 gap-5 mb-8 md:gap-19 md:grid-cols-2">
+              {eeroProducts.map((product) => (
+                <EeroCard
+                  key={product.id}
+                  product={product}
+                  isActive={selectedEero?.id === product.id}
+                  eeroChooseProductButtonText={eeroChooseProductButtonText}
+                  handleSelectEero={handleSelectEero}
+                />
+              ))}
+            </div>
+            <div className="flex flex-col w-full mt-8 space-y-4 md:space-y-0 md:flex-row md:justify-between">
               <Button
                 onClick={() => {
                   setCurrentStep(1);
@@ -144,6 +118,7 @@ const EeroSelection = () => {
                 }}
                 tint="white"
                 variant="outline"
+                className="w-full md:w-fit"
               >
                 {eeroPageContent.backButtonText}
               </Button>
@@ -153,6 +128,7 @@ const EeroSelection = () => {
                 tint="yellow"
                 variant="solid"
                 onClick={handleContinue}
+                className="w-full md:w-fit"
               >
                 {selectedEero && selectedEero.id === "no-additional-eero"
                   ? eeroContinueButtonText.continueButtonText

@@ -6,6 +6,7 @@ import { ReviewCardSkeleton } from "@components/atoms/ReviewCardSkeleton";
 import { ServerTest } from "@components/atoms/ServerTest";
 import { PackageCard } from "@components/molecules/PackageCard";
 import { RightArrow } from "@icons/RightArrow";
+import { Tick } from "@icons/Tick";
 
 export {
   Checkbox,
@@ -16,4 +17,5 @@ export {
   ReviewCardSkeleton,
   RightArrow,
   ServerTest,
+  Tick,
 };

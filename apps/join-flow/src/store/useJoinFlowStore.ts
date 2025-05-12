@@ -1,5 +1,6 @@
 "use client";
 
+import { ReactElement } from "react";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -37,7 +38,10 @@ export type PersonalDetails = {
 export type EeroProduct = {
   id: string;
   name: string;
-  description: string;
+  heading?: string | null;
+  imageURL?: string | null;
+  description?: ReactElement | string;
+  totalCount?: number | null;
   price: number;
   isSelected: boolean;
 };

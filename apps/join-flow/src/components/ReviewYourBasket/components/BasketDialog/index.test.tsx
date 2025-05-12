@@ -250,6 +250,9 @@ describe("BasketDialog", () => {
       description: "Enhanced coverage with one additional eero.",
       price: 5,
       isSelected: true,
+      imageURL: null,
+      heading: null,
+      totalCount: null,
     };
 
     renderComponent({

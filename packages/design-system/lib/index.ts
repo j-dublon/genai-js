@@ -28,6 +28,7 @@ import { Footer } from "@components/organisms/Footer";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { NavBar } from "@components/organisms/NavBar";
 import { ChevronVerticalWithCircle } from "@icons/ChevronVerticalWithCircle";
+import { Tick } from "@icons/Tick";
 
 export {
   AccordionSection,
@@ -53,6 +54,7 @@ export {
   Slider,
   TextWithTick,
   TextWithTickList,
+  Tick,
   TimelineCard,
   TimelineCardList,
   TrustpilotHorizontal,
