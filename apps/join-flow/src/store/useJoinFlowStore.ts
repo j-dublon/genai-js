@@ -79,6 +79,22 @@ export type GoLiveDetails = {
   };
 };
 
+export type AccessibilityRequirements = {
+  visionImpaired?: boolean;
+  hearingImpaired?: boolean;
+  neurodiverse?: boolean;
+  learningDisability?: boolean;
+  thirdPartyAssistance?: boolean;
+  thirdPartyName?: string;
+  thirdPartyPhone?: string;
+  thirdPartyEmail?: string;
+  physicalIllness?: boolean;
+  physicalDisability?: boolean;
+  communicationNeeds?: boolean;
+  mentalIllness?: boolean;
+  additionalInformation?: string;
+};
+
 export type BroadbandPackage = {
   id: string;
   name: string;
@@ -109,6 +125,7 @@ export type JoinFlowState = {
   switchingDetails: SwitchingDetails | null;
   paymentDetails: PaymentDetails | null;
   goLiveDetails: GoLiveDetails | null;
+  accessibilityRequirements: AccessibilityRequirements | null;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
@@ -120,6 +137,9 @@ export type JoinFlowState = {
   setSwitchingDetails: (details: SwitchingDetails) => void;
   setPaymentDetails: (details: PaymentDetails) => void;
   setGoLiveDetails: (details: GoLiveDetails) => void;
+  setAccessibilityRequirements: (
+    requirements: AccessibilityRequirements | null,
+  ) => void;
   resetFlow: () => void;
 };
 
@@ -136,6 +156,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       switchingDetails: null,
       paymentDetails: null,
       goLiveDetails: null,
+      accessibilityRequirements: null,
 
       // Actions
       setHasHydrated: (state) => set({ _hasHydrated: state }),
@@ -147,6 +168,8 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setSwitchingDetails: (details) => set({ switchingDetails: details }),
       setPaymentDetails: (details) => set({ paymentDetails: details }),
       setGoLiveDetails: (details) => set({ goLiveDetails: details }),
+      setAccessibilityRequirements: (requirements) =>
+        set({ accessibilityRequirements: requirements }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -157,6 +180,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           switchingDetails: null,
           paymentDetails: null,
           goLiveDetails: null,
+          accessibilityRequirements: null,
         }),
     }),
     {

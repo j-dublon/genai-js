@@ -1,12 +1,19 @@
 "use client";
 
-import { Button } from "@react-component-library/ui";
+import {
+  Button,
+  InfoModal,
+  useClickOutside,
+} from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import Stepper from "@/components/Stepper";
+import { useClearFocus } from "@/hooks/useClearFocus";
 
+import { AccessibilityModalContents } from "./AccessibilityModalContents";
+import { AccessibilityRequirements } from "./AccessibilityRequirements";
 import PaymentAccountDetails from "./PaymentAccountDetails";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
@@ -30,6 +37,20 @@ export const PaymentConfirmation = ({
     creditSearchAgreed: false,
   });
 
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useClearFocus(modalRef, "close");
+
+  const closeFunction = () => {
+    if (modalRef.current) {
+      modalRef.current.close();
+      setIsModalOpen(false);
+    }
+  };
+
+  useClickOutside(modalRef, isModalOpen, closeFunction);
+
   useEffect(() => {
     if (paymentDetails) {
       setTermsState({
@@ -49,6 +70,7 @@ export const PaymentConfirmation = ({
     backButtonText,
     signUpText,
     termsAndConditionsTitle,
+    accessibilityRequirementsModalTitle,
   } = paymentConfirmationText;
 
   const handleBack = useCallback(
@@ -132,6 +154,15 @@ export const PaymentConfirmation = ({
             <PaymentGoLiveDetails />
           </div>
 
+          <div className="mb-6">
+            <AccessibilityRequirements
+              onChange={() => {
+                modalRef.current?.showModal();
+                setIsModalOpen(true);
+              }}
+            />
+          </div>
+
           <p className="text-md font-bold mb-6">{termsAndConditionsTitle}</p>
           <div className="mb-6">
             <PaymentTermsAndConditions
@@ -164,6 +195,13 @@ export const PaymentConfirmation = ({
           </div>
         </div>
       </div>
+      <InfoModal
+        title={accessibilityRequirementsModalTitle}
+        titleStyling="md:text-md max-w-[500px]"
+        modalRef={modalRef}
+      >
+        <AccessibilityModalContents closeModal={closeFunction} />
+      </InfoModal>
     </div>
   );
 };

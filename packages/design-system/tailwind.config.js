@@ -6,5 +6,4 @@ export default {
   prefix: "ds",
   content: ["./lib/**/*.{js,ts,jsx,tsx}"],
   safelist: [],
-  plugins: [require("tailwind-scrollbar")],
 };
