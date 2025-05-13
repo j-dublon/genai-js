@@ -7,8 +7,7 @@ export const mockEeroProduct = {
   id: "eero-6-plus",
   name: "Eero Pro 6",
   heading: "Add 2 extra eeros to your plan",
-  description:
-    "Mocked description",
+  description: "Mocked description",
   totalCount: 3,
   imageURL: "/images/x3_eeros.png",
   price: 14.0,

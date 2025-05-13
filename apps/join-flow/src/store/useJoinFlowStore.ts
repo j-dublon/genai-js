@@ -65,6 +65,7 @@ export type PaymentDetails = {
   billingAddress: Address | null;
   sameAsServiceAddress?: boolean;
   termsAgreed: boolean;
+  isAccountHolder: boolean;
   directDebitAgreed: boolean;
   creditSearchAgreed: boolean;
   allTermsAgreed: boolean;

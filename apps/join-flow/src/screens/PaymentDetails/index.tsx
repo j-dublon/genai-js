@@ -97,7 +97,7 @@ export const PaymentDetails = ({
             <h1 className="text-2xl font-bold mb-6">{title}</h1>
 
             <div className="flex flex-row gap-8">
-              <div>
+              <div className="w-96">
                 <p className="text-md font-bold mb-6">{paymentDetailsTitle}</p>
                 <PaymentForm onSubmit={handleFormSubmit} />
                 <p className="text-md font-bold mb-6">
@@ -126,7 +126,7 @@ export const PaymentDetails = ({
                 </div>
               </div>
 
-              <div>
+              <div className="flex-1">
                 <p className="text-md font-bold mb-6">
                   {directDebitDetailsTitle}
                 </p>

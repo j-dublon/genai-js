@@ -7,6 +7,7 @@ interface InfoModalProps {
   modalRef: RefObject<HTMLDialogElement | null>;
   buttonText?: string;
   onButtonClick?: () => void;
+  validateBeforeClose?: () => boolean;
 }
 
 export const InfoModal = ({
@@ -14,9 +15,14 @@ export const InfoModal = ({
   buttonText,
   modalRef,
   onButtonClick,
+  validateBeforeClose,
   children,
 }: React.PropsWithChildren<InfoModalProps>) => {
   const onClick = () => {
+    if (validateBeforeClose && !validateBeforeClose()) {
+      return;
+    }
+
     modalRef.current?.close();
     if (onButtonClick) onButtonClick();
   };
