@@ -37,6 +37,7 @@ describe("PaymentConfirmation", () => {
       cardToken: "bank_account",
       accountNumber: "12345678",
       sortCode: "12-34-56",
+      isAccountHolder: true,
       billingAddress: null,
       sameAsServiceAddress: true,
       termsAgreed: false,

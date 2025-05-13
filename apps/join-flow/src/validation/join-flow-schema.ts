@@ -26,9 +26,7 @@ export const eeroSelectionSchema = z.object({
   isSelected: z.boolean().optional(),
   heading: z.string().min(1, "Heading is required"),
   description: z.string(),
-  totalCount: z
-    .number()
-    .int(),
+  totalCount: z.number().int(),
   imageURL: z.string(),
 });
 
