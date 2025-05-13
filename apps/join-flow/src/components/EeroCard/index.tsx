@@ -1,5 +1,6 @@
 import { Button, ColorPill } from "@react-component-library/ui";
 import { Tick } from "@react-component-library/ui/server";
+import Link from "next/link";
 
 import { EeroProduct } from "@/store/useJoinFlowStore";
 
@@ -84,7 +85,12 @@ export const EeroCard = ({
     >
       <div className="p-4 pb-0 md:pb-4 md:mb-8">
         <ProductImageAndInfo product={product} />
-        <p className="leading-6 text-ui-grey-500">{product.description}</p>
+        <span>
+          {product.description}{" "}
+          <Link className="font-medium underline text-ui-link" href="">
+            Help me decide
+          </Link>
+        </span>
       </div>
 
       <div className="flex flex-col w-full mx-auto overflow-hidden md:flex-row">

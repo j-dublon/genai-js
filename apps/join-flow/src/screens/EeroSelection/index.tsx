@@ -29,7 +29,7 @@ const EeroSelection = () => {
     name: "No additional eero device",
     heading: "No additional Eero needed",
     imageURL: "",
-    description: <span>Just one eero provided by us.</span>,
+    description: "Just one eero provided by us.",
     totalCount: 0,
     price: 0,
     isSelected: true,

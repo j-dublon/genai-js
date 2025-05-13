@@ -8,15 +8,8 @@ export const eeroProducts: EeroProduct[] = [
     id: "eero-6",
     name: "eero 6",
     heading: "Add one extra eero to your plan",
-    description: (
-      <>
-        2 eeros will cover an area of approximately XXX square metres and is
-        perfect for most UK homes.{" "}
-        <Link className="font-medium underline text-ui-link" href="">
-          Help me decide
-        </Link>
-      </>
-    ),
+    description:
+      "2 eeros will cover an area of approximately XXX square metres and is perfect for most UK homes.",
     totalCount: 2,
     imageURL: getAssetPath("/images/x2_eeros.png"),
     price: 7.0,
@@ -26,16 +19,8 @@ export const eeroProducts: EeroProduct[] = [
     id: "eero-6-plus",
     name: "eero 6 Plus",
     heading: "Add 2 extra eeros to your plan",
-    description: (
-      <>
-        3 eero routers will cover an area of approximately XXX square metres,
-        and is perfect for really large homes, multiple floors and connection
-        outside.{" "}
-        <Link className="font-medium underline text-ui-link" href="">
-          Help me decide
-        </Link>
-      </>
-    ),
+    description:
+      "3 eero routers will cover an area of approximately XXX square metres, and is perfect for really large homes, multiple floors and connection outside.",
     totalCount: 3,
     imageURL: getAssetPath("/images/x3_eeros.png"),
     price: 14.0,

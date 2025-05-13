@@ -22,9 +22,15 @@ export const packageSelectionSchema = z.object({
 export const eeroSelectionSchema = z.object({
   id: z.string().min(1, "Please select an eero product"),
   name: z.string(),
-  description: z.string(),
   price: z.number(),
   isSelected: z.boolean().optional(),
+  heading: z.string().min(1, "Heading is required"),
+  description: z.string(),
+  totalCount: z
+    .number()
+    .int()
+    .positive("Total count must be a positive integer"),
+  imageURL: z.string(),
 });
 
 export const goLiveDateSchema = z.object({

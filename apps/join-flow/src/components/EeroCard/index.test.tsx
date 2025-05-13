@@ -7,13 +7,8 @@ export const mockEeroProduct = {
   id: "eero-6-plus",
   name: "Eero Pro 6",
   heading: "Add 2 extra eeros to your plan",
-  description: (
-    <>
-      3 eero routers will cover an area of approximately XXX square metres, and
-      is perfect for really large homes, multiple floors and connection outside.
-      Help me decide
-    </>
-  ),
+  description:
+    "Mocked description",
   totalCount: 3,
   imageURL: "/images/x3_eeros.png",
   price: 14.0,
@@ -38,15 +33,7 @@ describe("EeroCard", () => {
 
     expect(screen.getByText(mockEeroProduct.heading)).toBeInTheDocument();
 
-    const descriptionText = screen.getByText((content, element) => {
-      return (
-        element?.tagName.toLowerCase() === "p" &&
-        content.includes("3 eero routers will cover an area") &&
-        content.includes("Help me decide")
-      );
-    });
-    expect(descriptionText).toBeInTheDocument();
-
+    expect(screen.getByText("Mocked description")).toBeInTheDocument();
     expect(screen.getByAltText("Eero router image.")).toHaveAttribute(
       "src",
       mockEeroProduct.imageURL,
