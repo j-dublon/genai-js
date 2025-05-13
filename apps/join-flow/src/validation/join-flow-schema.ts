@@ -28,8 +28,7 @@ export const eeroSelectionSchema = z.object({
   description: z.string(),
   totalCount: z
     .number()
-    .int()
-    .positive("Total count must be a positive integer"),
+    .int(),
   imageURL: z.string(),
 });
 
