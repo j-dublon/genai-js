@@ -30,7 +30,7 @@ export const ChooseYourPackage = () => {
     useScrollable(scrollContainerRef);
 
   const { selectedAddress } = useAddress({
-    initialPostcode: "SW1A 2AA",
+    initialPostcode: "PO9 2AB",
     autoFetch: true,
   });
 

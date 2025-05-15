@@ -10,11 +10,12 @@ export const Address = () => {
     loading: addressLoading,
     error: addressError,
   } = useAddress({
-    initialPostcode: "SW1A 2AA",
+    initialPostcode: "PO9 2AB",
     autoFetch: true,
   });
 
   let addressDetails;
+  console.log(selectedAddress, "selected");
 
   switch (true) {
     case addressLoading:

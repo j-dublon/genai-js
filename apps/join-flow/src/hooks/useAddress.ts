@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import { getAddressesByPostcode } from "@/graphql/helpers/addresses";
-import type { Address } from "@/store/useJoinFlowStore";
+import type { Address as AddressLookupAddress } from "@/services/helpers/addressLookup";
+import { getAddressesByPostcode } from "@/services/helpers/addressLookup";
+import type { Address as StoreAddress } from "@/store/useJoinFlowStore";
 
 interface UseAddressProps {
   initialPostcode?: string;
@@ -11,20 +12,36 @@ interface UseAddressProps {
 }
 
 interface UseAddressResult {
-  selectedAddress: Address | null;
-  addresses: Address[] | null;
+  selectedAddress: StoreAddress | null;
+  addresses: StoreAddress[] | null;
   loading: boolean;
   error: string | null;
   fetchAddresses: (postcode: string) => Promise<void>;
-  selectAddress: (address: Address) => void;
+  selectAddress: (address: StoreAddress) => void;
 }
+
+const convertToStoreAddress = (address: AddressLookupAddress): StoreAddress => {
+  return {
+    line1: address.line1,
+    line2: address.line2 || "",
+    line3: address.line3 || "",
+    postcode: address.postcode,
+    identifiers: address.identifiers.map((identifier) => ({
+      value: identifier.value,
+      scheme: identifier.scheme,
+      id: identifier.id || "",
+    })),
+  };
+};
 
 export const useAddress = ({
   initialPostcode = "",
   autoFetch = true,
 }: UseAddressProps = {}): UseAddressResult => {
-  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
-  const [addresses, setAddresses] = useState<Address[] | null>(null);
+  const [selectedAddress, setSelectedAddress] = useState<StoreAddress | null>(
+    null,
+  );
+  const [addresses, setAddresses] = useState<StoreAddress[] | null>(null);
   const [loading, setLoading] = useState(autoFetch && initialPostcode !== "");
   const [error, setError] = useState<string | null>(null);
 
@@ -39,24 +56,24 @@ export const useAddress = ({
       setError(null);
 
       const fetchedAddresses = await getAddressesByPostcode(postcode);
+      console.log(fetchedAddresses, "fetched addresses");
 
       if (Array.isArray(fetchedAddresses)) {
-        setAddresses(fetchedAddresses);
+        const convertedAddresses = fetchedAddresses.map(convertToStoreAddress);
+        setAddresses(convertedAddresses);
 
-        if (fetchedAddresses.length > 0) {
-          setSelectedAddress(fetchedAddresses[0]);
+        if (convertedAddresses.length > 0) {
+          setSelectedAddress(convertedAddresses[0]);
         } else {
           setError("No addresses found for this postcode");
         }
       } else {
-        const addressArray = fetchedAddresses ? [fetchedAddresses] : [];
+        const convertedAddress = convertToStoreAddress(
+          fetchedAddresses as AddressLookupAddress,
+        );
+        const addressArray = [convertedAddress];
         setAddresses(addressArray);
-
-        if (fetchedAddresses) {
-          setSelectedAddress(fetchedAddresses);
-        } else {
-          setError("No addresses found for this postcode");
-        }
+        setSelectedAddress(convertedAddress);
       }
     } catch (err) {
       console.error("Failed to fetch addresses:", err);
@@ -70,7 +87,7 @@ export const useAddress = ({
     }
   };
 
-  const selectAddress = (address: Address) => {
+  const selectAddress = (address: StoreAddress) => {
     setSelectedAddress(address);
   };
 

@@ -50,6 +50,3 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-
-# GraphQL Codegen generated files
-__generated__/

@@ -2,7 +2,6 @@
   "name": "website-rework",
   "scripts": {
     "build": "turbo run build",
-    "build:codegen": "turbo run build:codegen",
     "dev": "turbo run dev",
     "check-types": "turbo run check-types",
     "e2e": "turbo run e2e",

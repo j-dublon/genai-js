@@ -29,9 +29,6 @@ jobs:
         id: INSTALL_NODE_MODULES
         uses: ./.github/actions/install-node-modules
 
-      - name: Run GraphQL Codegen
-        run: cd apps/join-flow && npx graphql-codegen
-
       - name: Build apps
         uses: ./.github/actions/build-apps
 

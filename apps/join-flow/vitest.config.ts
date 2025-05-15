@@ -26,7 +26,7 @@ export default defineConfig({
     exclude: ["e2e/**/*", "node_modules", ".next", "dist"],
     alias: {
       "@": resolve(__dirname, "src"),
-      "@graphql": resolve(__dirname, "src/graphql"),
+      "@services": resolve(__dirname, "src/services"),
       "@store": resolve(__dirname, "src/store"),
       "@validation": resolve(__dirname, "src/validation"),
       "@schema": resolve(__dirname, "src/schema"),

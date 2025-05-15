@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@graphql/*": ["./src/graphql/*"],
+      "@services/*": ["./src/services/*"],
       "@store/*": ["./src/store/*"],
       "@schema/*": ["./src/schema/*"],
       "@validation/*": ["./src/validation/*"]
