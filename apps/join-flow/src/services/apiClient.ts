@@ -1,4 +1,4 @@
-const API_BASE_URL =
+export const API_BASE_URL =
   process.env.NEXT_PUBLIC_PAYLOAD_ENDPOINT ||
   "https://squid.cuckoohatchery-stage.com/api";
 
@@ -41,11 +41,15 @@ export const fetchFromPayload = async <T>(
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
       throw new Error(
-        `API Error: ${response.status} - ${errorData || response.statusText}`,
+        `API Error: ${response.status} - ${
+          typeof errorData === "object"
+            ? JSON.stringify(errorData)
+            : response.statusText
+        }`,
       );
     }
 
-    return await response.json();
+    return (await response.json()) as T;
   } catch (error) {
     console.error("API request failed:", error);
     throw error;

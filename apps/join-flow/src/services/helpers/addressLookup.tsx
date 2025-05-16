@@ -43,7 +43,7 @@ export const getAddressesByPostcode = async (
   try {
     const requestBody: AddressLookupRequest = {
       requestProcessingType: "sync",
-      postcode: postcode,
+      postcode,
     };
 
     console.log(requestBody, "req body", postcode, "postcode");

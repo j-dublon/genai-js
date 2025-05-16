@@ -15,7 +15,6 @@ export const Address = () => {
   });
 
   let addressDetails;
-  console.log(selectedAddress, "selected");
 
   switch (true) {
     case addressLoading:

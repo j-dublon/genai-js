@@ -3,6 +3,16 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { Affiliate } from "../../payload-types";
+
+export type AffiliateSession = {
+  sessionId: string;
+  affiliateName: string;
+  useCreditcheckResult: boolean;
+  doEmailValidation: boolean;
+  cuckooAffiliate: string | Affiliate;
+};
+
 export type AddressIdentifier = {
   value: string;
   scheme: string;
@@ -125,6 +135,7 @@ export type JoinFlowState = {
   switchingDetails: SwitchingDetails | null;
   paymentDetails: PaymentDetails | null;
   goLiveDetails: GoLiveDetails | null;
+  affiliateSession: AffiliateSession | null;
   accessibilityRequirements: AccessibilityRequirements | null;
 
   // Actions
@@ -136,6 +147,7 @@ export type JoinFlowState = {
   selectEeroProduct: (product: EeroProduct) => void;
   setSwitchingDetails: (details: SwitchingDetails) => void;
   setPaymentDetails: (details: PaymentDetails) => void;
+  setAffiliateSession: (session: AffiliateSession) => void;
   setGoLiveDetails: (details: GoLiveDetails) => void;
   setAccessibilityRequirements: (
     requirements: AccessibilityRequirements | null,
@@ -156,6 +168,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       switchingDetails: null,
       paymentDetails: null,
       goLiveDetails: null,
+      affiliateSession: null,
       accessibilityRequirements: null,
 
       // Actions
@@ -168,6 +181,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setSwitchingDetails: (details) => set({ switchingDetails: details }),
       setPaymentDetails: (details) => set({ paymentDetails: details }),
       setGoLiveDetails: (details) => set({ goLiveDetails: details }),
+      setAffiliateSession: (session) => set({ affiliateSession: session }),
       setAccessibilityRequirements: (requirements) =>
         set({ accessibilityRequirements: requirements }),
       resetFlow: () =>
@@ -180,6 +194,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           switchingDetails: null,
           paymentDetails: null,
           goLiveDetails: null,
+          affiliateSession: null,
           accessibilityRequirements: null,
         }),
     }),

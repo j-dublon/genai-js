@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 import { useAddress } from "@/hooks/useAddress";
+import { useAffiliateSession } from "@/hooks/useAffiliateSession";
 import { useClearFocus } from "@/hooks/useClearFocus";
 
 import { SpeedCalculator } from "../SpeedCalculator";
@@ -28,11 +29,12 @@ export const ChooseYourPackage = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(scrollContainerRef);
-
   const { selectedAddress } = useAddress({
     initialPostcode: "PO9 2AB",
     autoFetch: true,
   });
+
+  useAffiliateSession();
 
   useEffect(() => {
     if (selectedAddress) {
@@ -96,7 +98,6 @@ export const ChooseYourPackage = () => {
               isOn={is24Month}
               onChange={setIs24Month}
             />
-            {/* Only show the speed calculator button if there are multiple broadband packages available */}
             {filteredPackages.filter(
               (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
             ).length > 1 && (

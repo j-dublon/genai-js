@@ -13,6 +13,7 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: vi.fn(),
   }),
+  usePathname: () => "/test-path",
 }));
 
 vi.mock("@store/useJoinFlowStore", () => ({
@@ -62,6 +63,12 @@ vi.mock("@/hooks/useAddress", () => ({
     },
     loading: false,
     error: null,
+  }),
+}));
+
+vi.mock("@/hooks/useAffiliateSession", () => ({
+  useAffiliateSession: () => ({
+    getAffiliateCode: () => "headline",
   }),
 }));
 

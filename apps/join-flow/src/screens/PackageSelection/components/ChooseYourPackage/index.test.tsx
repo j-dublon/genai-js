@@ -105,6 +105,7 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockRouterPush,
   }),
+  usePathname: () => "/test-path",
 }));
 
 vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
