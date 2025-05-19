@@ -36,13 +36,50 @@ interface PageSelectors {
   legal: string;
 }
 
+const setupInitialState = (page: Page) => {
+  return page.addInitScript(() => {
+    const initialState = {
+      _hasHydrated: true,
+      currentStep: 0,
+      serviceAddress: {
+        line1: "Test Address Line 1",
+        line2: "Test Address Line 2",
+        line3: "London",
+        postcode: "SW1A 2AA",
+        identifiers: [],
+      },
+      accessibilityRequirements: null,
+      affiliateSession: {
+        affiliateName: "test-affiliate-name",
+        cuckooAffiliate: "",
+        doEmailValidation: true,
+        sessionId: "1645",
+        useCreditCheckResult: true,
+      },
+      personalDetails: null,
+      eeroSelection: null,
+      switchingDetails: null,
+      paymentDetails: null,
+      goLiveDetails: null,
+    };
+
+    localStorage.setItem(
+      "cuckoo-join-flow-storage",
+      JSON.stringify({
+        state: initialState,
+        version: 0,
+      }),
+    );
+  });
+};
+
 test.describe("Select package page", () => {
   const selectors: PageSelectors = {
-    logo: 'img[alt="Cuckoo"]',
+    logo: '[aria-label="Cuckoo Logo"]',
     heroSection: {
       title:
         'text="Great news – you can get our fastest full fibre speed. Woohoo!"',
-      changeAddressLink: 'a:has-text("Change my address")',
+      changeAddressLink: 'button:has-text("Change my address")',
       trustpilotLogo: '[aria-label="TrustPilot Logo"]',
       trustpilotStars:
         '[aria-label*="Trustpilot stars: 4 full star(s) and a half-star"]',
@@ -74,12 +111,15 @@ test.describe("Select package page", () => {
 
     await mockTrustpilotScore(page);
 
-    // TODO: mock address search when API is added
+    await setupInitialState(page);
 
-    await page.goto("/join-flow");
+    await page.goto("/join-flow/package-selection");
   });
 
   test("Page content and functionality verification", async ({ page }) => {
+    await page.waitForSelector('[aria-label="Cuckoo Logo"]', {
+      state: "visible",
+    });
     await expect(page.locator(selectors.logo)).toBeVisible();
 
     await verifyHeroSection(page, selectors.heroSection);

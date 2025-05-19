@@ -5,7 +5,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { FormData, FormDropdown } from "./";
+import { FormDropdown } from "./";
 
 vi.mock("@react-component-library/ui", () => ({
   InputField: ({
@@ -24,17 +24,27 @@ vi.mock("@react-component-library/ui", () => ({
   ),
 }));
 
-const mockOptions = ["9:00 AM", "10:00 AM", "11:00 AM"];
+interface MockFormData extends Record<string, string> {
+  timeSlot: string;
+  selectedDate: string;
+}
+
+const mockOptions = {
+  "9:00 AM": "9:00 AM",
+  "10:00 AM": "10:00 AM",
+  "11:00 AM": "11:00 AM",
+};
 const mockLabel = "Select Time Slot";
 const mockPlaceholder = "Choose a time slot";
 
 function TestComponent({ errorMessage }: { errorMessage?: string }) {
-  const { control } = useForm<FormData>({
+  const { control } = useForm<MockFormData>({
     defaultValues: { timeSlot: "", selectedDate: "" },
   });
 
   return (
     <FormDropdown
+      name="timeSlot"
       dropdownLabel={mockLabel}
       control={control}
       dropdownPlaceholder={mockPlaceholder}
@@ -60,12 +70,14 @@ describe("FormDropdown Component", () => {
     render(<TestComponent errorMessage={undefined} />);
 
     const inputField = screen.getByTestId("input-field");
-    expect(screen.queryByText(mockOptions[0])).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(Object.keys(mockOptions)[0]),
+    ).not.toBeInTheDocument();
 
     await userEvent.click(inputField);
 
     // Verify all options are displayed
-    for (const option of mockOptions) {
+    for (const option of Object.keys(mockOptions)) {
       expect(screen.getByText(option)).toBeInTheDocument();
     }
   });
@@ -78,12 +90,14 @@ describe("FormDropdown Component", () => {
     await userEvent.click(inputField);
 
     // Select an option
-    const optionToSelect = screen.getByText(mockOptions[1]);
+    const optionToSelect = screen.getByText(Object.keys(mockOptions)[1]);
     userEvent.click(optionToSelect);
 
     // Dropdown should be closed
     await waitFor(() => {
-      expect(screen.queryByText(mockOptions[0])).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(Object.keys(mockOptions)[0]),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -100,7 +114,7 @@ describe("FormDropdown Component", () => {
     await userEvent.click(inputField);
 
     // Verify dropdown is open
-    expect(screen.getByText(mockOptions[0])).toBeInTheDocument();
+    expect(screen.getByText(Object.keys(mockOptions)[0])).toBeInTheDocument();
 
     // Click outside
     const outsideElement = screen.getByTestId("outside-element");
@@ -108,7 +122,9 @@ describe("FormDropdown Component", () => {
 
     // Dropdown should close
     await waitFor(() => {
-      expect(screen.queryByText(mockOptions[0])).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(Object.keys(mockOptions)[0]),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -133,16 +149,18 @@ describe("FormDropdown Component", () => {
     await userEvent.click(inputField);
 
     // Select an option
-    const optionToSelect = screen.getByText(mockOptions[1]);
+    const optionToSelect = screen.getByText(Object.keys(mockOptions)[1]);
     await userEvent.click(optionToSelect);
 
     // Reopen dropdown to check if option is highlighted
     await userEvent.click(inputField);
 
     // Find the button containing the selected option
-    const selectedButton = screen.getByText(mockOptions[1]).closest("button");
+    const selectedButton = screen
+      .getByText(Object.keys(mockOptions)[1])
+      .closest("button");
 
-    // Check if it has the selected class (contains bg-secondary-yellow)
-    expect(selectedButton).toHaveClass("bg-secondary-yellow");
+    // Check if it has the selected class (contains font-medium)
+    expect(selectedButton).toHaveClass("font-medium");
   });
 });

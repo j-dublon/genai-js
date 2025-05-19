@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getAssetPath } from "@/lib/get-asset-path";
 import { NavWrapper } from "@/screens/PackageSelection/components/NavWrapper";
 import { props } from "@/screens/PackageSelection/components/NavWrapper/NavWrapperProps";
 
@@ -23,9 +22,8 @@ describe("NavWrapper", () => {
   it("renders the SimpleNavBar with correct props", () => {
     render(<NavWrapper />);
 
-    const logo = screen.getByAltText("Cuckoo");
+    const logo = screen.getByLabelText("Cuckoo Logo");
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute("src", getAssetPath("/images/cuckoo.svg"));
 
     const infoButton = screen.getByText(props.infoText);
     expect(infoButton).toBeInTheDocument();

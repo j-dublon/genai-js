@@ -1,85 +1,74 @@
+import useJoinFlowStore from "@store/useJoinFlowStore";
 import { render, screen } from "@testing-library/react";
+import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useAddress } from "@/hooks/useAddress";
 import { Address } from "@/screens/PackageSelection/components/Address";
+import { Address as AddressType } from "@/store/useJoinFlowStore";
 
-vi.mock("@/hooks/useAddress", () => ({
-  useAddress: vi.fn(),
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+}));
+
+vi.mock("@store/useJoinFlowStore", () => ({
+  default: vi.fn(),
 }));
 
 describe("Address", () => {
-  const mockUseAddress = (options = {}) => {
-    vi.mocked(useAddress).mockReturnValue({
-      selectedAddress: null,
-      loading: false,
-      error: null,
-      addresses: [],
-      fetchAddresses: vi.fn(),
-      selectAddress: vi.fn(),
-      ...options,
-    });
-  };
+  const mockPush = vi.fn();
+  const mockResetFlow = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUseAddress();
-  });
-
-  it("shows loading state when address is loading", () => {
-    mockUseAddress({ loading: true });
-
-    render(<Address />);
-    expect(screen.getByText("Loading your address...")).toBeInTheDocument();
-    expect(screen.getByRole("status")).toBeInTheDocument();
-  });
-
-  it("shows error state when there is an address error", () => {
-    const errorMessage = "Failed to load address";
-    mockUseAddress({ error: errorMessage });
-
-    render(<Address />);
-    expect(screen.getByText(errorMessage)).toBeInTheDocument();
+    vi.mocked(useRouter).mockReturnValue({
+      push: mockPush,
+    } as unknown as ReturnType<typeof useRouter>);
   });
 
   it("shows the formatted address when an address is selected", () => {
-    const mockAddress = {
-      addressKey: "12345",
-      addressKeyType: "UPRN",
+    const mockAddress: AddressType = {
       line1: "123 Test Street",
       line2: "Apt 4B",
       line3: "Test Area",
-      nad: "NAD12345",
-      postcode: "TE1 1ST",
-      uprn: "100123456789",
+      identifiers: [],
+      postcode: "ABC 123",
     };
 
-    mockUseAddress({ selectedAddress: mockAddress });
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      serviceAddress: mockAddress,
+    });
 
     render(<Address />);
     expect(
-      screen.getByText("123 Test Street, Apt 4B, Test Area, TE1 1ST"),
+      screen.getByText("123 Test Street, Apt 4B, Test Area, ABC 123"),
     ).toBeInTheDocument();
   });
 
   it("shows 'No address information available' when no address is selected", () => {
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      serviceAddress: null,
+    });
+
     render(<Address />);
     expect(
       screen.getByText("No address information available"),
     ).toBeInTheDocument();
   });
 
-  it("renders the 'Change my address' link when address is not loading", () => {
-    render(<Address />);
-    expect(
-      screen.getByRole("link", { name: "Change my address" }),
-    ).toBeInTheDocument();
-  });
-
-  it("does not render the 'Change my address' link when address is loading", () => {
-    mockUseAddress({ loading: true });
+  it("renders the 'Change my address' link and handles click, sending user to start page and clearing the join flow store", () => {
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      serviceAddress: null,
+      resetFlow: mockResetFlow,
+    } as ReturnType<typeof useJoinFlowStore>);
 
     render(<Address />);
-    expect(screen.queryByText("Change my address")).not.toBeInTheDocument();
+    const changeAddressButton = screen.getByRole("button", {
+      name: "Change my address",
+    });
+    expect(changeAddressButton).toBeInTheDocument();
+
+    changeAddressButton.click();
+    expect(mockPush).toHaveBeenCalledWith("/join-flow");
+    expect(mockResetFlow).toHaveBeenCalled();
   });
 });

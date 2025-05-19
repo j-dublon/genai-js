@@ -18,6 +18,7 @@ interface UseAddressResult {
   error: string | null;
   fetchAddresses: (postcode: string) => Promise<void>;
   selectAddress: (address: StoreAddress) => void;
+  setError: (error: string | null) => void;
 }
 
 const convertToStoreAddress = (address: AddressLookupAddress): StoreAddress => {
@@ -62,9 +63,7 @@ export const useAddress = ({
         const convertedAddresses = fetchedAddresses.map(convertToStoreAddress);
         setAddresses(convertedAddresses);
 
-        if (convertedAddresses.length > 0) {
-          setSelectedAddress(convertedAddresses[0]);
-        } else {
+        if (!convertedAddresses.length) {
           setError("No addresses found for this postcode");
         }
       } else {
@@ -77,9 +76,7 @@ export const useAddress = ({
       }
     } catch (err) {
       console.error("Failed to fetch addresses:", err);
-      setError(
-        "We couldn't load your address. Please try again or continue anyway.",
-      );
+      setError("We couldn't load your address. Please try again.");
       setAddresses(null);
       setSelectedAddress(null);
     } finally {
@@ -104,5 +101,6 @@ export const useAddress = ({
     error,
     fetchAddresses,
     selectAddress,
+    setError,
   };
 };

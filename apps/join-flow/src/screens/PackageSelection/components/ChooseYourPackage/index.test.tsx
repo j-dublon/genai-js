@@ -25,9 +25,7 @@ type PackageCardProps = {
 };
 
 const mockSelectPackage = vi.fn();
-const mockSetServiceAddress = vi.fn();
 const mockRouterPush = vi.fn();
-const mockSetAffiliateSession = vi.fn();
 
 const mockUseScrollable = {
   isMouseDown: false,
@@ -87,8 +85,6 @@ vi.mock("@react-component-library/ui/server", async () => {
 vi.mock("@store/useJoinFlowStore", () => ({
   default: () => ({
     selectPackage: mockSelectPackage,
-    setServiceAddress: mockSetServiceAddress,
-    setAffiliateSession: mockSetAffiliateSession,
   }),
 }));
 

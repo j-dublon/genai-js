@@ -112,7 +112,7 @@ describe("PackageSelection Component", () => {
 
     const navElement = screen.getByRole("navigation");
     expect(navElement).toBeInTheDocument();
-    const logo = screen.getByAltText("Cuckoo");
+    const logo = screen.getByLabelText("Cuckoo Logo");
     expect(logo).toBeInTheDocument();
   });
 

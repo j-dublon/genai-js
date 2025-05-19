@@ -1,5 +1,4 @@
 import { SimpleNavBar } from "@react-component-library/ui";
-import { action } from "@storybook/addon-actions";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof SimpleNavBar> = {
@@ -8,7 +7,7 @@ const meta: Meta<typeof SimpleNavBar> = {
     docs: {
       description: {
         component:
-          "A simple navigation bar component that displays a logo, info text, and additional info text.",
+          "A simple navigation bar component that displays a logo and children. Logo is optional, and if not provided, the default Cuckoo logo will be used.",
       },
     },
   },
@@ -18,27 +17,6 @@ const meta: Meta<typeof SimpleNavBar> = {
       control: "object",
       table: {
         type: { summary: "JSX.Element" },
-      },
-    },
-    infoText: {
-      control: "text",
-      description: "Text to display in the info button",
-      table: {
-        type: { summary: "string" },
-      },
-    },
-    additionalInfoText: {
-      control: "text",
-      description:
-        "Additional text to display (visible on medium screens and up)",
-      table: {
-        type: { summary: "string" },
-      },
-    },
-    onInfoClick: {
-      description: "Function to call when the info button is clicked",
-      table: {
-        type: { summary: "() => void" },
       },
     },
   },
@@ -60,9 +38,6 @@ const MockLogo = () => (
 export const Primary: Story = {
   args: {
     logo: <MockLogo />,
-    infoText: "All our plans use full fibre.",
-    additionalInfoText:
-      "In fact, it's the UK's most reliable broadband technology.",
-    onInfoClick: action("Info button clicked"),
+    children: <p>Child Item</p>,
   },
 };

@@ -1,7 +1,8 @@
 import { FLOW_STEPS } from "./routeGuard";
 
 export const DEFAULT_PAGE_NAMES: Record<string, string> = {
-  "/join-flow": "Select Package",
+  "/join-flow": "Choose Your Address",
+  "/join-flow/package-selection": "Select Package",
   "/join-flow/personal-details": "Personal Details",
   "/join-flow/eero-selection": "Adding your eero(s)",
   "/join-flow/one-touch-switching": "Switching & going live",

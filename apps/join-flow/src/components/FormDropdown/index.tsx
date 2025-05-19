@@ -1,28 +1,35 @@
 import { InputField } from "@react-component-library/ui";
+import { isEqual } from "lodash";
 import { useEffect, useRef, useState } from "react";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, Path } from "react-hook-form";
 
-export interface FormData {
-  timeSlot: string;
-  selectedDate: string;
-}
-
-export interface FormDropDownProps {
-  dropdownLabel: string;
-  control: Control<FormData>;
+export interface FormDropDownProps<T extends Record<string, unknown>, V> {
+  dropdownLabel?: string;
+  control: Control<T>;
+  name: Path<T>;
   dropdownPlaceholder: string;
-  options: string[];
+  options: Record<string, V>;
   errorMessage?: string;
+  showLabel?: boolean;
+  initiallyOpen?: boolean;
+  bottomButtonText?: string;
+  bottomButtonOnClick?: () => void;
+  showTick?: boolean;
 }
 
-export const FormDropdown = ({
+export const FormDropdown = <T extends Record<string, unknown>, V>({
   dropdownLabel,
   control,
+  name,
   dropdownPlaceholder,
   options,
   errorMessage,
-}: FormDropDownProps) => {
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
+  initiallyOpen = false,
+  bottomButtonText,
+  bottomButtonOnClick,
+  showTick = true,
+}: FormDropDownProps<T, V>) => {
+  const [isDropDownOpen, setIsDropDownOpen] = useState(initiallyOpen);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -40,53 +47,73 @@ export const FormDropdown = ({
   }, []);
 
   return (
-    <div className={isDropDownOpen ? "md:mb-30 mb-30" : "mb-4"}>
+    <>
       <h2 className="text-sm font-medium mb-4">{dropdownLabel}</h2>
       <div ref={wrapperRef}>
         <Controller
-          name="timeSlot"
+          name={name}
           control={control}
-          render={({ field }) => (
-            <div className="relative">
-              <div className="flex justify-center">
-                <InputField
-                  setIsOpen={setIsDropDownOpen}
-                  isOpen={isDropDownOpen}
-                  placeholderText={dropdownPlaceholder}
-                  value={field.value}
-                />
-              </div>
-
-              {isDropDownOpen && (
-                <div className="absolute z-10 mt-1 w-full bg-core-white border border-ui-grey-300 rounded-md shadow-lg">
-                  <div className="p-2">
-                    {options.map((slot) => (
-                      <button
-                        key={slot}
-                        type="button"
-                        className={`p-2 w-full text-left rounded-md hover:bg-ui-grey-100 ${
-                          field.value === slot
-                            ? "bg-secondary-yellow text-core-black font-medium"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          field.onChange(slot);
-                          setIsDropDownOpen(false);
-                        }}
-                      >
-                        {slot}
-                      </button>
-                    ))}
-                  </div>
+          render={({ field }) => {
+            return (
+              <>
+                <div className="flex justify-center">
+                  <InputField
+                    setIsOpen={setIsDropDownOpen}
+                    isOpen={isDropDownOpen}
+                    placeholderText={dropdownPlaceholder}
+                    value={
+                      field.value
+                        ? Object.keys(options).find((key) =>
+                            isEqual(options[key], field.value),
+                          )
+                        : ""
+                    }
+                    showTick={showTick}
+                  />
                 </div>
-              )}
-            </div>
-          )}
+
+                {isDropDownOpen && (
+                  <div
+                    className={`mt-1 w-full bg-core-white border border-ui-grey-300 shadow-lg max-h-[250px] md:max-h-[300px] overflow-y-auto ${bottomButtonText ? "rounded-t-xs" : "rounded-xs"}`}
+                  >
+                    <div className="p-4">
+                      {Object.entries(options).map(([key, value]) => (
+                        <button
+                          key={key}
+                          type="button"
+                          className={`p-2 w-full text-left rounded-xs hover:bg-ui-grey-100 ${
+                            isEqual(value, field.value)
+                              ? "text-core-black font-medium"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            field.onChange(value);
+                            setIsDropDownOpen(false);
+                          }}
+                        >
+                          {key}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {bottomButtonText && isDropDownOpen && (
+                  <button
+                    type="button"
+                    className="p-4 w-full text-left rounded-b-xs text-core-black font-semibold block border-ui-grey-300 border border-t-0 hover:bg-ui-grey-100"
+                    onClick={bottomButtonOnClick}
+                  >
+                    {bottomButtonText}
+                  </button>
+                )}
+              </>
+            );
+          }}
         />
       </div>
       {errorMessage && (
         <p className="text-ui-error text-sm mt-1">{errorMessage}</p>
       )}
-    </div>
+    </>
   );
 };

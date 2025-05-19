@@ -1,12 +1,12 @@
-import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 import { SimpleNavBar } from "./index";
 
 describe("SimpleNavBar", () => {
   const mockLogo = (
     <img
-      alt="Cuckoo"
+      alt="Mock Logo"
       width={130}
       height={50}
       src="/images/cuckoo.svg"
@@ -14,48 +14,29 @@ describe("SimpleNavBar", () => {
     />
   );
 
-  it("renders with required props", () => {
+  it("renders with defaults", () => {
+    render(<SimpleNavBar />);
+
+    const logo = screen.getByLabelText("Cuckoo Logo");
+    expect(logo).toBeInTheDocument();
+    expect(logo.parentElement).toHaveAttribute("href", "/");
+  });
+
+  it("renders with different logo if provided", () => {
     render(<SimpleNavBar logo={mockLogo} />);
 
-    const logo = screen.getByAltText("Cuckoo");
+    const logo = screen.getByAltText("Mock Logo");
     expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute("src", "/images/cuckoo.svg");
-    expect(logo.parentElement).toHaveAttribute("href", "/");
-
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
-  it("renders with info text when provided", () => {
-    const infoText = "Mock info text";
-    render(<SimpleNavBar logo={mockLogo} infoText={infoText} />);
-
-    const infoButton = screen.getByRole("button", { name: infoText });
-    expect(infoButton).toBeInTheDocument();
-  });
-
-  it("renders with additional info text when provided", () => {
-    const additionalInfoText = "Mock additional info text";
+  it("renders with children when provided", () => {
+    const mockChildren = "Mock children";
     render(
-      <SimpleNavBar logo={mockLogo} additionalInfoText={additionalInfoText} />,
+      <SimpleNavBar logo={mockLogo}>
+        <p>{mockChildren}</p>
+      </SimpleNavBar>,
     );
 
-    expect(screen.getByText(additionalInfoText)).toBeInTheDocument();
-  });
-
-  it("calls onInfoClick when the info button is clicked", () => {
-    const handleInfoClick = vi.fn();
-    const infoText = "Click me";
-    render(
-      <SimpleNavBar
-        logo={mockLogo}
-        infoText={infoText}
-        onInfoClick={handleInfoClick}
-      />,
-    );
-
-    const infoButton = screen.getByText(infoText);
-    fireEvent.click(infoButton);
-
-    expect(handleInfoClick).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(mockChildren)).toBeInTheDocument();
   });
 });

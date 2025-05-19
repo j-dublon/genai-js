@@ -10,8 +10,10 @@ export type FlowStep = {
   name?: string;
 };
 
+// TODO: "field" to be used in SummaryBar to indicate previous step - rename semantically
 export const FLOW_STEPS: FlowStep[] = [
   { path: "/join-flow", field: null, index: 0 },
+  { path: "/join-flow/package-selection", field: null, index: 1 },
   {
     path: "/join-flow/personal-details",
     field: "selectedPackage",
@@ -46,8 +48,10 @@ export const FLOW_STEPS: FlowStep[] = [
 
 const findNextRequiredStep = (storeState: JoinFlowState): string => {
   switch (true) {
-    case !storeState.selectedPackage:
+    case !storeState.serviceAddress:
       return "/join-flow";
+    case !storeState.selectedPackage:
+      return "/join-flow/package-selection";
     case !storeState.personalDetails ||
       !storeState.personalDetails.personalDetailsCompleted:
       return "/join-flow/personal-details";

@@ -42,8 +42,14 @@ test.describe("Go live date", () => {
           line2: "Test Address Line 2",
           line3: "London",
           postcode: "SW1A 2AA",
-          addressKey: "A00063116639",
-          addressKeyType: "NAD",
+          identifiers: [],
+        },
+        affiliateSession: {
+          affiliateName: "test-affiliate-name",
+          cuckooAffiliate: "",
+          doEmailValidation: true,
+          sessionId: "1645",
+          useCreditCheckResult: true,
         },
         personalDetails: {
           firstName: "sam",

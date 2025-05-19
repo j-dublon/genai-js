@@ -1,7 +1,7 @@
-import PackageSelection from "@/screens/PackageSelection";
+import { ChooseYourAddress } from "@/screens/ChooseYourAddress";
 
 const JoinFlowPage = () => {
-  return <PackageSelection />;
+  return <ChooseYourAddress />;
 };
 
 export default JoinFlowPage;

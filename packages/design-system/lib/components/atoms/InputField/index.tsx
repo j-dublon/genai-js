@@ -7,14 +7,15 @@ export interface CustomInputProps {
   placeholderText: string;
   setIsOpen: (arg0: boolean) => void;
   value?: string;
+  showTick?: boolean;
 }
 
 export const DropdownInputField = forwardRef<
   HTMLButtonElement,
   CustomInputProps
->(({ value, placeholderText, isOpen, setIsOpen }, ref) => (
+>(({ value, placeholderText, isOpen, setIsOpen, showTick = true }, ref) => (
   <button
-    className="ds:border ds:border-ui-grey-400 ds:rounded-xs ds:p-2 ds:w-full ds:h-16 ds:flex ds:justify-between ds:items-center"
+    className="ds:border ds:border-ui-grey-400 ds:rounded-xs ds:p-4 ds:w-full ds:h-16 ds:flex ds:justify-between ds:items-center"
     onClick={() => {
       setIsOpen(!isOpen);
     }}
@@ -23,9 +24,9 @@ export const DropdownInputField = forwardRef<
   >
     <span>{value || placeholderText}</span>
     <div className="ds:flex ds:justify-between ds:items-center ds:gap-2.5">
-      {value && (
+      {value && showTick && (
         <div
-          data-testid="arrow-icon"
+          data-testid="tick-icon"
           className={`ds:right-6 ds:transform ds:pointer-events-none`}
         >
           <TickWithCircle width={22} height={22} circleFill={"#009EA8"} />

@@ -67,7 +67,7 @@ export const DropdownMenu = ({
             : "ds:opacity-0 ds:translate-y-[-10px] ds:invisible ds:pointer-events-none"
         }`}
       >
-        <div className="ds:flex ds:flex-col ds:text-left ds:whitespace-nowrap ds:font-bold">
+        <div className="ds:flex ds:flex-col ds:text-left ds:whitespace-nowrap ds:font-semibold">
           {dropdownLinks.map(({ name: subName, href, external }, index) => {
             const notFirstItem = index !== 0;
             return external ? (

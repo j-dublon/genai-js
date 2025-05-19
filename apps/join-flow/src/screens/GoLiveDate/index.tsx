@@ -53,7 +53,8 @@ export const GoLiveDate = () => {
 
   const selectedDate = watch("selectedDate");
 
-  const timeSlots = ["8am - 1pm", "1pm - 6pm"];
+  // TODO: get real time slots from API
+  const timeSlots = { "8am - 1pm": "8am - 1pm", "1pm - 6pm": "1pm - 6pm" };
 
   const onSubmit = (data: GoLiveDateFormValues) => {
     setGoLiveDetails({
@@ -86,7 +87,7 @@ export const GoLiveDate = () => {
     );
   }
 
-  //TODO: Get real date range from graphQL
+  //TODO: Get real date range from API
   const getDates = (): Date[] => {
     const dates = [];
     const today = new Date();
@@ -176,13 +177,16 @@ export const GoLiveDate = () => {
               </div>
 
               {selectedDate && (
-                <FormDropdown
-                  dropdownLabel={timeSlotLabel}
-                  control={control}
-                  dropdownPlaceholder={timeSlotPlaceHolder}
-                  options={timeSlots}
-                  errorMessage={errors?.timeSlot?.message}
-                />
+                <div className="mb-6">
+                  <FormDropdown
+                    dropdownLabel={timeSlotLabel}
+                    control={control}
+                    name="timeSlot"
+                    dropdownPlaceholder={timeSlotPlaceHolder}
+                    options={timeSlots}
+                    errorMessage={errors?.timeSlot?.message}
+                  />
+                </div>
               )}
             </div>
 

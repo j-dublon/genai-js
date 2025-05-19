@@ -8,7 +8,6 @@ import {
 import { useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
-import { getAssetPath } from "@/lib/get-asset-path";
 
 import { FibreModalContents } from "./FibreModalContents";
 import { props } from "./NavWrapperProps";
@@ -38,23 +37,20 @@ export const NavWrapper = () => {
 
   return (
     <>
-      <SimpleNavBar
-        logo={
-          <img
-            alt="Cuckoo"
-            width={130}
-            height={50}
-            src={getAssetPath("/images/cuckoo.svg")}
-            className="min-w-[130px] min-h-[50px]"
-          />
-        }
-        additionalInfoText={additionalInfoText}
-        infoText={infoText}
-        onInfoClick={() => {
-          modalRef.current?.showModal();
-          setIsModalOpen(true);
-        }}
-      />
+      <SimpleNavBar>
+        <div className="flex items-center gap-2 ml-2 text-nowrap text-right font-medium leading-[1.6] text-core-black text-xxs sm:text-sm">
+          <button
+            onClick={() => {
+              modalRef.current?.showModal();
+              setIsModalOpen(true);
+            }}
+            className="leading-[1.6] underline cursor-pointer text-ui-link"
+          >
+            {infoText}
+          </button>
+          <span className="hidden md:inline">{additionalInfoText}</span>
+        </div>
+      </SimpleNavBar>
       <InfoModal title={title} modalRef={modalRef} buttonText={buttonText}>
         <FibreModalContents
           subtitle={subtitle}

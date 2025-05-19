@@ -7,6 +7,11 @@ import { FormDropDownProps } from "@/components/FormDropdown";
 
 import GoLiveDate from "./";
 
+interface MockFormData extends Record<string, string> {
+  timeSlot: string;
+  selectedDate: string;
+}
+
 interface ButtonProps {
   children: React.ReactNode;
   type: "button" | "submit" | "reset";
@@ -68,7 +73,11 @@ vi.mock("@/components/Stepper", () => ({
 }));
 
 vi.mock("@/components/FormDropdown", () => ({
-  FormDropdown: ({ control, dropdownLabel, options }: FormDropDownProps) => (
+  FormDropdown: ({
+    control,
+    dropdownLabel,
+    options,
+  }: FormDropDownProps<MockFormData, string>) => (
     <Controller
       name="timeSlot"
       control={control}
@@ -76,7 +85,7 @@ vi.mock("@/components/FormDropdown", () => ({
         <div data-testid="form-dropdown">
           <label>{dropdownLabel}</label>
           <select data-testid="time-slot-select">
-            {options.map((option) => (
+            {Object.keys(options).map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>

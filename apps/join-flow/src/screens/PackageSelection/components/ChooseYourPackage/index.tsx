@@ -3,52 +3,26 @@
 import { FullScreenModal } from "@react-component-library/ui";
 import { ToggleSwitch, useScrollable } from "@react-component-library/ui";
 import { PackageCard } from "@react-component-library/ui/server";
-import useJoinFlowStore, {
-  Address,
-  BroadbandPackage,
-} from "@store/useJoinFlowStore";
+import useJoinFlowStore, { BroadbandPackage } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import { useAddress } from "@/hooks/useAddress";
-import { useAffiliateSession } from "@/hooks/useAffiliateSession";
 import { useClearFocus } from "@/hooks/useClearFocus";
 
 import { SpeedCalculator } from "../SpeedCalculator";
 import {
   broadbandPackages,
-  MOCK_ADDRESS,
   packageSelectionPageText,
   speedCalculatorText,
 } from "./ChooseYourPackageProps";
 
 export const ChooseYourPackage = () => {
   const router = useRouter();
-  const { selectPackage, setServiceAddress } = useJoinFlowStore();
+  const { selectPackage } = useJoinFlowStore();
   const [is24Month, setIs24Month] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(scrollContainerRef);
-  const { selectedAddress } = useAddress({
-    initialPostcode: "PO9 2AB",
-    autoFetch: true,
-  });
-
-  useAffiliateSession();
-
-  useEffect(() => {
-    if (selectedAddress) {
-      const addressToSave: Address = {
-        line1: selectedAddress.line1 || "",
-        line2: selectedAddress.line2 || "",
-        line3: selectedAddress.line3 || "",
-        postcode: selectedAddress.postcode || "",
-        identifiers: selectedAddress.identifiers || [],
-      };
-
-      setServiceAddress(addressToSave);
-    }
-  }, [selectedAddress, setServiceAddress]);
 
   const handlePackageSelection = (packageId: string) => {
     const selectedPackage = broadbandPackages.find(
@@ -57,10 +31,6 @@ export const ChooseYourPackage = () => {
 
     if (selectedPackage) {
       selectPackage(selectedPackage);
-
-      if (!selectedAddress) {
-        setServiceAddress(MOCK_ADDRESS);
-      }
 
       router.push("/join-flow/personal-details");
     }
