@@ -1,10 +1,12 @@
 import {
   AddressLookup,
   AffiliateSession,
+  Basket,
   EngineerAppointment,
   QuoteLookup,
   ReferralSession,
   SwitchMatchLookup,
+  VulnerabilityAndAccessibility,
 } from "../../payload-types";
 
 export type GenericSquidResponse = GenericSyncAsyncResponse;
@@ -22,12 +24,25 @@ export type ResponseStates = NonNullable<
 >;
 
 export class FetchError extends Error {
+  public body: Record<string, unknown>;
+  public bodyString: string;
+  public url: string;
+  public response: Response;
+
   constructor(
-    public status: number,
-    public statusText: string,
+    status: number,
+    statusText: string,
+    url: string,
+    body: Record<string, unknown>,
+    response: Response,
   ) {
     super(`HTTP Error: ${status} ${statusText}`);
     this.name = "FetchError";
+
+    this.body = body;
+    this.url = url;
+    this.response = response;
+    this.bodyString = JSON.stringify(body);
   }
 }
 
@@ -39,17 +54,15 @@ export type ValidationErrorDetail = {
 
 export class ValidationError extends Error {
   public details: ValidationErrorDetail[];
+  public detailsString: string;
 
   constructor(details: ValidationErrorDetail[]) {
     super("Payload Validation Error");
     this.name = "PayloadValidationError";
     this.details = details;
-
-    Object.setPrototypeOf(this, ValidationError.prototype);
+    this.detailsString = JSON.stringify(details);
   }
 }
-
-// Define the type for an identifier from the API response
 
 export type AddressLookupSuccess = {
   documentID: string;
@@ -75,6 +88,10 @@ export type AffiliateSessionErrors = {
 export type AffiliateSessionInputs = Omit<
   NonNullable<NonNullable<AffiliateSession["inputs"]>>,
   "requestProcessingType"
+>;
+
+export type AffiliateSessionSuccessData = NonNullable<
+  NonNullable<AffiliateSession["outputs"]>["apiSuccess"]
 >;
 
 export type EngineerAppointmentSuccess = {
@@ -132,3 +149,25 @@ export type QuoteLookupInputs = Omit<
   NonNullable<NonNullable<QuoteLookup["inputs"]>>,
   "requestProcessingType"
 >;
+
+export type InitialBasket = Omit<
+  Omit<Omit<Basket, "createdAt">, "id">,
+  "updatedAt"
+>;
+
+export type InitialVulnerabilityAndAccessibility = Omit<
+  Omit<Omit<VulnerabilityAndAccessibility, "createdAt">, "id">,
+  "updatedAt"
+>;
+
+export type ApiErrorResponse = {
+  errors?: Array<{
+    message: string;
+    data?: {
+      errors?: Array<{
+        label?: string;
+        path?: string;
+      }>;
+    };
+  }>;
+};

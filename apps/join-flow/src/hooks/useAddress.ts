@@ -59,21 +59,21 @@ export const useAddress = ({
     try {
       setLoading(true);
       setError(null);
-      const fetchedAddresses = await getAddressesByPostcode(postcode);
+      const result = await getAddressesByPostcode(postcode);
 
-      if (!fetchedAddresses) {
+      if (result.error) {
+        setError(result.error.message);
+        setAddresses(null);
+        return;
+      }
+
+      if (!result.addresses || result.addresses.length === 0) {
         setError("No addresses found for this postcode");
         setAddresses(null);
         return;
       }
 
-      if (fetchedAddresses.length === 0) {
-        setError("No addresses found for this postcode");
-        setAddresses(null);
-        return;
-      }
-
-      const convertedAddresses = fetchedAddresses.map(convertToStoreAddress);
+      const convertedAddresses = result.addresses.map(convertToStoreAddress);
       setAddresses(convertedAddresses);
     } catch (err) {
       console.error("Failed to fetch addresses:", err);

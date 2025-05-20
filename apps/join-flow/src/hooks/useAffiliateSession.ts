@@ -18,13 +18,15 @@ export const useAffiliateSession = () => {
       try {
         const response = await getAffiliateSessionByCode(affiliateCode);
 
-        if (response) {
+        if (response && response.affiliateSession) {
           setAffiliateSession({
-            sessionId: response.sessionID || "",
-            affiliateName: response.affiliateName || "",
-            useCreditcheckResult: response.useCreditcheckResult || false,
-            doEmailValidation: response.doEmailValidation || false,
-            cuckooAffiliate: response.cuckooAffiliate || "",
+            sessionId: response.affiliateSession.sessionID || "",
+            affiliateName: response.affiliateSession.affiliateName || "",
+            useCreditcheckResult:
+              response.affiliateSession.useCreditcheckResult || false,
+            doEmailValidation:
+              response.affiliateSession.doEmailValidation || false,
+            cuckooAffiliate: response.affiliateSession.cuckooAffiliate || "",
           });
         } else {
           setAffiliateSession({
