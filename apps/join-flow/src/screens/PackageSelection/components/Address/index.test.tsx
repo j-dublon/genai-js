@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { Address } from "@/screens/PackageSelection/components/Address";
-import { Address as AddressType } from "@/store/useJoinFlowStore";
+import { StoreAddress } from "@/store/useJoinFlowStore";
 
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
@@ -26,7 +26,7 @@ describe("Address", () => {
   });
 
   it("shows the formatted address when an address is selected", () => {
-    const mockAddress: AddressType = {
+    const mockAddress: StoreAddress = {
       line1: "123 Test Street",
       line2: "Apt 4B",
       line3: "Test Area",

@@ -13,18 +13,18 @@ export type AffiliateSession = {
   cuckooAffiliate: string | Affiliate;
 };
 
-export type AddressIdentifier = {
+export type StoreAddressIdentifier = {
   value: string;
   scheme: string;
   id: string;
 };
 
-export type Address = {
+export type StoreAddress = {
   line1: string;
   line2: string;
   line3: string;
   postcode: string;
-  identifiers: AddressIdentifier[];
+  identifiers: StoreAddressIdentifier[];
 };
 
 export type PersonalDetails = {
@@ -72,7 +72,7 @@ export type PaymentDetails = {
   cardToken: string;
   accountNumber?: string;
   sortCode?: string;
-  billingAddress: Address | null;
+  billingAddress: StoreAddress | null;
   sameAsServiceAddress?: boolean;
   termsAgreed: boolean;
   isAccountHolder: boolean;
@@ -129,7 +129,7 @@ export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
   selectedPackage: BroadbandPackage | null;
-  serviceAddress: Address | null;
+  serviceAddress: StoreAddress | null;
   personalDetails: PersonalDetails | null;
   eeroSelection: EeroProduct | null;
   switchingDetails: SwitchingDetails | null;
@@ -142,7 +142,7 @@ export type JoinFlowState = {
   setHasHydrated: (state: boolean) => void;
   setCurrentStep: (step: number) => void;
   selectPackage: (pkg: BroadbandPackage) => void;
-  setServiceAddress: (address: Address) => void;
+  setServiceAddress: (address: StoreAddress) => void;
   setPersonalDetails: (details: PersonalDetails) => void;
   selectEeroProduct: (product: EeroProduct) => void;
   setSwitchingDetails: (details: SwitchingDetails) => void;

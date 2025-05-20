@@ -22,13 +22,13 @@
     "@axe-core/playwright": "4.10.1",
     "@hookform/resolvers": "5.0.1",
     "@react-component-library/ui": "*",
-    "@types/lodash": "4.17.16",
     "lodash": "4.17.21",
     "react-hook-form": "7.56.0",
     "zod": "3.24.2",
     "zustand": "5.0.3"
   },
   "devDependencies": {
+    "@types/lodash": "4.17.16",
     "dotenv": "16.5.0",
     "dotenv-cli": "8.0.0",
     "ts-node": "10.9.2"

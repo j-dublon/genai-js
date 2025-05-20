@@ -1,5 +1,5 @@
 import { Button } from "@react-component-library/ui";
-import { Address } from "@store/useJoinFlowStore";
+import { StoreAddress } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ import { ChooseYourAddressText } from "../ChooseYourAddressProps";
 
 interface ChooseAddressFormData extends Record<string, unknown> {
   postcode: string;
-  selectedAddress: Address | null;
+  selectedAddress: StoreAddress | null;
 }
 
 const Loading = () => (
@@ -41,7 +41,7 @@ export const AddressLookupForm = () => {
   });
 
   const formattedAddresses = postcode
-    ? addresses?.reduce<Record<string, Address>>((acc, address) => {
+    ? addresses?.reduce<Record<string, StoreAddress>>((acc, address) => {
         const formattedKey = `${address.line1}, ${address.line2}, ${address.line3}`;
         acc[formattedKey] = address;
         return acc;

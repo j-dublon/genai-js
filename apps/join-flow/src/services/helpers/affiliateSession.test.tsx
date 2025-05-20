@@ -1,12 +1,8 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { fetchFromPayload } from "@/services/apiClient";
 
-import { AffiliateSession } from "../../../payload-types";
-import {
-  AffiliateSessionResponse,
-  getAffiliateSessionByCode,
-} from "./affiliateSession";
+import { getAffiliateSessionByCode } from "./affiliateSession";
 
 describe("getAffiliateSessionByCode", () => {
   vi.mock("@/services/apiClient", () => ({
@@ -17,30 +13,21 @@ describe("getAffiliateSessionByCode", () => {
     vi.resetAllMocks();
   });
 
-  it("should call fetchFromPayload with correct parameters", async () => {
+  it("should call fetchFromPayload with correct parameters and return apiSuccess", async () => {
     const affiliateCode = "testAffiliate";
-    const mockResponse: AffiliateSessionResponse = {
+    const mockResponse = {
       doc: {
-        id: "123",
-        createdAt: "2025-05-16T12:00:00.000Z",
-        updatedAt: "2025-05-16T12:00:00.000Z",
-        inputs: {
-          requestProcessingType: "sync",
-          subdomain: "testAffiliate",
-        },
         outputs: {
-          state: "success",
           apiSuccess: {
             sessionID: "session123",
             affiliateName: "Test Affiliate",
             useCreditcheckResult: true,
             doEmailValidation: true,
+            cuckooAffiliate: "some-affiliate",
           },
-          apiErrors: [],
-          apiTraceIDs: [],
         },
-      } as AffiliateSession,
-      message: "Affiliate Session successfully created.",
+      },
+      message: "Success",
     };
 
     (fetchFromPayload as jest.Mock).mockResolvedValue(mockResponse);
@@ -51,14 +38,14 @@ describe("getAffiliateSessionByCode", () => {
       "/affiliateSessions",
       "POST",
       {
-        processingType: "sync",
         inputs: {
           requestProcessingType: "sync",
           subdomain: "testAffiliate",
         },
       },
     );
-    expect(result).toEqual(mockResponse);
+
+    expect(result).toEqual(mockResponse.doc.outputs.apiSuccess);
   });
 
   it("should throw error when fetchFromPayload fails", async () => {
@@ -70,11 +57,11 @@ describe("getAffiliateSessionByCode", () => {
     await expect(getAffiliateSessionByCode(affiliateCode)).rejects.toThrow(
       mockError,
     );
+
     expect(fetchFromPayload).toHaveBeenCalledWith(
       "/affiliateSessions",
       "POST",
       {
-        processingType: "sync",
         inputs: {
           requestProcessingType: "sync",
           subdomain: "testAffiliate",
@@ -83,35 +70,18 @@ describe("getAffiliateSessionByCode", () => {
     );
   });
 
-  it("should handle empty affiliate code", async () => {
+  it("should return empty object when no apiSuccess is present", async () => {
     const affiliateCode = "";
-    const mockResponse: AffiliateSessionResponse = {
+    const mockErrorResponse = {
       doc: {
-        id: "123",
-        createdAt: "2025-05-16T12:00:00.000Z",
-        updatedAt: "2025-05-16T12:00:00.000Z",
-        inputs: {
-          requestProcessingType: "sync",
-          subdomain: "",
-        },
         outputs: {
-          state: "error",
-          apiErrors: [
-            {
-              internalError: null,
-              errorMessage: "Invalid affiliate code",
-              id: null,
-              blockName: null,
-              blockType: "AffiliateSessionUnableToLoadLinkData",
-            },
-          ],
-          apiTraceIDs: [],
+          apiErrors: [{ message: "Error" }],
         },
-      } as AffiliateSession,
-      message: "Error processing affiliate session",
+      },
+      message: "Error",
     };
 
-    (fetchFromPayload as jest.Mock).mockResolvedValue(mockResponse);
+    (fetchFromPayload as jest.Mock).mockResolvedValue(mockErrorResponse);
 
     const result = await getAffiliateSessionByCode(affiliateCode);
 
@@ -119,13 +89,33 @@ describe("getAffiliateSessionByCode", () => {
       "/affiliateSessions",
       "POST",
       {
-        processingType: "sync",
         inputs: {
           requestProcessingType: "sync",
           subdomain: "",
         },
       },
     );
-    expect(result).toEqual(mockResponse);
+
+    expect(result).toEqual({});
+  });
+
+  it("should handle null response", async () => {
+    const affiliateCode = "test";
+    (fetchFromPayload as jest.Mock).mockResolvedValue(undefined);
+
+    const result = await getAffiliateSessionByCode(affiliateCode);
+
+    expect(fetchFromPayload).toHaveBeenCalledWith(
+      "/affiliateSessions",
+      "POST",
+      {
+        inputs: {
+          requestProcessingType: "sync",
+          subdomain: "test",
+        },
+      },
+    );
+
+    expect(result).toEqual({});
   });
 });

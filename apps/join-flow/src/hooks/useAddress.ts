@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 
-import type { Address as AddressLookupAddress } from "@/services/helpers/addressLookup";
 import { getAddressesByPostcode } from "@/services/helpers/addressLookup";
-import type { Address as StoreAddress } from "@/store/useJoinFlowStore";
+import { AddressLookupSuccess } from "@/services/payloadTypes";
+import type { StoreAddress } from "@/store/useJoinFlowStore";
 
 interface UseAddressProps {
   initialPostcode?: string;
@@ -21,7 +21,11 @@ interface UseAddressResult {
   setError: (error: string | null) => void;
 }
 
-const convertToStoreAddress = (address: AddressLookupAddress): StoreAddress => {
+type AddressFromApi = NonNullable<
+  AddressLookupSuccess["response"]["addresses"]
+>[number];
+
+const convertToStoreAddress = (address: AddressFromApi): StoreAddress => {
   return {
     line1: address.line1,
     line2: address.line2 || "",
@@ -55,25 +59,22 @@ export const useAddress = ({
     try {
       setLoading(true);
       setError(null);
-
       const fetchedAddresses = await getAddressesByPostcode(postcode);
-      console.log(fetchedAddresses, "fetched addresses");
 
-      if (Array.isArray(fetchedAddresses)) {
-        const convertedAddresses = fetchedAddresses.map(convertToStoreAddress);
-        setAddresses(convertedAddresses);
-
-        if (!convertedAddresses.length) {
-          setError("No addresses found for this postcode");
-        }
-      } else {
-        const convertedAddress = convertToStoreAddress(
-          fetchedAddresses as AddressLookupAddress,
-        );
-        const addressArray = [convertedAddress];
-        setAddresses(addressArray);
-        setSelectedAddress(convertedAddress);
+      if (!fetchedAddresses) {
+        setError("No addresses found for this postcode");
+        setAddresses(null);
+        return;
       }
+
+      if (fetchedAddresses.length === 0) {
+        setError("No addresses found for this postcode");
+        setAddresses(null);
+        return;
+      }
+
+      const convertedAddresses = fetchedAddresses.map(convertToStoreAddress);
+      setAddresses(convertedAddresses);
     } catch (err) {
       console.error("Failed to fetch addresses:", err);
       setError("We couldn't load your address. Please try again.");

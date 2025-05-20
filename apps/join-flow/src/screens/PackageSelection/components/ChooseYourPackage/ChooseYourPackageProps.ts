@@ -1,4 +1,4 @@
-import { Address, BroadbandPackage } from "@/store/useJoinFlowStore";
+import { BroadbandPackage, StoreAddress } from "@/store/useJoinFlowStore";
 
 export const packageSelectionPageText = {
   pageTitle: "Pick the speed you need",
@@ -124,7 +124,7 @@ export const broadbandPackages: BroadbandPackage[] = [
   },
 ];
 
-export const MOCK_ADDRESS: Address = {
+export const MOCK_ADDRESS: StoreAddress = {
   line1: "Test Address Line 1",
   line2: "Test Address Line 2",
   line3: "London",

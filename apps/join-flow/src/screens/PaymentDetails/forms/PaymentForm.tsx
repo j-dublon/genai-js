@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { Address } from "@store/useJoinFlowStore";
+import { StoreAddress } from "@store/useJoinFlowStore";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -24,7 +24,8 @@ export const PaymentForm = ({
   const { paymentDetails, personalDetails, setPaymentDetails } =
     useJoinFlowStore();
 
-  const billingAddress: Address | null = paymentDetails?.billingAddress || null;
+  const billingAddress: StoreAddress | null =
+    paymentDetails?.billingAddress || null;
 
   const {
     accountholderNamePlaceholder,

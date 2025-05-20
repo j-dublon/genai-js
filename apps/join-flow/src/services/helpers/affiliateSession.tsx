@@ -1,29 +1,32 @@
 import { AffiliateSession } from "../../../payload-types";
 import { fetchFromPayload } from "../apiClient";
-
-export interface AffiliateSessionResponse {
-  doc: AffiliateSession;
-  message: string;
-}
+import {
+  AffiliateSessionInputs,
+  AffiliateSessionSuccess,
+} from "../payloadTypes";
 
 export const getAffiliateSessionByCode = async (
   affiliateCode: string,
-): Promise<AffiliateSessionResponse> => {
+): Promise<AffiliateSessionSuccess["response"]> => {
   try {
-    const requestBody = {
-      requestProcessingType: "sync" as const,
+    const requestBody: AffiliateSessionInputs = {
       subdomain: affiliateCode,
     };
 
-    const response = await fetchFromPayload<AffiliateSessionResponse>(
-      `/affiliateSessions`,
-      "POST",
-      {
-        processingType: "sync",
-        inputs: requestBody,
+    const response = await fetchFromPayload<{
+      doc: AffiliateSession;
+      message: string;
+    }>(`/affiliateSessions`, "POST", {
+      inputs: {
+        requestProcessingType: "sync",
+        ...requestBody,
       },
-    );
-    return response;
+    });
+
+    if (response?.doc?.outputs?.apiSuccess) {
+      return response.doc.outputs.apiSuccess;
+    }
+    return {};
   } catch (error) {
     console.error(
       "Error in getAffiliateSessionByCode:",

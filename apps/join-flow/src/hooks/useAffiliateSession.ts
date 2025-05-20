@@ -6,13 +6,6 @@ import { useEffect } from "react";
 
 import { getAffiliateSessionByCode } from "@/services/helpers/affiliateSession";
 
-import { AffiliateSession } from "../../payload-types";
-
-export interface ExtendedAffiliateSessionResponse {
-  doc: AffiliateSession;
-  message: string;
-}
-
 export const useAffiliateSession = () => {
   const pathname = usePathname();
   const { setAffiliateSession } = useJoinFlowStore();
@@ -23,24 +16,15 @@ export const useAffiliateSession = () => {
 
     const fetchAffiliateSession = async () => {
       try {
-        const response = (await getAffiliateSessionByCode(
-          affiliateCode,
-        )) as ExtendedAffiliateSessionResponse;
+        const response = await getAffiliateSessionByCode(affiliateCode);
 
-        if (
-          response &&
-          response.doc &&
-          response.doc.outputs &&
-          response.doc.outputs.apiSuccess
-        ) {
-          const apiSuccess = response.doc.outputs.apiSuccess;
-
+        if (response) {
           setAffiliateSession({
-            sessionId: apiSuccess.sessionID || "",
-            affiliateName: apiSuccess.affiliateName || "",
-            useCreditcheckResult: apiSuccess.useCreditcheckResult || false,
-            doEmailValidation: apiSuccess.doEmailValidation || false,
-            cuckooAffiliate: apiSuccess.cuckooAffiliate || "",
+            sessionId: response.sessionID || "",
+            affiliateName: response.affiliateName || "",
+            useCreditcheckResult: response.useCreditcheckResult || false,
+            doEmailValidation: response.doEmailValidation || false,
+            cuckooAffiliate: response.cuckooAffiliate || "",
           });
         } else {
           setAffiliateSession({
