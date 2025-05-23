@@ -4,8 +4,7 @@
     "cuckoo-website": {
       "development": {
         "fallback": "test.cuckoo.co"
-      },
-      "projectId": "prj_4iozifD1snJP3CSqFe9GDqA3nca7"
+      }
     },
     "marketing": {
       "routing": [
@@ -13,12 +12,10 @@
           "paths": ["/"],
           "flag": "homepage"
         }
-      ],
-      "projectId": "prj_UMzWEDQ3G8oxxR0lS2cGkEXd3xeb"
+      ]
     },
     "join-flow": {
-      "routing": [],
-      "projectId": "prj_KaHc9KGvb7inmn6KN0mYMInLv6kq"
+      "routing": []
     }
   }
 }

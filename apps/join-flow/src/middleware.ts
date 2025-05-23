@@ -4,7 +4,6 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const response = await runMicrofrontendsMiddleware({
     request: request,
-    fromApp: "join-flow",
     flagValues: {
       homepage: async () => false,
     },
