@@ -133,6 +133,108 @@ export type BroadbandPackage = {
   features?: string[];
 };
 
+export type GiftcardCampaign = {
+  id: string;
+  name: string;
+  campaignIdentifier: string;
+  updatedAt: string;
+  createdAt: string;
+};
+
+export type Promotion = {
+  id: string;
+  name: string;
+  krakenPromotionCode: string;
+  term?: "wholeContract" | null;
+  value?:
+    | (
+        | {
+            value: number;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: "percentageBased";
+          }
+        | {
+            value: number;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: "fixedValue";
+          }
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+};
+
+export type StoreSelectedPackage = {
+  krakenProductCode: string;
+  frontendIdentifier: string;
+  termMonths: string;
+  selectionIdentifier: string;
+  installationRequired: boolean;
+  appliedPromotionUUIDs?:
+    | {
+        id: string | null;
+      }[]
+    | null;
+  prices: {
+    basePrice: number;
+    discountedPrice: number;
+    annualPriceRise?:
+      | {
+          price: number;
+          date: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  speeds: {
+    download: number;
+    upload: number;
+  };
+  extras?:
+    | {
+        family: string;
+        availableExtras?:
+          | {
+              code: string;
+              name: string;
+              description: string;
+              price: number;
+              selectionIdentifier: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  offers?:
+    | (
+        | {
+            campaign: string | GiftcardCampaign;
+            value: number;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: "giftCard";
+          }
+        | {
+            promotion: string | Promotion;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: "promotion";
+          }
+        | {
+            value: number;
+            isDiscretionary?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: "billCredit";
+          }
+      )[]
+    | null;
+  id?: string | null;
+};
+
 export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
