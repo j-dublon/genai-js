@@ -25,11 +25,12 @@ export const getAddressesByPostcode = async (
     const response = await payloadAPI.createAddressLookupSync({
       postcode,
     });
-
     if (response.state === "success" && response.data?.response?.addresses) {
+      const addressId = response.data.documentID;
       const addresses = response.data.response.addresses;
       return {
         addresses: addresses.map((item) => ({
+          id: addressId,
           selectionIdentifier: item.selectionIdentifier || "",
           line1: item.line1 || "",
           line2: item.line2 || "",

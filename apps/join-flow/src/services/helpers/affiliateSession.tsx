@@ -5,6 +5,7 @@ import { AffiliateSessionSuccessData } from "../payloadTypes";
 
 interface AffiliateSessionResult {
   affiliateSession: AffiliateSessionSuccessData;
+  id?: string;
   error?: {
     type:
       | "noAffiliateFound"
@@ -27,6 +28,7 @@ export const getAffiliateSessionByCode = async (
 
     if (response.state === "success" && response.data?.response) {
       return {
+        id: response.data.documentID,
         affiliateSession: response.data.response,
       };
     }

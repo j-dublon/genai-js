@@ -367,7 +367,7 @@ export interface QuoteLookup {
     /**
      * The selectionIdentifier for the row in addresses on the addressLookup referenced
      */
-    addessLookupSelectionIdentifier: string;
+    addressLookupSelectionIdentifier: string;
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;

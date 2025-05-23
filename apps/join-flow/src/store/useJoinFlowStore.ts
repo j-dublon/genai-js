@@ -3,9 +3,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { QuoteLookupSuccess } from "@/services/payloadTypes";
+
 import { Affiliate } from "../../payload-types";
 
 export type AffiliateSession = {
+  id: string;
   sessionId: string;
   affiliateName: string;
   useCreditcheckResult: boolean;
@@ -27,11 +30,16 @@ export type StoreAddress = {
   identifiers: StoreAddressIdentifier[];
 };
 
+export type ExtendedStoreAddress = StoreAddress & {
+  id: string; //Keep this as a string due to react hook form needing string values
+  selectionIdentifier: string;
+};
+
 export type PersonalDetails = {
   firstName: string;
   lastName: string;
   phone: string;
-  hasSmartphone: "yes" | "no"; //Keep this as a string due to react hook form needing string values
+  hasSmartphone: "yes" | "no";
   email: string;
   confirmEmail: string;
   marketingConsent?: boolean;
@@ -130,6 +138,7 @@ export type JoinFlowState = {
   currentStep: number;
   selectedPackage: BroadbandPackage | null;
   serviceAddress: StoreAddress | null;
+  billingAddress: StoreAddress | null;
   personalDetails: PersonalDetails | null;
   eeroSelection: EeroProduct | null;
   switchingDetails: SwitchingDetails | null;
@@ -137,18 +146,21 @@ export type JoinFlowState = {
   goLiveDetails: GoLiveDetails | null;
   affiliateSession: AffiliateSession | null;
   accessibilityRequirements: AccessibilityRequirements | null;
+  quoteResponse: QuoteLookupSuccess | null;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
   setCurrentStep: (step: number) => void;
   selectPackage: (pkg: BroadbandPackage) => void;
-  setServiceAddress: (address: StoreAddress) => void;
+  setServiceAddress: (address: ExtendedStoreAddress) => void;
+  setBillingAddress: (address: StoreAddress) => void;
   setPersonalDetails: (details: PersonalDetails) => void;
   selectEeroProduct: (product: EeroProduct) => void;
   setSwitchingDetails: (details: SwitchingDetails) => void;
   setPaymentDetails: (details: PaymentDetails) => void;
   setAffiliateSession: (session: AffiliateSession) => void;
   setGoLiveDetails: (details: GoLiveDetails) => void;
+  setQuoteResponse: (response: QuoteLookupSuccess) => void;
   setAccessibilityRequirements: (
     requirements: AccessibilityRequirements | null,
   ) => void;
@@ -163,6 +175,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       currentStep: 0,
       selectedPackage: null,
       serviceAddress: null,
+      billingAddress: null,
       personalDetails: null,
       eeroSelection: null,
       switchingDetails: null,
@@ -170,12 +183,13 @@ const useJoinFlowStore = create<JoinFlowState>()(
       goLiveDetails: null,
       affiliateSession: null,
       accessibilityRequirements: null,
+      quoteResponse: null,
 
-      // Actions
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
       selectPackage: (pkg) => set({ selectedPackage: pkg, currentStep: 1 }),
       setServiceAddress: (address) => set({ serviceAddress: address }),
+      setBillingAddress: (address) => set({ billingAddress: address }),
       setPersonalDetails: (details) => set({ personalDetails: details }),
       selectEeroProduct: (product) => set({ eeroSelection: product }),
       setSwitchingDetails: (details) => set({ switchingDetails: details }),
@@ -184,6 +198,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setAffiliateSession: (session) => set({ affiliateSession: session }),
       setAccessibilityRequirements: (requirements) =>
         set({ accessibilityRequirements: requirements }),
+      setQuoteResponse: (response) => set({ quoteResponse: response }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -196,6 +211,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           goLiveDetails: null,
           affiliateSession: null,
           accessibilityRequirements: null,
+          quoteResponse: null,
         }),
     }),
     {

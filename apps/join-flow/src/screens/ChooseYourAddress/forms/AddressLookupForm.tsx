@@ -1,5 +1,5 @@
 import { Button } from "@react-component-library/ui";
-import { StoreAddress } from "@store/useJoinFlowStore";
+import { ExtendedStoreAddress, StoreAddress } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -7,12 +7,13 @@ import { Controller, useForm } from "react-hook-form";
 
 import { FormDropdown } from "@/components/FormDropdown";
 import { useAddress } from "@/hooks/useAddress";
+import { createQuoteLookupPoll } from "@/services/helpers/createQuoteLookupPoll";
 
 import { ChooseYourAddressText } from "../ChooseYourAddressProps";
 
 interface ChooseAddressFormData extends Record<string, unknown> {
   postcode: string;
-  selectedAddress: StoreAddress | null;
+  selectedAddress: ExtendedStoreAddress | null;
 }
 
 const Loading = () => (
@@ -25,9 +26,10 @@ const Loading = () => (
 export const AddressLookupForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams().get("postcode");
-  const { setServiceAddress } = useJoinFlowStore();
+  const { setServiceAddress, affiliateSession } = useJoinFlowStore();
   const [postcode, setPostcode] = useState("");
   const [lastSearchedPostcode, setLastSearchedPostcode] = useState("");
+  const [isQuoteLookupLoading, setIsQuoteLookupLoading] = useState(false);
 
   const {
     error,
@@ -72,7 +74,7 @@ export const AddressLookupForm = () => {
     }
   }, [selectedAddress, setServiceAddress]);
 
-  const handleSubmit = (data: ChooseAddressFormData) => {
+  const handleSubmit = async (data: ChooseAddressFormData) => {
     // If the postcode has changed, treat as postcode search
     if (data.postcode !== lastSearchedPostcode) {
       setLastSearchedPostcode(data.postcode);
@@ -80,14 +82,64 @@ export const AddressLookupForm = () => {
       form.setValue("selectedAddress", null);
       return;
     }
+
     // If addresses are loaded and postcode matches last searched, continue
+
     if (formattedAddresses) {
       const selectedAddress = data.selectedAddress;
       if (selectedAddress) {
         selectAddress(selectedAddress);
+
+        if (!affiliateSession) {
+          console.error("No affiliate session available");
+          setError(
+            "Session information is missing. Please refresh the page or try again later.",
+          );
+          return;
+        }
+
+        try {
+          setIsQuoteLookupLoading(true);
+          const quoteResult = await createQuoteLookupPoll(
+            affiliateSession.id,
+            selectedAddress.id,
+            selectedAddress.selectionIdentifier,
+          );
+
+          if (quoteResult.error) {
+            setError(
+              quoteResult.error.message ||
+                "Failed to get available packages for this address. Please try again.",
+            );
+            return;
+          }
+
+          if (
+            quoteResult.products &&
+            quoteResult.quotingCode &&
+            quoteResult.documentID
+          ) {
+            const { setQuoteResponse } = useJoinFlowStore.getState();
+            setQuoteResponse({
+              documentID: quoteResult.documentID,
+              response: {
+                products: quoteResult.products,
+                quotingCode: quoteResult.quotingCode,
+              },
+            });
+            router.push("/join-flow/package-selection");
+          } else {
+            setError("No products available for this address.");
+          }
+        } catch (error) {
+          console.error("Error creating quote lookup:", error);
+          setError(
+            "Failed to get available packages for this address. Please try again.",
+          );
+        } finally {
+          setIsQuoteLookupLoading(false);
+        }
       }
-      // TODO: quote lookup to happen here once address selected
-      router.push("/join-flow/package-selection");
     }
   };
 
@@ -125,7 +177,7 @@ export const AddressLookupForm = () => {
           </button>
         )}
       </div>
-      {loading ? (
+      {loading || isQuoteLookupLoading ? (
         <Loading />
       ) : (
         isPostcodeSearched &&
@@ -158,6 +210,7 @@ export const AddressLookupForm = () => {
         className={`${isPostcodeSearched ? "mt-10 md:mt-16" : "mt-4 md:mt-8"}`}
         disabled={
           loading ||
+          isQuoteLookupLoading ||
           (isPostcodeSearched && !form.watch("selectedAddress")) ||
           !form.watch("postcode")
         }

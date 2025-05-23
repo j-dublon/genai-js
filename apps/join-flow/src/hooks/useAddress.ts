@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import { getAddressesByPostcode } from "@/services/helpers/addressLookup";
 import { AddressLookupSuccess } from "@/services/payloadTypes";
-import type { StoreAddress } from "@/store/useJoinFlowStore";
+import type { ExtendedStoreAddress } from "@/store/useJoinFlowStore";
 
 interface UseAddressProps {
   initialPostcode?: string;
@@ -12,12 +12,12 @@ interface UseAddressProps {
 }
 
 interface UseAddressResult {
-  selectedAddress: StoreAddress | null;
-  addresses: StoreAddress[] | null;
+  selectedAddress: ExtendedStoreAddress | null;
+  addresses: ExtendedStoreAddress[] | null;
   loading: boolean;
   error: string | null;
   fetchAddresses: (postcode: string) => Promise<void>;
-  selectAddress: (address: StoreAddress) => void;
+  selectAddress: (address: ExtendedStoreAddress) => void;
   setError: (error: string | null) => void;
 }
 
@@ -25,8 +25,11 @@ type AddressFromApi = NonNullable<
   AddressLookupSuccess["response"]["addresses"]
 >[number];
 
-const convertToStoreAddress = (address: AddressFromApi): StoreAddress => {
+const convertToStoreAddress = (
+  address: AddressFromApi,
+): ExtendedStoreAddress => {
   return {
+    id: address.id || "",
     line1: address.line1,
     line2: address.line2 || "",
     line3: address.line3 || "",
@@ -36,6 +39,7 @@ const convertToStoreAddress = (address: AddressFromApi): StoreAddress => {
       scheme: identifier.scheme,
       id: identifier.id || "",
     })),
+    selectionIdentifier: address.selectionIdentifier,
   };
 };
 
@@ -43,10 +47,11 @@ export const useAddress = ({
   initialPostcode = "",
   autoFetch = true,
 }: UseAddressProps = {}): UseAddressResult => {
-  const [selectedAddress, setSelectedAddress] = useState<StoreAddress | null>(
+  const [selectedAddress, setSelectedAddress] =
+    useState<ExtendedStoreAddress | null>(null);
+  const [addresses, setAddresses] = useState<ExtendedStoreAddress[] | null>(
     null,
   );
-  const [addresses, setAddresses] = useState<StoreAddress[] | null>(null);
   const [loading, setLoading] = useState(autoFetch && initialPostcode !== "");
   const [error, setError] = useState<string | null>(null);
 
@@ -85,7 +90,7 @@ export const useAddress = ({
     }
   };
 
-  const selectAddress = (address: StoreAddress) => {
+  const selectAddress = (address: ExtendedStoreAddress) => {
     setSelectedAddress(address);
   };
 

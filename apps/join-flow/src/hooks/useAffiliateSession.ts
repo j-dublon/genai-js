@@ -20,6 +20,7 @@ export const useAffiliateSession = () => {
 
         if (response && response.affiliateSession) {
           setAffiliateSession({
+            id: response.id || "",
             sessionId: response.affiliateSession.sessionID || "",
             affiliateName: response.affiliateSession.affiliateName || "",
             useCreditcheckResult:
@@ -30,6 +31,7 @@ export const useAffiliateSession = () => {
           });
         } else {
           setAffiliateSession({
+            id: "",
             sessionId: affiliateCode,
             affiliateName: "",
             useCreditcheckResult: false,
@@ -40,6 +42,7 @@ export const useAffiliateSession = () => {
       } catch (error) {
         console.error("Error fetching affiliate session:", error);
         setAffiliateSession({
+          id: "",
           sessionId: affiliateCode,
           affiliateName: "",
           useCreditcheckResult: false,
