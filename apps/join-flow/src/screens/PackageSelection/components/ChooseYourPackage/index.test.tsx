@@ -1,31 +1,42 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { BroadbandPackage } from "@/store/useJoinFlowStore";
 
 import { packageSelectionPageText } from "./ChooseYourPackageProps";
 import { ChooseYourPackage } from "./index";
 
-type PackageCardProps = {
-  pkg: {
-    id: string;
-    name: string;
-    price: {
-      monthly: number;
-    };
-    contractLength: number;
-  };
-  onPackageSelect: (pkg: {
-    id: string;
-    name: string;
-    price: { monthly: number };
-  }) => void;
-  tint: string;
-  featurePackage?: boolean;
-  promotion?: string;
-};
+const { mockSelectPackage, mockSetBasket, mockCreateBasket, mockRouterPush } =
+  vi.hoisted(() => ({
+    mockSelectPackage: vi.fn(),
+    mockSetBasket: vi.fn(),
+    mockCreateBasket: vi.fn(),
+    mockRouterPush: vi.fn(),
+  }));
 
-const mockSelectPackage = vi.fn();
-const mockRouterPush = vi.fn();
+const mockQuoteResponse = {
+  documentID: "quote-123",
+  response: {
+    products: [
+      {
+        selectionIdentifier: "product-selection-123",
+        krakenProductCode: "test-product",
+        frontendIdentifier: "150-12",
+        termMonths: "12",
+        installationRequired: false,
+        prices: {
+          basePrice: 2500,
+          discountedPrice: 2500,
+        },
+        speeds: {
+          download: 150,
+          upload: 30,
+        },
+      },
+    ],
+  },
+};
 
 const mockUseScrollable = {
   isMouseDown: false,
@@ -67,8 +78,19 @@ vi.mock("@react-component-library/ui/server", async () => {
       tint,
       featurePackage,
       promotion,
-    }: PackageCardProps) => (
-      <div data-testid="package-card" onClick={() => onPackageSelect(pkg)}>
+      disabled,
+    }: {
+      pkg: BroadbandPackage;
+      onPackageSelect: (pkg: BroadbandPackage) => void;
+      tint: string;
+      featurePackage?: boolean;
+      promotion?: string;
+      disabled?: boolean;
+    }) => (
+      <div
+        data-testid="package-card"
+        onClick={() => !disabled && onPackageSelect(pkg)}
+      >
         <div>{pkg.name}</div>
         <div>£{pkg.price.monthly}/month</div>
         <div data-testid="contract-length">{pkg.contractLength}</div>
@@ -85,7 +107,13 @@ vi.mock("@react-component-library/ui/server", async () => {
 vi.mock("@store/useJoinFlowStore", () => ({
   default: () => ({
     selectPackage: mockSelectPackage,
+    setBasket: mockSetBasket,
+    quoteResponse: mockQuoteResponse,
   }),
+}));
+
+vi.mock("@/services/helpers/createBasket", () => ({
+  createBasket: mockCreateBasket,
 }));
 
 vi.mock("@/hooks/useAddress", () => ({
@@ -113,8 +141,22 @@ vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
 }));
 
 describe("ChooseYourPackage", () => {
+  const mockBasketResponse = {
+    id: "basket-123",
+    locked: false,
+    product: {
+      quoteLookup: "quote-123",
+      selectionIdentifier: "product-selection-123",
+    },
+    updatedAt: "2025-01-01T00:00:00.000Z",
+    createdAt: "2025-01-01T00:00:00.000Z",
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
+    mockCreateBasket.mockResolvedValue({
+      basket: mockBasketResponse,
+    });
   });
 
   afterAll(() => {
@@ -162,7 +204,22 @@ describe("ChooseYourPackage", () => {
     await userEvent.click(packageCards[0]);
 
     expect(mockSelectPackage).toHaveBeenCalled();
-    expect(mockRouterPush).toHaveBeenCalledWith("/join-flow/personal-details");
+
+    await waitFor(() => {
+      expect(mockCreateBasket).toHaveBeenCalledWith({
+        product: {
+          selectionIdentifier: "product-selection-123",
+          quoteLookup: "quote-123",
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(mockSetBasket).toHaveBeenCalledWith(mockBasketResponse);
+      expect(mockRouterPush).toHaveBeenCalledWith(
+        "/join-flow/personal-details",
+      );
+    });
   });
 
   it("renders the toggle switch with correct initial state", () => {

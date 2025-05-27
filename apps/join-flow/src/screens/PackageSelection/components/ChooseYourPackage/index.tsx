@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { createBasket } from "@/services/helpers/createBasket";
 
 import { SpeedCalculator } from "../SpeedCalculator";
 import {
@@ -18,21 +19,38 @@ import {
 
 export const ChooseYourPackage = () => {
   const router = useRouter();
-  const { selectPackage } = useJoinFlowStore();
+  const { selectPackage, quoteResponse, setBasket } = useJoinFlowStore();
   const [is24Month, setIs24Month] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(scrollContainerRef);
 
-  const handlePackageSelection = (packageId: string) => {
+  const handlePackageSelection = async (packageId: string) => {
     const selectedPackage = broadbandPackages.find(
       (pkg) => pkg.id === packageId,
     );
 
-    if (selectedPackage) {
+    if (selectedPackage && quoteResponse?.response?.products?.[0]) {
       selectPackage(selectedPackage);
 
-      router.push("/join-flow/personal-details");
+      try {
+        const result = await createBasket({
+          product: {
+            selectionIdentifier:
+              quoteResponse.response.products[0].selectionIdentifier,
+            quoteLookup: quoteResponse.documentID,
+          },
+        });
+
+        if (result.basket) {
+          setBasket(result.basket);
+          router.push("/join-flow/personal-details");
+        } else if (result.error) {
+          console.error("Failed to create basket:", result.error);
+        }
+      } catch (error) {
+        console.error("Unexpected error creating basket:", error);
+      }
     }
   };
 

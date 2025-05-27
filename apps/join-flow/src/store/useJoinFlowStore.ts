@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 
 import { QuoteLookupSuccess } from "@/services/payloadTypes";
 
-import { Affiliate } from "../../payload-types";
+import { Affiliate, QuoteLookup } from "../../payload-types";
 
 export type AffiliateSession = {
   id: string;
@@ -235,6 +235,62 @@ export type StoreSelectedPackage = {
   id?: string | null;
 };
 
+export type StoreBasket = {
+  id: string;
+  locked?: boolean | null;
+  product?: {
+    quoteLookup?: (string | null) | QuoteLookup;
+    selectionIdentifier?: string | null;
+    extras?:
+      | {
+          family: string;
+          selectionIdentifier: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  engineer?: {
+    selectionIdentifier?: string | null;
+  };
+  goLiveDate?: string | null;
+  addressHistory?:
+    | {
+        line1?: string | null;
+        line2?: string | null;
+        line3?: string | null;
+        postcode?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  billingAddress?: {
+    line1?: string | null;
+    line2?: string | null;
+    line3?: string | null;
+    postcode?: string | null;
+  };
+  payment?: {
+    accountHolder?: string | null;
+    accountNumber?: string | null;
+    sortCode?: string | null;
+  };
+  personalDetails?: {
+    firstName?: string | null;
+    lastName?: string | null;
+    dateOfBirth?: string | null;
+    email?: string | null;
+    phone?: string | null;
+  };
+  sales?: {
+    discretionaryBillCreditsAmount?: number | null;
+  };
+  cics?: {
+    summaryHref?: string | null;
+    informationHref?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+};
+
 export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
@@ -249,6 +305,7 @@ export type JoinFlowState = {
   affiliateSession: AffiliateSession | null;
   accessibilityRequirements: AccessibilityRequirements | null;
   quoteResponse: QuoteLookupSuccess | null;
+  basket: StoreBasket | null;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
@@ -266,6 +323,7 @@ export type JoinFlowState = {
   setAccessibilityRequirements: (
     requirements: AccessibilityRequirements | null,
   ) => void;
+  setBasket: (basket: StoreBasket) => void;
   resetFlow: () => void;
 };
 
@@ -286,6 +344,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       affiliateSession: null,
       accessibilityRequirements: null,
       quoteResponse: null,
+      basket: null,
 
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
@@ -301,6 +360,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setAccessibilityRequirements: (requirements) =>
         set({ accessibilityRequirements: requirements }),
       setQuoteResponse: (response) => set({ quoteResponse: response }),
+      setBasket: (basket) => set({ basket }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -314,6 +374,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           affiliateSession: null,
           accessibilityRequirements: null,
           quoteResponse: null,
+          basket: null,
         }),
     }),
     {
