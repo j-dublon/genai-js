@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "update-schema": "ts-node fetch-graphql-schema.ts",
     "start": "next start",
     "start:e2e": "next start -p 3005",
     "test": "vitest",

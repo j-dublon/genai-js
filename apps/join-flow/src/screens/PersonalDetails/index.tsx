@@ -12,9 +12,11 @@ import { z } from "zod";
 import { Footer } from "@/components/Footer";
 import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
+import { formatDateOfBirth } from "@/lib/formatDate";
 import AdditionalPersonalDetailsForm from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
 import EmailVerificationForm from "@/screens/PersonalDetails/forms/emailVerificationForm";
 import InitialPersonalDetailsForm from "@/screens/PersonalDetails/forms/initialPersonalDetailsForm";
+import { updateBasket } from "@/services/helpers/updateBasket";
 
 import {
   AdditionalPersonalDetailsFormProps,
@@ -26,8 +28,13 @@ import { personalDetailsProps } from "./personalDetailsProps";
 
 const PersonalDetails = () => {
   const router = useRouter();
-  const { setPersonalDetails, personalDetails, setCurrentStep } =
-    useJoinFlowStore();
+  const {
+    setPersonalDetails,
+    personalDetails,
+    setCurrentStep,
+    basket,
+    setBasket,
+  } = useJoinFlowStore();
 
   const initialStep = personalDetails?.personalDetailsStep || "details";
   const [currentFormStep, setCurrentFormStep] = useState<
@@ -230,7 +237,32 @@ const PersonalDetails = () => {
 
     setPersonalDetails(updatedDetails);
     setCurrentStep(2);
-    router.push("/join-flow/eero-selection");
+    try {
+      if (!basket) {
+        console.error("No basket available");
+        return;
+      }
+
+      const result = await updateBasket(basket.id, {
+        ...basket,
+        personalDetails: {
+          firstName: updatedDetails.firstName,
+          lastName: updatedDetails.lastName,
+          dateOfBirth: formatDateOfBirth(dobDay, dobMonth, dobYear),
+          email: personalDetails.email,
+          phone: personalDetails.phone,
+        },
+      });
+
+      if (result.basket) {
+        setBasket(result.basket);
+        router.push("/join-flow/eero-selection");
+      } else if (result.error) {
+        console.error("Failed to create basket:", result.error);
+      }
+    } catch (error) {
+      console.error("Unexpected error creating basket:", error);
+    }
   };
 
   const handleBack = () => {
