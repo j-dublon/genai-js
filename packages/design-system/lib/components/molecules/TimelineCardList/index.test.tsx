@@ -11,18 +11,21 @@ const mockTimelineCardProps: TimelineCardProps[] = [
     backgroundColor: "pink",
     subtitleText: "We contact your current provider",
     subHeading: "Letting them know you're switching to Cuckoo",
+    className: "",
   },
   {
     colorPillText: "Day 10",
     backgroundColor: "pink",
     subtitleText: "They'll confirm you're leaving",
     subHeading: "And send you any final bills",
+    className: "",
   },
   {
     colorPillText: "Day 14",
     backgroundColor: "pink",
     subtitleText: "We aim to get you connected",
     subHeading: "If you need an engineer, they'll pop by and get you set up",
+    className: "",
   },
 ];
 

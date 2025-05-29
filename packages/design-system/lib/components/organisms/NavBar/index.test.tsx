@@ -171,12 +171,12 @@ describe("NavBar", () => {
 
   it("does not render CTA when toggled is true", () => {
     renderNavBar({ toggled: true });
-    expect(screen.queryByText("Click. Switch. Done.")).not.toBeInTheDocument();
+    expect(screen.queryByText("Refer a friend.")).not.toBeInTheDocument();
   });
 
   it("renders CTA when toggled is false", () => {
     renderNavBar({ toggled: false });
-    expect(screen.getByText("Click. Switch. Done.")).toBeInTheDocument();
+    expect(screen.getByText(/Refer a friend/i)).toBeInTheDocument();
   });
 
   it("renders mobile menu when toggled is true", () => {

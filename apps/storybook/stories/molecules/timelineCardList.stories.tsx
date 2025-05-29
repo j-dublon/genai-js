@@ -11,7 +11,7 @@ type Story = StoryObj<typeof TimelineCardList>;
 
 export const Primary: Story = {
   render: (props) => (
-    <div className="flex md:flex-row flex-col gap-1">
+    <div className="flex flex-col gap-1 md:flex-row">
       <TimelineCardList {...props} />
     </div>
   ),
@@ -23,12 +23,16 @@ export const Primary: Story = {
         backgroundColor: "pink",
         subtitleText: "We contact your current provider",
         subHeading: "Letting them know you're switching to Cuckoo",
+        className: "",
+        colorPillSize: "medium",
       },
       {
         colorPillText: "Day 10",
         backgroundColor: "pink",
         subtitleText: "They'll confirm you're leaving",
         subHeading: "And send you any final bills",
+        className: "",
+        colorPillSize: "medium",
       },
       {
         colorPillText: "Day 14",
@@ -36,6 +40,8 @@ export const Primary: Story = {
         subtitleText: "We aim to get you connected",
         subHeading:
           "If you need an engineer, they'll pop by and get you set up",
+        className: "",
+        colorPillSize: "medium",
       },
     ],
   },

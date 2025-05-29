@@ -2,7 +2,11 @@ import { NavBar } from "@react-component-library/ui";
 
 import { useDropdown, useNavBarHandlers } from "@/hooks";
 
-export const NavBarWrapper = () => {
+export const NavBarWrapper = ({
+  isContentPage = false,
+}: {
+  isContentPage?: boolean;
+}) => {
   const { toggled, setToggled, openDropdown, setOpenDropdown, drawerRef } =
     useNavBarHandlers();
 
@@ -63,6 +67,7 @@ export const NavBarWrapper = () => {
       setOpenDropdown={setOpenDropdown}
       drawerRef={drawerRef}
       useDropdown={useDropdown}
+      isContentPage={isContentPage}
     />
   );
 };

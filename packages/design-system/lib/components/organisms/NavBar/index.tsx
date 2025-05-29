@@ -32,6 +32,7 @@ interface NavBarProps {
     openDropdown: string | null,
     setOpenDropdown: (name: string | null) => void,
   ) => { isOpen: boolean; dropdownRef: RefObject<HTMLDivElement> };
+  isContentPage?: boolean;
 }
 
 export const NavBar = ({
@@ -44,6 +45,7 @@ export const NavBar = ({
   setOpenDropdown,
   drawerRef,
   useDropdown,
+  isContentPage = false,
 }: NavBarProps) => {
   const [openDropdownMobile, setOpenDropdownMobile] = useState<string | null>(
     null,
@@ -59,15 +61,14 @@ export const NavBar = ({
         {!toggled && (
           <CTA>
             <p className="ds:text-xs ds:leading-[160%] ds:text-core-black">
-              <span className="ds:font-semibold">Click. Switch. Done.</span>{" "}
-              We'll handle the whole broadband move for you
               <Link
-                href="/switching"
+                href="/refer-a-friend"
                 className="ds:text-ui-link ds:font-medium ds:underline ds:rounded ds:ml-1"
               >
-                just one click
-              </Link>
-              .
+                Refer a friend
+              </Link>{" "}
+              to Cuckoo and you&apos;ll both get{" "}
+              <span className="ds:font-semibold">£50 credit.</span> Woohoo!
             </p>
           </CTA>
         )}
@@ -77,9 +78,11 @@ export const NavBar = ({
           aria-label="Main navigation"
           className={`ds:flex ds:justify-between ds:items-center ds:h-20 ds:py-[15px] ds:px-5 ds:md:px-12 ds:w-full ds:relative ds:z-50
             ${
-              toggled
-                ? "ds:bg-core-white"
-                : "ds:bg-core-yellow ds:border-b ds:border-[#1f1f1f1a]"
+              isContentPage
+                ? "ds:bg-core-white" // If it's a content page, always white with no border
+                : toggled
+                  ? "ds:bg-core-white" // If toggled, white background
+                  : "ds:bg-core-yellow ds:border-b ds:border-[#1f1f1f1a]" // Default yellow with border
             }
           `}
         >
@@ -90,7 +93,11 @@ export const NavBar = ({
           )}
           <div
             className={`ds:hidden ds:md:flex ds:items-center ds:justify-end ds:gap-4 ${
-              toggled ? "ds:bg-core-white" : "ds:bg-core-yellow"
+              isContentPage
+                ? "ds:bg-core-white"
+                : toggled
+                  ? "ds:bg-core-white"
+                  : "ds:bg-core-yellow"
             }`}
           >
             <div className="ds:flex ds:justify-end ds:items-center">

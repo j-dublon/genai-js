@@ -173,5 +173,20 @@ test.describe("Home Page", () => {
         });
       });
     });
+
+    test.describe("Refer a Friend Page", () => {
+      test("should display hero section and referral button", async ({
+        page,
+      }) => {
+        await page.goto("/refer-a-friend");
+        await expect(
+          page.getByText("Share the love and get £50 each"),
+        ).toBeVisible();
+        const referralButton = page
+          .getByRole("button", { name: /get your referral code/i })
+          .or(page.getByRole("link", { name: /get your referral code/i }));
+        await expect(referralButton).toBeVisible();
+      });
+    });
   });
 });

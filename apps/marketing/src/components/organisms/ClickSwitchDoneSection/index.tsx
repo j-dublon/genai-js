@@ -10,18 +10,18 @@ export const ClickSwitchDoneSection = () => {
   return (
     <section
       aria-label="Click Switch Done Section"
-      className="bg-core-white flex justify-center items-center py-14 md:py-40 px-mobile sm:px-tablet lg:px-desktop "
+      className="flex items-center justify-center bg-core-white py-14 md:py-40 px-mobile sm:px-tablet lg:px-desktop "
     >
       <div className="flex flex-col md:gap-16 gap-8 max-w-[1152px]">
         <div className="max-w-[956px]">
-          <div className="flex items-center md:pb-7 pb-8 gap-2">
+          <div className="flex items-center gap-2 pb-8 md:pb-7">
             <h2 className="md:text-5xl text-[28px] font-bold md:pb-5 pb-3 leading-[1.2]">
               Click. Switch.
             </h2>
             <img
               src={getAssetPath("/images/done_button.svg")}
               alt="The word done in a pink coloured pill with an arrow icon pointing at it"
-              className="w-32 md:w-56 h-auto"
+              className="w-32 h-auto md:w-56"
             />
           </div>
 
@@ -33,7 +33,7 @@ export const ClickSwitchDoneSection = () => {
           </p>
         </div>
 
-        <div className="flex md:flex-row flex-col">
+        <div className="flex flex-col md:flex-row">
           <TimelineCardList timelineCardProps={timelineCardProps} />
         </div>
         <Link href="/switching" passHref>

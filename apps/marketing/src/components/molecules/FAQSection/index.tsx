@@ -1,7 +1,13 @@
 "use client";
 import { AccordionSection } from "@react-component-library/ui";
 
-const questionsArr = [
+export interface Question {
+  dropdown_header: string;
+  dropdown_content: string[];
+  button_text?: string;
+  button_link?: string;
+}
+export const questionsArr: Question[] = [
   {
     dropdown_header: "Why should I choose Cuckoo?",
     dropdown_content: [
@@ -45,11 +51,20 @@ const questionsArr = [
   },
 ];
 
-export const FAQSection = () => {
+export const FAQSection = ({
+  questions,
+  heading,
+  subText,
+}: {
+  questions: Question[];
+  heading: string;
+  subText?: string;
+}) => {
   return (
     <AccordionSection
-      heading="Questions about full fibre, broadband, or anything else at all?"
-      questionsArr={questionsArr}
+      heading={heading}
+      subText={subText}
+      questionsArr={questions}
     />
   );
 };

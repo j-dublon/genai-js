@@ -36,6 +36,12 @@ import { MobileApp } from "@components/molecules/MobileApp";
 import { MobilePhone } from "@components/molecules/MobilePhone";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
 import { ProductCard } from "@components/molecules/ProductCard";
+import { ReasonCard } from "@components/molecules/ReasonCard";
+import { ReferAFriendHero } from "@components/molecules/ReferAFriendHero";
+import {
+  ReferralCard,
+  ReferralCardWrapper,
+} from "@components/molecules/ReferralCards";
 import { TextWithTickList } from "@components/molecules/TextWithTickList";
 import { TimelineCard } from "@components/molecules/TimelineCard";
 import { TimelineCardList } from "@components/molecules/TimelineCardList";
@@ -81,6 +87,10 @@ export {
   PhoneTextContent,
   PostcodeChecker,
   ProductCard,
+  ReasonCard,
+  ReferAFriendHero,
+  ReferralCard,
+  ReferralCardWrapper,
   ReviewCard,
   SectionHeading,
   SimpleNavBar,
