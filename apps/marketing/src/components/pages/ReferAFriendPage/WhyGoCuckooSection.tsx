@@ -2,7 +2,7 @@ import { ReasonCard } from "@react-component-library/ui";
 
 const WhyGoCuckooSection = () => {
   return (
-    <div className="ds:bg-core-white ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop ds:md:pt-10 md:pb-20">
+    <div className="pb-16 sm:pb-36 ds:bg-core-white ds:px-mobile ds:sm:px-tablet ds:lg:px-desktop ds:md:pt-10">
       <div className="ds:grid ds:grid-cols-1 ds:md:grid-cols-1 ds:gap-6 ds:md:gap-16 ds:max-w-[1152px] ds:justify-center ds:items-center ds:mx-auto">
         <div className="space-y-4">
           <h2 className="font-semibold text-[26px] sm:text-3xl md:text-5xl text-core-black max-w-[90%] md:max-w-[75%]">

@@ -24,8 +24,7 @@ const DottedLine = () => {
           md:bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIiIGhlaWdodD0iNSIgdmlld0JveD0iMCAwIDEyIDUiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgY2xpcC1ydWxlPSJldmVub2RkIiBkPSJNLTEuNzQ4NDZlLTA3IDIuNUMtNy44MjgxZS0wOCAxLjM5NTQzIDAuOTE3MjcxIDAuNSAyLjA0ODc4IDAuNUw5Ljk1MTIyIDAuNTAwMDAxQzExLjA4MjcgMC41MDAwMDEgMTIgMS4zOTU0MyAxMiAyLjVDMTIgMy42MDQ1NyAxMS4wODI3IDQuNSA5Ljk1MTIyIDQuNUwyLjA0ODc4IDQuNUMwLjkxNzI3MSA0LjUgLTIuNzE0MWUtMDcgMy42MDQ1NyAtMS43NDg0NmUtMDcgMi41WiIgZmlsbD0iIzFGMUYxRiIvPgo8L3N2Zz4K')]
           md:bg-[length:20px_5px]
           md:h-[5px]
-          md:my-auto
-          md:mx-[--spacing-leaf]>
+          md:my-auto>
         "
     />
   );
@@ -34,12 +33,12 @@ const DottedLine = () => {
 const EveryoneWinsSection = () => {
   return (
     <div className="py-12 bg-core-white px-mobile sm:px-tablet lg:px-desktop md:px-10 md:py-20">
-      <div className="ds:grid ds:grid-cols-1 ds:md:grid-cols-1 ds:gap-6 ds:md:gap-10 ds:max-w-[1152px] ds:justify-center ds:items-center ds:mx-auto">
+      <div className="ds:grid ds:grid-cols-1 ds:md:grid-cols-1 ds:gap-4 ds:md:gap-10 ds:max-w-[1152px] ds:justify-center ds:items-center ds:mx-auto">
         <h2 className="font-semibold text-[26px] sm:text-3xl md:text-5xl text-core-black max-w-[90%] md:max-w-[75%]">
           Everyone wins (woohoo!)
         </h2>
 
-        <div className="mb-16">
+        <div className="mb-8 sm:mb-16">
           <p className="text-lg md:text-[36px] max-w-[90%] md:max-w-[85%]">
             There are no hidden surprises when you refer a friend to us. Once
             they&apos;re a fully fledged member of the flock, you&apos;ll both
@@ -114,8 +113,8 @@ const EveryoneWinsSection = () => {
           </ReferralCard>
         </ReferralCardWrapper>
 
-        <div className="flex flex-col space-y-16">
-          <span className="text-[20px]">
+        <div className="flex flex-col">
+          <span className="text-[20px] my-8 sm:mt-0 sm:mb-16">
             <Link
               href="/legal/promotional-terms"
               target="_blank"

@@ -16,7 +16,7 @@ export const AccordionSection = ({ heading, questionsArr, subText }: Props) => (
         <h2 className="ds:font-semibold ds:text-[26px] ds:sm:text-3xl ds:md:text-5xl ds:text-core-black ds:max-w-[90%] ds:md:max-w-[75%] ds:md:leading-[1.2]">
           {heading}
         </h2>
-        {subText && <p className="ds:text-xl ds:md:text-[26px]">{subText}</p>}
+        {subText && <p className="ds:text-sm ds:md:text-[26px]">{subText}</p>}
       </div>
       <div>
         <div className="ds:flex ds:flex-col ds:gap-4 ds:md:gap-5">

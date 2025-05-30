@@ -11,8 +11,8 @@ interface HeroProps {
 
 export const ReferAFriendHero = ({
   tag,
-  title = "Welcome to Our Service",
-  text = "This is an example hero section with Tailwind CSS.",
+  title,
+  text,
   imageSrc,
   buttonText,
 }: HeroProps) => {
@@ -40,8 +40,10 @@ export const ReferAFriendHero = ({
             {title}
           </p>
           <div>
-            <div className="ds:text-core-black ds:text-sm">{text}</div>
-            <div className="ds:text-core-black ds:mb-6 ds:md:mb-8 ds:text-sm">
+            <div className="ds:text-core-black ds:text-md ds:sm:text-[26px]">
+              {text}
+            </div>
+            <div className="ds:text-core-black ds:mb-6 ds:md:mb-8 ds:text-md ds:sm:text-[26px]">
               <Link href="/legal/promotional-terms" className="ds:underline">
                 T&Cs
               </Link>{" "}
@@ -57,7 +59,7 @@ export const ReferAFriendHero = ({
         <div className="ds:order-1 ds:md:order-2 ds:w-full ds:flex ds:justify-center ds:md:w-1/2 ds:md:absolute ds:top-1 ds:md:right-2 ds:md:justify-end ds:pt-8 ds:md:pr-10">
           <img
             src="https://images.prismic.io/cuckoo-egg/aBxzSCdWJ-7kRvhJ_Group27238.png?auto=format,compress"
-            className="ds:max-w-[360px]"
+            className="ds:max-w-[300px] ds:sm:max-w-[360px]"
             alt="Refer a friend"
           />
         </div>
