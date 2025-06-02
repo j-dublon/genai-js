@@ -41,103 +41,111 @@ export const CookieNotice = () => {
   };
 
   return (
-    <aside
-      className="fixed bottom-6 right-1/2 z-[99] w-[23rem] translate-x-1/2 rounded-sm border-2 border-core-grey-200 bg-ui-grey-100 p-6 sm:right-12 sm:translate-x-0 md:rounded-md"
+    <div
+      role="dialog"
+      aria-labelledby="cookie-notice-container"
+      aria-modal="true"
       data-testid="cookie-notice"
+      tabIndex={-1}
+      className="fixed inset-0 z-[1000] flex items-center justify-center bg-[#1F1F1F33] bg-opacity-50 backdrop-blur-sm"
     >
-      {checkCookies ? (
-        <>
-          <ScrollerVertical maxHeight="50vh">
-            <h1 className="text-sm md:text-md font-semibold">
-              {cookieBannerProps.cookie_header_two}
-            </h1>
-            <p className="text-xxs mt-2 text-ui-grey-500">
-              {cookieBannerProps.cookie_message_two}
-              <a
-                className="text-ui-link"
-                href="https://cuckoo.co/legal/cookie-policy"
-              >
-                {" "}
-                Cookie policy.
-              </a>
-            </p>
-            <div className="mt-4 max-h-[400px] space-y-2">
-              {cookieBannerProps.preferences.map((preference) => {
-                const categories = preference.id.split(",");
-                const defaultChecked = categories.every(
-                  (c) =>
-                    cookiePreferences &&
-                    cookiePreferences[c as keyof ConsentParams] === "granted",
-                );
+      <div className="max-w-md p-6 mx-5 border-2 rounded-lg border-ui-grey-300 bg-ui-grey-100 md:p-8 md:text-center">
+        {checkCookies ? (
+          <>
+            <ScrollerVertical maxHeight="50vh">
+              <h1 className="text-sm font-semibold md:text-md">
+                {cookieBannerProps.cookie_header_two}
+              </h1>
+              <p className="mt-2 text-xxs text-ui-grey-500">
+                {cookieBannerProps.cookie_message_two}
+                <a
+                  className="text-ui-link"
+                  href="https://cuckoo.co/legal/cookie-policy"
+                >
+                  {" "}
+                  Cookie policy.
+                </a>
+              </p>
+              <div className="mt-4 max-h-[400px] space-y-2">
+                {cookieBannerProps.preferences.map((preference) => {
+                  const categories = preference.id.split(",");
+                  const defaultChecked = categories.every(
+                    (c) =>
+                      cookiePreferences &&
+                      cookiePreferences[c as keyof ConsentParams] === "granted",
+                  );
 
-                return (
-                  <Preferences
-                    key={preference.id + preference.cookie_preferences_header}
-                    header={preference.cookie_preferences_header}
-                    body={preference.cookie_preferences_body}
-                    defaultChecked={defaultChecked}
-                    disabled={
-                      preference.cookie_preference_default === "disabled"
-                    }
-                    onChange={(checked) => {
-                      const toSet = categories.reduce((acc, category) => {
-                        // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-                        (acc as any)[category] = checked ? "granted" : "denied";
-                        return acc;
-                      }, {});
-                      setCookiePreferences((c) => ({
-                        ...c,
-                        ...toSet,
-                      }));
-                    }}
-                  />
-                );
-              })}
-            </div>
-          </ScrollerVertical>
-          <Button
-            variant="solid"
-            className="mt-6"
-            onClick={handleChoice()}
-            aria-label={cookieBannerProps.cookie_button_three_text}
-            fullWidth
-            size="small"
-          >
-            {cookieBannerProps.cookie_button_three_text}
-          </Button>
-        </>
-      ) : (
-        <>
-          <h1
-            id="cookieNoticeHeader"
-            className="text-sm md:text-md mb-2 font-semibold"
-          >
-            {cookieBannerProps.cookie_header_one}
-          </h1>
-          <div className="text-xxs md:text-xxs space-y-2 text-ui-grey-500 md:space-y-4">
-            <p>{cookieBannerProps.cookie_message_one}</p>
-          </div>
-          <div className="mt-4 flex items-center gap-4 [&>*]:grow">
+                  return (
+                    <Preferences
+                      key={preference.id + preference.cookie_preferences_header}
+                      header={preference.cookie_preferences_header}
+                      body={preference.cookie_preferences_body}
+                      defaultChecked={defaultChecked}
+                      disabled={
+                        preference.cookie_preference_default === "disabled"
+                      }
+                      onChange={(checked) => {
+                        const toSet = categories.reduce((acc, category) => {
+                          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+                          (acc as any)[category] = checked
+                            ? "granted"
+                            : "denied";
+                          return acc;
+                        }, {});
+                        setCookiePreferences((c) => ({
+                          ...c,
+                          ...toSet,
+                        }));
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            </ScrollerVertical>
             <Button
               variant="solid"
-              id="cookie-button-allow"
-              onClick={handleChoice(true)}
-              aria-label={cookieBannerProps.cookie_button_one_text}
+              className="mt-6"
+              onClick={handleChoice()}
+              aria-label={cookieBannerProps.cookie_button_three_text}
+              fullWidth
               size="small"
             >
-              {cookieBannerProps.cookie_button_one_text}
+              {cookieBannerProps.cookie_button_three_text}
             </Button>
-            <Button
-              tint="grey"
-              onClick={() => setCheckCookies(!checkCookies)}
-              aria-label={cookieBannerProps.cookie_button_two_text}
-              size="small"
+          </>
+        ) : (
+          <>
+            <h1
+              id="cookieNoticeHeader"
+              className="mb-2 text-sm font-semibold md:text-md"
             >
-              {cookieBannerProps.cookie_button_two_text}
-            </Button>
-          </div>
-        </>
-      )}
-    </aside>
+              {cookieBannerProps.cookie_header_one}
+            </h1>
+            <div className="space-y-2 text-xxs md:text-xxs text-ui-grey-500 md:space-y-4">
+              <p>{cookieBannerProps.cookie_message_one}</p>
+            </div>
+            <div className="mt-4 flex items-center gap-4 [&>*]:grow">
+              <Button
+                variant="solid"
+                id="cookie-button-allow"
+                onClick={handleChoice(true)}
+                aria-label={cookieBannerProps.cookie_button_one_text}
+                size="small"
+              >
+                {cookieBannerProps.cookie_button_one_text}
+              </Button>
+              <Button
+                tint="grey"
+                onClick={() => setCheckCookies(!checkCookies)}
+                aria-label={cookieBannerProps.cookie_button_two_text}
+                size="small"
+              >
+                {cookieBannerProps.cookie_button_two_text}
+              </Button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
   );
 };

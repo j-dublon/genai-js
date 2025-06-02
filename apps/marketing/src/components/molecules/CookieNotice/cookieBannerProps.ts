@@ -43,7 +43,7 @@ export const preferences: {
 
 export const cookieBannerProps = {
   cookie_header_one: "Cuckoo cookies",
-  cookie_header_two: "Check & manage cookies",
+  cookie_header_two: "Check cookies",
   cookie_message_one:
     "We use cookies to give you the best experience on our website. Is that ok?",
   cookie_message_two:
