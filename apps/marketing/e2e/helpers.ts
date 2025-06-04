@@ -83,3 +83,20 @@ export const checkVisibility = async (page: Page, section: TestCase) => {
   }
   await expect(element).toBeVisible();
 };
+
+export const acceptCookies = async (page: Page) => {
+  await page.addInitScript(() => {
+    const cookiePreferences = {
+      functionality_storage: "granted",
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+      analytics_storage: "granted",
+      personalization_storage: "granted",
+      security_storage: "granted",
+      ads_backend_tracking: "granted",
+    };
+
+    localStorage.setItem("cookieNotice", JSON.stringify(cookiePreferences));
+  });
+};

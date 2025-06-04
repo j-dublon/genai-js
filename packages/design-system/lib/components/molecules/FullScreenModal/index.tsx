@@ -1,14 +1,22 @@
+import { ToggleSwitch } from "@components/atoms/ToggleSwitch";
 import { CloseIcon } from "@icons/CloseIcon";
 import { RefObject } from "react";
 interface FullScreenModalProps {
   title: string;
   modalRef: RefObject<HTMLDialogElement | null>;
+  toggle?: {
+    isOn: boolean;
+    onChange: (isOn: boolean) => void;
+    leftLabel: string;
+    rightLabel: string;
+  };
 }
 
 export const FullScreenModal = ({
   title,
   modalRef,
   children,
+  toggle,
 }: React.PropsWithChildren<FullScreenModalProps>) => {
   return (
     <dialog
@@ -18,21 +26,39 @@ export const FullScreenModal = ({
       aria-label={`${title} modal`}
       aria-modal="true"
     >
-      <div className="ds:flex ds:justify-between ds:items-end ds:gap-2 ds:mb-4 ds:md:mb-13">
-        <h2 className="ds:text-core-white ds:text-sm ds:md:text-md ds:font-medium">
-          {title}
-        </h2>
-        <button
-          onClick={() => modalRef.current?.close()}
-          className="ds:text-core-white ds:text-sm ds:md:text-md ds:font-medium ds:cursor-pointer ds:flex ds:flex-row ds:gap-2 ds:items-center"
-          aria-label="Close modal"
-        >
-          Close
-          <CloseIcon color="#FFFFFF" width={30} height={30} />
-        </button>
-      </div>
-      <div className="ds:bg-core-white ds:rounded-lg ds:md:px-20 ds:lg:px-29 ds:md:pt-16 ds:md:pb-25 flex justify-center">
-        {children}
+      <div className="ds:flex ds:flex-col ds:items-center">
+        <div className="ds:w-full ds:flex ds:flex-wrap ds:justify-between ds:items-end ds:mb-4 ds:md:mb-13 ds:align-middle ds:md:max-w-[1252px]">
+          <h2
+            className="ds:text-core-white ds:text-xs ds:md:text-md ds:font-medium ds:align-middle"
+            id="fullscreen-modal-title"
+          >
+            {title}
+          </h2>
+          {toggle && (
+            <div className="ds:order-last ds:md:order-none ds:w-full ds:mt-6 ds:md:mt-0 ds:md:w-auto ds:md:ml-2 ds:md:mr-auto">
+              <ToggleSwitch
+                isOn={toggle.isOn}
+                onChange={toggle.onChange}
+                leftLabel={toggle.leftLabel}
+                rightLabel={toggle.rightLabel}
+              />
+            </div>
+          )}
+          <button
+            onClick={() => modalRef.current?.close()}
+            className="ds:text-core-white ds:text-xs ds:md:text-md ds:font-medium ds:cursor-pointer ds:flex ds:flex-row ds:gap-2 ds:items-center"
+            aria-label="Close modal"
+          >
+            Close
+            <CloseIcon
+              color="#FFFFFF"
+              className="ds:max-w-[18px] ds:max-h-[18px] ds:md:max-w-[30px] ds:md:max-h-[30px]"
+            />
+          </button>
+        </div>
+        <div className="ds:bg-core-white ds:rounded-lg ds:md:max-w-[1252px] ds:w-full">
+          {children}
+        </div>
       </div>
     </dialog>
   );

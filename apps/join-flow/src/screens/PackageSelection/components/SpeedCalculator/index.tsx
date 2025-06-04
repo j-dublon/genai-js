@@ -1,10 +1,11 @@
-import { Button, ColorPill } from "@react-component-library/ui";
 import {
+  Button,
   Checkbox,
+  ColorPill,
   InputSlider,
   Radio,
-  RightArrow,
-} from "@react-component-library/ui/server";
+} from "@react-component-library/ui";
+import { Arrow } from "@react-component-library/ui/icons";
 import {
   Control,
   Controller,
@@ -84,10 +85,12 @@ export const SpeedCalculator = ({
   title,
   subtitle,
   broadbandPackages,
+  onShowPackageDetails,
 }: {
   title: string;
   subtitle: string;
   broadbandPackages: BroadbandPackage[];
+  onShowPackageDetails: (selectedPackage: BroadbandPackage) => void;
 }) => {
   const { recommendedPackage, calculateRecommendedPackage } =
     useSpeedCalculator(broadbandPackages);
@@ -106,6 +109,7 @@ export const SpeedCalculator = ({
 
   const scrollToResults = useScrollToElement("#results");
   const scrollToForm = useScrollToElement("#speed-calculator-form");
+  const scrollToTop = useScrollToElement("#fullscreen-modal-title");
 
   const handleReset = () => {
     reset({
@@ -127,163 +131,167 @@ export const SpeedCalculator = ({
   };
 
   return (
-    <div className="rounded-lg w-full py-8 px-5 md:p-0 md:max-w-[1018px]">
-      <div className="rounded-lg md:rounded-b-none bg-secondary-pink p-6 flex flex-col gap-3">
-        <ColorPill
-          backgroundColor="tertiary-purple"
-          colorPillText="Cuckoo help"
-          size="extraSmall"
-          whiteText
-        />
-        <h2 className="text-core-black text-xl font-semibold leading-[1.5] md:text-3xl md:leading-[1.4] max-w-[260px] md:max-w-[378px]">
-          {title}
-        </h2>
-        <p className="text-xs font-normal leading-[1.6] md:text-sm sm:max-w-[450px]">
-          {subtitle}
-        </p>
-      </div>
-      <div className="bg-core-white md:bg-ui-grey-100 flex flex-col gap-8 md:py-8 md:px-16 lg:py-16 lg:px-32 rounded-b-lg">
-        <div className="md:bg-core-white pt-5 md:p-6 rounded-[20px]">
-          <form
-            id="speed-calculator-form"
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-5"
-          >
-            <ColorPill
-              backgroundColor="pink"
-              colorPillText="Speed Calculator"
-              size="small"
-            />
-
-            <FormQuestion
-              title={questionProps.question1.title}
-              subtitle={questionProps.question1.subtitle}
-              name="peopleCount"
-              control={control}
+    <div className="md:px-20 lg:px-29 md:pt-16 md:pb-25 flex justify-center">
+      <div className="rounded-lg w-full py-8 px-5 md:p-0 md:max-w-[1018px]">
+        <div className="rounded-lg md:rounded-b-none bg-secondary-pink p-6 flex flex-col gap-3">
+          <ColorPill
+            backgroundColor="tertiary-purple"
+            colorPillText="Cuckoo help"
+            size="extraSmall"
+            whiteText
+          />
+          <h2 className="text-core-black text-xl font-semibold leading-[1.5] md:text-3xl md:leading-[1.4] max-w-[260px] md:max-w-[378px]">
+            {title}
+          </h2>
+          <p className="text-xs font-normal leading-[1.6] md:text-sm sm:max-w-[450px]">
+            {subtitle}
+          </p>
+        </div>
+        <div className="bg-core-white md:bg-ui-grey-100 flex flex-col gap-8 md:py-8 md:px-16 lg:py-16 lg:px-32 rounded-b-lg">
+          <div className="md:bg-core-white pt-5 md:p-6 rounded-[20px]">
+            <form
+              id="speed-calculator-form"
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col gap-5"
             >
-              {({ onChange, value }) => (
-                <InputSlider
-                  min={0}
-                  max={10}
-                  value={value as number}
-                  onChange={onChange}
-                  disabled={isSubmitSuccessful}
-                  name="peopleCount"
-                />
-              )}
-            </FormQuestion>
+              <ColorPill
+                backgroundColor="pink"
+                colorPillText="Speed Calculator"
+                size="small"
+              />
 
-            <FormQuestion
-              title={questionProps.question2.title}
-              name="internetUses"
-              control={control}
-              rules={{
-                required: "Please select at least one option",
-                validate: (value: string[]) =>
-                  value.length > 0 || "Please select at least one option",
-              }}
-            >
-              {({ onChange, value }) => (
-                <div className="flex flex-col gap-3">
-                  {[
-                    "Streaming",
-                    "Gaming",
-                    "Working from home",
-                    "Video calls",
-                    "Social media",
-                  ].map((option) => (
-                    <Checkbox
-                      key={option}
-                      label={option}
-                      value={option}
-                      checked={(value as string[])?.includes(option)}
-                      onChange={(checked) => {
-                        const currentValues = (value as string[]) || [];
-                        if (checked) {
-                          onChange([...currentValues, option]);
-                        } else {
-                          onChange(currentValues.filter((v) => v !== option));
-                        }
-                      }}
-                      disabled={isSubmitSuccessful}
-                    />
-                  ))}
-                </div>
-              )}
-            </FormQuestion>
-
-            <FormQuestion
-              title={questionProps.question3.title}
-              name="smartSpeakers"
-              control={control}
-              rules={{
-                required: "Please select an option",
-              }}
-            >
-              {({ onChange, value }) => (
-                <div className="flex flex-col gap-3">
-                  {["Yes", "No"].map((option) => (
-                    <Radio
-                      key={option}
-                      label={option}
-                      value={option}
-                      checked={value === option}
-                      onChange={onChange}
-                      disabled={isSubmitSuccessful}
-                    />
-                  ))}
-                </div>
-              )}
-            </FormQuestion>
-
-            {recommendedPackage && (
-              <div
-                className="rounded-lg p-5 md:px-10 md:py-6 flex flex-col gap-4 md:gap-5 bg-tertiary-blue-light"
-                id="results"
+              <FormQuestion
+                title={questionProps.question1.title}
+                subtitle={questionProps.question1.subtitle}
+                name="peopleCount"
+                control={control}
               >
-                <p className="text-core-black text-sm md:text-md font-medium max-w-[480px]">
-                  {summaryText}
-                </p>
-                {/* TODO: Add onClick display package info once package selection modal is implemented */}
-                <Button
-                  variant="solid"
-                  tint="yellow"
-                  size="large"
-                  onClick={() => {}}
-                  className="w-full md:w-auto"
+                {({ onChange, value }) => (
+                  <InputSlider
+                    min={0}
+                    max={10}
+                    value={value as number}
+                    onChange={onChange}
+                    disabled={isSubmitSuccessful}
+                    name="peopleCount"
+                  />
+                )}
+              </FormQuestion>
+
+              <FormQuestion
+                title={questionProps.question2.title}
+                name="internetUses"
+                control={control}
+                rules={{
+                  required: "Please select at least one option",
+                  validate: (value: string[]) =>
+                    value.length > 0 || "Please select at least one option",
+                }}
+              >
+                {({ onChange, value }) => (
+                  <div className="flex flex-col gap-3">
+                    {[
+                      "Streaming",
+                      "Gaming",
+                      "Working from home",
+                      "Video calls",
+                      "Social media",
+                    ].map((option) => (
+                      <Checkbox
+                        key={option}
+                        label={option}
+                        value={option}
+                        checked={(value as string[])?.includes(option)}
+                        onChange={(checked) => {
+                          const currentValues = (value as string[]) || [];
+                          if (checked) {
+                            onChange([...currentValues, option]);
+                          } else {
+                            onChange(currentValues.filter((v) => v !== option));
+                          }
+                        }}
+                        disabled={isSubmitSuccessful}
+                      />
+                    ))}
+                  </div>
+                )}
+              </FormQuestion>
+
+              <FormQuestion
+                title={questionProps.question3.title}
+                name="smartSpeakers"
+                control={control}
+                rules={{
+                  required: "Please select an option",
+                }}
+              >
+                {({ onChange, value }) => (
+                  <div className="flex flex-col gap-3">
+                    {["Yes", "No"].map((option) => (
+                      <Radio
+                        key={option}
+                        label={option}
+                        value={option}
+                        checked={value === option}
+                        onChange={onChange}
+                        disabled={isSubmitSuccessful}
+                      />
+                    ))}
+                  </div>
+                )}
+              </FormQuestion>
+
+              {recommendedPackage && (
+                <div
+                  className="rounded-lg p-5 md:px-10 md:py-6 flex flex-col gap-4 md:gap-5 bg-tertiary-blue-light"
+                  id="results"
                 >
-                  <p className="flex items-center gap-4">
-                    <span>{`${recommendedPackage.name} Plan`}</span>
-                    <RightArrow />
+                  <p className="text-core-black text-sm md:text-md font-medium max-w-[480px]">
+                    {summaryText}
                   </p>
-                </Button>
-              </div>
-            )}
+                  <Button
+                    variant="solid"
+                    tint="yellow"
+                    size="large"
+                    onClick={() => {
+                      onShowPackageDetails(recommendedPackage);
+                      scrollToTop();
+                    }}
+                    className="w-full md:w-auto"
+                  >
+                    <p className="flex items-center gap-4">
+                      <span>{`${recommendedPackage.name} Plan`}</span>
+                      <Arrow />
+                    </p>
+                  </Button>
+                </div>
+              )}
 
-            <div className="flex gap-4 flex-col md:flex-row md:justify-end pt-3">
-              <Button
-                variant="outline"
-                tint="white"
-                size="large"
-                className="w-full md:w-auto md:py-3 md:px-5 text-sm"
-                onClick={handleReset}
-                type="button"
-              >
-                Reset
-              </Button>
-              {!isSubmitSuccessful && (
+              <div className="flex gap-4 flex-col md:flex-row md:justify-end pt-3">
                 <Button
-                  variant="solid"
-                  tint="yellow"
+                  variant="outline"
+                  tint="white"
                   size="large"
                   className="w-full md:w-auto md:py-3 md:px-5 text-sm"
-                  type="submit"
+                  onClick={handleReset}
+                  type="button"
                 >
-                  Calculate
+                  Reset
                 </Button>
-              )}
-            </div>
-          </form>
+                {!isSubmitSuccessful && (
+                  <Button
+                    variant="solid"
+                    tint="yellow"
+                    size="large"
+                    className="w-full md:w-auto md:py-3 md:px-5 text-sm"
+                    type="submit"
+                  >
+                    Calculate
+                  </Button>
+                )}
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

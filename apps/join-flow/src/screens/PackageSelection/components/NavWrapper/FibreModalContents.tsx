@@ -10,23 +10,19 @@ export const FibreModalContents = ({
   return (
     <>
       {image && (
-        <img
-          src={image}
-          alt="Modal Image"
-          className="ds:my-8 ds:md:my-4 ds:w-full"
-        />
+        <img src={image} alt="Modal Image" className="my-8 md:my-4 w-full" />
       )}
       {subtitle && (
         <p
           id="modal-subtitle"
-          className="ds:text-xs ds:md:text-sm ds:font-semibold ds:leading-relaxed ds:text-core-black ds:pb-4"
+          className="text-xs md:text-sm font-semibold leading-relaxed text-core-black pb-4"
         >
           {subtitle}
         </p>
       )}
       <p
         id="modal-content"
-        className="ds:text-core-black ds:leading-relaxed ds:pb-8 ds:md:pb-6 ds:font-normal ds:text-xs ds:md:text-sm"
+        className="text-core-black leading-relaxed pb-8 md:pb-6 font-normal text-xs md:text-sm"
       >
         {content}
       </p>

@@ -89,4 +89,33 @@ describe("TextWithTick Component", () => {
     expect(container).not.toHaveClass("ds:border-2");
     expect(container).not.toHaveClass("ds:border-ui-grey-300");
   });
+
+  it("renders additional text when additionalTextInput is provided", () => {
+    render(<TextWithTick {...props} additionalTextInput="Additional text" />);
+
+    const textWithTick = screen.getByText(props.textInput);
+    expect(textWithTick).toHaveTextContent("Test text Additional text");
+  });
+
+  it("applies custom styling to additional text when additionalTextStyling is provided", () => {
+    const customStyling = "ds:text-red-500 ds:font-bold";
+    render(
+      <TextWithTick
+        {...props}
+        additionalTextInput="Additional text"
+        additionalTextStyling={customStyling}
+      />,
+    );
+
+    const additionalText = screen.getByText("Additional text");
+    expect(additionalText).toHaveClass(customStyling);
+  });
+
+  it("does not render additional text when additionalTextInput is not provided", () => {
+    render(<TextWithTick {...props} />);
+
+    const textWithTick = screen.getByText(props.textInput);
+    expect(textWithTick).toHaveTextContent("Test text");
+    expect(textWithTick).not.toHaveTextContent("Additional text");
+  });
 });

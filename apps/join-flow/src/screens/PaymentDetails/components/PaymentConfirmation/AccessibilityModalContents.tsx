@@ -1,7 +1,6 @@
 "use client";
 
-import { Button } from "@react-component-library/ui";
-import { Checkbox } from "@react-component-library/ui/server";
+import { Button, Checkbox } from "@react-component-library/ui";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 

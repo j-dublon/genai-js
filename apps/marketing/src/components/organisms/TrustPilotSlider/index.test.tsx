@@ -8,6 +8,7 @@ import { TrustPilotSlider } from ".";
 
 // Mock UI components
 vi.mock("@react-component-library/ui", () => ({
+  ReviewCardSkeleton: () => <div data-testid="review-card-skeleton" />,
   ReviewCard: ({ title, author, reviewText, starRating }: ReviewCardProps) => (
     <div data-testid="review-card">
       <h3>{title}</h3>
@@ -42,10 +43,6 @@ vi.mock("@react-component-library/ui", () => ({
       </div>
     </div>
   ),
-}));
-
-vi.mock("@react-component-library/ui/server", () => ({
-  ReviewCardSkeleton: () => <div data-testid="review-card-skeleton" />,
 }));
 
 const mockProps = {

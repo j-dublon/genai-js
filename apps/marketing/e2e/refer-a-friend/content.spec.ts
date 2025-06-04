@@ -1,7 +1,9 @@
 import { test, expect } from "@playwright/test";
+import { acceptCookies } from "e2e/helpers";
 
 test.describe("Refer a Friend Page", () => {
   test.beforeEach(async ({ page }) => {
+    await acceptCookies(page);
     await page.goto("/refer-a-friend");
   });
 

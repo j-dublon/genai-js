@@ -1,4 +1,4 @@
-import { Checkbox } from "@react-component-library/ui/server";
+import { Checkbox } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
 

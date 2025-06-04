@@ -5,12 +5,21 @@ export const packageSelectionPageText = {
   pageSubtitle: "Your contract length",
   errorMessage: "Please select a package to continue",
   buttonText: "Add to bag",
+  packageDetailsModalTitle: "Choose your contract length",
+  toggleSwitchLabels: {
+    left: "12-months",
+    right: "24-months",
+  },
+  promotionText: "3 months free",
+  promotionActive: true,
 };
 
 export const speedCalculatorText = {
+  calculatorModalTitle: "Speed calculator",
   title: "Not sure which speed to go for?",
   subtitle:
     "Our super handy calculator will tell you which of our speeds is best for your household.",
+  speedCalculatorButtonText: "I need help choosing",
 };
 
 export const broadbandPackages: BroadbandPackage[] = [

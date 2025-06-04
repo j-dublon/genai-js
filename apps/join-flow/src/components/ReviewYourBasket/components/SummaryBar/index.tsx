@@ -100,7 +100,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
                     <ChevronVerticalWithCircle
                       width={20}
                       height={20}
-                      opacity={"1"}
+                      borderColor="#1F1F1F"
                     />
                   </span>
                 </Button>
@@ -110,7 +110,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
                   <ChevronVerticalWithCircle
                     width={20}
                     height={20}
-                    opacity={"1"}
+                    borderColor="#1F1F1F"
                   />
                 </span>
               </div>

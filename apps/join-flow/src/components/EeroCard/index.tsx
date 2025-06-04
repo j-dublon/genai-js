@@ -1,5 +1,5 @@
 import { Button, ColorPill } from "@react-component-library/ui";
-import { Tick } from "@react-component-library/ui/server";
+import { Tick } from "@react-component-library/ui/icons";
 import Link from "next/link";
 
 import { EeroProduct } from "@/store/useJoinFlowStore";

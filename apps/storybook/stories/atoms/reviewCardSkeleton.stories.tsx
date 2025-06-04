@@ -1,4 +1,4 @@
-import { ReviewCardSkeleton } from "@react-component-library/ui/server";
+import { ReviewCardSkeleton } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ReviewCardSkeleton> = {

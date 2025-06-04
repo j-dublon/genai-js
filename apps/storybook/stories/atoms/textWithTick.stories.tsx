@@ -13,6 +13,8 @@ const meta: Meta<typeof TextWithTick> = {
     padding: { control: "select", options: ["none", "default", "large"] },
     iconSize: { control: "number" },
     outline: { control: "boolean" },
+    additionalTextInput: { control: "text" },
+    additionalTextStyling: { control: "text" },
   },
 };
 
@@ -45,5 +47,13 @@ export const Outline: Story = {
   args: {
     textInput: "This is an outlined version",
     outline: true,
+  },
+};
+
+export const WithAdditionalText: Story = {
+  args: {
+    textInput: "Main text",
+    additionalTextInput: "with additional text",
+    additionalTextStyling: "ds:text-ui-error ds:font-semibold",
   },
 };

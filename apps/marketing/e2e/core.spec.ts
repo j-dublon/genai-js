@@ -1,5 +1,6 @@
 import { test, expect, Locator, Page } from "@playwright/test";
 import {
+  acceptCookies,
   checkPostcodeChecker,
   checkVisibility,
   mockTrustpilotReviews,
@@ -11,6 +12,7 @@ test.describe("Home Page", () => {
     await context.clearCookies();
     await context.clearPermissions();
     await mockTrustpilotReviews(page);
+    await acceptCookies(page);
     await page.goto("/");
     await page.getByTestId("hero-banner").locator("video").waitFor();
   });

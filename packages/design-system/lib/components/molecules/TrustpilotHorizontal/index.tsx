@@ -6,13 +6,15 @@ import Link from "next/link";
 interface TrustpilotHorizontalProps {
   trustScore: number;
   numberOfReviews?: number;
-  flexDirection?: string;
+  flexDirectionMobile?: "row" | "col";
+  className?: string;
 }
 
 export const TrustpilotHorizontal = ({
   trustScore,
   numberOfReviews,
-  flexDirection = "flex-row",
+  flexDirectionMobile = "row",
+  className,
 }: TrustpilotHorizontalProps) => {
   return (
     <Link
@@ -22,7 +24,9 @@ export const TrustpilotHorizontal = ({
       <div
         className={cx(
           "ds:flex ds:md:flex-row ds:items-center ds:lg:space-x-3 ds:space-x-2 ds:md:space-y-0",
-          `ds:${flexDirection}`,
+          flexDirectionMobile === "row" && "ds:flex-row",
+          flexDirectionMobile === "col" && "ds:flex-col",
+          className,
         )}
       >
         <div className="ds:flex ds:flex-row ds:items-center ds:align-middle ds:space-x-2 ds:md:space-x-4">

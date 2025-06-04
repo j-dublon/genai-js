@@ -1,5 +1,5 @@
 import { Button } from "@components/atoms/Button";
-import { ArrowIcon } from "@icons/ArrowIcon";
+import { ArrowWithCircle } from "@icons/ArrowWithCircle";
 import { InfoIcon } from "@icons/InfoIcon";
 
 const TEXT_CLASS =
@@ -29,6 +29,7 @@ type BroadbandPackage = {
 interface PackageCardProps {
   pkg: BroadbandPackage;
   onPackageSelect: (pkg: BroadbandPackage) => void;
+  onViewDetails?: (pkg: BroadbandPackage) => void;
   tint: "pink" | "blue" | "yellow";
   buttonText: string;
   className?: string;
@@ -87,7 +88,7 @@ const Speed = ({
 }) => {
   return (
     <div className="ds:flex ds:flex-row ds:items-center ds:gap-1 ds:md:gap-2">
-      <ArrowIcon direction={direction} />
+      <ArrowWithCircle direction={direction} />
       <p className={TEXT_CLASS}>
         <span className={FEATURE_TEXT_CLASS}>{value}Mbps</span>{" "}
         {direction === "down" ? "download" : "upload"} speed
@@ -115,6 +116,7 @@ const PromotionPill = ({ promotion }: { promotion: string }) => {
 export const PackageCard = ({
   pkg,
   onPackageSelect,
+  onViewDetails,
   tint,
   buttonText,
   className = "",
@@ -189,13 +191,12 @@ export const PackageCard = ({
           </Button>
           <div className="ds:flex ds:flex-row ds:gap-2">
             <InfoIcon />
-            {/* TODO: info link functionality */}
-            <a
-              href="/"
-              className="ds:text-ui-link ds:underline ds:font-medium ds:text-xs ds:md:text-sm"
+            <button
+              onClick={() => onViewDetails?.(pkg)}
+              className="ds:text-ui-link ds:underline ds:font-medium ds:text-xs ds:md:text-sm ds:bg-transparent ds:border-0 ds:p-0 ds:cursor-pointer"
             >
               Is this plan for me?
-            </a>
+            </button>
           </div>
         </div>
       </div>

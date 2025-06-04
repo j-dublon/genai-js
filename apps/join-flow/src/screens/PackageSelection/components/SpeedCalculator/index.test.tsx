@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useScrollToElement } from "@/hooks/useScrollToElement";
@@ -13,6 +19,9 @@ vi.mock("@/hooks/useSpeedCalculator");
 
 const mockScrollToElement = vi.fn();
 const mockScrollToForm = vi.fn();
+const mockScrollToTop = vi.fn();
+
+const mockOnShowPackageDetails = vi.fn();
 
 const testTitle = "Test Title";
 const testSubtitle = "Test Subtitle";
@@ -24,6 +33,7 @@ describe("SpeedCalculator", () => {
       (elementId: string) => {
         if (elementId === "#results") return mockScrollToElement;
         if (elementId === "#speed-calculator-form") return mockScrollToForm;
+        if (elementId === "#fullscreen-modal-title") return mockScrollToTop;
       },
     );
 
@@ -39,6 +49,7 @@ describe("SpeedCalculator", () => {
         title={testTitle}
         subtitle={testSubtitle}
         broadbandPackages={broadbandPackages}
+        onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
 
@@ -54,6 +65,7 @@ describe("SpeedCalculator", () => {
         title={testTitle}
         subtitle={testSubtitle}
         broadbandPackages={broadbandPackages}
+        onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
 
@@ -94,6 +106,7 @@ describe("SpeedCalculator", () => {
 
   it("handles form submission and shows results", async () => {
     const mockCalculateRecommendedPackage = vi.fn();
+    const mockOnShowPackageDetails = vi.fn();
     (useSpeedCalculator as ReturnType<typeof vi.fn>).mockReturnValue({
       recommendedPackage: broadbandPackages[0],
       calculateRecommendedPackage: mockCalculateRecommendedPackage,
@@ -104,20 +117,23 @@ describe("SpeedCalculator", () => {
         title={testTitle}
         subtitle={testSubtitle}
         broadbandPackages={broadbandPackages}
+        onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
 
-    const slider = screen.getByRole("slider");
-    fireEvent.change(slider, { target: { value: "3" } });
+    await act(async () => {
+      const slider = screen.getByRole("slider");
+      fireEvent.change(slider, { target: { value: "3" } });
 
-    const streamingCheckbox = screen.getByLabelText("Streaming");
-    fireEvent.click(streamingCheckbox);
+      const streamingCheckbox = screen.getByLabelText("Streaming");
+      fireEvent.click(streamingCheckbox);
 
-    const yesRadio = screen.getByLabelText("Yes");
-    fireEvent.click(yesRadio);
+      const yesRadio = screen.getByLabelText("Yes");
+      fireEvent.click(yesRadio);
 
-    const calculateButton = screen.getByText("Calculate");
-    fireEvent.click(calculateButton);
+      const calculateButton = screen.getByText("Calculate");
+      fireEvent.click(calculateButton);
+    });
 
     await waitFor(() => {
       expect(mockCalculateRecommendedPackage).toHaveBeenCalledWith({
@@ -132,9 +148,15 @@ describe("SpeedCalculator", () => {
       name: "C-150 Plan",
     });
     expect(recommendedPackageButton).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(recommendedPackageButton);
+    });
+
+    expect(mockOnShowPackageDetails).toHaveBeenCalledWith(broadbandPackages[0]);
   });
 
-  it("handles form reset", () => {
+  it("handles form reset", async () => {
     const mockCalculateRecommendedPackage = vi.fn();
     (useSpeedCalculator as ReturnType<typeof vi.fn>).mockReturnValue({
       recommendedPackage: broadbandPackages[0],
@@ -146,20 +168,27 @@ describe("SpeedCalculator", () => {
         title={testTitle}
         subtitle={testSubtitle}
         broadbandPackages={broadbandPackages}
+        onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
 
+    await act(async () => {
+      const slider = screen.getByRole("slider");
+      fireEvent.change(slider, { target: { value: "3" } });
+
+      const streamingCheckbox = screen.getByLabelText("Streaming");
+      fireEvent.click(streamingCheckbox);
+
+      const yesRadio = screen.getByLabelText("Yes");
+      fireEvent.click(yesRadio);
+
+      const resetButton = screen.getByText("Reset");
+      fireEvent.click(resetButton);
+    });
+
     const slider = screen.getByRole("slider");
-    fireEvent.change(slider, { target: { value: "3" } });
-
     const streamingCheckbox = screen.getByLabelText("Streaming");
-    fireEvent.click(streamingCheckbox);
-
     const yesRadio = screen.getByLabelText("Yes");
-    fireEvent.click(yesRadio);
-
-    const resetButton = screen.getByText("Reset");
-    fireEvent.click(resetButton);
 
     expect(slider).toHaveValue("0");
     expect(streamingCheckbox).not.toBeChecked();
@@ -174,11 +203,14 @@ describe("SpeedCalculator", () => {
         title={testTitle}
         subtitle={testSubtitle}
         broadbandPackages={broadbandPackages}
+        onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
 
-    const calculateButton = screen.getByText("Calculate");
-    fireEvent.click(calculateButton);
+    await act(async () => {
+      const calculateButton = screen.getByText("Calculate");
+      fireEvent.click(calculateButton);
+    });
 
     await waitFor(() => {
       expect(
@@ -200,27 +232,89 @@ describe("SpeedCalculator", () => {
         title={testTitle}
         subtitle={testSubtitle}
         broadbandPackages={broadbandPackages}
+        onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
 
-    const slider = screen.getByRole("slider");
-    fireEvent.change(slider, { target: { value: "3" } });
+    await act(async () => {
+      const slider = screen.getByRole("slider");
+      fireEvent.change(slider, { target: { value: "3" } });
 
-    const streamingCheckbox = screen.getByLabelText("Streaming");
-    fireEvent.click(streamingCheckbox);
+      const streamingCheckbox = screen.getByLabelText("Streaming");
+      fireEvent.click(streamingCheckbox);
 
-    const yesRadio = screen.getByLabelText("Yes");
-    fireEvent.click(yesRadio);
+      const yesRadio = screen.getByLabelText("Yes");
+      fireEvent.click(yesRadio);
 
-    const calculateButton = screen.getByText("Calculate");
-    fireEvent.click(calculateButton);
+      const calculateButton = screen.getByText("Calculate");
+      fireEvent.click(calculateButton);
+    });
 
     await waitFor(() => {
       expect(screen.queryByText("Calculate")).not.toBeInTheDocument();
     });
 
+    const slider = screen.getByRole("slider");
+    const streamingCheckbox = screen.getByLabelText("Streaming");
+    const yesRadio = screen.getByLabelText("Yes");
+
     expect(slider).toBeDisabled();
     expect(streamingCheckbox).toBeDisabled();
     expect(yesRadio).toBeDisabled();
+  });
+
+  it("displays the recommended package details when the submit button is clicked", async () => {
+    // Setup
+    const mockCalculateRecommendedPackage = vi.fn();
+    const mockRecommendedPackage = broadbandPackages[0];
+
+    (useSpeedCalculator as ReturnType<typeof vi.fn>).mockReturnValue({
+      recommendedPackage: mockRecommendedPackage,
+      calculateRecommendedPackage: mockCalculateRecommendedPackage,
+    });
+
+    render(
+      <SpeedCalculator
+        title={testTitle}
+        subtitle={testSubtitle}
+        broadbandPackages={broadbandPackages}
+        onShowPackageDetails={mockOnShowPackageDetails}
+      />,
+    );
+
+    const slider = screen.getByRole("slider");
+    const streamingCheckbox = screen.getByLabelText("Streaming");
+    const yesRadio = screen.getByLabelText("Yes");
+    const calculateButton = screen.getByText("Calculate");
+
+    await act(async () => {
+      fireEvent.change(slider, { target: { value: "3" } });
+      fireEvent.click(streamingCheckbox);
+      fireEvent.click(yesRadio);
+      fireEvent.click(calculateButton);
+    });
+
+    await waitFor(() => {
+      expect(mockCalculateRecommendedPackage).toHaveBeenCalledWith({
+        peopleCount: 3,
+        internetUses: ["Streaming"],
+        smartSpeakers: "Yes",
+      });
+      expect(screen.queryByText("Calculate")).not.toBeInTheDocument();
+    });
+
+    const recommendedPackageButton = screen.getByRole("button", {
+      name: `${mockRecommendedPackage.name} Plan`,
+    });
+    expect(recommendedPackageButton).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(recommendedPackageButton);
+    });
+
+    expect(mockOnShowPackageDetails).toHaveBeenCalledWith(
+      mockRecommendedPackage,
+    );
+    expect(mockScrollToTop).toHaveBeenCalled();
   });
 });

@@ -3,18 +3,23 @@ import "./index.css";
 
 import { AccountAppButton } from "@components/atoms/AccountAppButton";
 import { Button } from "@components/atoms/Button";
+import { Checkbox } from "@components/atoms/Checkbox";
 import { ColorPill } from "@components/atoms/ColorPill";
 import { DatePicker } from "@components/atoms/DatePicker";
+import { DropdownPill } from "@components/atoms/DropdownPill";
 import { FeatureImage } from "@components/atoms/FeatureImage";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
 import { Heading } from "@components/atoms/Heading";
+import { InfoAccordionItem } from "@components/atoms/InfoAccordionItem";
 import {
   CustomInputProps,
   DropdownInputField,
 } from "@components/atoms/InputField";
-import { LegalClaims } from "@components/atoms/LegalClaims";
+import { InputSlider } from "@components/atoms/InputSlider";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
+import { Radio } from "@components/atoms/Radio";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
+import { ReviewCardSkeleton } from "@components/atoms/ReviewCardSkeleton";
 import { SectionHeading } from "@components/atoms/SectionHeading";
 import { SimpleNavBar } from "@components/atoms/SimpleNavBar";
 import { Slider } from "@components/atoms/Slider";
@@ -34,6 +39,7 @@ import { InfoCard, InfoCardProps } from "@components/molecules/InfoCard";
 import { InfoModal } from "@components/molecules/InfoModal";
 import { MobileApp } from "@components/molecules/MobileApp";
 import { MobilePhone } from "@components/molecules/MobilePhone";
+import { PackageCard } from "@components/molecules/PackageCard";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
 import { ProductCard } from "@components/molecules/ProductCard";
 import { ReasonCard } from "@components/molecules/ReasonCard";
@@ -67,9 +73,11 @@ export {
   ArticleCard,
   BACKGROUND_COLORS,
   Button,
+  Checkbox,
   ColorPill,
   CompanyLogoStrip,
   DatePicker,
+  DropdownPill,
   FeatureImage,
   Footer,
   FullScreenModal,
@@ -77,21 +85,25 @@ export {
   Heading,
   HowFastCanYouGo,
   ImageMarquee,
+  InfoAccordionItem,
   InfoCard,
   InfoModal,
   DropdownInputField as InputField,
-  LegalClaims,
+  InputSlider,
   MobileApp,
   MobilePhone,
   NavBar,
+  PackageCard,
   PhoneTextContent,
   PostcodeChecker,
   ProductCard,
+  Radio,
   ReasonCard,
   ReferAFriendHero,
   ReferralCard,
   ReferralCardWrapper,
   ReviewCard,
+  ReviewCardSkeleton,
   SectionHeading,
   SimpleNavBar,
   Slider,

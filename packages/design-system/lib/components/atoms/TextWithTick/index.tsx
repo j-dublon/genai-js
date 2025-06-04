@@ -13,6 +13,8 @@ export interface TextWithTickProps {
   iconSize?: number;
   className?: string;
   outline?: boolean;
+  additionalTextInput?: string;
+  additionalTextStyling?: string;
 }
 
 export const TextWithTick = ({
@@ -24,6 +26,8 @@ export const TextWithTick = ({
   ariaLabel,
   className,
   outline = false,
+  additionalTextInput,
+  additionalTextStyling,
 }: TextWithTickProps) => {
   const paddingClass = {
     none: "",
@@ -52,6 +56,11 @@ export const TextWithTick = ({
 
       <p className="ds:leading-[1.6] ds:md:leading-[1.5] ds:font-inherit">
         {textInput}
+        {additionalTextInput && (
+          <span className={additionalTextStyling}>
+            {" " + additionalTextInput}
+          </span>
+        )}
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-export const ArrowIcon = ({
+export const ArrowWithCircle = ({
   height = 21,
   width = 21,
   className = "",

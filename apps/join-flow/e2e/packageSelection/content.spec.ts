@@ -1,5 +1,4 @@
 import { test, expect, Page } from "@playwright/test";
-import { mockTrustpilotScore } from "../helpers";
 
 interface HeroSectionSelectors {
   title: string;
@@ -45,9 +44,9 @@ const setupInitialState = (page: Page) => {
         id: "c-900",
         name: "C-900",
         speed: { download: 900, upload: 900 },
-        price: { monthly: 43, setup: 0 },
+        price: { monthly: 41, setup: 0 },
         priceIncrease: { nextYearIncrease: 0, followingYearIncrease: 0 },
-        contractLength: 12,
+        contractLength: 24,
         description: "Fast broadband",
         features: [],
       },
@@ -117,7 +116,7 @@ test.describe("Select package page", () => {
       c900: 'h2:has-text("C-900")',
       c900Package: '[aria-label="C-900 broadband package"]',
       toggleSwitch: "role=switch",
-      monthlyPrice: "43",
+      monthlyPrice: "41",
     },
     benefitsList: {
       title: 'text="A quick reminder of why you\'ll love Cuckoo"',

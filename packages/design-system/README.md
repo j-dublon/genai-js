@@ -39,6 +39,9 @@ import { Button } from "@react-component-library/ui";
 // For server-specific components
 import { ServerComponent } from "@react-component-library/ui/server";
 
+// For icons
+import { Arrow } from "@react-component-library/ui/icons";
+
 // Import the styles
 import "@react-component-library/ui/ui.css";
 ```

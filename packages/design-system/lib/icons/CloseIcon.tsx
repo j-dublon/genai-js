@@ -3,6 +3,7 @@ interface CloseIconProps {
   height?: number;
   outlineColor?: string;
   color?: string;
+  className?: string;
 }
 
 export const CloseIcon = ({
@@ -10,13 +11,14 @@ export const CloseIcon = ({
   height = 40,
   outlineColor = "#DBD8D0",
   color = "#1F1F1F",
+  className = "ds:max-w-8 ds:max-h-8 ds:md:max-w-10 ds:md:max-h-10",
 }: CloseIconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
-      className="ds:max-w-[32px] ds:max-h-[32px] ds:md:max-w-[40px] ds:md:max-h-[40px]"
+      className={className}
       viewBox="0 0 40 40"
       fill="none"
     >

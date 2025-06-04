@@ -1,15 +1,20 @@
 "use client";
 
 import { FullScreenModal } from "@react-component-library/ui";
-import { ToggleSwitch, useScrollable } from "@react-component-library/ui";
-import { PackageCard } from "@react-component-library/ui/server";
+import {
+  PackageCard,
+  ToggleSwitch,
+  useScrollable,
+} from "@react-component-library/ui";
 import useJoinFlowStore, { BroadbandPackage } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { useTopSpeedPackage } from "@/hooks/useTopSpeedPackage";
 import { createBasket } from "@/services/helpers/createBasket";
 
+import { PackageSelectionDetails } from "../PackageSelectionDetails";
 import { SpeedCalculator } from "../SpeedCalculator";
 import {
   broadbandPackages,
@@ -17,13 +22,71 @@ import {
   speedCalculatorText,
 } from "./ChooseYourPackageProps";
 
+type ModalContent = "speed-calculator" | "package-details";
+
 export const ChooseYourPackage = () => {
   const router = useRouter();
   const { selectPackage, quoteResponse, setBasket } = useJoinFlowStore();
-  const [is24Month, setIs24Month] = useState(false);
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDialogElement>(null);
+
+  const [is24Month, setIs24Month] = useState(true);
+  const [modalContent, setModalContent] =
+    useState<ModalContent>("speed-calculator");
+  const [packageDetails, setPackageDetails] = useState<BroadbandPackage | null>(
+    null,
+  );
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(scrollContainerRef);
+
+  const {
+    toggleSwitchLabels,
+    pageTitle,
+    pageSubtitle,
+    packageDetailsModalTitle,
+    promotionText,
+    promotionActive,
+  } = packageSelectionPageText;
+  const { calculatorModalTitle, title, subtitle, speedCalculatorButtonText } =
+    speedCalculatorText;
+
+  const filteredPackages = broadbandPackages.filter(
+    (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
+  );
+
+  const topSpeedPackage = useTopSpeedPackage(filteredPackages);
+
+  const handleToggleSwitch = (isOn: boolean) => {
+    setIs24Month(isOn);
+
+    if (packageDetails) {
+      const targetContractLength = isOn ? 24 : 12;
+      if (packageDetails.contractLength !== targetContractLength) {
+        // Find the same package with the correct contract length
+        const matchingPackage = broadbandPackages.find(
+          (pkg) =>
+            pkg.name === packageDetails.name &&
+            pkg.contractLength === targetContractLength,
+        );
+        if (matchingPackage) {
+          setPackageDetails(matchingPackage);
+        }
+      }
+    }
+  };
+
+  const packageDetailsToggle = {
+    isOn: is24Month,
+    onChange: handleToggleSwitch,
+    leftLabel: toggleSwitchLabels.left,
+    rightLabel: toggleSwitchLabels.right,
+  };
+
+  const modalTitle =
+    modalContent === "package-details"
+      ? packageDetailsModalTitle
+      : calculatorModalTitle;
 
   const handlePackageSelection = async (packageId: string) => {
     const selectedPackage = broadbandPackages.find(
@@ -59,12 +122,42 @@ export const ChooseYourPackage = () => {
     return cardColors[index % cardColors.length];
   };
 
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const filteredPackages = broadbandPackages.filter(
-    (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
-  );
-
   useClearFocus(modalRef, "close");
+
+  const handleOpenModal = (content: ModalContent, pkg?: BroadbandPackage) => {
+    if (pkg) {
+      setPackageDetails(pkg);
+    }
+    setModalContent(content);
+    modalRef.current?.showModal();
+  };
+
+  const getModalContent = () => {
+    switch (modalContent) {
+      case "speed-calculator":
+        return (
+          <SpeedCalculator
+            title={title}
+            subtitle={subtitle}
+            broadbandPackages={broadbandPackages}
+            onShowPackageDetails={(pkg) => {
+              setPackageDetails(pkg);
+              setModalContent("package-details");
+            }}
+          />
+        );
+      case "package-details":
+        return packageDetails ? (
+          <PackageSelectionDetails
+            packageDetails={packageDetails}
+            handlePackageSelection={handlePackageSelection}
+            topSpeedPackage={topSpeedPackage}
+            toggle={packageDetailsToggle}
+            changePackage={setPackageDetails}
+          />
+        ) : null;
+    }
+  };
 
   return (
     <section
@@ -74,15 +167,15 @@ export const ChooseYourPackage = () => {
       <div className="px-mobile sm:px-tablet lg:px-desktop">
         <div className="flex flex-col gap-4 md:gap-8 pb-6 md:pb-10 mx-auto md:max-w-[1152px]">
           <h2 className="text-[26px] md:text-3xl md:leading-[1.4] font-semibold">
-            {packageSelectionPageText.pageTitle}
+            {pageTitle}
           </h2>
           <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-center">
             <p className="leading-[1.6] text-xs md:text-sm font-semibold">
-              {packageSelectionPageText.pageSubtitle}
+              {pageSubtitle}
             </p>
             <ToggleSwitch
-              leftLabel="12-months"
-              rightLabel="24-months"
+              leftLabel={toggleSwitchLabels.left}
+              rightLabel={toggleSwitchLabels.right}
               isOn={is24Month}
               onChange={setIs24Month}
             />
@@ -90,13 +183,11 @@ export const ChooseYourPackage = () => {
               (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
             ).length > 1 && (
               <button
-                onClick={() => {
-                  modalRef.current?.showModal();
-                }}
+                onClick={() => handleOpenModal("speed-calculator")}
                 className="w-fit text-ui-link underline cursor-pointer leading-[1.4] md:leading-[1.6] text-xs md:text-sm font-medium bg-transparent border-0 p-0"
                 aria-label="Open speed calculator modal"
               >
-                I need help choosing
+                {speedCalculatorButtonText}
               </button>
             )}
           </div>
@@ -119,22 +210,29 @@ export const ChooseYourPackage = () => {
                 onPackageSelect={(pkg: BroadbandPackage) =>
                   handlePackageSelection(pkg.id)
                 }
+                onViewDetails={(pkg: BroadbandPackage) =>
+                  handleOpenModal("package-details", pkg)
+                }
                 buttonText={packageSelectionPageText.buttonText}
                 tint={getTint(index)}
                 featurePackage={pkg.id === "c-900"}
-                promotion={pkg.id === "c-900" ? "3 months free" : undefined}
+                promotion={
+                  promotionActive && pkg.id === "c-900"
+                    ? promotionText
+                    : undefined
+                }
               />
             ))}
             <div className="md:pr-6 hidden md:block" />
           </div>
         </div>
       </div>
-      <FullScreenModal title="Speed calculator" modalRef={modalRef}>
-        <SpeedCalculator
-          title={speedCalculatorText.title}
-          subtitle={speedCalculatorText.subtitle}
-          broadbandPackages={broadbandPackages}
-        />
+      <FullScreenModal
+        title={modalTitle}
+        modalRef={modalRef}
+        toggle={packageDetailsToggle}
+      >
+        {getModalContent()}
       </FullScreenModal>
     </section>
   );

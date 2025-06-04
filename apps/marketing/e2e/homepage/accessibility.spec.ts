@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { mockTrustpilotReviews, mockTrustpilotScore } from "../helpers";
+import {
+  acceptCookies,
+  mockTrustpilotReviews,
+  mockTrustpilotScore,
+} from "../helpers";
 
 test.describe("Homepage Accessibility", () => {
   test.beforeEach(async ({ page, context }) => {
@@ -8,6 +12,7 @@ test.describe("Homepage Accessibility", () => {
     await context.clearPermissions();
     await mockTrustpilotReviews(page);
     await mockTrustpilotScore(page);
+    await acceptCookies(page);
     await page.goto("/");
     await page.getByTestId("hero-banner").locator("video").waitFor();
   });

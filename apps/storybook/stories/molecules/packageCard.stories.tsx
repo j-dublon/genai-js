@@ -1,4 +1,4 @@
-import { PackageCard } from "@react-component-library/ui/server";
+import { PackageCard } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof PackageCard> = {

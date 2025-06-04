@@ -1,9 +1,11 @@
 import { test, expect, Locator, Page } from "@playwright/test";
+import { acceptCookies } from "e2e/helpers";
 
 test.describe("Homepage Navigation", () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await context.clearPermissions();
+    await acceptCookies(page);
     await page.goto("/");
     await page.getByTestId("hero-banner").locator("video").waitFor();
   });

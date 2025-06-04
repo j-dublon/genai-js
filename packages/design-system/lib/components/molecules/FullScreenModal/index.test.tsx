@@ -87,4 +87,29 @@ describe("FullScreenModal", () => {
     const contentContainer = screen.getByText("Modal content").parentElement;
     expect(contentContainer).toHaveClass("ds:bg-core-white", "ds:rounded-lg");
   });
+
+  it("renders toggle switch when toggle prop is provided", () => {
+    const mockToggle = {
+      isOn: true,
+      onChange: vi.fn(),
+      leftLabel: "Left",
+      rightLabel: "Right",
+    };
+
+    render(
+      <FullScreenModal
+        title={mockTitle}
+        modalRef={mockModalRef}
+        toggle={mockToggle}
+      >
+        <div>Modal content</div>
+      </FullScreenModal>,
+    );
+
+    const toggleSwitch = screen.getByLabelText("Toggle Right");
+    expect(toggleSwitch).toBeInTheDocument();
+    expect(screen.getByText("Left")).toBeInTheDocument();
+    expect(screen.getByText("Right")).toBeInTheDocument();
+    expect(toggleSwitch).toHaveAttribute("aria-checked", "true");
+  });
 });

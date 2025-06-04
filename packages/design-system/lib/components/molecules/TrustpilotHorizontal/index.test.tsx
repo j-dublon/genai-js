@@ -25,4 +25,11 @@ describe("TrustpilotHorizontal Component", () => {
       `Based on ${mockProps.numberOfReviews.toLocaleString()} reviews`,
     );
   });
+
+  it("allows passing of classNames", () => {
+    render(<TrustpilotHorizontal {...mockProps} className="test-class" />);
+    const trustpilotHorizontal =
+      screen.getByTestId("trustpilot-link").firstChild;
+    expect(trustpilotHorizontal).toHaveClass("test-class");
+  });
 });

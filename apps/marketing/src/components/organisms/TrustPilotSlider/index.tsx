@@ -1,9 +1,9 @@
 import {
   ReviewCard,
   ReviewCardProps,
+  ReviewCardSkeleton,
   Slider,
 } from "@react-component-library/ui";
-import { ReviewCardSkeleton } from "@react-component-library/ui/server";
 
 import { useReviewCardExpansion, useTrustpilotReviews } from "@/hooks";
 

@@ -2,8 +2,6 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { BroadbandPackage } from "@/store/useJoinFlowStore";
-
 import { packageSelectionPageText } from "./ChooseYourPackageProps";
 import { ChooseYourPackage } from "./index";
 
@@ -38,6 +36,30 @@ const mockQuoteResponse = {
   },
 };
 
+type PackageCardProps = {
+  pkg: {
+    id: string;
+    name: string;
+    price: {
+      monthly: number;
+    };
+    contractLength: number;
+  };
+  onPackageSelect: (pkg: {
+    id: string;
+    name: string;
+    price: { monthly: number };
+  }) => void;
+  onViewDetails: (pkg: {
+    id: string;
+    name: string;
+    price: { monthly: number };
+  }) => void;
+  tint: string;
+  featurePackage?: boolean;
+  promotion?: string;
+};
+
 const mockUseScrollable = {
   isMouseDown: false,
   onMouseDown: vi.fn(),
@@ -64,33 +86,15 @@ vi.mock("@react-component-library/ui", async () => {
         {isOn ? "24-months" : "12-months"}
       </button>
     ),
-    useScrollable: () => mockUseScrollable,
-  };
-});
-
-vi.mock("@react-component-library/ui/server", async () => {
-  const actual = await vi.importActual("@react-component-library/ui/server");
-  return {
-    ...actual,
     PackageCard: ({
       pkg,
       onPackageSelect,
+      onViewDetails,
       tint,
       featurePackage,
       promotion,
-      disabled,
-    }: {
-      pkg: BroadbandPackage;
-      onPackageSelect: (pkg: BroadbandPackage) => void;
-      tint: string;
-      featurePackage?: boolean;
-      promotion?: string;
-      disabled?: boolean;
-    }) => (
-      <div
-        data-testid="package-card"
-        onClick={() => !disabled && onPackageSelect(pkg)}
-      >
+    }: PackageCardProps) => (
+      <div data-testid="package-card">
         <div>{pkg.name}</div>
         <div>£{pkg.price.monthly}/month</div>
         <div data-testid="contract-length">{pkg.contractLength}</div>
@@ -99,8 +103,18 @@ vi.mock("@react-component-library/ui/server", async () => {
         )}
         {promotion && <div data-testid="promotion">{promotion}</div>}
         <div data-testid="tint">{tint}</div>
+        <button
+          data-testid="select-package"
+          onClick={() => onPackageSelect(pkg)}
+        >
+          Select Package
+        </button>
+        <button data-testid="view-details" onClick={() => onViewDetails(pkg)}>
+          View Details
+        </button>
       </div>
     ),
+    useScrollable: () => mockUseScrollable,
   };
 });
 
@@ -135,10 +149,49 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
-  SpeedCalculator: () => (
-    <dialog data-testid="speed-calculator-mock">Speed Calculator Mock</dialog>
+  SpeedCalculator: ({
+    onShowPackageDetails,
+  }: {
+    onShowPackageDetails: (pkg: { id: string }) => void;
+  }) => (
+    <dialog data-testid="speed-calculator-mock">
+      Speed Calculator Mock
+      <button onClick={() => onShowPackageDetails({ id: "test-package" })}>
+        Show Package Details
+      </button>
+    </dialog>
   ),
 }));
+
+vi.mock(
+  "@/screens/PackageSelection/components/PackageSelectionDetails",
+  () => ({
+    PackageSelectionDetails: ({
+      packageDetails,
+      handlePackageSelection,
+    }: {
+      packageDetails: {
+        id: string;
+        name: string;
+        contractLength: number;
+      };
+      handlePackageSelection: (id: string) => void;
+    }) => (
+      <div data-testid="package-selection-details">
+        <div data-testid="package-name">{packageDetails.name}</div>
+        <div data-testid="package-contract-length">
+          {packageDetails.contractLength}
+        </div>
+        <button
+          data-testid="package-selection-button"
+          onClick={() => handlePackageSelection(packageDetails.id)}
+        >
+          Add to basket
+        </button>
+      </div>
+    ),
+  }),
+);
 
 describe("ChooseYourPackage", () => {
   const mockBasketResponse = {
@@ -200,7 +253,7 @@ describe("ChooseYourPackage", () => {
   it("calls the expected functions when a package is selected", async () => {
     render(<ChooseYourPackage />);
 
-    const packageCards = screen.getAllByTestId("package-card");
+    const packageCards = screen.getAllByTestId("select-package");
     await userEvent.click(packageCards[0]);
 
     expect(mockSelectPackage).toHaveBeenCalled();
@@ -227,27 +280,27 @@ describe("ChooseYourPackage", () => {
     const toggleSwitch = screen.getByTestId("toggle-switch");
 
     expect(toggleSwitch).toBeInTheDocument();
-    expect(toggleSwitch).toHaveAttribute("aria-pressed", "false");
-    expect(toggleSwitch).toHaveTextContent("12-months");
+    expect(toggleSwitch).toHaveAttribute("aria-pressed", "true");
+    expect(toggleSwitch).toHaveTextContent("24-months");
   });
 
   it("filters packages based on contract length when toggle is switched", async () => {
     render(<ChooseYourPackage />);
 
     const initialContractLengths = screen.getAllByTestId("contract-length");
-    const initial12MonthCount = initialContractLengths.filter(
-      (el) => el.textContent === "12",
+    const initial24MonthCount = initialContractLengths.filter(
+      (el) => el.textContent === "24",
     ).length;
-    expect(initial12MonthCount).toBeGreaterThan(0);
+    expect(initial24MonthCount).toBeGreaterThan(0);
 
     const toggleSwitch = screen.getByTestId("toggle-switch");
     await userEvent.click(toggleSwitch);
 
     const updatedContractLengths = screen.getAllByTestId("contract-length");
-    const updated24MonthCount = updatedContractLengths.filter(
-      (el) => el.textContent === "24",
+    const updated12MonthCount = updatedContractLengths.filter(
+      (el) => el.textContent === "12",
     ).length;
-    expect(updated24MonthCount).toBeGreaterThan(0);
+    expect(updated12MonthCount).toBeGreaterThan(0);
   });
 
   it("renders the help link", () => {
@@ -268,5 +321,30 @@ describe("ChooseYourPackage", () => {
     const helpLink = screen.getByText("I need help choosing");
     await userEvent.click(helpLink);
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+  });
+
+  it("opens package details modal when view details is clicked", async () => {
+    HTMLDialogElement.prototype.showModal = vi.fn();
+    render(<ChooseYourPackage />);
+
+    const viewDetailsButtons = screen.getAllByTestId("view-details");
+    await userEvent.click(viewDetailsButtons[0]);
+
+    expect(screen.getByTestId("package-selection-details")).toBeInTheDocument();
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+  });
+
+  it("handles package selection from details modal", async () => {
+    HTMLDialogElement.prototype.showModal = vi.fn();
+    render(<ChooseYourPackage />);
+
+    const viewDetailsButtons = screen.getAllByTestId("view-details");
+    await userEvent.click(viewDetailsButtons[0]);
+
+    const addToBasketButton = screen.getByTestId("package-selection-button");
+    await userEvent.click(addToBasketButton);
+
+    expect(mockSelectPackage).toHaveBeenCalled();
+    expect(mockRouterPush).toHaveBeenCalledWith("/join-flow/personal-details");
   });
 });

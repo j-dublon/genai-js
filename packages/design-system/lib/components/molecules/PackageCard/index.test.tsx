@@ -28,6 +28,7 @@ describe("PackageCard", () => {
   const defaultProps = {
     pkg: mockPackage,
     onPackageSelect: vi.fn(),
+    onViewDetails: vi.fn(),
     tint: "blue" as const,
     buttonText: "Add to bag",
   };
@@ -115,5 +116,14 @@ describe("PackageCard", () => {
     const promotionPill = screen.getByLabelText("Promotion");
     expect(promotionPill).toHaveClass("ds:bg-offer-gradient");
     expect(promotionPill).toHaveTextContent(promotionText);
+  });
+
+  it("calls onViewDetails when 'Is this plan for me?' is clicked", async () => {
+    const onViewDetails = vi.fn();
+    render(<PackageCard {...defaultProps} onViewDetails={onViewDetails} />);
+
+    await userEvent.click(screen.getByText("Is this plan for me?"));
+
+    expect(onViewDetails).toHaveBeenCalledWith(mockPackage);
   });
 });

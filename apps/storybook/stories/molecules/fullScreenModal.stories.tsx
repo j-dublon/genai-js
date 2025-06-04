@@ -1,14 +1,16 @@
 import { Button, FullScreenModal } from "@react-component-library/ui";
 import type { Meta, StoryObj } from "@storybook/react";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useRef, useState } from "react";
 
 interface FullScreenModalWrapperProps {
   title: string;
   children: ReactNode;
+  showToggle?: boolean;
 }
 
 const FullScreenModalWrapper = (props: FullScreenModalWrapperProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
+  const [isToggled, setIsToggled] = useState(false);
 
   const openModal = () => {
     modalRef.current?.showModal();
@@ -19,7 +21,20 @@ const FullScreenModalWrapper = (props: FullScreenModalWrapperProps) => {
       <Button onClick={openModal} variant="solid" tint="yellow">
         Open Full Screen Modal
       </Button>
-      <FullScreenModal title={props.title} modalRef={modalRef}>
+      <FullScreenModal
+        title={props.title}
+        modalRef={modalRef}
+        toggle={
+          props.showToggle
+            ? {
+                isOn: isToggled,
+                onChange: setIsToggled,
+                leftLabel: "Off",
+                rightLabel: "On",
+              }
+            : undefined
+        }
+      >
         {props.children}
       </FullScreenModal>
     </div>
@@ -42,6 +57,10 @@ const meta: Meta<typeof FullScreenModalWrapper> = {
       description:
         "The content to display in the modal (can be text or React elements)",
     },
+    showToggle: {
+      control: "boolean",
+      description: "Whether to show the toggle switch in the modal header",
+    },
   },
 };
 
@@ -54,6 +73,7 @@ export const Default: Story = {
   name: "Full Screen Modal",
   args: {
     title: "Modal with Complex Content",
+    showToggle: true,
     children: (
       <div className="ds:p-4">
         <h3 className="ds:text-lg ds:font-medium ds:mb-4">
