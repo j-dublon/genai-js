@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
-import { BroadbandPackage, EeroProduct } from "@/store/useJoinFlowStore";
+import { EeroProduct, StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { BasketDialog } from "./index";
 
@@ -14,23 +14,36 @@ describe("BasketDialog", () => {
   const mockOnEeroRemove = vi.fn();
   const mockOnAddressChange = vi.fn();
 
-  const mockSelectedPackage: BroadbandPackage = {
-    id: "test-pkg",
-    name: "Test Package",
-    speed: {
+  const mockSelectedPackage: StoreSelectedPackage = {
+    krakenProductCode: "BT-150-12M_38",
+    frontendIdentifier: "150-12",
+    termMonths: "12",
+    selectionIdentifier: "0",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 3200,
+      discountedPrice: 3200,
+      annualPriceRise: [
+        {
+          price: 3500,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "test-rise-1",
+        },
+        {
+          price: 3800,
+          date: "2027-04-01T12:00:00.000Z",
+          id: "test-rise-2",
+        },
+      ],
+    },
+    speeds: {
       download: 150,
       upload: 30,
     },
-    price: {
-      monthly: 32,
-      setup: 0,
-    },
-    priceIncrease: {
-      nextYearIncrease: 3,
-      followingYearIncrease: 3,
-    },
-    contractLength: 12,
-    description: "Test package description",
+    extras: null,
+    offers: null,
+    id: "test-pkg-id",
   };
 
   const mockEeroSelection: EeroProduct = {
@@ -47,36 +60,44 @@ describe("BasketDialog", () => {
       id: "eero-6",
       name: "eero 6",
       description: "Enhanced coverage with one additional eero.",
-      price: 5,
+      price: 500,
       isSelected: false,
     },
     {
       id: "eero-6-plus",
       name: "eero 6 Plus",
       description: "Maximum coverage with two additional eeros.",
-      price: 8,
+      price: 800,
       isSelected: false,
     },
   ];
 
-  const mockAvailablePackages: BroadbandPackage[] = [
+  const mockAvailablePackages: StoreSelectedPackage[] = [
     {
-      id: "test-pkg-2",
-      name: "Test Package 2",
-      speed: {
+      krakenProductCode: "BT-300-12M_38",
+      frontendIdentifier: "300-12",
+      termMonths: "12",
+      selectionIdentifier: "1",
+      installationRequired: true,
+      appliedPromotionUUIDs: [],
+      prices: {
+        basePrice: 3800,
+        discountedPrice: 3800,
+        annualPriceRise: [
+          {
+            price: 4200,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "test-rise-3",
+          },
+        ],
+      },
+      speeds: {
         download: 300,
         upload: 50,
       },
-      price: {
-        monthly: 38,
-        setup: 0,
-      },
-      priceIncrease: {
-        nextYearIncrease: 4,
-        followingYearIncrease: 4,
-      },
-      contractLength: 12,
-      description: "Another test package",
+      extras: null,
+      offers: null,
+      id: "test-pkg-2-id",
     },
   ];
 
@@ -156,6 +177,18 @@ describe("BasketDialog", () => {
     expect(
       screen.getByText(/123 Test Street, Test Area, Test City/),
     ).toBeInTheDocument();
+  });
+
+  it("should display package information correctly", () => {
+    renderComponent();
+
+    expect(
+      screen.getByText(reviewYourBasketText.broadbandPlan),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/150Mbps/)).toBeInTheDocument();
+    expect(screen.getByText(/150Mbps download speed/)).toBeInTheDocument();
+    expect(screen.getByText(/30Mbps upload speed/)).toBeInTheDocument();
+    expect(screen.getByText(/12 months/)).toBeInTheDocument();
   });
 
   it("should display the change plan option", async () => {
@@ -248,7 +281,7 @@ describe("BasketDialog", () => {
       id: "eero-6",
       name: "eero 6",
       description: "Enhanced coverage with one additional eero.",
-      price: 5,
+      price: 500,
       isSelected: true,
       imageURL: null,
       heading: null,
@@ -273,5 +306,78 @@ describe("BasketDialog", () => {
       content.includes("£37"),
     )[0];
     expect(monthlyTotal).toBeInTheDocument();
+  });
+
+  it("should display correct package name from speeds", () => {
+    renderComponent();
+
+    expect(screen.getByText(/150Mbps/)).toBeInTheDocument();
+  });
+
+  it("should display pricing information correctly", () => {
+    renderComponent();
+
+    // Test for package price with /month suffix
+    expect(
+      screen.getByText((content, element) => {
+        return element?.textContent === "£32/month";
+      }),
+    ).toBeInTheDocument();
+
+    // Test for total price with /after free period suffix
+    expect(
+      screen.getByText((content, element) => {
+        return element?.textContent === "£32/after free period";
+      }),
+    ).toBeInTheDocument();
+
+    // Test for future pricing
+    expect(
+      screen.getByText((content, element) => {
+        return element?.textContent === "£35/from April 2025";
+      }),
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText((content, element) => {
+        return element?.textContent === "£38/from April 2027";
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("should show remove eeros option when premium eero is selected", () => {
+    const premiumEero: EeroProduct = {
+      id: "eero-6",
+      name: "eero 6",
+      description: "Enhanced coverage with one additional eero.",
+      price: 500,
+      isSelected: true,
+    };
+
+    renderComponent({ eeroSelection: premiumEero });
+
+    expect(
+      screen.getByText(reviewYourBasketText.removeEeros),
+    ).toBeInTheDocument();
+  });
+
+  it("should call onEeroRemove when remove eeros is clicked", async () => {
+    const premiumEero: EeroProduct = {
+      id: "eero-6",
+      name: "eero 6",
+      description: "Enhanced coverage with one additional eero.",
+      price: 500,
+      isSelected: true,
+    };
+
+    renderComponent({ eeroSelection: premiumEero });
+    const user = userEvent.setup();
+
+    const removeEerosButton = screen.getByText(
+      reviewYourBasketText.removeEeros,
+    );
+    await user.click(removeEerosButton);
+
+    expect(mockOnEeroRemove).toHaveBeenCalledTimes(1);
   });
 });

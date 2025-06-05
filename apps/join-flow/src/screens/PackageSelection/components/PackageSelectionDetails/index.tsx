@@ -4,8 +4,9 @@ import {
   TrustpilotHorizontal,
   useTrustpilotScore,
 } from "@react-component-library/ui";
-import { BroadbandPackage } from "@store/useJoinFlowStore";
 import { useState } from "react";
+
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { EeroImage } from "./EeroImage";
 import { MoreInformation } from "./MoreInformation";
@@ -13,18 +14,17 @@ import { tickListItems } from "./PackageSelectionDetailsProps";
 import { PackageTitle } from "./PackageTitle";
 import { SpeedPriceDetails } from "./SpeedPriceDetails";
 import { UpgradeOffer } from "./UpgradeOffer";
-
 interface PackageSelectionDetailsProps {
-  packageDetails: BroadbandPackage;
-  handlePackageSelection: (packageId: string) => void;
-  topSpeedPackage: BroadbandPackage | null;
+  packageDetails: StoreSelectedPackage;
+  handlePackageSelection: (selectedStorePackage: StoreSelectedPackage) => void;
+  topSpeedPackage: StoreSelectedPackage | null;
   toggle: {
     isOn: boolean;
     onChange: (isOn: boolean) => void;
     leftLabel: string;
     rightLabel: string;
   };
-  changePackage: (pkg: BroadbandPackage) => void;
+  changePackage: (pkg: StoreSelectedPackage) => void;
 }
 
 export const PackageSelectionDetails = ({
@@ -39,7 +39,12 @@ export const PackageSelectionDetails = ({
 
   const [showUpgradeOffer, setShowUpgradeOffer] = useState(true);
 
-  const isTopSpeedPackage = packageDetails.id === topSpeedPackage?.id;
+  const isTopSpeedPackage =
+    packageDetails.frontendIdentifier === topSpeedPackage?.frontendIdentifier;
+  const packageName = `${packageDetails.speeds.download}Mbps`;
+  const isHighSpeedPackage =
+    packageDetails.frontendIdentifier === "900-12" ||
+    packageDetails.frontendIdentifier === "900-24";
 
   return (
     <div className="px-5 md:px-20 lg:px-29 py-8 md:pt-14 lg:pt-20 md:pb-27">
@@ -50,10 +55,10 @@ export const PackageSelectionDetails = ({
       >
         <div className="flex gap-10">
           <div className="flex flex-col gap-12 w-1/2">
-            <EeroImage packageName={packageDetails.name} />
+            <EeroImage packageName={packageName} />
             <SpeedPriceDetails
               pkg={packageDetails}
-              promotion={packageDetails.name === "C-900"}
+              promotion={isHighSpeedPackage}
             />
           </div>
           <div className="flex flex-col gap-12 w-1/2">
@@ -64,16 +69,14 @@ export const PackageSelectionDetails = ({
               size="large"
               fullWidth
               className="md:w-auto"
-              onClick={() => handlePackageSelection(packageDetails.id)}
+              onClick={() => handlePackageSelection(packageDetails)}
             >
               Add to basket
             </Button>
             <div className="flex flex-col md:gap-6">
               <TextWithTickList
                 textItems={
-                  packageDetails.name === "C-900"
-                    ? tickListItems
-                    : tickListItems.slice(1)
+                  isHighSpeedPackage ? tickListItems : tickListItems.slice(1)
                 }
               />
             </div>
@@ -81,11 +84,14 @@ export const PackageSelectionDetails = ({
               <UpgradeOffer
                 topSpeedPackage={topSpeedPackage}
                 toggle={toggle}
-                offer={topSpeedPackage?.name === "C-900"}
+                offer={
+                  topSpeedPackage?.frontendIdentifier === "900-12" ||
+                  topSpeedPackage?.frontendIdentifier === "900-24"
+                }
                 setShowUpgradeOffer={setShowUpgradeOffer}
                 priceDifference={
-                  (topSpeedPackage?.price.monthly || 0) -
-                  packageDetails.price.monthly
+                  (topSpeedPackage?.prices.basePrice || 0) / 100 -
+                  packageDetails.prices.basePrice / 100
                 }
                 changePackage={changePackage}
               />
@@ -110,30 +116,31 @@ export const PackageSelectionDetails = ({
       >
         <PackageTitle pkg={packageDetails} />
         <div className="flex sm:gap-6 flex-col gap-4 sm:flex-row">
-          <EeroImage packageName={packageDetails.name} />
+          <EeroImage packageName={packageName} />
           <div className="flex flex-col gap-4">
             <TextWithTickList
               textItems={
-                packageDetails.name === "C-900"
-                  ? tickListItems
-                  : tickListItems.slice(1)
+                isHighSpeedPackage ? tickListItems : tickListItems.slice(1)
               }
             />
           </div>
         </div>
         <SpeedPriceDetails
           pkg={packageDetails}
-          promotion={packageDetails.name === "C-900"}
+          promotion={isHighSpeedPackage}
         />
         {!isTopSpeedPackage && showUpgradeOffer && (
           <UpgradeOffer
             topSpeedPackage={topSpeedPackage}
             toggle={toggle}
-            offer={topSpeedPackage?.name === "C-900"}
+            offer={
+              topSpeedPackage?.frontendIdentifier === "900-12" ||
+              topSpeedPackage?.frontendIdentifier === "900-24"
+            }
             setShowUpgradeOffer={setShowUpgradeOffer}
             priceDifference={
-              (topSpeedPackage?.price.monthly || 0) -
-              packageDetails.price.monthly
+              (topSpeedPackage?.prices.basePrice || 0) / 100 -
+              packageDetails.prices.basePrice / 100
             }
             changePackage={changePackage}
           />
@@ -143,7 +150,7 @@ export const PackageSelectionDetails = ({
           tint="yellow"
           size="large"
           fullWidth
-          onClick={() => handlePackageSelection(packageDetails.id)}
+          onClick={() => handlePackageSelection(packageDetails)}
         >
           Add to basket
         </Button>

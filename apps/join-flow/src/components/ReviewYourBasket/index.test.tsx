@@ -32,30 +32,92 @@ describe("ReviewYourBasket", () => {
 
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       selectedPackage: {
-        id: "test-package",
-        name: "Test Package",
-        speed: { download: "100Mbps", upload: "20Mbps" },
-        price: { monthly: 29.99 },
-        contractLength: 24,
-        priceIncrease: {
-          nextYearIncrease: 3,
-          followingYearIncrease: 6,
+        krakenProductCode: "test-package",
+        frontendIdentifier: "test-package-24",
+        termMonths: "24",
+        selectionIdentifier: "test-selection",
+        installationRequired: false,
+        appliedPromotionUUIDs: null,
+        prices: {
+          basePrice: 2999,
+          discountedPrice: 2999,
+          annualPriceRise: [
+            {
+              price: 3299,
+              date: "2025-04-01",
+              id: "rise-1",
+            },
+            {
+              price: 3599,
+              date: "2026-04-01",
+              id: "rise-2",
+            },
+          ],
         },
+        speeds: {
+          download: 100,
+          upload: 20,
+        },
+        extras: null,
+        offers: null,
+        id: "test-package-id",
       },
       currentStep: "review-basket",
       eeroSelection: {
         id: "eero-pro-6",
         name: "eero Pro 6",
         description: "Test description",
-        price: 9.99,
+        price: 999,
+        isSelected: true,
       },
       serviceAddress: {
         line1: "123 Test Street",
         line2: "Test Town",
         line3: "Test City",
+        postcode: "SW1A 1AA",
+        addressKey: "test-key",
+        addressKeyType: "NAD",
       },
       selectPackage: vi.fn(),
       selectEeroProduct: vi.fn(),
+      resetFlow: vi.fn(),
+      quoteResponse: {
+        response: {
+          products: [
+            {
+              krakenProductCode: "test-package",
+              frontendIdentifier: "test-package-24",
+              termMonths: 24,
+              selectionIdentifier: "test-selection",
+              installationRequired: false,
+              appliedPromotionUUIDs: null,
+              prices: {
+                basePrice: 2999,
+                discountedPrice: 2999,
+                annualPriceRise: [
+                  {
+                    price: 3299,
+                    date: "2025-04-01",
+                    id: "rise-1",
+                  },
+                  {
+                    price: 3599,
+                    date: "2026-04-01",
+                    id: "rise-2",
+                  },
+                ],
+              },
+              speeds: {
+                download: 100,
+                upload: 20,
+              },
+              extras: null,
+              offers: null,
+              id: "test-package-id",
+            },
+          ],
+        },
+      },
     });
   });
 
@@ -78,8 +140,16 @@ describe("ReviewYourBasket", () => {
     const user = userEvent.setup();
     const button = screen.getByText("View Basket");
     await user.click(button);
-    const closeButton = screen.getByRole("button", { name: "" });
-    await user.click(closeButton);
+
+    const allButtons = screen.getAllByRole("button");
+    const closeButton = allButtons.find(
+      (btn) =>
+        !btn.textContent?.includes("View Basket") && btn.querySelector("svg"),
+    );
+
+    expect(closeButton).toBeInTheDocument();
+    await user.click(closeButton!);
+
     expect(screen.queryByText("Review my basket")).not.toBeInTheDocument();
   });
 

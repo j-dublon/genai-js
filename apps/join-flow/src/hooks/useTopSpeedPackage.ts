@@ -1,10 +1,10 @@
-import { BroadbandPackage } from "@/store/useJoinFlowStore";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 export const useTopSpeedPackage = (
-  packages: BroadbandPackage[],
-): BroadbandPackage | null => {
+  packages: StoreSelectedPackage[],
+): StoreSelectedPackage | null => {
   const filteredPackages = [...packages].sort(
-    (a, b) => b.speed.download - a.speed.download,
+    (a, b) => b.speeds.download - a.speeds.download,
   );
 
   return filteredPackages[0] || null;

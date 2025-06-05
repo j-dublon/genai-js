@@ -16,10 +16,9 @@ import {
 
 import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { useSpeedCalculator } from "@/hooks/useSpeedCalculator";
-import { BroadbandPackage } from "@/store/useJoinFlowStore";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { questionProps, summaryText } from "./SpeedCalculatorProps";
-
 export interface SpeedCalculatorFormData {
   peopleCount: number;
   internetUses: string[];
@@ -89,8 +88,8 @@ export const SpeedCalculator = ({
 }: {
   title: string;
   subtitle: string;
-  broadbandPackages: BroadbandPackage[];
-  onShowPackageDetails: (selectedPackage: BroadbandPackage) => void;
+  broadbandPackages: StoreSelectedPackage[];
+  onShowPackageDetails: (selectedPackage: StoreSelectedPackage) => void;
 }) => {
   const { recommendedPackage, calculateRecommendedPackage } =
     useSpeedCalculator(broadbandPackages);
@@ -260,7 +259,7 @@ export const SpeedCalculator = ({
                     className="w-full md:w-auto"
                   >
                     <p className="flex items-center gap-4">
-                      <span>{`${recommendedPackage.name} Plan`}</span>
+                      <span>{`${recommendedPackage.speeds.download}Mbps Plan`}</span>
                       <Arrow />
                     </p>
                   </Button>

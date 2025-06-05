@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
-import { BroadbandPackage } from "@/store/useJoinFlowStore";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 const planChangeSchema = z.object({
   selectedPlanId: z.string().min(1, "Please select a plan"),
@@ -13,7 +13,7 @@ const planChangeSchema = z.object({
 export type PlanChangeFormData = z.infer<typeof planChangeSchema>;
 
 interface PackageChangeFormProps {
-  availablePackages: BroadbandPackage[];
+  availablePackages: StoreSelectedPackage[];
   onSubmit: (data: PlanChangeFormData) => void;
   onCancel: () => void;
 }
@@ -34,6 +34,18 @@ const PackageChangeForm = ({
     },
   });
 
+  const getPackageName = (pkg: StoreSelectedPackage) => {
+    return `${pkg.speeds.download}Mbps`;
+  };
+
+  const getMonthlyPrice = (pkg: StoreSelectedPackage) => {
+    return Math.round(pkg.prices.basePrice / 100);
+  };
+
+  const getOptionLabel = (pkg: StoreSelectedPackage) => {
+    return `${getPackageName(pkg)} ${reviewYourBasketText.fullFiber} - ${pkg.speeds.download}Mbps download, ${pkg.speeds.upload}Mbps upload - £${getMonthlyPrice(pkg)}${reviewYourBasketText.perMonth} - ${pkg.termMonths} months`;
+  };
+
   return (
     <div className="mt-4 mb-6">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -53,15 +65,10 @@ const PackageChangeForm = ({
             </option>
             {availablePackages.map((pkg) => (
               <option
-                key={`${pkg.id}-${pkg.contractLength}`}
-                value={`${pkg.id}-${pkg.contractLength}`}
+                key={pkg.frontendIdentifier}
+                value={pkg.frontendIdentifier}
               >
-                {pkg.name} {reviewYourBasketText.fullFiber} -{" "}
-                {pkg.speed.download}
-                Mbps download, {pkg.speed.upload}Mbps upload - £
-                {pkg.price.monthly}
-                {reviewYourBasketText.perMonth} - {`${pkg.contractLength}`}{" "}
-                months
+                {getOptionLabel(pkg)}
               </option>
             ))}
           </select>

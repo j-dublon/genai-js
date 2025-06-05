@@ -1,5 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { SummaryBar } from "./index";
 
@@ -21,13 +23,17 @@ vi.mock("@react-component-library/ui/icons", () => ({
   ChevronVerticalWithCircle: ({
     width,
     height,
-    opacity,
+    borderColor,
   }: {
     width: number;
     height: number;
-    opacity: string;
+    borderColor: string;
   }) => (
-    <div data-testid="chevron-icon" style={{ width, height, opacity }}>
+    <div
+      data-testid="chevron-icon"
+      style={{ width, height }}
+      data-border-color={borderColor}
+    >
       Icon
     </div>
   ),
@@ -41,26 +47,43 @@ vi.mock("@/components/ReviewYourBasket/ReviewYourBasketProps", () => ({
 }));
 
 describe("SummaryBar", () => {
-  const mockSelectedPackage = {
-    id: "standard",
-    price: {
-      monthly: 39.99,
+  const mockSelectedPackage: StoreSelectedPackage = {
+    krakenProductCode: "BT-150-12M_38",
+    frontendIdentifier: "150-12",
+    termMonths: "12",
+    selectionIdentifier: "0",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 3999,
+      discountedPrice: 3999,
+      annualPriceRise: [
+        {
+          price: 4499,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "test-rise-1",
+        },
+      ],
     },
-    speed: {
-      download: 100,
+    speeds: {
+      download: 150,
+      upload: 30,
     },
-    priceIncrease: {
-      nextYearIncrease: 5,
-      followingYearIncrease: 3,
-    },
+    extras: null,
+    offers: null,
+    id: "test-pkg-id",
   };
 
   const mockProps = {
     selectedPackage: mockSelectedPackage,
     isDialogOpen: false,
-    predictedTotalNextYear: 44.99,
+    predictedTotalNextYear: 45,
     openDialog: vi.fn(),
   };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
   it("renders fallback UI when no package is selected", () => {
     render(<SummaryBar {...mockProps} selectedPackage={null} />);
@@ -73,13 +96,18 @@ describe("SummaryBar", () => {
   it("renders package details when a package is selected", () => {
     render(<SummaryBar {...mockProps} />);
 
-    expect(screen.getByText(/Standard/)).toBeInTheDocument();
+    expect(screen.getByText(/150Mbps/)).toBeInTheDocument();
     expect(screen.getByText(/Full fibre broadband/)).toBeInTheDocument();
-
-    expect(screen.getByText(/£39.99/)).toBeInTheDocument();
     expect(
-      screen.getByText(/£44.99\/month from April 2026/),
+      screen.getByText(/150 upload and download speed/),
     ).toBeInTheDocument();
+
+    expect(screen.getByText(/12\/month/)).toBeInTheDocument();
+    expect(screen.getByText(/£40/)).toBeInTheDocument();
+
+    const monthlyElements = screen.getAllByText(/\/month/);
+    expect(monthlyElements.length).toBeGreaterThan(0);
+    expect(screen.getByText(/£45\/month from April 2026/)).toBeInTheDocument();
   });
 
   it("calls openDialog when View Basket button is clicked", () => {
@@ -94,8 +122,12 @@ describe("SummaryBar", () => {
   it("calls openDialog when ChevronVerticalWithCircle icon is clicked on mobile", () => {
     render(<SummaryBar {...mockProps} />);
 
-    const chevronIcon = screen.getAllByTestId("chevron-icon")[1];
-    fireEvent.click(chevronIcon);
+    const chevronIcons = screen.getAllByTestId("chevron-icon");
+
+    expect(chevronIcons).toHaveLength(2);
+
+    const mobileChevronParent = chevronIcons[1].parentElement;
+    fireEvent.click(mobileChevronParent!);
 
     expect(mockProps.openDialog).toHaveBeenCalledTimes(1);
   });
@@ -104,5 +136,52 @@ describe("SummaryBar", () => {
     render(<SummaryBar {...mockProps} isDialogOpen={true} />);
 
     expect(screen.queryByText("View Basket")).not.toBeInTheDocument();
+  });
+
+  it("displays correct package information from StoreSelectedPackage", () => {
+    const customPackage: StoreSelectedPackage = {
+      ...mockSelectedPackage,
+      speeds: {
+        download: 300,
+        upload: 50,
+      },
+      termMonths: "24",
+      prices: {
+        basePrice: 4500,
+        discountedPrice: 4500,
+        annualPriceRise: null,
+      },
+    };
+
+    render(
+      <SummaryBar
+        {...mockProps}
+        selectedPackage={customPackage}
+        predictedTotalNextYear={48}
+      />,
+    );
+
+    expect(screen.getByText(/300Mbps/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/300 upload and download speed/),
+    ).toBeInTheDocument();
+
+    expect(screen.getByText(/24\/month/)).toBeInTheDocument();
+    expect(screen.getByText(/£45/)).toBeInTheDocument();
+  });
+
+  it("handles price conversion correctly", () => {
+    const packageWithOddPrice: StoreSelectedPackage = {
+      ...mockSelectedPackage,
+      prices: {
+        basePrice: 3250,
+        discountedPrice: 3250,
+        annualPriceRise: null,
+      },
+    };
+
+    render(<SummaryBar {...mockProps} selectedPackage={packageWithOddPrice} />);
+
+    expect(screen.getByText(/£33/)).toBeInTheDocument();
   });
 });

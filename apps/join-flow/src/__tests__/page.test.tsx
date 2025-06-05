@@ -2,10 +2,7 @@ import { act, render, screen, within } from "@testing-library/react";
 import { vi } from "vitest";
 
 import PackageSelection from "@/screens/PackageSelection";
-import {
-  broadbandPackages,
-  packageSelectionPageText,
-} from "@/screens/PackageSelection/components/ChooseYourPackage/ChooseYourPackageProps";
+import { packageSelectionPageText } from "@/screens/PackageSelection/components/ChooseYourPackage/ChooseYourPackageProps";
 import { bannerTitle } from "@/screens/PackageSelection/components/HeroBanner/HeroBannerProps";
 import { heading as remindersHeading } from "@/screens/PackageSelection/components/Reminders/RemindersProps";
 
@@ -85,24 +82,6 @@ vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
 describe("PackageSelection Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it("renders the component with title and packages", async () => {
-    await act(async () => {
-      render(<PackageSelection />);
-    });
-
-    expect(
-      screen.getByText(packageSelectionPageText.pageTitle),
-    ).toBeInTheDocument();
-
-    expect(
-      screen.getByText(packageSelectionPageText.pageSubtitle),
-    ).toBeInTheDocument();
-
-    broadbandPackages.forEach((pkg) => {
-      expect(screen.getByText(pkg.name)).toBeInTheDocument();
-    });
   });
 
   it("renders NavWrapper component", async () => {

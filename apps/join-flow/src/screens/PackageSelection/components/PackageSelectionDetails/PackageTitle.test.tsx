@@ -1,31 +1,41 @@
 import { render, screen } from "@testing-library/react";
 
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
+
 import { PackageTitle } from "./PackageTitle";
 
 describe("PackageTitle", () => {
   it("renders package name and details correctly", () => {
-    const mockPackage = {
-      id: "c-150",
-      name: "Super Fast Broadband",
-      speed: {
+    const mockPackage: StoreSelectedPackage = {
+      krakenProductCode: "BT-100-24M_30",
+      frontendIdentifier: "100-24",
+      termMonths: "24",
+      selectionIdentifier: "0",
+      installationRequired: true,
+      appliedPromotionUUIDs: [],
+      prices: {
+        basePrice: 3000,
+        discountedPrice: 3000,
+        annualPriceRise: [
+          {
+            price: 3300,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-1",
+          },
+        ],
+      },
+      speeds: {
         download: 100,
         upload: 20,
       },
-      price: {
-        monthly: 30,
-        setup: 0,
-      },
-      priceIncrease: {
-        nextYearIncrease: 3.0,
-        followingYearIncrease: 3.0,
-      },
-      contractLength: 24,
-      description: "Full fibre speed",
+      extras: null,
+      offers: null,
+      id: "c-150",
     };
 
     render(<PackageTitle pkg={mockPackage} />);
 
-    expect(screen.getByText("Super Fast Broadband")).toBeInTheDocument();
+    expect(screen.getByText("100-24")).toBeInTheDocument();
 
     expect(
       screen.getByText("100Mbps full fibre speed, 24-month contract"),

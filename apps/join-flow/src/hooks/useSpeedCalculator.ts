@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { BroadbandPackage } from "@/store/useJoinFlowStore";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { SpeedCalculatorFormData } from "../screens/PackageSelection/components/SpeedCalculator";
 
@@ -16,9 +16,11 @@ const WEIGHTING = {
   SMART_SPEAKERS_MULTIPLIER: 1.2,
 };
 
-export const useSpeedCalculator = (broadbandPackages: BroadbandPackage[]) => {
+export const useSpeedCalculator = (
+  broadbandPackages: StoreSelectedPackage[],
+) => {
   const [recommendedPackage, setRecommendedPackage] =
-    useState<BroadbandPackage | null>(null);
+    useState<StoreSelectedPackage | null>(null);
 
   const calculateScore = (data: SpeedCalculatorFormData): number => {
     let totalScore = 0;
@@ -45,13 +47,13 @@ export const useSpeedCalculator = (broadbandPackages: BroadbandPackage[]) => {
 
   const getRecommendedPackage = (
     data: SpeedCalculatorFormData,
-  ): BroadbandPackage | null => {
+  ): StoreSelectedPackage | null => {
     const score = calculateScore(data);
 
     // filter to only include 24-month plans, then sort by download speed
     const sortedPackages = broadbandPackages
-      .filter((pkg) => pkg.contractLength === 24)
-      .sort((a, b) => a.speed.download - b.speed.download);
+      .filter((pkg) => parseInt(pkg.termMonths) === 24)
+      .sort((a, b) => a.speeds.download - b.speeds.download);
 
     // if there's only 1 package, return it, or return null if there are no packages
     if (sortedPackages.length <= 1) {

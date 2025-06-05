@@ -1,18 +1,30 @@
 import { Arrow } from "@react-component-library/ui/icons";
-import { BroadbandPackage } from "@store/useJoinFlowStore";
+
+import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 export const SpeedPriceDetails = ({
   pkg,
   promotion,
 }: {
-  pkg: BroadbandPackage;
+  pkg: StoreSelectedPackage;
   promotion: boolean;
 }) => {
-  const {
-    speed: { download, upload },
-    price: { monthly },
-    priceIncrease: { nextYearIncrease, followingYearIncrease },
-  } = pkg;
+  const { speeds, prices } = pkg;
+  const { download, upload } = speeds;
+  const { basePrice, annualPriceRise } = prices;
+
+  const sortedPriceRises = sortAnnualPriceRiseByDate(annualPriceRise);
+
+  const monthly = Math.round(basePrice / 100);
+
+  const nextYearPrice = sortedPriceRises?.[0]?.price || basePrice;
+  const followingYearPrice =
+    sortedPriceRises?.[1]?.price || sortedPriceRises?.[0]?.price || basePrice;
+
+  const nextYearMonthly = Math.round(nextYearPrice / 100);
+  const followingYearMonthly = Math.round(followingYearPrice / 100);
+
   return (
     <div className="flex flex-col gap-6 pb-2 md:pb-0">
       <div className="flex flex-col gap-4 md:gap-6">
@@ -24,7 +36,9 @@ export const SpeedPriceDetails = ({
           >
             <Arrow direction="up" className="w-4 h-5" color="#6F89FF" />
             <p className="text-ui-grey-500">
-              <span className="font-semibold text-core-black">{upload}Mbs</span>{" "}
+              <span className="font-semibold text-core-black">
+                {upload}Mbps
+              </span>{" "}
               upload speed
             </p>
           </div>
@@ -35,7 +49,7 @@ export const SpeedPriceDetails = ({
             <Arrow direction="down" className="w-4 h-5" color="#009EA8" />
             <p className="text-ui-grey-500">
               <span className="font-semibold text-core-black">
-                {download}Mbs
+                {download}Mbps
               </span>{" "}
               download speed
             </p>
@@ -79,7 +93,7 @@ export const SpeedPriceDetails = ({
               aria-label="Price next year"
             >
               <span className="font-semibold text-core-black">
-                £{monthly + nextYearIncrease}
+                £{nextYearMonthly}
               </span>
               /month from April 2026
             </p>
@@ -88,7 +102,7 @@ export const SpeedPriceDetails = ({
               aria-label="Price following year"
             >
               <span className="font-semibold text-core-black">
-                £{monthly + nextYearIncrease + followingYearIncrease}
+                £{followingYearMonthly}
               </span>
               /month from April 2027
             </p>

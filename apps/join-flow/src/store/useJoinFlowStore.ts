@@ -301,7 +301,7 @@ export type StoreBasket = {
 export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
-  selectedPackage: BroadbandPackage | null;
+  selectedPackage: StoreSelectedPackage | null;
   serviceAddress: StoreAddress | null;
   billingAddress: StoreAddress | null;
   personalDetails: PersonalDetails | null;
@@ -317,7 +317,7 @@ export type JoinFlowState = {
   // Actions
   setHasHydrated: (state: boolean) => void;
   setCurrentStep: (step: number) => void;
-  selectPackage: (pkg: BroadbandPackage) => void;
+  selectPackage: (pkg: StoreSelectedPackage) => void;
   setServiceAddress: (address: ExtendedStoreAddress) => void;
   setBillingAddress: (address: StoreAddress) => void;
   setPersonalDetails: (details: PersonalDetails) => void;
@@ -355,7 +355,13 @@ const useJoinFlowStore = create<JoinFlowState>()(
 
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
-      selectPackage: (pkg) => set({ selectedPackage: pkg, currentStep: 1 }),
+      // BROADBAND PACKAGE's selectpackage
+      // selectPackage: (pkg) => set({ selectedPackage: pkg, currentStep: 1 }),
+      selectPackage: (pkg) =>
+        set({
+          selectedPackage: pkg,
+          currentStep: 1,
+        }),
       setServiceAddress: (address) => set({ serviceAddress: address }),
       setBillingAddress: (address) => set({ billingAddress: address }),
       setPersonalDetails: (details) => set({ personalDetails: details }),

@@ -2,7 +2,8 @@ import { Button, DropdownPill } from "@react-component-library/ui";
 import { useState } from "react";
 
 import { useScrollToElement } from "@/hooks/useScrollToElement";
-import { BroadbandPackage } from "@/store/useJoinFlowStore";
+import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { upgradeOfferText } from "./PackageSelectionDetailsProps";
 
@@ -14,7 +15,7 @@ export const UpgradeOffer = ({
   setShowUpgradeOffer,
   changePackage,
 }: {
-  topSpeedPackage: BroadbandPackage | null;
+  topSpeedPackage: StoreSelectedPackage | null;
   toggle: {
     isOn: boolean;
     onChange: (isOn: boolean) => void;
@@ -24,13 +25,18 @@ export const UpgradeOffer = ({
   offer: boolean;
   priceDifference: number;
   setShowUpgradeOffer: (show: boolean) => void;
-  changePackage: (pkg: BroadbandPackage) => void;
+  changePackage: (pkg: StoreSelectedPackage) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const scrollToTop = useScrollToElement("#fullscreen-modal-title");
 
   if (!topSpeedPackage || priceDifference <= 0) return null;
-
+  const { speeds, prices } = topSpeedPackage;
+  const { basePrice, annualPriceRise } = prices;
+  const sortedPriceRises = sortAnnualPriceRiseByDate(annualPriceRise);
+  const nextYearPrice = sortedPriceRises?.[0]?.price || basePrice;
+  const followingYearPrice =
+    sortedPriceRises?.[1]?.price || sortedPriceRises?.[0]?.price || basePrice;
   const value = toggle.isOn ? toggle.rightLabel : toggle.leftLabel;
 
   const handleChange = (value: string) => {
@@ -45,8 +51,9 @@ export const UpgradeOffer = ({
       <div className="flex flex-col gap-3">
         <p className="font-semibold text-lg md:text-xl md:max-w-[90%]">
           For just £{priceDifference} more per month, you could get a super
-          speedy {topSpeedPackage.speed.download}Mbps
+          speedy {speeds.download}Mbps
         </p>
+        {/* TO DO: We don't have offers yet, but when this gets returned change it */}
         {offer && (
           <p
             className="font-medium text-sm md:text-md"
@@ -65,9 +72,7 @@ export const UpgradeOffer = ({
       />
       <div className="bg-core-yellow rounded-lg py-4 px-3 max-w-[272px]">
         <p className="pb-1 text-sm" data-testid="monthly-price">
-          <span className="font-semibold text-xl">
-            £{topSpeedPackage.price.monthly}
-          </span>
+          <span className="font-semibold text-xl">£{prices.basePrice}</span>
           /month
         </p>
         <hr className="border-t-[1px] border-core-black" />
@@ -75,9 +80,7 @@ export const UpgradeOffer = ({
           <p className="text-xs leading-[1.6]" data-testid="next-year-price">
             {upgradeOfferText.nextYearPrice}{" "}
             <span className="font-semibold">
-              £
-              {topSpeedPackage.price.monthly +
-                topSpeedPackage.priceIncrease.nextYearIncrease}
+              £{nextYearPrice}
               /month
             </span>
           </p>
@@ -87,10 +90,7 @@ export const UpgradeOffer = ({
           >
             {upgradeOfferText.followingYearPrice}{" "}
             <span className="font-semibold">
-              £
-              {topSpeedPackage.price.monthly +
-                topSpeedPackage.priceIncrease.nextYearIncrease +
-                topSpeedPackage.priceIncrease.followingYearIncrease}
+              £{followingYearPrice}
               /month
             </span>
           </p>

@@ -6,9 +6,11 @@ import {
   ToggleSwitch,
   useScrollable,
 } from "@react-component-library/ui";
-import useJoinFlowStore, { BroadbandPackage } from "@store/useJoinFlowStore";
+import useJoinFlowStore, {
+  StoreSelectedPackage,
+} from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { useTopSpeedPackage } from "@/hooks/useTopSpeedPackage";
@@ -17,7 +19,6 @@ import { createBasket } from "@/services/helpers/createBasket";
 import { PackageSelectionDetails } from "../PackageSelectionDetails";
 import { SpeedCalculator } from "../SpeedCalculator";
 import {
-  broadbandPackages,
   packageSelectionPageText,
   speedCalculatorText,
 } from "./ChooseYourPackageProps";
@@ -34,11 +35,53 @@ export const ChooseYourPackage = () => {
   const [is24Month, setIs24Month] = useState(true);
   const [modalContent, setModalContent] =
     useState<ModalContent>("speed-calculator");
-  const [packageDetails, setPackageDetails] = useState<BroadbandPackage | null>(
-    null,
-  );
+  const [packageDetails, setPackageDetails] =
+    useState<StoreSelectedPackage | null>(null);
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(scrollContainerRef);
+
+  const storeSelectedPackages = useMemo((): StoreSelectedPackage[] => {
+    if (!quoteResponse?.response?.products) return [];
+
+    return quoteResponse.response.products.map((product) => ({
+      krakenProductCode: product.krakenProductCode,
+      frontendIdentifier: product.frontendIdentifier,
+      termMonths: product.termMonths.toString(),
+      selectionIdentifier: product.selectionIdentifier,
+      installationRequired: product.installationRequired,
+      appliedPromotionUUIDs: product.appliedPromotionUUIDs || null,
+      prices: {
+        basePrice: product.prices.basePrice,
+        discountedPrice: product.prices.discountedPrice,
+        annualPriceRise:
+          product.prices.annualPriceRise?.map((rise) => ({
+            price: rise.price,
+            date: rise.date,
+            id: rise.id || null,
+          })) || null,
+      },
+      speeds: {
+        download: product.speeds.download,
+        upload: product.speeds.upload,
+      },
+      extras:
+        product.extras?.map((extra) => ({
+          family: extra.family,
+          availableExtras:
+            extra.availableExtras?.map((availableExtra) => ({
+              code: availableExtra.code,
+              name: availableExtra.name,
+              description: availableExtra.description,
+              price: availableExtra.price,
+              selectionIdentifier: availableExtra.selectionIdentifier,
+              id: availableExtra.id || null,
+            })) || null,
+          id: extra.id || null,
+        })) || null,
+      offers: product.offers || null,
+      id: product.id || null,
+    }));
+  }, [quoteResponse]);
 
   const {
     toggleSwitchLabels,
@@ -51,9 +94,9 @@ export const ChooseYourPackage = () => {
   const { calculatorModalTitle, title, subtitle, speedCalculatorButtonText } =
     speedCalculatorText;
 
-  const filteredPackages = broadbandPackages.filter(
-    (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
-  );
+  const filteredPackages = storeSelectedPackages
+    .filter((pkg) => parseInt(pkg.termMonths) === (is24Month ? 24 : 12))
+    .sort((a, b) => a.speeds.download - b.speeds.download);
 
   const topSpeedPackage = useTopSpeedPackage(filteredPackages);
 
@@ -62,12 +105,11 @@ export const ChooseYourPackage = () => {
 
     if (packageDetails) {
       const targetContractLength = isOn ? 24 : 12;
-      if (packageDetails.contractLength !== targetContractLength) {
-        // Find the same package with the correct contract length
-        const matchingPackage = broadbandPackages.find(
+      if (parseInt(packageDetails.termMonths) !== targetContractLength) {
+        const matchingPackage = storeSelectedPackages.find(
           (pkg) =>
-            pkg.name === packageDetails.name &&
-            pkg.contractLength === targetContractLength,
+            pkg.speeds.download === packageDetails.speeds.download &&
+            parseInt(pkg.termMonths) === targetContractLength,
         );
         if (matchingPackage) {
           setPackageDetails(matchingPackage);
@@ -88,19 +130,16 @@ export const ChooseYourPackage = () => {
       ? packageDetailsModalTitle
       : calculatorModalTitle;
 
-  const handlePackageSelection = async (packageId: string) => {
-    const selectedPackage = broadbandPackages.find(
-      (pkg) => pkg.id === packageId,
-    );
-
-    if (selectedPackage && quoteResponse?.response?.products?.[0]) {
-      selectPackage(selectedPackage);
+  const handlePackageSelection = async (
+    selectedStorePackage: StoreSelectedPackage,
+  ) => {
+    if (selectedStorePackage && quoteResponse?.response?.products?.[0]) {
+      selectPackage(selectedStorePackage);
 
       try {
         const result = await createBasket({
           product: {
-            selectionIdentifier:
-              quoteResponse.response.products[0].selectionIdentifier,
+            selectionIdentifier: selectedStorePackage.selectionIdentifier,
             quoteLookup: quoteResponse.documentID,
           },
         });
@@ -124,7 +163,10 @@ export const ChooseYourPackage = () => {
 
   useClearFocus(modalRef, "close");
 
-  const handleOpenModal = (content: ModalContent, pkg?: BroadbandPackage) => {
+  const handleOpenModal = (
+    content: ModalContent,
+    pkg?: StoreSelectedPackage,
+  ) => {
     if (pkg) {
       setPackageDetails(pkg);
     }
@@ -139,7 +181,7 @@ export const ChooseYourPackage = () => {
           <SpeedCalculator
             title={title}
             subtitle={subtitle}
-            broadbandPackages={broadbandPackages}
+            broadbandPackages={storeSelectedPackages}
             onShowPackageDetails={(pkg) => {
               setPackageDetails(pkg);
               setModalContent("package-details");
@@ -179,9 +221,7 @@ export const ChooseYourPackage = () => {
               isOn={is24Month}
               onChange={setIs24Month}
             />
-            {filteredPackages.filter(
-              (pkg) => pkg.contractLength === (is24Month ? 24 : 12),
-            ).length > 1 && (
+            {filteredPackages.length > 1 && (
               <button
                 onClick={() => handleOpenModal("speed-calculator")}
                 className="w-fit text-ui-link underline cursor-pointer leading-[1.4] md:leading-[1.6] text-xs md:text-sm font-medium bg-transparent border-0 p-0"
@@ -205,19 +245,22 @@ export const ChooseYourPackage = () => {
             <div className="pr-3 md:hidden block" />
             {filteredPackages.map((pkg, index) => (
               <PackageCard
-                key={pkg.id}
+                key={pkg.frontendIdentifier}
                 pkg={pkg}
-                onPackageSelect={(pkg: BroadbandPackage) =>
-                  handlePackageSelection(pkg.id)
-                }
-                onViewDetails={(pkg: BroadbandPackage) =>
+                onPackageSelect={handlePackageSelection}
+                onViewDetails={(pkg: StoreSelectedPackage) =>
                   handleOpenModal("package-details", pkg)
                 }
                 buttonText={packageSelectionPageText.buttonText}
                 tint={getTint(index)}
-                featurePackage={pkg.id === "c-900"}
+                featurePackage={
+                  pkg.frontendIdentifier === "900-12" ||
+                  pkg.frontendIdentifier === "900-24"
+                }
                 promotion={
-                  promotionActive && pkg.id === "c-900"
+                  promotionActive &&
+                  (pkg.frontendIdentifier === "900-12" ||
+                    pkg.frontendIdentifier === "900-24")
                     ? promotionText
                     : undefined
                 }

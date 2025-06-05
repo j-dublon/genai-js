@@ -5,14 +5,14 @@ import PackageChangeForm, {
   PlanChangeFormData,
 } from "@/components/ReviewYourBasket/forms/packageChangeForm";
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
-import { BroadbandPackage, EeroProduct } from "@/store/useJoinFlowStore";
+import { EeroProduct, StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 interface BasketDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedPackage: BroadbandPackage | null;
+  selectedPackage: StoreSelectedPackage | null;
   eeroSelection: EeroProduct | null;
-  availablePackages: BroadbandPackage[];
+  availablePackages: StoreSelectedPackage[];
   eeroProducts: EeroProduct[];
   serviceAddress: {
     line1: string;
@@ -164,10 +164,11 @@ export const BasketDialog = ({
                 <h3 className="font-normal mb-4">
                   {reviewYourBasketText.broadbandPlan}{" "}
                   <span className="text-sm font-medium text-ui-grey-500">
-                    {selectedPackage.name} {reviewYourBasketText.fullFiber},{" "}
-                    {selectedPackage.speed.download}Mbps download speed,{" "}
-                    {selectedPackage.speed.upload}Mbps upload speed -{" "}
-                    {selectedPackage.contractLength} months
+                    {`${selectedPackage.speeds.download}Mbps`}{" "}
+                    {reviewYourBasketText.fullFiber},{" "}
+                    {selectedPackage.speeds.download}Mbps download speed,{" "}
+                    {selectedPackage.speeds.upload}Mbps upload speed -{" "}
+                    {selectedPackage.termMonths} months
                   </span>{" "}
                 </h3>
 
@@ -246,7 +247,7 @@ export const BasketDialog = ({
                   {selectedPackage && (
                     <div className="flex justify-between items-center text-sm">
                       <h3 className="font-bold">
-                        {selectedPackage.name}{" "}
+                        {selectedPackage.frontendIdentifier}{" "}
                         {reviewYourBasketText.fullFiber}{" "}
                       </h3>
                       <p className="whitespace-nowrap font-medium">

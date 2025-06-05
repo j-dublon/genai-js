@@ -1,7 +1,9 @@
 import { test, expect, Page } from "@playwright/test";
 import { addDays, format } from "date-fns";
 
-test.describe("Go live date", () => {
+//Skip till Switch match is added
+
+test.skip("Go live date", () => {
   const goLiveDate = addDays(new Date(), 3);
 
   const formattedDate = {

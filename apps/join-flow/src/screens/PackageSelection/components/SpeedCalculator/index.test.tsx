@@ -9,8 +9,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { useSpeedCalculator } from "@/hooks/useSpeedCalculator";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
-import { broadbandPackages } from "../ChooseYourPackage/ChooseYourPackageProps";
 import { SpeedCalculator } from "./index";
 import { questionProps } from "./SpeedCalculatorProps";
 
@@ -25,6 +25,87 @@ const mockOnShowPackageDetails = vi.fn();
 
 const testTitle = "Test Title";
 const testSubtitle = "Test Subtitle";
+
+const mockBroadbandPackages: StoreSelectedPackage[] = [
+  {
+    krakenProductCode: "BT-150-24M_30",
+    frontendIdentifier: "150-24",
+    termMonths: "24",
+    selectionIdentifier: "0",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 3000,
+      discountedPrice: 3000,
+      annualPriceRise: [
+        {
+          price: 3300,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "rise-1",
+        },
+      ],
+    },
+    speeds: {
+      download: 150,
+      upload: 30,
+    },
+    extras: null,
+    offers: null,
+    id: "c-150",
+  },
+  {
+    krakenProductCode: "BT-500-24M_35",
+    frontendIdentifier: "500-24",
+    termMonths: "24",
+    selectionIdentifier: "1",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 3500,
+      discountedPrice: 3500,
+      annualPriceRise: [
+        {
+          price: 3800,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "rise-2",
+        },
+      ],
+    },
+    speeds: {
+      download: 500,
+      upload: 20,
+    },
+    extras: null,
+    offers: null,
+    id: "c-500",
+  },
+  {
+    krakenProductCode: "BT-900-24M_41",
+    frontendIdentifier: "900-24",
+    termMonths: "24",
+    selectionIdentifier: "2",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 4100,
+      discountedPrice: 4100,
+      annualPriceRise: [
+        {
+          price: 4400,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "rise-3",
+        },
+      ],
+    },
+    speeds: {
+      download: 900,
+      upload: 100,
+    },
+    extras: null,
+    offers: null,
+    id: "c-900",
+  },
+];
 
 describe("SpeedCalculator", () => {
   beforeEach(() => {
@@ -48,7 +129,7 @@ describe("SpeedCalculator", () => {
       <SpeedCalculator
         title={testTitle}
         subtitle={testSubtitle}
-        broadbandPackages={broadbandPackages}
+        broadbandPackages={mockBroadbandPackages}
         onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
@@ -64,7 +145,7 @@ describe("SpeedCalculator", () => {
       <SpeedCalculator
         title={testTitle}
         subtitle={testSubtitle}
-        broadbandPackages={broadbandPackages}
+        broadbandPackages={mockBroadbandPackages}
         onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
@@ -108,7 +189,7 @@ describe("SpeedCalculator", () => {
     const mockCalculateRecommendedPackage = vi.fn();
     const mockOnShowPackageDetails = vi.fn();
     (useSpeedCalculator as ReturnType<typeof vi.fn>).mockReturnValue({
-      recommendedPackage: broadbandPackages[0],
+      recommendedPackage: mockBroadbandPackages[0],
       calculateRecommendedPackage: mockCalculateRecommendedPackage,
     });
 
@@ -116,7 +197,7 @@ describe("SpeedCalculator", () => {
       <SpeedCalculator
         title={testTitle}
         subtitle={testSubtitle}
-        broadbandPackages={broadbandPackages}
+        broadbandPackages={mockBroadbandPackages}
         onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
@@ -145,7 +226,7 @@ describe("SpeedCalculator", () => {
     });
 
     const recommendedPackageButton = screen.getByRole("button", {
-      name: "C-150 Plan",
+      name: "150Mbps Plan",
     });
     expect(recommendedPackageButton).toBeInTheDocument();
 
@@ -153,13 +234,15 @@ describe("SpeedCalculator", () => {
       fireEvent.click(recommendedPackageButton);
     });
 
-    expect(mockOnShowPackageDetails).toHaveBeenCalledWith(broadbandPackages[0]);
+    expect(mockOnShowPackageDetails).toHaveBeenCalledWith(
+      mockBroadbandPackages[0],
+    );
   });
 
   it("handles form reset", async () => {
     const mockCalculateRecommendedPackage = vi.fn();
     (useSpeedCalculator as ReturnType<typeof vi.fn>).mockReturnValue({
-      recommendedPackage: broadbandPackages[0],
+      recommendedPackage: mockBroadbandPackages[0],
       calculateRecommendedPackage: mockCalculateRecommendedPackage,
     });
 
@@ -167,7 +250,7 @@ describe("SpeedCalculator", () => {
       <SpeedCalculator
         title={testTitle}
         subtitle={testSubtitle}
-        broadbandPackages={broadbandPackages}
+        broadbandPackages={mockBroadbandPackages}
         onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
@@ -202,7 +285,7 @@ describe("SpeedCalculator", () => {
       <SpeedCalculator
         title={testTitle}
         subtitle={testSubtitle}
-        broadbandPackages={broadbandPackages}
+        broadbandPackages={mockBroadbandPackages}
         onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
@@ -223,7 +306,7 @@ describe("SpeedCalculator", () => {
   it("disables form controls after successful submission", async () => {
     const mockCalculateRecommendedPackage = vi.fn();
     (useSpeedCalculator as ReturnType<typeof vi.fn>).mockReturnValue({
-      recommendedPackage: broadbandPackages[0],
+      recommendedPackage: mockBroadbandPackages[0],
       calculateRecommendedPackage: mockCalculateRecommendedPackage,
     });
 
@@ -231,7 +314,7 @@ describe("SpeedCalculator", () => {
       <SpeedCalculator
         title={testTitle}
         subtitle={testSubtitle}
-        broadbandPackages={broadbandPackages}
+        broadbandPackages={mockBroadbandPackages}
         onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
@@ -264,9 +347,8 @@ describe("SpeedCalculator", () => {
   });
 
   it("displays the recommended package details when the submit button is clicked", async () => {
-    // Setup
     const mockCalculateRecommendedPackage = vi.fn();
-    const mockRecommendedPackage = broadbandPackages[0];
+    const mockRecommendedPackage = mockBroadbandPackages[0];
 
     (useSpeedCalculator as ReturnType<typeof vi.fn>).mockReturnValue({
       recommendedPackage: mockRecommendedPackage,
@@ -277,7 +359,7 @@ describe("SpeedCalculator", () => {
       <SpeedCalculator
         title={testTitle}
         subtitle={testSubtitle}
-        broadbandPackages={broadbandPackages}
+        broadbandPackages={mockBroadbandPackages}
         onShowPackageDetails={mockOnShowPackageDetails}
       />,
     );
@@ -304,7 +386,7 @@ describe("SpeedCalculator", () => {
     });
 
     const recommendedPackageButton = screen.getByRole("button", {
-      name: `${mockRecommendedPackage.name} Plan`,
+      name: `150Mbps Plan`,
     });
     expect(recommendedPackageButton).toBeInTheDocument();
 

@@ -3,6 +3,8 @@
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import React from "react";
 
+import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
+
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
 export const PaymentSummary = () => {
@@ -15,7 +17,6 @@ export const PaymentSummary = () => {
     followingYearPriceIncreaseText,
   } = paymentConfirmationText;
 
-  //TO DO: we need confirmation on how to redirect a user
   if (!selectedPackage) {
     return (
       <div className="bg-ui-grey-100 p-6 rounded-md">
@@ -24,14 +25,30 @@ export const PaymentSummary = () => {
     );
   }
 
-  const monthlyPackagePrice = selectedPackage.price.monthly;
+  const monthlyPackagePrice = Math.round(
+    selectedPackage.prices.basePrice / 100,
+  );
   const monthlyEeroPrice = eeroSelection ? eeroSelection.price : 0;
   const monthlyTotal = monthlyPackagePrice + monthlyEeroPrice;
 
-  const predictedTotalNextYear =
-    monthlyTotal + selectedPackage.priceIncrease.nextYearIncrease;
-  const predictedTotalFollowingYear =
-    monthlyTotal + selectedPackage.priceIncrease.followingYearIncrease;
+  const sortedPriceRises = sortAnnualPriceRiseByDate(
+    selectedPackage.prices.annualPriceRise,
+  );
+
+  const nextYearPrice =
+    sortedPriceRises?.[0]?.price || selectedPackage.prices.basePrice;
+  const followingYearPrice =
+    sortedPriceRises?.[1]?.price ||
+    sortedPriceRises?.[0]?.price ||
+    selectedPackage.prices.basePrice;
+
+  const nextYearMonthly = Math.round(nextYearPrice / 100);
+  const followingYearMonthly = Math.round(followingYearPrice / 100);
+
+  const predictedTotalNextYear = nextYearMonthly + monthlyEeroPrice;
+  const predictedTotalFollowingYear = followingYearMonthly + monthlyEeroPrice;
+
+  const packageName = `${selectedPackage.speeds.download}Mbps`;
 
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md">
@@ -39,7 +56,7 @@ export const PaymentSummary = () => {
 
       <div className="flex justify-between items-center mb-4">
         <div>
-          <h3 className="font-medium">{selectedPackage.name}</h3>
+          <h3 className="font-medium">{packageName}</h3>
         </div>
         <div className="text-right">
           <p className="font-bold">£{monthlyPackagePrice.toFixed(2)}</p>
@@ -75,10 +92,7 @@ export const PaymentSummary = () => {
         <div className="flex justify-between items-center mb-2">
           <p className="text-sm text-ui-grey-500">
             {nextYearPriceIncreaseText && (
-              <>
-                {nextYearPriceIncreaseText.replace("{year}", "2026")}
-                {selectedPackage.priceIncrease.nextYearIncrease.toFixed(2)}
-              </>
+              <>{nextYearPriceIncreaseText.replace("{year}", "2026")}</>
             )}
           </p>
           <p className="font-bold">£{predictedTotalNextYear.toFixed(2)}</p>
@@ -87,10 +101,7 @@ export const PaymentSummary = () => {
         <div className="flex justify-between items-center">
           <p className="text-sm text-ui-grey-500">
             {followingYearPriceIncreaseText && (
-              <>
-                {followingYearPriceIncreaseText.replace("{year}", "2027")}
-                {selectedPackage.priceIncrease.followingYearIncrease.toFixed(2)}
-              </>
+              <>{followingYearPriceIncreaseText.replace("{year}", "2027")}</>
             )}
           </p>
           <p className="font-bold">£{predictedTotalFollowingYear.toFixed(2)}</p>

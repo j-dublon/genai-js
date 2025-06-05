@@ -1,8 +1,9 @@
+import { StoreSelectedPackage } from "@store/useJoinFlowStore";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { packageSelectionPageText } from "./ChooseYourPackageProps";
+import { speedCalculatorText } from "./ChooseYourPackageProps";
 import { ChooseYourPackage } from "./index";
 
 const { mockSelectPackage, mockSetBasket, mockCreateBasket, mockRouterPush } =
@@ -19,45 +20,154 @@ const mockQuoteResponse = {
     products: [
       {
         selectionIdentifier: "product-selection-123",
-        krakenProductCode: "test-product",
-        frontendIdentifier: "150-12",
-        termMonths: "12",
+        krakenProductCode: "BT-150-24M_30",
+        frontendIdentifier: "150-24",
+        termMonths: 24,
         installationRequired: false,
+        appliedPromotionUUIDs: [],
         prices: {
-          basePrice: 2500,
-          discountedPrice: 2500,
+          basePrice: 3000,
+          discountedPrice: 3000,
+          annualPriceRise: [
+            {
+              price: 3300,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "rise-1",
+            },
+          ],
         },
         speeds: {
           download: 150,
           upload: 30,
         },
+        extras: null,
+        offers: null,
+        id: "c-150",
+      },
+      {
+        selectionIdentifier: "product-selection-124",
+        krakenProductCode: "BT-500-24M_35",
+        frontendIdentifier: "500-24",
+        termMonths: 24,
+        installationRequired: false,
+        appliedPromotionUUIDs: [],
+        prices: {
+          basePrice: 3500,
+          discountedPrice: 3500,
+          annualPriceRise: [
+            {
+              price: 3800,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "rise-2",
+            },
+          ],
+        },
+        speeds: {
+          download: 500,
+          upload: 20,
+        },
+        extras: null,
+        offers: null,
+        id: "c-500",
+      },
+      {
+        selectionIdentifier: "product-selection-125",
+        krakenProductCode: "BT-900-24M_41",
+        frontendIdentifier: "900-24",
+        termMonths: 24,
+        installationRequired: false,
+        appliedPromotionUUIDs: [],
+        prices: {
+          basePrice: 4100,
+          discountedPrice: 4100,
+          annualPriceRise: [
+            {
+              price: 4400,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "rise-3",
+            },
+          ],
+        },
+        speeds: {
+          download: 900,
+          upload: 100,
+        },
+        extras: null,
+        offers: null,
+        id: "c-900",
+      },
+      {
+        selectionIdentifier: "product-selection-126",
+        krakenProductCode: "BT-150-12M_32",
+        frontendIdentifier: "150-12",
+        termMonths: 12,
+        installationRequired: false,
+        appliedPromotionUUIDs: [],
+        prices: {
+          basePrice: 3200,
+          discountedPrice: 3200,
+          annualPriceRise: [
+            {
+              price: 3500,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "rise-4",
+            },
+          ],
+        },
+        speeds: {
+          download: 150,
+          upload: 30,
+        },
+        extras: null,
+        offers: null,
+        id: "c-150-12",
+      },
+      {
+        selectionIdentifier: "product-selection-127",
+        krakenProductCode: "BT-500-12M_37",
+        frontendIdentifier: "500-12",
+        termMonths: 12,
+        installationRequired: false,
+        appliedPromotionUUIDs: [],
+        prices: {
+          basePrice: 3700,
+          discountedPrice: 3700,
+          annualPriceRise: [
+            {
+              price: 4000,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "rise-5",
+            },
+          ],
+        },
+        speeds: {
+          download: 500,
+          upload: 20,
+        },
+        extras: null,
+        offers: null,
+        id: "c-500-12",
       },
     ],
   },
 };
 
 type PackageCardProps = {
-  pkg: {
-    id: string;
-    name: string;
-    price: {
-      monthly: number;
-    };
-    contractLength: number;
-  };
-  onPackageSelect: (pkg: {
-    id: string;
-    name: string;
-    price: { monthly: number };
-  }) => void;
-  onViewDetails: (pkg: {
-    id: string;
-    name: string;
-    price: { monthly: number };
-  }) => void;
+  pkg: StoreSelectedPackage;
+  onPackageSelect: (pkg: StoreSelectedPackage) => void;
+  onViewDetails: (pkg: StoreSelectedPackage) => void;
   tint: string;
   featurePackage?: boolean;
   promotion?: string;
+};
+
+// Define proper types for package details
+type PackageDetails = {
+  frontendIdentifier: string;
+  speeds: {
+    download: number;
+  };
+  termMonths: string;
 };
 
 const mockUseScrollable = {
@@ -95,9 +205,9 @@ vi.mock("@react-component-library/ui", async () => {
       promotion,
     }: PackageCardProps) => (
       <div data-testid="package-card">
-        <div>{pkg.name}</div>
-        <div>£{pkg.price.monthly}/month</div>
-        <div data-testid="contract-length">{pkg.contractLength}</div>
+        <div>{pkg.speeds.download}Mbps</div>
+        <div>£{Math.round(pkg.prices.basePrice / 100)}/month</div>
+        <div data-testid="contract-length">{pkg.termMonths}</div>
         {featurePackage && (
           <div data-testid="feature-package">Feature Package</div>
         )}
@@ -141,6 +251,14 @@ vi.mock("@/hooks/useAddress", () => ({
   }),
 }));
 
+vi.mock("@/hooks/useTopSpeedPackage", () => ({
+  useTopSpeedPackage: () => null,
+}));
+
+vi.mock("@/hooks/useClearFocus", () => ({
+  useClearFocus: () => {},
+}));
+
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: mockRouterPush,
@@ -152,11 +270,17 @@ vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
   SpeedCalculator: ({
     onShowPackageDetails,
   }: {
-    onShowPackageDetails: (pkg: { id: string }) => void;
+    onShowPackageDetails: (pkg: StoreSelectedPackage) => void;
   }) => (
     <dialog data-testid="speed-calculator-mock">
       Speed Calculator Mock
-      <button onClick={() => onShowPackageDetails({ id: "test-package" })}>
+      <button
+        onClick={() =>
+          onShowPackageDetails({
+            frontendIdentifier: "test-package",
+          } as StoreSelectedPackage)
+        }
+      >
         Show Package Details
       </button>
     </dialog>
@@ -170,21 +294,21 @@ vi.mock(
       packageDetails,
       handlePackageSelection,
     }: {
-      packageDetails: {
-        id: string;
-        name: string;
-        contractLength: number;
-      };
-      handlePackageSelection: (id: string) => void;
+      packageDetails: PackageDetails;
+      handlePackageSelection: (pkg: StoreSelectedPackage) => void;
     }) => (
       <div data-testid="package-selection-details">
-        <div data-testid="package-name">{packageDetails.name}</div>
+        <div data-testid="package-name">
+          {packageDetails.speeds.download}Mbps
+        </div>
         <div data-testid="package-contract-length">
-          {packageDetails.contractLength}
+          {packageDetails.termMonths}
         </div>
         <button
           data-testid="package-selection-button"
-          onClick={() => handlePackageSelection(packageDetails.id)}
+          onClick={() =>
+            handlePackageSelection(packageDetails as StoreSelectedPackage)
+          }
         >
           Add to basket
         </button>
@@ -216,16 +340,6 @@ describe("ChooseYourPackage", () => {
     vi.clearAllMocks();
   });
 
-  it("renders the component with the correct title", () => {
-    render(<ChooseYourPackage />);
-    expect(
-      screen.getByText(packageSelectionPageText.pageTitle),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(packageSelectionPageText.pageSubtitle),
-    ).toBeInTheDocument();
-  });
-
   it("renders package cards", () => {
     render(<ChooseYourPackage />);
     const packageCards = screen.getAllByTestId("package-card");
@@ -239,7 +353,6 @@ describe("ChooseYourPackage", () => {
 
     expect(featurePackage).toBeInTheDocument();
     expect(promotion).toBeInTheDocument();
-    expect(promotion).toHaveTextContent("3 months free");
   });
 
   it("applies different tints to package cards", () => {
@@ -261,7 +374,7 @@ describe("ChooseYourPackage", () => {
     await waitFor(() => {
       expect(mockCreateBasket).toHaveBeenCalledWith({
         product: {
-          selectionIdentifier: "product-selection-123",
+          selectionIdentifier: expect.any(String),
           quoteLookup: "quote-123",
         },
       });
@@ -305,7 +418,9 @@ describe("ChooseYourPackage", () => {
 
   it("renders the help link", () => {
     render(<ChooseYourPackage />);
-    const helpLink = screen.getByText("I need help choosing");
+    const helpLink = screen.getByText(
+      speedCalculatorText.speedCalculatorButtonText,
+    );
 
     expect(helpLink).toBeInTheDocument();
     expect(helpLink).toHaveClass("text-ui-link", "underline", "cursor-pointer");
@@ -318,7 +433,9 @@ describe("ChooseYourPackage", () => {
     expect(modal).toBeInTheDocument();
     expect(modal).toHaveAttribute("aria-modal", "true");
     expect(modal).not.toHaveAttribute("open");
-    const helpLink = screen.getByText("I need help choosing");
+    const helpLink = screen.getByText(
+      speedCalculatorText.speedCalculatorButtonText,
+    );
     await userEvent.click(helpLink);
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
   });

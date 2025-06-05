@@ -2,21 +2,10 @@ import { Button } from "@react-component-library/ui";
 import { ChevronVerticalWithCircle } from "@react-component-library/ui/icons";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 interface SummaryBarProps {
-  selectedPackage: {
-    id: string;
-    price: {
-      monthly: number;
-    };
-    speed: {
-      download: number;
-    };
-    priceIncrease: {
-      nextYearIncrease: number;
-      followingYearIncrease: number;
-    };
-  } | null;
+  selectedPackage: StoreSelectedPackage | null;
   isDialogOpen: boolean;
   predictedTotalNextYear: number;
   openDialog: () => void;
@@ -44,7 +33,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
     >
       <div className="w-full max-w-7xl flex items-center justify-center px-4 py-4 mx-auto">
         <div className="flex items-center gap-6 md:gap-6 lg:gap-10">
-          <div className="hidden  lg:flex items-center">
+          <div className="hidden lg:flex items-center">
             <img
               alt="Cuckoo"
               src={reviewYourBasketText.eeroImage}
@@ -54,8 +43,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
 
           <div className="flex flex-col text-md whitespace-nowrap font-medium">
             <p>
-              {selectedPackage.id.charAt(0).toUpperCase() +
-                selectedPackage.id.slice(1)}{" "}
+              {selectedPackage.speeds.download}Mbps{" "}
               <span className="font-normal">Full fibre broadband</span>
             </p>
             <div className="text-xxs items-center gap-2 hidden lg:flex">
@@ -64,13 +52,14 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
                 src={reviewYourBasketText.biDirectionalImage}
                 className="w-[15px] h-[9px]"
               />
-              <p>{selectedPackage.speed.download} upload and download speed</p>
+              <p>{selectedPackage.speeds.download} upload and download speed</p>
             </div>
           </div>
 
           <div className="flex flex-col text-md whitespace-nowrap font-medium hidden lg:flex">
             <p>
-              24-month <span className="font-normal">contract</span>
+              {selectedPackage.termMonths}/month{" "}
+              <span className="font-normal">contract</span>
             </p>
             <div className="text-xxs">
               <p>£150 Amazon gift card included</p>
@@ -79,7 +68,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
 
           <div className="flex flex-col text-md whitespace-nowrap font-medium">
             <p>
-              £{selectedPackage.price.monthly}{" "}
+              £{Math.round(selectedPackage.prices.basePrice / 100)}
               <span className="font-normal">/month</span>
             </p>
             <div className="text-xxs hidden lg:flex">

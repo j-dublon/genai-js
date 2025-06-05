@@ -1,6 +1,7 @@
-import { BroadbandPackage } from "@store/useJoinFlowStore";
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
+
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { PackageSelectionDetails } from "./index";
 
@@ -23,8 +24,8 @@ vi.mock("./MoreInformation", () => ({
 }));
 
 vi.mock("./PackageTitle", () => ({
-  PackageTitle: ({ pkg }: { pkg: BroadbandPackage }) => (
-    <div data-testid="package-title">{pkg.name}</div>
+  PackageTitle: ({ pkg }: { pkg: StoreSelectedPackage }) => (
+    <div data-testid="package-title">{pkg.speeds.download}Mbps</div>
   ),
 }));
 
@@ -33,11 +34,28 @@ vi.mock("./SpeedPriceDetails", () => ({
     pkg,
     promotion,
   }: {
-    pkg: BroadbandPackage;
+    pkg: StoreSelectedPackage;
     promotion: boolean;
   }) => (
     <div data-testid="speed-price-details">
-      {pkg.name} {promotion ? "with promotion" : "without promotion"}
+      {pkg.speeds.download}Mbps{" "}
+      {promotion ? "with promotion" : "without promotion"}
+    </div>
+  ),
+}));
+
+vi.mock("./UpgradeOffer", () => ({
+  UpgradeOffer: ({
+    topSpeedPackage,
+    changePackage,
+  }: {
+    topSpeedPackage: StoreSelectedPackage | null;
+    changePackage: (pkg: StoreSelectedPackage) => void;
+  }) => (
+    <div data-testid="upgrade-offer">
+      <button onClick={() => topSpeedPackage && changePackage(topSpeedPackage)}>
+        Upgrade me
+      </button>
     </div>
   ),
 }));
@@ -76,42 +94,58 @@ vi.mock("@react-component-library/ui", async () => {
 });
 
 describe("PackageSelectionDetails", () => {
-  const mockPackage: BroadbandPackage = {
-    id: "test-id",
-    name: "C-500",
-    speed: {
+  const mockPackage: StoreSelectedPackage = {
+    krakenProductCode: "BT-500-24M_20",
+    frontendIdentifier: "500-24",
+    termMonths: "24",
+    selectionIdentifier: "1",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 2000,
+      discountedPrice: 2000,
+      annualPriceRise: [
+        {
+          price: 2300,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "rise-1",
+        },
+      ],
+    },
+    speeds: {
       download: 500,
       upload: 100,
     },
-    price: {
-      monthly: 20,
-      setup: 0,
-    },
-    priceIncrease: {
-      nextYearIncrease: 3.0,
-      followingYearIncrease: 3.0,
-    },
-    contractLength: 24,
-    description: "Test package",
+    extras: null,
+    offers: null,
+    id: "test-id",
   };
 
-  const mockSpeedyPackage: BroadbandPackage = {
-    id: "test-id-speed",
-    name: "C-900",
-    speed: {
+  const mockSpeedyPackage: StoreSelectedPackage = {
+    krakenProductCode: "BT-900-24M_50",
+    frontendIdentifier: "900-24",
+    termMonths: "24",
+    selectionIdentifier: "2",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 5000,
+      discountedPrice: 5000,
+      annualPriceRise: [
+        {
+          price: 5300,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "rise-2",
+        },
+      ],
+    },
+    speeds: {
       download: 900,
       upload: 100,
     },
-    price: {
-      monthly: 50,
-      setup: 0,
-    },
-    priceIncrease: {
-      nextYearIncrease: 3.0,
-      followingYearIncrease: 3.0,
-    },
-    contractLength: 24,
-    description: "Test speedy package",
+    extras: null,
+    offers: null,
+    id: "test-id-speed",
   };
 
   const mockHandlePackageSelection = vi.fn();
@@ -259,13 +293,13 @@ describe("PackageSelectionDetails", () => {
     const desktopButton = within(desktopView).getByTestId("add-to-basket");
     desktopButton.click();
 
-    expect(mockHandlePackageSelection).toHaveBeenCalledWith(mockPackage.id);
+    expect(mockHandlePackageSelection).toHaveBeenCalledWith(mockPackage);
 
     const mobileView = screen.getByTestId("package-selection-details-mobile");
     const mobileButton = within(mobileView).getByTestId("add-to-basket");
     mobileButton.click();
 
-    expect(mockHandlePackageSelection).toHaveBeenCalledWith(mockPackage.id);
+    expect(mockHandlePackageSelection).toHaveBeenCalledWith(mockPackage);
     expect(mockHandlePackageSelection).toHaveBeenCalledTimes(2);
   });
 
@@ -315,5 +349,56 @@ describe("PackageSelectionDetails", () => {
     upgradeButton.click();
 
     expect(mockChangePackage).toHaveBeenCalledWith(mockSpeedyPackage);
+  });
+
+  it("passes correct packageName to EeroImage", () => {
+    render(
+      <PackageSelectionDetails
+        packageDetails={mockPackage}
+        handlePackageSelection={mockHandlePackageSelection}
+        topSpeedPackage={mockPackage}
+        toggle={mockToggle}
+        changePackage={mockChangePackage}
+      />,
+    );
+
+    const eeroImages = screen.getAllByTestId("eero-image");
+    eeroImages.forEach((image) => {
+      expect(image).toHaveTextContent("500Mbps");
+    });
+  });
+
+  it("shows promotion for high speed packages", () => {
+    render(
+      <PackageSelectionDetails
+        packageDetails={mockSpeedyPackage}
+        handlePackageSelection={mockHandlePackageSelection}
+        topSpeedPackage={mockSpeedyPackage}
+        toggle={mockToggle}
+        changePackage={mockChangePackage}
+      />,
+    );
+
+    const speedPriceDetails = screen.getAllByTestId("speed-price-details");
+    speedPriceDetails.forEach((detail) => {
+      expect(detail).toHaveTextContent("with promotion");
+    });
+  });
+
+  it("does not show promotion for non-high speed packages", () => {
+    render(
+      <PackageSelectionDetails
+        packageDetails={mockPackage}
+        handlePackageSelection={mockHandlePackageSelection}
+        topSpeedPackage={mockPackage}
+        toggle={mockToggle}
+        changePackage={mockChangePackage}
+      />,
+    );
+
+    const speedPriceDetails = screen.getAllByTestId("speed-price-details");
+    speedPriceDetails.forEach((detail) => {
+      expect(detail).toHaveTextContent("without promotion");
+    });
   });
 });

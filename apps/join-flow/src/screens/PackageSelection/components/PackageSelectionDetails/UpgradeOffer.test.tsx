@@ -1,28 +1,42 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { BroadbandPackage } from "@/store/useJoinFlowStore";
+import { AnnualPriceRise } from "@/lib/sortAnnualPriceRise";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { upgradeOfferText } from "./PackageSelectionDetailsProps";
 import { UpgradeOffer } from "./UpgradeOffer";
 
-const mockTopSpeedPackage: BroadbandPackage = {
-  id: "test-package",
-  name: "Test Package",
-  description: "Test package description",
-  contractLength: 12,
-  speed: {
+const mockTopSpeedPackage: StoreSelectedPackage = {
+  krakenProductCode: "BT-900-12M_45",
+  frontendIdentifier: "900-12",
+  termMonths: "12",
+  selectionIdentifier: "2",
+  installationRequired: true,
+  appliedPromotionUUIDs: [],
+  prices: {
+    basePrice: 4500,
+    discountedPrice: 4500,
+    annualPriceRise: [
+      {
+        price: 5000,
+        date: "2026-04-01T12:00:00.000Z",
+        id: "rise-1",
+      },
+      {
+        price: 5300,
+        date: "2027-04-01T12:00:00.000Z",
+        id: "rise-2",
+      },
+    ],
+  },
+  speeds: {
     download: 900,
     upload: 100,
   },
-  price: {
-    monthly: 45,
-    setup: 0,
-  },
-  priceIncrease: {
-    nextYearIncrease: 5,
-    followingYearIncrease: 3,
-  },
+  extras: null,
+  offers: null,
+  id: "test-package",
 };
 
 const mockToggle = {
@@ -39,6 +53,50 @@ const mockScrollToTop = vi.fn();
 vi.mock("@/hooks/useScrollToElement", () => ({
   useScrollToElement: () => mockScrollToTop,
 }));
+
+vi.mock("@/lib/sortAnnualPriceRise", () => ({
+  sortAnnualPriceRiseByDate: (priceRises: AnnualPriceRise) => priceRises || [],
+}));
+
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    Button: ({
+      children,
+      onClick,
+    }: {
+      children: React.ReactNode;
+      onClick: () => void;
+    }) => <button onClick={onClick}>{children}</button>,
+    DropdownPill: ({
+      value,
+      setValue,
+      options,
+      setIsOpen,
+    }: {
+      value: string;
+      setValue: (value: string) => void;
+      options: string[];
+      setIsOpen: (open: boolean) => void;
+    }) => (
+      <div>
+        <button
+          role="button"
+          aria-label={`Dropdown menu pill with the text ${value}`}
+          onClick={() => setIsOpen(true)}
+        >
+          {value}
+        </button>
+        {options.map((option) => (
+          <button key={option} onClick={() => setValue(option)}>
+            {option}
+          </button>
+        ))}
+      </div>
+    ),
+  };
+});
 
 describe("UpgradeOffer", () => {
   beforeEach(() => {
@@ -108,7 +166,9 @@ describe("UpgradeOffer", () => {
       ),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(new RegExp(`${mockTopSpeedPackage.speed.download}Mbps`)),
+      screen.getByText(
+        new RegExp(`${mockTopSpeedPackage.speeds.download}Mbps`),
+      ),
     ).toBeInTheDocument();
   });
 
@@ -147,12 +207,14 @@ describe("UpgradeOffer", () => {
       />,
     );
 
-    expect(screen.getByTestId("monthly-price")).toHaveTextContent("£45/month");
+    expect(screen.getByTestId("monthly-price")).toHaveTextContent(
+      "£4500/month",
+    );
     expect(screen.getByTestId("next-year-price")).toHaveTextContent(
-      "£50/month",
+      "£5000/month",
     );
     expect(screen.getByTestId("following-year-price")).toHaveTextContent(
-      "£53/month",
+      "£5300/month",
     );
   });
 
@@ -223,5 +285,36 @@ describe("UpgradeOffer", () => {
     expect(
       screen.queryByTestId("upgrade-offer-subtitle"),
     ).not.toBeInTheDocument();
+  });
+
+  it("should handle missing price rises", () => {
+    const packageWithoutRises: StoreSelectedPackage = {
+      ...mockTopSpeedPackage,
+      prices: {
+        ...mockTopSpeedPackage.prices,
+        annualPriceRise: null,
+      },
+    };
+
+    render(
+      <UpgradeOffer
+        topSpeedPackage={packageWithoutRises}
+        toggle={mockToggle}
+        offer={true}
+        priceDifference={10}
+        setShowUpgradeOffer={mockSetShowUpgradeOffer}
+        changePackage={mockChangePackage}
+      />,
+    );
+
+    expect(screen.getByTestId("monthly-price")).toHaveTextContent(
+      "£4500/month",
+    );
+    expect(screen.getByTestId("next-year-price")).toHaveTextContent(
+      "£4500/month",
+    );
+    expect(screen.getByTestId("following-year-price")).toHaveTextContent(
+      "£4500/month",
+    );
   });
 });

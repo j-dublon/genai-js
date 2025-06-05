@@ -1,42 +1,62 @@
 import { render, screen } from "@testing-library/react";
 
+import { AnnualPriceRise } from "@/lib/sortAnnualPriceRise";
+import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
+
 import { SpeedPriceDetails } from "./SpeedPriceDetails";
 
-const mockPackage = {
-  id: "test-package",
-  name: "Test Package",
-  contractLength: 24,
-  description: "Test package description",
-  speed: {
-    download: 100,
-    upload: 20,
-  },
-  price: {
-    monthly: 25,
-    setup: 0,
-  },
-  priceIncrease: {
-    nextYearIncrease: 5,
-    followingYearIncrease: 3,
-  },
-};
+vi.mock("@react-component-library/ui/icons", () => ({
+  Arrow: ({ direction, color }: { direction: string; color: string }) => (
+    <div data-testid={`arrow-${direction}`} style={{ color }}>
+      Arrow {direction}
+    </div>
+  ),
+}));
 
-const {
-  speed: { download, upload },
-  price: { monthly },
-  priceIncrease: { nextYearIncrease, followingYearIncrease },
-} = mockPackage;
+vi.mock("@/lib/sortAnnualPriceRise", () => ({
+  sortAnnualPriceRiseByDate: (priceRises: AnnualPriceRise) => priceRises || [],
+}));
 
 describe("SpeedPriceDetails", () => {
+  const mockPackage: StoreSelectedPackage = {
+    krakenProductCode: "BT-100-24M_25",
+    frontendIdentifier: "100-24",
+    termMonths: "24",
+    selectionIdentifier: "0",
+    installationRequired: true,
+    appliedPromotionUUIDs: [],
+    prices: {
+      basePrice: 2500,
+      discountedPrice: 2500,
+      annualPriceRise: [
+        {
+          price: 3000,
+          date: "2026-04-01T12:00:00.000Z",
+          id: "rise-1",
+        },
+        {
+          price: 3300,
+          date: "2027-04-01T12:00:00.000Z",
+          id: "rise-2",
+        },
+      ],
+    },
+    speeds: {
+      download: 100,
+      upload: 20,
+    },
+    extras: null,
+    offers: null,
+    id: "test-package",
+  };
+
   it("renders speed details correctly", () => {
     render(<SpeedPriceDetails pkg={mockPackage} promotion={false} />);
 
     expect(screen.getByText("Our speed promise")).toBeInTheDocument();
-    expect(screen.getByLabelText("Upload speed")).toHaveTextContent(
-      `${upload}Mbs`,
-    );
+    expect(screen.getByLabelText("Upload speed")).toHaveTextContent("20Mbps");
     expect(screen.getByLabelText("Download speed")).toHaveTextContent(
-      `${download}Mbs`,
+      "100Mbps",
     );
   });
 
@@ -45,13 +65,11 @@ describe("SpeedPriceDetails", () => {
 
     expect(screen.getByText("What you'll be paying")).toBeInTheDocument();
     expect(screen.getByLabelText("Current monthly price")).toHaveTextContent(
-      `£${monthly}`,
+      "£25",
     );
-    expect(screen.getByLabelText("Price next year")).toHaveTextContent(
-      `£${monthly + nextYearIncrease}`,
-    );
+    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£30");
     expect(screen.getByLabelText("Price following year")).toHaveTextContent(
-      `£${monthly + nextYearIncrease + followingYearIncrease}`,
+      "£33",
     );
   });
 
@@ -63,13 +81,51 @@ describe("SpeedPriceDetails", () => {
       "£0",
     );
     expect(screen.getByLabelText("Price after promotion")).toHaveTextContent(
-      `£${monthly}`,
+      "£25",
     );
-    expect(screen.getByLabelText("Price next year")).toHaveTextContent(
-      `£${monthly + nextYearIncrease}`,
-    );
+    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£30");
     expect(screen.getByLabelText("Price following year")).toHaveTextContent(
-      `£${monthly + nextYearIncrease + followingYearIncrease}`,
+      "£33",
+    );
+  });
+
+  it("handles missing price rises", () => {
+    const packageWithoutRises: StoreSelectedPackage = {
+      ...mockPackage,
+      prices: {
+        ...mockPackage.prices,
+        annualPriceRise: null,
+      },
+    };
+
+    render(<SpeedPriceDetails pkg={packageWithoutRises} promotion={false} />);
+
+    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£25");
+    expect(screen.getByLabelText("Price following year")).toHaveTextContent(
+      "£25",
+    );
+  });
+
+  it("handles single price rise", () => {
+    const packageWithSingleRise: StoreSelectedPackage = {
+      ...mockPackage,
+      prices: {
+        ...mockPackage.prices,
+        annualPriceRise: [
+          {
+            price: 3000,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-1",
+          },
+        ],
+      },
+    };
+
+    render(<SpeedPriceDetails pkg={packageWithSingleRise} promotion={false} />);
+
+    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£30");
+    expect(screen.getByLabelText("Price following year")).toHaveTextContent(
+      "£30",
     );
   });
 });
