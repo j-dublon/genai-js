@@ -9,6 +9,7 @@ interface InfoModalProps {
   buttonText?: string;
   onButtonClick?: () => void;
   validateBeforeClose?: () => boolean;
+  buttonType?: "submit" | "button" | "reset";
 }
 
 export const InfoModal = ({
@@ -19,6 +20,7 @@ export const InfoModal = ({
   onButtonClick,
   validateBeforeClose,
   children,
+  buttonType = "submit",
 }: React.PropsWithChildren<InfoModalProps>) => {
   const onClick = () => {
     if (validateBeforeClose && !validateBeforeClose()) {
@@ -32,7 +34,7 @@ export const InfoModal = ({
   return (
     <dialog
       ref={modalRef}
-      className="ds:bg-core-white ds:w-[90vw] ds:sm:w-[65vw] ds:md:w-[45vw] ds:md:max-w-[652px] ds:justify-self-center ds:self-center ds:p-6 ds:pb-4 ds:md:p-8 ds:rounded-md ds:md:rounded-lg ds:border-2 ds:border-core-grey-200 ds:[&::backdrop]:bg-core-black ds:[&::backdrop]:opacity-40 ds:overflow-y-auto ds:scrollbar-none"
+      className="ds:bg-core-white ds:w-[90vw] ds:sm:w-[65vw] ds:md:w-[50vw] ds:md:max-w-[652px] ds:justify-self-center ds:self-center ds:p-6 ds:pb-4 ds:md:p-8 ds:rounded-md ds:md:rounded-lg ds:border-2 ds:border-core-grey-200 ds:[&::backdrop]:bg-core-black ds:[&::backdrop]:opacity-40 ds:overflow-y-auto ds:scrollbar-none"
       role="dialog"
       aria-labelledby="modal-title"
       aria-modal="true"
@@ -45,6 +47,7 @@ export const InfoModal = ({
           {title}
         </h2>
         <button
+          type={buttonType}
           onClick={() => modalRef.current?.close()}
           className="ds:text-gray-500 ds:hover:text-gray-700 ds:cursor-pointer"
           aria-label="Close modal"
@@ -61,6 +64,7 @@ export const InfoModal = ({
             tint="yellow"
             onClick={onClick}
             aria-label="Confirm and close modal"
+            type={buttonType}
           >
             {buttonText}
           </Button>

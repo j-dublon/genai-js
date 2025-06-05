@@ -59,6 +59,8 @@ import { NavBar } from "@components/organisms/NavBar";
 import { useClickOutside } from "@hooks/useClickOutside";
 import { useScrollable } from "@hooks/useScrollable";
 import { useTrustpilotScore } from "@hooks/useTrustPilotScore";
+import { InfoIcon } from "@icons/InfoIcon";
+import { RadioIcon } from "@icons/Radio";
 
 import {
   BACKGROUND_COLORS,
@@ -87,6 +89,7 @@ export {
   ImageMarquee,
   InfoAccordionItem,
   InfoCard,
+  InfoIcon,
   InfoModal,
   DropdownInputField as InputField,
   InputSlider,
@@ -98,6 +101,7 @@ export {
   PostcodeChecker,
   ProductCard,
   Radio,
+  RadioIcon,
   ReasonCard,
   ReferAFriendHero,
   ReferralCard,

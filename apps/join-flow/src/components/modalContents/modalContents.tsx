@@ -1,0 +1,31 @@
+export interface ModalContent {
+  title: string;
+  text: string;
+}
+
+interface ModalContentProps {
+  content: ModalContent[];
+}
+
+export const ModalContents = ({ content }: ModalContentProps) => {
+  return (
+    <div className="bg-ui-grey-100 rounded-sm p-4 my-8">
+      {content.map((item, index) => (
+        <div key={index}>
+          <p
+            id={`modal-subtitle-${index}`}
+            className="text-xs md:text-sm font-semibold leading-relaxed text-core-black pb-4"
+          >
+            {item.title}
+          </p>
+          <p
+            id={`modal-content-${index}`}
+            className="text-core-black leading-relaxed pb-8 md:pb-6 font-normal text-xs md:text-sm"
+          >
+            {item.text}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+};

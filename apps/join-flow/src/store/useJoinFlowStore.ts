@@ -43,13 +43,14 @@ export type PersonalDetails = {
   email: string;
   confirmEmail: string;
   marketingConsent?: boolean;
-  verificationCode: string;
+  isVerified: boolean;
   dobDay: string;
   dobMonth: string;
   dobYear: string;
   residencyDuration: "over-year" | "under-year" | null;
   personalDetailsStep: "details" | "verification" | "additional";
   personalDetailsCompleted?: boolean;
+  requiresLandline: boolean;
 };
 
 export type EeroProduct = {

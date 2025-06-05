@@ -13,9 +13,9 @@ import { Footer } from "@/components/Footer";
 import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 import { formatDateOfBirth } from "@/lib/formatDate";
-import AdditionalPersonalDetailsForm from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
-import EmailVerificationForm from "@/screens/PersonalDetails/forms/emailVerificationForm";
-import InitialPersonalDetailsForm from "@/screens/PersonalDetails/forms/initialPersonalDetailsForm";
+import { AdditionalPersonalDetailsForm } from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
+import { EmailVerificationForm } from "@/screens/PersonalDetails/forms/emailVerificationForm";
+import { InitialPersonalDetailsForm } from "@/screens/PersonalDetails/forms/initialPersonalDetailsForm";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
 import {
@@ -32,6 +32,7 @@ const PersonalDetails = () => {
     setPersonalDetails,
     personalDetails,
     setCurrentStep,
+    serviceAddress,
     basket,
     setBasket,
   } = useJoinFlowStore();
@@ -42,17 +43,51 @@ const PersonalDetails = () => {
   >(initialStep);
 
   const [isEmailVerified, setIsEmailVerified] = useState(
-    Boolean(personalDetails?.verificationCode === "123456"),
+    personalDetails?.isVerified,
   );
+  const [isEmailCodeValid, setIsEmailCodeValid] = useState<boolean | undefined>(
+    undefined,
+  );
+
   const [previousEmail, setPreviousEmail] = useState<string | undefined>(
     personalDetails?.email,
   );
+  const [validationCode, setValidationCode] = useState<string[]>([
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+  ]);
 
   const getStepSchema = () => {
     return createStepBasedPersonalDetailsSchema(
       personalDetailsProps,
       currentFormStep,
     ) as z.ZodType<PersonalDetails>;
+  };
+
+  // this will call the validate endpoint eventually
+  const validateCode = (code: string) =>
+    code.toString() === "123456"
+      ? setIsEmailCodeValid(true)
+      : setIsEmailCodeValid(false);
+
+  const handleCodeChange = (value: string, index: number) => {
+    const newCode = [...validationCode];
+    newCode[index] = value;
+
+    if (value.length <= 1) {
+      setValidationCode(newCode);
+
+      if (newCode.every((digit) => digit !== "")) {
+        const code = newCode.join("");
+        if (code.length === 6) {
+          validateCode(code);
+        }
+      }
+    }
   };
 
   const {
@@ -62,16 +97,17 @@ const PersonalDetails = () => {
     reset,
     getValues,
     trigger,
+    control,
   } = useForm<PersonalDetails>({
     resolver: zodResolver(getStepSchema()),
     defaultValues: {
       firstName: personalDetails?.firstName || "",
       lastName: personalDetails?.lastName || "",
       phone: personalDetails?.phone || "",
-      hasSmartphone: (personalDetails?.hasSmartphone as "yes" | "no") || "yes",
+      hasSmartphone: (personalDetails?.hasSmartphone as "yes" | "no") || "",
       email: personalDetails?.email || "",
       confirmEmail: personalDetails?.confirmEmail || "",
-      verificationCode: personalDetails?.verificationCode || "",
+      isVerified: personalDetails?.isVerified ?? false,
       dobDay: personalDetails?.dobDay || "",
       dobMonth: personalDetails?.dobMonth || "",
       dobYear: personalDetails?.dobYear || "",
@@ -80,9 +116,16 @@ const PersonalDetails = () => {
       personalDetailsStep: personalDetails?.personalDetailsStep || "details",
       personalDetailsCompleted:
         personalDetails?.personalDetailsCompleted || false,
+      requiresLandline: personalDetails?.requiresLandline ?? false,
     },
-    mode: "onChange",
   });
+
+  const [hasSubmittedDetails, setHasSubmittedDetails] = useState<boolean>(
+    personalDetails?.firstName !== "",
+  );
+  const [hasSubmittedAdditional, setHasSubmittedAdditional] = useState<boolean>(
+    personalDetails?.dobDay !== "",
+  );
 
   useEffect(() => {
     reset(
@@ -99,43 +142,35 @@ const PersonalDetails = () => {
   }, [currentFormStep, reset, personalDetails]);
 
   const hasSmartphoneValue = watch("hasSmartphone");
-  const verificationCode = watch("verificationCode");
   const dobDay = watch("dobDay");
   const dobMonth = watch("dobMonth");
   const dobYear = watch("dobYear");
   const residencyDuration = watch("residencyDuration");
   const currentEmail = watch("email");
+  const requiresLandline = watch("requiresLandline");
 
-  useEffect(() => {
-    if (previousEmail && previousEmail !== currentEmail) {
-      setIsEmailVerified(false);
-      setPreviousEmail(currentEmail);
-    }
-  }, [currentEmail, previousEmail]);
-
-  useEffect(() => {
-    if (personalDetails?.verificationCode === "123456") {
-      setIsEmailVerified(true);
-    }
-  }, [personalDetails]);
-
-  const handleContinueFromDetails = async () => {
+  const handleContinueFormDetails = async () => {
     try {
+      setHasSubmittedDetails(true);
       const isFormValid = await trigger();
-
       if (!isFormValid) {
         return;
       }
 
       const formValues = getValues();
-      const nextStep = isEmailVerified ? "additional" : "verification";
+      if (formValues.email !== previousEmail) await onEmailChanged();
+      setPreviousEmail(formValues.email);
+      const nextStep =
+        isEmailVerified && formValues.email === previousEmail
+          ? "additional"
+          : "verification";
 
       const updatedDetails: PersonalDetails = {
         ...personalDetails,
         firstName: formValues.firstName || "",
         lastName: formValues.lastName || "",
         phone: formValues.phone || "",
-        hasSmartphone: formValues.hasSmartphone || "yes",
+        hasSmartphone: formValues.hasSmartphone || "",
         email: formValues.email || "",
         confirmEmail: formValues.confirmEmail || "",
         marketingConsent:
@@ -149,6 +184,10 @@ const PersonalDetails = () => {
         dobMonth: personalDetails?.dobMonth || "",
         dobYear: personalDetails?.dobYear || "",
         residencyDuration: personalDetails?.residencyDuration || null,
+        requiresLandline:
+          formValues.requiresLandline !== undefined
+            ? formValues.requiresLandline
+            : false,
       } as PersonalDetails;
 
       setPersonalDetails(updatedDetails);
@@ -166,24 +205,18 @@ const PersonalDetails = () => {
       return;
     }
 
-    if (verificationCode === "123456") {
-      if (personalDetails) {
-        const updatedDetails: PersonalDetails = {
-          ...personalDetails,
-          verificationCode: "123456",
-          personalDetailsStep: "additional",
-          personalDetailsCompleted: false,
-          marketingConsent: personalDetails.marketingConsent,
-        } as PersonalDetails;
+    if (personalDetails) {
+      const updatedDetails: PersonalDetails = {
+        ...personalDetails,
+        personalDetailsStep: "additional",
+        personalDetailsCompleted: false,
+        marketingConsent: personalDetails.marketingConsent,
+      } as PersonalDetails;
 
-        setPersonalDetails(updatedDetails);
-      }
-      setIsEmailVerified(true);
-      setPreviousEmail(currentEmail); // Update previousEmail with the verified email
-      setCurrentFormStep("additional");
-    } else {
-      alert(personalDetailsProps.verificationSection.invalidCodeText);
+      setPersonalDetails(updatedDetails);
     }
+    setIsEmailVerified(true);
+    setCurrentFormStep("additional");
   };
 
   const onVerificationSuccess = async () => {
@@ -204,10 +237,12 @@ const PersonalDetails = () => {
   };
 
   const onEmailChanged = () => {
-    setIsEmailVerified(false);
+    setIsEmailCodeValid(undefined);
+    setIsEmailVerified(undefined);
   };
 
   const onSubmitAdditionalDetails = async () => {
+    setHasSubmittedAdditional(true);
     const isFormValid = await trigger();
 
     if (!isFormValid) {
@@ -230,6 +265,7 @@ const PersonalDetails = () => {
       dobMonth,
       dobYear,
       residencyDuration,
+      requiresLandline,
       personalDetailsCompleted: true,
       marketingConsent: personalDetails.marketingConsent,
       personalDetailsStep: "additional",
@@ -274,7 +310,7 @@ const PersonalDetails = () => {
           marketingConsent: personalDetails.marketingConsent,
           personalDetailsCompleted:
             personalDetails.personalDetailsCompleted ?? false,
-          verificationCode: personalDetails.verificationCode || "",
+          isVerified: isEmailVerified ?? false,
         } as PersonalDetails;
         setPersonalDetails(updatedDetails);
       }
@@ -288,7 +324,7 @@ const PersonalDetails = () => {
           personalDetailsCompleted:
             personalDetails.personalDetailsCompleted ?? false,
 
-          verificationCode: personalDetails.verificationCode || "",
+          isVerified: isEmailVerified ?? false,
         } as PersonalDetails;
         setPersonalDetails(updatedDetails);
       }
@@ -297,27 +333,6 @@ const PersonalDetails = () => {
       setCurrentStep(0);
       router.push("/join-flow");
     }
-  };
-
-  const renderMarketingText = () => {
-    const text = personalDetailsProps.marketingSection.text;
-    const parts = text.split("Privacy Notice");
-
-    return (
-      <>
-        {parts[0]}
-        <a
-          href={personalDetailsProps.marketingSection.privacyNoticeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-ui-link underline hover:text-tertiary-purple cursor-pointer"
-          style={{ transition: "color 0.2s ease" }}
-        >
-          {personalDetailsProps.marketingSection.privacyNoticeText}
-        </a>
-        {parts[1]}
-      </>
-    );
   };
 
   const InitialPersonalDetailsComponent =
@@ -332,10 +347,10 @@ const PersonalDetails = () => {
   return (
     <>
       <ReviewYourBasket />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-6 py-8">
         <Stepper />
 
-        <div className="max-w-2xl mx-auto p-8 rounded-lg">
+        <div className="max-w-[569px] mx-auto py-8 rounded-lg">
           <h1 className="text-2xl text-center font-bold mb-6">
             {personalDetailsProps.pageTitle}
           </h1>
@@ -345,33 +360,37 @@ const PersonalDetails = () => {
           )}
 
           {currentFormStep === "details" && (
-            <>
-              <h2 className="text-md font-bold mb-6">
+            <div className="flex flex-col gap-6">
+              <h2 className="text-md font-bold">
                 {personalDetailsProps.sectionTitle}
               </h2>
-              <p className="text-md mb-4">
-                {personalDetailsProps.requiredFieldsText}
+              <p className="text-md">
+                Fields marked <span className="text-ui-error">*</span> are
+                required
               </p>
               <InitialPersonalDetailsComponent
                 register={register}
                 errors={errors}
                 hasSmartphoneValue={hasSmartphoneValue}
                 personalDetailsProps={personalDetailsProps}
-                renderMarketingText={renderMarketingText}
+                control={control}
+                hasSubmitted={hasSubmittedDetails}
               />
-            </>
+            </div>
           )}
 
           {currentFormStep === "verification" && !isEmailVerified && (
             <EmailVerificationFormComponent
               register={register}
               errors={errors}
-              personalDetailsProps={personalDetailsProps}
+              verificationSection={personalDetailsProps.verificationSection}
               isVerified={isEmailVerified}
               onVerificationSuccess={onVerificationSuccess}
-              onEmailChanged={onEmailChanged}
               currentEmail={currentEmail}
-              previousEmail={previousEmail}
+              handleCodeChange={handleCodeChange}
+              validateCode={validateCode}
+              isCodeValid={isEmailCodeValid}
+              handleBack={handleBack}
             />
           )}
 
@@ -380,27 +399,39 @@ const PersonalDetails = () => {
               register={register}
               errors={errors}
               personalDetailsProps={personalDetailsProps}
+              address={serviceAddress}
+              control={control}
+              requiresLandline={requiresLandline}
+              hasSubmitted={hasSubmittedAdditional}
             />
           )}
-          <div className="flex justify-between mt-8">
-            <Button
-              onClick={handleBack}
-              tint="white"
-              variant="outline"
-              type="button"
-            >
-              {personalDetailsProps.buttons.back}
-            </Button>
+          <div className="flex flex-col md:flex-row justify-between mt-8 gap-6">
+            <div className="flex-1">
+              <Button
+                onClick={handleBack}
+                tint="white"
+                variant="outline"
+                type="button"
+                fullWidth={true}
+                className=""
+              >
+                {personalDetailsProps.buttons.back}
+              </Button>
+            </div>
 
             {currentFormStep === "details" && (
-              <Button
-                tint="yellow"
-                variant="solid"
-                type="button"
-                onClick={handleContinueFromDetails}
-              >
-                {personalDetailsProps.buttons.continue}
-              </Button>
+              <div className="flex-3">
+                <Button
+                  tint="yellow"
+                  variant="solid"
+                  type="button"
+                  fullWidth={true}
+                  onClick={handleContinueFormDetails}
+                  disabled={hasSmartphoneValue === "no"}
+                >
+                  {personalDetailsProps.buttons.continue}
+                </Button>
+              </div>
             )}
 
             {currentFormStep === "verification" && !isEmailVerified && (
@@ -408,8 +439,9 @@ const PersonalDetails = () => {
                 tint="yellow"
                 variant="solid"
                 type="button"
+                fullWidth={true}
                 onClick={handleVerification}
-                disabled={!verificationCode}
+                disabled={!isEmailCodeValid}
               >
                 {personalDetailsProps.buttons.verify}
               </Button>
@@ -420,6 +452,7 @@ const PersonalDetails = () => {
                 tint="yellow"
                 variant="solid"
                 type="button"
+                fullWidth={true}
                 onClick={onVerificationSuccess}
               >
                 {personalDetailsProps.buttons.continue}
@@ -431,9 +464,11 @@ const PersonalDetails = () => {
                 tint="yellow"
                 variant="solid"
                 type="button"
+                fullWidth={true}
+                disabled={requiresLandline}
                 onClick={onSubmitAdditionalDetails}
               >
-                {personalDetailsProps.buttons.continue}
+                {personalDetailsProps.buttons.continueToEero}
               </Button>
             )}
           </div>

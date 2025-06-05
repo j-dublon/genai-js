@@ -1,10 +1,12 @@
-import { JSX } from "react";
-import type { FieldErrors, UseFormRegister } from "react-hook-form";
+import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 import { z } from "zod";
 
-import { PersonalDetails } from "@/store/useJoinFlowStore";
+import { PersonalDetails, StoreAddress } from "@/store/useJoinFlowStore";
 
+import { ModalContent } from "../../../components/modalContents/modalContents";
 import { personalDetailsProps } from "../personalDetailsProps";
+const UNWANTED_CHAR_SET = "[\\-\\(\\).\\s]";
+const MOBILE_PHONE_NUMBER_GB_PATTERN = `${UNWANTED_CHAR_SET}*0${UNWANTED_CHAR_SET}*7${UNWANTED_CHAR_SET}*(?:[1-57-9]${UNWANTED_CHAR_SET}*(?:${UNWANTED_CHAR_SET}*[0-9]){2}|6${UNWANTED_CHAR_SET}*2${UNWANTED_CHAR_SET}*4)(?:${UNWANTED_CHAR_SET}*[0-9]){6}${UNWANTED_CHAR_SET}*`;
 
 export const createStepBasedPersonalDetailsSchema = (
   props: typeof personalDetailsProps,
@@ -18,7 +20,7 @@ export const createStepBasedPersonalDetailsSchema = (
     email: z.string().optional(),
     confirmEmail: z.string().optional(),
     marketingConsent: z.boolean().optional(),
-    verificationCode: z.string().optional(),
+    isVerified: z.boolean().optional(),
     dobDay: z.string().optional(),
     dobMonth: z.string().optional(),
     dobYear: z.string().optional(),
@@ -30,6 +32,7 @@ export const createStepBasedPersonalDetailsSchema = (
       .enum(["details", "verification", "additional"])
       .optional(),
     personalDetailsCompleted: z.boolean().optional(),
+    requiresLandline: z.boolean().optional(),
   });
 
   if (step === "details") {
@@ -39,7 +42,12 @@ export const createStepBasedPersonalDetailsSchema = (
           .string()
           .min(1, props.validationMessages.firstNameRequired),
         lastName: z.string().min(1, props.validationMessages.lastNameRequired),
-        phone: z.string().min(1, props.validationMessages.phoneRequired),
+        phone: z
+          .string()
+          .regex(
+            RegExp(MOBILE_PHONE_NUMBER_GB_PATTERN),
+            props.validationMessages.phoneRequired,
+          ),
         hasSmartphone: z.enum(["yes", "no"], {
           required_error: props.validationMessages.smartphoneConfirmation,
           invalid_type_error: props.validationMessages.smartphoneConfirmation,
@@ -53,26 +61,90 @@ export const createStepBasedPersonalDetailsSchema = (
         message: props.validationMessages.emailsMustMatch,
         path: ["confirmEmail"],
       });
-  } else if (step === "verification") {
-    return baseSchema.extend({
-      verificationCode: z.string().min(6, "Verification code is required"),
-    });
   } else if (step === "additional") {
-    return baseSchema.extend({
-      dobDay: z.string().min(1, "Day is required"),
-      dobMonth: z.string().min(1, "Month is required"),
-      dobYear: z.string().min(1, "Year is required"),
-      residencyDuration: z
-        .enum(["over-year", "under-year"], {
-          required_error: props.validationMessages.residencyDurationRequired,
-          invalid_type_error:
-            props.validationMessages.residencyDurationRequired,
-        })
-        .nullable()
-        .refine((val) => val !== null, {
-          message: props.validationMessages.residencyDurationRequired,
-        }),
-    });
+    return baseSchema
+      .extend({
+        dobDay: z
+          .string()
+          .min(1, "Day is required")
+          .refine(
+            (val) => {
+              const num = Number(val);
+              return !isNaN(num) && num >= 1 && num <= 31;
+            },
+            {
+              message: "Day must be between 1 and 31",
+            },
+          ),
+        dobMonth: z
+          .string()
+          .min(1, "Month is required")
+          .refine(
+            (val) => {
+              const num = Number(val);
+              return !isNaN(num) && num >= 1 && num <= 12;
+            },
+            {
+              message: "Month must be between 1 and 12",
+            },
+          ),
+        dobYear: z
+          .string()
+          .min(4, "Year is required")
+          .refine(
+            (val) => {
+              const num = Number(val);
+              return (
+                !isNaN(num) && num > 1900 && num <= new Date().getFullYear()
+              );
+            },
+            { message: "Enter a valid year" },
+          ),
+        residencyDuration: z
+          .enum(["over-year", "under-year"], {
+            required_error: props.validationMessages.residencyDurationRequired,
+            invalid_type_error:
+              props.validationMessages.residencyDurationRequired,
+          })
+          .nullable()
+          .refine((val) => val !== null, {
+            message: props.validationMessages.residencyDurationRequired,
+          }),
+      })
+      .superRefine((values, ctx) => {
+        const day = Number(values.dobDay);
+        const month = Number(values.dobMonth);
+        const year = Number(values.dobYear);
+
+        if (
+          !isNaN(day) &&
+          day >= 1 &&
+          day <= 31 &&
+          !isNaN(month) &&
+          month >= 1 &&
+          month <= 12 &&
+          !isNaN(year) &&
+          year > 1900 &&
+          year <= new Date().getFullYear()
+        ) {
+          const dob = new Date(year, month - 1, day);
+          const today = new Date();
+          const eighteenYearsAgo = new Date(
+            today.getFullYear() - 18,
+            today.getMonth(),
+            today.getDate(),
+          );
+          if (dob > eighteenYearsAgo) {
+            ["dobDay", "dobMonth", "dobYear"].forEach((field) =>
+              ctx.addIssue({
+                path: [field],
+                message: "You must be at least 18 years old",
+                code: z.ZodIssueCode.custom,
+              }),
+            );
+          }
+        }
+      });
   }
 
   return baseSchema;
@@ -92,25 +164,48 @@ export type InitialPersonalDetailsProps = {
   errors: FieldErrors<PersonalDetails>;
   hasSmartphoneValue: string;
   personalDetailsProps: PersonalDetailsUIConfig;
-  renderMarketingText: () => JSX.Element;
+  control: Control<PersonalDetails>;
+  hasSubmitted: boolean;
 };
 
 export type AdditionalPersonalDetailsFormProps = {
   register: UseFormRegister<PersonalDetails>;
   errors: FieldErrors<PersonalDetails>;
+  address: StoreAddress | null;
+  requiresLandline: boolean;
+  control: Control<PersonalDetails>;
+  hasSubmitted: boolean;
   personalDetailsProps: {
     additionalSection: {
       dobTitle: string;
       dobDayPlaceholder: string;
       dobMonthPlaceholder: string;
       dobYearPlaceholder: string;
+      dobLink: string;
       addressTitle: string;
       residencyOptions: Array<{
         value: string;
         label: string;
       }>;
+      landlineTitle: string;
+      landlineText: string;
+      landlineTextLink: string;
+      landlineCheckboxText: string;
+      dobModalTitle: string;
+      dobModal: ModalContent[];
+      modalCloseText: string;
+      teleHealthDeviceModalTitle: string;
+      teleHealthDeviceModal: ModalContent[];
     };
   };
+};
+
+type verificationSection = {
+  title: string;
+  description: string;
+  inputLabelText: string;
+  tipCardText: string;
+  invalidCodeText?: string;
 };
 
 export type PersonalDetailsUIConfig = {
@@ -142,12 +237,7 @@ export type PersonalDetailsUIConfig = {
     emailsMustMatch: string;
     residencyDurationRequired: string;
   };
-  verificationSection: {
-    title: string;
-    description: string;
-    codePlaceholder: string;
-    invalidCodeText?: string;
-  };
+  verificationSection: verificationSection;
   buttons?: {
     back: string;
     continue: string;
@@ -156,22 +246,27 @@ export type PersonalDetailsUIConfig = {
   pageTitle?: string;
   sectionTitle?: string;
   requiredFieldsText?: string;
+  smartphoneModalDetails: {
+    modalTitle: string;
+    modalContent: ModalContent[];
+  };
+  emailModalDetails: {
+    modalTitle: string;
+    modalContent: ModalContent[];
+  };
 };
 
 export type EmailVerificationFormProps = {
   register: UseFormRegister<PersonalDetails>;
   errors: FieldErrors<PersonalDetails>;
-  personalDetailsProps: {
-    verificationSection: {
-      title: string;
-      description: string;
-      codePlaceholder: string;
-      invalidCodeText?: string;
-    };
-  };
+  verificationSection: verificationSection;
+  isCodeValid?: boolean;
   isVerified?: boolean;
   onVerificationSuccess?: () => void;
   onEmailChanged?: () => void;
   currentEmail?: string;
   previousEmail?: string;
+  handleCodeChange: (arg1: string, arg2: number) => void;
+  validateCode: (code: string) => void;
+  handleBack: () => void;
 };

@@ -1,77 +1,247 @@
-import FormInput from "@/components/FormInput";
+import {
+  Checkbox,
+  InfoModal,
+  Radio,
+  TipCard,
+  useClickOutside,
+} from "@react-component-library/ui";
+import { TickWithCircle } from "@react-component-library/ui/icons";
+import { useRef, useState } from "react";
+import { Controller } from "react-hook-form";
 
+import { useClearFocus } from "@/hooks/useClearFocus";
+import { getAssetPath } from "@/lib/get-asset-path";
+
+import { ModalContents } from "../../../components/modalContents/modalContents";
+import { TextInput } from "../components/textInput";
 import type { AdditionalPersonalDetailsFormProps } from "./formValues";
 
-const AdditionalPersonalDetailsForm = ({
+export const AdditionalPersonalDetailsForm = ({
   register,
   errors,
   personalDetailsProps,
+  address,
+  requiresLandline,
+  control,
+  hasSubmitted,
 }: AdditionalPersonalDetailsFormProps) => {
+  const dobModalRef = useRef<HTMLDialogElement>(null);
+  const teleHealthModalRef = useRef<HTMLDialogElement>(null);
+
+  const [isDobModalOpen, setIsDobModalOpen] = useState(false);
+  const [isTeleHealthModalOpen, setIsTeleHealthModalOpen] = useState(false);
+
+  const closeDobModal = (e?: MouseEvent) => {
+    if (dobModalRef.current) {
+      e?.preventDefault();
+      dobModalRef.current.close();
+      setIsDobModalOpen(false);
+    }
+  };
+
+  const closeTeleHealthModal = (e?: MouseEvent) => {
+    if (teleHealthModalRef.current) {
+      e?.preventDefault();
+      teleHealthModalRef.current.close();
+      setIsTeleHealthModalOpen(false);
+    }
+  };
+
+  useClickOutside(dobModalRef, isDobModalOpen, closeDobModal);
+  useClickOutside(
+    teleHealthModalRef,
+    isTeleHealthModalOpen,
+    closeTeleHealthModal,
+  );
+
+  useClearFocus(dobModalRef, "close");
+  useClearFocus(teleHealthModalRef, "close");
+
   return (
     <form id="additionalDetailsForm">
-      <p className="text-md font-bold mb-6">
-        {personalDetailsProps.additionalSection.dobTitle}
-      </p>
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <div>
-          <FormInput
-            id="dobDay"
-            placeholder={
-              personalDetailsProps.additionalSection.dobDayPlaceholder
-            }
-            error={errors.dobDay}
+      <TipCard
+        image={{
+          src: getAssetPath("/images/linked-hands.svg"),
+          alt: "linked hands",
+        }}
+        className="mt-10 md:mt-12 mb-10 md:mb-12 bg-tertiary-blue-light justify-center md:w-full items-center"
+      >
+        <span>
+          <span className="text-tertiary-blue-dark font-semibold">
+            Good to know:
+          </span>{" "}
+          As part of your sign up process, we’ll be running a soft credit check
+          to make sure Cuckoo is right for you. We’ll let you know before this
+          happens.
+        </span>
+      </TipCard>
+      <div className="flex flex-col gap-6 mb-12 items-start">
+        <p className="text-md font-bold">
+          {personalDetailsProps.additionalSection.dobTitle}
+        </p>
+        <div className="flex flex-row gap-4 items-center">
+          <TextInput
+            type="text"
+            placeholder="DD"
+            maxLength={2}
+            id="dob-day"
+            aria-invalid={!!errors.dobDay}
+            className="w-21 h-16 rounded-sm"
+            hasSubmitted={hasSubmitted}
             {...register("dobDay")}
           />
-        </div>
-        <div>
-          <FormInput
-            id="dobMonth"
-            placeholder={
-              personalDetailsProps.additionalSection.dobMonthPlaceholder
-            }
-            error={errors.dobMonth}
+          <TextInput
+            type="text"
+            placeholder="MM"
+            maxLength={2}
+            id="dob-month"
+            aria-invalid={!!errors.dobMonth}
+            className="w-21 h-16 rounded-sm"
             {...register("dobMonth")}
+            hasSubmitted={hasSubmitted}
           />
-        </div>
-        <div>
-          <FormInput
-            id="dobYear"
-            placeholder={
-              personalDetailsProps.additionalSection.dobYearPlaceholder
-            }
-            error={errors.dobYear}
+          <TextInput
+            type="text"
+            placeholder="YYYY"
+            maxLength={4}
+            id="dob-year"
+            aria-invalid={!!errors.dobYear}
+            className="w-21 h-16 rounded-sm"
             {...register("dobYear")}
+            hasSubmitted={hasSubmitted}
           />
+          {hasSubmitted &&
+            !errors.dobDay &&
+            !errors.dobMonth &&
+            !errors.dobYear && (
+              <TickWithCircle width={22} height={22} circleFill={"#009EA8"} />
+            )}
         </div>
+        {hasSubmitted &&
+          (errors.dobDay || errors.dobMonth || errors.dobYear) && (
+            <p className="text-ui-error text-sm mt-1">
+              {errors?.dobDay?.message === "You must be at least 18 years old"
+                ? "You must be at least 18 years old"
+                : "Please enter a valid date"}
+            </p>
+          )}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.preventDefault();
+            dobModalRef.current?.showModal();
+            setIsDobModalOpen(true);
+          }}
+          className="leading-[1.6] underline font-medium cursor-pointer text-ui-link"
+        >
+          {personalDetailsProps.additionalSection.dobLink}
+        </button>
       </div>
 
-      <p className="text-md font-bold mb-6">
-        {personalDetailsProps.additionalSection.addressTitle}
-      </p>
-      <div className="mb-6">
-        <div className="flex flex-col gap-2">
-          {personalDetailsProps.additionalSection.residencyOptions.map(
-            (option) => (
-              <label key={option.value} className="inline-flex items-center">
-                <input
-                  type="radio"
-                  value={option.value}
-                  {...register("residencyDuration")}
-                  className="mr-2"
-                />
-                {option.label}
-              </label>
-            ),
+      <div className="flex flex-col gap-4 mb-12">
+        <p className="text-md font-bold">
+          {personalDetailsProps.additionalSection.addressTitle}
+        </p>
+        {address && (
+          <p className="mb-4 font-medium">
+            {[address.line1, address.line2, address.line3, address.postcode]
+              .filter(Boolean)
+              .join(", ")}
+          </p>
+        )}
+        <Controller
+          name="residencyDuration"
+          control={control}
+          render={({ field }) => (
+            <div className="flex flex-col gap-2">
+              {personalDetailsProps.additionalSection.residencyOptions.map(
+                (option) => (
+                  <div key={option.value} className="inline-flex items-center">
+                    <Radio
+                      label={option.label}
+                      value={option.value}
+                      checked={field.value === option.value}
+                      onChange={() => field.onChange(option.value)}
+                    />
+                  </div>
+                ),
+              )}
+            </div>
           )}
-        </div>
+        />
         {errors.residencyDuration && (
           <p className="text-ui-error text-sm mt-1">
             {errors.residencyDuration.message}
           </p>
         )}
       </div>
+      <div className="flex flex-col gap-4 mb-16">
+        <p className="text-md font-bold">
+          {personalDetailsProps.additionalSection.landlineTitle}
+        </p>
+        <p>
+          {personalDetailsProps.additionalSection.landlineText}{" "}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              teleHealthModalRef.current?.showModal();
+              setIsTeleHealthModalOpen(true);
+            }}
+            className="leading-[1.6] underline font-medium cursor-pointer text-ui-link"
+          >
+            {personalDetailsProps.additionalSection.landlineTextLink}
+          </button>
+        </p>
+        <Controller
+          name="requiresLandline"
+          control={control}
+          render={({ field }) => (
+            <Checkbox
+              label={
+                personalDetailsProps.additionalSection.landlineCheckboxText
+              }
+              value="yes"
+              checked={Boolean(field.value)}
+              onChange={(checked) => field.onChange(checked)}
+            />
+          )}
+        />
+        {requiresLandline && (
+          <TipCard
+            image={{
+              src: getAssetPath("/images/stop-hand.svg"),
+              alt: "Hand indicating a stop",
+            }}
+            className="bg-tertiary-peach-light justify-center md:w-full items-center"
+          >
+            You&apos;ll need a smartphone to get Cuckoo. We can&apos;t provide
+            our service without a smartphone.
+          </TipCard>
+        )}
+      </div>
+      <InfoModal
+        title={personalDetailsProps.additionalSection.dobModalTitle}
+        modalRef={dobModalRef}
+        buttonText="close"
+        buttonType="button"
+      >
+        <ModalContents
+          content={personalDetailsProps.additionalSection.dobModal}
+        />
+      </InfoModal>
+      <InfoModal
+        title={
+          personalDetailsProps.additionalSection.teleHealthDeviceModalTitle
+        }
+        modalRef={teleHealthModalRef}
+        buttonText={personalDetailsProps.additionalSection.modalCloseText}
+        buttonType="button"
+      >
+        <ModalContents
+          content={personalDetailsProps.additionalSection.teleHealthDeviceModal}
+        />
+      </InfoModal>
     </form>
   );
 };
-
-export default AdditionalPersonalDetailsForm;
