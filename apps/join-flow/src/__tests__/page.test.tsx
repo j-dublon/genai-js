@@ -4,6 +4,7 @@ import { vi } from "vitest";
 import PackageSelection from "@/screens/PackageSelection";
 import { packageSelectionPageText } from "@/screens/PackageSelection/components/ChooseYourPackage/ChooseYourPackageProps";
 import { bannerTitle } from "@/screens/PackageSelection/components/HeroBanner/HeroBannerProps";
+import { notReadyToJoinProps } from "@/screens/PackageSelection/components/NotReadyToJoin/NotReadyToJoinProps";
 import { heading as remindersHeading } from "@/screens/PackageSelection/components/Reminders/RemindersProps";
 
 vi.mock("next/navigation", () => ({
@@ -79,6 +80,17 @@ vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
   ),
 }));
 
+vi.mock(
+  "@/screens/PackageSelection/components/NotReadyToJoin/NotReadyToJoinForm",
+  () => ({
+    NotReadyToJoinForm: () => (
+      <div data-testid="not-ready-to-join-form-mock">
+        Not Ready To Join Form Mock
+      </div>
+    ),
+  }),
+);
+
 describe("PackageSelection Component", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -125,6 +137,17 @@ describe("PackageSelection Component", () => {
     });
     expect(screen.getByText(remindersHeading)).toBeInTheDocument();
     expect(remindersSection).toBeInTheDocument();
+  });
+
+  it("renders NotReadyToJoin component", async () => {
+    await act(async () => {
+      render(<PackageSelection />);
+    });
+    const notReadyToJoinSection = screen.getByRole("region", {
+      name: "Not ready to join section",
+    });
+    expect(notReadyToJoinSection).toBeInTheDocument();
+    expect(screen.getByText(notReadyToJoinProps.heading)).toBeInTheDocument();
   });
 
   it("renders LegalClaims component", async () => {

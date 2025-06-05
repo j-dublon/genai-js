@@ -9,6 +9,10 @@ export interface DatePickerProps {
   selectedDate: string;
   onDateSelect: (date: string | undefined) => void;
   placeholderText?: string;
+  buttonClassName?: string;
+  outerClassName?: string;
+  disabled?: boolean;
+  overlay?: boolean;
 }
 
 registerLocale("en-GB", enGB);
@@ -18,6 +22,10 @@ export const DatePicker = ({
   selectedDate,
   onDateSelect,
   placeholderText = "Please select a date",
+  buttonClassName,
+  outerClassName,
+  disabled = false,
+  overlay = false,
 }: DatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -50,9 +58,11 @@ export const DatePicker = ({
   }, []);
 
   return (
-    <div className="ds:relative ds:my-4">
+    <div className={`ds:relative ds:my-4 ${outerClassName}`}>
       <div
-        className={`ds:flex ds:flex-col ds:gap-2 ds:justify-center ${isOpen ? "ds:md:mb-5 ds:mb-5" : "ds:mb-4m"}`}
+        className={`ds:flex ds:flex-col ds:w-full ds:gap-2 ds:justify-center ${
+          !overlay && isOpen ? "ds:md:mb-5 ds:mb-5" : "ds:mb-4m"
+        }`}
         ref={wrapperRef}
       >
         <DropdownInputField
@@ -60,28 +70,38 @@ export const DatePicker = ({
           isOpen={isOpen}
           setIsOpen={setIsOpen}
           value={selectedDate}
+          className={buttonClassName}
+          disabled={disabled}
         />
         {isOpen && (
-          <ReactDatePicker
-            selected={selected}
-            onSelect={handleDateSelect}
-            minDate={availableDates[0]}
-            maxDate={availableDates[availableDates.length - 1]}
-            calendarClassName="calendar-style ds:md:justify-center ds:w-[350px] ds:md:w-[565px] ds:px-2"
-            renderDayContents={(day, date) => (
-              <div
-                className={`.react-datepicker__day--selected ds:flex ds:justify-center ds:items-center ds:md:h-[55px] ds:md:w-[77px]`}
-              >
-                <div className={`ds:font-lg ${getDayClassName(date)}`}>
-                  {day}
+          <div
+            className={
+              overlay
+                ? "ds:absolute ds:top-full ds:left-0 ds:z-50 ds:mt-1 ds:w-full"
+                : ""
+            }
+          >
+            <ReactDatePicker
+              selected={selected}
+              onSelect={handleDateSelect}
+              minDate={availableDates[0]}
+              maxDate={availableDates[availableDates.length - 1]}
+              calendarClassName="calendar-style ds:md:justify-center ds:px-2 ds:w-full"
+              renderDayContents={(day, date) => (
+                <div
+                  className={`.react-datepicker__day--selected ds:flex ds:justify-center ds:items-center ds:md:h-[55px] ds:md:w-[77px]`}
+                >
+                  <div className={`ds:font-lg ${getDayClassName(date)}`}>
+                    {day}
+                  </div>
                 </div>
-              </div>
-            )}
-            showPopperArrow={false}
-            locale="en-GB"
-            dateFormat="EEEE, MMM dd yyyy"
-            inline
-          />
+              )}
+              showPopperArrow={false}
+              locale="en-GB"
+              dateFormat="EEEE, MMM dd yyyy"
+              inline
+            />
+          </div>
         )}
       </div>
     </div>

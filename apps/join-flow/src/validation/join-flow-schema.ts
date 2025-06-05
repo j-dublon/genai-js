@@ -30,6 +30,13 @@ export const eeroSelectionSchema = z.object({
   imageURL: z.string(),
 });
 
+export const notReadyToJoinSchema = z.object({
+  fullName: z.string().min(1, "Full name is required"),
+  email: z.string().email("Invalid email address"),
+  phoneNumber: z.string().optional(),
+  selectedDate: z.string().min(1, "Please select a date"),
+});
+
 export const goLiveDateSchema = z.object({
   selectedDate: z.string().min(1, "Please select a date"),
   timeSlot: z.string().min(1, "Please select a time slot"),

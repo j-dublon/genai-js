@@ -4,7 +4,7 @@ import { AccountAppButton } from "@components/atoms/AccountAppButton";
 import { Button } from "@components/atoms/Button";
 import { Checkbox } from "@components/atoms/Checkbox";
 import { ColorPill } from "@components/atoms/ColorPill";
-import { DatePicker } from "@components/atoms/DatePicker";
+import { DatePicker, DatePickerProps } from "@components/atoms/DatePicker";
 import { DropdownPill } from "@components/atoms/DropdownPill";
 import { FeatureImage } from "@components/atoms/FeatureImage";
 import { GuideCard, GuideCardProps } from "@components/atoms/GuideCard";
@@ -129,6 +129,7 @@ export {
 export type {
   BackgroundColors,
   CustomInputProps,
+  DatePickerProps,
   GuideCardProps,
   InfoCardProps,
   ReviewCardProps,
