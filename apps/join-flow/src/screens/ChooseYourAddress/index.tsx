@@ -7,10 +7,12 @@ import {
   TrustpilotHorizontal,
   useTrustpilotScore,
 } from "@react-component-library/ui";
+import { useEffect } from "react";
 
 import { ContactInfo } from "@/components/ContactInfo";
 import { useAffiliateSession } from "@/hooks/useAffiliateSession";
 import { getAssetPath } from "@/lib/get-asset-path";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 import { ChooseYourAddressText } from "./ChooseYourAddressProps";
 import { AddressLookupForm } from "./forms/AddressLookupForm";
@@ -25,8 +27,13 @@ export const ChooseYourAddress = () => {
   } = ChooseYourAddressText;
   const { data: trustpilotRating } = useTrustpilotScore();
   const { trustScore, numberOfReviews } = trustpilotRating || {};
+  const { resetFlow } = useJoinFlowStore();
 
   useAffiliateSession();
+
+  useEffect(() => {
+    resetFlow();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="flex flex-col items-center">

@@ -1,6 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -23,9 +24,13 @@ export const OneTouchSwitchingForm = ({
   setMatchResult,
   isSubmitting = false,
 }: OneTouchSwitchingFormProps) => {
+  const { switchingDetails } = useJoinFlowStore();
   const [customProviderError, setCustomProviderError] = useState<string | null>(
     null,
   );
+
+  const shouldShowAccountNumber =
+    switchingDetails?.otsSwitchStatus === "FIRST_ATTEMPT_FAILED";
 
   const {
     register,
@@ -126,9 +131,11 @@ export const OneTouchSwitchingForm = ({
         </div>
       )}
 
-      {matchResult && !matchResult.success && (
+      {shouldShowAccountNumber && (
         <div className="mb-8">
-          <p className="font-medium">{matchResult.message}</p>
+          <p className="font-medium">
+            {matchResult?.message || oneTouchSwitchingText.noMatchMessage}
+          </p>
 
           <div className="mt-4">
             <p className="text-sm mb-6">

@@ -75,13 +75,7 @@ test.describe("Go live date", () => {
           isSelected: true,
         },
         switchingDetails: {
-          isWillingToSwitch: false,
-          currentProvider: {
-            id: "noProvider",
-            name: "noProvider",
-            description: "No provider was selected",
-          },
-          switchOrderReference: "SKIPPED",
+          otsSwitchStatus: "SKIPPED",
         },
         paymentDetails: null,
         goLiveDetails: null,

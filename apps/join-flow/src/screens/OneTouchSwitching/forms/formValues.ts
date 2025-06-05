@@ -21,8 +21,6 @@ export type MatchResultType = {
   success: boolean;
   message: string;
   provider?: BroadbandProvider;
-  hasUsedAccountNumber?: boolean;
-  isFirstAttempt?: boolean;
 };
 
 export type OneTouchSwitchingFormProps = {

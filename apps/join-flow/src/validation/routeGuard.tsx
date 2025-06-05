@@ -46,6 +46,13 @@ export const FLOW_STEPS: FlowStep[] = [
   },
 ];
 
+const otsCompleted = (storeState: JoinFlowState): boolean => {
+  return (
+    storeState.switchingDetails?.otsSwitchStatus !== undefined &&
+    storeState.switchingDetails?.otsSwitchStatus !== "FIRST_ATTEMPT_FAILED"
+  );
+};
+
 const findNextRequiredStep = (storeState: JoinFlowState): string => {
   switch (true) {
     case !storeState.serviceAddress:
@@ -57,8 +64,7 @@ const findNextRequiredStep = (storeState: JoinFlowState): string => {
       return "/join-flow/personal-details";
     case !storeState.eeroSelection:
       return "/join-flow/eero-selection";
-    case !storeState.switchingDetails ||
-      storeState.switchingDetails.isWillingToSwitch === undefined:
+    case !otsCompleted(storeState):
       return "/join-flow/one-touch-switching";
     case !storeState.goLiveDetails:
       return "/join-flow/go-live-date";
@@ -108,6 +114,14 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
 
         if (!allowed) {
           router.replace(nextRequiredStep);
+          return;
+        }
+
+        if (
+          pathname === "/join-flow/one-touch-switching" &&
+          otsCompleted(store)
+        ) {
+          router.replace("/join-flow/go-live-date");
           return;
         }
 

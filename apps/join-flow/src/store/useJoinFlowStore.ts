@@ -5,7 +5,7 @@ import { persist } from "zustand/middleware";
 
 import { QuoteLookupSuccess } from "@/services/payloadTypes";
 
-import { Affiliate, QuoteLookup } from "../../payload-types";
+import { Affiliate, QuoteLookup, SwitchMatchLookup } from "../../payload-types";
 
 export type AffiliateSession = {
   id: string;
@@ -69,10 +69,16 @@ export type BroadbandProvider = {
   description: string;
 };
 
+export type OTSSwitchStatus =
+  | "FIRST_ATTEMPT_FAILED"
+  | "SWITCH_SUCCESS"
+  | "OTS_FAILED"
+  | "SKIPPED";
+
 export type SwitchingDetails = {
-  isWillingToSwitch: boolean;
   currentProvider?: BroadbandProvider;
   switchOrderReference?: string;
+  otsSwitchStatus: OTSSwitchStatus;
 };
 
 export type PaymentDetails = {
@@ -280,6 +286,7 @@ export type StoreBasket = {
     email?: string | null;
     phone?: string | null;
   };
+  switchMatchLookup?: (string | null) | SwitchMatchLookup;
   sales?: {
     discretionaryBillCreditsAmount?: number | null;
   };

@@ -12,6 +12,8 @@ import { Footer } from "@/components/Footer";
 import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 import { accountNumberSchema } from "@/screens/OneTouchSwitching/forms/formValues";
+import { createSwitchMatchLookup } from "@/services/helpers/createSwitchMatchLookup";
+import { updateBasket } from "@/services/helpers/updateBasket";
 
 import { MatchResultType, OneTouchSwitchingFormData } from "./forms/formValues";
 import OneTouchSwitchingForm from "./forms/oneTouchSwitchingForm";
@@ -22,25 +24,53 @@ import {
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
-  const { setSwitchingDetails, switchingDetails, setCurrentStep } =
+  const { setSwitchingDetails, switchingDetails, setCurrentStep, basket } =
     useJoinFlowStore();
 
   const [matchResult, setMatchResult] = useState<MatchResultType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const formatProviderMessage = (
-    message: string,
-    provider?: BroadbandProvider,
-  ) => {
-    if (!provider) return message;
-    return message.replace("{provider}", provider.name);
+  const otsSwitchStatus = switchingDetails?.otsSwitchStatus;
+  const isSecondAttempt = otsSwitchStatus === "FIRST_ATTEMPT_FAILED";
+
+  const handleOTSFailure = (provider?: BroadbandProvider) => {
+    if (isSecondAttempt) {
+      // Second attempt failed, proceed to next step with failed status
+      const switchData: SwitchingDetails = {
+        otsSwitchStatus: "OTS_FAILED",
+      };
+
+      setSwitchingDetails(switchData);
+      setCurrentStep(3);
+      router.push("/join-flow/go-live-date");
+    } else {
+      // First attempt failure, save the selected provider for good UX
+      setSwitchingDetails({
+        currentProvider: provider,
+        otsSwitchStatus: "FIRST_ATTEMPT_FAILED",
+      });
+    }
   };
 
   const handleSubmit = async (data: OneTouchSwitchingFormData) => {
-    const isRetryingWithAccountNumber = matchResult && !matchResult.success;
     setIsSubmitting(true);
 
-    if (data.accountNumber && data.accountNumber.trim().length > 0) {
+    // this should never happen
+    if (!basket?.id) {
+      console.error("No basket ID available for OTS");
+      setMatchResult({
+        success: false,
+        message: oneTouchSwitchingText.errorMessage,
+      });
+      setIsSubmitting(false);
+      return;
+    }
+
+    const provider = broadbandProviders.find((p) => p.id === data.provider);
+    const accountNumberProvided =
+      data.accountNumber && data.accountNumber.trim().length > 0;
+
+    if (accountNumberProvided) {
       const result = accountNumberSchema.safeParse(data.accountNumber);
       if (!result.success) {
         setMatchResult({
@@ -52,95 +82,60 @@ export const OneTouchSwitching = () => {
       }
     }
 
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      if (
-        isRetryingWithAccountNumber ||
-        (data.accountNumber && data.accountNumber.trim().length > 0)
-      ) {
-        const provider = broadbandProviders.find((p) => p.id === data.provider);
-
-        // Success case - account number matches expected value
-        if (
-          data.accountNumber &&
-          data.accountNumber.trim() === "12345678" &&
-          provider
-        ) {
-          setMatchResult({
-            success: true,
-            message: formatProviderMessage(
-              oneTouchSwitchingText.matchSuccessMessage,
-              provider,
-            ),
-            provider,
-            hasUsedAccountNumber: true,
-          });
-
-          const switchData: SwitchingDetails = {
-            isWillingToSwitch: true,
-            currentProvider: provider,
-            switchOrderReference: "12345678",
-          };
-
-          setSwitchingDetails(switchData);
-          setCurrentStep(3);
-          router.push("/join-flow/go-live-date");
-        } else {
-          // Failed matching with account number - still proceed to next step
-          setMatchResult({
-            success: false,
-            message: oneTouchSwitchingText.accountNumberNotFoundMessage,
-          });
-
-          const switchData: SwitchingDetails = {
-            isWillingToSwitch: false,
-            currentProvider: {
-              id: "noProvider",
-              name: "noProvider",
-              description: "No provider was selected",
-            },
-            switchOrderReference: "FAILED_OTS",
-          };
-
-          setSwitchingDetails(switchData);
-          setCurrentStep(3);
-          router.push("/join-flow/go-live-date");
-        }
-      } else {
-        // First attempt without account number
-        setMatchResult({
-          success: false,
-          message: oneTouchSwitchingText.noMatchMessage,
-        });
-
-        // We don't redirect here, so the user can enter an account number
-      }
-    } catch (error) {
-      console.error("Error matching provider details:", error);
+    if (isSecondAttempt && !accountNumberProvided) {
       setMatchResult({
         success: false,
-        message: oneTouchSwitchingText.errorMessage,
+        message: "Account number is required for verification",
       });
+      setIsSubmitting(false);
+      return;
+    }
 
-      if (
-        isRetryingWithAccountNumber ||
-        (data.accountNumber && data.accountNumber.trim().length > 0)
-      ) {
+    try {
+      const result = await createSwitchMatchLookup(
+        basket.id,
+        data.provider,
+        data.accountNumber,
+      );
+
+      // Success case - OTS matched successfully
+      if (result.switchMatchLookup && provider) {
+        await updateBasket(basket.id, {
+          switchMatchLookup: result.switchMatchLookup,
+        });
         const switchData: SwitchingDetails = {
-          isWillingToSwitch: false,
-          currentProvider: {
-            id: "noProvider",
-            name: "noProvider",
-            description: "No provider was selected",
-          },
-          switchOrderReference: "FAILED_OTS",
+          currentProvider: provider,
+          switchOrderReference: result.switchMatchLookup,
+          otsSwitchStatus: "SWITCH_SUCCESS",
         };
 
         setSwitchingDetails(switchData);
         setCurrentStep(3);
         router.push("/join-flow/go-live-date");
+        return;
       }
+
+      // Failure case - OTS did not match or API returned error
+      if (result.error) {
+        const errorMessage =
+          result.error.message || oneTouchSwitchingText.noMatchMessage;
+
+        setMatchResult({
+          success: false,
+          message: errorMessage,
+        });
+      }
+
+      handleOTSFailure(provider);
+    } catch (error) {
+      console.error("Error during One Touch Switching API call:", error);
+
+      setMatchResult({
+        success: false,
+        message: oneTouchSwitchingText.errorMessage,
+      });
+
+      handleOTSFailure(provider);
     } finally {
       setIsSubmitting(false);
     }
@@ -148,13 +143,7 @@ export const OneTouchSwitching = () => {
 
   const handleSkip = () => {
     const switchData: SwitchingDetails = {
-      isWillingToSwitch: false,
-      currentProvider: {
-        id: "noProvider",
-        name: "noProvider",
-        description: "No provider was selected",
-      },
-      switchOrderReference: "SKIPPED",
+      otsSwitchStatus: "SKIPPED",
     };
 
     setSwitchingDetails(switchData);

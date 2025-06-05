@@ -108,13 +108,13 @@ export const GoLiveDate = () => {
       <div className="container md:max-w-[565px] mx-auto px-4 py-8">
         <Stepper />
         {/* TO DO: pretty this up with styling */}
-        {switchingDetails?.switchOrderReference === "FAILED_OTS" && (
+        {switchingDetails?.otsSwitchStatus === "OTS_FAILED" && (
           <p className="text-ui-error">
             We couldn&apos;t find your current provider{" "}
           </p>
         )}
 
-        {switchingDetails?.switchOrderReference === "12345678" && (
+        {switchingDetails?.otsSwitchStatus === "SWITCH_SUCCESS" && (
           <p className="mb-4">Switch successful!</p>
         )}
 

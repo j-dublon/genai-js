@@ -10,6 +10,7 @@ export const broadbandProviders: BroadbandProvider[] = [
   { id: "plusnet", name: "Plusnet", description: "Plusnet Broadband" },
   { id: "ee", name: "EE", description: "EE Broadband" },
   { id: "shell", name: "Shell Energy", description: "Shell Energy Broadband" },
+  { id: "RTLL", name: "NowYoYo", description: "NowYoYo Broadband" },
   { id: "other", name: "Other", description: "Other broadband provider" },
 ];
 
@@ -17,7 +18,8 @@ export const oneTouchSwitchingText = {
   title: "Switching to Cuckoo",
   subtitle:
     "We'll tell your current broadband provider that you're leaving them and joining us, so you won't have to. They'll let you know if there are any final charges from them. Find out more about one touch switching",
-  providerSelectionTitle: "Select your current broadband provider",
+  providerSelectionTitle:
+    "Select your current broadband provider from the list",
   oneTouchExplanation: "Find out more about One Touch Switching",
   providerSelectorDefault: "Pick your provider",
   consentLabel:
@@ -25,9 +27,6 @@ export const oneTouchSwitchingText = {
   accountNumberPrompt: "Enter your account number",
   accountNumberPlaceholder: "Enter your account number",
   noMatchMessage: "We could not match your details currently",
-  accountNumberNotFoundMessage: "Sorry, we could not find your account number",
-  matchSuccessMessage: "We've matched your {provider} account",
-  switchConfirmationLabel: "Yes, switch me from {provider} to Cuckoo",
   skipButtonText: "Skip this step",
   submitButtonText: "Match my details",
   loadingButtonText: "Checking...",
