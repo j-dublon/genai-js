@@ -1,7 +1,6 @@
 import { Button, DropdownPill } from "@react-component-library/ui";
 import { useState } from "react";
 
-import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
@@ -12,8 +11,7 @@ export const UpgradeOffer = ({
   toggle,
   offer,
   priceDifference,
-  setShowUpgradeOffer,
-  changePackage,
+  handlePackageSelection,
 }: {
   topSpeedPackage: StoreSelectedPackage | null;
   toggle: {
@@ -24,11 +22,9 @@ export const UpgradeOffer = ({
   };
   offer: boolean;
   priceDifference: number;
-  setShowUpgradeOffer: (show: boolean) => void;
-  changePackage: (pkg: StoreSelectedPackage) => void;
+  handlePackageSelection: (selectedStorePackage: StoreSelectedPackage) => void;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const scrollToTop = useScrollToElement("#fullscreen-modal-title");
 
   if (!topSpeedPackage || priceDifference <= 0) return null;
   const { speeds, prices } = topSpeedPackage;
@@ -72,7 +68,9 @@ export const UpgradeOffer = ({
       />
       <div className="bg-core-yellow rounded-lg py-4 px-3 max-w-[272px]">
         <p className="pb-1 text-sm" data-testid="monthly-price">
-          <span className="font-semibold text-xl">£{prices.basePrice}</span>
+          <span className="font-semibold text-xl">
+            £{(prices.basePrice / 100).toFixed(0)}
+          </span>
           /month
         </p>
         <hr className="border-t-[1px] border-core-black" />
@@ -80,7 +78,7 @@ export const UpgradeOffer = ({
           <p className="text-xs leading-[1.6]" data-testid="next-year-price">
             {upgradeOfferText.nextYearPrice}{" "}
             <span className="font-semibold">
-              £{nextYearPrice}
+              £{(nextYearPrice / 100).toFixed(0)}
               /month
             </span>
           </p>
@@ -90,37 +88,24 @@ export const UpgradeOffer = ({
           >
             {upgradeOfferText.followingYearPrice}{" "}
             <span className="font-semibold">
-              £{followingYearPrice}
+              £{(followingYearPrice / 100).toFixed(0)}
               /month
             </span>
           </p>
         </div>
       </div>
-      <div className="flex flex-col sm:flex-row gap-4 flex-wrap">
-        <Button
-          type="button"
-          variant="outline"
-          tint="black"
-          size="small"
-          onClick={() => setShowUpgradeOffer(false)}
-          className="w-full sm:w-[173px]"
-        >
-          {upgradeOfferText.hideOfferButton}
-        </Button>
-        <Button
-          type="button"
-          variant="solid"
-          tint="black"
-          size="small"
-          onClick={() => {
-            changePackage(topSpeedPackage);
-            scrollToTop();
-          }}
-          className="w-full sm:w-[173px]"
-        >
-          {upgradeOfferText.upgradeButton}
-        </Button>
-      </div>
+      <Button
+        type="button"
+        variant="solid"
+        tint="black"
+        size="small"
+        onClick={() => {
+          handlePackageSelection(topSpeedPackage);
+        }}
+        className="w-full sm:w-[173px]"
+      >
+        {upgradeOfferText.upgradeButton}
+      </Button>
     </div>
   );
 };

@@ -195,7 +195,6 @@ export const ChooseYourPackage = () => {
             handlePackageSelection={handlePackageSelection}
             topSpeedPackage={topSpeedPackage}
             toggle={packageDetailsToggle}
-            changePackage={setPackageDetails}
           />
         ) : null;
     }

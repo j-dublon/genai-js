@@ -46,13 +46,7 @@ const mockToggle = {
   rightLabel: "24",
 };
 
-const mockSetShowUpgradeOffer = vi.fn();
-const mockChangePackage = vi.fn();
-const mockScrollToTop = vi.fn();
-
-vi.mock("@/hooks/useScrollToElement", () => ({
-  useScrollToElement: () => mockScrollToTop,
-}));
+const mockHandlePackageSelection = vi.fn();
 
 vi.mock("@/lib/sortAnnualPriceRise", () => ({
   sortAnnualPriceRiseByDate: (priceRises: AnnualPriceRise) => priceRises || [],
@@ -110,8 +104,7 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
@@ -125,8 +118,7 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={0}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
@@ -138,8 +130,7 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={-5}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
@@ -154,8 +145,7 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={mockPriceDifference}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
@@ -179,8 +169,7 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
@@ -202,38 +191,17 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
-    expect(screen.getByTestId("monthly-price")).toHaveTextContent(
-      "£4500/month",
-    );
+    expect(screen.getByTestId("monthly-price")).toHaveTextContent("£45/month");
     expect(screen.getByTestId("next-year-price")).toHaveTextContent(
-      "£5000/month",
+      "£50/month",
     );
     expect(screen.getByTestId("following-year-price")).toHaveTextContent(
-      "£5300/month",
+      "£53/month",
     );
-  });
-
-  it("should handle 'No thanks' button click", () => {
-    render(
-      <UpgradeOffer
-        topSpeedPackage={mockTopSpeedPackage}
-        toggle={mockToggle}
-        offer={true}
-        priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
-      />,
-    );
-
-    const noThanksButton = screen.getByText(upgradeOfferText.hideOfferButton);
-    fireEvent.click(noThanksButton);
-
-    expect(mockSetShowUpgradeOffer).toHaveBeenCalledWith(false);
   });
 
   it("should handle 'Upgrade me' button click", () => {
@@ -243,16 +211,16 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
     const upgradeButton = screen.getByText(upgradeOfferText.upgradeButton);
     fireEvent.click(upgradeButton);
 
-    expect(mockChangePackage).toHaveBeenCalledWith(mockTopSpeedPackage);
-    expect(mockScrollToTop).toHaveBeenCalled();
+    expect(mockHandlePackageSelection).toHaveBeenCalledWith(
+      mockTopSpeedPackage,
+    );
   });
 
   it("should show offer text when offer prop is true", () => {
@@ -262,8 +230,7 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
@@ -277,8 +244,7 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={false}
         priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
@@ -302,19 +268,16 @@ describe("UpgradeOffer", () => {
         toggle={mockToggle}
         offer={true}
         priceDifference={10}
-        setShowUpgradeOffer={mockSetShowUpgradeOffer}
-        changePackage={mockChangePackage}
+        handlePackageSelection={mockHandlePackageSelection}
       />,
     );
 
-    expect(screen.getByTestId("monthly-price")).toHaveTextContent(
-      "£4500/month",
-    );
+    expect(screen.getByTestId("monthly-price")).toHaveTextContent("£45/month");
     expect(screen.getByTestId("next-year-price")).toHaveTextContent(
-      "£4500/month",
+      "£45/month",
     );
     expect(screen.getByTestId("following-year-price")).toHaveTextContent(
-      "£4500/month",
+      "£45/month",
     );
   });
 });

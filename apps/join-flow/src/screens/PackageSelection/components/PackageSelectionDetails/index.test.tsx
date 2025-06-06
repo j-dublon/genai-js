@@ -47,13 +47,17 @@ vi.mock("./SpeedPriceDetails", () => ({
 vi.mock("./UpgradeOffer", () => ({
   UpgradeOffer: ({
     topSpeedPackage,
-    changePackage,
+    handlePackageSelection,
   }: {
     topSpeedPackage: StoreSelectedPackage | null;
-    changePackage: (pkg: StoreSelectedPackage) => void;
+    handlePackageSelection: (pkg: StoreSelectedPackage) => void;
   }) => (
     <div data-testid="upgrade-offer">
-      <button onClick={() => topSpeedPackage && changePackage(topSpeedPackage)}>
+      <button
+        onClick={() =>
+          topSpeedPackage && handlePackageSelection(topSpeedPackage)
+        }
+      >
         Upgrade me
       </button>
     </div>
@@ -157,8 +161,6 @@ describe("PackageSelectionDetails", () => {
     rightLabel: "Right",
   };
 
-  const mockChangePackage = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseTrustpilotScore.mockReturnValue({
@@ -175,7 +177,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -195,7 +196,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -236,7 +236,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -285,7 +284,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -316,7 +314,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -330,7 +327,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockSpeedyPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -348,7 +344,7 @@ describe("PackageSelectionDetails", () => {
 
     upgradeButton.click();
 
-    expect(mockChangePackage).toHaveBeenCalledWith(mockSpeedyPackage);
+    expect(mockHandlePackageSelection).toHaveBeenCalledWith(mockSpeedyPackage);
   });
 
   it("passes correct packageName to EeroImage", () => {
@@ -358,7 +354,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -375,7 +370,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockSpeedyPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 
@@ -392,7 +386,6 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
-        changePackage={mockChangePackage}
       />,
     );
 

@@ -4,7 +4,6 @@ import {
   TrustpilotHorizontal,
   useTrustpilotScore,
 } from "@react-component-library/ui";
-import { useState } from "react";
 
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
@@ -24,7 +23,6 @@ interface PackageSelectionDetailsProps {
     leftLabel: string;
     rightLabel: string;
   };
-  changePackage: (pkg: StoreSelectedPackage) => void;
 }
 
 export const PackageSelectionDetails = ({
@@ -32,12 +30,9 @@ export const PackageSelectionDetails = ({
   handlePackageSelection,
   topSpeedPackage,
   toggle,
-  changePackage,
 }: PackageSelectionDetailsProps) => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const { trustScore, numberOfReviews } = trustpilotRating || {};
-
-  const [showUpgradeOffer, setShowUpgradeOffer] = useState(true);
 
   const isTopSpeedPackage =
     packageDetails.frontendIdentifier === topSpeedPackage?.frontendIdentifier;
@@ -80,7 +75,7 @@ export const PackageSelectionDetails = ({
                 }
               />
             </div>
-            {!isTopSpeedPackage && showUpgradeOffer && (
+            {!isTopSpeedPackage && (
               <UpgradeOffer
                 topSpeedPackage={topSpeedPackage}
                 toggle={toggle}
@@ -88,12 +83,11 @@ export const PackageSelectionDetails = ({
                   topSpeedPackage?.frontendIdentifier === "900-12" ||
                   topSpeedPackage?.frontendIdentifier === "900-24"
                 }
-                setShowUpgradeOffer={setShowUpgradeOffer}
                 priceDifference={
                   (topSpeedPackage?.prices.basePrice || 0) / 100 -
                   packageDetails.prices.basePrice / 100
                 }
-                changePackage={changePackage}
+                handlePackageSelection={handlePackageSelection}
               />
             )}
             {trustScore && (
@@ -129,7 +123,7 @@ export const PackageSelectionDetails = ({
           pkg={packageDetails}
           promotion={isHighSpeedPackage}
         />
-        {!isTopSpeedPackage && showUpgradeOffer && (
+        {!isTopSpeedPackage && (
           <UpgradeOffer
             topSpeedPackage={topSpeedPackage}
             toggle={toggle}
@@ -137,12 +131,11 @@ export const PackageSelectionDetails = ({
               topSpeedPackage?.frontendIdentifier === "900-12" ||
               topSpeedPackage?.frontendIdentifier === "900-24"
             }
-            setShowUpgradeOffer={setShowUpgradeOffer}
             priceDifference={
               (topSpeedPackage?.prices.basePrice || 0) / 100 -
               packageDetails.prices.basePrice / 100
             }
-            changePackage={changePackage}
+            handlePackageSelection={handlePackageSelection}
           />
         )}
         <Button

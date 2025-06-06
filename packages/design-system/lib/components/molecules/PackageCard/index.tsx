@@ -198,6 +198,7 @@ const PromotionPill = ({ promotion }: { promotion: string }) => {
 export const PackageCard = ({
   pkg,
   onPackageSelect,
+  onViewDetails,
   tint,
   buttonText,
   className = "",
@@ -272,13 +273,12 @@ export const PackageCard = ({
           </Button>
           <div className="ds:flex ds:flex-row ds:gap-2">
             <InfoIcon />
-            {/* TODO: info link functionality */}
-            <a
-              href="/"
-              className="ds:text-ui-link ds:underline ds:font-medium ds:text-xs ds:md:text-sm"
+            <button
+              onClick={() => onViewDetails?.(pkg)}
+              className="ds:text-ui-link ds:underline ds:font-medium ds:text-xs ds:md:text-sm ds:bg-transparent ds:border-0 ds:p-0 ds:cursor-pointer"
             >
               Is this plan for me?
-            </a>
+            </button>
           </div>
         </div>
       </div>
