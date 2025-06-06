@@ -1,8 +1,8 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
-import { FieldErrors,UseFormRegister } from "react-hook-form";
-import { beforeEach,describe, expect, it, vi } from "vitest";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import PersonalDetails from "..";
 import { EmailVerificationForm } from "./emailVerificationForm";

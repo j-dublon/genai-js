@@ -29,18 +29,6 @@ export const EmailVerificationForm = ({
     }
   }, [isVerified, onVerificationSuccess]);
 
-  useEffect(() => {
-    const joinedCode = code.join("");
-    const lastFilledIndex = code.findIndex((char) => char === "") - 1;
-    const indexToPass = lastFilledIndex >= 0 ? lastFilledIndex : NUM_FIELDS - 1;
-
-    handleCodeChange(joinedCode, indexToPass);
-
-    if (joinedCode.length === NUM_FIELDS && !code.includes("")) {
-      validateCode(joinedCode);
-    }
-  }, [code, handleCodeChange, validateCode]);
-
   const handleInput = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>,
@@ -56,6 +44,17 @@ export const EmailVerificationForm = ({
     setCode(newCode);
     if (value && index < NUM_FIELDS - 1) {
       inputRefs.current[index + 1]?.focus();
+    } else {
+      const joinedCode = newCode.join("");
+      const lastFilledIndex = newCode.findIndex((char) => char === "") - 1;
+      const indexToPass =
+        lastFilledIndex >= 0 ? lastFilledIndex : NUM_FIELDS - 1;
+
+      handleCodeChange(joinedCode, indexToPass);
+
+      if (joinedCode.length === NUM_FIELDS && !newCode.includes("")) {
+        validateCode(joinedCode);
+      }
     }
   };
 

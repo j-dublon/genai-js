@@ -49,8 +49,7 @@ export const createStepBasedPersonalDetailsSchema = (
             props.validationMessages.phoneRequired,
           ),
         hasSmartphone: z.enum(["yes", "no"], {
-          required_error: props.validationMessages.smartphoneConfirmation,
-          invalid_type_error: props.validationMessages.smartphoneConfirmation,
+          message: props.validationMessages.smartphoneConfirmation, // invalid_type_error doesn't handle enum errors as you'd expect (https://github.com/colinhacks/zod/issues/2919)
         }),
         email: z.string().email(props.validationMessages.emailInvalid),
         confirmEmail: z

@@ -134,7 +134,15 @@ export const InitialPersonalDetailsForm = ({
               ))}
             </div>
           )}
+          rules={{
+            required: true,
+          }}
         />
+        {errors.hasSmartphone && (
+          <p className="text-ui-error text-sm">
+            {errors.hasSmartphone.message}
+          </p>
+        )}
         {hasSmartphoneValue === "no" && (
           <TipCard
             image={{

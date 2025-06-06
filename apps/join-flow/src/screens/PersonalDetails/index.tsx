@@ -121,10 +121,10 @@ const PersonalDetails = () => {
   });
 
   const [hasSubmittedDetails, setHasSubmittedDetails] = useState<boolean>(
-    personalDetails?.firstName !== "",
+    !!personalDetails?.firstName,
   );
   const [hasSubmittedAdditional, setHasSubmittedAdditional] = useState<boolean>(
-    personalDetails?.dobDay !== "",
+    !!personalDetails?.dobDay,
   );
 
   useEffect(() => {
