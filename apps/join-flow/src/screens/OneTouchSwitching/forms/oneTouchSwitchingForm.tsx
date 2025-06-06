@@ -6,10 +6,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
-import {
-  broadbandProviders,
-  oneTouchSwitchingText,
-} from "@/screens/OneTouchSwitching/oneTouchSwitchingProps";
+import { oneTouchSwitchingText } from "@/screens/OneTouchSwitching/oneTouchSwitchingProps";
 
 import {
   OneTouchSwitchingFormData,
@@ -23,6 +20,8 @@ export const OneTouchSwitchingForm = ({
   matchResult,
   setMatchResult,
   isSubmitting = false,
+  providers,
+  providerError,
 }: OneTouchSwitchingFormProps) => {
   const { switchingDetails } = useJoinFlowStore();
   const [customProviderError, setCustomProviderError] = useState<string | null>(
@@ -76,23 +75,30 @@ export const OneTouchSwitchingForm = ({
 
         <select
           {...register("provider")}
-          value={matchResult?.provider?.id || selectedProvider}
+          value={matchResult?.provider?.losingRcpid || selectedProvider}
           onChange={handleProviderChange}
           className={`w-full p-3 border ${
             errors.provider || customProviderError
               ? "border-ui-error"
               : "border-ui-grey-300"
           } rounded-md`}
+          aria-label="provider"
         >
           <option value="" disabled>
             {oneTouchSwitchingText.providerSelectorDefault}
           </option>
-          {broadbandProviders.map((provider) => (
-            <option key={provider.id} value={provider.id}>
+          {providers.map((provider) => (
+            <option key={provider.losingRcpid} value={provider.losingRcpid}>
               {provider.name}
             </option>
           ))}
         </select>
+
+        {providerError && (
+          <p className="text-ui-error text-sm mt-1">
+            {oneTouchSwitchingText.providerErrorMessage}
+          </p>
+        )}
 
         {(errors.provider || customProviderError) && (
           <p className="text-ui-error text-sm mt-1">
@@ -147,6 +153,7 @@ export const OneTouchSwitchingForm = ({
               {...register("accountNumber")}
               className="mb-4"
               disabled={isSubmitting}
+              aria-label="accountNumber"
             />
           </div>
         </div>

@@ -65,9 +65,8 @@ export type EeroProduct = {
 };
 
 export type BroadbandProvider = {
-  id: string;
+  losingRcpid: string;
   name: string;
-  description: string;
 };
 
 export type OTSSwitchStatus =
@@ -98,10 +97,7 @@ export type PaymentDetails = {
 
 export type GoLiveDetails = {
   selectedDate: string;
-  engineerSlot?: {
-    date: string;
-    timeSlot: string;
-  };
+  engineerSlot?: { date: string; timeSlot: string };
 };
 
 export type AccessibilityRequirements = {
@@ -123,18 +119,9 @@ export type AccessibilityRequirements = {
 export type BroadbandPackage = {
   id: string;
   name: string;
-  speed: {
-    download: number;
-    upload: number;
-  };
-  price: {
-    monthly: number;
-    setup: number;
-  };
-  priceIncrease: {
-    nextYearIncrease: number;
-    followingYearIncrease: number;
-  };
+  speed: { download: number; upload: number };
+  price: { monthly: number; setup: number };
+  priceIncrease: { nextYearIncrease: number; followingYearIncrease: number };
   contractLength: number;
   description: string;
   features?: string[];
@@ -179,26 +166,15 @@ export type StoreSelectedPackage = {
   termMonths: string;
   selectionIdentifier: string;
   installationRequired: boolean;
-  appliedPromotionUUIDs?:
-    | {
-        id: string | null;
-      }[]
-    | null;
+  appliedPromotionUUIDs?: { id: string | null }[] | null;
   prices: {
     basePrice: number;
     discountedPrice: number;
     annualPriceRise?:
-      | {
-          price: number;
-          date: string;
-          id?: string | null;
-        }[]
+      | { price: number; date: string; id?: string | null }[]
       | null;
   };
-  speeds: {
-    download: number;
-    upload: number;
-  };
+  speeds: { download: number; upload: number };
   extras?:
     | {
         family: string;
@@ -249,16 +225,10 @@ export type StoreBasket = {
     quoteLookup?: (string | null) | QuoteLookup;
     selectionIdentifier?: string | null;
     extras?:
-      | {
-          family: string;
-          selectionIdentifier: string;
-          id?: string | null;
-        }[]
+      | { family: string; selectionIdentifier: string; id?: string | null }[]
       | null;
   };
-  engineer?: {
-    selectionIdentifier?: string | null;
-  };
+  engineer?: { selectionIdentifier?: string | null };
   goLiveDate?: string | null;
   addressHistory?:
     | {

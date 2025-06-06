@@ -4,9 +4,7 @@ import * as z from "zod";
 // Update schema with custom error message
 export const oneTouchSwitchingSchema = z.object({
   provider: z
-    .string({
-      required_error: "Please select a provider from the list",
-    })
+    .string({ required_error: "Please select a provider from the list" })
     .min(1, "Please select a provider from the list"),
   consentGiven: z.boolean().refine((val) => val === true, {
     message:
@@ -29,6 +27,8 @@ export type OneTouchSwitchingFormProps = {
   matchResult: MatchResultType | null;
   setMatchResult: (result: MatchResultType | null) => void;
   isSubmitting?: boolean;
+  providers: BroadbandProvider[];
+  providerError: boolean;
 };
 
 export const accountNumberSchema = z

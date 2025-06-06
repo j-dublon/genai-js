@@ -2,7 +2,11 @@ export const API_BASE_URL =
   process.env.NEXT_PUBLIC_PAYLOAD_ENDPOINT ||
   "https://squid.cuckoohatchery-stage.com/api";
 
-import { Basket, VulnerabilityAndAccessibility } from "../../payload-types";
+import type {
+  Basket,
+  KrakenSwitchMatchServiceProvider,
+  VulnerabilityAndAccessibility,
+} from "../../payload-types";
 import {
   AddressLookupErrors,
   AddressLookupInputs,
@@ -188,10 +192,7 @@ const getPayloadWithDocumentRawAsync = async <TSuccess, TError>(
     case "error":
       return {
         state: "error",
-        data: {
-          documentID: data.id,
-          errors: data.outputs.apiErrors,
-        } as TError,
+        data: { documentID: data.id, errors: data.outputs.apiErrors } as TError,
       };
     case "pending":
       return { state: "pending", documentID: data.id };
@@ -385,4 +386,10 @@ export const payloadAPI = {
     id: string,
     data: Partial<VulnerabilityAndAccessibility>,
   ) => updatePayLoadEndpoint(`/vulnerabilityAndAccessibility/${id}`, data),
+
+  // Kraken reference
+  getAllSwitchMatchServiceProviders: () =>
+    getPayloadEndpoint<KrakenSwitchMatchServiceProvider[]>(
+      "/krakenSwitchMatchServiceProviders/all-active",
+    ),
 };

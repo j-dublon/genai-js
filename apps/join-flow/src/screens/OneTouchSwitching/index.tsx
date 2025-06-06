@@ -6,21 +6,19 @@ import useJoinFlowStore, {
   SwitchingDetails,
 } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { ReviewYourBasket } from "@/components/ReviewYourBasket";
 import Stepper from "@/components/Stepper";
 import { accountNumberSchema } from "@/screens/OneTouchSwitching/forms/formValues";
 import { createSwitchMatchLookup } from "@/services/helpers/createSwitchMatchLookup";
+import { getAllProviders } from "@/services/helpers/getAllProviders";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
 import { MatchResultType, OneTouchSwitchingFormData } from "./forms/formValues";
 import OneTouchSwitchingForm from "./forms/oneTouchSwitchingForm";
-import {
-  broadbandProviders,
-  oneTouchSwitchingText,
-} from "./oneTouchSwitchingProps";
+import { oneTouchSwitchingText } from "./oneTouchSwitchingProps";
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
@@ -29,6 +27,8 @@ export const OneTouchSwitching = () => {
 
   const [matchResult, setMatchResult] = useState<MatchResultType | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [providerError, setProviderError] = useState<boolean>(false);
+  const [providers, setProviders] = useState<BroadbandProvider[]>([]);
 
   const otsSwitchStatus = switchingDetails?.otsSwitchStatus;
   const isSecondAttempt = otsSwitchStatus === "FIRST_ATTEMPT_FAILED";
@@ -52,6 +52,18 @@ export const OneTouchSwitching = () => {
     }
   };
 
+  const fetchProviders = async () => {
+    const result = await getAllProviders();
+
+    if (result.error) {
+      console.error("Error fetching providers:", result.error);
+      setProviderError(true);
+      return;
+    }
+
+    setProviders(result.providers || []);
+  };
+
   const handleSubmit = async (data: OneTouchSwitchingFormData) => {
     setIsSubmitting(true);
 
@@ -66,7 +78,7 @@ export const OneTouchSwitching = () => {
       return;
     }
 
-    const provider = broadbandProviders.find((p) => p.id === data.provider);
+    const provider = providers.find((p) => p.losingRcpid === data.provider);
     const accountNumberProvided =
       data.accountNumber && data.accountNumber.trim().length > 0;
 
@@ -157,6 +169,10 @@ export const OneTouchSwitching = () => {
       ?.dispatchEvent(new Event("submit", { cancelable: true, bubbles: true }));
   };
 
+  useEffect(() => {
+    fetchProviders();
+  }, []);
+
   return (
     <>
       <ReviewYourBasket />
@@ -174,10 +190,14 @@ export const OneTouchSwitching = () => {
 
             <OneTouchSwitchingForm
               onSubmit={handleSubmit}
-              defaultProvider={switchingDetails?.currentProvider?.id || ""}
+              defaultProvider={
+                switchingDetails?.currentProvider?.losingRcpid || ""
+              }
               matchResult={matchResult}
               setMatchResult={setMatchResult}
               isSubmitting={isSubmitting}
+              providers={providers}
+              providerError={providerError}
             />
 
             <div className="flex justify-between mt-8">

@@ -19,7 +19,7 @@ describe("createQuoteLookupPoll", () => {
     {
       krakenProductCode: "BT-150-12M_38",
       frontendIdentifier: "150-12",
-      termMonths: "12",
+      termMonths: 12,
       selectionIdentifier: "0",
       installationRequired: true,
       appliedPromotionUUIDs: [],
