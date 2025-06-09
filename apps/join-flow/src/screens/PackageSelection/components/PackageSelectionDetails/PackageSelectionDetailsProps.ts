@@ -60,8 +60,8 @@ export const moreInformationItems = [
 
 export const upgradeOfferText = {
   upgradeOffer: "Plus, you'll get the first 3 months free",
-  nextYearPrice: "From 1st April 2026",
-  followingYearPrice: "From 1st April 2027",
+  nextPrice: "From 1st April 2026",
+  followingPrice: "From 1st April 2027",
   hideOfferButton: "No thanks",
   upgradeButton: "Upgrade me",
 };

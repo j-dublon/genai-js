@@ -26,8 +26,8 @@ interface BasketDialogProps {
   monthlyPackagePrice: number;
   monthlyEeroPrice: number;
   monthlyTotal: number;
-  predictedTotalNextYear: number;
-  predictedTotalFollowingYear: number;
+  predictedTotalNext: number;
+  predictedTotalFollowing: number;
 }
 
 export const BasketDialog = ({
@@ -45,8 +45,8 @@ export const BasketDialog = ({
   monthlyPackagePrice,
   monthlyEeroPrice,
   monthlyTotal,
-  predictedTotalNextYear,
-  predictedTotalFollowingYear,
+  predictedTotalNext,
+  predictedTotalFollowing,
 }: BasketDialogProps) => {
   const [isChangingPlan, setIsChangingPlan] = useState(false);
   const [isManagingEeros, setIsManagingEeros] = useState(false);
@@ -290,13 +290,13 @@ export const BasketDialog = ({
 
                         <div className="mt-4">
                           <p className="whitespace-nowrap font-medium">
-                            £{predictedTotalNextYear}
+                            £{predictedTotalNext}
                             <span className="font-normal">
                               {reviewYourBasketText.fromApril2025}
                             </span>
                           </p>
                           <p className="whitespace-nowrap font-medium mt-2">
-                            £{predictedTotalFollowingYear}
+                            £{predictedTotalFollowing}
                             <span className="font-normal">
                               {reviewYourBasketText.fromApril2027}
                             </span>

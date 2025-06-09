@@ -126,8 +126,8 @@ describe("BasketDialog", () => {
         monthlyPackagePrice={32}
         monthlyEeroPrice={0}
         monthlyTotal={32}
-        predictedTotalNextYear={35}
-        predictedTotalFollowingYear={38}
+        predictedTotalNext={35}
+        predictedTotalFollowing={38}
         {...props}
       />,
     );
@@ -154,8 +154,8 @@ describe("BasketDialog", () => {
         monthlyPackagePrice={32}
         monthlyEeroPrice={0}
         monthlyTotal={32}
-        predictedTotalNextYear={35}
-        predictedTotalFollowingYear={38}
+        predictedTotalNext={35}
+        predictedTotalFollowing={38}
       />,
     );
 
@@ -293,8 +293,8 @@ describe("BasketDialog", () => {
       monthlyPackagePrice: 32,
       monthlyEeroPrice: 5,
       monthlyTotal: 37,
-      predictedTotalNextYear: 40,
-      predictedTotalFollowingYear: 43,
+      predictedTotalNext: 40,
+      predictedTotalFollowing: 43,
     });
 
     const eeroPrice = screen.getAllByText((content) =>

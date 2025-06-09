@@ -2,6 +2,7 @@ import { format } from "date-fns";
 
 export const formatDisplayDate = (dateString: string): string => {
   const date = new Date(dateString);
+
   return format(date, "EEEE d MMMM yyyy");
 };
 
@@ -14,7 +15,6 @@ export const formatDateOfBirth = (
 ): string => {
   const paddedDay = day.padStart(2, "0");
   const paddedMonth = month.padStart(2, "0");
-  console.log(`${year}-${paddedMonth}-${paddedDay}T${time}${timezone}`);
 
   return `${year}-${paddedMonth}-${paddedDay}T${time}${timezone}`;
 };

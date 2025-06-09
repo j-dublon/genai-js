@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 import { BasketDialog } from "@/components/ReviewYourBasket/components/BasketDialog";
 import { SummaryBar } from "@/components/ReviewYourBasket/components/SummaryBar";
 import { PlanChangeFormData } from "@/components/ReviewYourBasket/forms/packageChangeForm";
-import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
+import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { eeroProducts } from "@/screens/EeroSelection/eeroSelectionProps";
 import useJoinFlowStore, {
   EeroProduct,
@@ -38,11 +38,15 @@ export const ReviewYourBasket = () => {
         basePrice: product.prices.basePrice,
         discountedPrice: product.prices.discountedPrice,
         annualPriceRise:
-          product.prices.annualPriceRise?.map((rise) => ({
-            price: rise.price,
-            date: rise.date,
-            id: rise.id || null,
-          })) || null,
+          product.prices.annualPriceRise
+            ?.map((rise) => ({
+              price: rise.price,
+              date: rise.date,
+              id: rise.id || null,
+            }))
+            .sort(
+              (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
+            ) || null,
       },
       speeds: {
         download: product.speeds.download,
@@ -126,41 +130,13 @@ export const ReviewYourBasket = () => {
     router.push("/join-flow");
   };
 
-  // Calculate pricing information to pass to BasketDialog
-  const calculatePackagePricing = (pkg: StoreSelectedPackage | null) => {
-    if (!pkg) return { monthly: 0, nextYear: 0, followingYear: 0 };
-
-    const sortedPriceRises = sortAnnualPriceRiseByDate(
-      pkg.prices.annualPriceRise,
-    );
-    const monthly = Math.round(pkg.prices.basePrice / 100);
-    const nextYearPrice = sortedPriceRises?.[0]?.price || pkg.prices.basePrice;
-    const followingYearPrice =
-      sortedPriceRises?.[1]?.price ||
-      sortedPriceRises?.[0]?.price ||
-      pkg.prices.basePrice;
-
-    return {
-      monthly,
-      nextYear: Math.round(nextYearPrice / 100),
-      followingYear: Math.round(followingYearPrice / 100),
-    };
-  };
-
-  const packagePricing = calculatePackagePricing(selectedPackage);
-  const monthlyEeroPrice = eeroSelection
-    ? Math.round(eeroSelection.price / 100)
-    : 0;
-  const monthlyTotal = packagePricing.monthly + monthlyEeroPrice;
-  const predictedTotalNextYear = packagePricing.nextYear + monthlyEeroPrice;
-  const predictedTotalFollowingYear =
-    packagePricing.followingYear + monthlyEeroPrice;
+  const pricing = usePricingCalculations(selectedPackage, eeroSelection);
 
   return (
     <div className="pt-32">
       <SummaryBar
         selectedPackage={selectedPackage}
-        predictedTotalNextYear={predictedTotalNextYear}
+        predictedTotalNext={pricing.predictedTotalNext}
         openDialog={openDialog}
         isDialogOpen={isDialogOpen}
       />
@@ -177,11 +153,11 @@ export const ReviewYourBasket = () => {
         onEeroSelect={handleEeroSelect}
         onEeroRemove={handleEeroRemove}
         onAddressChange={handleAddressChange}
-        monthlyPackagePrice={packagePricing.monthly}
-        monthlyEeroPrice={monthlyEeroPrice}
-        monthlyTotal={monthlyTotal}
-        predictedTotalNextYear={predictedTotalNextYear}
-        predictedTotalFollowingYear={predictedTotalFollowingYear}
+        monthlyPackagePrice={pricing.monthlyPackagePrice}
+        monthlyEeroPrice={pricing.monthlyEeroPrice}
+        monthlyTotal={pricing.monthlyTotal}
+        predictedTotalNext={pricing.predictedTotalNext}
+        predictedTotalFollowing={pricing.predictedTotalFollowing}
       />
     </div>
   );

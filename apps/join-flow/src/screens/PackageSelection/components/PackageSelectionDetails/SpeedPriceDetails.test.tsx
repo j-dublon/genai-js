@@ -67,8 +67,10 @@ describe("SpeedPriceDetails", () => {
     expect(screen.getByLabelText("Current monthly price")).toHaveTextContent(
       "£25",
     );
-    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£30");
-    expect(screen.getByLabelText("Price following year")).toHaveTextContent(
+    expect(screen.getByLabelText("Price next displayed")).toHaveTextContent(
+      "£30",
+    );
+    expect(screen.getByLabelText("Price following display")).toHaveTextContent(
       "£33",
     );
   });
@@ -83,8 +85,10 @@ describe("SpeedPriceDetails", () => {
     expect(screen.getByLabelText("Price after promotion")).toHaveTextContent(
       "£25",
     );
-    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£30");
-    expect(screen.getByLabelText("Price following year")).toHaveTextContent(
+    expect(screen.getByLabelText("Price next displayed")).toHaveTextContent(
+      "£30",
+    );
+    expect(screen.getByLabelText("Price following display")).toHaveTextContent(
       "£33",
     );
   });
@@ -100,10 +104,12 @@ describe("SpeedPriceDetails", () => {
 
     render(<SpeedPriceDetails pkg={packageWithoutRises} promotion={false} />);
 
-    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£25");
-    expect(screen.getByLabelText("Price following year")).toHaveTextContent(
-      "£25",
-    );
+    expect(
+      screen.queryByLabelText("Price next displayed"),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Price following display"),
+    ).not.toBeInTheDocument();
   });
 
   it("handles single price rise", () => {
@@ -123,9 +129,11 @@ describe("SpeedPriceDetails", () => {
 
     render(<SpeedPriceDetails pkg={packageWithSingleRise} promotion={false} />);
 
-    expect(screen.getByLabelText("Price next year")).toHaveTextContent("£30");
-    expect(screen.getByLabelText("Price following year")).toHaveTextContent(
+    expect(screen.getByLabelText("Price next displayed")).toHaveTextContent(
       "£30",
     );
+    expect(
+      screen.queryByLabelText("Price following display"),
+    ).not.toBeInTheDocument();
   });
 });

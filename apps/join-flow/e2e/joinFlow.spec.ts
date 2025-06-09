@@ -12,7 +12,7 @@ test.describe("JoinFlowPage", () => {
           name: "Test Package",
           speed: { download: 100, upload: 20 },
           price: { monthly: 29.99, setup: 0 },
-          priceIncrease: { nextYearIncrease: 0, followingYearIncrease: 0 },
+          priceIncrease: { nextIncrease: 0, followingIncrease: 0 },
           contractLength: 12,
           description: "Test package for e2e tests",
         },

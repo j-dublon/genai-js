@@ -77,7 +77,7 @@ describe("SummaryBar", () => {
   const mockProps = {
     selectedPackage: mockSelectedPackage,
     isDialogOpen: false,
-    predictedTotalNextYear: 45,
+    predictedTotalNext: 45,
     openDialog: vi.fn(),
   };
 
@@ -103,7 +103,7 @@ describe("SummaryBar", () => {
     ).toBeInTheDocument();
 
     expect(screen.getByText(/12\/month/)).toBeInTheDocument();
-    expect(screen.getByText(/£40/)).toBeInTheDocument();
+    expect(screen.getByText(/£39/)).toBeInTheDocument();
 
     const monthlyElements = screen.getAllByText(/\/month/);
     expect(monthlyElements.length).toBeGreaterThan(0);
@@ -157,7 +157,7 @@ describe("SummaryBar", () => {
       <SummaryBar
         {...mockProps}
         selectedPackage={customPackage}
-        predictedTotalNextYear={48}
+        predictedTotalNext={48}
       />,
     );
 
@@ -174,8 +174,8 @@ describe("SummaryBar", () => {
     const packageWithOddPrice: StoreSelectedPackage = {
       ...mockSelectedPackage,
       prices: {
-        basePrice: 3250,
-        discountedPrice: 3250,
+        basePrice: 3300,
+        discountedPrice: 3300,
         annualPriceRise: null,
       },
     };

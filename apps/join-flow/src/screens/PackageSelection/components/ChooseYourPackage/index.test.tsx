@@ -161,7 +161,6 @@ type PackageCardProps = {
   promotion?: string;
 };
 
-// Define proper types for package details
 type PackageDetails = {
   frontendIdentifier: string;
   speeds: {
@@ -176,6 +175,8 @@ const mockUseScrollable = {
   onMouseUp: vi.fn(),
   onMouseMove: vi.fn(),
 };
+
+const convertPenceToPounds = (pence: number): number => pence / 100;
 
 vi.mock("@react-component-library/ui", async () => {
   const actual = await vi.importActual("@react-component-library/ui");
@@ -206,7 +207,7 @@ vi.mock("@react-component-library/ui", async () => {
     }: PackageCardProps) => (
       <div data-testid="package-card">
         <div>{pkg.speeds.download}Mbps</div>
-        <div>£{Math.round(pkg.prices.basePrice / 100)}/month</div>
+        <div>£{convertPenceToPounds(pkg.prices.basePrice)}/month</div>
         <div data-testid="contract-length">{pkg.termMonths}</div>
         {featurePackage && (
           <div data-testid="feature-package">Feature Package</div>

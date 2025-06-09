@@ -13,6 +13,7 @@ import { tickListItems } from "./PackageSelectionDetailsProps";
 import { PackageTitle } from "./PackageTitle";
 import { SpeedPriceDetails } from "./SpeedPriceDetails";
 import { UpgradeOffer } from "./UpgradeOffer";
+
 interface PackageSelectionDetailsProps {
   packageDetails: StoreSelectedPackage;
   handlePackageSelection: (selectedStorePackage: StoreSelectedPackage) => void;

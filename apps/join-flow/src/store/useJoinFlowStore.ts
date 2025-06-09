@@ -121,7 +121,7 @@ export type BroadbandPackage = {
   name: string;
   speed: { download: number; upload: number };
   price: { monthly: number; setup: number };
-  priceIncrease: { nextYearIncrease: number; followingYearIncrease: number };
+  priceIncrease: { nextIncrease: number; followingIncrease: number };
   contractLength: number;
   description: string;
   features?: string[];

@@ -1,7 +1,7 @@
 import { Button, DropdownPill } from "@react-component-library/ui";
 import { useState } from "react";
 
-import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
+import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { upgradeOfferText } from "./PackageSelectionDetailsProps";
@@ -26,13 +26,9 @@ export const UpgradeOffer = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const pricing = usePricingCalculations(topSpeedPackage, null);
+
   if (!topSpeedPackage || priceDifference <= 0) return null;
-  const { speeds, prices } = topSpeedPackage;
-  const { basePrice, annualPriceRise } = prices;
-  const sortedPriceRises = sortAnnualPriceRiseByDate(annualPriceRise);
-  const nextYearPrice = sortedPriceRises?.[0]?.price || basePrice;
-  const followingYearPrice =
-    sortedPriceRises?.[1]?.price || sortedPriceRises?.[0]?.price || basePrice;
   const value = toggle.isOn ? toggle.rightLabel : toggle.leftLabel;
 
   const handleChange = (value: string) => {
@@ -47,7 +43,7 @@ export const UpgradeOffer = ({
       <div className="flex flex-col gap-3">
         <p className="font-semibold text-lg md:text-xl md:max-w-[90%]">
           For just £{priceDifference} more per month, you could get a super
-          speedy {speeds.download}Mbps
+          speedy {topSpeedPackage.speeds.download}Mbps
         </p>
         {/* TO DO: We don't have offers yet, but when this gets returned change it */}
         {offer && (
@@ -69,26 +65,23 @@ export const UpgradeOffer = ({
       <div className="bg-core-yellow rounded-lg py-4 px-3 max-w-[272px]">
         <p className="pb-1 text-sm" data-testid="monthly-price">
           <span className="font-semibold text-xl">
-            £{(prices.basePrice / 100).toFixed(0)}
+            £{pricing.monthlyPackagePrice}
           </span>
           /month
         </p>
         <hr className="border-t-[1px] border-core-black" />
         <div className="pt-1 flex flex-col">
-          <p className="text-xs leading-[1.6]" data-testid="next-year-price">
-            {upgradeOfferText.nextYearPrice}{" "}
+          <p className="text-xs leading-[1.6]" data-testid="next-price">
+            {upgradeOfferText.nextPrice}{" "}
             <span className="font-semibold">
-              £{(nextYearPrice / 100).toFixed(0)}
+              £{pricing.nextPrice}
               /month
             </span>
           </p>
-          <p
-            className="text-xs leading-[1.6]"
-            data-testid="following-year-price"
-          >
-            {upgradeOfferText.followingYearPrice}{" "}
+          <p className="text-xs leading-[1.6]" data-testid="following-price">
+            {upgradeOfferText.followingPrice}{" "}
             <span className="font-semibold">
-              £{(followingYearPrice / 100).toFixed(0)}
+              £{pricing.followingPrice}
               /month
             </span>
           </p>

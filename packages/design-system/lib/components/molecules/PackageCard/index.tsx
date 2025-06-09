@@ -139,15 +139,15 @@ const AnnualPrice = ({
   dateType,
 }: {
   price: number;
-  dateType: "nextYear" | "followingYear";
+  dateType: "next" | "following";
 }) => {
-  const calculateYear = (dateType: "nextYear" | "followingYear"): number => {
+  const calculateYear = (dateType: "next" | "following"): number => {
     const today = new Date();
     const currentYear = today.getFullYear();
     const isBeforeApril = today.getMonth() < 3;
 
-    const nextYear = isBeforeApril ? currentYear : currentYear + 1;
-    return dateType === "nextYear" ? nextYear : nextYear + 1;
+    const next = isBeforeApril ? currentYear : currentYear + 1;
+    return dateType === "next" ? next : next + 1;
   };
 
   return (
@@ -220,10 +220,9 @@ export const PackageCard = ({
   const packageDescription = "Full fibre speed";
   const monthlyPrice = (pkg.prices.basePrice / 100).toFixed(0);
 
-  const nextYearPrice =
+  const nextPrice =
     pkg.prices.annualPriceRise?.[0]?.price || pkg.prices.basePrice;
-  const followingYearPrice =
-    pkg.prices.annualPriceRise?.[1]?.price || nextYearPrice;
+  const followingPrice = pkg.prices.annualPriceRise?.[1]?.price || nextPrice;
 
   return (
     <div
@@ -257,8 +256,8 @@ export const PackageCard = ({
           </span>
           /month
         </p>
-        <AnnualPrice price={nextYearPrice} dateType="nextYear" />
-        <AnnualPrice price={followingYearPrice} dateType="followingYear" />
+        <AnnualPrice price={nextPrice} dateType="next" />
+        <AnnualPrice price={followingPrice} dateType="following" />
         <div className="ds:flex ds:flex-col ds:gap-3 ds:md:gap-4 ds:items-center ds:pt-3 ds:md:pt-4">
           <Button
             onClick={() => onPackageSelect(pkg)}

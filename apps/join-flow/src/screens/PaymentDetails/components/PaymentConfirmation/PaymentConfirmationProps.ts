@@ -9,8 +9,6 @@ export const paymentConfirmationText = {
   directDebitDetailsTitle: "Your direct debit payment details",
   monthlyPaymentTitle: "Your monthly payment",
   totalMonthlyPaymentTitle: "Your total monthly payment",
-  nextYearPriceIncreaseText: "From April 1 2026 an increase of £",
-  followingYearPriceIncreaseText: "From April 1 2027 an increase of £",
   backButtonText: "Back",
   sortCodeLabel: "Sort code",
   signUpText: "Sign me up",

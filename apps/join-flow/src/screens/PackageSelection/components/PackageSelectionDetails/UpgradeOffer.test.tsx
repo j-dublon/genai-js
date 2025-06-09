@@ -1,7 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { AnnualPriceRise } from "@/lib/sortAnnualPriceRise";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { upgradeOfferText } from "./PackageSelectionDetailsProps";
@@ -48,8 +47,40 @@ const mockToggle = {
 
 const mockHandlePackageSelection = vi.fn();
 
-vi.mock("@/lib/sortAnnualPriceRise", () => ({
-  sortAnnualPriceRiseByDate: (priceRises: AnnualPriceRise) => priceRises || [],
+vi.mock("@/hooks/usePricingCalculations", () => ({
+  usePricingCalculations: (topSpeedPackage: StoreSelectedPackage | null) => {
+    if (!topSpeedPackage) {
+      return {
+        monthlyPackagePrice: 0,
+        nextPrice: 0,
+        followingPrice: 0,
+        monthlyEeroPrice: 0,
+        monthlyTotal: 0,
+        predictedTotalNext: 0,
+        predictedTotalfollowing: 0,
+        packageName: "",
+      };
+    }
+
+    const monthlyPackagePrice = topSpeedPackage.prices.basePrice / 100;
+    const nextPrice = topSpeedPackage.prices.annualPriceRise?.[0]?.price
+      ? topSpeedPackage.prices.annualPriceRise[0].price / 100
+      : monthlyPackagePrice;
+    const followingPrice = topSpeedPackage.prices.annualPriceRise?.[1]?.price
+      ? topSpeedPackage.prices.annualPriceRise[1].price / 100
+      : nextPrice;
+
+    return {
+      monthlyPackagePrice,
+      nextPrice,
+      followingPrice,
+      monthlyEeroPrice: 0,
+      monthlyTotal: monthlyPackagePrice,
+      predictedTotalNext: nextPrice,
+      predictedTotalfollowing: followingPrice,
+      packageName: `${topSpeedPackage.speeds.download}Mbps`,
+    };
+  },
 }));
 
 vi.mock("@react-component-library/ui", async () => {
@@ -196,10 +227,8 @@ describe("UpgradeOffer", () => {
     );
 
     expect(screen.getByTestId("monthly-price")).toHaveTextContent("£45/month");
-    expect(screen.getByTestId("next-year-price")).toHaveTextContent(
-      "£50/month",
-    );
-    expect(screen.getByTestId("following-year-price")).toHaveTextContent(
+    expect(screen.getByTestId("next-price")).toHaveTextContent("£50/month");
+    expect(screen.getByTestId("following-price")).toHaveTextContent(
       "£53/month",
     );
   });
@@ -273,10 +302,8 @@ describe("UpgradeOffer", () => {
     );
 
     expect(screen.getByTestId("monthly-price")).toHaveTextContent("£45/month");
-    expect(screen.getByTestId("next-year-price")).toHaveTextContent(
-      "£45/month",
-    );
-    expect(screen.getByTestId("following-year-price")).toHaveTextContent(
+    expect(screen.getByTestId("next-price")).toHaveTextContent("£45/month");
+    expect(screen.getByTestId("following-price")).toHaveTextContent(
       "£45/month",
     );
   });

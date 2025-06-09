@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import { convertPenceToPounds } from "@/hooks/usePricingCalculations";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 const planChangeSchema = z.object({
@@ -34,16 +35,8 @@ const PackageChangeForm = ({
     },
   });
 
-  const getPackageName = (pkg: StoreSelectedPackage) => {
-    return `${pkg.speeds.download}Mbps`;
-  };
-
-  const getMonthlyPrice = (pkg: StoreSelectedPackage) => {
-    return Math.round(pkg.prices.basePrice / 100);
-  };
-
   const getOptionLabel = (pkg: StoreSelectedPackage) => {
-    return `${getPackageName(pkg)} ${reviewYourBasketText.fullFiber} - ${pkg.speeds.download}Mbps download, ${pkg.speeds.upload}Mbps upload - £${getMonthlyPrice(pkg)}${reviewYourBasketText.perMonth} - ${pkg.termMonths} months`;
+    return `${pkg.speeds.download}Mbps ${reviewYourBasketText.fullFiber} - ${pkg.speeds.download}Mbps download, ${pkg.speeds.upload}Mbps upload - £${convertPenceToPounds(pkg.prices.basePrice)}${reviewYourBasketText.perMonth} - ${pkg.termMonths} months`;
   };
 
   return (

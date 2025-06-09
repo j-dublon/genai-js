@@ -2,19 +2,20 @@ import { Button } from "@react-component-library/ui";
 import { ChevronVerticalWithCircle } from "@react-component-library/ui/icons";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import { formatPriceHideZeroPence } from "@/lib/formatPriceHideZeroPence";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 interface SummaryBarProps {
   selectedPackage: StoreSelectedPackage | null;
   isDialogOpen: boolean;
-  predictedTotalNextYear: number;
+  predictedTotalNext: number;
   openDialog: () => void;
 }
 
 export const SummaryBar: React.FC<SummaryBarProps> = ({
   selectedPackage,
   isDialogOpen,
-  predictedTotalNextYear,
+  predictedTotalNext,
   openDialog,
 }) => {
   if (!selectedPackage) {
@@ -68,11 +69,11 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
 
           <div className="flex flex-col text-md whitespace-nowrap font-medium">
             <p>
-              £{Math.round(selectedPackage.prices.basePrice / 100)}
+              {formatPriceHideZeroPence(selectedPackage.prices.basePrice)}
               <span className="font-normal">/month</span>
             </p>
             <div className="text-xxs hidden lg:flex">
-              <p>£{predictedTotalNextYear}/month from April 2026</p>
+              <p>£{predictedTotalNext}/month from April 2026</p>
             </div>
           </div>
           {!isDialogOpen && (
