@@ -37,7 +37,7 @@ export const ChooseYourAddress = () => {
 
   return (
     <div className="flex flex-col items-center">
-      <SimpleNavBar>
+      <SimpleNavBar backgroundColor="yellow">
         <div className="flex flex-col items-center gap-[2px] md:gap-2">
           <p className="text-xxs leading-[1.6] font-normal text-ui-grey-500">
             {navBarText}
@@ -50,7 +50,7 @@ export const ChooseYourAddress = () => {
           />
         </div>
       </SimpleNavBar>
-      <div className="w-full sm:max-w-[570px] p-5 flex flex-col items-center">
+      <div className="w-full sm:max-w-[570px] p-5 pt-20 flex flex-col items-center">
         <h1 className="mt-10 mb-4 text-md md:text-xl font-semibold">
           {pageTitle}
         </h1>

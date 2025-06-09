@@ -10,8 +10,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Footer } from "@/components/Footer";
-import { ReviewYourBasket } from "@/components/ReviewYourBasket";
-import Stepper from "@/components/Stepper";
+import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { formatDateOfBirth } from "@/lib/formatDate";
 import { AdditionalPersonalDetailsForm } from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
 import { EmailVerificationForm } from "@/screens/PersonalDetails/forms/emailVerificationForm";
@@ -346,10 +345,8 @@ const PersonalDetails = () => {
 
   return (
     <>
-      <ReviewYourBasket />
-      <div className="container mx-auto px-6 py-8">
-        <Stepper />
-
+      <StepNavigationWithBasket step={1} />
+      <div className="container mx-auto px-6 py-8 pt-20">
         <div className="max-w-[569px] mx-auto py-8 rounded-lg">
           <h1 className="text-2xl text-center font-bold mb-6">
             {personalDetailsProps.pageTitle}

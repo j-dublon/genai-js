@@ -37,7 +37,7 @@ export const NavWrapper = () => {
 
   return (
     <>
-      <SimpleNavBar>
+      <SimpleNavBar fixed={false} backgroundColor="yellow">
         <div className="flex items-center gap-2 ml-2 text-nowrap text-right font-medium leading-[1.6] text-core-black text-xxs sm:text-sm">
           <button
             onClick={() => {

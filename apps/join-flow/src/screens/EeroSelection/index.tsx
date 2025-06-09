@@ -8,8 +8,7 @@ import { useState } from "react";
 
 import { EeroCard } from "@/components/EeroCard";
 import { Footer } from "@/components/Footer";
-import { ReviewYourBasket } from "@/components/ReviewYourBasket";
-import Stepper from "@/components/Stepper";
+import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
 import {
@@ -85,9 +84,8 @@ const EeroSelection = () => {
 
   return (
     <>
-      <ReviewYourBasket />
-      <div className="container px-4 py-8 mx-auto">
-        <Stepper />
+      <StepNavigationWithBasket step={2} />
+      <div className="container px-4 pb-8 pt-16 mx-auto">
         <div className="max-w-6xl mx-auto mt-16">
           <div className="p-8 rounded-md">
             <div className="flex flex-col items-center">

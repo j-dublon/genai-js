@@ -29,6 +29,7 @@ export const eeroProducts: EeroProduct[] = [
 ];
 
 export const eeroPageContent = {
+  nextStepPillText: "Switching & going live",
   title: "Get whole home mesh Wi-Fi",
   description: (
     <>

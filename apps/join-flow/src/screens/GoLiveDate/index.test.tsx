@@ -57,6 +57,20 @@ vi.mock("@react-component-library/ui", () => ({
       <div>Available Dates: {availableDates.length}</div>
     </div>
   ),
+  SimpleNavBar: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="simple-nav-bar">{children}</div>
+  ),
+  ColorPill: ({
+    colorPillText,
+    className,
+  }: {
+    colorPillText: string;
+    className: string;
+  }) => (
+    <div data-testid="color-pill" className={className}>
+      {colorPillText}
+    </div>
+  ),
   TipCard: ({ children, className }: TipCardProps) => (
     <div data-testid="tip-card" className={className}>
       {children}
@@ -66,10 +80,6 @@ vi.mock("@react-component-library/ui", () => ({
 
 vi.mock("@/components/Footer", () => ({
   Footer: () => <div data-testid="footer">Footer</div>,
-}));
-
-vi.mock("@/components/Stepper", () => ({
-  default: () => <div data-testid="stepper">Stepper</div>,
 }));
 
 vi.mock("@/components/FormDropdown", () => ({
@@ -136,7 +146,11 @@ describe("GoLiveDate Component", () => {
   it("renders the component correctly", () => {
     render(<GoLiveDate />);
 
-    expect(screen.getByTestId("stepper")).toBeInTheDocument();
+    expect(screen.getByTestId("simple-nav-bar")).toBeInTheDocument();
+    const stepText = screen.getByText((_, element) => {
+      return element?.textContent === "Step 3 of 4";
+    });
+    expect(stepText).toBeInTheDocument();
     expect(screen.getByTestId("tip-card")).toBeInTheDocument();
     expect(screen.getByTestId("date-picker")).toBeInTheDocument();
     expect(screen.getByTestId("button")).toBeInTheDocument();

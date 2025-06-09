@@ -9,8 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
-import { ReviewYourBasket } from "@/components/ReviewYourBasket";
-import Stepper from "@/components/Stepper";
+import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { accountNumberSchema } from "@/screens/OneTouchSwitching/forms/formValues";
 import { createSwitchMatchLookup } from "@/services/helpers/createSwitchMatchLookup";
 import { getAllProviders } from "@/services/helpers/getAllProviders";
@@ -175,13 +174,11 @@ export const OneTouchSwitching = () => {
 
   return (
     <>
-      <ReviewYourBasket />
-      <div className="container mx-auto px-4 py-8">
-        <Stepper />
-
+      <StepNavigationWithBasket step={3} />
+      <div className="container mx-auto px-4 pb-8 pt-20">
         <div className="max-w-3xl mx-auto">
           <div className="bg-core-white p-8 rounded-md">
-            <h1 className="text-2xl font-bold mb-2">
+            <h1 className="text-2xl font-bold mb-2 text-center">
               {oneTouchSwitchingText.title}
             </h1>
             <p className="text-ui-grey-500 mb-6">

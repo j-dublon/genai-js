@@ -1,4 +1,5 @@
 export interface GoLiveDateProps {
+  nextStepPillText: string;
   title: string;
   subtitle: string;
   paragraph: string;
@@ -12,6 +13,7 @@ export interface GoLiveDateProps {
 }
 
 export const goLiveDateText: GoLiveDateProps = {
+  nextStepPillText: "Pay & join Cuckoo",
   title: "Your go-live Date",
   subtitle:
     "This is the earliest date we can connect you to our full fibre. If this date doesn't suit you, pick another below.",

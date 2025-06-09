@@ -20,6 +20,9 @@ describe("SimpleNavBar", () => {
     const logo = screen.getByLabelText("Cuckoo Logo");
     expect(logo).toBeInTheDocument();
     expect(logo.parentElement).toHaveAttribute("href", "/");
+    const header = screen.getByRole("banner");
+    expect(header).toHaveClass("ds:fixed");
+    expect(header.firstChild).toHaveClass("ds:bg-core-white");
   });
 
   it("renders with different logo if provided", () => {
@@ -38,5 +41,19 @@ describe("SimpleNavBar", () => {
     );
 
     expect(screen.getByText(mockChildren)).toBeInTheDocument();
+  });
+
+  it("renders without fixed class when fixed is false", () => {
+    render(<SimpleNavBar fixed={false} />);
+
+    const nav = screen.getByRole("banner");
+    expect(nav).not.toHaveClass("ds:fixed");
+  });
+
+  it("renders with yellow background when backgroundColor is yellow", () => {
+    render(<SimpleNavBar backgroundColor="yellow" />);
+
+    const header = screen.getByRole("banner");
+    expect(header.firstChild).toHaveClass("ds:bg-core-yellow");
   });
 });

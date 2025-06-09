@@ -112,7 +112,7 @@ export const BasketDialog = ({
 
       <div
         ref={modalRef}
-        className="fixed inset-x-0 bottom-0 top-[85px] flex items-start justify-center z-40 overflow-y-auto"
+        className="fixed inset-x-0 bottom-0 top-40 flex items-start justify-center z-40 overflow-y-auto"
       >
         <div className="relative bg-core-white w-3/5 mx-auto shadow-lg">
           <div className="px-12 py-16">

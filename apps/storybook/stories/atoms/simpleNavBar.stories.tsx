@@ -19,6 +19,23 @@ const meta: Meta<typeof SimpleNavBar> = {
         type: { summary: "JSX.Element" },
       },
     },
+    fixed: {
+      description: "Whether the navigation bar should be fixed to the top",
+      control: "boolean",
+      table: {
+        type: { summary: "boolean" },
+        defaultValue: { summary: "true" },
+      },
+    },
+    backgroundColor: {
+      description: "Background color of the navigation bar",
+      control: "select",
+      options: ["yellow", "white"],
+      table: {
+        type: { summary: '"yellow" | "white"' },
+        defaultValue: { summary: '"white"' },
+      },
+    },
   },
 };
 
@@ -39,5 +56,6 @@ export const Primary: Story = {
   args: {
     logo: <MockLogo />,
     children: <p>Child Item</p>,
+    backgroundColor: "yellow",
   },
 };

@@ -46,7 +46,7 @@ describe("Stepper", () => {
 
     const step2 = screen.getByText("2");
     const step2Container = step2.closest("div");
-    expect(step2Container).toHaveClass("bg-core-grey-200");
+    expect(step2Container).toHaveClass("bg-core-white");
   });
 
   test("displays labels when showLabels is true", () => {

@@ -1,4 +1,5 @@
 export const personalDetailsProps = {
+  nextStepPillText: "Choosing your eero(s)",
   pageTitle: "Your info",
   sectionTitle: "Your details",
 

@@ -28,11 +28,11 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
 
   return (
     <div
-      className={`w-full fixed top-0 left-0 z-50 shadow-lg bg-core-white border-b border-ui-grey-100 ${
+      className={`w-full fixed top-20 left-0 z-49 shadow-lg bg-core-white border-b border-ui-grey-100 ${
         isDialogOpen ? "lg:bg-core-white" : "lg:bg-ui-grey-100"
       }`}
     >
-      <div className="w-full max-w-7xl flex items-center justify-center px-4 py-4 mx-auto">
+      <div className="w-full max-w-7xl flex items-center justify-center px-4 py-8 mx-auto">
         <div className="flex items-center gap-6 md:gap-6 lg:gap-10">
           <div className="hidden lg:flex items-center">
             <img
@@ -57,7 +57,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
             </div>
           </div>
 
-          <div className="flex flex-col text-md whitespace-nowrap font-medium hidden lg:flex">
+          <div className="flex-col text-md whitespace-nowrap font-medium hidden lg:flex">
             <p>
               {selectedPackage.termMonths}/month{" "}
               <span className="font-normal">contract</span>
@@ -78,7 +78,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
           </div>
           {!isDialogOpen && (
             <>
-              <div className="flex items-center ml-4 hidden lg:flex">
+              <div className="items-center ml-4 hidden lg:flex">
                 <Button
                   variant="solid"
                   size="small"

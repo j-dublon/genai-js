@@ -1,4 +1,5 @@
 export const oneTouchSwitchingText = {
+  nextStepPillText: "Payment & join Cuckoo",
   title: "Switching to Cuckoo",
   subtitle:
     "We'll tell your current broadband provider that you're leaving them and joining us, so you won't have to. They'll let you know if there are any final charges from them. Find out more about one touch switching",

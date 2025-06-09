@@ -37,7 +37,7 @@ const Stepper = ({ showLabels = true, steps = defaultSteps }: StepperProps) => {
     pathToStepperIndex[pathname as keyof typeof pathToStepperIndex] || 0;
 
   return (
-    <div className="w-full max-w-[600px] mx-auto py-4">
+    <div className="w-full max-w-[360px] mx-auto py-4 hidden md:block">
       <div className="flex justify-between items-center">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
@@ -47,8 +47,8 @@ const Stepper = ({ showLabels = true, steps = defaultSteps }: StepperProps) => {
                   index < activeStep
                     ? "bg-core-yellow text-core-black"
                     : index === activeStep
-                      ? "bg-core-yellow text-core-black"
-                      : "bg-core-grey-200 text-core-black"
+                      ? "bg-core-yellow text-core-black font-medium"
+                      : "bg-core-white text-ui-grey-500"
                 } transition-all duration-300 cursor-pointer`}
               onClick={() => {
                 setCurrentStep(index + 1);
@@ -71,7 +71,7 @@ const Stepper = ({ showLabels = true, steps = defaultSteps }: StepperProps) => {
               )}
 
               {showLabels && step.label && index === activeStep && (
-                <span className="absolute -bottom-12 w-max text-xs text-center text-core-black px-2 py-1 rounded-md bg-core-yellow border-2 border-core-black">
+                <span className="absolute -bottom-10 w-max text-xs text-center text-core-black px-2 py-1 rounded-md bg-core-yellow border-2 border-core-black">
                   {step.label}
                 </span>
               )}

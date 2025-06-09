@@ -9,8 +9,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { Footer } from "@/components/Footer";
 import { FormDropdown } from "@/components/FormDropdown";
-import { ReviewYourBasket } from "@/components/ReviewYourBasket";
-import Stepper from "@/components/Stepper";
+import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { getAssetPath } from "@/lib/get-asset-path";
 import PaymentDetails from "@/screens/PaymentDetails";
 import {
@@ -106,9 +105,8 @@ export const GoLiveDate = () => {
 
   return (
     <>
-      <ReviewYourBasket />
-      <div className="container md:max-w-[565px] mx-auto px-4 py-8">
-        <Stepper />
+      <StepNavigationWithBasket step={3} />
+      <div className="container md:max-w-[565px] mx-auto px-4 pb-8 pt-30">
         {switchingDetails?.otsSwitchStatus === "OTS_FAILED" && (
           <OtsFailBanner bannerText={otsFailBannerText} />
         )}
