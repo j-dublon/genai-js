@@ -190,4 +190,36 @@ describe("GoLiveDate Component", () => {
 
     expect(screen.getByText(/Available Dates: \d+/)).toBeInTheDocument();
   });
+
+  it("displays the OTS fail banner when the OTS switch fails", () => {
+    mockedUseJoinFlowStore.mockReturnValue({
+      setGoLiveDetails: mockSetGoLiveDetails,
+      goLiveDetails: {},
+      setCurrentStep: mockSetCurrentStep,
+      switchingDetails: {
+        otsSwitchStatus: "OTS_FAILED",
+      },
+    });
+
+    render(<GoLiveDate />);
+
+    expect(screen.getByText("Important info:")).toBeInTheDocument();
+    expect(screen.getByText("let them know")).toBeInTheDocument();
+  });
+
+  it("does not display the OTS fail banner when the OTS switch is successful", () => {
+    mockedUseJoinFlowStore.mockReturnValue({
+      setGoLiveDetails: mockSetGoLiveDetails,
+      goLiveDetails: {},
+      setCurrentStep: mockSetCurrentStep,
+      switchingDetails: {
+        otsSwitchStatus: "SWITCH_SUCCESS",
+      },
+    });
+
+    render(<GoLiveDate />);
+
+    expect(screen.queryByText("Important info:")).not.toBeInTheDocument();
+    expect(screen.queryByText("let them know")).not.toBeInTheDocument();
+  });
 });

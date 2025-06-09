@@ -18,6 +18,7 @@ import {
   goLiveDateSchema,
 } from "@/validation/join-flow-schema";
 
+import { OtsFailBanner } from "./components/OtsFailBanner";
 import { goLiveDateText } from "./GoLiveDateProps";
 
 export const GoLiveDate = () => {
@@ -30,6 +31,7 @@ export const GoLiveDate = () => {
     timeSlotLabel,
     timeSlotPlaceHolder,
     continueButtonText,
+    otsFailBannerText,
   } = goLiveDateText;
 
   const router = useRouter();
@@ -107,13 +109,11 @@ export const GoLiveDate = () => {
       <ReviewYourBasket />
       <div className="container md:max-w-[565px] mx-auto px-4 py-8">
         <Stepper />
-        {/* TO DO: pretty this up with styling */}
         {switchingDetails?.otsSwitchStatus === "OTS_FAILED" && (
-          <p className="text-ui-error">
-            We couldn&apos;t find your current provider{" "}
-          </p>
+          <OtsFailBanner bannerText={otsFailBannerText} />
         )}
 
+        {/* TODO: replace with Toast pill once we have it */}
         {switchingDetails?.otsSwitchStatus === "SWITCH_SUCCESS" && (
           <p className="mb-4">Switch successful!</p>
         )}

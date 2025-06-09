@@ -8,6 +8,7 @@ export interface GoLiveDateProps {
   datePickerPlaceholder: string;
   timeSlotPlaceHolder: string;
   continueButtonText: string;
+  otsFailBannerText: string;
 }
 
 export const goLiveDateText: GoLiveDateProps = {
@@ -23,4 +24,6 @@ export const goLiveDateText: GoLiveDateProps = {
     "Please note, our engineers operate Monday - Saturday, between the hours of 8am - 6pm. ",
   timeSlotPlaceHolder: "Select a timeslot",
   continueButtonText: "Continue to payment",
+  otsFailBannerText:
+    "We couldn't find your current provider, so you'll need to let them know that you're switching to Cuckoo after you've signed up.",
 };

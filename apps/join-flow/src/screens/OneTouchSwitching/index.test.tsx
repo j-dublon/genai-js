@@ -102,8 +102,13 @@ describe("OneTouchSwitching", () => {
     });
   });
 
-  it("should render the component with initial state", () => {
+  it("should render the component with initial state", async () => {
     render(<OneTouchSwitching />);
+
+    // Wait for the async fetchProviders effect to complete
+    await waitFor(() => {
+      expect(getAllProviders).toHaveBeenCalled();
+    });
 
     expect(screen.getByText("Switching to Cuckoo")).toBeInTheDocument();
     expect(
