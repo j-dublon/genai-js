@@ -1,6 +1,6 @@
 # Website Rework
 
-This project holds the website rework code. Included in this are the join-flow, marketing, Storybook, and the design system. It uses a mix of technologies, mainly Next.js for the join-flow and marketing apps, and Vite for the individual packages, including the design system.
+This project holds the website rework code. Included in this are the join-flow, marketing and the design system. It uses a mix of technologies, mainly Next.js for the join-flow and marketing apps, and Vite for the individual packages, including the design system.
 
 ## Project Structure
 
@@ -8,13 +8,10 @@ This is a multi-app project that contains the following applications:
 
 - **Join Flow**: Built with Next.js, this application handles the user onboarding process.
 - **Marketing**: Also built with Next.js, this application serves the marketing pages and content.
-- **Storybook**: A development environment for UI components, built using Vite, which allows for isolated component testing and documentation.
 
 The design system is located in the `packages/design-system` directory. It is imported into the other applications to ensure a consistent UI across the project.
 
 ## Getting Started
-
-If it's your first time using this project, the best way to get up to speed is to view the Storybook and see what components are available.
 
 ### Steps to Run the Project
 
@@ -35,17 +32,7 @@ If it's your first time using this project, the best way to get up to speed is t
 
    Builds in development mode and watches for changes, rebuilding automatically on file updates
 
-3. **Run Storybook**:
-   In another terminal, navigate to the Storybook app and run:
-
-   ```bash
-   cd apps/storybook
-   npm run dev
-   ```
-
-   This will start the Storybook application, which you can access on <http://localhost:6006>.
-
-4. **Run marketing and join flow apps**:
+3. **Run marketing and join flow apps**:
    To run the other 2 apps ensure the project has been built with step 1
    Then an env file will be needed in marketing
 
