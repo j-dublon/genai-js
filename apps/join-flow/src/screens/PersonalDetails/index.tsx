@@ -178,6 +178,7 @@ const PersonalDetails = () => {
             : false,
         personalDetailsStep: nextStep,
         personalDetailsCompleted: false,
+        isVerified: isEmailVerified ?? false,
         verificationCode: isEmailVerified ? "123456" : "",
         dobDay: personalDetails?.dobDay || "",
         dobMonth: personalDetails?.dobMonth || "",
@@ -210,6 +211,7 @@ const PersonalDetails = () => {
         personalDetailsStep: "additional",
         personalDetailsCompleted: false,
         marketingConsent: personalDetails.marketingConsent,
+        isVerified: true,
       } as PersonalDetails;
 
       setPersonalDetails(updatedDetails);
@@ -229,6 +231,7 @@ const PersonalDetails = () => {
       const updatedDetails: PersonalDetails = {
         ...personalDetails,
         personalDetailsStep: "additional",
+        isVerified: isEmailVerified ?? false,
       } as PersonalDetails;
       setPersonalDetails(updatedDetails);
     }
