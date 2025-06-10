@@ -6,13 +6,19 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { speedCalculatorText } from "./ChooseYourPackageProps";
 import { ChooseYourPackage } from "./index";
 
-const { mockSelectPackage, mockSetBasket, mockCreateBasket, mockRouterPush } =
-  vi.hoisted(() => ({
-    mockSelectPackage: vi.fn(),
-    mockSetBasket: vi.fn(),
-    mockCreateBasket: vi.fn(),
-    mockRouterPush: vi.fn(),
-  }));
+const {
+  mockSelectPackage,
+  mockSetBasket,
+  mockCreateBasket,
+  mockRouterPush,
+  mockSetSoftCreditCheck,
+} = vi.hoisted(() => ({
+  mockSelectPackage: vi.fn(),
+  mockSetBasket: vi.fn(),
+  mockCreateBasket: vi.fn(),
+  mockRouterPush: vi.fn(),
+  mockSetSoftCreditCheck: vi.fn(),
+}));
 
 const mockQuoteResponse = {
   documentID: "quote-123",
@@ -258,6 +264,7 @@ vi.mock("@store/useJoinFlowStore", () => ({
   default: () => ({
     selectPackage: mockSelectPackage,
     setBasket: mockSetBasket,
+    setSoftCreditCheck: mockSetSoftCreditCheck,
     quoteResponse: mockQuoteResponse,
   }),
 }));

@@ -269,6 +269,11 @@ export type StoreBasket = {
   createdAt: string;
 };
 
+export type SoftCreditCheck = {
+  latestStatus: "PASSED" | "FAILED" | "NO_MATCH" | null;
+  attempts: number;
+};
+
 export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
@@ -284,6 +289,7 @@ export type JoinFlowState = {
   accessibilityRequirements: AccessibilityRequirements | null;
   quoteResponse: QuoteLookupSuccess | null;
   basket: StoreBasket | null;
+  softCreditCheck: SoftCreditCheck | null;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
@@ -302,6 +308,7 @@ export type JoinFlowState = {
     requirements: AccessibilityRequirements | null,
   ) => void;
   setBasket: (basket: StoreBasket) => void;
+  setSoftCreditCheck: (softCreditCheck: SoftCreditCheck) => void;
   resetFlow: () => void;
 };
 
@@ -323,6 +330,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       accessibilityRequirements: null,
       quoteResponse: null,
       basket: null,
+      softCreditCheck: null,
 
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
@@ -345,6 +353,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
         set({ accessibilityRequirements: requirements }),
       setQuoteResponse: (response) => set({ quoteResponse: response }),
       setBasket: (basket) => set({ basket }),
+      setSoftCreditCheck: (softCreditCheck) => set({ softCreditCheck }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -359,6 +368,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           accessibilityRequirements: null,
           quoteResponse: null,
           basket: null,
+          softCreditCheck: null,
         }),
     }),
     {

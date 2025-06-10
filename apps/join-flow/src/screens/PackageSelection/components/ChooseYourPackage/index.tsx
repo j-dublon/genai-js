@@ -24,7 +24,8 @@ type ModalContent = "speed-calculator" | "package-details";
 
 export const ChooseYourPackage = () => {
   const router = useRouter();
-  const { selectPackage, quoteResponse, setBasket } = useJoinFlowStore();
+  const { selectPackage, quoteResponse, setBasket, setSoftCreditCheck } =
+    useJoinFlowStore();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -143,6 +144,10 @@ export const ChooseYourPackage = () => {
 
         if (result.basket) {
           setBasket(result.basket);
+          setSoftCreditCheck({
+            latestStatus: null,
+            attempts: 0,
+          });
           router.push("/join-flow/personal-details");
         } else if (result.error) {
           console.error("Failed to create basket:", result.error);

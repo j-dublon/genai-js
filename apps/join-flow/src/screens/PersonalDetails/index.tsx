@@ -15,6 +15,7 @@ import { formatDateOfBirth } from "@/lib/formatDate";
 import { AdditionalPersonalDetailsForm } from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
 import { EmailVerificationForm } from "@/screens/PersonalDetails/forms/emailVerificationForm";
 import { InitialPersonalDetailsForm } from "@/screens/PersonalDetails/forms/initialPersonalDetailsForm";
+import { runCreditCheck } from "@/services/helpers/runCreditCheck";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
 import {
@@ -33,7 +34,9 @@ const PersonalDetails = () => {
     setCurrentStep,
     serviceAddress,
     basket,
+    softCreditCheck,
     setBasket,
+    setSoftCreditCheck,
   } = useJoinFlowStore();
 
   const initialStep = personalDetails?.personalDetailsStep || "details";
@@ -290,16 +293,66 @@ const PersonalDetails = () => {
           email: personalDetails.email,
           phone: personalDetails.phone,
         },
+        // TODO: this is temporary to get the address history to the credit check endpoint, until address form is completed
+        addressHistory: [
+          {
+            line1: serviceAddress?.line1,
+            line2: serviceAddress?.line2,
+            line3: serviceAddress?.line3,
+            postcode: serviceAddress?.postcode,
+            id: serviceAddress?.identifiers?.[0]?.id,
+          },
+        ],
       });
 
       if (result.basket) {
         setBasket(result.basket);
-        router.push("/join-flow/eero-selection");
       } else if (result.error) {
-        console.error("Failed to create basket:", result.error);
+        console.error("Failed to update basket:", result.error);
       }
     } catch (error) {
-      console.error("Unexpected error creating basket:", error);
+      console.error("Unexpected error updating basket:", error);
+      return;
+    }
+
+    try {
+      let latestStatus = softCreditCheck?.latestStatus ?? null;
+      let softCreditCheckAttempts = softCreditCheck?.attempts ?? 0;
+      let error = null;
+
+      if (softCreditCheckAttempts <= 2 && latestStatus !== "PASSED") {
+        const creditCheckResult = await runCreditCheck(basket.id);
+        softCreditCheckAttempts++;
+        latestStatus = creditCheckResult.status ?? null;
+        error = creditCheckResult.error;
+      }
+
+      if (error) {
+        console.error("Failed to run soft credit check:", error);
+        return;
+      }
+
+      setSoftCreditCheck({
+        latestStatus,
+        attempts: softCreditCheckAttempts,
+      });
+
+      switch (latestStatus) {
+        case "FAILED":
+          // Handle failed credit check
+          break;
+        case "PASSED":
+          router.push("/join-flow/eero-selection");
+          break;
+        case "NO_MATCH":
+          // Handle no match response
+          break;
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error("Unexpected error during soft credit check:", error);
+      return;
     }
   };
 

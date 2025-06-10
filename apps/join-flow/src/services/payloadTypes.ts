@@ -2,6 +2,7 @@ import {
   AddressLookup,
   AffiliateSession,
   Basket,
+  CreditCheckExecution,
   EngineerAppointment,
   QuoteLookup,
   ReferralSession,
@@ -154,6 +155,13 @@ export type InitialBasket = Omit<
   Omit<Omit<Basket, "createdAt">, "id">,
   "updatedAt"
 >;
+
+export type RunCreditCheckResponse = {
+  status: NonNullable<
+    NonNullable<CreditCheckExecution["outputs"]>["apiSuccess"]
+  >["status"];
+  message?: string;
+};
 
 export type InitialVulnerabilityAndAccessibility = Omit<
   Omit<Omit<VulnerabilityAndAccessibility, "createdAt">, "id">,
