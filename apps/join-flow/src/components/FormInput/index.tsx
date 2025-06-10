@@ -8,7 +8,10 @@ import React, {
 } from "react";
 import { FieldError } from "react-hook-form";
 
-import { ModalContent, ModalContents } from "../modalContents/modalContents";
+import {
+  type ModalContent,
+  ModalContent as ModalContentComponent,
+} from "../ModalContent";
 import { ToolTip } from "../Tooltip";
 
 export interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -94,7 +97,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             buttonText="close"
             buttonType="button"
           >
-            <ModalContents content={modalContent} />
+            <ModalContentComponent content={modalContent} />
           </InfoModal>
         )}
       </div>

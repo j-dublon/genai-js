@@ -152,15 +152,6 @@ const mockQuoteResponse = {
   },
 };
 
-type PackageCardProps = {
-  pkg: StoreSelectedPackage;
-  onPackageSelect: (pkg: StoreSelectedPackage) => void;
-  onViewDetails: (pkg: StoreSelectedPackage) => void;
-  tint: string;
-  featurePackage?: boolean;
-  promotion?: string;
-};
-
 type PackageDetails = {
   frontendIdentifier: string;
   speeds: {
@@ -175,8 +166,6 @@ const mockUseScrollable = {
   onMouseUp: vi.fn(),
   onMouseMove: vi.fn(),
 };
-
-const convertPenceToPounds = (pence: number): number => pence / 100;
 
 vi.mock("@react-component-library/ui", async () => {
   const actual = await vi.importActual("@react-component-library/ui");
@@ -197,37 +186,73 @@ vi.mock("@react-component-library/ui", async () => {
         {isOn ? "24-months" : "12-months"}
       </button>
     ),
-    PackageCard: ({
-      pkg,
-      onPackageSelect,
-      onViewDetails,
+    PromotionCard: ({
+      heading,
+      features,
+      mainPrice,
+      onButtonClick,
+      onDetailsClick,
+      buttonText,
+      detailsButtonText,
       tint,
-      featurePackage,
-      promotion,
-    }: PackageCardProps) => (
+      featured,
+      promotionText,
+    }: {
+      heading: string;
+      features: Array<{ value: number; unit: string; label: string }>;
+      mainPrice: number;
+      onButtonClick: () => void;
+      onDetailsClick?: () => void;
+      buttonText: string;
+      detailsButtonText?: string;
+      tint: string;
+      featured?: boolean;
+      promotionText?: string;
+    }) => (
       <div data-testid="package-card">
-        <div>{pkg.speeds.download}Mbps</div>
-        <div>£{convertPenceToPounds(pkg.prices.basePrice)}/month</div>
-        <div data-testid="contract-length">{pkg.termMonths}</div>
-        {featurePackage && (
-          <div data-testid="feature-package">Feature Package</div>
-        )}
-        {promotion && <div data-testid="promotion">{promotion}</div>}
+        <div>{heading}</div>
+        <div>
+          {features.map((feature, index) => (
+            <div key={index}>
+              {feature.value}
+              {feature.unit} {feature.label}
+            </div>
+          ))}
+        </div>
+        <div>£{mainPrice}/month</div>
+        {featured && <div data-testid="feature-package">Feature Package</div>}
+        {promotionText && <div data-testid="promotion">{promotionText}</div>}
         <div data-testid="tint">{tint}</div>
-        <button
-          data-testid="select-package"
-          onClick={() => onPackageSelect(pkg)}
-        >
-          Select Package
+        <button data-testid="select-package" onClick={onButtonClick}>
+          {buttonText}
         </button>
-        <button data-testid="view-details" onClick={() => onViewDetails(pkg)}>
-          View Details
-        </button>
+        {onDetailsClick && detailsButtonText && (
+          <button data-testid="view-details" onClick={onDetailsClick}>
+            {detailsButtonText}
+          </button>
+        )}
       </div>
     ),
     useScrollable: () => mockUseScrollable,
   };
 });
+
+vi.mock("@/screens/PackageSelection/components/PackageCard", async () => {
+  const { PackageCard: RealPackageCard } = await vi.importActual(
+    "@/screens/PackageSelection/components/PackageCard",
+  );
+  return {
+    PackageCard: RealPackageCard,
+  };
+});
+
+vi.mock("@/lib/formatDate", () => ({
+  formatDisplayDate: () => "1 April 2026",
+}));
+
+vi.mock("@/hooks/usePricingCalculations", () => ({
+  convertPenceToPounds: (pence: number) => pence / 100,
+}));
 
 vi.mock("@store/useJoinFlowStore", () => ({
   default: () => ({
@@ -401,20 +426,14 @@ describe("ChooseYourPackage", () => {
   it("filters packages based on contract length when toggle is switched", async () => {
     render(<ChooseYourPackage />);
 
-    const initialContractLengths = screen.getAllByTestId("contract-length");
-    const initial24MonthCount = initialContractLengths.filter(
-      (el) => el.textContent === "24",
-    ).length;
-    expect(initial24MonthCount).toBeGreaterThan(0);
+    const initialPackageCards = screen.getAllByTestId("package-card");
+    expect(initialPackageCards).toHaveLength(3);
 
     const toggleSwitch = screen.getByTestId("toggle-switch");
     await userEvent.click(toggleSwitch);
 
-    const updatedContractLengths = screen.getAllByTestId("contract-length");
-    const updated12MonthCount = updatedContractLengths.filter(
-      (el) => el.textContent === "12",
-    ).length;
-    expect(updated12MonthCount).toBeGreaterThan(0);
+    const updatedPackageCards = screen.getAllByTestId("package-card");
+    expect(updatedPackageCards).toHaveLength(2);
   });
 
   it("renders the help link", () => {

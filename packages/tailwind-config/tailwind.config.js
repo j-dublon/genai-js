@@ -146,6 +146,6 @@ export default {
         },
       });
     },
-    require("tailwind-scrollbar")
+    require("tailwind-scrollbar"),
   ],
 };

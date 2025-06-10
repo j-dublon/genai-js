@@ -9,7 +9,7 @@ import { useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
-import { ModalContents } from "@/components/modalContents/modalContents";
+import { ModalContent } from "@/components/ModalContent";
 import { ToolTip } from "@/components/Tooltip";
 import { getAssetPath } from "@/lib/get-asset-path";
 
@@ -204,7 +204,7 @@ export const InitialPersonalDetailsForm = ({
         buttonText="close"
         buttonType="button"
       >
-        <ModalContents
+        <ModalContent
           content={personalDetailsProps.emailModalDetails.modalContent}
         />
       </InfoModal>

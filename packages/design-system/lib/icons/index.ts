@@ -1,4 +1,5 @@
 export { Arrow } from "./Arrow";
+export { ArrowWithCircle } from "./ArrowWithCircle";
 export { ChevronVerticalWithCircle } from "./ChevronVerticalWithCircle";
 export { InfoIcon } from "./InfoIcon";
 export { RadioIcon } from "./Radio";

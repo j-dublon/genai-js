@@ -7,7 +7,7 @@ interface ModalContentProps {
   content: ModalContent[];
 }
 
-export const ModalContents = ({ content }: ModalContentProps) => {
+export const ModalContent = ({ content }: ModalContentProps) => {
   return (
     <div className="bg-ui-grey-100 rounded-sm p-4 my-8">
       {content.map((item, index) => (

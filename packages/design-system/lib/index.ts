@@ -40,7 +40,6 @@ import { InfoCard, InfoCardProps } from "@components/molecules/InfoCard";
 import { InfoModal } from "@components/molecules/InfoModal";
 import { MobileApp } from "@components/molecules/MobileApp";
 import { MobilePhone } from "@components/molecules/MobilePhone";
-import { PackageCard } from "@components/molecules/PackageCard";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
 import { ProductCard } from "@components/molecules/ProductCard";
 import { ReasonCard } from "@components/molecules/ReasonCard";
@@ -95,7 +94,6 @@ export {
   MobileApp,
   MobilePhone,
   NavBar,
-  PackageCard,
   PhoneTextContent,
   PostcodeChecker,
   ProductCard,

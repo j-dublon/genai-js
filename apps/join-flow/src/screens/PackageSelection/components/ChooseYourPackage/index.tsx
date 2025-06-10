@@ -1,11 +1,7 @@
 "use client";
 
 import { FullScreenModal } from "@react-component-library/ui";
-import {
-  PackageCard,
-  ToggleSwitch,
-  useScrollable,
-} from "@react-component-library/ui";
+import { ToggleSwitch, useScrollable } from "@react-component-library/ui";
 import useJoinFlowStore, {
   StoreSelectedPackage,
 } from "@store/useJoinFlowStore";
@@ -14,6 +10,7 @@ import { useMemo, useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { useTopSpeedPackage } from "@/hooks/useTopSpeedPackage";
+import { PackageCard } from "@/screens/PackageSelection/components/PackageCard";
 import { createBasket } from "@/services/helpers/createBasket";
 
 import { PackageSelectionDetails } from "../PackageSelectionDetails";

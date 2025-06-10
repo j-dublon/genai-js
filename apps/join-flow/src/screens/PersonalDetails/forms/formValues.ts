@@ -1,9 +1,9 @@
 import type { Control, FieldErrors, UseFormRegister } from "react-hook-form";
 import { z } from "zod";
 
+import { ModalContent } from "@/components/ModalContent";
 import { PersonalDetails, StoreAddress } from "@/store/useJoinFlowStore";
 
-import { ModalContent } from "../../../components/modalContents/modalContents";
 import { personalDetailsProps } from "../personalDetailsProps";
 const UNWANTED_CHAR_SET = "[\\-\\(\\).\\s]";
 const MOBILE_PHONE_NUMBER_GB_PATTERN = `${UNWANTED_CHAR_SET}*0${UNWANTED_CHAR_SET}*7${UNWANTED_CHAR_SET}*(?:[1-57-9]${UNWANTED_CHAR_SET}*(?:${UNWANTED_CHAR_SET}*[0-9]){2}|6${UNWANTED_CHAR_SET}*2${UNWANTED_CHAR_SET}*4)(?:${UNWANTED_CHAR_SET}*[0-9]){6}${UNWANTED_CHAR_SET}*`;

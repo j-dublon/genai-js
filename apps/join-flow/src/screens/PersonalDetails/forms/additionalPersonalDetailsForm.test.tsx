@@ -8,7 +8,8 @@ import type {
 } from "react-hook-form";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { ModalContent } from "../../../components/modalContents/modalContents";
+import { ModalContent } from "@/components/ModalContent";
+
 import PersonalDetails from "..";
 import { AdditionalPersonalDetailsForm } from "./additionalPersonalDetailsForm";
 import type { AdditionalPersonalDetailsFormProps } from "./formValues";
@@ -75,8 +76,8 @@ vi.mock("../components/textInput", () => ({
     props: React.InputHTMLAttributes<HTMLInputElement> & { id: string },
   ) => <input data-testid={`text-input-${props.id}`} {...props} />,
 }));
-vi.mock("../components/modalContents", () => ({
-  ModalContents: (content: ModalContent[]) => (
+vi.mock("../components/ModalContent", () => ({
+  ModalContent: (content: ModalContent[]) => (
     <div data-testid="modal-contents">{content[0]?.text}</div>
   ),
 }));

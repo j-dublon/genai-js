@@ -1,16 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { ModalContent, ModalContents } from "./modalContents";
+import {
+  type ModalContent,
+  ModalContent as ModalContentComponent,
+} from "@/components/ModalContent";
 
-describe("ModalContents Component", () => {
+describe("ModalContent Component", () => {
   it("renders multiple content items correctly", () => {
     const mockContent: ModalContent[] = [
       { title: "First Title", text: "First text content" },
       { title: "Second Title", text: "Second text content" },
     ];
 
-    render(<ModalContents content={mockContent} />);
+    render(<ModalContentComponent content={mockContent} />);
 
     expect(screen.getByText("First Title")).toBeInTheDocument();
     expect(screen.getByText("Second Title")).toBeInTheDocument();
@@ -24,7 +27,7 @@ describe("ModalContents Component", () => {
       { title: "Solo Title", text: "Solo text content" },
     ];
 
-    render(<ModalContents content={mockContent} />);
+    render(<ModalContentComponent content={mockContent} />);
 
     expect(screen.getByText("Solo Title")).toBeInTheDocument();
     expect(screen.getByText("Solo text content")).toBeInTheDocument();
@@ -33,7 +36,9 @@ describe("ModalContents Component", () => {
   it("renders nothing when content array is empty", () => {
     const mockContent: ModalContent[] = [];
 
-    const { container } = render(<ModalContents content={mockContent} />);
+    const { container } = render(
+      <ModalContentComponent content={mockContent} />,
+    );
 
     expect(container.firstChild).toHaveClass("bg-ui-grey-100");
     expect(container.firstChild?.childNodes.length).toBe(0);
@@ -45,7 +50,7 @@ describe("ModalContents Component", () => {
       { title: "Second Title", text: "Second text content" },
     ];
 
-    render(<ModalContents content={mockContent} />);
+    render(<ModalContentComponent content={mockContent} />);
 
     expect(screen.getByText("First Title")).toHaveAttribute(
       "id",

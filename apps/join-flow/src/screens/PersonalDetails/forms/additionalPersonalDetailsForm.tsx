@@ -9,10 +9,10 @@ import { TickWithCircle } from "@react-component-library/ui/icons";
 import { useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 
+import { ModalContent } from "@/components/ModalContent";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
 
-import { ModalContents } from "../../../components/modalContents/modalContents";
 import { TextInput } from "../components/textInput";
 import type { AdditionalPersonalDetailsFormProps } from "./formValues";
 
@@ -226,7 +226,7 @@ export const AdditionalPersonalDetailsForm = ({
         buttonText="close"
         buttonType="button"
       >
-        <ModalContents
+        <ModalContent
           content={personalDetailsProps.additionalSection.dobModal}
         />
       </InfoModal>
@@ -238,7 +238,7 @@ export const AdditionalPersonalDetailsForm = ({
         buttonText={personalDetailsProps.additionalSection.modalCloseText}
         buttonType="button"
       >
-        <ModalContents
+        <ModalContent
           content={personalDetailsProps.additionalSection.teleHealthDeviceModal}
         />
       </InfoModal>
