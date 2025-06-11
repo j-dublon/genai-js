@@ -34,7 +34,7 @@ describe("ReviewYourBasket", () => {
       selectedPackage: {
         krakenProductCode: "test-package",
         frontendIdentifier: "test-package-24",
-        termMonths: "24",
+        termMonths: 24,
         selectionIdentifier: "test-selection",
         installationRequired: false,
         appliedPromotionUUIDs: null,

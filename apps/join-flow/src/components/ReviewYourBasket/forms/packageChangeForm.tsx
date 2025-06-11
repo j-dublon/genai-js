@@ -57,10 +57,7 @@ const PackageChangeForm = ({
               {reviewYourBasketText.selectDifferentPlan}
             </option>
             {availablePackages.map((pkg) => (
-              <option
-                key={pkg.frontendIdentifier}
-                value={pkg.frontendIdentifier}
-              >
+              <option key={pkg.id} value={pkg.frontendTitle}>
                 {getOptionLabel(pkg)}
               </option>
             ))}

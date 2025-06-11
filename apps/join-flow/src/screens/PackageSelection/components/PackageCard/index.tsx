@@ -60,7 +60,7 @@ export const PackageCard = ({
 
   return (
     <PromotionCard
-      heading={pkg.frontendIdentifier}
+      heading={pkg.frontendTitle}
       subtitle={packageSelectionPageText.promotionSubtitle}
       features={features}
       mainPrice={convertPenceToPounds(pkg.prices.basePrice)}

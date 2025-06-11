@@ -10,7 +10,8 @@ const mockThreePackages: StoreSelectedPackage[] = [
   {
     krakenProductCode: "BT-150-24M_30",
     frontendIdentifier: "150-24",
-    termMonths: "24",
+    frontendTitle: "C-150",
+    termMonths: 24,
     selectionIdentifier: "0",
     installationRequired: true,
     appliedPromotionUUIDs: [],
@@ -36,7 +37,8 @@ const mockThreePackages: StoreSelectedPackage[] = [
   {
     krakenProductCode: "BT-500-24M_35",
     frontendIdentifier: "500-24",
-    termMonths: "24",
+    frontendTitle: "C-500",
+    termMonths: 24,
     selectionIdentifier: "1",
     installationRequired: true,
     appliedPromotionUUIDs: [],
@@ -62,7 +64,8 @@ const mockThreePackages: StoreSelectedPackage[] = [
   {
     krakenProductCode: "BT-900-24M_41",
     frontendIdentifier: "900-24",
-    termMonths: "24",
+    frontendTitle: "C-900",
+    termMonths: 24,
     selectionIdentifier: "2",
     installationRequired: true,
     appliedPromotionUUIDs: [],
@@ -221,7 +224,7 @@ describe("useSpeedCalculator", () => {
     const mixedTermPackages: StoreSelectedPackage[] = [
       {
         ...mockThreePackages[0],
-        termMonths: "12",
+        termMonths: 12,
       },
       ...mockThreePackages,
     ];

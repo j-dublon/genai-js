@@ -22,7 +22,8 @@ const setupInitialState = (page: Page) => {
             {
               krakenProductCode: "BT-150-12M_38",
               frontendIdentifier: "150-12",
-              termMonths: "12",
+              frontendTitle: "C-150",
+              termMonths: 12,
               selectionIdentifier: "0",
               installationRequired: true,
               appliedPromotionUUIDs: [],
@@ -45,7 +46,8 @@ const setupInitialState = (page: Page) => {
             {
               krakenProductCode: "BT-500-12M_42",
               frontendIdentifier: "500-12",
-              termMonths: "12",
+              frontendTitle: "C-500",
+              termMonths: 12,
               selectionIdentifier: "1",
               installationRequired: true,
               appliedPromotionUUIDs: [],
@@ -68,7 +70,8 @@ const setupInitialState = (page: Page) => {
             {
               krakenProductCode: "BT-900-12M_45",
               frontendIdentifier: "900-12",
-              termMonths: "12",
+              frontendTitle: "C-900",
+              termMonths: 12,
               selectionIdentifier: "2",
               installationRequired: true,
               appliedPromotionUUIDs: [],
@@ -91,7 +94,8 @@ const setupInitialState = (page: Page) => {
             {
               krakenProductCode: "BT-150-24M_38",
               frontendIdentifier: "150-24",
-              termMonths: "24",
+              frontendTitle: "C-150",
+              termMonths: 24,
               selectionIdentifier: "3",
               installationRequired: true,
               appliedPromotionUUIDs: [],
@@ -114,7 +118,8 @@ const setupInitialState = (page: Page) => {
             {
               krakenProductCode: "BT-500-24M_42",
               frontendIdentifier: "500-24",
-              termMonths: "24",
+              frontendTitle: "C-500",
+              termMonths: 24,
               selectionIdentifier: "4",
               installationRequired: true,
               appliedPromotionUUIDs: [],
@@ -137,7 +142,8 @@ const setupInitialState = (page: Page) => {
             {
               krakenProductCode: "BT-900-24M_45",
               frontendIdentifier: "900-24",
-              termMonths: "24",
+              frontendTitle: "C-900",
+              termMonths: 24,
               selectionIdentifier: "5",
               installationRequired: true,
               appliedPromotionUUIDs: [],

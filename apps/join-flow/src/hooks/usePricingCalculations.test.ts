@@ -10,6 +10,7 @@ describe("usePricingCalculations", () => {
   const mockPackage: StoreSelectedPackage = {
     id: "1",
     frontendIdentifier: "Superfast",
+    frontendTitle: "C-150",
     speeds: {
       download: 67,
       upload: 18,
@@ -23,7 +24,7 @@ describe("usePricingCalculations", () => {
       ],
     },
     krakenProductCode: "SUPERFAST_67",
-    termMonths: "18",
+    termMonths: 18,
     selectionIdentifier: "superfast-67",
     installationRequired: false,
   };

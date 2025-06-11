@@ -50,7 +50,8 @@ describe("SummaryBar", () => {
   const mockSelectedPackage: StoreSelectedPackage = {
     krakenProductCode: "BT-150-12M_38",
     frontendIdentifier: "150-12",
-    termMonths: "12",
+    termMonths: 12,
+    frontendTitle: "C-150",
     selectionIdentifier: "0",
     installationRequired: true,
     appliedPromotionUUIDs: [],
@@ -145,7 +146,7 @@ describe("SummaryBar", () => {
         download: 300,
         upload: 50,
       },
-      termMonths: "24",
+      termMonths: 24,
       prices: {
         basePrice: 4500,
         discountedPrice: 4500,

@@ -163,18 +163,30 @@ export type Promotion = {
 export type StoreSelectedPackage = {
   krakenProductCode: string;
   frontendIdentifier: string;
-  termMonths: string;
+  frontendTitle: string;
+  termMonths: number;
   selectionIdentifier: string;
   installationRequired: boolean;
-  appliedPromotionUUIDs?: { id: string | null }[] | null;
+  appliedPromotionUUIDs?:
+    | {
+        id: string | null;
+      }[]
+    | null;
   prices: {
     basePrice: number;
     discountedPrice: number;
     annualPriceRise?:
-      | { price: number; date: string; id?: string | null }[]
+      | {
+          price: number;
+          date: string;
+          id?: string | null;
+        }[]
       | null;
   };
-  speeds: { download: number; upload: number };
+  speeds: {
+    download: number;
+    upload: number;
+  };
   extras?:
     | {
         family: string;
@@ -185,6 +197,7 @@ export type StoreSelectedPackage = {
               description: string;
               price: number;
               selectionIdentifier: string;
+              family: string;
               id?: string | null;
             }[]
           | null;
@@ -198,20 +211,20 @@ export type StoreSelectedPackage = {
             value: number;
             id?: string | null;
             blockName?: string | null;
-            blockType: "giftCard";
+            blockType: "giftCardBlock";
           }
         | {
             promotion: string | Promotion;
             id?: string | null;
             blockName?: string | null;
-            blockType: "promotion";
+            blockType: "promotionBlock";
           }
         | {
             value: number;
             isDiscretionary?: boolean | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: "billCredit";
+            blockType: "billCreditBlock";
           }
       )[]
     | null;

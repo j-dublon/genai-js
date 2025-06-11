@@ -17,7 +17,8 @@ describe("BasketDialog", () => {
   const mockSelectedPackage: StoreSelectedPackage = {
     krakenProductCode: "BT-150-12M_38",
     frontendIdentifier: "150-12",
-    termMonths: "12",
+    termMonths: 12,
+    frontendTitle: "C-150",
     selectionIdentifier: "0",
     installationRequired: true,
     appliedPromotionUUIDs: [],
@@ -76,7 +77,8 @@ describe("BasketDialog", () => {
     {
       krakenProductCode: "BT-300-12M_38",
       frontendIdentifier: "300-12",
-      termMonths: "12",
+      frontendTitle: "C-150",
+      termMonths: 12,
       selectionIdentifier: "1",
       installationRequired: true,
       appliedPromotionUUIDs: [],

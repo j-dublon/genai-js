@@ -44,7 +44,8 @@ export const ChooseYourPackage = () => {
     return quoteResponse.response.products.map((product) => ({
       krakenProductCode: product.krakenProductCode,
       frontendIdentifier: product.frontendIdentifier,
-      termMonths: product.termMonths.toString(),
+      frontendTitle: product.frontendTitle,
+      termMonths: product.termMonths,
       selectionIdentifier: product.selectionIdentifier,
       installationRequired: product.installationRequired,
       appliedPromotionUUIDs: product.appliedPromotionUUIDs || null,
@@ -72,6 +73,7 @@ export const ChooseYourPackage = () => {
               description: availableExtra.description,
               price: availableExtra.price,
               selectionIdentifier: availableExtra.selectionIdentifier,
+              family: extra.family,
               id: availableExtra.id || null,
             })) || null,
           id: extra.id || null,
@@ -93,7 +95,7 @@ export const ChooseYourPackage = () => {
     speedCalculatorText;
 
   const filteredPackages = storeSelectedPackages
-    .filter((pkg) => parseInt(pkg.termMonths) === (is24Month ? 24 : 12))
+    .filter((pkg) => pkg.termMonths === (is24Month ? 24 : 12))
     .sort((a, b) => a.speeds.download - b.speeds.download);
 
   const topSpeedPackage = useTopSpeedPackage(filteredPackages);
@@ -103,11 +105,11 @@ export const ChooseYourPackage = () => {
 
     if (packageDetails) {
       const targetContractLength = isOn ? 24 : 12;
-      if (parseInt(packageDetails.termMonths) !== targetContractLength) {
+      if (packageDetails.termMonths !== targetContractLength) {
         const matchingPackage = storeSelectedPackages.find(
           (pkg) =>
             pkg.speeds.download === packageDetails.speeds.download &&
-            parseInt(pkg.termMonths) === targetContractLength,
+            pkg.termMonths === targetContractLength,
         );
         if (matchingPackage) {
           setPackageDetails(matchingPackage);
@@ -245,8 +247,9 @@ export const ChooseYourPackage = () => {
           <div className="flex gap-3 md:gap-6 lg:gap-13 flex-row-reverse md:flex-row justify-end md:justify-start pr-mobile sm:pr-tablet md:pr-desktop">
             <div className="pr-3 md:hidden block" />
             {filteredPackages.map((pkg, index) => (
+              //to do: The feature package depends needs to be changed on offer or promotion
               <PackageCard
-                key={pkg.frontendIdentifier}
+                key={pkg.id}
                 pkg={pkg}
                 onPackageSelect={handlePackageSelection}
                 onViewDetails={(pkg: StoreSelectedPackage) =>

@@ -9,7 +9,8 @@ import { UpgradeOffer } from "./UpgradeOffer";
 const mockTopSpeedPackage: StoreSelectedPackage = {
   krakenProductCode: "BT-900-12M_45",
   frontendIdentifier: "900-12",
-  termMonths: "12",
+  frontendTitle: "C-900",
+  termMonths: 12,
   selectionIdentifier: "2",
   installationRequired: true,
   appliedPromotionUUIDs: [],
@@ -209,7 +210,7 @@ describe("UpgradeOffer", () => {
     });
     fireEvent.click(dropdown);
 
-    const annualOption = screen.getByText("24");
+    const annualOption = screen.getByText(24);
     fireEvent.click(annualOption);
 
     expect(mockToggle.onChange).toHaveBeenCalledWith(true);

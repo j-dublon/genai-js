@@ -52,7 +52,7 @@ export const useSpeedCalculator = (
 
     // filter to only include 24-month plans, then sort by download speed
     const sortedPackages = broadbandPackages
-      .filter((pkg) => parseInt(pkg.termMonths) === 24)
+      .filter((pkg) => pkg.termMonths === 24)
       .sort((a, b) => a.speeds.download - b.speeds.download);
 
     // if there's only 1 package, return it, or return null if there are no packages

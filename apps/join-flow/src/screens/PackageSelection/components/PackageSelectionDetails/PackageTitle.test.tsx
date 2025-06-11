@@ -8,8 +8,9 @@ describe("PackageTitle", () => {
   it("renders package name and details correctly", () => {
     const mockPackage: StoreSelectedPackage = {
       krakenProductCode: "BT-100-24M_30",
-      frontendIdentifier: "100-24",
-      termMonths: "24",
+      frontendIdentifier: "150-24",
+      frontendTitle: "C-150",
+      termMonths: 24,
       selectionIdentifier: "0",
       installationRequired: true,
       appliedPromotionUUIDs: [],
@@ -35,7 +36,7 @@ describe("PackageTitle", () => {
 
     render(<PackageTitle pkg={mockPackage} />);
 
-    expect(screen.getByText("100-24")).toBeInTheDocument();
+    expect(screen.getByText("C-150")).toBeInTheDocument();
 
     expect(
       screen.getByText("100Mbps full fibre speed, 24-month contract"),

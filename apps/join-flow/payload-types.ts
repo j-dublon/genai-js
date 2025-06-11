@@ -62,7 +62,9 @@ export type SupportedTimezones =
   | "Pacific/Fiji";
 
 export interface Config {
-  auth: { users: UserAuthOperations };
+  auth: {
+    users: UserAuthOperations;
+  };
   blocks: {};
   collections: {
     orders: Order;
@@ -83,8 +85,7 @@ export interface Config {
     promotions: Promotion;
     giftcardCampaigns: GiftcardCampaign;
     media: Media;
-    todo: Todo;
-    page: Page;
+    pages: Page;
     postcodeRecords: PostcodeRecord;
     postcodeLists: PostcodeList;
     postcodeListImports: PostcodeListImport;
@@ -144,8 +145,7 @@ export interface Config {
       | GiftcardCampaignsSelect<false>
       | GiftcardCampaignsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    todo: TodoSelect<false> | TodoSelect<true>;
-    page: PageSelect<false> | PageSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     postcodeRecords: PostcodeRecordsSelect<false> | PostcodeRecordsSelect<true>;
     postcodeLists: PostcodeListsSelect<false> | PostcodeListsSelect<true>;
     postcodeListImports:
@@ -183,7 +183,9 @@ export interface Config {
       | PayloadMigrationsSelect<false>
       | PayloadMigrationsSelect<true>;
   };
-  db: { defaultIDType: string };
+  db: {
+    defaultIDType: string;
+  };
   globals: {
     generalConfig: GeneralConfig;
     PayloadTaskViewer: PayloadTaskViewer;
@@ -195,7 +197,9 @@ export interface Config {
       | PayloadTaskViewerSelect<true>;
   };
   locale: null;
-  user: User & { collection: "users" };
+  user: User & {
+    collection: "users";
+  };
   jobs: {
     tasks: {
       doDatabaseDumps: TaskDoDatabaseDumps;
@@ -203,16 +207,31 @@ export interface Config {
       doPostcodeListImports: TaskDoPostcodeListImports;
       doRewardsAutomations: TaskDoRewardsAutomations;
       doKrakenReferenceDataSync: TaskDoKrakenReferenceDataSync;
-      inline: { input: unknown; output: unknown };
+      inline: {
+        input: unknown;
+        output: unknown;
+      };
     };
     workflows: unknown;
   };
 }
 export interface UserAuthOperations {
-  forgotPassword: { email: string; password: string };
-  login: { email: string; password: string };
-  registerFirstUser: { email: string; password: string };
-  unlock: { email: string; password: string };
+  forgotPassword: {
+    email: string;
+    password: string;
+  };
+  login: {
+    email: string;
+    password: string;
+  };
+  registerFirstUser: {
+    email: string;
+    password: string;
+  };
+  unlock: {
+    email: string;
+    password: string;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -222,6 +241,7 @@ export interface Order {
   id: string;
   krakenAccountNumber: string;
   basket: string | Basket;
+  hardCreditCheck?: (string | null) | CreditCheckExecution;
   updatedAt: string;
   createdAt: string;
 }
@@ -252,12 +272,15 @@ export interface Basket {
      * The identifier of the item on hte quoteLookup that should be selected as a product for this basket
      */
     selectionIdentifier?: string | null;
-    noExtras?: boolean | null;
     /**
      * An array of possible extras for the selected product on the quoteLookup
      */
     extras?:
-      | { family: string; selectionIdentifier: string; id?: string | null }[]
+      | {
+          family: string;
+          selectionIdentifier: string;
+          id?: string | null;
+        }[]
       | null;
   };
   engineer?: {
@@ -395,18 +418,30 @@ export interface QuoteLookup {
         | {
             krakenProductCode: string;
             frontendIdentifier: string;
+            frontendTitle: string;
             termMonths: number;
             selectionIdentifier: string;
             installationRequired: boolean;
-            appliedPromotionUUIDs?: { id: string | null }[] | null;
+            appliedPromotionUUIDs?:
+              | {
+                  id: string | null;
+                }[]
+              | null;
             prices: {
               basePrice: number;
               discountedPrice: number;
               annualPriceRise?:
-                | { price: number; date: string; id?: string | null }[]
+                | {
+                    price: number;
+                    date: string;
+                    id?: string | null;
+                  }[]
                 | null;
             };
-            speeds: { download: number; upload: number };
+            speeds: {
+              download: number;
+              upload: number;
+            };
             extras?:
               | {
                   family: string;
@@ -438,9 +473,27 @@ export interface QuoteLookup {
                        * Value of the gift card
                        */
                       value: number;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
                       id?: string | null;
                       blockName?: string | null;
-                      blockType: "giftCard";
+                      blockType: "giftCardBlock";
                     }
                   | {
                       /**
@@ -449,7 +502,7 @@ export interface QuoteLookup {
                       promotion: string | Promotion;
                       id?: string | null;
                       blockName?: string | null;
-                      blockType: "promotion";
+                      blockType: "promotionBlock";
                     }
                   | {
                       /**
@@ -460,9 +513,27 @@ export interface QuoteLookup {
                        * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
                        */
                       isDiscretionary?: boolean | null;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
                       id?: string | null;
                       blockName?: string | null;
-                      blockType: "billCredit";
+                      blockType: "billCreditBlock";
                     }
                 )[]
               | null;
@@ -594,7 +665,12 @@ export interface QuoteLookup {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -679,7 +755,12 @@ export interface AffiliateSession {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -702,13 +783,19 @@ export interface Affiliate {
    * This is the way to tie this affiliate to Kraken, It is a subdomain for an affiliate link in Kraken, You can have multiple affiliate links that all need the same payload config. this is the SUBDOMAIN for an affiliate link.
    */
   krakenSubdomainIdentifiers?:
-    | { identifier: string; id?: string | null }[]
+    | {
+        identifier: string;
+        id?: string | null;
+      }[]
     | null;
   /**
    * This is the way to tie this affiliate to Kraken but via the organisation - i.e. you can have multiple affiliate links to one organisation in Kraken, it may be simpler if you just want all links to have the same config to use this identifier rather than multiple subdomains. THIS VALID IS THE ORGANISATION ID (which is a number) NOT the name.
    */
   krakenOrganisationIdentifiers?:
-    | { identifier: string; id?: string | null }[]
+    | {
+        identifier: string;
+        id?: string | null;
+      }[]
     | null;
   /**
    * Should the credit check results be used to reject, or should we ignore them. Note the credit check will always run, its just the results won't be used if this is not selected
@@ -739,10 +826,13 @@ export interface Affiliate {
      * This is an inclusive list of the addresses that the product is available at. You could use this for example to make a set of products only work for example for staff at Cuckoo, or those in Hull. It does not have anything to do with the discounts, it is to do with availability. Multiple lists just add upp - i.e. if your address appears in at least 1 you will qualify. NOTE if you specify multiple lists, the customer needs to appear in ANY ONE - not ALL
      */
     postcodeInclusions?:
-      | { postcodeList: string | PostcodeList; id?: string | null }[]
+      | {
+          postcodeList: string | PostcodeList;
+          id?: string | null;
+        }[]
       | null;
     /**
-     * These are offers that are applied based on specific postcodes. If multiple are specified and an address qualifies for more than 1, the top one is used. Order matters. Think of these are offers ontop of the base price if you win the postcode lottery based on this config
+     * These are offers that are applied based on specific postcodes. If multiple are specified and an address qualifies for more than 1, the top one is used. Order matters. Think of these are offers ontop of the base price if you win the postcode lottery based on this config. Note that if an address qualifies for this, and there is a main offer of the same type (i.e. giftcard on postcode, giftcard on main offer) the postcode based one will always win.
      */
     postcodeOffers?:
       | {
@@ -760,9 +850,27 @@ export interface Affiliate {
                  * Value of the gift card
                  */
                 value: number;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: "giftCard";
+                blockType: "giftCardBlock";
               }
             | {
                 /**
@@ -771,7 +879,7 @@ export interface Affiliate {
                 promotion: string | Promotion;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: "promotion";
+                blockType: "promotionBlock";
               }
             | {
                 /**
@@ -782,9 +890,27 @@ export interface Affiliate {
                  * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
                  */
                 isDiscretionary?: boolean | null;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: "billCredit";
+                blockType: "billCreditBlock";
               }
           )[];
           id?: string | null;
@@ -808,9 +934,27 @@ export interface Affiliate {
                  * Value of the gift card
                  */
                 value: number;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: "giftCard";
+                blockType: "giftCardBlock";
               }
             | {
                 /**
@@ -819,7 +963,7 @@ export interface Affiliate {
                 promotion: string | Promotion;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: "promotion";
+                blockType: "promotionBlock";
               }
             | {
                 /**
@@ -830,9 +974,27 @@ export interface Affiliate {
                  * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
                  */
                 isDiscretionary?: boolean | null;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
                 id?: string | null;
                 blockName?: string | null;
-                blockType: "billCredit";
+                blockType: "billCreditBlock";
               }
           )[]
         | null;
@@ -863,11 +1025,18 @@ export interface Product {
     | "500-24"
     | "900-24";
   /**
+   * This is used in product cards on the frontend as the title.
+   */
+  frontendTitle: string;
+  /**
    * This is the identifier used by to pick the correct Kraken product that aligns with this payload record. It should be a string that when matched with startsWith (i.e. krakenProductCode.startsWith) will match 1 product in Kraken.
    */
   krakenProductCodeFragment: string;
-  term: "24" | "12";
-  speeds: { upload: number; download: number };
+  term: 24 | 12;
+  speeds: {
+    upload: number;
+    download: number;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -944,7 +1113,10 @@ export interface Promotion {
  */
 export interface AddressLookup {
   id: string;
-  inputs: { requestProcessingType: "async" | "sync"; postcode: string };
+  inputs: {
+    requestProcessingType: "async" | "sync";
+    postcode: string;
+  };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
     apiSuccess?: {
@@ -989,7 +1161,12 @@ export interface AddressLookup {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1076,7 +1253,12 @@ export interface EngineerAppointment {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1105,7 +1287,9 @@ export interface SwitchMatchLookup {
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
-    apiSuccess?: { switchOrderReference?: string | null };
+    apiSuccess?: {
+      switchOrderReference?: string | null;
+    };
     apiErrors?:
       | (
           | {
@@ -1338,7 +1522,12 @@ export interface SwitchMatchLookup {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1349,10 +1538,15 @@ export interface SwitchMatchLookup {
  */
 export interface ReferralSession {
   id: string;
-  inputs: { requestProcessingType: "async" | "sync"; code: string };
+  inputs: {
+    requestProcessingType: "async" | "sync";
+    code: string;
+  };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
-    apiSuccess?: { referrerFirstName?: string | null };
+    apiSuccess?: {
+      referrerFirstName?: string | null;
+    };
     apiErrors?:
       | (
           | {
@@ -1369,7 +1563,12 @@ export interface ReferralSession {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1404,7 +1603,12 @@ export interface EmailValidator {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1452,6 +1656,10 @@ export interface CreditCheckExecution {
       postcode: string;
       id?: string | null;
     }[];
+    /**
+     * The date of birth to pass to Transunion to improve accuracy for credit check.
+     */
+    dateOfBirth: string;
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
@@ -1464,8 +1672,10 @@ export interface CreditCheckExecution {
       /**
        * The report data returned from Transunion
        */
-      report?:
-        | { [k: string]: unknown }
+      creditReport?:
+        | {
+            [k: string]: unknown;
+          }
         | unknown[]
         | string
         | number
@@ -1516,7 +1726,12 @@ export interface CreditCheckExecution {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1566,21 +1781,33 @@ export interface VulnerabilityAndAccessibility {
       selected?: boolean | null;
       krakenIdentifier?: string | null;
     };
-    cics?: { selected?: boolean | null; krakenIdentifier?: string | null };
+    cics?: {
+      selected?: boolean | null;
+      krakenIdentifier?: string | null;
+    };
     termsAndConditions?: {
       selected?: boolean | null;
       krakenIdentifier?: string | null;
     };
   };
   contactPreferences?: {
-    audio?: { selected?: boolean | null; krakenIdentifier?: string | null };
+    audio?: {
+      selected?: boolean | null;
+      krakenIdentifier?: string | null;
+    };
     largePrint?: {
       selected?: boolean | null;
       krakenIdentifier?: string | null;
     };
-    braille?: { selected?: boolean | null; krakenIdentifier?: string | null };
+    braille?: {
+      selected?: boolean | null;
+      krakenIdentifier?: string | null;
+    };
   };
-  other?: { content?: string | null; krakenIdentifier?: string | null };
+  other?: {
+    content?: string | null;
+    krakenIdentifier?: string | null;
+  };
   nominatedPerson?: {
     name?: string | null;
     phone?: string | null;
@@ -1618,6 +1845,7 @@ export interface CuckooGraphOrder {
   propertyType?: string | null;
   offerId?: string | null;
   offerType?: string | null;
+  offerValue?: number | null;
   marketingConsent?: boolean | null;
   referralType?: string | null;
   referralCode?: string | null;
@@ -1682,7 +1910,10 @@ export interface RewardsAutomation {
     | null;
   krakenAccountNumber: string;
   order?: (string | null) | Order;
-  award?: { awarded?: boolean | null; awardedDateTime?: string | null };
+  award?: {
+    awarded?: boolean | null;
+    awardedDateTime?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1728,37 +1959,61 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "todo".
- */
-export interface Todo {
-  id: string;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page".
+ * via the `definition` "pages".
  */
 export interface Page {
   id: string;
-  slug?: string | null;
-  "page-contents"?:
+  slug: string;
+  content: (
     | {
-        "bannerhero-video-src"?: string | null;
-        "bannerhero-video-type"?: "video/mp4" | null;
-        "bannerhero-headingText-text"?: string | null;
-        "bannerhero-headingText-body"?: string | null;
-        "bannerhero-postCode-placeholderText"?: string | null;
-        "bannerhero-postCode-buttonText"?: string | null;
-        "bannerhero-trustpilot-option"?: ("horizontal" | "vertical") | null;
-        "bannerhero-tick-list"?:
-          | { text?: string | null; id?: string | null }[]
-          | null;
+        video: string | Media;
+        heading: string;
+        body: string;
+        postCodeButtonText: string;
+        postCodePlaceholderText: string;
+        list: {
+          text?: string | null;
+          id?: string | null;
+        }[];
         id?: string | null;
         blockName?: string | null;
         blockType: "bannerHeroBlock";
-      }[]
-    | null;
+      }
+    | {
+        heading: string;
+        paragraph: string;
+        blocks: {
+          heading: string;
+          list: {
+            listItem?: string | null;
+            id?: string | null;
+          }[];
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "inlineContentWithItemsBlock";
+      }
+    | {
+        overlayImage?: (string | null) | Media;
+        backgroundImage: string | Media;
+        promotionImage: string | Media;
+        content: {
+          "left column": {
+            content?: string | null;
+            id?: string | null;
+          }[];
+          paragraph: string;
+          buttonText?: string | null;
+          id?: string | null;
+        }[];
+        responsiveImage?: (string | null) | Media;
+        responsiveParagraph: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "inlineImageWithContentBlock";
+      }
+  )[];
   updatedAt: string;
   createdAt: string;
 }
@@ -1917,7 +2172,9 @@ export interface ManualTaskRunner {
    * Pass any JSON into the task as input
    */
   taskJSON:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
@@ -1939,14 +2196,18 @@ export interface ErrorLog {
   level: "error" | "warn" | "info" | "debug";
   message: string;
   context?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
     | boolean
     | null;
   error?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
@@ -1969,14 +2230,18 @@ export interface ApiLog {
   id: string;
   identifier: string;
   response:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
     | boolean
     | null;
   input?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
@@ -1995,16 +2260,30 @@ export interface ApiLog {
 export interface ApiTest {
   id: string;
   input:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
     | boolean
     | null;
-  steps?: { value?: string | null; id?: string | null }[] | null;
-  skips?: { value?: string | null; id?: string | null }[] | null;
+  steps?:
+    | {
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  skips?:
+    | {
+        value?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   errorsData?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
@@ -2137,7 +2416,12 @@ export interface RegisterOfInterestSubmission {
             }
         )[]
       | null;
-    apiTraceIDs?: { value?: string | null; id?: string | null }[] | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -2203,14 +2487,18 @@ export interface PayloadJob {
    * Input data provided to the job
    */
   input?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
     | boolean
     | null;
   taskStatus?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
@@ -2226,7 +2514,9 @@ export interface PayloadJob {
    * If hasError is true, this is the error that caused it
    */
   error?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
@@ -2248,14 +2538,18 @@ export interface PayloadJob {
           | "doKrakenReferenceDataSync";
         taskID: string;
         input?:
-          | { [k: string]: unknown }
+          | {
+              [k: string]: unknown;
+            }
           | unknown[]
           | string
           | number
           | boolean
           | null;
         output?:
-          | { [k: string]: unknown }
+          | {
+              [k: string]: unknown;
+            }
           | unknown[]
           | string
           | number
@@ -2263,7 +2557,9 @@ export interface PayloadJob {
           | null;
         state: "failed" | "succeeded";
         error?:
-          | { [k: string]: unknown }
+          | {
+              [k: string]: unknown;
+            }
           | unknown[]
           | string
           | number
@@ -2295,7 +2591,10 @@ export interface PayloadJob {
 export interface PayloadLockedDocument {
   id: string;
   document?:
-    | ({ relationTo: "orders"; value: string | Order } | null)
+    | ({
+        relationTo: "orders";
+        value: string | Order;
+      } | null)
     | ({
         relationTo: "cuckooGraphOrders";
         value: string | CuckooGraphOrder;
@@ -2304,18 +2603,30 @@ export interface PayloadLockedDocument {
         relationTo: "rewardsAutomations";
         value: string | RewardsAutomation;
       } | null)
-    | ({ relationTo: "baskets"; value: string | Basket } | null)
-    | ({ relationTo: "addressLookups"; value: string | AddressLookup } | null)
+    | ({
+        relationTo: "baskets";
+        value: string | Basket;
+      } | null)
+    | ({
+        relationTo: "addressLookups";
+        value: string | AddressLookup;
+      } | null)
     | ({
         relationTo: "affiliateSessions";
         value: string | AffiliateSession;
       } | null)
-    | ({ relationTo: "quoteLookups"; value: string | QuoteLookup } | null)
+    | ({
+        relationTo: "quoteLookups";
+        value: string | QuoteLookup;
+      } | null)
     | ({
         relationTo: "engineerAppointments";
         value: string | EngineerAppointment;
       } | null)
-    | ({ relationTo: "emailValidators"; value: string | EmailValidator } | null)
+    | ({
+        relationTo: "emailValidators";
+        value: string | EmailValidator;
+      } | null)
     | ({
         relationTo: "creditCheckExecutions";
         value: string | CreditCheckExecution;
@@ -2332,18 +2643,38 @@ export interface PayloadLockedDocument {
         relationTo: "vulnerabilityAndAccessibility";
         value: string | VulnerabilityAndAccessibility;
       } | null)
-    | ({ relationTo: "affiliates"; value: string | Affiliate } | null)
-    | ({ relationTo: "products"; value: string | Product } | null)
-    | ({ relationTo: "promotions"; value: string | Promotion } | null)
+    | ({
+        relationTo: "affiliates";
+        value: string | Affiliate;
+      } | null)
+    | ({
+        relationTo: "products";
+        value: string | Product;
+      } | null)
+    | ({
+        relationTo: "promotions";
+        value: string | Promotion;
+      } | null)
     | ({
         relationTo: "giftcardCampaigns";
         value: string | GiftcardCampaign;
       } | null)
-    | ({ relationTo: "media"; value: string | Media } | null)
-    | ({ relationTo: "todo"; value: string | Todo } | null)
-    | ({ relationTo: "page"; value: string | Page } | null)
-    | ({ relationTo: "postcodeRecords"; value: string | PostcodeRecord } | null)
-    | ({ relationTo: "postcodeLists"; value: string | PostcodeList } | null)
+    | ({
+        relationTo: "media";
+        value: string | Media;
+      } | null)
+    | ({
+        relationTo: "pages";
+        value: string | Page;
+      } | null)
+    | ({
+        relationTo: "postcodeRecords";
+        value: string | PostcodeRecord;
+      } | null)
+    | ({
+        relationTo: "postcodeLists";
+        value: string | PostcodeList;
+      } | null)
     | ({
         relationTo: "postcodeListImports";
         value: string | PostcodeListImport;
@@ -2356,17 +2687,38 @@ export interface PayloadLockedDocument {
         relationTo: "krakenSwitchMatchServiceProviders";
         value: string | KrakenSwitchMatchServiceProvider;
       } | null)
-    | ({ relationTo: "users"; value: string | User } | null)
-    | ({ relationTo: "roles"; value: string | Role } | null)
+    | ({
+        relationTo: "users";
+        value: string | User;
+      } | null)
+    | ({
+        relationTo: "roles";
+        value: string | Role;
+      } | null)
     | ({
         relationTo: "manualTaskRunner";
         value: string | ManualTaskRunner;
       } | null)
-    | ({ relationTo: "errorLogs"; value: string | ErrorLog } | null)
-    | ({ relationTo: "apiLogs"; value: string | ApiLog } | null)
-    | ({ relationTo: "apiTests"; value: string | ApiTest } | null)
-    | ({ relationTo: "databaseExports"; value: string | DatabaseExport } | null)
-    | ({ relationTo: "databaseImports"; value: string | DatabaseImport } | null)
+    | ({
+        relationTo: "errorLogs";
+        value: string | ErrorLog;
+      } | null)
+    | ({
+        relationTo: "apiLogs";
+        value: string | ApiLog;
+      } | null)
+    | ({
+        relationTo: "apiTests";
+        value: string | ApiTest;
+      } | null)
+    | ({
+        relationTo: "databaseExports";
+        value: string | DatabaseExport;
+      } | null)
+    | ({
+        relationTo: "databaseImports";
+        value: string | DatabaseImport;
+      } | null)
     | ({
         relationTo: "lambdaPrototype";
         value: string | LambdaPrototype;
@@ -2375,10 +2727,19 @@ export interface PayloadLockedDocument {
         relationTo: "registerOfInterestSubmissions";
         value: string | RegisterOfInterestSubmission;
       } | null)
-    | ({ relationTo: "WhatsNew"; value: string | WhatsNew } | null)
-    | ({ relationTo: "payload-jobs"; value: string | PayloadJob } | null);
+    | ({
+        relationTo: "WhatsNew";
+        value: string | WhatsNew;
+      } | null)
+    | ({
+        relationTo: "payload-jobs";
+        value: string | PayloadJob;
+      } | null);
   globalSlug?: string | null;
-  user: { relationTo: "users"; value: string | User };
+  user: {
+    relationTo: "users";
+    value: string | User;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -2388,10 +2749,15 @@ export interface PayloadLockedDocument {
  */
 export interface PayloadPreference {
   id: string;
-  user: { relationTo: "users"; value: string | User };
+  user: {
+    relationTo: "users";
+    value: string | User;
+  };
   key?: string | null;
   value?:
-    | { [k: string]: unknown }
+    | {
+        [k: string]: unknown;
+      }
     | unknown[]
     | string
     | number
@@ -2418,6 +2784,7 @@ export interface PayloadMigration {
 export interface OrdersSelect<T extends boolean = true> {
   krakenAccountNumber?: T;
   basket?: T;
+  hardCreditCheck?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2445,6 +2812,7 @@ export interface CuckooGraphOrdersSelect<T extends boolean = true> {
   propertyType?: T;
   offerId?: T;
   offerType?: T;
+  offerValue?: T;
   marketingConsent?: T;
   referralType?: T;
   referralCode?: T;
@@ -2461,30 +2829,63 @@ export interface RewardsAutomationsSelect<T extends boolean = true> {
     | {
         rewardFrequencyScheduleBlock?:
           | T
-          | { frequency?: T; id?: T; blockName?: T };
-        rewardFrequencyImmediateBlock?: T | { id?: T; blockName?: T };
+          | {
+              frequency?: T;
+              id?: T;
+              blockName?: T;
+            };
+        rewardFrequencyImmediateBlock?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
       };
   type?:
     | T
     | {
         rewardTypeBillCreditBlock?:
           | T
-          | { value?: T; reason?: T; id?: T; blockName?: T };
+          | {
+              value?: T;
+              reason?: T;
+              id?: T;
+              blockName?: T;
+            };
         rewardTypeGiftCardBlock?:
           | T
-          | { value?: T; campaign?: T; id?: T; blockName?: T };
+          | {
+              value?: T;
+              campaign?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   conditions?:
     | T
     | {
         rewardConditionsAccountAgeBlock?:
           | T
-          | { age?: T; id?: T; blockName?: T };
-        rewardConditionsAccountNotInDebtBlock?: T | { id?: T; blockName?: T };
+          | {
+              age?: T;
+              id?: T;
+              blockName?: T;
+            };
+        rewardConditionsAccountNotInDebtBlock?:
+          | T
+          | {
+              id?: T;
+              blockName?: T;
+            };
       };
   krakenAccountNumber?: T;
   order?: T;
-  award?: T | { awarded?: T; awardedDateTime?: T };
+  award?:
+    | T
+    | {
+        awarded?: T;
+        awardedDateTime?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2509,25 +2910,79 @@ export interface BasketsSelect<T extends boolean = true> {
     | {
         quoteLookup?: T;
         selectionIdentifier?: T;
-        noExtras?: T;
-        extras?: T | { family?: T; selectionIdentifier?: T; id?: T };
+        extras?:
+          | T
+          | {
+              family?: T;
+              selectionIdentifier?: T;
+              id?: T;
+            };
       };
-  engineer?: T | { engineerAppointment?: T; selectionIdentifier?: T };
+  engineer?:
+    | T
+    | {
+        engineerAppointment?: T;
+        selectionIdentifier?: T;
+      };
   goLiveDate?: T;
   addressHistory?:
     | T
-    | { line1?: T; line2?: T; line3?: T; postcode?: T; id?: T };
-  billingAddress?: T | { line1?: T; line2?: T; line3?: T; postcode?: T };
-  payment?: T | { accountHolder?: T; accountNumber?: T; sortCode?: T };
+    | {
+        line1?: T;
+        line2?: T;
+        line3?: T;
+        postcode?: T;
+        id?: T;
+      };
+  billingAddress?:
+    | T
+    | {
+        line1?: T;
+        line2?: T;
+        line3?: T;
+        postcode?: T;
+      };
+  payment?:
+    | T
+    | {
+        accountHolder?: T;
+        accountNumber?: T;
+        sortCode?: T;
+      };
   personalDetails?:
     | T
-    | { firstName?: T; lastName?: T; dateOfBirth?: T; email?: T; phone?: T };
+    | {
+        firstName?: T;
+        lastName?: T;
+        dateOfBirth?: T;
+        email?: T;
+        phone?: T;
+      };
   switchMatchLookup?: T;
   referralSession?: T;
-  sales?: T | { discretionaryBillCreditsAmount?: T };
-  emailValidation?: T | { emailHasBeenValidated?: T; emailValidators?: T };
-  creditCheck?: T | { creditCheckSuccess?: T; creditChecks?: T };
-  cics?: T | { summaryHref?: T; informationHref?: T };
+  sales?:
+    | T
+    | {
+        discretionaryBillCreditsAmount?: T;
+      };
+  emailValidation?:
+    | T
+    | {
+        emailHasBeenValidated?: T;
+        emailValidators?: T;
+      };
+  creditCheck?:
+    | T
+    | {
+        creditCheckSuccess?: T;
+        creditChecks?: T;
+      };
+  cics?:
+    | T
+    | {
+        summaryHref?: T;
+        informationHref?: T;
+      };
   vulnerabilityAndAccessibility?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2537,7 +2992,12 @@ export interface BasketsSelect<T extends boolean = true> {
  * via the `definition` "addressLookups_select".
  */
 export interface AddressLookupsSelect<T extends boolean = true> {
-  inputs?: T | { requestProcessingType?: T; postcode?: T };
+  inputs?:
+    | T
+    | {
+        requestProcessingType?: T;
+        postcode?: T;
+      };
   outputs?:
     | T
     | {
@@ -2553,7 +3013,13 @@ export interface AddressLookupsSelect<T extends boolean = true> {
                     line2?: T;
                     line3?: T;
                     postcode?: T;
-                    identifiers?: T | { value?: T; scheme?: T; id?: T };
+                    identifiers?:
+                      | T
+                      | {
+                          value?: T;
+                          scheme?: T;
+                          id?: T;
+                        };
                     id?: T;
                   };
             };
@@ -2562,13 +3028,32 @@ export interface AddressLookupsSelect<T extends boolean = true> {
           | {
               "KT-CT-4410KrakenAddressLookupBadPostcode"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               AddressLookupNoAddressesAtPostcode?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2578,7 +3063,12 @@ export interface AddressLookupsSelect<T extends boolean = true> {
  * via the `definition` "affiliateSessions_select".
  */
 export interface AffiliateSessionsSelect<T extends boolean = true> {
-  inputs?: T | { requestProcessingType?: T; subdomain?: T };
+  inputs?:
+    | T
+    | {
+        requestProcessingType?: T;
+        subdomain?: T;
+      };
   outputs?:
     | T
     | {
@@ -2597,31 +3087,74 @@ export interface AffiliateSessionsSelect<T extends boolean = true> {
           | {
               "KT-CT-7713KrakenUnableToLoadAffiliateLinkBadSubdomain"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-7718KrakenUnableToLoadAffiliateLinkExpired"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-7803KrakenUnableToLoadApiExceptionIdInvalid"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               AffiliateSessionUnableToLoadLinkData?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               AffiliateSessionUnableToStartSession?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               AffiliateSessionUnableToLoadCuckooData?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               AffiliateSessionInactive?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               AffiliateSessionExpired?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2652,18 +3185,34 @@ export interface QuoteLookupsSelect<T extends boolean = true> {
                 | {
                     krakenProductCode?: T;
                     frontendIdentifier?: T;
+                    frontendTitle?: T;
                     termMonths?: T;
                     selectionIdentifier?: T;
                     installationRequired?: T;
-                    appliedPromotionUUIDs?: T | { id?: T };
+                    appliedPromotionUUIDs?:
+                      | T
+                      | {
+                          id?: T;
+                        };
                     prices?:
                       | T
                       | {
                           basePrice?: T;
                           discountedPrice?: T;
-                          annualPriceRise?: T | { price?: T; date?: T; id?: T };
+                          annualPriceRise?:
+                            | T
+                            | {
+                                price?: T;
+                                date?: T;
+                                id?: T;
+                              };
                         };
-                    speeds?: T | { download?: T; upload?: T };
+                    speeds?:
+                      | T
+                      | {
+                          download?: T;
+                          upload?: T;
+                        };
                     extras?:
                       | T
                       | {
@@ -2684,22 +3233,60 @@ export interface QuoteLookupsSelect<T extends boolean = true> {
                     offers?:
                       | T
                       | {
-                          giftCard?:
+                          giftCardBlock?:
                             | T
                             | {
                                 campaign?: T;
                                 value?: T;
+                                conditions?:
+                                  | T
+                                  | {
+                                      rewardConditionsAccountAgeBlock?:
+                                        | T
+                                        | {
+                                            age?: T;
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      rewardConditionsAccountNotInDebtBlock?:
+                                        | T
+                                        | {
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                    };
                                 id?: T;
                                 blockName?: T;
                               };
-                          promotion?:
+                          promotionBlock?:
                             | T
-                            | { promotion?: T; id?: T; blockName?: T };
-                          billCredit?:
+                            | {
+                                promotion?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          billCreditBlock?:
                             | T
                             | {
                                 value?: T;
                                 isDiscretionary?: T;
+                                conditions?:
+                                  | T
+                                  | {
+                                      rewardConditionsAccountAgeBlock?:
+                                        | T
+                                        | {
+                                            age?: T;
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      rewardConditionsAccountNotInDebtBlock?:
+                                        | T
+                                        | {
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                    };
                                 id?: T;
                                 blockName?: T;
                               };
@@ -2712,64 +3299,151 @@ export interface QuoteLookupsSelect<T extends boolean = true> {
           | {
               "KT-CT-4410KrakenAddressLookupBadPostcode"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4616KrakenUnableToCreateQuote"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4627KrakenNoProductsAvailableForProperty"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4620KrakenUnableToLoadQuote"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4619KrakenUnableToLoadQuoteBadQuoteCode"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupCouldNotLoadAffiliateSession?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupCouldNotLoadAddressLookup?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupAddressLookupInvalidState?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupInvalidSelectionIdentifier?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupKrakenCreateTelcoError?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupResultPollingTimeout?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupKrakenPollingError?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupKrakenRetrievalError?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupKrakenFormatError?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupNoProductsAvailableAtAddress?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupNoProductsAvailableForAffiliate?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupNoProductsAvailableForAffiliateAddress?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupAffiliateSessionConfigInvalidNoAffiliate?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupBadConfiguration?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2779,7 +3453,12 @@ export interface QuoteLookupsSelect<T extends boolean = true> {
  * via the `definition` "engineerAppointments_select".
  */
 export interface EngineerAppointmentsSelect<T extends boolean = true> {
-  inputs?: T | { requestProcessingType?: T; quoteLookup?: T };
+  inputs?:
+    | T
+    | {
+        requestProcessingType?: T;
+        quoteLookup?: T;
+      };
   outputs?:
     | T
     | {
@@ -2801,33 +3480,76 @@ export interface EngineerAppointmentsSelect<T extends boolean = true> {
         apiErrors?:
           | T
           | {
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4182KrakenRequestedInstallationDateNotValid"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4619KrakenUnableToLoadQuoteBadQuoteCode"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4620KrakenUnableToLoadQuote"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-CT-4916KrakenUnableToLookUpAppointments"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               EngineerAppointmentsInvalidQuoteLookup?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               EngineerAppointmentsMalformatedKrakenResponse?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               EngineerAppointmentsNonAvailable?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               EngineerAppointmentsCouldNotLoadQuoteLookup?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2837,7 +3559,13 @@ export interface EngineerAppointmentsSelect<T extends boolean = true> {
  * via the `definition` "emailValidators_select".
  */
 export interface EmailValidatorsSelect<T extends boolean = true> {
-  inputs?: T | { requestProcessingType?: T; email?: T; code?: T };
+  inputs?:
+    | T
+    | {
+        requestProcessingType?: T;
+        email?: T;
+        code?: T;
+      };
   outputs?:
     | T
     | {
@@ -2846,12 +3574,27 @@ export interface EmailValidatorsSelect<T extends boolean = true> {
         apiErrors?:
           | T
           | {
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               EmailValidationBadInput?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2871,34 +3614,79 @@ export interface CreditCheckExecutionsSelect<T extends boolean = true> {
         email?: T;
         addresses?:
           | T
-          | { line1?: T; line2?: T; line3?: T; postcode?: T; id?: T };
+          | {
+              line1?: T;
+              line2?: T;
+              line3?: T;
+              postcode?: T;
+              id?: T;
+            };
+        dateOfBirth?: T;
       };
   outputs?:
     | T
     | {
         state?: T;
-        apiSuccess?: T | { hash?: T; creditScore?: T; report?: T; status?: T };
+        apiSuccess?:
+          | T
+          | {
+              hash?: T;
+              creditScore?: T;
+              creditReport?: T;
+              status?: T;
+            };
         apiErrors?:
           | T
           | {
               CreditCheckNoMatchForAddress?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               CreditCheckFailed?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               CreditCheckCreateBadInput?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               CreditCheckRecordExists?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               CreditCheckUnableToLoadData?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -2921,80 +3709,287 @@ export interface SwitchMatchLookupsSelect<T extends boolean = true> {
     | T
     | {
         state?: T;
-        apiSuccess?: T | { switchOrderReference?: T };
+        apiSuccess?:
+          | T
+          | {
+              switchOrderReference?: T;
+            };
         apiErrors?:
           | T
           | {
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1101?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1102?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1103?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1104?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1105?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1106?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1107?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1108?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1109?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1110?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1111?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1112?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1113?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1114?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1115?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1116?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1117?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1118?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1119?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1120?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1121?: T | { errorMessage?: T; id?: T; blockName?: T };
-              TOTSCO1122?: T | { errorMessage?: T; id?: T; blockName?: T };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1101?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1102?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1103?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1104?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1105?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1106?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1107?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1108?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1109?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1110?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1111?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1112?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1113?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1114?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1115?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1116?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1117?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1118?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1119?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1120?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1121?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              TOTSCO1122?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchBadFormatRequestID?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchBadFormatOrderReference?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchPollingTimeout?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchCouldNotLoadBasket?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchNoQuoteLookupOnBasket?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchNoAddressLookupOnQuote?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchNoAddressOnQuote?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               SwitchMatchNoLastNameOnBasket?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-GB-10603KrakenEmptyPostcodeAddress"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-GB-10604KrakenBadUPRNLength"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-GB-10605KrakenBadUPRNFormat"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-GB-10606KrakenSwitchMatchBadPostcode"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-GB-10607KrakenNoServices"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-GB-10608KrakenBadSurname"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               "KT-GB-10609KrakenInvalidLosingProviderId"?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -3004,21 +3999,45 @@ export interface SwitchMatchLookupsSelect<T extends boolean = true> {
  * via the `definition` "referralSessions_select".
  */
 export interface ReferralSessionsSelect<T extends boolean = true> {
-  inputs?: T | { requestProcessingType?: T; code?: T };
+  inputs?:
+    | T
+    | {
+        requestProcessingType?: T;
+        code?: T;
+      };
   outputs?:
     | T
     | {
         state?: T;
-        apiSuccess?: T | { referrerFirstName?: T };
+        apiSuccess?:
+          | T
+          | {
+              referrerFirstName?: T;
+            };
         apiErrors?:
           | T
           | {
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               ReferralCodeNotFound?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -3031,33 +4050,113 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
   accessibilityOptions?:
     | T
     | {
-        blindVisionImpaired?: T | { selected?: T; krakenIdentifier?: T };
-        deafOrHardOfHearing?: T | { selected?: T; krakenIdentifier?: T };
-        neurodivergent?: T | { selected?: T; krakenIdentifier?: T };
-        learningDisability?: T | { selected?: T; krakenIdentifier?: T };
-        physicalIllness?: T | { selected?: T; krakenIdentifier?: T };
-        physicalDisability?: T | { selected?: T; krakenIdentifier?: T };
-        communicationDifficulties?: T | { selected?: T; krakenIdentifier?: T };
-        otherIllness?: T | { selected?: T; krakenIdentifier?: T };
+        blindVisionImpaired?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        deafOrHardOfHearing?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        neurodivergent?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        learningDisability?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        physicalIllness?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        physicalDisability?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        communicationDifficulties?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        otherIllness?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
       };
   contentTypes?:
     | T
     | {
-        monthlyBills?: T | { selected?: T; krakenIdentifier?: T };
-        cics?: T | { selected?: T; krakenIdentifier?: T };
-        termsAndConditions?: T | { selected?: T; krakenIdentifier?: T };
+        monthlyBills?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        cics?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        termsAndConditions?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
       };
   contactPreferences?:
     | T
     | {
-        audio?: T | { selected?: T; krakenIdentifier?: T };
-        largePrint?: T | { selected?: T; krakenIdentifier?: T };
-        braille?: T | { selected?: T; krakenIdentifier?: T };
+        audio?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        largePrint?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
+        braille?:
+          | T
+          | {
+              selected?: T;
+              krakenIdentifier?: T;
+            };
       };
-  other?: T | { content?: T; krakenIdentifier?: T };
+  other?:
+    | T
+    | {
+        content?: T;
+        krakenIdentifier?: T;
+      };
   nominatedPerson?:
     | T
-    | { name?: T; phone?: T; email?: T; krakenIdentifier?: T };
+    | {
+        name?: T;
+        phone?: T;
+        email?: T;
+        krakenIdentifier?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3068,8 +4167,18 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
 export interface AffiliatesSelect<T extends boolean = true> {
   name?: T;
   referralCanUse?: T;
-  krakenSubdomainIdentifiers?: T | { identifier?: T; id?: T };
-  krakenOrganisationIdentifiers?: T | { identifier?: T; id?: T };
+  krakenSubdomainIdentifiers?:
+    | T
+    | {
+        identifier?: T;
+        id?: T;
+      };
+  krakenOrganisationIdentifiers?:
+    | T
+    | {
+        identifier?: T;
+        id?: T;
+      };
   useCreditCheckResults?: T;
   doEmailValidation?: T;
   active?: T;
@@ -3079,7 +4188,12 @@ export interface AffiliatesSelect<T extends boolean = true> {
     | T
     | {
         products?: T;
-        postcodeInclusions?: T | { postcodeList?: T; id?: T };
+        postcodeInclusions?:
+          | T
+          | {
+              postcodeList?: T;
+              id?: T;
+            };
         postcodeOffers?:
           | T
           | {
@@ -3087,15 +4201,60 @@ export interface AffiliatesSelect<T extends boolean = true> {
               offers?:
                 | T
                 | {
-                    giftCard?:
+                    giftCardBlock?:
                       | T
-                      | { campaign?: T; value?: T; id?: T; blockName?: T };
-                    promotion?: T | { promotion?: T; id?: T; blockName?: T };
-                    billCredit?:
+                      | {
+                          campaign?: T;
+                          value?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    promotionBlock?:
+                      | T
+                      | {
+                          promotion?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    billCreditBlock?:
                       | T
                       | {
                           value?: T;
                           isDiscretionary?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -3108,15 +4267,60 @@ export interface AffiliatesSelect<T extends boolean = true> {
               offers?:
                 | T
                 | {
-                    giftCard?:
+                    giftCardBlock?:
                       | T
-                      | { campaign?: T; value?: T; id?: T; blockName?: T };
-                    promotion?: T | { promotion?: T; id?: T; blockName?: T };
-                    billCredit?:
+                      | {
+                          campaign?: T;
+                          value?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    promotionBlock?:
+                      | T
+                      | {
+                          promotion?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    billCreditBlock?:
                       | T
                       | {
                           value?: T;
                           isDiscretionary?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
                           id?: T;
                           blockName?: T;
                         };
@@ -3134,9 +4338,15 @@ export interface AffiliatesSelect<T extends boolean = true> {
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
   frontendIdentifier?: T;
+  frontendTitle?: T;
   krakenProductCodeFragment?: T;
   term?: T;
-  speeds?: T | { upload?: T; download?: T };
+  speeds?:
+    | T
+    | {
+        upload?: T;
+        download?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3151,8 +4361,20 @@ export interface PromotionsSelect<T extends boolean = true> {
   value?:
     | T
     | {
-        percentageBased?: T | { value?: T; id?: T; blockName?: T };
-        fixedValue?: T | { value?: T; id?: T; blockName?: T };
+        percentageBased?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+              blockName?: T;
+            };
+        fixedValue?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -3187,32 +4409,71 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "todo_select".
+ * via the `definition` "pages_select".
  */
-export interface TodoSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "page_select".
- */
-export interface PageSelect<T extends boolean = true> {
+export interface PagesSelect<T extends boolean = true> {
   slug?: T;
-  "page-contents"?:
+  content?:
     | T
     | {
         bannerHeroBlock?:
           | T
           | {
-              "bannerhero-video-src"?: T;
-              "bannerhero-video-type"?: T;
-              "bannerhero-headingText-text"?: T;
-              "bannerhero-headingText-body"?: T;
-              "bannerhero-postCode-placeholderText"?: T;
-              "bannerhero-postCode-buttonText"?: T;
-              "bannerhero-trustpilot-option"?: T;
-              "bannerhero-tick-list"?: T | { text?: T; id?: T };
+              video?: T;
+              heading?: T;
+              body?: T;
+              postCodeButtonText?: T;
+              postCodePlaceholderText?: T;
+              list?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        inlineContentWithItemsBlock?:
+          | T
+          | {
+              heading?: T;
+              paragraph?: T;
+              blocks?:
+                | T
+                | {
+                    heading?: T;
+                    list?:
+                      | T
+                      | {
+                          listItem?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        inlineImageWithContentBlock?:
+          | T
+          | {
+              overlayImage?: T;
+              backgroundImage?: T;
+              promotionImage?: T;
+              content?:
+                | T
+                | {
+                    "left column"?:
+                      | T
+                      | {
+                          content?: T;
+                          id?: T;
+                        };
+                    paragraph?: T;
+                    buttonText?: T;
+                    id?: T;
+                  };
+              responsiveImage?: T;
+              responsiveParagraph?: T;
               id?: T;
               blockName?: T;
             };
@@ -3266,7 +4527,11 @@ export interface KrakenAccountCreditReasonsSelect<T extends boolean = true> {
   isDeprecated?: T;
   isTaxExempt?: T;
   isHidden?: T;
-  cuckoo?: T | { isInKraken?: T };
+  cuckoo?:
+    | T
+    | {
+        isInKraken?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3281,7 +4546,11 @@ export interface KrakenSwitchMatchServiceProvidersSelect<
   losingRcpid?: T;
   isActive?: T;
   name?: T;
-  cuckoo?: T | { isInKraken?: T };
+  cuckoo?:
+    | T
+    | {
+        isInKraken?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3375,8 +4644,18 @@ export interface ApiLogsSelect<T extends boolean = true> {
  */
 export interface ApiTestsSelect<T extends boolean = true> {
   input?: T;
-  steps?: T | { value?: T; id?: T };
-  skips?: T | { value?: T; id?: T };
+  steps?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
+  skips?:
+    | T
+    | {
+        value?: T;
+        id?: T;
+      };
   errorsData?: T;
   accountNumber?: T;
   updatedAt?: T;
@@ -3444,18 +4723,41 @@ export interface RegisterOfInterestSubmissionsSelect<T extends boolean = true> {
         apiErrors?:
           | T
           | {
-              UnknownError?: T | { errorMessage?: T; id?: T; blockName?: T };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupCouldNotLoadAddressLookup?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupAddressLookupInvalidState?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               QuoteLookupInvalidSelectionIdentifier?:
                 | T
-                | { errorMessage?: T; id?: T; blockName?: T };
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
-        apiTraceIDs?: T | { value?: T; id?: T };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -3470,7 +4772,15 @@ export interface WhatsNewSelect<T extends boolean = true> {
   body?: T;
   imageUrl?: T;
   backgroundColor?: T;
-  buttons?: T | { title?: T; deeplink?: T; event?: T; style?: T; id?: T };
+  buttons?:
+    | T
+    | {
+        title?: T;
+        deeplink?: T;
+        event?: T;
+        style?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -3543,6 +4853,18 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface GeneralConfig {
   id: string;
+  vAndA: {
+    /**
+     * This is the ammount of time, in hours, after a person who signs up on the join flow with nominated persons will have a reminder set for for an agent to action the nominated person manually.
+     */
+    signupNominatedPersonReminderTimeHours: number;
+  };
+  customerIO: {
+    smsPreferenceString: string;
+    postPreferenceString: string;
+    emailPreferenceString: string;
+    telephonePreferenceString: string;
+  };
   defaultAffiliate: string | Affiliate;
   billCredits: {
     /**
@@ -3605,10 +4927,14 @@ export interface PayloadTaskViewer {
   deleteAllComplete?: boolean | null;
   tasks?:
     | {
-        editData?: { delete?: boolean | null };
+        editData?: {
+          delete?: boolean | null;
+        };
         payloadData?: {
           input?:
-            | { [k: string]: unknown }
+            | {
+                [k: string]: unknown;
+              }
             | unknown[]
             | string
             | number
@@ -3621,14 +4947,18 @@ export interface PayloadTaskViewer {
           processing?: boolean | null;
           payloadIdentifier?: string | null;
           taskStatus?:
-            | { [k: string]: unknown }
+            | {
+                [k: string]: unknown;
+              }
             | unknown[]
             | string
             | number
             | boolean
             | null;
           log?:
-            | { [k: string]: unknown }
+            | {
+                [k: string]: unknown;
+              }
             | unknown[]
             | string
             | number
@@ -3647,14 +4977,51 @@ export interface PayloadTaskViewer {
  * via the `definition` "generalConfig_select".
  */
 export interface GeneralConfigSelect<T extends boolean = true> {
+  vAndA?:
+    | T
+    | {
+        signupNominatedPersonReminderTimeHours?: T;
+      };
+  customerIO?:
+    | T
+    | {
+        smsPreferenceString?: T;
+        postPreferenceString?: T;
+        emailPreferenceString?: T;
+        telephonePreferenceString?: T;
+      };
   defaultAffiliate?: T;
-  billCredits?: T | { ledgerName?: T; billCreditRewardReason?: T };
-  apiConfig?: T | { krakenOTSPollTimeout?: T; krakenQuotePollTimeout?: T };
-  emailVerification?: T | { timeBetweenNewCodes?: T; maxCodesPerBasket?: T };
+  billCredits?:
+    | T
+    | {
+        ledgerName?: T;
+        billCreditRewardReason?: T;
+      };
+  apiConfig?:
+    | T
+    | {
+        krakenOTSPollTimeout?: T;
+        krakenQuotePollTimeout?: T;
+      };
+  emailVerification?:
+    | T
+    | {
+        timeBetweenNewCodes?: T;
+        maxCodesPerBasket?: T;
+      };
   creditChecks?:
     | T
-    | { creditScoreThreshold?: T; creditChecksPerBasketLimit?: T };
-  annualPriceRises?: T | { date?: T; increase?: T; id?: T };
+    | {
+        creditScoreThreshold?: T;
+        creditChecksPerBasketLimit?: T;
+      };
+  annualPriceRises?:
+    | T
+    | {
+        date?: T;
+        increase?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -3669,7 +5036,11 @@ export interface PayloadTaskViewerSelect<T extends boolean = true> {
   tasks?:
     | T
     | {
-        editData?: T | { delete?: T };
+        editData?:
+          | T
+          | {
+              delete?: T;
+            };
         payloadData?:
           | T
           | {
@@ -3700,23 +5071,35 @@ export interface TaskDoDatabaseDumps {
     prependFileNameString?: string | null;
     taskID?: string | null;
   };
-  output: { success: boolean };
+  output: {
+    success: boolean;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskDoDatabaseImports".
  */
 export interface TaskDoDatabaseImports {
-  input: { databaseImportID: string; taskID?: string | null };
-  output: { success: boolean };
+  input: {
+    databaseImportID: string;
+    taskID?: string | null;
+  };
+  output: {
+    success: boolean;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskDoPostcodeListImports".
  */
 export interface TaskDoPostcodeListImports {
-  input: { postcodeListImportID: string; taskID?: string | null };
-  output: { success: boolean };
+  input: {
+    postcodeListImportID: string;
+    taskID?: string | null;
+  };
+  output: {
+    success: boolean;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3735,7 +5118,9 @@ export interface TaskDoRewardsAutomations {
     shouldAutoQueueTaskOnCompletion?: boolean | null;
     taskID?: string | null;
   };
-  output: { success: boolean };
+  output: {
+    success: boolean;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -3746,7 +5131,9 @@ export interface TaskDoKrakenReferenceDataSync {
     shouldAutoQueueTaskOnCompletion?: boolean | null;
     taskID?: string | null;
   };
-  output: { success: boolean };
+  output: {
+    success: boolean;
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

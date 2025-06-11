@@ -28,6 +28,7 @@ const mockQuoteResponse = {
         selectionIdentifier: "product-selection-123",
         krakenProductCode: "BT-150-24M_30",
         frontendIdentifier: "150-24",
+        frontendTitle: "C-150",
         termMonths: 24,
         installationRequired: false,
         appliedPromotionUUIDs: [],
@@ -156,14 +157,6 @@ const mockQuoteResponse = {
       },
     ],
   },
-};
-
-type PackageDetails = {
-  frontendIdentifier: string;
-  speeds: {
-    download: number;
-  };
-  termMonths: string;
 };
 
 const mockUseScrollable = {
@@ -311,6 +304,24 @@ vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
         onClick={() =>
           onShowPackageDetails({
             frontendIdentifier: "test-package",
+            frontendTitle: "test-package",
+            krakenProductCode: "TEST-CODE",
+            termMonths: 24,
+            selectionIdentifier: "test-selection",
+            installationRequired: false,
+            appliedPromotionUUIDs: null,
+            prices: {
+              basePrice: 3000,
+              discountedPrice: 3000,
+              annualPriceRise: null,
+            },
+            speeds: {
+              download: 150,
+              upload: 30,
+            },
+            extras: null,
+            offers: null,
+            id: null,
           } as StoreSelectedPackage)
         }
       >
@@ -327,7 +338,7 @@ vi.mock(
       packageDetails,
       handlePackageSelection,
     }: {
-      packageDetails: PackageDetails;
+      packageDetails: StoreSelectedPackage;
       handlePackageSelection: (pkg: StoreSelectedPackage) => void;
     }) => (
       <div data-testid="package-selection-details">

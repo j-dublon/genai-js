@@ -21,7 +21,8 @@ describe("SpeedPriceDetails", () => {
   const mockPackage: StoreSelectedPackage = {
     krakenProductCode: "BT-100-24M_25",
     frontendIdentifier: "100-24",
-    termMonths: "24",
+    frontendTitle: "C-150",
+    termMonths: 24,
     selectionIdentifier: "0",
     installationRequired: true,
     appliedPromotionUUIDs: [],

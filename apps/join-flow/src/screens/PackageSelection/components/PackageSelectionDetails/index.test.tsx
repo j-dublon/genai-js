@@ -101,7 +101,8 @@ describe("PackageSelectionDetails", () => {
   const mockPackage: StoreSelectedPackage = {
     krakenProductCode: "BT-500-24M_20",
     frontendIdentifier: "500-24",
-    termMonths: "24",
+    frontendTitle: "C-500",
+    termMonths: 24,
     selectionIdentifier: "1",
     installationRequired: true,
     appliedPromotionUUIDs: [],
@@ -128,7 +129,8 @@ describe("PackageSelectionDetails", () => {
   const mockSpeedyPackage: StoreSelectedPackage = {
     krakenProductCode: "BT-900-24M_50",
     frontendIdentifier: "900-24",
-    termMonths: "24",
+    frontendTitle: "C-150",
+    termMonths: 24,
     selectionIdentifier: "2",
     installationRequired: true,
     appliedPromotionUUIDs: [],

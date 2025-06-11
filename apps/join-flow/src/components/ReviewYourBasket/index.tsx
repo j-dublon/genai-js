@@ -30,7 +30,8 @@ export const ReviewYourBasket = () => {
     return quoteResponse.response.products.map((product) => ({
       krakenProductCode: product.krakenProductCode,
       frontendIdentifier: product.frontendIdentifier,
-      termMonths: product.termMonths.toString(),
+      termMonths: product.termMonths,
+      frontendTitle: product.frontendTitle,
       selectionIdentifier: product.selectionIdentifier,
       installationRequired: product.installationRequired,
       appliedPromotionUUIDs: product.appliedPromotionUUIDs || null,
@@ -62,6 +63,7 @@ export const ReviewYourBasket = () => {
               description: availableExtra.description,
               price: availableExtra.price,
               selectionIdentifier: availableExtra.selectionIdentifier,
+              family: extra.family,
               id: availableExtra.id || null,
             })) || null,
           id: extra.id || null,
