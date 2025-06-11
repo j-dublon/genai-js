@@ -259,9 +259,9 @@ export type StoreBasket = {
     postcode?: string | null;
   };
   payment?: {
-    accountHolder?: string | null;
-    accountNumber?: string | null;
-    sortCode?: string | null;
+    bankAccountHolder?: string | null;
+    bankAccountNumber?: string | null;
+    bankSortCode?: string | null;
   };
   personalDetails?: {
     firstName?: string | null;

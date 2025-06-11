@@ -26,7 +26,6 @@ describe("createBasket", () => {
 
   const mockBasketResponse: Basket = {
     id: "basket-123",
-    locked: false,
     product: {
       quoteLookup: "test-quote-lookup-id",
       selectionIdentifier: "test-selection-id",

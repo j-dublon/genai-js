@@ -240,8 +240,277 @@ export interface UserAuthOperations {
 export interface Order {
   id: string;
   krakenAccountNumber: string;
-  basket: string | Basket;
+  basketData:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
   hardCreditCheck?: (string | null) | CreditCheckExecution;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "creditCheckExecutions".
+ */
+export interface CreditCheckExecution {
+  id: string;
+  inputs: {
+    requestProcessingType: "async" | "sync";
+    type: "hard" | "soft";
+    /**
+     * The first name/forename of the applicant
+     */
+    firstName: string;
+    /**
+     * The last name/surname of the applicant
+     */
+    lastName: string;
+    /**
+     * The email address of the applicant
+     */
+    email: string;
+    /**
+     * The address to pass to Transunion to run the credit check
+     */
+    addresses: {
+      /**
+       * The first line of the address of the applicant
+       */
+      line1: string;
+      /**
+       * The second line of the address of the applicant
+       */
+      line2?: string | null;
+      /**
+       * The third line of the address (post town to be specific) of the applicant
+       */
+      line3?: string | null;
+      /**
+       * The post code of the address of the applicant
+       */
+      postcode: string;
+      id?: string | null;
+    }[];
+    /**
+     * The date of birth to pass to Transunion to improve accuracy for credit check.
+     */
+    dateOfBirth: string;
+  };
+  outputs?: {
+    state?: ("pending" | "success" | "error") | null;
+    apiSuccess?: {
+      hash?: string | null;
+      /**
+       * The credit score returned from Transunion
+       */
+      creditScore?: string | null;
+      /**
+       * The report data returned from Transunion
+       */
+      creditReport?:
+        | {
+            [k: string]: unknown;
+          }
+        | unknown[]
+        | string
+        | number
+        | boolean
+        | null;
+      /**
+       * The status returned on whether there was no match, the credit check passed or failed
+       */
+      status?: ("PASSED" | "FAILED" | "NO_MATCH") | null;
+    };
+    apiErrors?:
+      | (
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "CreditCheckNoMatchForAddress";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "CreditCheckFailed";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "CreditCheckCreateBadInput";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "CreditCheckRecordExists";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "CreditCheckUnableToLoadData";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "UnknownError";
+            }
+        )[]
+      | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cuckooGraphOrders".
+ */
+export interface CuckooGraphOrder {
+  id: string;
+  /**
+   * The account number used to identify a customers account
+   */
+  accountNumber: string;
+  quotingCode: string;
+  addressKey: string;
+  addressKeyType: string;
+  price?: string | null;
+  contract: string;
+  selectedProduct?: string | null;
+  postcode: string;
+  orderDate: string;
+  salesAgentId?: string | null;
+  utmCampaign?: string | null;
+  utmMedium?: string | null;
+  utmSource?: string | null;
+  trackingNetwork?: string | null;
+  partnerizeClickRef?: string | null;
+  convertUuid?: string | null;
+  propertyType?: string | null;
+  offerId?: string | null;
+  offerType?: string | null;
+  offerValue?: number | null;
+  marketingConsent?: boolean | null;
+  referralType?: string | null;
+  referralCode?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "rewardsAutomations".
+ */
+export interface RewardsAutomation {
+  id: string;
+  frequency: (
+    | {
+        frequency: "daily" | "weekly" | "monthly";
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "rewardFrequencyScheduleBlock";
+      }
+    | {
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "rewardFrequencyImmediateBlock";
+      }
+  )[];
+  type: (
+    | {
+        /**
+         * NOTE! THIS VALUE IS IN PENCE - 100 is 1 POUND
+         */
+        value: number;
+        reason: string | KrakenAccountCreditReason;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "rewardTypeBillCreditBlock";
+      }
+    | {
+        value: number;
+        campaign: string | GiftcardCampaign;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "rewardTypeGiftCardBlock";
+      }
+  )[];
+  conditions?:
+    | (
+        | {
+            /**
+             * The age of the account in days, after this goes by, the reward can trigger
+             */
+            age: number;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: "rewardConditionsAccountAgeBlock";
+          }
+        | {
+            id?: string | null;
+            blockName?: string | null;
+            blockType: "rewardConditionsAccountNotInDebtBlock";
+          }
+      )[]
+    | null;
+  krakenAccountNumber: string;
+  order?: (string | null) | Order;
+  award?: {
+    awarded?: boolean | null;
+    awardedDateTime?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "krakenAccountCreditReasons".
+ */
+export interface KrakenAccountCreditReason {
+  id: string;
+  code: string;
+  display: string;
+  group?: string | null;
+  isDeprecated: boolean;
+  isTaxExempt: boolean;
+  isHidden: boolean;
+  cuckoo: {
+    /**
+     * When the batch job runs to update the kraken data, if something is deleted from kraken we keep it alive here, but we set this to true - i.e this should not be used on NEW things but it may be referenced by old stuff. Filters using this collection should filter out items where this is true
+     */
+    isInKraken: boolean;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "giftcardCampaigns".
+ */
+export interface GiftcardCampaign {
+  id: string;
+  /**
+   * The name we, and this CMS, use to identify this gift card config. Include the contract/affiliate name here - i.e. a good name would be 'PCW - 2025 Campaign' so that it is easy to link it to the affiliates
+   */
+  name: string;
+  /**
+   * The identifier used to identify against the giftcloud API for this campaign (UUID)
+   */
+  campaignIdentifier: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -251,10 +520,6 @@ export interface Order {
  */
 export interface Basket {
   id: string;
-  /**
-   * This is used to lock the basket after it has been submitted to prevent further updates from anyone on the API to keep the record accurate. This field is only visible and editable to/by admins and programatically.
-   */
-  locked?: boolean | null;
   optIns?: {
     termsAgreed?: boolean | null;
     directDebitAgreed?: boolean | null;
@@ -322,9 +587,9 @@ export interface Basket {
    * The direct debit mandate will be constructed from these payment details, they are validated against gocardless to make sure the acct number / sort code / acct holder are valid / match the account record on file
    */
   payment?: {
-    accountHolder?: string | null;
-    accountNumber?: string | null;
-    sortCode?: string | null;
+    bankAccountHolder?: string | null;
+    bankAccountNumber?: string | null;
+    bankSortCode?: string | null;
   };
   /**
    * Personal details which are used throught the process, for example the email here is used for email validation
@@ -1032,7 +1297,7 @@ export interface Product {
    * This is the identifier used by to pick the correct Kraken product that aligns with this payload record. It should be a string that when matched with startsWith (i.e. krakenProductCode.startsWith) will match 1 product in Kraken.
    */
   krakenProductCodeFragment: string;
-  term: 24 | 12;
+  term: "24" | "12";
   speeds: {
     upload: number;
     download: number;
@@ -1047,23 +1312,6 @@ export interface Product {
 export interface PostcodeList {
   id: string;
   name?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "giftcardCampaigns".
- */
-export interface GiftcardCampaign {
-  id: string;
-  /**
-   * The name we, and this CMS, use to identify this gift card config. Include the contract/affiliate name here - i.e. a good name would be 'PCW - 2025 Campaign' so that it is easy to link it to the affiliates
-   */
-  name: string;
-  /**
-   * The identifier used to identify against the giftcloud API for this campaign (UUID)
-   */
-  campaignIdentifier: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1615,129 +1863,6 @@ export interface EmailValidator {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "creditCheckExecutions".
- */
-export interface CreditCheckExecution {
-  id: string;
-  inputs: {
-    requestProcessingType: "async" | "sync";
-    type: "hard" | "soft";
-    /**
-     * The first name/forename of the applicant
-     */
-    firstName: string;
-    /**
-     * The last name/surname of the applicant
-     */
-    lastName: string;
-    /**
-     * The email address of the applicant
-     */
-    email: string;
-    /**
-     * The address to pass to Transunion to run the credit check
-     */
-    addresses: {
-      /**
-       * The first line of the address of the applicant
-       */
-      line1: string;
-      /**
-       * The second line of the address of the applicant
-       */
-      line2?: string | null;
-      /**
-       * The third line of the address (post town to be specific) of the applicant
-       */
-      line3?: string | null;
-      /**
-       * The post code of the address of the applicant
-       */
-      postcode: string;
-      id?: string | null;
-    }[];
-    /**
-     * The date of birth to pass to Transunion to improve accuracy for credit check.
-     */
-    dateOfBirth: string;
-  };
-  outputs?: {
-    state?: ("pending" | "success" | "error") | null;
-    apiSuccess?: {
-      hash?: string | null;
-      /**
-       * The credit score returned from Transunion
-       */
-      creditScore?: string | null;
-      /**
-       * The report data returned from Transunion
-       */
-      creditReport?:
-        | {
-            [k: string]: unknown;
-          }
-        | unknown[]
-        | string
-        | number
-        | boolean
-        | null;
-      /**
-       * The status returned on whether there was no match, the credit check passed or failed
-       */
-      status?: ("PASSED" | "FAILED" | "NO_MATCH") | null;
-    };
-    apiErrors?:
-      | (
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "CreditCheckNoMatchForAddress";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "CreditCheckFailed";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "CreditCheckCreateBadInput";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "CreditCheckRecordExists";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "CreditCheckUnableToLoadData";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "UnknownError";
-            }
-        )[]
-      | null;
-    apiTraceIDs?:
-      | {
-          value?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "vulnerabilityAndAccessibility".
  */
 export interface VulnerabilityAndAccessibility {
@@ -1809,131 +1934,10 @@ export interface VulnerabilityAndAccessibility {
     krakenIdentifier?: string | null;
   };
   nominatedPerson?: {
-    name?: string | null;
+    fullName?: string | null;
     phone?: string | null;
     email?: string | null;
     krakenIdentifier?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "cuckooGraphOrders".
- */
-export interface CuckooGraphOrder {
-  id: string;
-  /**
-   * The account number used to identify a customers account
-   */
-  accountNumber: string;
-  quotingCode: string;
-  addressKey: string;
-  addressKeyType: string;
-  price?: string | null;
-  contract: string;
-  selectedProduct?: string | null;
-  postcode: string;
-  orderDate: string;
-  salesAgentId?: string | null;
-  utmCampaign?: string | null;
-  utmMedium?: string | null;
-  utmSource?: string | null;
-  trackingNetwork?: string | null;
-  partnerizeClickRef?: string | null;
-  convertUuid?: string | null;
-  propertyType?: string | null;
-  offerId?: string | null;
-  offerType?: string | null;
-  offerValue?: number | null;
-  marketingConsent?: boolean | null;
-  referralType?: string | null;
-  referralCode?: string | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "rewardsAutomations".
- */
-export interface RewardsAutomation {
-  id: string;
-  frequency: (
-    | {
-        frequency: "daily" | "weekly" | "monthly";
-        id?: string | null;
-        blockName?: string | null;
-        blockType: "rewardFrequencyScheduleBlock";
-      }
-    | {
-        id?: string | null;
-        blockName?: string | null;
-        blockType: "rewardFrequencyImmediateBlock";
-      }
-  )[];
-  type: (
-    | {
-        /**
-         * NOTE! THIS VALUE IS IN PENCE - 100 is 1 POUND
-         */
-        value: number;
-        reason: string | KrakenAccountCreditReason;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: "rewardTypeBillCreditBlock";
-      }
-    | {
-        value: number;
-        campaign: string | GiftcardCampaign;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: "rewardTypeGiftCardBlock";
-      }
-  )[];
-  conditions?:
-    | (
-        | {
-            /**
-             * The age of the account in days, after this goes by, the reward can trigger
-             */
-            age: number;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: "rewardConditionsAccountAgeBlock";
-          }
-        | {
-            id?: string | null;
-            blockName?: string | null;
-            blockType: "rewardConditionsAccountNotInDebtBlock";
-          }
-      )[]
-    | null;
-  krakenAccountNumber: string;
-  order?: (string | null) | Order;
-  award?: {
-    awarded?: boolean | null;
-    awardedDateTime?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "krakenAccountCreditReasons".
- */
-export interface KrakenAccountCreditReason {
-  id: string;
-  code: string;
-  display: string;
-  group?: string | null;
-  isDeprecated: boolean;
-  isTaxExempt: boolean;
-  isHidden: boolean;
-  cuckoo: {
-    /**
-     * When the batch job runs to update the kraken data, if something is deleted from kraken we keep it alive here, but we set this to true - i.e this should not be used on NEW things but it may be referenced by old stuff. Filters using this collection should filter out items where this is true
-     */
-    isInKraken: boolean;
   };
   updatedAt: string;
   createdAt: string;
@@ -2289,7 +2293,7 @@ export interface ApiTest {
     | number
     | boolean
     | null;
-  accountNumber?: string | null;
+  krakenAccountNumber?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2783,7 +2787,7 @@ export interface PayloadMigration {
  */
 export interface OrdersSelect<T extends boolean = true> {
   krakenAccountNumber?: T;
-  basket?: T;
+  basketData?: T;
   hardCreditCheck?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -2894,7 +2898,6 @@ export interface RewardsAutomationsSelect<T extends boolean = true> {
  * via the `definition` "baskets_select".
  */
 export interface BasketsSelect<T extends boolean = true> {
-  locked?: T;
   optIns?:
     | T
     | {
@@ -2945,9 +2948,9 @@ export interface BasketsSelect<T extends boolean = true> {
   payment?:
     | T
     | {
-        accountHolder?: T;
-        accountNumber?: T;
-        sortCode?: T;
+        bankAccountHolder?: T;
+        bankAccountNumber?: T;
+        bankSortCode?: T;
       };
   personalDetails?:
     | T
@@ -4152,7 +4155,7 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
   nominatedPerson?:
     | T
     | {
-        name?: T;
+        fullName?: T;
         phone?: T;
         email?: T;
         krakenIdentifier?: T;
@@ -4657,7 +4660,7 @@ export interface ApiTestsSelect<T extends boolean = true> {
         id?: T;
       };
   errorsData?: T;
-  accountNumber?: T;
+  krakenAccountNumber?: T;
   updatedAt?: T;
   createdAt?: T;
 }
