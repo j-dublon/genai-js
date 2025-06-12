@@ -116,17 +116,6 @@ export type AccessibilityRequirements = {
   additionalInformation?: string;
 };
 
-export type BroadbandPackage = {
-  id: string;
-  name: string;
-  speed: { download: number; upload: number };
-  price: { monthly: number; setup: number };
-  priceIncrease: { nextIncrease: number; followingIncrease: number };
-  contractLength: number;
-  description: string;
-  features?: string[];
-};
-
 export type GiftcardCampaign = {
   id: string;
   name: string;
