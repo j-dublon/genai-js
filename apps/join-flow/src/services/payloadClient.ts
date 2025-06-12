@@ -397,4 +397,8 @@ export const payloadAPI = {
     getPayloadEndpoint<KrakenSwitchMatchServiceProvider[]>(
       "/krakenSwitchMatchServiceProviders/all-active",
     ),
+
+  //Signup
+  signUpToKraken: (basketId: string) =>
+    getPayloadEndpoint<Basket>(`/baskets/${basketId}/signup`),
 };
