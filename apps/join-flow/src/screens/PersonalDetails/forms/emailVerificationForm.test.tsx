@@ -23,6 +23,7 @@ const defaultProps = {
   handleBack: vi.fn(),
   validateCode: vi.fn(),
   handleCodeChange: vi.fn(),
+  handleResendCode: vi.fn(),
   register: vi.fn() as unknown as UseFormRegister<PersonalDetails>,
   errors: {} as FieldErrors<PersonalDetails>,
 };
@@ -61,12 +62,12 @@ describe("EmailVerificationForm", () => {
     const inputs = screen.getAllByRole("textbox");
 
     await userEvent.type(inputs[0], "a");
-    expect(inputs[0]).toHaveValue("A");
+    expect(inputs[0]).toHaveValue("a");
 
     expect(document.activeElement).toBe(inputs[1]);
 
     await userEvent.type(inputs[1], "b");
-    expect(inputs[1]).toHaveValue("B");
+    expect(inputs[1]).toHaveValue("b");
 
     expect(defaultProps.validateCode).not.toHaveBeenCalled();
   });

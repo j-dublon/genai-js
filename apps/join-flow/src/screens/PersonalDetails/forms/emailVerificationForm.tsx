@@ -18,6 +18,8 @@ export const EmailVerificationForm = ({
   handleBack,
   validateCode,
   handleCodeChange,
+  handleResendCode,
+  userVerificationErrorMessage,
 }: EmailVerificationFormProps) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [code, setCode] = useState<string[]>(Array(NUM_FIELDS).fill(""));
@@ -33,7 +35,7 @@ export const EmailVerificationForm = ({
     index: number,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    let value = event.target.value.toUpperCase();
+    let value = event.target.value;
 
     if (value.length > 1) {
       value = value.charAt(0);
@@ -85,7 +87,7 @@ export const EmailVerificationForm = ({
       ev.preventDefault();
 
       let paste = ev.clipboardData?.getData("text") || "";
-      paste = paste.toUpperCase().replace(/[^A-Z0-9]/g, "");
+      paste = paste.replace(/[^a-z0-9]/gi, "");
 
       if (paste.length !== NUM_FIELDS) return;
 
@@ -148,6 +150,9 @@ export const EmailVerificationForm = ({
           ))}
         </div>
       </div>
+      {userVerificationErrorMessage && (
+        <p className="text-ui-error text-sm mb-6">{userVerificationErrorMessage}</p>
+      )}
       <div className="flex gap-2 mb-6">
         <TickWithCircle width={22} height={22} circleFill={"#009EA8"} />
         {isCodeValid ? (
@@ -155,9 +160,13 @@ export const EmailVerificationForm = ({
         ) : (
           <span>
             You should receive your code within 2 minutes.{" "}
-            <a href="" className="text-ui-link underline font-medium">
+            <button
+              type="button"
+              onClick={handleResendCode}
+              className="text-ui-link underline font-medium cursor-pointer"
+            >
               Resend
-            </a>
+            </button>
           </span>
         )}
       </div>

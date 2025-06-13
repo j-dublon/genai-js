@@ -163,6 +163,15 @@ export type RunCreditCheckResponse = {
   message?: string;
 };
 
+export type SendEmailCodeResponse = {
+  success: boolean;
+};
+
+export type ValidateEmailCodeResponse = {
+  success: boolean;
+  message?: string;
+};
+
 export type InitialVulnerabilityAndAccessibility = Omit<
   Omit<Omit<VulnerabilityAndAccessibility, "createdAt">, "id">,
   "updatedAt"

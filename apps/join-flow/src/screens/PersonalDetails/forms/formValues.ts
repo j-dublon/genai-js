@@ -268,4 +268,6 @@ export type EmailVerificationFormProps = {
   handleCodeChange: (arg1: string, arg2: number) => void;
   validateCode: (code: string) => void;
   handleBack: () => void;
+  handleResendCode: () => Promise<void>;
+  userVerificationErrorMessage?: string;
 };

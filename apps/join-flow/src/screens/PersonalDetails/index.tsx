@@ -16,7 +16,9 @@ import { AdditionalPersonalDetailsForm } from "@/screens/PersonalDetails/forms/a
 import { EmailVerificationForm } from "@/screens/PersonalDetails/forms/emailVerificationForm";
 import { InitialPersonalDetailsForm } from "@/screens/PersonalDetails/forms/initialPersonalDetailsForm";
 import { runCreditCheck } from "@/services/helpers/runCreditCheck";
+import { sendEmailCode } from "@/services/helpers/sendEmailCode";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { validateEmailCode } from "@/services/helpers/validateEmailCode";
 
 import {
   AdditionalPersonalDetailsFormProps,
@@ -50,6 +52,9 @@ const PersonalDetails = () => {
   const [isEmailCodeValid, setIsEmailCodeValid] = useState<boolean | undefined>(
     undefined,
   );
+  const [emailCodeErrorMessage, setEmailCodeErrorMessage] = useState<
+    string | undefined
+  >(undefined);
 
   const [previousEmail, setPreviousEmail] = useState<string | undefined>(
     personalDetails?.email,
@@ -70,13 +75,33 @@ const PersonalDetails = () => {
     ) as z.ZodType<PersonalDetails>;
   };
 
-  // this will call the validate endpoint eventually
-  const validateCode = (code: string) =>
-    code.toString() === "123456"
-      ? setIsEmailCodeValid(true)
-      : setIsEmailCodeValid(false);
+  const validateCode = async (code: string) => {
+    if (!basket) {
+      console.error("No basket available");
+      setIsEmailCodeValid(false);
+      return;
+    }
 
-  const handleCodeChange = (value: string, index: number) => {
+    const response = await validateEmailCode(basket.id, code);
+
+    if (response.error) {
+      if (response.error.details.find((detail) => detail.includes("invalidCode"))) {
+        setEmailCodeErrorMessage("This code does not match what we expected");
+      }
+      console.error("Failed to validate email code:", response.error);
+      setIsEmailCodeValid(false);
+      return;
+    }
+
+    if (response.success) {
+      setIsEmailCodeValid(true);
+      setEmailCodeErrorMessage(undefined);
+    } else {
+      setIsEmailCodeValid(false);
+    }
+  };
+
+  const handleCodeChange = async (value: string, index: number) => {
     const newCode = [...validationCode];
     newCode[index] = value;
 
@@ -85,9 +110,43 @@ const PersonalDetails = () => {
 
       if (newCode.every((digit) => digit !== "")) {
         const code = newCode.join("");
-        if (code.length === 6) {
-          validateCode(code);
+        if (code.length === 6 && !isEmailCodeValid) {
+          await validateCode(code);
         }
+      }
+    }
+  };
+
+  const handleSendCode = async () => {
+    if (!isEmailVerified) {
+      if (!basket) {
+        console.error("No basket available");
+        return;
+      }
+
+      const response = await sendEmailCode(basket.id);
+      if (response.error) {
+        if (
+          response.error.details.find((detail) =>
+            detail.includes("emailCodeTooRecent"),
+          )
+        ) {
+          setEmailCodeErrorMessage(
+            "An email validation code was already requested recently. Please wait a moment.",
+          );
+        } else if (
+          response.error.details.find((detail) =>
+            detail.includes("emailCodeSpam"),
+          )
+        ) {
+          setEmailCodeErrorMessage("Too many code requests.");
+        }
+        console.error("Failed to send email code:", response.error);
+        return;
+      }
+
+      if (response.success) {
+        setEmailCodeErrorMessage(undefined);
       }
     }
   };
@@ -192,6 +251,34 @@ const PersonalDetails = () => {
             ? formValues.requiresLandline
             : false,
       } as PersonalDetails;
+
+      try {
+        if (!basket) {
+          console.error("No basket available");
+          return;
+        }
+
+        const result = await updateBasket(basket.id, {
+          ...basket,
+          personalDetails: {
+            firstName: formValues.firstName,
+            lastName: formValues.lastName,
+            email: formValues.email,
+            phone: formValues.phone,
+          },
+        });
+
+        if (result.basket) {
+          setBasket(result.basket);
+        } else if (result.error) {
+          console.error("Failed to update basket:", result.error);
+        }
+      } catch (error) {
+        console.error("Unexpected error updating basket:", error);
+        return;
+      }
+
+      await handleSendCode();
 
       setPersonalDetails(updatedDetails);
       setCurrentFormStep(nextStep);
@@ -436,6 +523,7 @@ const PersonalDetails = () => {
             <EmailVerificationFormComponent
               register={register}
               errors={errors}
+              userVerificationErrorMessage={emailCodeErrorMessage}
               verificationSection={personalDetailsProps.verificationSection}
               isVerified={isEmailVerified}
               onVerificationSuccess={onVerificationSuccess}
@@ -444,6 +532,7 @@ const PersonalDetails = () => {
               validateCode={validateCode}
               isCodeValid={isEmailCodeValid}
               handleBack={handleBack}
+              handleResendCode={handleSendCode}
             />
           )}
 

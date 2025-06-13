@@ -29,9 +29,11 @@ import {
   ReferralSessionSuccess,
   ResponseStates,
   RunCreditCheckResponse,
+  SendEmailCodeResponse,
   SwitchMatchLookupErrors,
   SwitchMatchLookupInputs,
   SwitchMatchLookupSuccess,
+  ValidateEmailCodeResponse,
   ValidationError,
   ValidationErrorDetail,
 } from "./payloadTypes";
@@ -373,6 +375,12 @@ export const payloadAPI = {
   runCreditCheck: (id: string) =>
     getPayloadEndpoint<RunCreditCheckResponse>(
       `/baskets/${id}/run-credit-check`,
+    ),
+  sendEmailCode: (id: string) =>
+    getPayloadEndpoint<SendEmailCodeResponse>(`/baskets/${id}/send-email-code`),
+  validateEmailCode: (id: string, code: string) =>
+    getPayloadEndpoint<ValidateEmailCodeResponse>(
+      `/baskets/${id}/validate-email-code/${code}`,
     ),
 
   // V&A
