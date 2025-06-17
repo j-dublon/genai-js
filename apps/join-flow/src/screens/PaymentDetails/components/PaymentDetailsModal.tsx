@@ -11,7 +11,7 @@ import {
 import { PaymentForm } from "@/screens/PaymentDetails/forms/PaymentForm";
 
 interface PaymentDetailsModalProps {
-  onSave?: () => void;
+  onSave?: () => Promise<void>;
 }
 
 export const PaymentDetailsModal = ({ onSave }: PaymentDetailsModalProps) => {
@@ -131,7 +131,7 @@ export const PaymentDetailsModal = ({ onSave }: PaymentDetailsModalProps) => {
     checkbox.classList.add("border-ui-error");
   };
 
-  const handleSubmit = (data: PaymentFormValues) => {
+  const handleSubmit = async (data: PaymentFormValues) => {
     if (!data.isAccountHolder) {
       const checkbox = document.querySelector(
         'input[name="isAccountHolder"]',
@@ -160,7 +160,7 @@ export const PaymentDetailsModal = ({ onSave }: PaymentDetailsModalProps) => {
     setShowingModal(false);
     modalRef.current?.close();
 
-    if (onSave) onSave();
+    if (onSave) await onSave();
   };
 
   const setFormSubmitHandler = (

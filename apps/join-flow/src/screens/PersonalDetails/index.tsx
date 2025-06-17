@@ -85,7 +85,9 @@ const PersonalDetails = () => {
     const response = await validateEmailCode(basket.id, code);
 
     if (response.error) {
-      if (response.error.details.find((detail) => detail.includes("invalidCode"))) {
+      if (
+        response.error.details.find((detail) => detail.includes("invalidCode"))
+      ) {
         setEmailCodeErrorMessage("This code does not match what we expected");
       }
       console.error("Failed to validate email code:", response.error);

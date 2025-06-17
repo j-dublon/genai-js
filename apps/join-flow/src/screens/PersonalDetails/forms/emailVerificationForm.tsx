@@ -151,7 +151,9 @@ export const EmailVerificationForm = ({
         </div>
       </div>
       {userVerificationErrorMessage && (
-        <p className="text-ui-error text-sm mb-6">{userVerificationErrorMessage}</p>
+        <p className="text-ui-error text-sm mb-6">
+          {userVerificationErrorMessage}
+        </p>
       )}
       <div className="flex gap-2 mb-6">
         <TickWithCircle width={22} height={22} circleFill={"#009EA8"} />

@@ -1,7 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { StoreAddress } from "@store/useJoinFlowStore";
 import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -16,16 +15,13 @@ export const PaymentForm = ({
   onSubmit,
   setSubmitHandler,
 }: {
-  onSubmit: (data: PaymentFormValues) => void;
+  onSubmit: (data: PaymentFormValues) => Promise<void>;
   setSubmitHandler?: (
     submitHandler: (data: FormValues) => Promise<void>,
   ) => void;
 }) => {
-  const { paymentDetails, personalDetails, setPaymentDetails } =
+  const { paymentDetails, personalDetails, setPaymentDetails, serviceAddress } =
     useJoinFlowStore();
-
-  const billingAddress: StoreAddress | null =
-    paymentDetails?.billingAddress || null;
 
   const {
     accountholderNamePlaceholder,
@@ -89,12 +85,35 @@ export const PaymentForm = ({
         return false;
       }
 
+      if (!serviceAddress) {
+        return false;
+      }
+
+      let billingAddress = null;
+
+      if (useSameAddress) {
+        billingAddress = {
+          line1: serviceAddress.line1,
+          line2: serviceAddress.line2,
+          line3: serviceAddress.line3,
+          postcode: serviceAddress.postcode,
+        };
+      } else {
+        // TODO: Handle different address (change billing address modal)
+        billingAddress = {
+          line1: serviceAddress.line1,
+          line2: serviceAddress.line2,
+          line3: serviceAddress.line3,
+          postcode: serviceAddress.postcode,
+        };
+      }
+
       setPaymentDetails({
         accountholderName: data.accountholderName,
         cardToken: "bank_account",
         accountNumber: data.accountNumber,
         sortCode: data.sortCode,
-        billingAddress: billingAddress,
+        billingAddress,
         sameAsServiceAddress: useSameAddress,
         isAccountHolder: data.isAccountHolder,
         termsAgreed: paymentDetails?.termsAgreed || false,
@@ -105,7 +124,14 @@ export const PaymentForm = ({
 
       return true;
     },
-    [billingAddress, paymentDetails, setPaymentDetails],
+    [
+      setPaymentDetails,
+      paymentDetails?.termsAgreed,
+      paymentDetails?.directDebitAgreed,
+      paymentDetails?.creditSearchAgreed,
+      paymentDetails?.allTermsAgreed,
+      serviceAddress,
+    ],
   );
 
   const formSubmitHandler = useCallback(
@@ -120,7 +146,7 @@ export const PaymentForm = ({
       if (isValid) {
         const saved = savePaymentDetails(data);
         if (saved) {
-          onSubmit(data as PaymentFormValues);
+          await onSubmit(data as PaymentFormValues);
         }
       }
     },

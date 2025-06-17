@@ -83,6 +83,12 @@ vi.mock("@store/useJoinFlowStore", () => ({
       lastName: "Doe",
     },
     setPaymentDetails: mockSetPaymentDetails,
+    serviceAddress: {
+      line1: "123 Main St",
+      line2: "Apt 4B",
+      line3: "Anytown",
+      postcode: "LS42PH",
+    },
   }),
 }));
 
