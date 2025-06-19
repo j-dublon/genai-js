@@ -372,6 +372,8 @@ export const payloadAPI = {
     postPayLoadEndpoint<InitialBasket, Basket>("/baskets", data),
   updateBasket: (id: string, data: Partial<Basket>) =>
     updatePayLoadEndpoint(`/baskets/${id}`, data),
+  generateCICS: (basketID: string) =>
+    getPayloadEndpoint(`/baskets/${basketID}/generate-cics`),
   runCreditCheck: (id: string) =>
     getPayloadEndpoint<RunCreditCheckResponse>(
       `/baskets/${id}/run-credit-check`,

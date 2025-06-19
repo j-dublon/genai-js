@@ -12,12 +12,14 @@ const {
   mockCreateBasket,
   mockRouterPush,
   mockSetSoftCreditCheck,
+  mockGenerateCICS,
 } = vi.hoisted(() => ({
   mockSelectPackage: vi.fn(),
   mockSetBasket: vi.fn(),
   mockCreateBasket: vi.fn(),
   mockRouterPush: vi.fn(),
   mockSetSoftCreditCheck: vi.fn(),
+  mockGenerateCICS: vi.fn(),
 }));
 
 const mockQuoteResponse = {
@@ -236,6 +238,12 @@ vi.mock("@react-component-library/ui", async () => {
   };
 });
 
+vi.mock("@/services/helpers/generateCICS", async () => {
+  return {
+    generateCICS: mockGenerateCICS,
+  };
+});
+
 vi.mock("@/screens/PackageSelection/components/PackageCard", async () => {
   const { PackageCard: RealPackageCard } = await vi.importActual(
     "@/screens/PackageSelection/components/PackageCard",
@@ -425,7 +433,10 @@ describe("ChooseYourPackage", () => {
     });
 
     await waitFor(() => {
-      expect(mockSetBasket).toHaveBeenCalledWith(mockBasketResponse);
+      expect(mockGenerateCICS).toHaveBeenCalledWith(
+        mockBasketResponse,
+        mockSetBasket,
+      );
       expect(mockRouterPush).toHaveBeenCalledWith(
         "/join-flow/personal-details",
       );

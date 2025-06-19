@@ -188,3 +188,20 @@ export type ApiErrorResponse = {
     };
   }>;
 };
+
+export type GenerateCICSResponse =
+  | {
+      success: true;
+      cics?: {
+        informationHref: string;
+        summaryHref: string;
+      };
+    }
+  | {
+      success: false;
+      // NOTE because this is not linked to payload we don't get actual block type hints, once in monorepo this will be much better
+      errorBlocks?: {
+        errorMessage?: string;
+        blockType?: string;
+      }[];
+    };

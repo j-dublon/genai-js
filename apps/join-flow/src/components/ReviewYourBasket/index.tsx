@@ -111,6 +111,7 @@ export const ReviewYourBasket = () => {
 
     if (newPackage) {
       selectPackage(newPackage);
+      // TODO: When this page is done we need to add a `generateCICS` call when the user chooses a different product
     } else {
       console.error("No matching package found");
     }
