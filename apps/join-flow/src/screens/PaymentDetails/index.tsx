@@ -39,18 +39,18 @@ export const PaymentDetails = ({
   } = paymentDetailsText;
 
   const handleFormSubmit = useCallback(
-    async (data: PaymentFormValues) => {
+    async (data: PaymentFormValues): Promise<boolean> => {
       setIsSubmitting(true);
 
       try {
         if (!basket?.id) {
           console.error("Basket ID is required to update basket");
-          return;
+          return false;
         }
 
         if (!serviceAddress) {
           console.error("Service address is required to update basket");
-          return;
+          return false;
         }
 
         let billingAddress = null;
@@ -84,14 +84,18 @@ export const PaymentDetails = ({
         if (result.error) {
           console.error("Error updating basket:", result.error);
           setShowPaymentDetailsError(true);
-          return;
+          return false;
         }
 
         setShowPaymentDetailsError(false);
         setShowConfirmation(true);
+
+        return true;
       } catch (error) {
         console.error("Error processing payment details:", error);
         setShowPaymentDetailsError(true);
+
+        return false;
       } finally {
         setIsSubmitting(false);
       }

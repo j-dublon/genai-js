@@ -261,12 +261,15 @@ const PersonalDetails = () => {
         }
 
         const result = await updateBasket(basket.id, {
-          ...basket,
           personalDetails: {
             firstName: formValues.firstName,
             lastName: formValues.lastName,
             email: formValues.email,
             phone: formValues.phone,
+          },
+          optIns: {
+            ...basket.optIns,
+            hasSmartPhone: formValues.hasSmartphone === "yes",
           },
         });
 

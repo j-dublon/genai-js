@@ -13,12 +13,8 @@ import { FormValues } from "./formValues";
 
 export const PaymentForm = ({
   onSubmit,
-  setSubmitHandler,
 }: {
-  onSubmit: (data: PaymentFormValues) => Promise<void>;
-  setSubmitHandler?: (
-    submitHandler: (data: FormValues) => Promise<void>,
-  ) => void;
+  onSubmit: (data: PaymentFormValues) => Promise<boolean>;
 }) => {
   const { paymentDetails, personalDetails, setPaymentDetails, serviceAddress } =
     useJoinFlowStore();
@@ -55,7 +51,7 @@ export const PaymentForm = ({
   const {
     register,
     handleSubmit,
-    formState: { errors, dirtyFields },
+    formState: { errors, dirtyFields, isSubmitting },
     watch,
     trigger,
     setValue,
@@ -144,20 +140,14 @@ export const PaymentForm = ({
       }
 
       if (isValid) {
-        const saved = savePaymentDetails(data);
-        if (saved) {
-          await onSubmit(data as PaymentFormValues);
+        const submitSuccess = await onSubmit(data as PaymentFormValues);
+        if (submitSuccess) {
+          savePaymentDetails(data);
         }
       }
     },
     [savePaymentDetails, onSubmit, trigger],
   );
-
-  useEffect(() => {
-    if (setSubmitHandler) {
-      setSubmitHandler(formSubmitHandler);
-    }
-  }, [setSubmitHandler, formSubmitHandler]);
 
   const accountholderName = watch("accountholderName");
   const accountNumber = watch("accountNumber");
@@ -198,6 +188,7 @@ export const PaymentForm = ({
       data-testid="payment-form"
       onSubmit={handleSubmit(formSubmitHandler)}
       noValidate
+      aria-busy={isSubmitting}
     >
       <div className="mb-6">
         <div className="relative">
@@ -206,6 +197,7 @@ export const PaymentForm = ({
             id="accountholderName"
             placeholder={accountholderNamePlaceholder}
             error={errors.accountholderName}
+            disabled={isSubmitting}
           />
           {isAccountholderNameValid && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -222,6 +214,7 @@ export const PaymentForm = ({
             id="accountNumber"
             placeholder={accountNumberPlaceholder}
             error={errors.accountNumber}
+            disabled={isSubmitting}
           />
           {isAccountNumberValid && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -238,6 +231,9 @@ export const PaymentForm = ({
             id="sortCode"
             placeholder={sortCodePlaceholder}
             error={errors.sortCode}
+            inputProps={{
+              disabled: isSubmitting,
+            }}
           />
           {isSortCodeValid && (
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
@@ -257,6 +253,7 @@ export const PaymentForm = ({
             ref={combineRefs}
             {...accountHolderRegisterRest}
             data-unchanged={!isFormModified}
+            disabled={isSubmitting}
           />
           <span className="text-sm">
             I confirm that I&apos;m the account holder

@@ -6,7 +6,6 @@ import { PaymentForm } from "./PaymentForm";
 
 const mockSetPaymentDetails = vi.fn();
 const mockOnSubmit = vi.fn();
-const mockSetSubmitHandler = vi.fn();
 
 let setValueMock = vi.fn();
 
@@ -185,17 +184,6 @@ describe("PaymentForm", () => {
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalled();
     });
-  });
-
-  it("sets up the submitHandler correctly", () => {
-    render(
-      <PaymentForm
-        onSubmit={mockOnSubmit}
-        setSubmitHandler={mockSetSubmitHandler}
-      />,
-    );
-
-    expect(mockSetSubmitHandler).toHaveBeenCalled();
   });
 
   it("preserves checkbox state when form values match stored values", async () => {

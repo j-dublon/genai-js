@@ -7,6 +7,7 @@ type SortCodeInputProps = {
   id: string;
   placeholder: string;
   error?: FieldError;
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>;
 };
 
 export const SortCodeInput = ({
@@ -14,6 +15,7 @@ export const SortCodeInput = ({
   id,
   placeholder,
   error,
+  inputProps,
 }: SortCodeInputProps) => {
   const { onChange, onBlur, name, ref } = register;
   const [isTouched, setIsTouched] = useState(false);
@@ -63,6 +65,7 @@ export const SortCodeInput = ({
         aria-invalid={showError ? "true" : "false"}
         maxLength={8}
         inputMode="numeric"
+        {...inputProps}
       />
       {showError && (
         <p className="text-ui-error text-sm mt-1">{error.message}</p>

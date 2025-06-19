@@ -1,31 +1,24 @@
 "use client";
 
-import { InfoModal } from "@react-component-library/ui";
+import { Button, InfoModal } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useEffect, useRef, useState } from "react";
 
-import {
-  FormValues,
-  PaymentFormValues,
-} from "@/screens/PaymentDetails/forms/formValues";
+import { PaymentFormValues } from "@/screens/PaymentDetails/forms/formValues";
 import { PaymentForm } from "@/screens/PaymentDetails/forms/PaymentForm";
+import { updateBasket } from "@/services/helpers/updateBasket";
 
-interface PaymentDetailsModalProps {
-  onSave?: () => Promise<void>;
-}
-
-export const PaymentDetailsModal = ({ onSave }: PaymentDetailsModalProps) => {
+export const PaymentDetailsModal = () => {
   const modalRef = useRef<HTMLDialogElement | null>(null);
-  const { paymentDetails, setPaymentDetails } = useJoinFlowStore();
-  const formSubmitRef = useRef<((data: FormValues) => Promise<void>) | null>(
-    null,
-  );
+  const { paymentDetails, basket } = useJoinFlowStore();
   const [showingModal, setShowingModal] = useState(false);
   const [initialValues, setInitialValues] = useState<{
     accountholderName: string;
     accountNumber: string;
     sortCode: string;
   } | null>(null);
+  const [showPaymentDetailsError, setShowPaymentDetailsError] = useState(false);
+  const [isFormSubmitting, setIsFormSubmitting] = useState(false);
 
   const [fieldsModified, setFieldsModified] = useState(false);
 
@@ -131,7 +124,7 @@ export const PaymentDetailsModal = ({ onSave }: PaymentDetailsModalProps) => {
     checkbox.classList.add("border-ui-error");
   };
 
-  const handleSubmit = async (data: PaymentFormValues) => {
+  const handleSubmit = async (data: PaymentFormValues): Promise<boolean> => {
     if (!data.isAccountHolder) {
       const checkbox = document.querySelector(
         'input[name="isAccountHolder"]',
@@ -139,34 +132,43 @@ export const PaymentDetailsModal = ({ onSave }: PaymentDetailsModalProps) => {
       if (checkbox) {
         showError(checkbox);
       }
-      return;
+      return false;
     }
 
-    const paymentData = {
-      accountholderName: data.accountholderName,
-      cardToken: "bank_account",
-      accountNumber: data.accountNumber,
-      sortCode: data.sortCode,
-      sameAsServiceAddress: data.sameAsServiceAddress ?? true,
-      isAccountHolder: data.isAccountHolder,
-      billingAddress: paymentDetails?.billingAddress || null,
-      termsAgreed: paymentDetails?.termsAgreed || false,
-      directDebitAgreed: paymentDetails?.directDebitAgreed || false,
-      creditSearchAgreed: paymentDetails?.creditSearchAgreed || false,
-      allTermsAgreed: paymentDetails?.allTermsAgreed || false,
-    };
+    setIsFormSubmitting(true);
+    try {
+      if (!basket?.id) {
+        console.error("Basket ID is required to update basket");
+        return false;
+      }
 
-    setPaymentDetails(paymentData);
-    setShowingModal(false);
-    modalRef.current?.close();
+      const result = await updateBasket(basket.id, {
+        payment: {
+          bankAccountHolder: data.accountholderName,
+          bankAccountNumber: data.accountNumber,
+          bankSortCode: data.sortCode.replace(/-/g, ""),
+        },
+      });
 
-    if (onSave) await onSave();
-  };
+      if (result.error) {
+        console.error("Error updating basket:", result.error);
+        setShowPaymentDetailsError(true);
+        return false;
+      }
 
-  const setFormSubmitHandler = (
-    submitHandler: (data: FormValues) => Promise<void>,
-  ) => {
-    formSubmitRef.current = submitHandler;
+      setShowPaymentDetailsError(false);
+      setShowingModal(false);
+      modalRef.current?.close();
+
+      return true;
+    } catch (error) {
+      console.error("Error processing payment details:", error);
+      setShowPaymentDetailsError(true);
+
+      return false;
+    } finally {
+      setIsFormSubmitting(false);
+    }
   };
 
   const openModal = () => {
@@ -185,45 +187,32 @@ export const PaymentDetailsModal = ({ onSave }: PaymentDetailsModalProps) => {
     }, 0);
   };
 
-  const handleSaveClick = () => {
-    const form = document.getElementById("payment-form") as HTMLFormElement;
-
-    if (form) {
-      form.dispatchEvent(
-        new Event("submit", { bubbles: true, cancelable: true }),
-      );
-    }
-  };
-
-  const validateBeforeClose = (): boolean => {
-    const checkbox = document.querySelector(
-      'input[name="isAccountHolder"]',
-    ) as HTMLInputElement;
-
-    if (!checkbox || !checkbox.checked) {
-      showError(checkbox);
-      return false;
-    }
-
-    return true;
-  };
-
   return (
     <>
-      <InfoModal
-        title="Change your direct debit details"
-        modalRef={modalRef}
-        buttonText="Save changes"
-        onButtonClick={handleSaveClick}
-        validateBeforeClose={validateBeforeClose}
-      >
+      <InfoModal title="Change your direct debit details" modalRef={modalRef}>
         <p className="mb-6 mt-6 text-ui-grey-500 font-bold">
           Enter your new details in the form below, then hit save.
         </p>
-        <PaymentForm
-          onSubmit={handleSubmit}
-          setSubmitHandler={setFormSubmitHandler}
-        />
+        <PaymentForm onSubmit={handleSubmit} />
+        {showPaymentDetailsError && (
+          <p className="text-sm text-ui-error mb-6">
+            Unable to validate bank details, please check your details and try
+            again.
+          </p>
+        )}
+        <div className="ds:flex ds:justify-end">
+          <Button
+            type="submit"
+            form="payment-form"
+            size="small"
+            variant="solid"
+            tint="yellow"
+            aria-label="Save changes and close modal"
+            disabled={isFormSubmitting}
+          >
+            {isFormSubmitting ? "Loading..." : "Save changes"}
+          </Button>
+        </div>
       </InfoModal>
 
       <span

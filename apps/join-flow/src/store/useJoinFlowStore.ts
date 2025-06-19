@@ -223,6 +223,14 @@ export type StoreSelectedPackage = {
 export type StoreBasket = {
   id: string;
   locked?: boolean | null;
+  optIns?: {
+    termsAgreed?: boolean | null;
+    directDebitAgreed?: boolean | null;
+    creditSearchAgreed?: boolean | null;
+    isAccountHolder?: boolean | null;
+    hasSmartPhone?: boolean | null;
+    marketingConsent?: boolean | null;
+  };
   product?: {
     quoteLookup?: (string | null) | QuoteLookup;
     selectionIdentifier?: string | null;
