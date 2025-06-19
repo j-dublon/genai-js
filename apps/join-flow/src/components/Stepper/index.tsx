@@ -71,7 +71,7 @@ const Stepper = ({ showLabels = true, steps = defaultSteps }: StepperProps) => {
               )}
 
               {showLabels && step.label && index === activeStep && (
-                <span className="absolute -bottom-10 w-max text-xs text-center text-core-black px-2 py-1 rounded-md bg-core-yellow border-2 border-core-black">
+                <span className="absolute -bottom-10 w-max text-xxs lg:text-xs text-center text-core-black px-2 py-1 rounded-md bg-core-yellow border-2 border-core-black">
                   {step.label}
                 </span>
               )}

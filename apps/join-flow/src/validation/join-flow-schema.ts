@@ -42,6 +42,4 @@ export const goLiveDateSchema = z.object({
   timeSlot: z.string().min(1, "Please select a time slot"),
 });
 
-export type PackageSelectionFormValues = z.infer<typeof packageSelectionSchema>;
-export type EeroSelectionFormValues = z.infer<typeof eeroSelectionSchema>;
 export type GoLiveDateFormValues = z.infer<typeof goLiveDateSchema>;

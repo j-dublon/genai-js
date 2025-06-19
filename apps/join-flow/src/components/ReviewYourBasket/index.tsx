@@ -1,24 +1,28 @@
 import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { Dispatch, SetStateAction, useMemo } from "react";
 
 import { BasketDialog } from "@/components/ReviewYourBasket/components/BasketDialog";
 import { SummaryBar } from "@/components/ReviewYourBasket/components/SummaryBar";
-import { PlanChangeFormData } from "@/components/ReviewYourBasket/forms/packageChangeForm";
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
+import { getAssetPath } from "@/lib/get-asset-path";
 import { eeroProducts } from "@/screens/EeroSelection/eeroSelectionProps";
 import useJoinFlowStore, {
-  EeroProduct,
   StoreSelectedPackage,
 } from "@/store/useJoinFlowStore";
 
-export const ReviewYourBasket = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+interface ReviewYourBasketProps {
+  isDialogOpen: boolean;
+  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const ReviewYourBasket = ({
+  isDialogOpen,
+  setIsDialogOpen,
+}: ReviewYourBasketProps) => {
   const {
     selectedPackage,
     eeroSelection,
-    serviceAddress,
     selectPackage,
-    selectEeroProduct,
     resetFlow,
     quoteResponse,
   } = useJoinFlowStore();
@@ -84,47 +88,40 @@ export const ReviewYourBasket = () => {
   const allEeroProducts = [
     {
       id: "no-additional-eero",
-      name: "Standard eero",
-      description: "One eero router included with your package",
+      name: "No additional eero device",
+      heading: "No additional Eero needed",
+      imageURL: getAssetPath("/images/x1_eeros.png"),
+      description: "Just one eero provided by us.",
+      totalCount: 1,
       price: 0,
-      isSelected: false,
+      isSelected: true,
     },
     ...eeroProducts,
   ];
 
-  const handlePlanChange = (data: PlanChangeFormData) => {
-    if (!data.selectedPlanId) {
+  const handlePlanChange = (selectedPlanId: string) => {
+    if (!selectedPlanId) {
       console.error("No plan ID found in form data");
       return;
     }
 
-    const lastDashIndex = data.selectedPlanId.lastIndexOf("-");
+    const lastDashIndex = selectedPlanId.lastIndexOf("-");
     if (lastDashIndex === -1) {
       console.error("Invalid plan ID format");
       return;
     }
 
-    const frontendIdentifier = data.selectedPlanId;
+    const frontendIdentifier = selectedPlanId;
     const newPackage = storeSelectedPackages.find(
       (p) => p.frontendIdentifier === frontendIdentifier,
     );
 
     if (newPackage) {
       selectPackage(newPackage);
+      // TODO: update basket in payload
       // TODO: When this page is done we need to add a `generateCICS` call when the user chooses a different product
     } else {
       console.error("No matching package found");
-    }
-  };
-
-  const handleEeroSelect = (product: EeroProduct) => {
-    selectEeroProduct(product);
-  };
-
-  const handleEeroRemove = () => {
-    const noEero = allEeroProducts.find((p) => p.id === "no-additional-eero");
-    if (noEero) {
-      selectEeroProduct(noEero);
     }
   };
 
@@ -134,6 +131,8 @@ export const ReviewYourBasket = () => {
   };
 
   const pricing = usePricingCalculations(selectedPackage, eeroSelection);
+
+  if (!selectedPackage) return null;
 
   return (
     <div className="pt-32">
@@ -147,20 +146,11 @@ export const ReviewYourBasket = () => {
       <BasketDialog
         isOpen={isDialogOpen}
         onClose={closeDialog}
-        selectedPackage={selectedPackage}
-        eeroSelection={eeroSelection}
         availablePackages={storeSelectedPackages}
         eeroProducts={allEeroProducts}
-        serviceAddress={serviceAddress}
         onPlanChange={handlePlanChange}
-        onEeroSelect={handleEeroSelect}
-        onEeroRemove={handleEeroRemove}
         onAddressChange={handleAddressChange}
-        monthlyPackagePrice={pricing.monthlyPackagePrice}
-        monthlyEeroPrice={pricing.monthlyEeroPrice}
-        monthlyTotal={pricing.monthlyTotal}
-        predictedTotalNext={pricing.predictedTotalNext}
-        predictedTotalFollowing={pricing.predictedTotalFollowing}
+        pricing={pricing}
       />
     </div>
   );

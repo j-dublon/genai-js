@@ -2,6 +2,7 @@ import { Button, ColorPill } from "@react-component-library/ui";
 import { Tick } from "@react-component-library/ui/icons";
 import Link from "next/link";
 
+import { convertPenceToPounds } from "@/hooks/usePricingCalculations";
 import { EeroProduct } from "@/store/useJoinFlowStore";
 
 export type EeroCardProps = {
@@ -17,10 +18,18 @@ export type EeroCardProps = {
 const ProductImageAndInfo = ({ product }: { product: EeroProduct }) => (
   <div className="flex flex-col mb-2">
     {product.imageURL && (
-      <img src={product.imageURL} className="h-full" alt="Eero router image." />
+      <div className="w-full aspect-[555/256]">
+        <img
+          src={product.imageURL}
+          className="object-contain w-full h-full"
+          alt="Eero router image."
+        />
+      </div>
     )}
-    <div className="flex flex-col justify-between w-full mt-8 space-y-2 md:flex-row">
-      <h3 className="font-bold text-md">{product.heading}</h3>
+    <div className="flex flex-col justify-between w-full mt-8 space-y-2md:flex-row">
+      <h3 className="font-semibold text-core-black text-sm md:text-md leading-[1.6]">
+        {product.heading}
+      </h3>
       {product.totalCount && (
         <ColorPill
           backgroundColor="pink"
@@ -39,35 +48,41 @@ const PricingInfo = ({
 }: {
   product: EeroProduct;
   isActive: boolean;
-}) => (
-  <>
-    <div className="flex flex-row justify-between md:flex-col">
-      {product.totalCount && (
-        <h2 className="text-sm font-semibold text-gray-800">
-          {isActive ? (
-            <span className="flex flex-row">
-              <Tick />
-              <span className="ml-1">
-                {product.totalCount - 1} extra eero
-                {product.totalCount - 1 > 1 ? "s" : ""} selected
+}) => {
+  const price = convertPenceToPounds(product.price);
+  return (
+    <>
+      <div className="flex flex-row items-baseline justify-between md:flex-col">
+        {product.totalCount && (
+          <h2 className="text-sm font-semibold leading-[1.6]">
+            {isActive ? (
+              <span className="flex flex-row">
+                <Tick />
+                <span className="ml-1">
+                  {product.totalCount - 1} extra eero
+                  {product.totalCount - 1 > 1 ? "s" : ""} selected
+                </span>
               </span>
-            </span>
-          ) : (
-            `Add ${product.totalCount - 1} extra eeros`
-          )}
-        </h2>
-      )}
-      <span className="flex flex-row items-baseline mt-1">
-        <span className="font-semibold text-md">+£{product.price}</span>
-        <span className="text-xxs">/month</span>
-      </span>
-    </div>
-    <p className="mt-1 text-xs text-gray-700 md:max-w-[130px]">
-      You&apos;ll have <strong>{product.totalCount}</strong> eero routers in
-      your plan.
-    </p>
-  </>
-);
+            ) : (
+              `Add ${product.totalCount - 1} extra eeros`
+            )}
+          </h2>
+        )}
+        <span className="flex flex-row items-baseline">
+          <span className="font-semibold text-md text-nowrap">+£{price}</span>
+          <span className="text-xxs">/month</span>
+        </span>
+      </div>
+      <p className="mt-1 text-xs text-ui-grey-500 md:text-core-black md:max-w-[160px]">
+        You&apos;ll have{" "}
+        <span className="font-semibold text-core-black">
+          {product.totalCount}
+        </span>{" "}
+        eero routers in your plan.
+      </p>
+    </>
+  );
+};
 
 export const EeroCard = ({
   product,
@@ -83,7 +98,7 @@ export const EeroCard = ({
         md:flex md:flex-col
       `}
     >
-      <div className="p-4 pb-0 md:pb-4 md:mb-8">
+      <div className="p-4 pb-0 md:pb-4 md:mb-8 text-xs md:text-sm text-ui-grey-500">
         <ProductImageAndInfo product={product} />
         <span>
           {product.description}{" "}

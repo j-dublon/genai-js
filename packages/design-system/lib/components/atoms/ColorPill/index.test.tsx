@@ -109,4 +109,12 @@ describe("ColorPill Component", () => {
     render(<ColorPill {...props} icon={undefined} />);
     expect(screen.queryByTestId("test-icon")).not.toBeInTheDocument();
   });
+
+  it("applies custom textClassName when provided", () => {
+    const customTextClass = "custom-text-class";
+    render(<ColorPill {...props} textClassName={customTextClass} />);
+
+    const colorPillText = screen.getByText(/test text/i);
+    expect(colorPillText).toHaveClass(customTextClass);
+  });
 });

@@ -16,12 +16,12 @@ export const SimpleNavBar = ({
 }: React.PropsWithChildren<SimpleNavBarProps>) => {
   return (
     <header
-      className={`ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ${fixed ? "ds:fixed" : ""}`}
+      className={`ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ${fixed ? "ds:fixed" : ""} ${backgroundColor === "yellow" ? "ds:border-core-grey-200 ds:border-b" : "ds:border-b-[0.25px] ds:border-transparent ds:md:border-ui-grey-300"}`}
       role="banner"
     >
       <nav
         aria-label="Simple navigation"
-        className={`ds:flex ds:justify-between ds:items-center ds:h-20 ds:py-4 ds:px-5 ds:md:px-12 ds:w-full ds:relative ds:z-50 ds:border-b-2 ds:border-ui-grey-300 ${backgroundColor === "yellow" ? "ds:bg-core-yellow" : "ds:bg-core-white"}`}
+        className={`ds:flex ds:justify-between ds:items-center ds:h-20 ds:py-4 ds:px-5 ds:md:px-12 ds:w-full ds:relative ds:z-50 ${backgroundColor === "yellow" ? "ds:bg-core-yellow" : "ds:bg-core-white"}`}
       >
         <Link href="/" className="ds:cursor-pointer">
           {logo}

@@ -30,6 +30,7 @@ export interface ColorPillProps {
   whiteText?: boolean;
   noPadding?: boolean;
   icon?: React.ReactNode;
+  textClassName?: string;
 }
 
 export const ColorPill = ({
@@ -37,10 +38,11 @@ export const ColorPill = ({
   backgroundColor,
   ariaLabel,
   size,
-  className,
+  className = "",
   whiteText = false,
   noPadding = false,
   icon,
+  textClassName = "",
 }: ColorPillProps) => {
   return (
     <div
@@ -52,12 +54,17 @@ export const ColorPill = ({
       )}
       aria-label={`Color pill with the text ${colorPillText}`}
     >
-      {icon && icon}
+      {icon && (
+        <div className="ds:flex ds:items-center ds:justify-center ds:mr-1">
+          {icon}
+        </div>
+      )}
       <h1
         className={cx(
           "ds:font-semibold",
           sizeVariants[size].text,
           whiteText ? "ds:text-core-white" : "ds:text-core-black",
+          textClassName,
         )}
         aria-label={ariaLabel ? ariaLabel : `Color pill text ${colorPillText}`}
       >

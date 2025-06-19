@@ -1,324 +1,144 @@
-import { useEffect, useRef, useState } from "react";
+import { useClickOutside } from "@react-component-library/ui";
+import { useEffect, useRef } from "react";
 
-import EeroSelectionForm from "@/components/ReviewYourBasket/forms/eeroSelectionForm";
-import PackageChangeForm, {
-  PlanChangeFormData,
-} from "@/components/ReviewYourBasket/forms/packageChangeForm";
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
-import { EeroProduct, StoreSelectedPackage } from "@/store/useJoinFlowStore";
+import { PricingCalculations } from "@/hooks/usePricingCalculations";
+import useJoinFlowStore, {
+  EeroProduct,
+  StoreSelectedPackage,
+} from "@/store/useJoinFlowStore";
+
+import { AddressInfo } from "./AddressInfo";
+import { BasketHeader } from "./BasketHeader";
+import { EeroInfo } from "./EeroInfo";
+import { PackageInfo } from "./PackageInfo";
+import { RestartBasket } from "./RestartBasket";
+import { Subtotal } from "./Subtotal";
 
 interface BasketDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  selectedPackage: StoreSelectedPackage | null;
-  eeroSelection: EeroProduct | null;
   availablePackages: StoreSelectedPackage[];
   eeroProducts: EeroProduct[];
-  serviceAddress: {
-    line1: string;
-    line2?: string;
-    line3?: string;
-  } | null;
-  onPlanChange: (data: PlanChangeFormData) => void;
-  onEeroSelect: (product: EeroProduct) => void;
-  onEeroRemove: () => void;
+  onPlanChange: (selectedPlanId: string) => void;
   onAddressChange: () => void;
-  monthlyPackagePrice: number;
-  monthlyEeroPrice: number;
-  monthlyTotal: number;
-  predictedTotalNext: number;
-  predictedTotalFollowing: number;
+  pricing: PricingCalculations;
 }
 
 export const BasketDialog = ({
   isOpen,
   onClose,
-  selectedPackage,
-  eeroSelection,
   availablePackages,
   eeroProducts,
-  serviceAddress,
   onPlanChange,
-  onEeroSelect,
-  onEeroRemove,
   onAddressChange,
-  monthlyPackagePrice,
-  monthlyEeroPrice,
-  monthlyTotal,
-  predictedTotalNext,
-  predictedTotalFollowing,
+  pricing,
 }: BasketDialogProps) => {
-  const [isChangingPlan, setIsChangingPlan] = useState(false);
-  const [isManagingEeros, setIsManagingEeros] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleEscapeKey = (e: KeyboardEvent) => {
-      if (isOpen && e.key === "Escape") {
-        onClose();
-      }
-    };
+  const { serviceAddress, selectedPackage, eeroSelection } = useJoinFlowStore();
 
-    if (isOpen) {
-      document.addEventListener("keydown", handleEscapeKey);
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+  const { yourMeshNetwork, addMoreEeros, removeEeros } = reviewYourBasketText;
+
+  useClickOutside(modalRef, isOpen, onClose);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleEscape = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", handleEscape);
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
+      document.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
     };
   }, [isOpen, onClose]);
-
-  const getEeroDescription = () => {
-    if (!eeroSelection || eeroSelection.id === "no-additional-eero") {
-      return "Standard setup with one eero device";
-    } else if (eeroSelection.id === "eero-6") {
-      return "Enhanced coverage with one additional eero (2 total)";
-    } else if (eeroSelection.id === "eero-6-plus") {
-      return "Maximum coverage with two additional eeros (3 total)";
-    }
-    return eeroSelection.description;
-  };
-
-  const togglePlanChange = () => {
-    setIsChangingPlan(!isChangingPlan);
-  };
-
-  const toggleManageEeros = () => {
-    setIsManagingEeros(!isManagingEeros);
-  };
-
-  const handlePlanChangeSubmit = (data: PlanChangeFormData) => {
-    onPlanChange(data);
-    setIsChangingPlan(false);
-  };
-
-  const handleSelectEero = (product: EeroProduct) => {
-    onEeroSelect(product);
-    setIsManagingEeros(false);
-  };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-40 overflow-hidden">
-      <div
-        className="fixed inset-0 bg-[rgba(31,31,31,0.4)]"
-        onClick={onClose}
-      />
-
-      <div
-        ref={modalRef}
-        className="fixed inset-x-0 bottom-0 top-40 flex items-start justify-center z-40 overflow-y-auto"
-      >
-        <div className="relative bg-core-white w-3/5 mx-auto shadow-lg">
-          <div className="px-12 py-16">
-            <div className="flex justify-between items-start">
-              <h2 className="text-2xl font-bold mb-6">
-                {reviewYourBasketText.title}
-              </h2>
-              <button
-                onClick={onClose}
-                className="p-2 text-ui-grey-300 hover:text-black"
+      <div className="fixed inset-0 bg-[rgba(31,31,31,0.4)]" />
+      <div className="fixed inset-x-0 bottom-0 top-20 flex items-start justify-center z-40 overflow-y-auto">
+        <div
+          ref={modalRef}
+          className="relative w-full md:w-[80%] h-auto max-w-[1143px] mx-auto md:rounded-b-[50px] bg-ui-grey-100 md:bg-core-white"
+        >
+          <div className="py-3 px-5 md:py-10">
+            <div className="w-full max-w-[713px] mx-auto flex flex-col gap-6 md:gap-16">
+              <BasketHeader
+                onClose={onClose}
+                title={reviewYourBasketText.title}
+              />
+              <div
+                id="review-your-basket-content"
+                className="bg-core-white rounded-lg p-4 md:p-0"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
-            {serviceAddress && (
-              <div className="flex justify-between items-center mb-4">
-                <div>
-                  <h3 className="font-normal">
-                    {reviewYourBasketText.yourAddress}{" "}
-                    <span className="text-sm font-medium text-ui-grey-500">
-                      {[
-                        serviceAddress.line1,
-                        serviceAddress.line2,
-                        serviceAddress.line3,
-                      ]
-                        .filter(Boolean)
-                        .join(", ")}
-                    </span>{" "}
-                  </h3>
-                </div>
-              </div>
-            )}
-
-            {selectedPackage && (
-              <div className="border-t border-ui-grey-300 pt-4 mt-4">
-                <h3 className="font-normal mb-4">
-                  {reviewYourBasketText.broadbandPlan}{" "}
-                  <span className="text-sm font-medium text-ui-grey-500">
-                    {`${selectedPackage.speeds.download}Mbps`}{" "}
-                    {reviewYourBasketText.fullFiber},{" "}
-                    {selectedPackage.speeds.download}Mbps download speed,{" "}
-                    {selectedPackage.speeds.upload}Mbps upload speed -{" "}
-                    {selectedPackage.termMonths} months
-                  </span>{" "}
-                </h3>
-
-                {!isChangingPlan ? (
-                  <p
-                    className="text-tertiary-peach cursor-pointer"
-                    onClick={togglePlanChange}
-                  >
-                    {reviewYourBasketText.changePlan}
-                  </p>
-                ) : (
-                  <PackageChangeForm
-                    availablePackages={availablePackages}
-                    onSubmit={handlePlanChangeSubmit}
-                    onCancel={togglePlanChange}
-                  />
-                )}
-              </div>
-            )}
-
-            {eeroSelection && (
-              <div className="border-t border-ui-grey-300 pt-4 mt-4">
-                <h3 className="font-normal mb-4">
-                  {reviewYourBasketText.yourMeshNetwork}{" "}
-                  <span className="text-sm font-medium text-ui-grey-500">
-                    {eeroSelection
-                      ? eeroSelection.name
-                      : reviewYourBasketText.standardEero}
-                  </span>
-                </h3>
-                <p className="mb-4">{getEeroDescription()}</p>
-
-                {!isManagingEeros ? (
-                  <div className="flex gap-4">
-                    {(!eeroSelection ||
-                      eeroSelection.id === "no-additional-eero" ||
-                      eeroSelection.id === "eero-6") && (
-                      <p
-                        className="text-tertiary-peach cursor-pointer"
-                        onClick={toggleManageEeros}
-                      >
-                        {reviewYourBasketText.addMoreEeros}
-                      </p>
-                    )}
-                    {eeroSelection &&
-                      eeroSelection.id !== "no-additional-eero" && (
-                        <p
-                          className="text-tertiary-peach cursor-pointer"
-                          onClick={onEeroRemove}
-                        >
-                          {reviewYourBasketText.removeEeros}
-                        </p>
-                      )}
-                  </div>
-                ) : (
-                  <EeroSelectionForm
-                    eeroProducts={eeroProducts}
-                    currentSelection={eeroSelection}
-                    onSelect={handleSelectEero}
-                    onCancel={toggleManageEeros}
-                  />
-                )}
-              </div>
-            )}
-
-            {eeroSelection && (
-              <>
-                <div className="border-t border-ui-grey-300 pt-4 my-4">
-                  <div className="flex justify-between items-center">
-                    <h3 className="font-bold">
-                      {reviewYourBasketText.yourSubtotal}
-                    </h3>
-                  </div>
-                </div>
-                <div className="bg-ui-grey-100 p-4 rounded-md">
+                <div className="border md:border-none border-ui-grey-300 rounded-lg p-4 md:p-0 flex flex-col gap-6 md:gap-8">
+                  {serviceAddress && (
+                    <AddressInfo
+                      title={reviewYourBasketText.yourAddress}
+                      address={serviceAddress}
+                    />
+                  )}
+                  <hr className="border-ui-grey-300 bg-ui-grey-300 md:border-ui-grey-400 md:bg-ui-grey-400" />
                   {selectedPackage && (
-                    <div className="flex justify-between items-center text-sm">
-                      <h3 className="font-bold">
-                        {selectedPackage.frontendIdentifier}{" "}
-                        {reviewYourBasketText.fullFiber}{" "}
-                      </h3>
-                      <p className="whitespace-nowrap font-medium">
-                        £{monthlyPackagePrice}
-                        <span className="font-normal">
-                          {reviewYourBasketText.perMonth}
-                        </span>
-                      </p>
-                    </div>
+                    <PackageInfo
+                      changePlanButtonText={reviewYourBasketText.changePlan}
+                      broadbandPlanText={reviewYourBasketText.broadbandPlan}
+                      planDescriptionText={reviewYourBasketText.fullFiber}
+                      availablePackages={availablePackages}
+                      onPlanChange={onPlanChange}
+                      selectedPackage={selectedPackage}
+                    />
                   )}
-
-                  {eeroSelection && (
-                    <div className="border-t border-core-white mt-4">
-                      <div className="flex justify-between mt-4">
-                        <h3 className="font-bold">{eeroSelection.name}</h3>
-
-                        <p className="whitespace-nowrap font-medium">
-                          £{monthlyEeroPrice}
-                          <span className="font-normal">
-                            {reviewYourBasketText.perMonth}
-                          </span>
-                        </p>
-                      </div>
-                    </div>
+                  <hr className="border-ui-grey-300 bg-ui-grey-300 md:border-ui-grey-400 md:bg-ui-grey-400" />
+                  {eeroSelection && selectedPackage && (
+                    <>
+                      <EeroInfo
+                        monthlyEeroPrice={pricing.monthlyEeroPrice}
+                        eeroSelection={eeroSelection}
+                        eeroProducts={eeroProducts}
+                        eeroInfoText={{
+                          title: yourMeshNetwork,
+                          addMoreEeros,
+                          removeEeros,
+                        }}
+                      />
+                      <hr className="border-ui-grey-300 bg-ui-grey-300 md:border-ui-grey-400 md:bg-ui-grey-400" />
+                      <Subtotal
+                        pricing={pricing}
+                        selectedPackage={selectedPackage}
+                        eeroSelection={eeroSelection}
+                        // TODO: offer text should be based on any applicable offers?
+                        offerText={reviewYourBasketText.offerText}
+                        pricingText={{
+                          title: reviewYourBasketText.yourSubtotal,
+                          subtitle: reviewYourBasketText.yourTotal,
+                          fullFiber: reviewYourBasketText.fullFiber,
+                          perMonth: reviewYourBasketText.perMonth,
+                          eeroRouters: reviewYourBasketText.eeroRouters,
+                          contractText: reviewYourBasketText.contractText,
+                          installationText:
+                            reviewYourBasketText.installationText,
+                          discountPeriodText:
+                            reviewYourBasketText.discountPeriodText,
+                          afterText: reviewYourBasketText.afterText,
+                          afterDiscountPeriod:
+                            reviewYourBasketText.afterDiscountPeriod,
+                        }}
+                      />
+                    </>
                   )}
-
-                  <div className="border-t border-core-white mt-4">
-                    <div className="flex justify-between mt-4">
-                      <h3 className="font-bold">
-                        {reviewYourBasketText.yourTotal}
-                      </h3>
-
-                      <div className="text-right">
-                        <p className="whitespace-nowrap font-medium">
-                          £{monthlyTotal}
-                          <span className="font-normal">
-                            {reviewYourBasketText.afterFreePeriod}
-                          </span>
-                        </p>
-
-                        <div className="mt-4">
-                          <p className="whitespace-nowrap font-medium">
-                            £{predictedTotalNext}
-                            <span className="font-normal">
-                              {reviewYourBasketText.fromApril2025}
-                            </span>
-                          </p>
-                          <p className="whitespace-nowrap font-medium mt-2">
-                            £{predictedTotalFollowing}
-                            <span className="font-normal">
-                              {reviewYourBasketText.fromApril2027}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  <RestartBasket
+                    subtitle={reviewYourBasketText.addressWrong}
+                    restartText={reviewYourBasketText.startAgain}
+                    warningText={reviewYourBasketText.addressChangeWarning}
+                    onRestart={onAddressChange}
+                  />
                 </div>
-              </>
-            )}
-            <div className="mt-6 flex-col justify-between">
-              <p className="mb-2">{reviewYourBasketText.addressWrong} </p>
-              <p>
-                <span
-                  onClick={() => onAddressChange()}
-                  className="text-tertiary-purple underline font-medium mr-2"
-                >
-                  {reviewYourBasketText.startAgain}
-                </span>
-                {reviewYourBasketText.addressChangeWarning}
-              </p>
+              </div>
             </div>
           </div>
         </div>

@@ -12,7 +12,7 @@ export const eeroProducts: EeroProduct[] = [
       "2 eeros will cover an area of approximately XXX square metres and is perfect for most UK homes.",
     totalCount: 2,
     imageURL: getAssetPath("/images/x2_eeros.png"),
-    price: 7.0,
+    price: 700,
     isSelected: false,
   },
   {
@@ -23,7 +23,7 @@ export const eeroProducts: EeroProduct[] = [
       "3 eero routers will cover an area of approximately XXX square metres, and is perfect for really large homes, multiple floors and connection outside.",
     totalCount: 3,
     imageURL: getAssetPath("/images/x3_eeros.png"),
-    price: 14.0,
+    price: 1400,
     isSelected: false,
   },
 ];

@@ -12,8 +12,8 @@ const mockUseTrustpilotScore = vi.fn().mockReturnValue({
 });
 
 vi.mock("./EeroImage", () => ({
-  EeroImage: ({ packageName }: { packageName: string }) => (
-    <div data-testid="eero-image">{packageName}</div>
+  EeroImage: ({ packageSpeed }: { packageSpeed: number }) => (
+    <div data-testid="eero-image">{packageSpeed}</div>
   ),
 }));
 
@@ -349,7 +349,7 @@ describe("PackageSelectionDetails", () => {
     expect(mockHandlePackageSelection).toHaveBeenCalledWith(mockSpeedyPackage);
   });
 
-  it("passes correct packageName to EeroImage", () => {
+  it("passes correct packageSpeed to EeroImage", () => {
     render(
       <PackageSelectionDetails
         packageDetails={mockPackage}
@@ -361,7 +361,7 @@ describe("PackageSelectionDetails", () => {
 
     const eeroImages = screen.getAllByTestId("eero-image");
     eeroImages.forEach((image) => {
-      expect(image).toHaveTextContent("500Mbps");
+      expect(image).toHaveTextContent("500");
     });
   });
 

@@ -7,10 +7,10 @@ import { upgradeOfferText } from "./PackageSelectionDetailsProps";
 import { UpgradeOffer } from "./UpgradeOffer";
 
 const mockTopSpeedPackage: StoreSelectedPackage = {
-  krakenProductCode: "BT-900-12M_45",
-  frontendIdentifier: "900-12",
+  krakenProductCode: "BT-900-24M_45",
+  frontendIdentifier: "900-24",
   frontendTitle: "C-900",
-  termMonths: 12,
+  termMonths: 24,
   selectionIdentifier: "2",
   installationRequired: true,
   appliedPromotionUUIDs: [],
@@ -20,12 +20,12 @@ const mockTopSpeedPackage: StoreSelectedPackage = {
     annualPriceRise: [
       {
         price: 5000,
-        date: "2026-04-01T12:00:00.000Z",
+        date: "2027-04-01T12:00:00.000Z",
         id: "rise-1",
       },
       {
         price: 5300,
-        date: "2027-04-01T12:00:00.000Z",
+        date: "2028-04-01T12:00:00.000Z",
         id: "rise-2",
       },
     ],

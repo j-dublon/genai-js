@@ -2,6 +2,11 @@ import { Button, DropdownPill } from "@react-component-library/ui";
 import { useState } from "react";
 
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
+import {
+  followingApril,
+  formatDisplayDateMonthYear,
+  nextApril,
+} from "@/lib/formatDate";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { upgradeOfferText } from "./PackageSelectionDetailsProps";
@@ -34,6 +39,10 @@ export const UpgradeOffer = ({
   const handleChange = (value: string) => {
     toggle.onChange(value === toggle.rightLabel);
   };
+
+  const annualPriceRise = topSpeedPackage.prices?.annualPriceRise ?? [];
+  const nextPriceDate = annualPriceRise[0]?.date;
+  const followingPriceDate = annualPriceRise[1]?.date;
 
   return (
     <div
@@ -72,19 +81,27 @@ export const UpgradeOffer = ({
         <hr className="border-t-[1px] border-core-black" />
         <div className="pt-1 flex flex-col">
           <p className="text-xs leading-[1.6]" data-testid="next-price">
-            {upgradeOfferText.nextPrice}{" "}
+            From{" "}
+            {nextPriceDate
+              ? formatDisplayDateMonthYear(nextPriceDate)
+              : nextApril(new Date())}{" "}
             <span className="font-semibold">
               £{pricing.nextPrice}
               /month
             </span>
           </p>
-          <p className="text-xs leading-[1.6]" data-testid="following-price">
-            {upgradeOfferText.followingPrice}{" "}
-            <span className="font-semibold">
-              £{pricing.followingPrice}
-              /month
-            </span>
-          </p>
+          {topSpeedPackage.termMonths > 12 && (
+            <p className="text-xs leading-[1.6]" data-testid="following-price">
+              From{" "}
+              {followingPriceDate
+                ? formatDisplayDateMonthYear(followingPriceDate)
+                : followingApril(new Date())}{" "}
+              <span className="font-semibold">
+                £{pricing.followingPrice}
+                /month
+              </span>
+            </p>
+          )}
         </div>
       </div>
       <Button

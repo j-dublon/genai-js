@@ -8,18 +8,33 @@ export const convertPenceToPounds = (pence: number): number => pence / 100;
 const generatePackageName = (speeds: { download: number }): string =>
   `${speeds.download}Mbps`;
 
+export interface PricingCalculations {
+  monthlyPackagePrice: number;
+  discountedPrice: number;
+  nextPrice: number;
+  followingPrice: number;
+  monthlyEeroPrice: number;
+  monthlyTotal: number;
+  discountedMonthlyTotal: number;
+  predictedTotalNext: number;
+  predictedTotalFollowing: number;
+  packageName: string;
+}
+
 export const usePricingCalculations = (
   selectedPackage: StoreSelectedPackage | null,
   eeroSelection: EeroProduct | null,
-) => {
+): PricingCalculations => {
   return useMemo(() => {
     if (!selectedPackage) {
       return {
         monthlyPackagePrice: 0,
+        discountedPrice: 0,
         nextPrice: 0,
         followingPrice: 0,
         monthlyEeroPrice: 0,
         monthlyTotal: 0,
+        discountedMonthlyTotal: 0,
         predictedTotalNext: 0,
         predictedTotalFollowing: 0,
         packageName: "",
@@ -29,6 +44,10 @@ export const usePricingCalculations = (
     const monthlyPackagePrice = convertPenceToPounds(
       selectedPackage.prices.basePrice,
     );
+    const discountedPrice = convertPenceToPounds(
+      selectedPackage.prices.discountedPrice,
+    );
+
     const nextPrice = selectedPackage.prices.annualPriceRise?.[0]?.price
       ? convertPenceToPounds(selectedPackage.prices.annualPriceRise[0].price)
       : monthlyPackagePrice;
@@ -36,21 +55,41 @@ export const usePricingCalculations = (
       ? convertPenceToPounds(selectedPackage.prices.annualPriceRise[1].price)
       : nextPrice;
 
-    //TO DO: unlikely we need to round this, but lets to see what extras returns
     const monthlyEeroPrice = eeroSelection
-      ? Math.round(convertPenceToPounds(eeroSelection.price))
+      ? convertPenceToPounds(eeroSelection.price)
       : 0;
-    const monthlyTotal = monthlyPackagePrice + monthlyEeroPrice;
-    const predictedTotalNext = nextPrice + monthlyEeroPrice;
-    const predictedTotalFollowing = followingPrice + monthlyEeroPrice;
+
+    // Calculate totals in pence first, then convert to pounds to avoid floating point precision issues
+    const eeroSelectionPence = eeroSelection ? eeroSelection.price : 0;
+    const monthlyTotal = convertPenceToPounds(
+      selectedPackage.prices.basePrice + eeroSelectionPence,
+    );
+    const discountedMonthlyTotal = convertPenceToPounds(
+      selectedPackage.prices.discountedPrice + eeroSelectionPence,
+    );
+
+    const nextPricePence =
+      selectedPackage.prices.annualPriceRise?.[0]?.price ||
+      selectedPackage.prices.basePrice;
+    const followingPricePence =
+      selectedPackage.prices.annualPriceRise?.[1]?.price || nextPricePence;
+    const predictedTotalNext = convertPenceToPounds(
+      nextPricePence + eeroSelectionPence,
+    );
+    const predictedTotalFollowing = convertPenceToPounds(
+      followingPricePence + eeroSelectionPence,
+    );
+
     const packageName = generatePackageName(selectedPackage.speeds);
 
     return {
       monthlyPackagePrice,
+      discountedPrice,
       nextPrice,
       followingPrice,
       monthlyEeroPrice,
       monthlyTotal,
+      discountedMonthlyTotal,
       predictedTotalNext,
       predictedTotalFollowing,
       packageName,

@@ -1,7 +1,7 @@
 import { RefObject, useEffect } from "react";
 
 export const useClickOutside = (
-  ref: RefObject<HTMLDialogElement | null>,
+  ref: RefObject<HTMLDialogElement | HTMLDivElement | null>,
   isModalOpen: boolean,
   onOutsideClick: () => void,
 ): void => {

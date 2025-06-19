@@ -188,7 +188,7 @@ export const GoLiveDate = () => {
   return (
     <>
       <StepNavigationWithBasket step={3} />
-      <div className="container md:max-w-[565px] mx-auto px-4 pb-8 pt-30">
+      <div className="container md:max-w-[565px] mx-auto px-4 pb-8 pt-10 lg:pt-20">
         {switchingDetails?.otsSwitchStatus === "OTS_FAILED" && (
           <OtsFailBanner bannerText={otsFailBannerText} />
         )}

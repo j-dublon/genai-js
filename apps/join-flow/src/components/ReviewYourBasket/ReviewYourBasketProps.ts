@@ -4,7 +4,7 @@ export const reviewYourBasketText = {
   eeroImage: getAssetPath("/images/x1_eeros.png"),
   biDirectionalImage: getAssetPath("/images/biDirectionalArrows.png"),
 
-  title: "Review my basket",
+  title: "Review your basket",
   viewBasketButton: "View Basket",
   whatIsNext: "What's next?",
   oopsMessage: "Oops have you selected a package",
@@ -13,15 +13,12 @@ export const reviewYourBasketText = {
   addressWrong: "Notice something's wrong with your address?",
   startAgain: "Start again here",
   addressChangeWarning:
-    "Please be aware that you’ll need to pop all your info in again.",
+    "Please be aware that you'll need to pop all your info in again.",
 
   broadbandPlan: "Broadband plan:",
   changePlan: "Change my plan",
-  chooseDifferentPlan: "Choose a different plan",
-  selectDifferentPlan: "Select a different plan",
 
   yourMeshNetwork: "Your mesh network:",
-  standardEero: "Standard eero",
   addMoreEeros: "Add more eeros",
   removeEeros: "Remove eeros",
   chooseEeroSetup: "Choose your eero setup",
@@ -35,8 +32,12 @@ export const reviewYourBasketText = {
   yourSubtotal: "Your Subtotal",
   fullFiber: "full fibre",
   perMonth: "/month",
+  contractText: "-month contract",
+  installationText: "Installation / set-up fee",
   yourTotal: "Your total",
-  afterFreePeriod: "/after free period",
-  fromApril2025: "/from April 2025",
-  fromApril2027: "/from April 2027",
+  eeroRouters: "eero routers",
+  discountPeriodText: "/month for the first 3 months",
+  afterText: "/month afterwards",
+  afterDiscountPeriod: "/month after discounted period",
+  offerText: "You're saving £100 on this plan",
 };

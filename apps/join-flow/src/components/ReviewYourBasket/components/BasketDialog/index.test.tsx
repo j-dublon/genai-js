@@ -3,28 +3,33 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
-import { EeroProduct, StoreSelectedPackage } from "@/store/useJoinFlowStore";
+import useJoinFlowStore, {
+  EeroProduct,
+  StoreSelectedPackage,
+} from "@/store/useJoinFlowStore";
 
 import { BasketDialog } from "./index";
+
+vi.mock("@/store/useJoinFlowStore", () => ({
+  default: vi.fn(),
+}));
 
 describe("BasketDialog", () => {
   const mockOnClose = vi.fn();
   const mockOnPlanChange = vi.fn();
-  const mockOnEeroSelect = vi.fn();
-  const mockOnEeroRemove = vi.fn();
   const mockOnAddressChange = vi.fn();
 
   const mockSelectedPackage: StoreSelectedPackage = {
-    krakenProductCode: "BT-150-12M_38",
-    frontendIdentifier: "150-12",
-    termMonths: 12,
+    krakenProductCode: "BT-150-24M_38",
+    frontendIdentifier: "150-24",
+    termMonths: 24,
     frontendTitle: "C-150",
     selectionIdentifier: "0",
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
       basePrice: 3200,
-      discountedPrice: 3200,
+      discountedPrice: 3000,
       annualPriceRise: [
         {
           price: 3500,
@@ -52,6 +57,7 @@ describe("BasketDialog", () => {
     name: "No additional eero device",
     description: "Just one eero provided by us.",
     price: 0,
+    totalCount: 1,
     isSelected: true,
   };
 
@@ -62,12 +68,14 @@ describe("BasketDialog", () => {
       name: "eero 6",
       description: "Enhanced coverage with one additional eero.",
       price: 500,
+      totalCount: 2,
       isSelected: false,
     },
     {
       id: "eero-6-plus",
       name: "eero 6 Plus",
       description: "Maximum coverage with two additional eeros.",
+      totalCount: 3,
       price: 800,
       isSelected: false,
     },
@@ -104,10 +112,32 @@ describe("BasketDialog", () => {
   ];
 
   const mockServiceAddress = {
-    line1: "123 Test Street",
-    line2: "Test Area",
+    line1: "123",
+    line2: "Test Street",
     line3: "Test City",
+    postcode: "ABC 123",
   };
+
+  const mockPricing = {
+    monthlyPackagePrice: 32,
+    monthlyEeroPrice: 0,
+    monthlyTotal: 32,
+    discountedPrice: 30,
+    discountedMonthlyTotal: 30,
+    predictedTotalNext: 38,
+    predictedTotalFollowing: 42,
+    nextPrice: 38,
+    followingPrice: 42,
+    packageName: "C-300",
+  };
+
+  beforeEach(() => {
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      serviceAddress: mockServiceAddress,
+      selectedPackage: mockSelectedPackage,
+      eeroSelection: mockEeroSelection,
+    });
+  });
 
   const renderComponent = (
     props: Partial<Parameters<typeof BasketDialog>[0]> = {},
@@ -116,20 +146,11 @@ describe("BasketDialog", () => {
       <BasketDialog
         isOpen={true}
         onClose={mockOnClose}
-        selectedPackage={mockSelectedPackage}
-        eeroSelection={mockEeroSelection}
         availablePackages={mockAvailablePackages}
         eeroProducts={mockEeroProducts}
-        serviceAddress={mockServiceAddress}
         onPlanChange={mockOnPlanChange}
-        onEeroSelect={mockOnEeroSelect}
-        onEeroRemove={mockOnEeroRemove}
         onAddressChange={mockOnAddressChange}
-        monthlyPackagePrice={32}
-        monthlyEeroPrice={0}
-        monthlyTotal={32}
-        predictedTotalNext={35}
-        predictedTotalFollowing={38}
+        pricing={mockPricing}
         {...props}
       />,
     );
@@ -144,20 +165,11 @@ describe("BasketDialog", () => {
       <BasketDialog
         isOpen={false}
         onClose={mockOnClose}
-        selectedPackage={mockSelectedPackage}
-        eeroSelection={mockEeroSelection}
         availablePackages={mockAvailablePackages}
         eeroProducts={mockEeroProducts}
-        serviceAddress={mockServiceAddress}
         onPlanChange={mockOnPlanChange}
-        onEeroSelect={mockOnEeroSelect}
-        onEeroRemove={mockOnEeroRemove}
         onAddressChange={mockOnAddressChange}
-        monthlyPackagePrice={32}
-        monthlyEeroPrice={0}
-        monthlyTotal={32}
-        predictedTotalNext={35}
-        predictedTotalFollowing={38}
+        pricing={mockPricing}
       />,
     );
 
@@ -177,7 +189,7 @@ describe("BasketDialog", () => {
       screen.getByText(reviewYourBasketText.yourAddress),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/123 Test Street, Test Area, Test City/),
+      screen.getByText(/123 Test Street, Test City, ABC 123/),
     ).toBeInTheDocument();
   });
 
@@ -190,36 +202,41 @@ describe("BasketDialog", () => {
     expect(screen.getByText(/150Mbps/)).toBeInTheDocument();
     expect(screen.getByText(/150Mbps download speed/)).toBeInTheDocument();
     expect(screen.getByText(/30Mbps upload speed/)).toBeInTheDocument();
-    expect(screen.getByText(/12 months/)).toBeInTheDocument();
+    expect(screen.getByText(/24 months/)).toBeInTheDocument();
   });
 
   it("should display the change plan option", async () => {
     renderComponent();
-    const user = userEvent.setup();
-
-    const changePlanButton = screen.getByText(reviewYourBasketText.changePlan);
+    const changePlanButton = screen.getByRole("button", {
+      name: "Change plan",
+    });
     expect(changePlanButton).toBeInTheDocument();
-
-    await user.click(changePlanButton);
-
-    expect(
-      screen.getByText(reviewYourBasketText.selectDifferentPlan),
-    ).toBeInTheDocument();
+    expect(changePlanButton).toHaveTextContent(reviewYourBasketText.changePlan);
   });
 
   it("should not display eero section when eeroSelection is null", () => {
-    renderComponent({ eeroSelection: null });
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      serviceAddress: mockServiceAddress,
+      selectedPackage: mockSelectedPackage,
+      eeroSelection: null,
+    });
+    renderComponent();
 
     expect(
       screen.queryByText(reviewYourBasketText.yourMeshNetwork),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByText("No additional eero device"),
+      screen.queryByText(reviewYourBasketText.addMoreEeros),
     ).not.toBeInTheDocument();
   });
 
   it("should not display the subtotal section when eeroSelection is null", () => {
-    renderComponent({ eeroSelection: null });
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      serviceAddress: mockServiceAddress,
+      selectedPackage: mockSelectedPackage,
+      eeroSelection: null,
+    });
+    renderComponent();
 
     expect(
       screen.queryByText(reviewYourBasketText.yourSubtotal),
@@ -233,24 +250,10 @@ describe("BasketDialog", () => {
     renderComponent();
     const user = userEvent.setup();
 
-    const closeButton = screen.getByRole("button", { name: "" });
+    const closeButton = screen.getByLabelText("Close basket");
     await user.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
-  });
-
-  it("should show eero selection form when add more eeros is clicked", async () => {
-    renderComponent();
-    const user = userEvent.setup();
-
-    const addMoreEerosButton = screen.getByText(
-      reviewYourBasketText.addMoreEeros,
-    );
-    await user.click(addMoreEerosButton);
-
-    expect(
-      screen.getByText(reviewYourBasketText.chooseEeroSetup),
-    ).toBeInTheDocument();
   });
 
   it("should call onAddressChange when start again is clicked", async () => {
@@ -263,21 +266,6 @@ describe("BasketDialog", () => {
     expect(mockOnAddressChange).toHaveBeenCalledTimes(1);
   });
 
-  it("should handle eero selection", async () => {
-    renderComponent();
-    const user = userEvent.setup();
-
-    const addMoreEerosButton = screen.getByText(
-      reviewYourBasketText.addMoreEeros,
-    );
-    await user.click(addMoreEerosButton);
-
-    const eero6 = screen.getByText("eero 6");
-    await user.click(eero6);
-
-    expect(mockOnEeroSelect).toHaveBeenCalledWith(mockEeroProducts[1]);
-  });
-
   it("should show eero price in subtotal when premium eero is selected", () => {
     const premiumEero: EeroProduct = {
       id: "eero-6",
@@ -285,18 +273,28 @@ describe("BasketDialog", () => {
       description: "Enhanced coverage with one additional eero.",
       price: 500,
       isSelected: true,
-      imageURL: null,
-      heading: null,
-      totalCount: null,
+      totalCount: 2,
     };
 
-    renderComponent({
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      serviceAddress: mockServiceAddress,
+      selectedPackage: mockSelectedPackage,
       eeroSelection: premiumEero,
-      monthlyPackagePrice: 32,
-      monthlyEeroPrice: 5,
-      monthlyTotal: 37,
-      predictedTotalNext: 40,
-      predictedTotalFollowing: 43,
+    });
+
+    renderComponent({
+      pricing: {
+        monthlyPackagePrice: 32,
+        monthlyEeroPrice: 5,
+        monthlyTotal: 37,
+        discountedPrice: 32,
+        discountedMonthlyTotal: 37,
+        predictedTotalNext: 43,
+        predictedTotalFollowing: 47,
+        nextPrice: 38,
+        followingPrice: 42,
+        packageName: "C-300",
+      },
     });
 
     const eeroPrice = screen.getAllByText((content) =>
@@ -319,30 +317,37 @@ describe("BasketDialog", () => {
   it("should display pricing information correctly", () => {
     renderComponent();
 
-    // Test for package price with /month suffix
+    // Test for package price with discount suffix
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£32/month";
+        return element?.textContent === "£30/month for the first 3 months";
       }),
     ).toBeInTheDocument();
 
-    // Test for total price with /after free period suffix
+    // Test for total price with afterwards suffix
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£32/after free period";
+        return element?.textContent === "£32/month afterwards";
+      }),
+    ).toBeInTheDocument();
+
+    // Test for package price after discount period
+    expect(
+      screen.getByText((content, element) => {
+        return element?.textContent === "£32/month after discounted period";
       }),
     ).toBeInTheDocument();
 
     // Test for future pricing
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£35/from April 2025";
+        return element?.textContent === "£38/month from April 2026";
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£38/from April 2027";
+        return element?.textContent === "£42/month from April 2027";
       }),
     ).toBeInTheDocument();
   });
@@ -354,32 +359,58 @@ describe("BasketDialog", () => {
       description: "Enhanced coverage with one additional eero.",
       price: 500,
       isSelected: true,
+      totalCount: 2,
     };
 
-    renderComponent({ eeroSelection: premiumEero });
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      serviceAddress: mockServiceAddress,
+      selectedPackage: mockSelectedPackage,
+      eeroSelection: premiumEero,
+    });
+
+    renderComponent();
 
     expect(
       screen.getByText(reviewYourBasketText.removeEeros),
     ).toBeInTheDocument();
+    expect(
+      screen.queryByText(reviewYourBasketText.addMoreEeros),
+    ).toBeInTheDocument();
   });
 
-  it("should call onEeroRemove when remove eeros is clicked", async () => {
+  it("should show add eeros but not remove eeros button when minimum eero is selected", () => {
+    renderComponent();
+
+    expect(
+      screen.queryByText(reviewYourBasketText.removeEeros),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByText(reviewYourBasketText.addMoreEeros),
+    ).toBeInTheDocument();
+  });
+
+  it("should not show add more eeros button when maximum eero is selected", () => {
     const premiumEero: EeroProduct = {
-      id: "eero-6",
-      name: "eero 6",
-      description: "Enhanced coverage with one additional eero.",
-      price: 500,
-      isSelected: true,
+      id: "eero-6-plus",
+      name: "eero 6 Plus",
+      description: "Maximum coverage with two additional eeros.",
+      totalCount: 3,
+      price: 800,
+      isSelected: false,
     };
 
-    renderComponent({ eeroSelection: premiumEero });
-    const user = userEvent.setup();
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      serviceAddress: mockServiceAddress,
+      selectedPackage: mockSelectedPackage,
+      eeroSelection: premiumEero,
+    });
+    renderComponent();
 
-    const removeEerosButton = screen.getByText(
-      reviewYourBasketText.removeEeros,
-    );
-    await user.click(removeEerosButton);
-
-    expect(mockOnEeroRemove).toHaveBeenCalledTimes(1);
+    expect(
+      screen.queryByText(reviewYourBasketText.addMoreEeros),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByText(reviewYourBasketText.removeEeros),
+    ).toBeInTheDocument();
   });
 });

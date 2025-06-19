@@ -1,7 +1,13 @@
+export { Alert } from "./Alert";
 export { Arrow } from "./Arrow";
 export { ArrowWithCircle } from "./ArrowWithCircle";
+export { ChevronVertical } from "./ChevronVertical";
 export { ChevronVerticalWithCircle } from "./ChevronVerticalWithCircle";
+export { CloseIcon } from "./CloseIcon";
 export { InfoIcon } from "./InfoIcon";
+export { Minus } from "./Minus";
+export { Plus } from "./Plus";
 export { RadioIcon } from "./Radio";
+export { Tag } from "./Tag";
 export { Tick } from "./Tick";
 export { TickWithCircle } from "./TickWithCircle";

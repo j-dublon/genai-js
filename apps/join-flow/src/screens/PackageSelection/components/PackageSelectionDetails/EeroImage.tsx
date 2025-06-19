@@ -2,15 +2,15 @@ import { ColorPill } from "@react-component-library/ui";
 
 import { getAssetPath } from "@/lib/get-asset-path";
 
-export const EeroImage = ({ packageName }: { packageName: string }) => {
+export const EeroImage = ({ packageSpeed }: { packageSpeed: number }) => {
   const packageColors = {
-    "C-900": "bg-core-yellow",
-    "C-500": "bg-secondary-blue",
-    "C-150": "bg-secondary-pink",
+    "900": "bg-core-yellow",
+    "500": "bg-secondary-blue",
+    "150": "bg-secondary-pink",
   } as const;
 
   const backgroundColor =
-    packageColors[packageName as keyof typeof packageColors] ||
+    packageColors[packageSpeed.toString() as keyof typeof packageColors] ||
     "bg-secondary-blue";
 
   return (

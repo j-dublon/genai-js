@@ -494,7 +494,7 @@ const PersonalDetails = () => {
   return (
     <>
       <StepNavigationWithBasket step={1} />
-      <div className="container mx-auto px-6 py-8 pt-20">
+      <div className="container mx-auto px-6 py-8 lg:pt-24">
         <div className="max-w-[569px] mx-auto py-8 rounded-lg">
           <h1 className="text-2xl text-center font-bold mb-6">
             {personalDetailsProps.pageTitle}

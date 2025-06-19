@@ -10,7 +10,7 @@ export const mockEeroProduct = {
   description: "Mocked description",
   totalCount: 3,
   imageURL: "/images/x3_eeros.png",
-  price: 14.0,
+  price: 1400,
   isSelected: false,
 };
 

@@ -1,7 +1,7 @@
 import { Arrow } from "@react-component-library/ui/icons";
 
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
-import { formatDisplayDate } from "@/lib/formatDate";
+import { formatDisplayDateMonthYear } from "@/lib/formatDate";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 export const SpeedPriceDetails = ({
@@ -83,28 +83,30 @@ export const SpeedPriceDetails = ({
             )}
           </div>
           <hr className="border-t-[2px] text-core-white mx-8 md:mx-0" />
-          {nextPriceDate && (
-            <p
-              className="text-sm md:text-md leading-[1.6] md:leading-[1.5] text-ui-grey-500"
-              aria-label="Price next displayed"
-            >
-              <span className="font-semibold text-core-black">
-                £{pricing.nextPrice}
-              </span>
-              /month from {formatDisplayDate(nextPriceDate)}
-            </p>
-          )}
-          {followingPriceDate && (
-            <p
-              className="text-sm md:text-md leading-[1.6] md:leading-[1.5] text-ui-grey-500"
-              aria-label="Price following display"
-            >
-              <span className="font-semibold text-core-black">
-                £{pricing.followingPrice}
-              </span>
-              /month from {formatDisplayDate(followingPriceDate)}
-            </p>
-          )}
+          <div className="pt-4 px-8 pb-6 md:pb-4 flex flex-col gap-2">
+            {nextPriceDate && (
+              <p
+                className="text-sm md:text-md leading-[1.6] md:leading-[1.5] text-ui-grey-500"
+                aria-label="Price next displayed"
+              >
+                <span className="font-semibold text-core-black">
+                  £{pricing.nextPrice}
+                </span>
+                /month from {formatDisplayDateMonthYear(nextPriceDate)}
+              </p>
+            )}
+            {followingPriceDate && (
+              <p
+                className="text-sm md:text-md leading-[1.6] md:leading-[1.5] text-ui-grey-500"
+                aria-label="Price following display"
+              >
+                <span className="font-semibold text-core-black">
+                  £{pricing.followingPrice}
+                </span>
+                /month from {formatDisplayDateMonthYear(followingPriceDate)}
+              </p>
+            )}
+          </div>
         </div>
       </div>
     </div>

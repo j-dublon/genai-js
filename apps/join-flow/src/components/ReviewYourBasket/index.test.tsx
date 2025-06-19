@@ -22,6 +22,8 @@ vi.mock("@/validation/getNextPage", () => ({
   getNextPage: vi.fn(),
 }));
 
+const mockSetIsDialogOpen = vi.fn();
+
 describe("ReviewYourBasket", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -69,12 +71,13 @@ describe("ReviewYourBasket", () => {
         description: "Test description",
         price: 999,
         isSelected: true,
+        totalCount: 3,
       },
       serviceAddress: {
-        line1: "123 Test Street",
-        line2: "Test Town",
+        line1: "123",
+        line2: "Test Street",
         line3: "Test City",
-        postcode: "SW1A 1AA",
+        postcode: "ABC 123",
         addressKey: "test-key",
         addressKeyType: "NAD",
       },
@@ -122,55 +125,64 @@ describe("ReviewYourBasket", () => {
   });
 
   it("should render basket button", () => {
-    render(<ReviewYourBasket />);
+    render(
+      <ReviewYourBasket
+        isDialogOpen={false}
+        setIsDialogOpen={mockSetIsDialogOpen}
+      />,
+    );
     const button = screen.getByText("View Basket");
     expect(button).toBeInTheDocument();
   });
 
   it("should open dialog when button is clicked", async () => {
-    render(<ReviewYourBasket />);
+    render(
+      <ReviewYourBasket
+        isDialogOpen={false}
+        setIsDialogOpen={mockSetIsDialogOpen}
+      />,
+    );
     const user = userEvent.setup();
     const button = screen.getByText("View Basket");
     await user.click(button);
-    expect(screen.getByText("Review my basket")).toBeInTheDocument();
+    expect(mockSetIsDialogOpen).toHaveBeenCalledWith(true);
   });
 
   it("should close dialog when close button is clicked", async () => {
-    render(<ReviewYourBasket />);
-    const user = userEvent.setup();
-    const button = screen.getByText("View Basket");
-    await user.click(button);
-
-    const allButtons = screen.getAllByRole("button");
-    const closeButton = allButtons.find(
-      (btn) =>
-        !btn.textContent?.includes("View Basket") && btn.querySelector("svg"),
+    render(
+      <ReviewYourBasket
+        isDialogOpen={true}
+        setIsDialogOpen={mockSetIsDialogOpen}
+      />,
     );
-
-    expect(closeButton).toBeInTheDocument();
-    await user.click(closeButton!);
-
-    expect(screen.queryByText("Review my basket")).not.toBeInTheDocument();
+    const user = userEvent.setup();
+    const button = screen.getByLabelText("Close basket");
+    await user.click(button);
+    expect(mockSetIsDialogOpen).toHaveBeenCalledWith(false);
   });
 
   it("should display eero information when available", async () => {
-    render(<ReviewYourBasket />);
-    const user = userEvent.setup();
-    const button = screen.getByText("View Basket");
-    await user.click(button);
+    render(
+      <ReviewYourBasket
+        isDialogOpen={true}
+        setIsDialogOpen={mockSetIsDialogOpen}
+      />,
+    );
     expect(screen.getByText("Your mesh network:")).toBeInTheDocument();
-    const eeroElements = screen.getAllByText(/eero Pro 6/);
+    const eeroElements = screen.getAllByText(/3x eero router/);
     expect(eeroElements.length).toBeGreaterThan(0);
     expect(screen.getByText("Test description")).toBeInTheDocument();
   });
 
   it("should display address information when available", async () => {
-    render(<ReviewYourBasket />);
-    const user = userEvent.setup();
-    const button = screen.getByText("View Basket");
-    await user.click(button);
+    render(
+      <ReviewYourBasket
+        isDialogOpen={true}
+        setIsDialogOpen={mockSetIsDialogOpen}
+      />,
+    );
     expect(
-      screen.getByText(/123 Test Street, Test Town, Test City/),
+      screen.getByText(/123 Test Street, Test City, ABC 123/),
     ).toBeInTheDocument();
   });
 });

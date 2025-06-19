@@ -9,6 +9,7 @@ import { useState } from "react";
 import { EeroCard } from "@/components/EeroCard";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { getAssetPath } from "@/lib/get-asset-path";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
 import {
@@ -27,9 +28,9 @@ const EeroSelection = () => {
     id: "no-additional-eero",
     name: "No additional eero device",
     heading: "No additional Eero needed",
-    imageURL: "",
+    imageURL: getAssetPath("/images/x1_eeros.png"),
     description: "Just one eero provided by us.",
-    totalCount: 0,
+    totalCount: 1,
     price: 0,
     isSelected: true,
   };
@@ -85,14 +86,14 @@ const EeroSelection = () => {
   return (
     <>
       <StepNavigationWithBasket step={2} />
-      <div className="container px-4 pb-8 pt-16 mx-auto">
-        <div className="max-w-6xl mx-auto mt-16">
-          <div className="p-8 rounded-md">
+      <div className="container px-4 pb-8 lg:pt-16 mx-auto">
+        <div className="max-w-[1183px] mx-auto mt-16">
+          <div className="p-5 md:p-8 rounded-md">
             <div className="flex flex-col items-center">
-              <h1 className="mb-8 text-3xl font-semibold text-center [text-wrap:balance]">
+              <h1 className="mb-4 text-[26px] md:text-3xl font-semibold text-center [text-wrap:balance]">
                 {eeroPageContent.title}
               </h1>
-              <p className="mb-6 text-center text-ui-grey-500 max-w-[700px]">
+              <p className="text-xs md:text-md mb-6 text-center max-w-[880px]">
                 {eeroPageContent.description}
               </p>
             </div>

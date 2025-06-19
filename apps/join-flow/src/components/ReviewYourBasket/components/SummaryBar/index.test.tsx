@@ -86,21 +86,21 @@ describe("SummaryBar", () => {
     vi.clearAllMocks();
   });
 
-  it("renders fallback UI when no package is selected", () => {
+  it("renders null when no package is selected", () => {
     render(<SummaryBar {...mockProps} selectedPackage={null} />);
 
-    expect(
-      screen.getByText("Oops, have you selected a package?"),
-    ).toBeInTheDocument();
+    expect(screen.queryByTestId("summary-bar")).toBeNull();
   });
 
   it("renders package details when a package is selected", () => {
     render(<SummaryBar {...mockProps} />);
 
-    expect(screen.getByText(/150Mbps/)).toBeInTheDocument();
+    expect(
+      screen.getByText(mockSelectedPackage.frontendIdentifier),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Full fibre broadband/)).toBeInTheDocument();
     expect(
-      screen.getByText(/150 upload and download speed/),
+      screen.getByText(/150Mbps upload & download speed/),
     ).toBeInTheDocument();
 
     expect(screen.getByText(/12\/month/)).toBeInTheDocument();
@@ -133,10 +133,10 @@ describe("SummaryBar", () => {
     expect(mockProps.openDialog).toHaveBeenCalledTimes(1);
   });
 
-  it("does not display View Basket button when dialog is open", () => {
+  it("hides SummaryBar when dialog is open", () => {
     render(<SummaryBar {...mockProps} isDialogOpen={true} />);
 
-    expect(screen.queryByText("View Basket")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("summary-bar")).toHaveClass("hidden");
   });
 
   it("displays correct package information from StoreSelectedPackage", () => {
@@ -162,9 +162,11 @@ describe("SummaryBar", () => {
       />,
     );
 
-    expect(screen.getByText(/300Mbps/)).toBeInTheDocument();
     expect(
-      screen.getByText(/300 upload and download speed/),
+      screen.getByText(customPackage.frontendIdentifier),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/300Mbps upload & download speed/),
     ).toBeInTheDocument();
 
     expect(screen.getByText(/24\/month/)).toBeInTheDocument();

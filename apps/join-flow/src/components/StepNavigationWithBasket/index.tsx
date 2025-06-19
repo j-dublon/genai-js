@@ -1,4 +1,5 @@
 import { ColorPill, SimpleNavBar } from "@react-component-library/ui";
+import { useState } from "react";
 
 import { ReviewYourBasket } from "../ReviewYourBasket";
 import Stepper from "../Stepper";
@@ -11,11 +12,13 @@ export const StepNavigationWithBasket = ({
   step: number;
   totalSteps?: number;
 }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const text = nextStepPillText[step as keyof typeof nextStepPillText];
+
   return (
     <>
       <SimpleNavBar>
-        <Stepper />
+        <Stepper showLabels={!isDialogOpen} />
         {step <= totalSteps && (
           <p className="block md:hidden text-xs leading-[1.6] font-normal text-ui-grey-500">
             Step <span className="font-semibold">{step}</span> of{" "}
@@ -36,7 +39,10 @@ export const StepNavigationWithBasket = ({
           </div>
         )}
       </SimpleNavBar>
-      <ReviewYourBasket />
+      <ReviewYourBasket
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+      />
     </>
   );
 };

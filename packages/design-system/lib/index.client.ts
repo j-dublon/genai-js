@@ -17,6 +17,7 @@ import {
 } from "@components/atoms/InputField";
 import { InputSlider } from "@components/atoms/InputSlider";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
+import { PillButton } from "@components/atoms/PillButton";
 import { Radio } from "@components/atoms/Radio";
 import { ReviewCard, ReviewCardProps } from "@components/atoms/ReviewCard";
 import { ReviewCardSkeleton } from "@components/atoms/ReviewCardSkeleton";
@@ -97,6 +98,7 @@ export {
   MobilePhone,
   NavBar,
   PhoneTextContent,
+  PillButton,
   PostcodeChecker,
   ProductCard,
   PromotionCard,

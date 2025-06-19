@@ -175,8 +175,8 @@ export const OneTouchSwitching = () => {
   return (
     <>
       <StepNavigationWithBasket step={3} />
-      <div className="container mx-auto px-4 pb-8 pt-20">
-        <div className="max-w-3xl mx-auto">
+      <div className="container mx-auto px-4 pb-8 pt-6 md:pt-10 lg:pt-20">
+        <div className="max-w-[570px] mx-auto">
           <div className="bg-core-white p-8 rounded-md">
             <h1 className="text-2xl font-bold mb-2 text-center">
               {oneTouchSwitchingText.title}

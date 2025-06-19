@@ -59,7 +59,7 @@ export type EeroProduct = {
   heading?: string | null;
   imageURL?: string | null;
   description?: string;
-  totalCount?: number | null;
+  totalCount: number;
   price: number;
   isSelected: boolean;
 };

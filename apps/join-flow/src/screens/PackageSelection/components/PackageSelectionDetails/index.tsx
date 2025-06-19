@@ -37,7 +37,6 @@ export const PackageSelectionDetails = ({
 
   const isTopSpeedPackage =
     packageDetails.frontendIdentifier === topSpeedPackage?.frontendIdentifier;
-  const packageName = `${packageDetails.speeds.download}Mbps`;
   const isHighSpeedPackage =
     packageDetails.frontendIdentifier === "900-12" ||
     packageDetails.frontendIdentifier === "900-24";
@@ -51,7 +50,7 @@ export const PackageSelectionDetails = ({
       >
         <div className="flex gap-10">
           <div className="flex flex-col gap-12 w-1/2">
-            <EeroImage packageName={packageName} />
+            <EeroImage packageSpeed={packageDetails.speeds.download} />
             <SpeedPriceDetails
               pkg={packageDetails}
               promotion={isHighSpeedPackage}
@@ -111,7 +110,7 @@ export const PackageSelectionDetails = ({
       >
         <PackageTitle pkg={packageDetails} />
         <div className="flex sm:gap-6 flex-col gap-4 sm:flex-row">
-          <EeroImage packageName={packageName} />
+          <EeroImage packageSpeed={packageDetails.speeds.download} />
           <div className="flex flex-col gap-4">
             <TextWithTickList
               textItems={

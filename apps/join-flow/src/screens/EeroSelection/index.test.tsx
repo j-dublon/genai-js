@@ -69,7 +69,7 @@ vi.mock("./eeroSelectionProps", () => ({
       imageURL: "",
       description: "One router.",
       totalCount: 1,
-      price: 5,
+      price: 500,
       isSelected: false,
     },
     {
@@ -79,7 +79,7 @@ vi.mock("./eeroSelectionProps", () => ({
       imageURL: "",
       description: "Two routers.",
       totalCount: 2,
-      price: 10,
+      price: 1000,
       isSelected: false,
     },
   ],
