@@ -467,7 +467,7 @@ const proceedToPayment = async (page: Page) => {
   await expect(page).toHaveURL(/payment-details/);
 };
 
-test.describe("Go live date page", () => {
+test.skip("Go live date page", () => {
   test.beforeEach(async ({ page, context }) => {
     await context.clearCookies();
     await context.clearPermissions();

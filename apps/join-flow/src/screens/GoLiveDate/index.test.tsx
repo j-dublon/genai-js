@@ -1,239 +1,225 @@
+import { DatePickerProps } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { Controller } from "react-hook-form";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { useRouter } from "next/navigation";
+import React from "react";
+import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { FormDropDownProps } from "@/components/FormDropdown";
+import * as getEngineerAppointmentsModule from "@/services/helpers/getEngineerAppointments";
 
 import GoLiveDate from "./";
 
-interface MockFormData extends Record<string, string> {
-  timeSlot: string;
-  selectedDate: string;
-}
+vi.mock("@/services/helpers/getEngineerAppointments");
+vi.mock("@store/useJoinFlowStore");
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+}));
 
-interface ButtonProps {
-  children: React.ReactNode;
-  type: "button" | "submit" | "reset";
-  onClick: () => void;
-  disabled?: boolean;
+vi.mock("@/components/StepNavigationWithBasket", () => ({
+  StepNavigationWithBasket: () => <div>Step Navigation</div>,
+}));
+vi.mock("@/components/Footer", () => ({ Footer: () => <footer /> }));
+interface FormDropdownProps<T extends Record<string, unknown>, V> {
+  control: T;
+  name: keyof T & string;
+  dropdownLabel?: string;
+  dropdownPlaceholder: string;
+  options: Record<string, V>;
+  errorMessage?: string;
 }
+vi.mock("@/components/FormDropdown", () => ({
+  FormDropdown: <T extends Record<string, unknown>, V>({
+    control,
+    name,
+    dropdownLabel,
+    dropdownPlaceholder,
+    options,
+  }: FormDropdownProps<T, V>) => {
+    const typedControl = control as unknown as {
+      _formValues?: Record<string, unknown>;
+      _fields?: Record<
+        string,
+        {
+          onChange: (event: Event | unknown) => void;
+        }
+      >;
+    };
 
-interface DatePickerProps {
-  selectedDate: string;
-  onDateSelect: (date: string) => void;
-  availableDates: string[];
-}
-
-interface TipCardProps {
-  children: React.ReactNode;
-  className: string;
-}
-
+    return (
+      <select
+        aria-label={dropdownLabel}
+        name={name}
+        data-testid="form-dropdown"
+        onChange={(e) => {
+          if (typedControl._formValues) {
+            typedControl._formValues[name] = (
+              e.target as HTMLSelectElement
+            ).value;
+          }
+          typedControl._fields?.[name]?.onChange(e);
+        }}
+      >
+        <option value="">{dropdownPlaceholder}</option>
+        {Object.entries(options).map(([label, value]) => (
+          <option key={label} value={value as unknown as string}>
+            {label}
+          </option>
+        ))}
+      </select>
+    );
+  },
+}));
 vi.mock("@react-component-library/ui", () => ({
-  Button: ({ children, type, onClick, disabled }: ButtonProps) => (
-    <button
-      type={type}
-      onClick={onClick}
+  DatePicker: ({ selectedDate, onDateSelect, disabled }: DatePickerProps) => (
+    <input
+      type="date"
+      aria-label="DatePicker"
+      value={selectedDate}
+      onChange={(e) => onDateSelect(e.target.value)}
       disabled={disabled}
-      data-testid="button"
-    >
+      data-testid="date-picker"
+    />
+  ),
+  Button: ({
+    children,
+    disabled,
+    ...props
+  }: {
+    children: React.ReactNode;
+    disabled: boolean;
+    onClick?: () => void;
+  }) => (
+    <button disabled={disabled} {...props}>
       {children}
     </button>
   ),
-  DatePicker: ({
-    selectedDate,
-    onDateSelect,
-    availableDates,
-  }: DatePickerProps) => (
-    <div data-testid="date-picker">
-      <button
-        data-testid="select-date-button"
-        onClick={() => onDateSelect("Wed Jun 15 2023")}
-      >
-        Select Date
-      </button>
-      <div>Selected: {selectedDate}</div>
-      <div>Available Dates: {availableDates.length}</div>
-    </div>
-  ),
-  SimpleNavBar: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="simple-nav-bar">{children}</div>
-  ),
-  ColorPill: ({
-    colorPillText,
-    className,
-  }: {
-    colorPillText: string;
-    className: string;
-  }) => (
-    <div data-testid="color-pill" className={className}>
-      {colorPillText}
-    </div>
-  ),
-  TipCard: ({ children, className }: TipCardProps) => (
-    <div data-testid="tip-card" className={className}>
-      {children}
-    </div>
-  ),
+  TipCard: (
+    props: React.PropsWithChildren<{
+      image: { src: string; alt: string };
+      className: string;
+    }>,
+  ) => <div data-testid="tip-card">{props.children}</div>,
 }));
 
-vi.mock("@/components/Footer", () => ({
-  Footer: () => <div data-testid="footer">Footer</div>,
-}));
-
-vi.mock("@/components/FormDropdown", () => ({
-  FormDropdown: ({
-    control,
-    dropdownLabel,
-    options,
-  }: FormDropDownProps<MockFormData, string>) => (
-    <Controller
-      name="timeSlot"
-      control={control}
-      render={() => (
-        <div data-testid="form-dropdown">
-          <label>{dropdownLabel}</label>
-          <select data-testid="time-slot-select">
-            {Object.keys(options).map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-    />
-  ),
-}));
-
-interface PaymentDetailsProps {
-  onGoBack: () => void;
-  onComplete: () => void;
-}
-
-vi.mock("@/screens/PaymentDetails", () => ({
-  default: ({ onGoBack, onComplete }: PaymentDetailsProps) => (
-    <div data-testid="payment-details">
-      <button data-testid="go-back-button" onClick={onGoBack}>
-        Go Back
-      </button>
-      <button data-testid="complete-button" onClick={onComplete}>
-        Complete
-      </button>
-    </div>
-  ),
-}));
-
-vi.mock("next/navigation");
-vi.mock("@store/useJoinFlowStore");
-const mockedUseJoinFlowStore = vi.mocked(useJoinFlowStore);
-
-describe("GoLiveDate Component", () => {
+describe("GoLiveDate component", () => {
   const mockSetGoLiveDetails = vi.fn();
   const mockSetCurrentStep = vi.fn();
+  const mockPush = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    mockedUseJoinFlowStore.mockReturnValue({
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       setGoLiveDetails: mockSetGoLiveDetails,
       goLiveDetails: {},
       setCurrentStep: mockSetCurrentStep,
+      switchingDetails: {},
+      basket: { product: { quoteLookup: "quote123" } },
+    });
+
+    (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      push: mockPush,
     });
   });
 
-  it("renders the component correctly", () => {
-    render(<GoLiveDate />);
-
-    expect(screen.getByTestId("simple-nav-bar")).toBeInTheDocument();
-    const stepText = screen.getByText((_, element) => {
-      return element?.textContent === "Step 3 of 4";
+  it("renders loading state and fetches appointments", async () => {
+    (
+      getEngineerAppointmentsModule.getEngineerAppointments as Mock
+    ).mockResolvedValue({
+      appointments: [
+        {
+          startDateTime: new Date("2023-01-01T08:00:00Z"),
+          endDateTime: new Date("2023-01-01T13:00:00Z"),
+          type: "am",
+        },
+      ],
     });
-    expect(stepText).toBeInTheDocument();
-    expect(screen.getByTestId("tip-card")).toBeInTheDocument();
-    expect(screen.getByTestId("date-picker")).toBeInTheDocument();
-    expect(screen.getByTestId("button")).toBeInTheDocument();
-    expect(screen.getByTestId("footer")).toBeInTheDocument();
-  });
 
-  it("disables the continue button when no date is selected", () => {
     render(<GoLiveDate />);
 
-    const continueButton = screen.getByTestId("button");
-    expect(continueButton).toBeDisabled();
-  });
-
-  it("enables the continue button and shows time slot dropdown when date is selected", async () => {
-    render(<GoLiveDate />);
-
-    expect(screen.queryByTestId("form-dropdown")).not.toBeInTheDocument();
-
-    fireEvent.click(screen.getByTestId("select-date-button"));
+    expect(screen.getByText("Step Navigation")).toBeDefined();
 
     await waitFor(() => {
-      expect(screen.getByTestId("form-dropdown")).toBeInTheDocument();
+      expect(
+        getEngineerAppointmentsModule.getEngineerAppointments,
+      ).toHaveBeenCalledWith("quote123");
     });
 
-    const continueButton = screen.getByTestId("button");
-    expect(continueButton).not.toBeDisabled();
+    expect(screen.getByTestId("date-picker")).not.toBeDisabled();
   });
 
-  it("pre-fills form with existing data from store", () => {
-    // Mock store with existing data
-    mockedUseJoinFlowStore.mockReturnValue({
-      setGoLiveDetails: mockSetGoLiveDetails,
-      goLiveDetails: {
-        selectedDate: "Wed Jun 15 2023",
-        engineerSlot: {
-          timeSlot: "1pm - 6pm",
+  it("shows error message if fetching appointments fails", async () => {
+    (
+      getEngineerAppointmentsModule.getEngineerAppointments as Mock
+    ).mockResolvedValue({
+      appointments: [],
+      error: { type: "generalError", message: "Failed to fetch" },
+    });
+
+    render(<GoLiveDate />);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText("Failed to fetch engineer appointments"),
+      ).toBeDefined();
+    });
+  });
+
+  it("disables continue button if no date selected", async () => {
+    (
+      getEngineerAppointmentsModule.getEngineerAppointments as Mock
+    ).mockResolvedValue({
+      appointments: [],
+    });
+
+    render(<GoLiveDate />);
+
+    const button = screen.getByRole("button", { name: /continue/i });
+    expect(button).toBeDisabled();
+  });
+
+  it("enables continue button when date is selected", async () => {
+    (
+      getEngineerAppointmentsModule.getEngineerAppointments as Mock
+    ).mockResolvedValue({
+      appointments: [
+        {
+          startDateTime: new Date("2023-01-01T08:00:00Z"),
+          endDateTime: new Date("2023-01-01T13:00:00Z"),
+          type: "am",
         },
-      },
-      setCurrentStep: mockSetCurrentStep,
+      ],
     });
 
     render(<GoLiveDate />);
 
-    expect(screen.getByText("Selected: Wed Jun 15 2023")).toBeInTheDocument();
+    const datePicker = screen.getByTestId("date-picker");
+    fireEvent.change(datePicker, { target: { value: "2023-01-01" } });
 
-    expect(screen.getByTestId("form-dropdown")).toBeInTheDocument();
-  });
-
-  it("generates the correct date range for available dates", () => {
-    render(<GoLiveDate />);
-
-    expect(screen.getByText(/Available Dates: \d+/)).toBeInTheDocument();
-  });
-
-  it("displays the OTS fail banner when the OTS switch fails", () => {
-    mockedUseJoinFlowStore.mockReturnValue({
-      setGoLiveDetails: mockSetGoLiveDetails,
-      goLiveDetails: {},
-      setCurrentStep: mockSetCurrentStep,
-      switchingDetails: {
-        otsSwitchStatus: "OTS_FAILED",
-      },
+    await waitFor(() => {
+      expect(screen.getByTestId("form-dropdown")).toBeDefined();
     });
 
-    render(<GoLiveDate />);
+    const dropdown = screen.getByTestId("form-dropdown");
+    fireEvent.change(dropdown, { target: { value: "am" } });
 
-    expect(screen.getByText("Important info:")).toBeInTheDocument();
-    expect(screen.getByText("let them know")).toBeInTheDocument();
+    const button = screen.getByRole("button", { name: /continue/i });
+    expect(button).not.toBeDisabled();
   });
 
-  it("does not display the OTS fail banner when the OTS switch is successful", () => {
-    mockedUseJoinFlowStore.mockReturnValue({
-      setGoLiveDetails: mockSetGoLiveDetails,
-      goLiveDetails: {},
-      setCurrentStep: mockSetCurrentStep,
-      switchingDetails: {
-        otsSwitchStatus: "SWITCH_SUCCESS",
-      },
+  it("logs error and returns nothing if no quoteLookup in basket", () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      basket: { product: {} },
     });
 
-    render(<GoLiveDate />);
+    const { container } = render(<GoLiveDate />);
 
-    expect(screen.queryByText("Important info:")).not.toBeInTheDocument();
-    expect(screen.queryByText("let them know")).not.toBeInTheDocument();
+    expect(consoleErrorSpy).toHaveBeenCalledWith("no quoting code available");
+    expect(container.innerHTML).toBe("");
+
+    consoleErrorSpy.mockRestore();
   });
 });

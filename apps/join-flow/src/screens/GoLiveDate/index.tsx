@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, DatePicker, TipCard } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Footer } from "@/components/Footer";
@@ -12,6 +12,10 @@ import { FormDropdown } from "@/components/FormDropdown";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { getAssetPath } from "@/lib/get-asset-path";
 import PaymentDetails from "@/screens/PaymentDetails";
+import {
+  Appointment,
+  getEngineerAppointments,
+} from "@/services/helpers/getEngineerAppointments";
 import {
   GoLiveDateFormValues,
   goLiveDateSchema,
@@ -34,9 +38,30 @@ export const GoLiveDate = () => {
   } = goLiveDateText;
 
   const router = useRouter();
-  const { setGoLiveDetails, goLiveDetails, setCurrentStep, switchingDetails } =
-    useJoinFlowStore();
+  const {
+    setGoLiveDetails,
+    goLiveDetails,
+    setCurrentStep,
+    switchingDetails,
+    basket,
+  } = useJoinFlowStore();
+
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [availableAppointments, setAvailableAppointments] = useState<
+    Appointment[]
+  >([]);
+  const initialTimeslots: Record<string, string> = goLiveDetails?.engineerSlot
+    ?.timeSlot
+    ? {
+        [goLiveDetails.engineerSlot.timeSlot]:
+          goLiveDetails.engineerSlot.timeSlot,
+      }
+    : {};
+
+  const [timeslots, setTimeslots] =
+    useState<Record<string, string>>(initialTimeslots);
+  const [loadingAppointments, setLoadingAppointments] = useState(true);
+  const [appointmentError, setAppointmentError] = useState<string>();
 
   const {
     control,
@@ -54,8 +79,75 @@ export const GoLiveDate = () => {
 
   const selectedDate = watch("selectedDate");
 
-  // TODO: get real time slots from API
-  const timeSlots = { "8am - 1pm": "8am - 1pm", "1pm - 6pm": "1pm - 6pm" };
+  const timeSlotLabelMap: Record<string, string> = {
+    am: "8am - 1pm",
+    pm: "1pm - 6pm",
+  };
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const response = await getEngineerAppointments(
+          basket?.product?.quoteLookup as string,
+        );
+        if (response.error) {
+          console.error("Failed to fetch engineer appointments");
+          setAppointmentError("Failed to fetch engineer appointments");
+        }
+
+        const appointments = response.appointments || [];
+
+        setAvailableAppointments(appointments);
+      } catch (error) {
+        console.error("Failed to fetch engineer appointments", error);
+        setAppointmentError("Failed to fetch engineer appointments");
+      } finally {
+        setLoadingAppointments(false);
+      }
+    };
+
+    fetchAppointments();
+  }, [basket?.product?.quoteLookup]);
+
+  useEffect(() => {
+    const getTimeSlotsForDate = (
+      appointments: Appointment[],
+      selectedDate: string,
+    ): string[] => {
+      const selected = new Date(selectedDate);
+      selected.setHours(0, 0, 0, 0);
+
+      const appointmentsOnDate = appointments.filter((appt) => {
+        const apptDate = new Date(appt.startDateTime);
+        apptDate.setHours(0, 0, 0, 0);
+        return apptDate.getTime() === selected.getTime();
+      });
+
+      const uniqueTypes = Array.from(
+        new Set(appointmentsOnDate.map((appt) => appt.type)),
+      );
+
+      const availableSlots = uniqueTypes
+        .map((type) => timeSlotLabelMap[type])
+        .filter(Boolean) as string[];
+
+      return availableSlots;
+    };
+
+    const availableTimeSlots = getTimeSlotsForDate(
+      availableAppointments,
+      selectedDate,
+    );
+    setTimeslots(
+      availableTimeSlots.reduce(
+        (acc, label) => {
+          acc[label] = label;
+          return acc;
+        },
+        {} as Record<string, string>,
+      ),
+    );
+  }, [availableAppointments, selectedDate]);
 
   const onSubmit = (data: GoLiveDateFormValues) => {
     setGoLiveDetails({
@@ -88,20 +180,10 @@ export const GoLiveDate = () => {
     );
   }
 
-  //TODO: Get real date range from API
-  const getDates = (): Date[] => {
-    const dates = [];
-    const today = new Date();
-
-    for (let i = 3; i < 25; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
-
-      dates.push(date);
-    }
-
-    return dates;
-  };
+  if (!basket?.product?.quoteLookup) {
+    console.error("no quoting code available");
+    return;
+  }
 
   return (
     <>
@@ -128,13 +210,20 @@ export const GoLiveDate = () => {
             className="mt-10 md:mt-0 mb-10 md:mb-6 bg-secondary-green justify-center md:w-full items-center"
           >
             Yay! We can get you live as early as{" "}
-            <span className="font-medium">
-              {getDates()[0].toLocaleDateString("en-GB", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
+            {availableAppointments.length > 0 ? (
+              <span className="font-medium">
+                {availableAppointments[0].startDateTime.toLocaleDateString(
+                  "en-GB",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  },
+                )}
+              </span>
+            ) : (
+              <span>....</span>
+            )}
           </TipCard>
           <p className="text-core-black text-sm leading-[26px] font-medium mb-3">
             {subtitle}
@@ -156,14 +245,21 @@ export const GoLiveDate = () => {
                   {availableDatesLabel}
                 </h2>
 
+                {appointmentError && (
+                  <div className="text-ui-error">{appointmentError}</div>
+                )}
+
                 <Controller
                   name="selectedDate"
                   control={control}
                   render={({ field }) => (
                     <DatePicker
-                      availableDates={getDates()}
+                      availableDates={availableAppointments.map(
+                        (appointment) => appointment.startDateTime,
+                      )}
                       selectedDate={field.value}
                       onDateSelect={(date) => field.onChange(date)}
+                      disabled={loadingAppointments}
                     />
                   )}
                 />
@@ -181,7 +277,7 @@ export const GoLiveDate = () => {
                     control={control}
                     name="timeSlot"
                     dropdownPlaceholder={timeSlotPlaceHolder}
-                    options={timeSlots}
+                    options={timeslots}
                     errorMessage={errors?.timeSlot?.message}
                   />
                 </div>
