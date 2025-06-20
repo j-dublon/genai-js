@@ -10,6 +10,12 @@ export interface GoLiveDateProps {
   timeSlotPlaceHolder: string;
   continueButtonText: string;
   otsFailBannerText: string;
+  engineerVisitModal: {
+    title: string;
+    paragraphs: string[];
+    link: string;
+    buttonText: string;
+  };
 }
 
 export const goLiveDateText: GoLiveDateProps = {
@@ -28,4 +34,17 @@ export const goLiveDateText: GoLiveDateProps = {
   continueButtonText: "Continue to payment",
   otsFailBannerText:
     "We couldn't find your current provider, so you'll need to let them know that you're switching to Cuckoo after you've signed up.",
+  engineerVisitModal: {
+    title: "What happens if I need an engineer?",
+    paragraphs: [
+      "If an engineer is due, you'll be contacted by our engineer to advise that they are on their way.",
+      "Once the engineer is on site, they'll introduce themselves and provide ID and talk you through the process before they begin.",
+      "Depending on how we've built our new network in your area, they'll either:",
+      "bring the connection to your home either overhead using a nearby telegraph pole, or underground by digging a narrow channel up to your access wall. The team will agree the most effective route possible. We'll then connect your home by putting a new connection box on the outside of your property, and a smaller one on the inside of it where it won't get in the way.",
+      "check that the equipment that's been installed previously is still working and take action to ensure that any faults they spot get fixed.",
+      "When your home is connected, the team will carry out several quality tests to confirm your new fibre broadband works. To learn more, read our handy guide what happens on the day of the installation/activation?",
+    ],
+    link: "https://help.cuckoo.co/en/articles/9123620-what-happens-on-the-day-of-the-installation-activation",
+    buttonText: "Okay, got it",
+  },
 };

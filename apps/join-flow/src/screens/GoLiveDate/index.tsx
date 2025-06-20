@@ -1,15 +1,21 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, DatePicker, TipCard } from "@react-component-library/ui";
+import {
+  Button,
+  DatePicker,
+  TipCard,
+  useClickOutside,
+} from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Footer } from "@/components/Footer";
 import { FormDropdown } from "@/components/FormDropdown";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
 import PaymentDetails from "@/screens/PaymentDetails";
 import {
@@ -21,6 +27,7 @@ import {
   goLiveDateSchema,
 } from "@/validation/join-flow-schema";
 
+import { EngineerVisitModal } from "./components/EngineerVisitModal";
 import { OtsFailBanner } from "./components/OtsFailBanner";
 import { goLiveDateText } from "./GoLiveDateProps";
 
@@ -47,6 +54,17 @@ export const GoLiveDate = () => {
   } = useJoinFlowStore();
 
   const [showPaymentDetails, setShowPaymentDetails] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const modalRef = useRef<HTMLDialogElement>(null);
+
+  const closeEngineerModal = () => {
+    modalRef.current?.close();
+    setIsModalOpen(false);
+  };
+
+  useClickOutside(modalRef, isModalOpen, closeEngineerModal);
+  useClearFocus(modalRef, "close");
   const [availableAppointments, setAvailableAppointments] = useState<
     Appointment[]
   >([]);
@@ -231,12 +249,19 @@ export const GoLiveDate = () => {
           <p className="text-ui-grey-500 text-sm leading-[26px] mb-3">
             {paragraph}
           </p>
-          <a
-            href=""
-            className="text-ui-link underline text-sm leading-[26px] font-medium pb-12"
+          <button
+            onClick={() => {
+              modalRef.current?.showModal();
+              setIsModalOpen(true);
+            }}
+            className="text-ui-link underline text-sm leading-[26px] font-medium pb-12 bg-transparent border-none cursor-pointer p-0"
           >
             {engineerLink}
-          </a>
+          </button>
+          <EngineerVisitModal
+            modalRef={modalRef}
+            modalContent={goLiveDateText.engineerVisitModal}
+          />
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-8 pt-12">

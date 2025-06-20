@@ -9,13 +9,17 @@ vi.mock("next/link", () => {
       children,
       href,
       className,
+      target,
+      rel,
     }: {
       children: React.ReactNode;
       href: string;
       className?: string;
+      target?: string;
+      rel?: string;
     }) {
       return (
-        <a href={href} className={className}>
+        <a href={href} className={className} target={target} rel={rel}>
           {children}
         </a>
       );
@@ -146,5 +150,46 @@ describe("InsertLink", () => {
     const link = screen.getByRole("link");
     expect(link).toHaveTextContent("[here]");
     expect(screen.getByText(/to continue/i)).toBeInTheDocument();
+  });
+
+  it("should open in same tab by default", () => {
+    const props = {
+      text: "Click here to continue",
+      searchText: "here",
+      href: "/continue",
+    };
+
+    render(<InsertLink {...props} />);
+    const link = screen.getByRole("link");
+    expect(link).not.toHaveAttribute("target");
+    expect(link).not.toHaveAttribute("rel");
+  });
+
+  it("should open in same tab when openInNewTab is false", () => {
+    const props = {
+      text: "Click here to continue",
+      searchText: "here",
+      href: "/continue",
+      openInNewTab: false,
+    };
+
+    render(<InsertLink {...props} />);
+    const link = screen.getByRole("link");
+    expect(link).not.toHaveAttribute("target");
+    expect(link).not.toHaveAttribute("rel");
+  });
+
+  it("should open in new tab when openInNewTab is true", () => {
+    const props = {
+      text: "Click here to continue",
+      searchText: "here",
+      href: "/continue",
+      openInNewTab: true,
+    };
+
+    render(<InsertLink {...props} />);
+    const link = screen.getByRole("link");
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noopener noreferrer");
   });
 });

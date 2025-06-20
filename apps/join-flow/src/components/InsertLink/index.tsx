@@ -4,10 +4,12 @@ export const InsertLink = ({
   text,
   searchText,
   href,
+  openInNewTab = false,
 }: {
   text: string;
   searchText: string;
   href: string;
+  openInNewTab?: boolean;
 }) => {
   const index = text.indexOf(searchText);
 
@@ -21,7 +23,12 @@ export const InsertLink = ({
   return (
     <>
       {beforeText}
-      <Link href={href} className="text-ui-link font-medium underline">
+      <Link
+        href={href}
+        className="text-ui-link font-medium underline"
+        target={openInNewTab ? "_blank" : undefined}
+        rel={openInNewTab ? "noopener noreferrer" : undefined}
+      >
         {searchText}
       </Link>
       {afterText}
