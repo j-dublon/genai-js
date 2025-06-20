@@ -189,12 +189,14 @@ export interface Config {
   globals: {
     generalConfig: GeneralConfig;
     PayloadTaskViewer: PayloadTaskViewer;
+    OSSEvents: OSSEvent;
   };
   globalsSelect: {
     generalConfig: GeneralConfigSelect<false> | GeneralConfigSelect<true>;
     PayloadTaskViewer:
       | PayloadTaskViewerSelect<false>
       | PayloadTaskViewerSelect<true>;
+    OSSEvents: OSSEventsSelect<false> | OSSEventsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -206,7 +208,10 @@ export interface Config {
       doDatabaseImports: TaskDoDatabaseImports;
       doPostcodeListImports: TaskDoPostcodeListImports;
       doRewardsAutomations: TaskDoRewardsAutomations;
+      doROIDynamoImports: TaskDoROIDynamoImports;
+      doROIAddressCheck: TaskDoROIAddressCheck;
       doKrakenReferenceDataSync: TaskDoKrakenReferenceDataSync;
+      doOSSEventsFetch: TaskDoOSSEventsFetch;
       inline: {
         input: unknown;
         output: unknown;
@@ -249,6 +254,7 @@ export interface Order {
     | number
     | boolean
     | null;
+  softCreditCheck?: (string | null) | CreditCheckExecution;
   hardCreditCheck?: (string | null) | CreditCheckExecution;
   updatedAt: string;
   createdAt: string;
@@ -363,6 +369,12 @@ export interface CreditCheckExecution {
               id?: string | null;
               blockName?: string | null;
               blockType: "UnknownError";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
             }
         )[]
       | null;
@@ -674,6 +686,10 @@ export interface QuoteLookup {
      * The selectionIdentifier for the row in addresses on the addressLookup referenced
      */
     addressLookupSelectionIdentifier: string;
+    /**
+     * OPTIONAL - this is used to fetch an existing quote from Kraken to avoid creating the same one. Please use this for the Cuckoo Graph Orders Hook
+     */
+    quotingCode?: string | null;
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
@@ -928,6 +944,12 @@ export interface QuoteLookup {
               blockName?: string | null;
               blockType: "UnknownError";
             }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
+            }
         )[]
       | null;
     apiTraceIDs?:
@@ -1017,6 +1039,12 @@ export interface AffiliateSession {
               id?: string | null;
               blockName?: string | null;
               blockType: "UnknownError";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
             }
         )[]
       | null;
@@ -1407,6 +1435,12 @@ export interface AddressLookup {
               blockName?: string | null;
               blockType: "UnknownError";
             }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
+            }
         )[]
       | null;
     apiTraceIDs?:
@@ -1498,6 +1532,12 @@ export interface EngineerAppointment {
               id?: string | null;
               blockName?: string | null;
               blockType: "EngineerAppointmentsCouldNotLoadQuoteLookup";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
             }
         )[]
       | null;
@@ -1768,6 +1808,12 @@ export interface SwitchMatchLookup {
               blockName?: string | null;
               blockType: "KT-GB-10609KrakenInvalidLosingProviderId";
             }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
+            }
         )[]
       | null;
     apiTraceIDs?:
@@ -1809,6 +1855,12 @@ export interface ReferralSession {
               blockName?: string | null;
               blockType: "ReferralCodeNotFound";
             }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
+            }
         )[]
       | null;
     apiTraceIDs?:
@@ -1848,6 +1900,12 @@ export interface EmailValidator {
               id?: string | null;
               blockName?: string | null;
               blockType: "EmailValidationBadInput";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "JoinSuspended";
             }
         )[]
       | null;
@@ -1976,7 +2034,7 @@ export interface Page {
         postCodeButtonText: string;
         postCodePlaceholderText: string;
         list: {
-          text?: string | null;
+          listItem?: string | null;
           id?: string | null;
         }[];
         id?: string | null;
@@ -1996,7 +2054,7 @@ export interface Page {
         }[];
         id?: string | null;
         blockName?: string | null;
-        blockType: "inlineContentWithItemsBlock";
+        blockType: "cardSectionBlock";
       }
     | {
         overlayImage?: (string | null) | Media;
@@ -2015,7 +2073,145 @@ export interface Page {
         responsiveParagraph: string;
         id?: string | null;
         blockName?: string | null;
-        blockType: "inlineImageWithContentBlock";
+        blockType: "horizontalImageWithContentBlock";
+      }
+    | {
+        tagline: string;
+        companyLogos: {
+          companyLogo: string | Media;
+          imageWidth: string;
+          imageHeight: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "logoStripBlock";
+      }
+    | {
+        heading: string;
+        questions: {
+          heading: string;
+          paragraph: string;
+          buttonLink?: string | null;
+          buttonText?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "faqBlock";
+      }
+    | {
+        paragraph: string;
+        timeline: {
+          pill: string;
+          heading: string;
+          text: string;
+          id?: string | null;
+        }[];
+        buttonLink: string;
+        buttonText: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "clickSwitchDoneBlock";
+      }
+    | {
+        logo: string | Media;
+        paragraph: string;
+        list: {
+          listItem?: string | null;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "cuckooProtectBlock";
+      }
+    | {
+        heading: string;
+        subheading: string;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "trustPilotReviewsBlock";
+      }
+    | {
+        heading: string;
+        featureList: {
+          feature: string;
+          mobileImage: string | Media;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "mobileFeatureBlock";
+      }
+    | {
+        heading: string;
+        paragraph: string;
+        imageCarousel: {
+          image: string | Media;
+          width: string;
+          height: string;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "imageCarouselBlock";
+      }
+    | {
+        heading: string;
+        paragraph: string;
+        sliderItem: {
+          tags: {
+            text: string;
+            colour: "pink";
+            id?: string | null;
+          }[];
+          heading: string;
+          link: string;
+          image: string | Media;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "imageSliderBlock";
+      }
+    | {
+        heading: string;
+        postcodePlaceholder: string;
+        postcodeButtonText: string;
+        backgroundVideos: {
+          video: string | Media;
+          id?: string | null;
+        }[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "postcodeBlock";
+      }
+    | {
+        text?: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ("ltr" | "rtl") | null;
+            format:
+              | "left"
+              | "start"
+              | "center"
+              | "right"
+              | "end"
+              | "justify"
+              | "";
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: "richTextBlock";
       }
   )[];
   updatedAt: string;
@@ -2372,22 +2568,53 @@ export interface RegisterOfInterestSubmission {
   id: string;
   inputs: {
     requestProcessingType: "async" | "sync";
-    fullName: string;
+    /**
+     * The address information to pass to Customer IO.
+     */
+    address: {
+      /**
+       * The address key of the ROI (UPRN)
+       */
+      addressKey: string;
+      /**
+       * The address key type of the ROI
+       */
+      addressKeyType: string;
+      /**
+       * The formatted address of the ROI
+       */
+      formattedAddress: string;
+      /**
+       * The post code of the ROI
+       */
+      postcode: string;
+      /**
+       * The additional address keys of the ROI
+       */
+      additionalAddressKeys?:
+        | {
+            /**
+             * The address key of the ROI (UPRN)
+             */
+            addressKey?: string | null;
+            /**
+             * The address key type of the ROI
+             */
+            addressKeyType?: string | null;
+            id?: string | null;
+          }[]
+        | null;
+      id?: string | null;
+    }[];
     email: string;
+    fullName: string;
     phoneNumber?: string | null;
-    /**
-     * The addressLookup item that you want to get products for
-     */
-    addressLookup: string | AddressLookup;
-    /**
-     * The selectionIdentifier for the row in addresses on the addressLookup referenced
-     */
-    addressLookupSelectionIdentifier: string;
     originJourney?: string | null;
-    endOfContractDate?: string | null;
     network?: string | null;
     legacyBrand?: string | null;
     affiliateCode?: string | null;
+    endOfContractDate?: string | null;
+    isServiceable?: boolean | null;
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
@@ -2404,19 +2631,7 @@ export interface RegisterOfInterestSubmission {
               errorMessage?: string | null;
               id?: string | null;
               blockName?: string | null;
-              blockType: "QuoteLookupCouldNotLoadAddressLookup";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "QuoteLookupAddressLookupInvalidState";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "QuoteLookupInvalidSelectionIdentifier";
+              blockType: "RegisterOfInterestSubmissionBadInput";
             }
         )[]
       | null;
@@ -2539,7 +2754,10 @@ export interface PayloadJob {
           | "doDatabaseImports"
           | "doPostcodeListImports"
           | "doRewardsAutomations"
-          | "doKrakenReferenceDataSync";
+          | "doROIDynamoImports"
+          | "doROIAddressCheck"
+          | "doKrakenReferenceDataSync"
+          | "doOSSEventsFetch";
         taskID: string;
         input?:
           | {
@@ -2579,7 +2797,10 @@ export interface PayloadJob {
         | "doDatabaseImports"
         | "doPostcodeListImports"
         | "doRewardsAutomations"
+        | "doROIDynamoImports"
+        | "doROIAddressCheck"
         | "doKrakenReferenceDataSync"
+        | "doOSSEventsFetch"
       )
     | null;
   queue?: string | null;
@@ -2788,6 +3009,7 @@ export interface PayloadMigration {
 export interface OrdersSelect<T extends boolean = true> {
   krakenAccountNumber?: T;
   basketData?: T;
+  softCreditCheck?: T;
   hardCreditCheck?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -3050,6 +3272,13 @@ export interface AddressLookupsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
+              JoinSuspended?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
         apiTraceIDs?:
           | T
@@ -3151,6 +3380,13 @@ export interface AffiliateSessionsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
+              JoinSuspended?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
         apiTraceIDs?:
           | T
@@ -3174,6 +3410,7 @@ export interface QuoteLookupsSelect<T extends boolean = true> {
         affiliateSession?: T;
         addressLookup?: T;
         addressLookupSelectionIdentifier?: T;
+        quotingCode?: T;
       };
   outputs?:
     | T
@@ -3440,6 +3677,13 @@ export interface QuoteLookupsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
+              JoinSuspended?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
         apiTraceIDs?:
           | T
@@ -3546,6 +3790,13 @@ export interface EngineerAppointmentsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
+              JoinSuspended?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
         apiTraceIDs?:
           | T
@@ -3585,6 +3836,13 @@ export interface EmailValidatorsSelect<T extends boolean = true> {
                     blockName?: T;
                   };
               EmailValidationBadInput?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              JoinSuspended?:
                 | T
                 | {
                     errorMessage?: T;
@@ -3677,6 +3935,13 @@ export interface CreditCheckExecutionsSelect<T extends boolean = true> {
                     blockName?: T;
                   };
               UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              JoinSuspended?:
                 | T
                 | {
                     errorMessage?: T;
@@ -3986,6 +4251,13 @@ export interface SwitchMatchLookupsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
+              JoinSuspended?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
             };
         apiTraceIDs?:
           | T
@@ -4028,6 +4300,13 @@ export interface ReferralSessionsSelect<T extends boolean = true> {
                     blockName?: T;
                   };
               ReferralCodeNotFound?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              JoinSuspended?:
                 | T
                 | {
                     errorMessage?: T;
@@ -4430,13 +4709,13 @@ export interface PagesSelect<T extends boolean = true> {
               list?:
                 | T
                 | {
-                    text?: T;
+                    listItem?: T;
                     id?: T;
                   };
               id?: T;
               blockName?: T;
             };
-        inlineContentWithItemsBlock?:
+        cardSectionBlock?:
           | T
           | {
               heading?: T;
@@ -4456,7 +4735,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        inlineImageWithContentBlock?:
+        horizontalImageWithContentBlock?:
           | T
           | {
               overlayImage?: T;
@@ -4477,6 +4756,151 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               responsiveImage?: T;
               responsiveParagraph?: T;
+              id?: T;
+              blockName?: T;
+            };
+        logoStripBlock?:
+          | T
+          | {
+              tagline?: T;
+              companyLogos?:
+                | T
+                | {
+                    companyLogo?: T;
+                    imageWidth?: T;
+                    imageHeight?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        faqBlock?:
+          | T
+          | {
+              heading?: T;
+              questions?:
+                | T
+                | {
+                    heading?: T;
+                    paragraph?: T;
+                    buttonLink?: T;
+                    buttonText?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        clickSwitchDoneBlock?:
+          | T
+          | {
+              paragraph?: T;
+              timeline?:
+                | T
+                | {
+                    pill?: T;
+                    heading?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              buttonLink?: T;
+              buttonText?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cuckooProtectBlock?:
+          | T
+          | {
+              logo?: T;
+              paragraph?: T;
+              list?:
+                | T
+                | {
+                    listItem?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        trustPilotReviewsBlock?:
+          | T
+          | {
+              heading?: T;
+              subheading?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mobileFeatureBlock?:
+          | T
+          | {
+              heading?: T;
+              featureList?:
+                | T
+                | {
+                    feature?: T;
+                    mobileImage?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        imageCarouselBlock?:
+          | T
+          | {
+              heading?: T;
+              paragraph?: T;
+              imageCarousel?:
+                | T
+                | {
+                    image?: T;
+                    width?: T;
+                    height?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        imageSliderBlock?:
+          | T
+          | {
+              heading?: T;
+              paragraph?: T;
+              sliderItem?:
+                | T
+                | {
+                    tags?:
+                      | T
+                      | {
+                          text?: T;
+                          colour?: T;
+                          id?: T;
+                        };
+                    heading?: T;
+                    link?: T;
+                    image?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        postcodeBlock?:
+          | T
+          | {
+              heading?: T;
+              postcodePlaceholder?: T;
+              postcodeButtonText?: T;
+              backgroundVideos?:
+                | T
+                | {
+                    video?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        richTextBlock?:
+          | T
+          | {
+              text?: T;
               id?: T;
               blockName?: T;
             };
@@ -4707,16 +5131,31 @@ export interface RegisterOfInterestSubmissionsSelect<T extends boolean = true> {
     | T
     | {
         requestProcessingType?: T;
-        fullName?: T;
+        address?:
+          | T
+          | {
+              addressKey?: T;
+              addressKeyType?: T;
+              formattedAddress?: T;
+              postcode?: T;
+              additionalAddressKeys?:
+                | T
+                | {
+                    addressKey?: T;
+                    addressKeyType?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
         email?: T;
+        fullName?: T;
         phoneNumber?: T;
-        addressLookup?: T;
-        addressLookupSelectionIdentifier?: T;
         originJourney?: T;
-        endOfContractDate?: T;
         network?: T;
         legacyBrand?: T;
         affiliateCode?: T;
+        endOfContractDate?: T;
+        isServiceable?: T;
       };
   outputs?:
     | T
@@ -4733,21 +5172,7 @@ export interface RegisterOfInterestSubmissionsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
-              QuoteLookupCouldNotLoadAddressLookup?:
-                | T
-                | {
-                    errorMessage?: T;
-                    id?: T;
-                    blockName?: T;
-                  };
-              QuoteLookupAddressLookupInvalidState?:
-                | T
-                | {
-                    errorMessage?: T;
-                    id?: T;
-                    blockName?: T;
-                  };
-              QuoteLookupInvalidSelectionIdentifier?:
+              RegisterOfInterestSubmissionBadInput?:
                 | T
                 | {
                     errorMessage?: T;
@@ -4856,12 +5281,53 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface GeneralConfig {
   id: string;
+  testing?: {
+    /**
+     * If set, this code can be used in the email validation step and will always pass validation, this probably should not have a value in production
+     */
+    alwaysValidEmailCode?: string | null;
+  };
+  extrasFilters: {
+    /**
+     * What is the family name that is allowed to be shown to users as extras
+     */
+    allowedFamily: string;
+    /**
+     * If this has a value, it will be used for filtering the extras by code - i.e. if you set this to EERO_, only things in the family that start with EERO_ will appear
+     */
+    filterPrefix?: string | null;
+    id?: string | null;
+  }[];
   vAndA: {
     /**
      * This is the ammount of time, in hours, after a person who signs up on the join flow with nominated persons will have a reminder set for for an agent to action the nominated person manually.
      */
     signupNominatedPersonReminderTimeHours: number;
   };
+  /**
+   * If this is set to false, all joinflow endpoints will error with inactive error
+   */
+  joinFlowActive?: boolean | null;
+  engineerAppointments: {
+    /**
+     * This is the furthers number of days away a go-live date can be
+     */
+    maxDaysInFuture: number;
+  };
+  goLiveDates: {
+    /**
+     * This is the number of days away from today the earliest go-live date presented to a user can be
+     */
+    daysFromToday: number;
+    /**
+     * This is the furthers number of days away a go-live date can be
+     */
+    maxDaysInFuture: number;
+  };
+  bankHolidays: {
+    value: string;
+    id?: string | null;
+  }[];
   customerIO: {
     smsPreferenceString: string;
     postPreferenceString: string;
@@ -4879,15 +5345,67 @@ export interface GeneralConfig {
      */
     billCreditRewardReason: string | KrakenAccountCreditReason;
   };
-  apiConfig?: {
-    /**
-     * This is time in seconds that we wait for OTS to complete before timing out.
-     */
-    krakenOTSPollTimeout?: number | null;
-    /**
-     * This is the time in seconds we wait for quotes to return before timing out.
-     */
-    krakenQuotePollTimeout?: number | null;
+  apiConfig: {
+    krakenOTS: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
+    krakenQuote: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
+    krakenExtras: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
+    krakenProducts: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
+    krakenEngineerAppointmentList: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
+    krakenEngineerAppointmentBooking: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
   };
   emailVerification: {
     /**
@@ -4977,13 +5495,56 @@ export interface PayloadTaskViewer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OSSEvents".
+ */
+export interface OSSEvent {
+  id: string;
+  /**
+   * This is the latest telco_supply_ossorderevent to be processed. Any new events (i.e. with a higher ID) will be processed on the next run
+   */
+  latestSyncedID: number;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "generalConfig_select".
  */
 export interface GeneralConfigSelect<T extends boolean = true> {
+  testing?:
+    | T
+    | {
+        alwaysValidEmailCode?: T;
+      };
+  extrasFilters?:
+    | T
+    | {
+        allowedFamily?: T;
+        filterPrefix?: T;
+        id?: T;
+      };
   vAndA?:
     | T
     | {
         signupNominatedPersonReminderTimeHours?: T;
+      };
+  joinFlowActive?: T;
+  engineerAppointments?:
+    | T
+    | {
+        maxDaysInFuture?: T;
+      };
+  goLiveDates?:
+    | T
+    | {
+        daysFromToday?: T;
+        maxDaysInFuture?: T;
+      };
+  bankHolidays?:
+    | T
+    | {
+        value?: T;
+        id?: T;
       };
   customerIO?:
     | T
@@ -5003,8 +5564,42 @@ export interface GeneralConfigSelect<T extends boolean = true> {
   apiConfig?:
     | T
     | {
-        krakenOTSPollTimeout?: T;
-        krakenQuotePollTimeout?: T;
+        krakenOTS?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
+        krakenQuote?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
+        krakenExtras?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
+        krakenProducts?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
+        krakenEngineerAppointmentList?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
+        krakenEngineerAppointmentBooking?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
       };
   emailVerification?:
     | T
@@ -5060,6 +5655,16 @@ export interface PayloadTaskViewerSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OSSEvents_select".
+ */
+export interface OSSEventsSelect<T extends boolean = true> {
+  latestSyncedID?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -5127,9 +5732,48 @@ export interface TaskDoRewardsAutomations {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDoROIDynamoImports".
+ */
+export interface TaskDoROIDynamoImports {
+  input: {
+    taskID?: string | null;
+  };
+  output: {
+    success: boolean;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDoROIAddressCheck".
+ */
+export interface TaskDoROIAddressCheck {
+  input: {
+    registerOfInterestSubmissionIds: {
+      roiId: string;
+    }[];
+  };
+  output: {
+    success: boolean;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "TaskDoKrakenReferenceDataSync".
  */
 export interface TaskDoKrakenReferenceDataSync {
+  input: {
+    shouldAutoQueueTaskOnCompletion?: boolean | null;
+    taskID?: string | null;
+  };
+  output: {
+    success: boolean;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDoOSSEventsFetch".
+ */
+export interface TaskDoOSSEventsFetch {
   input: {
     shouldAutoQueueTaskOnCompletion?: boolean | null;
     taskID?: string | null;
