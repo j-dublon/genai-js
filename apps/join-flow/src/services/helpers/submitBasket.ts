@@ -3,20 +3,30 @@ import type { StoreBasket } from "@store/useJoinFlowStore";
 import { payloadAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
-interface SubmitBasketResult {
-  basket?: StoreBasket;
-  error?: {
-    type: "generalError" | "validationError" | "networkError" | "unknownError";
-    message: string;
-    details?: string[];
-  };
-}
+export type SubmitBasketResult =
+  | {
+      type: "error";
+      error?: {
+        type:
+          | "generalError"
+          | "validationError"
+          | "networkError"
+          | "unknownError";
+        message: string;
+        details?: string[];
+      };
+    }
+  | {
+      type: "success";
+      basket: StoreBasket;
+    };
 
 export const submitBasket = async (
   basketId: string,
 ): Promise<SubmitBasketResult> => {
   if (!basketId) {
     return {
+      type: "error",
       error: {
         type: "validationError",
         message: "Basket ID is required",
@@ -29,6 +39,7 @@ export const submitBasket = async (
     const basket = (await payloadAPI.signUpToKraken(basketId)) as StoreBasket;
 
     return {
+      type: "success",
       basket,
     };
   } catch (error) {
@@ -36,6 +47,7 @@ export const submitBasket = async (
 
     if (error instanceof ValidationError) {
       return {
+        type: "error",
         error: {
           type: "validationError",
           message: "The basket submission is invalid",
@@ -48,6 +60,7 @@ export const submitBasket = async (
 
     if (error instanceof FetchError) {
       return {
+        type: "error",
         error: {
           type: "networkError",
           message: `Server error: ${error.message}`,
@@ -57,6 +70,7 @@ export const submitBasket = async (
     }
 
     return {
+      type: "error",
       error: {
         type: "unknownError",
         message: "An unexpected error occurred",

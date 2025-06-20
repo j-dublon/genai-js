@@ -6,11 +6,12 @@ import {
   useClickOutside,
 } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import Stepper from "@/components/Stepper";
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { submitBasket } from "@/services/helpers/submitBasket";
+import { updateBasket } from "@/services/helpers/updateBasket";
 
 import { AccessibilityModalContents } from "./AccessibilityModalContents";
 import { AccessibilityRequirements } from "./AccessibilityRequirements";
@@ -24,11 +25,10 @@ export const PaymentConfirmation = ({
   onGoBack,
   onComplete,
 }: {
-  onGoBack?: () => void;
-  onComplete?: () => void;
+  onGoBack: () => void;
+  onComplete: () => void;
 }) => {
-  const router = useRouter();
-  const { setCurrentStep, paymentDetails, setPaymentDetails } =
+  const { paymentDetails, setPaymentDetails, basket, setBasket } =
     useJoinFlowStore();
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsState, setTermsState] = useState({
@@ -78,18 +78,12 @@ export const PaymentConfirmation = ({
       if (event) {
         event.preventDefault();
       }
-
-      if (onGoBack && typeof onGoBack === "function") {
-        onGoBack();
-      } else {
-        setCurrentStep(4);
-        router.push("/join-flow/payment-details");
-      }
+      onGoBack();
     },
-    [onGoBack, setCurrentStep, router],
+    [onGoBack],
   );
 
-  const handleConfirm = useCallback(() => {
+  const handleConfirm = useCallback(async () => {
     if (paymentDetails) {
       setPaymentDetails({
         ...paymentDetails,
@@ -100,20 +94,54 @@ export const PaymentConfirmation = ({
       });
     }
 
-    if (onComplete && typeof onComplete === "function") {
-      onComplete();
-    } else {
-      setCurrentStep(5);
-      router.push("/join-flow/order-summary");
+    if (!basket?.id) {
+      console.error("Basket ID is required to update basket");
+      return;
+    }
+
+    try {
+      const result = await updateBasket(basket.id, {
+        optIns: {
+          creditSearchAgreed: true,
+          directDebitAgreed: true,
+          termsAgreed: true,
+        },
+      });
+
+      if (result.error) {
+        console.error("Error updating opt ins on basket:", result.error);
+        return;
+      }
+
+      if (result.basket) {
+        setBasket(result.basket);
+      }
+
+      try {
+        const submitResult = await submitBasket(basket.id);
+
+        if (submitResult.type === "error") {
+          console.error("Error submitting basket:", submitResult.error);
+          return;
+        }
+
+        onComplete();
+      } catch (error) {
+        console.error("Unexpected error submitting basket:", error);
+      }
+    } catch (error) {
+      console.error("Unexpected error updating opt ins on basket:", error);
     }
   }, [
-    onComplete,
-    setCurrentStep,
-    router,
     paymentDetails,
+    basket,
+    onComplete,
     setPaymentDetails,
-    termsState,
+    termsState.termsAgreed,
+    termsState.directDebitAgreed,
+    termsState.creditSearchAgreed,
     termsAgreed,
+    setBasket,
   ]);
 
   const handleTermsChange = useCallback(

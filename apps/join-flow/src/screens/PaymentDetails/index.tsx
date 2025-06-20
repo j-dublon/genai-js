@@ -16,15 +16,10 @@ import type { PaymentFormValues } from "./forms/formValues";
 import { PaymentForm } from "./forms/PaymentForm";
 import { paymentDetailsText } from "./PaymentDetailsProps";
 
-export const PaymentDetails = ({
-  onGoBack,
-  onComplete,
-}: {
-  onGoBack?: () => void;
-  onComplete?: () => void;
-}) => {
+export const PaymentDetails = () => {
   const router = useRouter();
-  const { setCurrentStep, basket, serviceAddress } = useJoinFlowStore();
+  const { setCurrentStep, basket, serviceAddress, switchingDetails } =
+    useJoinFlowStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPaymentDetailsError, setShowPaymentDetailsError] = useState(false);
@@ -74,6 +69,9 @@ export const PaymentDetails = ({
 
         const result = await updateBasket(basket.id, {
           billingAddress,
+          optIns: {
+            isAccountHolder: true,
+          },
           payment: {
             bankAccountHolder: data.accountholderName,
             bankAccountNumber: data.accountNumber,
@@ -109,14 +107,19 @@ export const PaymentDetails = ({
         event.preventDefault();
       }
 
-      if (onGoBack && typeof onGoBack === "function") {
-        onGoBack();
+      // i.e. if the user has already switched, the switch failed or the switch option was skipped, no need to go back to OTS page
+      if (
+        switchingDetails?.otsSwitchStatus !== undefined ||
+        switchingDetails?.otsSwitchStatus !== "FIRST_ATTEMPT_FAILED"
+      ) {
+        setCurrentStep(3);
+        router.push("/join-flow/go-live-date");
       } else {
         setCurrentStep(3);
         router.push("/join-flow/one-touch-switching");
       }
     },
-    [onGoBack, setCurrentStep, router],
+    [switchingDetails?.otsSwitchStatus, setCurrentStep, router],
   );
 
   const handleConfirmationBack = useCallback(() => {
@@ -124,13 +127,9 @@ export const PaymentDetails = ({
   }, []);
 
   const handleComplete = useCallback(() => {
-    if (onComplete && typeof onComplete === "function") {
-      onComplete();
-    } else {
-      setCurrentStep(5);
-      router.push("/join-flow/order-summary");
-    }
-  }, [onComplete, setCurrentStep, router]);
+    setCurrentStep(5);
+    router.push("/join-flow/order-summary");
+  }, [setCurrentStep, router]);
 
   if (showConfirmation) {
     return (

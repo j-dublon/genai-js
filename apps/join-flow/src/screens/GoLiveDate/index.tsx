@@ -17,7 +17,6 @@ import { FormDropdown } from "@/components/FormDropdown";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
-import PaymentDetails from "@/screens/PaymentDetails";
 import {
   Appointment,
   getEngineerAppointments,
@@ -53,7 +52,6 @@ export const GoLiveDate = () => {
     basket,
   } = useJoinFlowStore();
 
-  const [showPaymentDetails, setShowPaymentDetails] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const modalRef = useRef<HTMLDialogElement>(null);
@@ -97,11 +95,6 @@ export const GoLiveDate = () => {
 
   const selectedDate = watch("selectedDate");
 
-  const timeSlotLabelMap: Record<string, string> = {
-    am: "8am - 1pm",
-    pm: "1pm - 6pm",
-  };
-
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
@@ -132,6 +125,10 @@ export const GoLiveDate = () => {
       appointments: Appointment[],
       selectedDate: string,
     ): string[] => {
+      const timeSlotLabelMap: Record<string, string> = {
+        am: "8am - 1pm",
+        pm: "1pm - 6pm",
+      };
       const selected = new Date(selectedDate);
       selected.setHours(0, 0, 0, 0);
 
@@ -176,27 +173,8 @@ export const GoLiveDate = () => {
       },
     });
     setCurrentStep(4);
-    setShowPaymentDetails(true);
     router.push("/join-flow/payment-details");
   };
-
-  const handlePaymentDetailsBack = () => {
-    setShowPaymentDetails(false);
-  };
-
-  const handlePaymentDetailsComplete = () => {
-    setCurrentStep(5);
-    router.push("/join-flow/order-summary");
-  };
-
-  if (showPaymentDetails) {
-    return (
-      <PaymentDetails
-        onGoBack={handlePaymentDetailsBack}
-        onComplete={handlePaymentDetailsComplete}
-      />
-    );
-  }
 
   if (!basket?.product?.quoteLookup) {
     console.error("no quoting code available");
