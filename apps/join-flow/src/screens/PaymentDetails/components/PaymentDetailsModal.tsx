@@ -142,6 +142,18 @@ export const PaymentDetailsModal = () => {
         return false;
       }
 
+      // Check if any details have changed to avoid unnecessary API calls
+      const havePaymentDetailsChanged =
+        data.accountholderName !== paymentDetails?.accountholderName ||
+        data.accountNumber !== paymentDetails?.accountNumber ||
+        data.sortCode !== paymentDetails?.sortCode;
+
+      if (!havePaymentDetailsChanged) {
+        setShowingModal(false);
+        modalRef.current?.close();
+        return false;
+      }
+
       const result = await updateBasket(basket.id, {
         payment: {
           bankAccountHolder: data.accountholderName,

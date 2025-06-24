@@ -155,13 +155,13 @@ export const PaymentForm = ({
   const isAccountHolder = watch("isAccountHolder");
 
   const isFormModified =
-    (accountholderName &&
-      initialAccountHolderName &&
+    (!!accountholderName &&
+      !!initialAccountHolderName &&
       accountholderName !== initialAccountHolderName) ||
-    (accountNumber &&
-      initialAccountNumber &&
+    (!!accountNumber &&
+      !!initialAccountNumber &&
       accountNumber !== initialAccountNumber) ||
-    (sortCode && initialSortCode && sortCode !== initialSortCode);
+    (!!sortCode && !!initialSortCode && sortCode !== initialSortCode);
 
   const isAccountholderNameValid = accountholderName?.trim().length > 0;
   const isAccountNumberValid = /^\d{8}$/.test(accountNumber || "");

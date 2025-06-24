@@ -18,8 +18,13 @@ import { paymentDetailsText } from "./PaymentDetailsProps";
 
 export const PaymentDetails = () => {
   const router = useRouter();
-  const { setCurrentStep, basket, serviceAddress, switchingDetails } =
-    useJoinFlowStore();
+  const {
+    setCurrentStep,
+    basket,
+    serviceAddress,
+    switchingDetails,
+    paymentDetails,
+  } = useJoinFlowStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPaymentDetailsError, setShowPaymentDetailsError] = useState(false);
@@ -67,6 +72,18 @@ export const PaymentDetails = () => {
           };
         }
 
+        // Check if any details have changed to avoid unnecessary API calls
+        // TODO: As part of change billing address work we'll need to deeply compare the billing address objects
+        const havePaymentDetailsChanged =
+          data.accountholderName !== paymentDetails?.accountholderName ||
+          data.accountNumber !== paymentDetails?.accountNumber ||
+          data.sortCode !== paymentDetails?.sortCode;
+
+        if (!havePaymentDetailsChanged) {
+          setShowConfirmation(true);
+          return false;
+        }
+
         const result = await updateBasket(basket.id, {
           billingAddress,
           optIns: {
@@ -98,7 +115,13 @@ export const PaymentDetails = () => {
         setIsSubmitting(false);
       }
     },
-    [basket?.id, serviceAddress],
+    [
+      basket?.id,
+      paymentDetails?.accountNumber,
+      paymentDetails?.accountholderName,
+      paymentDetails?.sortCode,
+      serviceAddress,
+    ],
   );
 
   const handleBackClick = useCallback(
