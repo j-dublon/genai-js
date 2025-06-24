@@ -10,6 +10,7 @@ import { EeroCard } from "@/components/EeroCard";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { getAssetPath } from "@/lib/get-asset-path";
+import { generateCICS } from "@/services/helpers/generateCICS";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
 import {
@@ -21,7 +22,13 @@ import {
 
 const EeroSelection = () => {
   const router = useRouter();
-  const { eeroSelection, setCurrentStep } = useJoinFlowStore();
+  const {
+    eeroSelection,
+    setCurrentStep,
+    basket,
+    setBasket,
+    selectEeroProduct,
+  } = useJoinFlowStore();
 
   // TO DO: might need to come from api eventually, but to be reviewed
   const noAdditionalEero = {
@@ -57,21 +64,16 @@ const EeroSelection = () => {
   const handleContinue = () => {
     try {
       if (!selectedEero) {
-        useJoinFlowStore.setState((state) => ({
-          ...state,
-          eeroSelection: noAdditionalEero,
-          currentStep: 3,
-          _hasHydrated: true,
-        }));
+        selectEeroProduct(noAdditionalEero);
+        setCurrentStep(3);
       } else {
         eeroSelectionSchema.parse(selectedEero);
+        selectEeroProduct(selectedEero);
+        setCurrentStep(3);
+      }
 
-        useJoinFlowStore.setState((state) => ({
-          ...state,
-          eeroSelection: selectedEero,
-          currentStep: 3,
-          _hasHydrated: true,
-        }));
+      if (basket !== null) {
+        generateCICS(basket, setBasket);
       }
 
       // Add a small delay to ensure store updates before navigation
@@ -124,6 +126,7 @@ const EeroSelection = () => {
 
               <Button
                 type="submit"
+                name="Continue"
                 tint="yellow"
                 variant="solid"
                 onClick={handleContinue}

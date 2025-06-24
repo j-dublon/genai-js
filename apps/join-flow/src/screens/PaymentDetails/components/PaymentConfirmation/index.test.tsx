@@ -6,8 +6,27 @@ import { userEvent } from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { AffiliateSessionSuccessData } from "@/services/payloadTypes";
+
 import { PaymentConfirmation } from "./index";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
+
+const defaultAffiliateResponse: AffiliateSessionSuccessData = {
+  termsAndConditionsLink: "https://cms.cuckoo.co/terms-and-conditions/",
+  privacyPolicyLink: "https://cms.cuckoo.co/privacy-policy/",
+};
+
+vi.mock("@/services/payloadClient", () => ({
+  payloadAPI: {
+    getDefaultAffiliate: vi.fn().mockReturnValue(() => {
+      return {
+        response: {
+          data: defaultAffiliateResponse,
+        },
+      };
+    }),
+  },
+}));
 
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
@@ -89,6 +108,10 @@ describe("PaymentConfirmation", () => {
       id: "123",
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
+      cics: {
+        summaryHref: "https://s3.cuckoo.co/contractSummary",
+        informationHref: "https://s3.cuckoo.co/contractInformation",
+      },
     });
   });
 
@@ -96,24 +119,23 @@ describe("PaymentConfirmation", () => {
     vi.clearAllMocks();
   });
 
+  const {
+    title,
+    directDebitDetailsTitle,
+    accountDetailsTitle,
+    goLiveDetailsTitle,
+    signUpText,
+    accessibilityRequirementsModalTitle,
+  } = paymentConfirmationText;
+
   it("renders the main sections", () => {
     render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
 
-    expect(
-      screen.getByRole("heading", { name: paymentConfirmationText.title }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(paymentConfirmationText.directDebitDetailsTitle),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(paymentConfirmationText.accountDetailsTitle),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(paymentConfirmationText.goLiveDetailsTitle),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(paymentConfirmationText.termsAndConditionsTitle),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: title })).toBeInTheDocument();
+    expect(screen.getByText(directDebitDetailsTitle)).toBeInTheDocument();
+    expect(screen.getByText(accountDetailsTitle)).toBeInTheDocument();
+    expect(screen.getByText(goLiveDetailsTitle)).toBeInTheDocument();
+    expect(screen.getByTestId("termsAndConditions")).toBeInTheDocument();
   });
 
   it("handles back button click correctly", async () => {
@@ -143,9 +165,7 @@ describe("PaymentConfirmation", () => {
     );
 
     await act(async () => {
-      const termsSection = screen.getByText(
-        paymentConfirmationText.termsAndConditionsTitle,
-      ).nextSibling;
+      const termsSection = screen.getByTestId("termsAndConditions").nextSibling;
       const termsCheckboxes = within(termsSection as HTMLElement).getAllByRole(
         "checkbox",
       );
@@ -156,7 +176,7 @@ describe("PaymentConfirmation", () => {
     });
 
     const confirmButton = screen.getByRole("button", {
-      name: paymentConfirmationText.signUpText,
+      name: signUpText,
     });
     await user.click(confirmButton);
 
@@ -198,17 +218,13 @@ describe("PaymentConfirmation", () => {
       container.querySelectorAll("dialog"),
     ).find((dialog) => {
       const titleElement = dialog.querySelector('h2[id="modal-title"]');
-      return (
-        titleElement?.textContent ===
-        paymentConfirmationText.accessibilityRequirementsModalTitle
-      );
+      return titleElement?.textContent === accessibilityRequirementsModalTitle;
     }) as HTMLDialogElement;
     const otherModal = Array.from(container.querySelectorAll("dialog")).find(
       (dialog) => {
         const titleElement = dialog.querySelector('h2[id="modal-title"]');
         return (
-          titleElement?.textContent !==
-          paymentConfirmationText.accessibilityRequirementsModalTitle
+          titleElement?.textContent !== accessibilityRequirementsModalTitle
         );
       },
     ) as HTMLDialogElement;
@@ -224,5 +240,34 @@ describe("PaymentConfirmation", () => {
     expect(accessibilityModal.open).toBe(true);
     expect(otherModal.open).toBe(false);
     expect(screen.getByText("Blind or Vision impaired")).toBeVisible();
+  });
+
+  it("shows the CICS buttons that that link to the intended resources", () => {
+    render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
+
+    const contractSummaryBtn = screen.getByTestId("Contract Summary");
+    const contractInformationBtn = screen.getByTestId("Contract Information");
+    const termsAndConditionsBtn = screen.getByTestId("Terms & Conditions");
+    const privacyNoticeBtn = screen.getByTestId("Privacy Notice");
+
+    // short wait while the data is fetched
+    setTimeout(() => {
+      expect(contractSummaryBtn).toHaveAttribute(
+        "href",
+        "https://s3.cuckoo.co/contractSummary",
+      );
+      expect(contractInformationBtn).toHaveAttribute(
+        "href",
+        "https://s3.cuckoo.co/contractInformation",
+      );
+      expect(termsAndConditionsBtn).toHaveAttribute(
+        "href",
+        "https://cms.cuckoo.co/terms-and-conditions/",
+      );
+      expect(privacyNoticeBtn).toHaveAttribute(
+        "href",
+        "https://cms.cuckoo.co/privacy-policy/",
+      );
+    }, 100);
   });
 });

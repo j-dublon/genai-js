@@ -12,7 +12,9 @@ import Stepper from "@/components/Stepper";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { payloadAPI } from "@/services/payloadClient";
 
+import { PaymentDocuments } from "../PaymentDocuments";
 import { AccessibilityModalContents } from "./AccessibilityModalContents";
 import { AccessibilityRequirements } from "./AccessibilityRequirements";
 import PaymentAccountDetails from "./PaymentAccountDetails";
@@ -159,6 +161,44 @@ export const PaymentConfirmation = ({
     [],
   );
 
+  // Get the T&C's and Privacy policy
+  const [termsAndConditionsLink, setTermsAndConditionsLink] = useState("");
+  const [privacyPolicyLink, setPrivacyPolicyLink] = useState("");
+
+  useEffect(() => {
+    const getContractLinks = async () => {
+      const response = await payloadAPI.getDefaultAffiliate();
+      if (response.state == "success") {
+        const { termsAndConditionsLink, privacyPolicyLink } =
+          response.data.response;
+
+        setTermsAndConditionsLink(termsAndConditionsLink || "/");
+        setPrivacyPolicyLink(privacyPolicyLink || "/");
+      }
+    };
+
+    getContractLinks();
+  });
+
+  const documentItems = [
+    {
+      text: "Contract Summary",
+      href: basket?.cics?.summaryHref || "/",
+      name: "contractSummary",
+    },
+    {
+      text: "Contract Information",
+      href: basket?.cics?.informationHref || "/",
+      name: "contractInformation",
+    },
+    {
+      text: "Terms & Conditions",
+      href: termsAndConditionsLink,
+      name: "termsAndConditions",
+    },
+    { text: "Privacy Notice", href: privacyPolicyLink, name: "privacyPolicy" },
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8">
       <Stepper />
@@ -166,6 +206,12 @@ export const PaymentConfirmation = ({
       <div className="max-w-4xl mx-auto">
         <div className="bg-core-white p-8 rounded-md">
           <h1 className="text-2xl font-bold mb-6">{title}</h1>
+
+          <PaymentDocuments
+            title="Your Cuckoo Documents"
+            disclaimer="Please read and download the following before joining Cuckoo:"
+            items={documentItems}
+          />
 
           <p className="text-md font-bold mb-6">{directDebitDetailsTitle}</p>
 
@@ -191,7 +237,12 @@ export const PaymentConfirmation = ({
             />
           </div>
 
-          <p className="text-md font-bold mb-6">{termsAndConditionsTitle}</p>
+          <p
+            className="text-md font-bold mb-6"
+            data-testid="termsAndConditions"
+          >
+            {termsAndConditionsTitle}
+          </p>
           <div className="mb-6">
             <PaymentTermsAndConditions
               onChange={handleTermsChange}

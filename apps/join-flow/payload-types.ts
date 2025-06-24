@@ -980,8 +980,26 @@ export interface AffiliateSession {
     apiSuccess?: {
       sessionID?: string | null;
       affiliateName?: string | null;
+      /**
+       * Should the credit check results be used to reject, or should we ignore them. Note the credit check will always run, its just the results won't be used if this is not selected
+       */
       useCreditcheckResult?: boolean | null;
+      /**
+       * If this is false, email validation will not be required
+       */
       doEmailValidation?: boolean | null;
+      /**
+       * This is a link to the Ts and Cs to be used in the join flow
+       */
+      termsAndConditionsLink?: string | null;
+      /**
+       * This is a link to the privacy policy
+       */
+      privacyPolicyLink?: string | null;
+      /**
+       * This is a quick and dirty way to allow for differentiation between the affiliates visually, we would like for this to be a real CMS block in the future but the idea here is that the frontend just use this to pick some style options.
+       */
+      affiliateVisualStyle?: string | null;
       cuckooAffiliate?: (string | null) | Affiliate;
     };
     apiErrors?:
