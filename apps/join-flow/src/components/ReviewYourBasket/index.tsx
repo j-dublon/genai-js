@@ -6,6 +6,8 @@ import { SummaryBar } from "@/components/ReviewYourBasket/components/SummaryBar"
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { eeroProducts } from "@/screens/EeroSelection/eeroSelectionProps";
+import { generateCICS } from "@/services/helpers/generateCICS";
+import { updateBasket } from "@/services/helpers/updateBasket";
 import useJoinFlowStore, {
   StoreSelectedPackage,
 } from "@/store/useJoinFlowStore";
@@ -25,6 +27,8 @@ export const ReviewYourBasket = ({
     selectPackage,
     resetFlow,
     quoteResponse,
+    basket,
+    setBasket,
   } = useJoinFlowStore();
   const router = useRouter();
 
@@ -99,7 +103,7 @@ export const ReviewYourBasket = ({
     ...eeroProducts,
   ];
 
-  const handlePlanChange = (selectedPlanId: string) => {
+  const handlePlanChange = async (selectedPlanId: string) => {
     if (!selectedPlanId) {
       console.error("No plan ID found in form data");
       return;
@@ -117,9 +121,39 @@ export const ReviewYourBasket = ({
     );
 
     if (newPackage) {
-      selectPackage(newPackage);
-      // TODO: update basket in payload
-      // TODO: When this page is done we need to add a `generateCICS` call when the user chooses a different product
+      try {
+        if (
+          newPackage.selectionIdentifier ===
+          selectedPackage?.selectionIdentifier
+        ) {
+          // No need to update the basket as the package is the same
+          return;
+        }
+
+        if (!basket?.id) {
+          console.error("No basket ID found");
+          return;
+        }
+
+        const result = await updateBasket(basket.id, {
+          product: {
+            quoteLookup: quoteResponse?.documentID,
+            selectionIdentifier: newPackage.selectionIdentifier,
+          },
+        });
+
+        if (result.error) {
+          console.error("Error updating basket:", result.error);
+          return;
+        }
+
+        if (result.basket) {
+          await generateCICS(result.basket, setBasket);
+          selectPackage(newPackage);
+        }
+      } catch (error) {
+        console.error("Error updating basket:", error);
+      }
     } else {
       console.error("No matching package found");
     }

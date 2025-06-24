@@ -20,7 +20,7 @@ interface BasketDialogProps {
   onClose: () => void;
   availablePackages: StoreSelectedPackage[];
   eeroProducts: EeroProduct[];
-  onPlanChange: (selectedPlanId: string) => void;
+  onPlanChange: (selectedPlanId: string) => Promise<void>;
   onAddressChange: () => void;
   pricing: PricingCalculations;
 }
