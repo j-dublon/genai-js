@@ -116,6 +116,19 @@ export type AccessibilityRequirements = {
   additionalInformation?: string;
 };
 
+export type AccessibilityCommunicationPreferences = {
+  contentTypes?: {
+    monthlyBills?: boolean;
+    cics?: boolean;
+    termsAndConditions?: boolean;
+  };
+  contactPreferences?: {
+    audio?: boolean;
+    braille?: boolean;
+    largePrint?: boolean;
+  };
+};
+
 export type GiftcardCampaign = {
   id: string;
   name: string;
@@ -297,6 +310,7 @@ export type JoinFlowState = {
   goLiveDetails: GoLiveDetails | null;
   affiliateSession: AffiliateSession | null;
   accessibilityRequirements: AccessibilityRequirements | null;
+  accessibilityCommunicationPreferences: AccessibilityCommunicationPreferences | null;
   quoteResponse: QuoteLookupSuccess | null;
   basket: StoreBasket | null;
   softCreditCheck: SoftCreditCheck | null;
@@ -316,6 +330,9 @@ export type JoinFlowState = {
   setQuoteResponse: (response: QuoteLookupSuccess) => void;
   setAccessibilityRequirements: (
     requirements: AccessibilityRequirements | null,
+  ) => void;
+  setAccessibilityCommunicationPreferences: (
+    preferences: AccessibilityCommunicationPreferences | null,
   ) => void;
   setBasket: (basket: StoreBasket) => void;
   setSoftCreditCheck: (softCreditCheck: SoftCreditCheck) => void;
@@ -338,6 +355,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       goLiveDetails: null,
       affiliateSession: null,
       accessibilityRequirements: null,
+      accessibilityCommunicationPreferences: null,
       quoteResponse: null,
       basket: null,
       softCreditCheck: null,
@@ -361,6 +379,8 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setAffiliateSession: (session) => set({ affiliateSession: session }),
       setAccessibilityRequirements: (requirements) =>
         set({ accessibilityRequirements: requirements }),
+      setAccessibilityCommunicationPreferences: (preferences) =>
+        set({ accessibilityCommunicationPreferences: preferences }),
       setQuoteResponse: (response) => set({ quoteResponse: response }),
       setBasket: (basket) => set({ basket }),
       setSoftCreditCheck: (softCreditCheck) => set({ softCreditCheck }),
@@ -376,6 +396,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           goLiveDetails: null,
           affiliateSession: null,
           accessibilityRequirements: null,
+          accessibilityCommunicationPreferences: null,
           quoteResponse: null,
           basket: null,
           softCreditCheck: null,

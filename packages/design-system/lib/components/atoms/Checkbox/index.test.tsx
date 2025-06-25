@@ -67,4 +67,16 @@ describe("Checkbox", () => {
     expect(svg).toBeInTheDocument();
     expect(svg).toHaveClass("ds:peer-checked:block", "ds:hidden");
   });
+
+  it("applies custom label className", () => {
+    render(
+      <Checkbox
+        label={mockLabel}
+        value={mockValue}
+        labelClassName="custom-label-class"
+      />,
+    );
+    const label = screen.getByText(mockLabel);
+    expect(label).toHaveClass("custom-label-class");
+  });
 });

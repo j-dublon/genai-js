@@ -19,11 +19,4 @@ export const paymentConfirmationText = {
     "I confirm I'm authorised to make Direct Debits using the account details provided",
   creditSearchCheckboxText:
     "I agree to a credit search being carried out on my file",
-  accessibilityRequirementsTitle: "Your requirements",
-  accessibilityRequirementsDescription:
-    "We're a diverse bunch here at Cuckoo and we understand our customers are the same. Do you have any accessibility or communication needs you'd like us to be aware of?",
-  accessibilityRequirementsCheckboxText:
-    "Yes, I have specific requirements or needs",
-  accessibilityRequirementsModalTitle:
-    "Let us know a bit more about your specific needs or requirements",
 };

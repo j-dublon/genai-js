@@ -1,5 +1,6 @@
 "use client";
 
+import { Checkbox } from "@react-component-library/ui";
 import React, { useEffect, useState } from "react";
 
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
@@ -53,44 +54,29 @@ export const PaymentTermsAndConditions = ({
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md">
       <div className="space-y-4">
-        <div className="flex items-start">
-          <input
-            type="checkbox"
-            id="terms"
-            className="mt-1 mr-3"
-            checked={termsChecked}
-            onChange={(e) => setTermsChecked(e.target.checked)}
-          />
-          <label htmlFor="terms" className="text-sm">
-            {termsCheckboxText.replace(/'/g, "'")}
-          </label>
-        </div>
+        <Checkbox
+          label={termsCheckboxText.replace(/'/g, "'")}
+          value="terms"
+          checked={termsChecked}
+          onChange={setTermsChecked}
+          labelClassName="text-sm text-core-black"
+        />
 
-        <div className="flex items-start">
-          <input
-            type="checkbox"
-            id="directDebit"
-            className="mt-1 mr-3"
-            checked={directDebitChecked}
-            onChange={(e) => setDirectDebitChecked(e.target.checked)}
-          />
-          <label htmlFor="directDebit" className="text-sm">
-            {directDebitCheckboxText.replace(/'/g, "'")}
-          </label>
-        </div>
+        <Checkbox
+          label={directDebitCheckboxText.replace(/'/g, "'")}
+          value="directDebit"
+          checked={directDebitChecked}
+          onChange={setDirectDebitChecked}
+          labelClassName="text-sm text-core-black"
+        />
 
-        <div className="flex items-start">
-          <input
-            type="checkbox"
-            id="creditSearch"
-            className="mt-1 mr-3"
-            checked={creditSearchChecked}
-            onChange={(e) => setCreditSearchChecked(e.target.checked)}
-          />
-          <label htmlFor="creditSearch" className="text-sm">
-            {creditSearchCheckboxText}
-          </label>
-        </div>
+        <Checkbox
+          label={creditSearchCheckboxText}
+          value="creditSearch"
+          checked={creditSearchChecked}
+          onChange={setCreditSearchChecked}
+          labelClassName="text-sm text-core-black"
+        />
       </div>
     </div>
   );

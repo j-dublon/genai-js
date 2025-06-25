@@ -1,22 +1,16 @@
 "use client";
 
-import {
-  Button,
-  InfoModal,
-  useClickOutside,
-} from "@react-component-library/ui";
+import { Button } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import Stepper from "@/components/Stepper";
-import { useClearFocus } from "@/hooks/useClearFocus";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import { payloadAPI } from "@/services/payloadClient";
 
 import { PaymentDocuments } from "../PaymentDocuments";
-import { AccessibilityModalContents } from "./AccessibilityModalContents";
-import { AccessibilityRequirements } from "./AccessibilityRequirements";
+import { AccessibilityRequirements } from "./Accessibility/AccessibilityRequirements";
 import PaymentAccountDetails from "./PaymentAccountDetails";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
@@ -39,20 +33,6 @@ export const PaymentConfirmation = ({
     creditSearchAgreed: false,
   });
 
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useClearFocus(modalRef, "close");
-
-  const closeFunction = () => {
-    if (modalRef.current) {
-      modalRef.current.close();
-      setIsModalOpen(false);
-    }
-  };
-
-  useClickOutside(modalRef, isModalOpen, closeFunction);
-
   useEffect(() => {
     if (paymentDetails) {
       setTermsState({
@@ -72,7 +52,6 @@ export const PaymentConfirmation = ({
     backButtonText,
     signUpText,
     termsAndConditionsTitle,
-    accessibilityRequirementsModalTitle,
   } = paymentConfirmationText;
 
   const handleBack = useCallback(
@@ -229,12 +208,7 @@ export const PaymentConfirmation = ({
           </div>
 
           <div className="mb-6">
-            <AccessibilityRequirements
-              onChange={() => {
-                modalRef.current?.showModal();
-                setIsModalOpen(true);
-              }}
-            />
+            <AccessibilityRequirements />
           </div>
 
           <p
@@ -274,13 +248,6 @@ export const PaymentConfirmation = ({
           </div>
         </div>
       </div>
-      <InfoModal
-        title={accessibilityRequirementsModalTitle}
-        titleStyling="md:text-md max-w-[500px]"
-        modalRef={modalRef}
-      >
-        <AccessibilityModalContents closeModal={closeFunction} />
-      </InfoModal>
     </div>
   );
 };

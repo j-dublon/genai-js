@@ -8,6 +8,7 @@ export interface RadioProps {
   onChange?: (value: string) => void;
   disabled?: boolean;
   className?: string;
+  labelClassName?: string;
 }
 
 export const Radio = ({
@@ -18,6 +19,7 @@ export const Radio = ({
   onChange,
   disabled = false,
   className = "",
+  labelClassName = "",
 }: RadioProps) => {
   const radioClasses = `ds:relative ds:peer ds:h-7 ds:w-7 ds:bg-core-white ds:border-ui-grey-300 ds:appearance-none ds:rounded-full ds:border-2 
   ds:checked:border-core-black ${disabled ? "ds:cursor-not-allowed" : "ds:cursor-pointer"} ${className}`;
@@ -35,7 +37,9 @@ export const Radio = ({
         aria-checked={checked}
       />
       <RadioIcon className="ds:absolute ds:hidden ds:peer-checked:block ds:rounded-full ds:w-7 ds:h-7" />
-      <span className="ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:font-normal ds:text-ui-grey-500">
+      <span
+        className={`ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:font-normal ds:text-ui-grey-500 ${labelClassName}`}
+      >
         {label}
       </span>
     </label>

@@ -1,49 +1,32 @@
 "use client";
 
 import { Button, Checkbox } from "@react-component-library/ui";
-import { useEffect } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  UseFormHandleSubmit,
+  UseFormSetValue,
+} from "react-hook-form";
 
-import useJoinFlowStore from "@/store/useJoinFlowStore";
-import { AccessibilityRequirements } from "@/store/useJoinFlowStore";
+import { AccessibilityRequirementsFormData } from "@/validation/join-flow-schema";
 
-import { accessibilityModalText } from "./AccessibilityModalProps";
+import { accessibilityModalText } from "./AccessibilityProps";
+
+interface AccessibilityModalContentsProps {
+  control: Control<AccessibilityRequirementsFormData>;
+  handleSubmit: UseFormHandleSubmit<AccessibilityRequirementsFormData>;
+  setValue: UseFormSetValue<AccessibilityRequirementsFormData>;
+  onSubmit: (data: AccessibilityRequirementsFormData) => void;
+  onClear: () => void;
+}
 
 export const AccessibilityModalContents = ({
-  closeModal,
-}: {
-  closeModal: () => void;
-}) => {
-  const { accessibilityRequirements, setAccessibilityRequirements } =
-    useJoinFlowStore();
-
-  const { handleSubmit, control, setValue, watch, reset } =
-    useForm<AccessibilityRequirements>({
-      defaultValues: {
-        visionImpaired: false,
-        hearingImpaired: false,
-        neurodiverse: false,
-        learningDisability: false,
-        thirdPartyAssistance: false,
-        thirdPartyName: "",
-        thirdPartyPhone: "",
-        thirdPartyEmail: "",
-        physicalIllness: false,
-        physicalDisability: false,
-        communicationNeeds: false,
-        mentalIllness: false,
-        additionalInformation: "",
-      },
-    });
-
-  useEffect(() => {
-    if (accessibilityRequirements) {
-      Object.entries(accessibilityRequirements).forEach(([key, value]) => {
-        setValue(key as keyof AccessibilityRequirements, value);
-      });
-    }
-  }, [accessibilityRequirements, setValue]);
-
+  control,
+  handleSubmit,
+  setValue,
+  onSubmit,
+  onClear,
+}: AccessibilityModalContentsProps) => {
   const {
     resetButtonText,
     submitButtonText,
@@ -52,39 +35,17 @@ export const AccessibilityModalContents = ({
     additionalInformationPlaceholder,
   } = accessibilityModalText;
 
-  const thirdPartyAssistance = watch("thirdPartyAssistance");
-
-  const handleFormSubmit = (data: AccessibilityRequirements) => {
-    if (data.thirdPartyAssistance && !data.thirdPartyName) {
-      return;
-    }
-
-    // Filter out false checkboxes and empty strings
-    const changedData = Object.fromEntries(
-      Object.entries(data).filter(
-        ([, value]) =>
-          value === true || (typeof value === "string" && value.length > 0),
-      ),
-    ) as AccessibilityRequirements;
-
-    // if no changed data, set requirements to null, else update store with new requirements
-    const dataToUpdate =
-      Object.keys(changedData).length === 0 ? null : changedData;
-    setAccessibilityRequirements(dataToUpdate);
-    closeModal();
-  };
-
   return (
     <form
       id="accessibility-form"
-      onSubmit={handleSubmit(handleFormSubmit)}
+      onSubmit={handleSubmit(onSubmit)}
       className="p-4 md:p-6 bg-ui-grey-100 rounded-md md:rounded-sm flex flex-col gap-4 md:gap-6 mt-6 md:mt-8"
     >
       {accessibilityCheckboxes.map(({ label, name, moreDetails }) => {
         return (
           <div key={name}>
             <Controller
-              name={name as keyof AccessibilityRequirements}
+              name={name as keyof AccessibilityRequirementsFormData}
               control={control}
               render={({ field }) => (
                 <Checkbox
@@ -97,24 +58,18 @@ export const AccessibilityModalContents = ({
             />
             {name === "thirdPartyAssistance" && (
               <div className="flex flex-col gap-4 mt-4 md:mt-6">
-                {moreDetails?.map(({ name, placeholder, error }) => {
+                {moreDetails?.map(({ name, placeholder }) => {
                   const getInputType = (fieldName: string) => {
                     if (fieldName.includes("email")) return "email";
                     if (fieldName.includes("phone")) return "tel";
                     return "text";
                   };
 
-                  const isRequired =
-                    name === "thirdPartyName" && thirdPartyAssistance;
-
                   return (
                     <Controller
                       key={name}
-                      name={name as keyof AccessibilityRequirements}
+                      name={name as keyof AccessibilityRequirementsFormData}
                       control={control}
-                      rules={{
-                        required: isRequired ? error : false,
-                      }}
                       render={({ field, fieldState: { error } }) => (
                         <div className="flex flex-col gap-1">
                           <input
@@ -132,7 +87,7 @@ export const AccessibilityModalContents = ({
                               }
                             }}
                           />
-                          {error && thirdPartyAssistance && (
+                          {error && (
                             <span className="text-ui-error text-xs">
                               {error.message}
                             </span>
@@ -169,11 +124,7 @@ export const AccessibilityModalContents = ({
           aria-label="Clear requirements"
           className="w-full md:w-auto"
           type="button"
-          onClick={() => {
-            setAccessibilityRequirements(null);
-            closeModal();
-            reset();
-          }}
+          onClick={onClear}
         >
           {resetButtonText}
         </Button>

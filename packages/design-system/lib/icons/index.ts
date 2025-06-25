@@ -1,6 +1,7 @@
 export { Alert } from "./Alert";
 export { Arrow } from "./Arrow";
 export { ArrowWithCircle } from "./ArrowWithCircle";
+export { CheckboxIcon } from "./CheckboxIcon";
 export { ChevronVertical } from "./ChevronVertical";
 export { ChevronVerticalWithCircle } from "./ChevronVerticalWithCircle";
 export { CloseIcon } from "./CloseIcon";

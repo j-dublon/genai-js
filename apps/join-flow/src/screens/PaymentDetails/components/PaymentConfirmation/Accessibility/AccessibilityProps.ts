@@ -23,7 +23,6 @@ export const accessibilityModalText = {
         {
           name: "thirdPartyName",
           placeholder: "Full name of nominated person",
-          error: "Please provide a name",
         },
         {
           name: "thirdPartyPhone",
@@ -31,7 +30,7 @@ export const accessibilityModalText = {
         },
         {
           name: "thirdPartyEmail",
-          placeholder: "Email address (optional)",
+          placeholder: "Email address",
         },
       ],
     },
@@ -58,4 +57,49 @@ export const accessibilityModalText = {
     "Please let us know any more info that'll help us understand your specific needs or requirements",
   additionalInformationPlaceholder:
     "For example: My hearing has recently deteriorated, because of this, I find it hard to communicate so I prefer not to use the phone",
+  accessibilityRequirementsTitle: "Your requirements",
+  accessibilityRequirementsDescription:
+    "We're a diverse bunch here at Cuckoo and we understand our customers are the same. Do you have any accessibility or communication needs you'd like us to be aware of?",
+  accessibilityRequirementsModalTitle:
+    "Let us know a bit more about your specific needs or requirements",
+  accessibilityRequirementsCheckboxText:
+    "Yes, I have specific requirements or needs",
+};
+
+export const accessibilityCommunicationPreferencesText = {
+  formatNeededLabel: "I require my info in a different format",
+  communicationsTitle: "Your communications",
+  formatDescription:
+    "Tell us how you'd like to receive your information and we'll handle the rest",
+  formatRadioOptions: [
+    {
+      label: "Audio",
+      name: "audio",
+    },
+    {
+      label: "Braille",
+      name: "braille",
+    },
+    {
+      label: "Large print",
+      name: "largePrint",
+    },
+  ],
+  documentCheckboxesTitle: "What info do you require in a different format?",
+  documentCheckboxes: [
+    {
+      label: "Monthly bills",
+      name: "monthlyBills",
+    },
+    {
+      label: "Contract information and summary",
+      name: "cics",
+    },
+    {
+      label: "T&Cs",
+      name: "termsAndConditions",
+    },
+  ],
+  saveButtonText: "Save",
+  editButtonText: "Edit my communications",
 };

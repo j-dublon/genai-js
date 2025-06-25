@@ -8,6 +8,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AffiliateSessionSuccessData } from "@/services/payloadTypes";
 
+import { accessibilityModalText } from "./Accessibility/AccessibilityProps";
 import { PaymentConfirmation } from "./index";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
@@ -125,7 +126,6 @@ describe("PaymentConfirmation", () => {
     accountDetailsTitle,
     goLiveDetailsTitle,
     signUpText,
-    accessibilityRequirementsModalTitle,
   } = paymentConfirmationText;
 
   it("renders the main sections", () => {
@@ -218,13 +218,17 @@ describe("PaymentConfirmation", () => {
       container.querySelectorAll("dialog"),
     ).find((dialog) => {
       const titleElement = dialog.querySelector('h2[id="modal-title"]');
-      return titleElement?.textContent === accessibilityRequirementsModalTitle;
+      return (
+        titleElement?.textContent ===
+        accessibilityModalText.accessibilityRequirementsModalTitle
+      );
     }) as HTMLDialogElement;
     const otherModal = Array.from(container.querySelectorAll("dialog")).find(
       (dialog) => {
         const titleElement = dialog.querySelector('h2[id="modal-title"]');
         return (
-          titleElement?.textContent !== accessibilityRequirementsModalTitle
+          titleElement?.textContent !==
+          accessibilityModalText.accessibilityRequirementsModalTitle
         );
       },
     ) as HTMLDialogElement;
