@@ -6,7 +6,6 @@ import { SummaryBar } from "@/components/ReviewYourBasket/components/SummaryBar"
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { eeroProducts } from "@/screens/EeroSelection/eeroSelectionProps";
-import { generateCICS } from "@/services/helpers/generateCICS";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import useJoinFlowStore, {
   StoreSelectedPackage,
@@ -28,7 +27,6 @@ export const ReviewYourBasket = ({
     resetFlow,
     quoteResponse,
     basket,
-    setBasket,
   } = useJoinFlowStore();
   const router = useRouter();
 
@@ -148,7 +146,6 @@ export const ReviewYourBasket = ({
         }
 
         if (result.basket) {
-          await generateCICS(result.basket, setBasket);
           selectPackage(newPackage);
         }
       } catch (error) {

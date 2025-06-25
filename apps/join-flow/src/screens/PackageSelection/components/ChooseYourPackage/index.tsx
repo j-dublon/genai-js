@@ -12,7 +12,6 @@ import { useClearFocus } from "@/hooks/useClearFocus";
 import { useTopSpeedPackage } from "@/hooks/useTopSpeedPackage";
 import { PackageCard } from "@/screens/PackageSelection/components/PackageCard";
 import { createBasket } from "@/services/helpers/createBasket";
-import { generateCICS } from "@/services/helpers/generateCICS";
 
 import { PackageSelectionDetails } from "../PackageSelectionDetails";
 import { SpeedCalculator } from "../SpeedCalculator";
@@ -146,7 +145,7 @@ export const ChooseYourPackage = () => {
         });
 
         if (result.basket) {
-          await generateCICS(result.basket, setBasket);
+          setBasket(result.basket);
           setSoftCreditCheck({
             latestStatus: null,
             attempts: 0,
