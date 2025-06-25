@@ -58,15 +58,14 @@ const renderNavBar = (options = {}) => {
       logo={<h1>LOGO</h1>}
       links={testLinks}
       signupText="Sign up"
-      toggled={props.toggled}
       setToggled={mockSetToggled}
-      openDropdown={props.openDropdown}
       setOpenDropdown={mockSetOpenDropdown}
       drawerRef={{ current: document.createElement("div") }}
       useDropdown={(name, currentOpenDropdown) => ({
         isOpen: currentOpenDropdown === name,
         dropdownRef: { current: document.createElement("div") },
       })}
+      {...props}
     />,
   );
 };
@@ -191,5 +190,17 @@ describe("NavBar", () => {
 
     const mobileMenu = document.querySelector("aside");
     expect(mobileMenu).not.toBeInTheDocument();
+  });
+
+  it("renders RAF banner when showReferFriendCTA is true", () => {
+    renderNavBar({ showReferFriendCTA: true });
+
+    expect(screen.getByText(/Refer a friend/i)).toBeInTheDocument();
+  });
+
+  it("does not render RAF banner when showReferFriendCTA is false", () => {
+    renderNavBar({ showReferFriendCTA: false });
+
+    expect(screen.queryByText(/Refer a friend/i)).not.toBeInTheDocument();
   });
 });

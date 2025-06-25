@@ -33,6 +33,7 @@ interface NavBarProps {
     setOpenDropdown: (name: string | null) => void,
   ) => { isOpen: boolean; dropdownRef: RefObject<HTMLDivElement> };
   isContentPage?: boolean;
+  showReferFriendCTA?: boolean;
 }
 
 export const NavBar = ({
@@ -46,6 +47,7 @@ export const NavBar = ({
   drawerRef,
   useDropdown,
   isContentPage = false,
+  showReferFriendCTA = true,
 }: NavBarProps) => {
   const [openDropdownMobile, setOpenDropdownMobile] = useState<string | null>(
     null,
@@ -58,7 +60,7 @@ export const NavBar = ({
         className="ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ds:bg-core-white"
         role="banner"
       >
-        {!toggled && (
+        {!toggled && showReferFriendCTA && (
           <CTA>
             <p className="ds:text-xs ds:leading-[160%] ds:text-core-black">
               <Link

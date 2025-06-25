@@ -431,13 +431,13 @@ const PersonalDetails = () => {
 
       switch (latestStatus) {
         case "FAILED":
-          // Handle failed credit check
+          router.push("/join-flow/personal-details/check-failed");
           break;
         case "PASSED":
           router.push("/join-flow/eero-selection");
           break;
         case "NO_MATCH":
-          // Handle no match response
+          // TODO: Handle no match response
           break;
         default:
           break;
