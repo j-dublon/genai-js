@@ -87,6 +87,10 @@ export const props = {
           label: "Cookie Preferences",
           href: "https://www.cuckoo.co/index#cookie-notice",
         },
+        {
+          label: "Business Terms",
+          href: "https://www.cuckoo.co/legal/terms-business-customers",
+        },
       ],
     },
   ],
