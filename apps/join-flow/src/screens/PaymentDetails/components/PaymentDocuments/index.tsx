@@ -15,7 +15,7 @@ const DocumentItem = ({
       <div>
         <Button
           size="small"
-          data-testId={text}
+          data-testid={text}
           target="_blank"
           variant="outline"
           href={href}

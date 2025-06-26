@@ -80,7 +80,10 @@ export interface Config {
     switchMatchLookups: SwitchMatchLookup;
     referralSessions: ReferralSession;
     vulnerabilityAndAccessibility: VulnerabilityAndAccessibility;
+    renewalQuoteLookups: RenewalQuoteLookup;
+    renewalQuoteSelections: RenewalQuoteSelection;
     affiliates: Affiliate;
+    renewals: Renewal;
     products: Product;
     promotions: Promotion;
     giftcardCampaigns: GiftcardCampaign;
@@ -138,7 +141,14 @@ export interface Config {
     vulnerabilityAndAccessibility:
       | VulnerabilityAndAccessibilitySelect<false>
       | VulnerabilityAndAccessibilitySelect<true>;
+    renewalQuoteLookups:
+      | RenewalQuoteLookupsSelect<false>
+      | RenewalQuoteLookupsSelect<true>;
+    renewalQuoteSelections:
+      | RenewalQuoteSelectionsSelect<false>
+      | RenewalQuoteSelectionsSelect<true>;
     affiliates: AffiliatesSelect<false> | AffiliatesSelect<true>;
+    renewals: RenewalsSelect<false> | RenewalsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
     promotions: PromotionsSelect<false> | PromotionsSelect<true>;
     giftcardCampaigns:
@@ -212,6 +222,7 @@ export interface Config {
       doROIAddressCheck: TaskDoROIAddressCheck;
       doKrakenReferenceDataSync: TaskDoKrakenReferenceDataSync;
       doOSSEventsFetch: TaskDoOSSEventsFetch;
+      doBasketCleanup: TaskDoBasketCleanup;
       inline: {
         input: unknown;
         output: unknown;
@@ -687,7 +698,7 @@ export interface QuoteLookup {
      */
     addressLookupSelectionIdentifier: string;
     /**
-     * OPTIONAL - this is used to fetch an existing quote from Kraken to avoid creating the same one. Please use this for the Cuckoo Graph Orders Hook
+     * This is used to fetch an existing quote from Kraken to avoid creating the same one. Usedfor the Cuckoo Graph Orders Hook - only API
      */
     quotingCode?: string | null;
   };
@@ -1086,6 +1097,18 @@ export interface Affiliate {
    * The name we, and this CMS, use to identify this affiliate
    */
   name: string;
+  /**
+   * This is a link to the Ts and Cs to be used in the join flow
+   */
+  termsAndConditionsLink: string;
+  /**
+   * This is a link to the privacy policy
+   */
+  privacyPolicyLink: string;
+  /**
+   * This is a quick and dirty way to allow for differentiation between the affiliates visually, we would like for this to be a real CMS block in the future but the idea here is that the frontend just use this to pick some style options.
+   */
+  affiliateVisualStyle: string;
   /**
    * Used by the basket validation - referral sessions can only run on affiliates that have this set.
    */
@@ -1946,75 +1969,535 @@ export interface VulnerabilityAndAccessibility {
   accessibilityOptions?: {
     blindVisionImpaired?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     deafOrHardOfHearing?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     neurodivergent?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     learningDisability?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     physicalIllness?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     physicalDisability?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     communicationDifficulties?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     otherIllness?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
   };
   contentTypes?: {
     monthlyBills?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     cics?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     termsAndConditions?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
   };
   contactPreferences?: {
     audio?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     largePrint?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
     braille?: {
       selected?: boolean | null;
-      krakenIdentifier?: string | null;
     };
   };
   other?: {
     content?: string | null;
-    krakenIdentifier?: string | null;
   };
   nominatedPerson?: {
     fullName?: string | null;
     phone?: string | null;
     email?: string | null;
-    krakenIdentifier?: string | null;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewalQuoteLookups".
+ */
+export interface RenewalQuoteLookup {
+  id: string;
+  inputs: {
+    requestProcessingType: "async" | "sync";
+    accountNumber?: string | null;
+  };
+  outputs?: {
+    state?: ("pending" | "success" | "error") | null;
+    apiSuccess?: {
+      quotingCode?: string | null;
+      products?:
+        | {
+            krakenProductCode: string;
+            frontendIdentifier: string;
+            frontendTitle: string;
+            termMonths: number;
+            selectionIdentifier: string;
+            installationRequired: boolean;
+            appliedPromotionUUIDs?:
+              | {
+                  id: string | null;
+                }[]
+              | null;
+            prices: {
+              basePrice: number;
+              discountedPrice: number;
+              annualPriceRise?:
+                | {
+                    price: number;
+                    date: string;
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            speeds: {
+              download: number;
+              upload: number;
+            };
+            /**
+             * Add any combination of gift cards, promotions, and bill credits - max 2.
+             */
+            offers?:
+              | (
+                  | {
+                      /**
+                       * Select the gift card campaign
+                       */
+                      campaign: string | GiftcardCampaign;
+                      /**
+                       * Value of the gift card
+                       */
+                      value: number;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "giftCardBlock";
+                    }
+                  | {
+                      /**
+                       * Select a promotion
+                       */
+                      promotion: string | Promotion;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "promotionBlock";
+                    }
+                  | {
+                      /**
+                       * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
+                       */
+                      value: number;
+                      /**
+                       * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
+                       */
+                      isDiscretionary?: boolean | null;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "billCreditBlock";
+                    }
+                )[]
+              | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    apiErrors?:
+      | (
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1124CredentialsExpired";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1111KrakenUnauthorized";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "MyAccountSuspended";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupKrakenFormatError";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupResultPollingTimeout";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupNoProductsAvailableForAffiliate";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "UnknownError";
+            }
+        )[]
+      | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewalQuoteSelections".
+ */
+export interface RenewalQuoteSelection {
+  id: string;
+  inputs: {
+    requestProcessingType: "async" | "sync";
+    /**
+     * The renewalQuoteLookup item that you want to pick products from
+     */
+    renewalQuoteLookup: string | RenewalQuoteLookup;
+    /**
+     * The selectionIdentifier for the product row on the renewalQuoteLookup
+     */
+    renewalQuoteLookupSelectionIdentifier: string;
+  };
+  outputs?: {
+    state?: ("pending" | "success" | "error") | null;
+    apiSuccess?: {
+      extras?:
+        | {
+            family: string;
+            availableExtras?:
+              | {
+                  code: string;
+                  name: string;
+                  description: string;
+                  price: number;
+                  selectionIdentifier: string;
+                  family: string;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    apiErrors?:
+      | (
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1124CredentialsExpired";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1111KrakenUnauthorized";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "MyAccountSuspended";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteSelectionCouldNotLoadRenewalQuoteLookup";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteSelectionCouldNotFindProductWithSelectedSelectionIdentifier";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteSelectionResultPollingTimeout";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteSelectionsKrakenFormatError";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "UnknownError";
+            }
+        )[]
+      | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewals".
+ */
+export interface Renewal {
+  id: string;
+  /**
+   * The name we, and this CMS, use to identify the renewal
+   */
+  name: string;
+  /**
+   * This is a link to the Ts and Cs to be used in the join flow
+   */
+  termsAndConditionsLink: string;
+  /**
+   * This is a link to the privacy policy
+   */
+  privacyPolicyLink: string;
+  productConfig: {
+    /**
+     * The product that will be shown for this config line
+     */
+    products: (string | Product)[];
+    /**
+     * These are offers that are applied based on specific postcodes. If multiple are specified and an address qualifies for more than 1, the top one is used. Order matters. Think of these are offers ontop of the base price if you win the postcode lottery based on this config. Note that if an address qualifies for this, and there is a main offer of the same type (i.e. giftcard on postcode, giftcard on main offer) the postcode based one will always win.
+     */
+    postcodeOffers?:
+      | {
+          postcodeList: string | PostcodeList;
+          /**
+           * Add any combination of gift cards, promotions, and bill credits - max 2.
+           */
+          offers: (
+            | {
+                /**
+                 * Select the gift card campaign
+                 */
+                campaign: string | GiftcardCampaign;
+                /**
+                 * Value of the gift card
+                 */
+                value: number;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: "giftCardBlock";
+              }
+            | {
+                /**
+                 * Select a promotion
+                 */
+                promotion: string | Promotion;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: "promotionBlock";
+              }
+            | {
+                /**
+                 * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
+                 */
+                value: number;
+                /**
+                 * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
+                 */
+                isDiscretionary?: boolean | null;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: "billCreditBlock";
+              }
+          )[];
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * These are offers that are applied to all products in this context, regardless of postcode..
+     */
+    mainOffers?: {
+      /**
+       * Add any combination of gift cards, promotions, and bill credits - max 2.
+       */
+      offers?:
+        | (
+            | {
+                /**
+                 * Select the gift card campaign
+                 */
+                campaign: string | GiftcardCampaign;
+                /**
+                 * Value of the gift card
+                 */
+                value: number;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: "giftCardBlock";
+              }
+            | {
+                /**
+                 * Select a promotion
+                 */
+                promotion: string | Promotion;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: "promotionBlock";
+              }
+            | {
+                /**
+                 * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
+                 */
+                value: number;
+                /**
+                 * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
+                 */
+                isDiscretionary?: boolean | null;
+                conditions?:
+                  | (
+                      | {
+                          /**
+                           * The age of the account in days, after this goes by, the reward can trigger
+                           */
+                          age: number;
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountAgeBlock";
+                        }
+                      | {
+                          id?: string | null;
+                          blockName?: string | null;
+                          blockType: "rewardConditionsAccountNotInDebtBlock";
+                        }
+                    )[]
+                  | null;
+                id?: string | null;
+                blockName?: string | null;
+                blockType: "billCreditBlock";
+              }
+          )[]
+        | null;
+    };
+    id?: string | null;
+  }[];
   updatedAt: string;
   createdAt: string;
 }
@@ -2446,6 +2929,7 @@ export interface ErrorLog {
  */
 export interface ApiLog {
   id: string;
+  action: string;
   identifier: string;
   response:
     | {
@@ -2467,7 +2951,7 @@ export interface ApiLog {
     | null;
   api: string;
   url: string;
-  type?: ("success" | "error") | null;
+  type?: ("success" | "error" | "fatal") | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2775,7 +3259,8 @@ export interface PayloadJob {
           | "doROIDynamoImports"
           | "doROIAddressCheck"
           | "doKrakenReferenceDataSync"
-          | "doOSSEventsFetch";
+          | "doOSSEventsFetch"
+          | "doBasketCleanup";
         taskID: string;
         input?:
           | {
@@ -2819,6 +3304,7 @@ export interface PayloadJob {
         | "doROIAddressCheck"
         | "doKrakenReferenceDataSync"
         | "doOSSEventsFetch"
+        | "doBasketCleanup"
       )
     | null;
   queue?: string | null;
@@ -2887,8 +3373,20 @@ export interface PayloadLockedDocument {
         value: string | VulnerabilityAndAccessibility;
       } | null)
     | ({
+        relationTo: "renewalQuoteLookups";
+        value: string | RenewalQuoteLookup;
+      } | null)
+    | ({
+        relationTo: "renewalQuoteSelections";
+        value: string | RenewalQuoteSelection;
+      } | null)
+    | ({
         relationTo: "affiliates";
         value: string | Affiliate;
+      } | null)
+    | ({
+        relationTo: "renewals";
+        value: string | Renewal;
       } | null)
     | ({
         relationTo: "products";
@@ -3330,6 +3828,9 @@ export interface AffiliateSessionsSelect<T extends boolean = true> {
               affiliateName?: T;
               useCreditcheckResult?: T;
               doEmailValidation?: T;
+              termsAndConditionsLink?: T;
+              privacyPolicyLink?: T;
+              affiliateVisualStyle?: T;
               cuckooAffiliate?: T;
             };
         apiErrors?:
@@ -4354,49 +4855,41 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         deafOrHardOfHearing?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         neurodivergent?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         learningDisability?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         physicalIllness?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         physicalDisability?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         communicationDifficulties?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         otherIllness?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
       };
   contentTypes?:
@@ -4406,19 +4899,16 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         cics?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         termsAndConditions?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
       };
   contactPreferences?:
@@ -4428,26 +4918,22 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         largePrint?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
         braille?:
           | T
           | {
               selected?: T;
-              krakenIdentifier?: T;
             };
       };
   other?:
     | T
     | {
         content?: T;
-        krakenIdentifier?: T;
       };
   nominatedPerson?:
     | T
@@ -4455,7 +4941,292 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
         fullName?: T;
         phone?: T;
         email?: T;
-        krakenIdentifier?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewalQuoteLookups_select".
+ */
+export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
+  inputs?:
+    | T
+    | {
+        requestProcessingType?: T;
+        accountNumber?: T;
+      };
+  outputs?:
+    | T
+    | {
+        state?: T;
+        apiSuccess?:
+          | T
+          | {
+              quotingCode?: T;
+              products?:
+                | T
+                | {
+                    krakenProductCode?: T;
+                    frontendIdentifier?: T;
+                    frontendTitle?: T;
+                    termMonths?: T;
+                    selectionIdentifier?: T;
+                    installationRequired?: T;
+                    appliedPromotionUUIDs?:
+                      | T
+                      | {
+                          id?: T;
+                        };
+                    prices?:
+                      | T
+                      | {
+                          basePrice?: T;
+                          discountedPrice?: T;
+                          annualPriceRise?:
+                            | T
+                            | {
+                                price?: T;
+                                date?: T;
+                                id?: T;
+                              };
+                        };
+                    speeds?:
+                      | T
+                      | {
+                          download?: T;
+                          upload?: T;
+                        };
+                    offers?:
+                      | T
+                      | {
+                          giftCardBlock?:
+                            | T
+                            | {
+                                campaign?: T;
+                                value?: T;
+                                conditions?:
+                                  | T
+                                  | {
+                                      rewardConditionsAccountAgeBlock?:
+                                        | T
+                                        | {
+                                            age?: T;
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      rewardConditionsAccountNotInDebtBlock?:
+                                        | T
+                                        | {
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                    };
+                                id?: T;
+                                blockName?: T;
+                              };
+                          promotionBlock?:
+                            | T
+                            | {
+                                promotion?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          billCreditBlock?:
+                            | T
+                            | {
+                                value?: T;
+                                isDiscretionary?: T;
+                                conditions?:
+                                  | T
+                                  | {
+                                      rewardConditionsAccountAgeBlock?:
+                                        | T
+                                        | {
+                                            age?: T;
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      rewardConditionsAccountNotInDebtBlock?:
+                                        | T
+                                        | {
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                    };
+                                id?: T;
+                                blockName?: T;
+                              };
+                        };
+                    id?: T;
+                  };
+            };
+        apiErrors?:
+          | T
+          | {
+              "KT-CT-1124CredentialsExpired"?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              "KT-CT-1111KrakenUnauthorized"?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              MyAccountSuspended?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteLookupKrakenFormatError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteLookupResultPollingTimeout?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteLookupNoProductsAvailableForAffiliate?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewalQuoteSelections_select".
+ */
+export interface RenewalQuoteSelectionsSelect<T extends boolean = true> {
+  inputs?:
+    | T
+    | {
+        requestProcessingType?: T;
+        renewalQuoteLookup?: T;
+        renewalQuoteLookupSelectionIdentifier?: T;
+      };
+  outputs?:
+    | T
+    | {
+        state?: T;
+        apiSuccess?:
+          | T
+          | {
+              extras?:
+                | T
+                | {
+                    family?: T;
+                    availableExtras?:
+                      | T
+                      | {
+                          code?: T;
+                          name?: T;
+                          description?: T;
+                          price?: T;
+                          selectionIdentifier?: T;
+                          family?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+            };
+        apiErrors?:
+          | T
+          | {
+              "KT-CT-1124CredentialsExpired"?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              "KT-CT-1111KrakenUnauthorized"?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              MyAccountSuspended?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteSelectionCouldNotLoadRenewalQuoteLookup?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteSelectionCouldNotFindProductWithSelectedSelectionIdentifier?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteSelectionResultPollingTimeout?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteSelectionsKrakenFormatError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              UnknownError?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
+        apiTraceIDs?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -4466,6 +5237,9 @@ export interface VulnerabilityAndAccessibilitySelect<T extends boolean = true> {
  */
 export interface AffiliatesSelect<T extends boolean = true> {
   name?: T;
+  termsAndConditionsLink?: T;
+  privacyPolicyLink?: T;
+  affiliateVisualStyle?: T;
   referralCanUse?: T;
   krakenSubdomainIdentifiers?:
     | T
@@ -4494,6 +5268,155 @@ export interface AffiliatesSelect<T extends boolean = true> {
               postcodeList?: T;
               id?: T;
             };
+        postcodeOffers?:
+          | T
+          | {
+              postcodeList?: T;
+              offers?:
+                | T
+                | {
+                    giftCardBlock?:
+                      | T
+                      | {
+                          campaign?: T;
+                          value?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    promotionBlock?:
+                      | T
+                      | {
+                          promotion?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    billCreditBlock?:
+                      | T
+                      | {
+                          value?: T;
+                          isDiscretionary?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+              id?: T;
+            };
+        mainOffers?:
+          | T
+          | {
+              offers?:
+                | T
+                | {
+                    giftCardBlock?:
+                      | T
+                      | {
+                          campaign?: T;
+                          value?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                    promotionBlock?:
+                      | T
+                      | {
+                          promotion?: T;
+                          id?: T;
+                          blockName?: T;
+                        };
+                    billCreditBlock?:
+                      | T
+                      | {
+                          value?: T;
+                          isDiscretionary?: T;
+                          conditions?:
+                            | T
+                            | {
+                                rewardConditionsAccountAgeBlock?:
+                                  | T
+                                  | {
+                                      age?: T;
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                                rewardConditionsAccountNotInDebtBlock?:
+                                  | T
+                                  | {
+                                      id?: T;
+                                      blockName?: T;
+                                    };
+                              };
+                          id?: T;
+                          blockName?: T;
+                        };
+                  };
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewals_select".
+ */
+export interface RenewalsSelect<T extends boolean = true> {
+  name?: T;
+  termsAndConditionsLink?: T;
+  privacyPolicyLink?: T;
+  productConfig?:
+    | T
+    | {
+        products?: T;
         postcodeOffers?:
           | T
           | {
@@ -5074,6 +5997,7 @@ export interface ErrorLogsSelect<T extends boolean = true> {
  * via the `definition` "apiLogs_select".
  */
 export interface ApiLogsSelect<T extends boolean = true> {
+  action?: T;
   identifier?: T;
   response?: T;
   input?: T;
@@ -5299,11 +6223,40 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface GeneralConfig {
   id: string;
+  defaultAffiliate: string | Affiliate;
+  defaultRenewal: string | Renewal;
   testing?: {
     /**
      * If set, this code can be used in the email validation step and will always pass validation, this probably should not have a value in production
      */
     alwaysValidEmailCode?: string | null;
+    /**
+     * Any address in a postcode in this list will always fail credit check regardless of the actual results the API comes back with. Note the credit check still runs, we just replace results with failure.
+     */
+    alwaysFailCreditCheckPostcodes?:
+      | {
+          postcode?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Any address in a postcode in this list will always return unknown credit check regardless of the actual results the API comes back with. Note the credit check still runs, we just replace results with failure. - this only happens if the address history is one entry, if it is multiple, it will return whatever the actual API result is.
+     */
+    alwaysUnknownCreditCheckPostcodesWithOneAddressHistory?:
+      | {
+          postcode?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Any postcodes in this list will have their requirement for engineer appt set to false. This will not allow Kraken to actually submit an order as it will not match in their system but can be used to test the frontend / force a desired state
+     */
+    noEngineerRequiredOverride?:
+      | {
+          postcode?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   extrasFilters: {
     /**
@@ -5321,11 +6274,65 @@ export interface GeneralConfig {
      * This is the ammount of time, in hours, after a person who signs up on the join flow with nominated persons will have a reminder set for for an agent to action the nominated person manually.
      */
     signupNominatedPersonReminderTimeHours: number;
+    fieldMappings: {
+      blindVisionImpaired: {
+        krakenIdentifier: string;
+      };
+      deafOrHardOfHearing: {
+        krakenIdentifier: string;
+      };
+      neurodivergent: {
+        krakenIdentifier: string;
+      };
+      learningDisability: {
+        krakenIdentifier: string;
+      };
+      physicalIllness: {
+        krakenIdentifier: string;
+      };
+      physicalDisability: {
+        krakenIdentifier: string;
+      };
+      communicationDifficulties: {
+        krakenIdentifier: string;
+      };
+      otherIllness: {
+        krakenIdentifier: string;
+      };
+      monthlyBills: {
+        krakenIdentifier: string;
+      };
+      cics: {
+        krakenIdentifier: string;
+      };
+      termsAndConditions: {
+        krakenIdentifier: string;
+      };
+      audio: {
+        krakenIdentifier: string;
+      };
+      largePrint: {
+        krakenIdentifier: string;
+      };
+      braille: {
+        krakenIdentifier: string;
+      };
+      other: {
+        krakenIdentifier: string;
+      };
+      nominatedPerson: {
+        krakenIdentifier: string;
+      };
+    };
   };
   /**
    * If this is set to false, all joinflow endpoints will error with inactive error
    */
   joinFlowActive?: boolean | null;
+  /**
+   * If this is set to false, all joinflow endpoints will error with inactive error
+   */
+  myAccountActive?: boolean | null;
   engineerAppointments: {
     /**
      * This is the furthers number of days away a go-live date can be
@@ -5351,8 +6358,8 @@ export interface GeneralConfig {
     postPreferenceString: string;
     emailPreferenceString: string;
     telephonePreferenceString: string;
+    emailMessageID: number;
   };
-  defaultAffiliate: string | Affiliate;
   billCredits: {
     /**
      * This is the identifier of the appropriate ledger in kraken that bill credits, for a given user, are assigned to.
@@ -5385,6 +6392,26 @@ export interface GeneralConfig {
       pollIntervalMs: number;
     };
     krakenExtras: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
+    renewalQuote: {
+      /**
+       * This is the time, in miliseconds, we wait before we timeout polling.
+       */
+      pollTimeoutMs: number;
+      /**
+       * This is the time, in miliseconds we wait between poll attempts.
+       */
+      pollIntervalMs: number;
+    };
+    renewalQuoteSelection: {
       /**
        * This is the time, in miliseconds, we wait before we timeout polling.
        */
@@ -5447,6 +6474,20 @@ export interface GeneralConfig {
     increase: number;
     id?: string | null;
   }[];
+  tasks: {
+    /**
+     * How long should we wait before giving up on trying to requeue a task onto the queue, in ms
+     */
+    requeueMaxWaitMs: number;
+    /**
+     * The delay between attempts to requeue a task, in ms
+     */
+    requeueDelayMs: number;
+    /**
+     * Used in the basket cleanup task - How many hours since the last update (updatedAt field) should we trigger a delete for the join flow documents
+     */
+    hoursAgo: number;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -5529,10 +6570,30 @@ export interface OSSEvent {
  * via the `definition` "generalConfig_select".
  */
 export interface GeneralConfigSelect<T extends boolean = true> {
+  defaultAffiliate?: T;
+  defaultRenewal?: T;
   testing?:
     | T
     | {
         alwaysValidEmailCode?: T;
+        alwaysFailCreditCheckPostcodes?:
+          | T
+          | {
+              postcode?: T;
+              id?: T;
+            };
+        alwaysUnknownCreditCheckPostcodesWithOneAddressHistory?:
+          | T
+          | {
+              postcode?: T;
+              id?: T;
+            };
+        noEngineerRequiredOverride?:
+          | T
+          | {
+              postcode?: T;
+              id?: T;
+            };
       };
   extrasFilters?:
     | T
@@ -5545,8 +6606,93 @@ export interface GeneralConfigSelect<T extends boolean = true> {
     | T
     | {
         signupNominatedPersonReminderTimeHours?: T;
+        fieldMappings?:
+          | T
+          | {
+              blindVisionImpaired?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              deafOrHardOfHearing?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              neurodivergent?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              learningDisability?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              physicalIllness?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              physicalDisability?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              communicationDifficulties?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              otherIllness?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              monthlyBills?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              cics?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              termsAndConditions?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              audio?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              largePrint?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              braille?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              other?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+              nominatedPerson?:
+                | T
+                | {
+                    krakenIdentifier?: T;
+                  };
+            };
       };
   joinFlowActive?: T;
+  myAccountActive?: T;
   engineerAppointments?:
     | T
     | {
@@ -5571,8 +6717,8 @@ export interface GeneralConfigSelect<T extends boolean = true> {
         postPreferenceString?: T;
         emailPreferenceString?: T;
         telephonePreferenceString?: T;
+        emailMessageID?: T;
       };
-  defaultAffiliate?: T;
   billCredits?:
     | T
     | {
@@ -5595,6 +6741,18 @@ export interface GeneralConfigSelect<T extends boolean = true> {
               pollIntervalMs?: T;
             };
         krakenExtras?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
+        renewalQuote?:
+          | T
+          | {
+              pollTimeoutMs?: T;
+              pollIntervalMs?: T;
+            };
+        renewalQuoteSelection?:
           | T
           | {
               pollTimeoutMs?: T;
@@ -5637,6 +6795,13 @@ export interface GeneralConfigSelect<T extends boolean = true> {
         date?: T;
         increase?: T;
         id?: T;
+      };
+  tasks?:
+    | T
+    | {
+        requeueMaxWaitMs?: T;
+        requeueDelayMs?: T;
+        hoursAgo?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -5792,6 +6957,19 @@ export interface TaskDoKrakenReferenceDataSync {
  * via the `definition` "TaskDoOSSEventsFetch".
  */
 export interface TaskDoOSSEventsFetch {
+  input: {
+    shouldAutoQueueTaskOnCompletion?: boolean | null;
+    taskID?: string | null;
+  };
+  output: {
+    success: boolean;
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TaskDoBasketCleanup".
+ */
+export interface TaskDoBasketCleanup {
   input: {
     shouldAutoQueueTaskOnCompletion?: boolean | null;
     taskID?: string | null;
