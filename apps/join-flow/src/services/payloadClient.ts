@@ -19,6 +19,7 @@ import {
   EngineerAppointmentInputs,
   EngineerAppointmentSuccess,
   FetchError,
+  GetCICSResponse,
   InitialBasket,
   InitialVulnerabilityAndAccessibility,
   QuoteLookupErrors,
@@ -384,6 +385,10 @@ export const payloadAPI = {
     getPayloadEndpoint<ValidateEmailCodeResponse>(
       `/baskets/${id}/validate-email-code/${code}`,
     ),
+
+  // CI/CS
+  getCICS: (basketID: string) =>
+    getPayloadEndpoint<GetCICSResponse>(`/baskets/${basketID}/get-cics`),
 
   // V&A
   getVulnerabilityAndAccessibility: (id: string) =>

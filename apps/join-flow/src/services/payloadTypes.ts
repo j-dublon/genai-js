@@ -205,3 +205,5 @@ export type GenerateCICSResponse =
         blockType?: string;
       }[];
     };
+
+export type GetCICSResponse = Basket["cics"];

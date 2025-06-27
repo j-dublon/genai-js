@@ -19,15 +19,25 @@ export const useAffiliateSession = () => {
         const response = await getAffiliateSessionByCode(affiliateCode);
 
         if (response && response.affiliateSession) {
+          const {
+            sessionID,
+            affiliateName,
+            useCreditcheckResult,
+            doEmailValidation,
+            cuckooAffiliate,
+            termsAndConditionsLink,
+            privacyPolicyLink,
+          } = response.affiliateSession;
+
           setAffiliateSession({
             id: response.id || "",
-            sessionId: response.affiliateSession.sessionID || "",
-            affiliateName: response.affiliateSession.affiliateName || "",
-            useCreditcheckResult:
-              response.affiliateSession.useCreditcheckResult || false,
-            doEmailValidation:
-              response.affiliateSession.doEmailValidation || false,
-            cuckooAffiliate: response.affiliateSession.cuckooAffiliate || "",
+            sessionId: sessionID || "",
+            affiliateName: affiliateName || "",
+            useCreditcheckResult: useCreditcheckResult || false,
+            doEmailValidation: doEmailValidation || false,
+            cuckooAffiliate: cuckooAffiliate || "",
+            termsAndConditionsLink: termsAndConditionsLink || "",
+            privacyPolicyLink: privacyPolicyLink || "",
           });
         } else {
           setAffiliateSession({
@@ -37,6 +47,8 @@ export const useAffiliateSession = () => {
             useCreditcheckResult: false,
             doEmailValidation: false,
             cuckooAffiliate: "",
+            termsAndConditionsLink: "",
+            privacyPolicyLink: "",
           });
         }
       } catch (error) {
@@ -48,6 +60,8 @@ export const useAffiliateSession = () => {
           useCreditcheckResult: false,
           doEmailValidation: false,
           cuckooAffiliate: "",
+          termsAndConditionsLink: "",
+          privacyPolicyLink: "",
         });
       }
     };

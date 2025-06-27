@@ -10,8 +10,8 @@ const DocumentItem = ({
   href,
 }: DocumentItemProps): React.ReactElement => {
   return (
-    <div className="flex items-center gap-6 p-4 self-stretch mb-4 content-center border-b-1">
-      <div className="font-bold">{text}</div>
+    <div className="flex items-center gap-4 md:gap-24 p-4 self-stretch mb-4 last content-center [&:not(:last-child)]:border-b-[0.5]">
+      <div className="text-sm md:text-medium font-bold">{text}</div>
       <div>
         <Button
           size="small"
@@ -54,7 +54,7 @@ export const PaymentDocuments = ({
       <p className="text-md font-bold mb-6">{title}</p>
       <div className="bg-ui-grey-100 p-6 rounded-md">
         <div className="font-semibold mb-4">{disclaimer}</div>
-        <div className="flex flex-col gap-[10] p-4 bg-core-white rounded-sm">
+        <div className="flex flex-col md:gap-[10] md:p-4 p-2 bg-core-white rounded-sm">
           <>{documents}</>
         </div>
       </div>

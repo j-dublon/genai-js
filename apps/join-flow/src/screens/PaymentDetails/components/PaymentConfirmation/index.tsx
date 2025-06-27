@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@react-component-library/ui";
-import useJoinFlowStore from "@store/useJoinFlowStore";
+import useJoinFlowStore, { StoreBasket } from "@store/useJoinFlowStore";
 import React, { useCallback, useEffect, useState } from "react";
 
 import Stepper from "@/components/Stepper";
@@ -24,8 +24,15 @@ export const PaymentConfirmation = ({
   onGoBack: () => void;
   onComplete: () => void;
 }) => {
-  const { paymentDetails, setPaymentDetails, basket, setBasket } =
-    useJoinFlowStore();
+  const {
+    paymentDetails,
+    setPaymentDetails,
+    basket,
+    setBasket,
+    affiliateSession,
+    selectedPackage,
+    eeroSelection,
+  } = useJoinFlowStore();
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsState, setTermsState] = useState({
     termsAgreed: false,
@@ -140,49 +147,58 @@ export const PaymentConfirmation = ({
     [],
   );
 
-  // Get the T&C's and Privacy policy
-  const [termsAndConditionsLink, setTermsAndConditionsLink] = useState("");
-  const [privacyPolicyLink, setPrivacyPolicyLink] = useState("");
+  const [contractSummary, setContractSummary] = useState("/");
+  const [contractInformation, setContractInformation] = useState("/");
 
   useEffect(() => {
     const getContractLinks = async () => {
-      const response = await payloadAPI.getDefaultAffiliate();
-      if (response.state == "success") {
-        const { termsAndConditionsLink, privacyPolicyLink } =
-          response.data.response;
+      if (typeof basket?.id === "string") {
+        try {
+          const response: StoreBasket["cics"] = await payloadAPI.getCICS(
+            basket.id,
+          );
 
-        setTermsAndConditionsLink(termsAndConditionsLink || "/");
-        setPrivacyPolicyLink(privacyPolicyLink || "/");
+          if (response && response.summaryHref && response.informationHref) {
+            setContractSummary(response.summaryHref);
+            setContractInformation(response.informationHref);
+          }
+        } catch (error) {
+          // If we can't fetch CI/CS we can't finish the sale, need to redirect to an 'Oops' page
+          console.log("error: ", error);
+        }
       }
     };
-
     getContractLinks();
-  });
+  }, [basket?.id, selectedPackage, eeroSelection]);
 
   const documentItems = [
     {
       text: "Contract Summary",
-      href: basket?.cics?.summaryHref || "/",
+      href: contractSummary,
       name: "contractSummary",
     },
     {
       text: "Contract Information",
-      href: basket?.cics?.informationHref || "/",
+      href: contractInformation,
       name: "contractInformation",
     },
     {
       text: "Terms & Conditions",
-      href: termsAndConditionsLink,
+      href: affiliateSession?.termsAndConditionsLink || "/",
       name: "termsAndConditions",
     },
-    { text: "Privacy Notice", href: privacyPolicyLink, name: "privacyPolicy" },
+    {
+      text: "Privacy Notice",
+      href: affiliateSession?.privacyPolicyLink || "/",
+      name: "privacyPolicy",
+    },
   ];
 
   return (
     <div className="container mx-auto px-4 py-8">
       <Stepper />
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-xl mx-auto">
         <div className="bg-core-white p-8 rounded-md">
           <h1 className="text-2xl font-bold mb-6">{title}</h1>
 

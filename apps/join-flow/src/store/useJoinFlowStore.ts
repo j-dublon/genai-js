@@ -14,6 +14,8 @@ export type AffiliateSession = {
   useCreditcheckResult: boolean;
   doEmailValidation: boolean;
   cuckooAffiliate: string | Affiliate;
+  termsAndConditionsLink: string;
+  privacyPolicyLink: string;
 };
 
 export type StoreAddressIdentifier = {

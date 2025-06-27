@@ -6,25 +6,26 @@ import { userEvent } from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { AffiliateSessionSuccessData } from "@/services/payloadTypes";
-
 import { accessibilityModalText } from "./Accessibility/AccessibilityProps";
 import { PaymentConfirmation } from "./index";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
-const defaultAffiliateResponse: AffiliateSessionSuccessData = {
-  termsAndConditionsLink: "https://cms.cuckoo.co/terms-and-conditions/",
-  privacyPolicyLink: "https://cms.cuckoo.co/privacy-policy/",
-};
+const mockGetCICS = vi.fn();
+mockGetCICS.mockReturnValue({
+  summaryHref: "https://s3.cuckoo.co/contractSummary",
+  informationHref: "https://s3.cuckoo.co/contractInformation",
+});
 
 vi.mock("@/services/payloadClient", () => ({
   payloadAPI: {
-    getDefaultAffiliate: vi.fn().mockReturnValue(() => {
-      return {
-        response: {
-          data: defaultAffiliateResponse,
-        },
-      };
+    getBasket: vi.fn().mockReturnValue({
+      id: "123",
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+      cics: {
+        summaryHref: "https://s3.cuckoo.co/contractSummary",
+        informationHref: "https://s3.cuckoo.co/contractInformation",
+      },
     }),
   },
 }));
@@ -110,9 +111,20 @@ describe("PaymentConfirmation", () => {
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
       cics: {
-        summaryHref: "https://s3.cuckoo.co/contractSummary",
-        informationHref: "https://s3.cuckoo.co/contractInformation",
+        summaryHref: "https://s3.cuckoo.co/some-out-of-date-value",
+        informationHref: "https://s3.cuckoo.co/another-out-of-date-value",
       },
+    });
+
+    store.setAffiliateSession({
+      id: "abc",
+      sessionId: "6852b406eb7af90001c66918",
+      affiliateName: "default",
+      useCreditcheckResult: true,
+      doEmailValidation: true,
+      cuckooAffiliate: "",
+      termsAndConditionsLink: "https://cms.cuckoo.co/tacs",
+      privacyPolicyLink: "https://cms.cuckoo.co/privacy",
     });
   });
 
@@ -266,11 +278,11 @@ describe("PaymentConfirmation", () => {
       );
       expect(termsAndConditionsBtn).toHaveAttribute(
         "href",
-        "https://cms.cuckoo.co/terms-and-conditions/",
+        "https://cms.cuckoo.co/tacs",
       );
       expect(privacyNoticeBtn).toHaveAttribute(
         "href",
-        "https://cms.cuckoo.co/privacy-policy/",
+        "https://cms.cuckoo.co/privacy",
       );
     }, 100);
   });
