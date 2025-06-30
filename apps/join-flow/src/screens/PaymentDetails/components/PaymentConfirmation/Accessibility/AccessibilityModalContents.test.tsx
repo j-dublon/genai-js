@@ -27,9 +27,9 @@ const TestWrapper = ({
     useForm<AccessibilityRequirementsFormData>({
       resolver: zodResolver(accessibilityRequirementsSchema),
       defaultValues: {
-        visionImpaired: false,
-        hearingImpaired: false,
-        neurodiverse: false,
+        blindVisionImpaired: false,
+        deafOrHardOfHearing: false,
+        neurodivergent: false,
         learningDisability: false,
         thirdPartyAssistance: false,
         thirdPartyName: "",
@@ -37,8 +37,8 @@ const TestWrapper = ({
         thirdPartyEmail: "",
         physicalIllness: false,
         physicalDisability: false,
-        communicationNeeds: false,
-        mentalIllness: false,
+        communicationDifficulties: false,
+        otherIllness: false,
         additionalInformation: "",
         ...initialValues,
       },
@@ -103,7 +103,7 @@ describe("AccessibilityModalContents", () => {
     render(<TestWrapper onSubmit={mockOnSubmit} onClear={mockOnClear} />);
 
     const visionImpairedCheckbox = screen.getByLabelText(
-      accessibilityCheckboxes.find(({ name }) => name === "visionImpaired")
+      accessibilityCheckboxes.find(({ name }) => name === "blindVisionImpaired")
         ?.label ?? "",
     );
 
@@ -117,9 +117,9 @@ describe("AccessibilityModalContents", () => {
 
     expect(mockOnSubmit).toHaveBeenCalledWith(
       {
-        visionImpaired: true,
-        hearingImpaired: false,
-        neurodiverse: false,
+        blindVisionImpaired: true,
+        deafOrHardOfHearing: false,
+        neurodivergent: false,
         learningDisability: false,
         thirdPartyAssistance: false,
         thirdPartyName: "",
@@ -127,8 +127,8 @@ describe("AccessibilityModalContents", () => {
         thirdPartyEmail: "",
         physicalIllness: false,
         physicalDisability: false,
-        communicationNeeds: false,
-        mentalIllness: false,
+        communicationDifficulties: false,
+        otherIllness: false,
         additionalInformation: "",
       },
       expect.any(Object), // The event object
@@ -174,8 +174,8 @@ describe("AccessibilityModalContents", () => {
 
   it("loads initial values into form", () => {
     const initialValues = {
-      visionImpaired: true,
-      hearingImpaired: true,
+      blindVisionImpaired: true,
+      deafOrHardOfHearing: true,
       additionalInformation: "Test information",
     };
 
@@ -188,11 +188,11 @@ describe("AccessibilityModalContents", () => {
     );
 
     const visionImpairedCheckbox = screen.getByLabelText(
-      accessibilityCheckboxes.find(({ name }) => name === "visionImpaired")
+      accessibilityCheckboxes.find(({ name }) => name === "blindVisionImpaired")
         ?.label ?? "",
     );
     const hearingImpairedCheckbox = screen.getByLabelText(
-      accessibilityCheckboxes.find(({ name }) => name === "hearingImpaired")
+      accessibilityCheckboxes.find(({ name }) => name === "deafOrHardOfHearing")
         ?.label ?? "",
     );
 

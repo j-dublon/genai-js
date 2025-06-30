@@ -115,7 +115,7 @@ describe("PaymentConfirmation", () => {
         informationHref: "https://s3.cuckoo.co/another-out-of-date-value",
       },
     });
-
+    store.setAccessibilityRequirements(null);
     store.setAffiliateSession({
       id: "abc",
       sessionId: "6852b406eb7af90001c66918",
@@ -214,6 +214,55 @@ describe("PaymentConfirmation", () => {
     expect(confirmButton).toBeDisabled();
   });
 
+  it("handles confirm button click correctly when terms are agreed and accessibility requirements are selected", async () => {
+    const user = userEvent.setup();
+    const mockOnCompleteHandler = vi.fn();
+    render(
+      <PaymentConfirmation
+        onGoBack={() => {}}
+        onComplete={mockOnCompleteHandler}
+      />,
+    );
+
+    await act(async () => {
+      const termsSection = screen.getByTestId("termsAndConditions").nextSibling;
+      const termsCheckboxes = within(termsSection as HTMLElement).getAllByRole(
+        "checkbox",
+      );
+
+      termsCheckboxes.forEach(async (checkbox) => {
+        await user.click(checkbox);
+      });
+    });
+
+    const accessibilityCheckbox = screen.getByRole("checkbox", {
+      name: "Yes, I have specific requirements or needs",
+    });
+    await user.click(accessibilityCheckbox);
+    await user.click(screen.getByText("Blind or Vision impaired"));
+    await user.click(
+      screen.getByRole("button", {
+        name: accessibilityModalText.submitButtonText,
+      }),
+    );
+
+    const confirmButton = screen.getByRole("button", {
+      name: signUpText,
+    });
+    await user.click(confirmButton);
+
+    const accessibilityRequirements =
+      useJoinFlowStore.getState().accessibilityRequirements;
+    expect(accessibilityRequirements).toEqual(
+      expect.objectContaining({
+        blindVisionImpaired: true,
+      }),
+    );
+
+    expect(mockUpdateBasket).toHaveBeenCalled();
+    expect(mockOnCompleteHandler).toHaveBeenCalled();
+  });
+
   it("opens accessibility modal when accessibility requirements checkbox is clicked", async () => {
     // This test is written weirdly as the DOM tree is too large for the testing library and the modal is not in the truncated DOM tree
     const user = userEvent.setup();
@@ -249,9 +298,7 @@ describe("PaymentConfirmation", () => {
     expect(accessibilityModal.open).toBe(false);
     expect(otherModal.open).toBe(false);
 
-    await act(async () => {
-      await user.click(accessibilityCheckbox);
-    });
+    await user.click(accessibilityCheckbox);
 
     expect(accessibilityModal.open).toBe(true);
     expect(otherModal.open).toBe(false);

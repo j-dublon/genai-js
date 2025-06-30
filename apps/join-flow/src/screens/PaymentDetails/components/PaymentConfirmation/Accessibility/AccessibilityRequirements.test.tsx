@@ -89,7 +89,7 @@ describe("AccessibilityRequirements", () => {
 
   it("renders the component with checked state when accessibilityRequirements exists", () => {
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      accessibilityRequirements: { visionImpaired: true },
+      accessibilityRequirements: { blindVisionImpaired: true },
       setAccessibilityRequirements: mockSetAccessibilityRequirements,
       setAccessibilityCommunicationPreferences:
         mockSetAccessibilityCommunicationPreferences,
@@ -118,7 +118,7 @@ describe("AccessibilityRequirements", () => {
   it("clears accessibility requirements when checkbox is unchecked", async () => {
     const user = userEvent.setup();
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      accessibilityRequirements: { visionImpaired: true },
+      accessibilityRequirements: { blindVisionImpaired: true },
       setAccessibilityRequirements: mockSetAccessibilityRequirements,
       setAccessibilityCommunicationPreferences:
         mockSetAccessibilityCommunicationPreferences,

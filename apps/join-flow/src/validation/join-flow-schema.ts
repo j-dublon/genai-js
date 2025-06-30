@@ -44,9 +44,9 @@ export const goLiveDateSchema = z.object({
 
 export const accessibilityRequirementsSchema = z
   .object({
-    visionImpaired: z.boolean().optional(),
-    hearingImpaired: z.boolean().optional(),
-    neurodiverse: z.boolean().optional(),
+    blindVisionImpaired: z.boolean().optional(),
+    deafOrHardOfHearing: z.boolean().optional(),
+    neurodivergent: z.boolean().optional(),
     learningDisability: z.boolean().optional(),
     thirdPartyAssistance: z.boolean().optional(),
     thirdPartyName: z.string().optional(),
@@ -54,8 +54,8 @@ export const accessibilityRequirementsSchema = z
     thirdPartyEmail: z.string().optional(),
     physicalIllness: z.boolean().optional(),
     physicalDisability: z.boolean().optional(),
-    communicationNeeds: z.boolean().optional(),
-    mentalIllness: z.boolean().optional(),
+    communicationDifficulties: z.boolean().optional(),
+    otherIllness: z.boolean().optional(),
     additionalInformation: z.string().optional(),
   })
   .superRefine((data, ctx) => {
@@ -92,51 +92,38 @@ export const accessibilityRequirementsSchema = z
 
 export const accessibilityCommunicationPreferencesSchema = z
   .object({
-    contentTypes: z
-      .object({
-        monthlyBills: z.boolean().optional(),
-        cics: z.boolean().optional(),
-        termsAndConditions: z.boolean().optional(),
-      })
-      .optional(),
-    contactPreferences: z
-      .object({
-        audio: z.boolean().optional(),
-        braille: z.boolean().optional(),
-        largePrint: z.boolean().optional(),
-      })
-      .optional(),
+    contentTypes: z.object({
+      monthlyBills: z.boolean().optional(),
+      cics: z.boolean().optional(),
+      termsAndConditions: z.boolean().optional(),
+    }),
+    contactPreferences: z.object({
+      audio: z.boolean().optional(),
+      braille: z.boolean().optional(),
+      largePrint: z.boolean().optional(),
+    }),
   })
   .superRefine((data, ctx) => {
-    const selectedPreferences = Object.values(
-      data?.contactPreferences || {},
-    ).filter((value) => value === true);
-
-    // If a format is selected, at least one document must be selected
-    if (selectedPreferences.length > 0) {
-      const selectedContentTypes = Object.values(
-        data?.contentTypes || {},
-      ).filter((value) => value === true);
-
-      if (selectedContentTypes.length === 0) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          message: "Please select at least one document",
-          path: ["contentTypes"],
-        });
-      }
-    }
-
-    // If a document is selected, one format must also be selected
-    const selectedContentTypes = Object.values(data?.contentTypes || {}).filter(
-      (value) => value === true,
+    const selectedPreferences = Object.values(data.contactPreferences).filter(
+      Boolean,
+    );
+    const selectedContentTypes = Object.values(data.contentTypes).filter(
+      Boolean,
     );
 
-    if (selectedContentTypes.length > 0 && selectedPreferences.length === 0) {
+    if (selectedPreferences.length !== 1) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: "Please select a format",
         path: ["contactPreferences"],
+      });
+    }
+
+    if (selectedContentTypes.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Please select at least one document",
+        path: ["contentTypes"],
       });
     }
   });

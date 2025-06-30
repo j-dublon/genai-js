@@ -5,7 +5,12 @@ import { persist } from "zustand/middleware";
 
 import { QuoteLookupSuccess } from "@/services/payloadTypes";
 
-import { Affiliate, QuoteLookup, SwitchMatchLookup } from "../../payload-types";
+import {
+  Affiliate,
+  QuoteLookup,
+  SwitchMatchLookup,
+  VulnerabilityAndAccessibility,
+} from "../../payload-types";
 
 export type AffiliateSession = {
   id: string;
@@ -103,9 +108,9 @@ export type GoLiveDetails = {
 };
 
 export type AccessibilityRequirements = {
-  visionImpaired?: boolean;
-  hearingImpaired?: boolean;
-  neurodiverse?: boolean;
+  blindVisionImpaired?: boolean;
+  deafOrHardOfHearing?: boolean;
+  neurodivergent?: boolean;
   learningDisability?: boolean;
   thirdPartyAssistance?: boolean;
   thirdPartyName?: string;
@@ -113,22 +118,24 @@ export type AccessibilityRequirements = {
   thirdPartyEmail?: string;
   physicalIllness?: boolean;
   physicalDisability?: boolean;
-  communicationNeeds?: boolean;
-  mentalIllness?: boolean;
+  communicationDifficulties?: boolean;
+  otherIllness?: boolean;
   additionalInformation?: string;
 };
 
+type ContactPreference =
+  | { audio: true; braille?: false; largePrint?: false }
+  | { braille: true; audio?: false; largePrint?: false }
+  | { largePrint: true; audio?: false; braille?: false };
+
+type ContentType =
+  | { monthlyBills: true; cics?: boolean; termsAndConditions?: boolean }
+  | { monthlyBills?: boolean; cics: true; termsAndConditions?: boolean }
+  | { monthlyBills?: boolean; cics?: boolean; termsAndConditions: true };
+
 export type AccessibilityCommunicationPreferences = {
-  contentTypes?: {
-    monthlyBills?: boolean;
-    cics?: boolean;
-    termsAndConditions?: boolean;
-  };
-  contactPreferences?: {
-    audio?: boolean;
-    braille?: boolean;
-    largePrint?: boolean;
-  };
+  contentTypes: ContentType;
+  contactPreferences: ContactPreference;
 };
 
 export type GiftcardCampaign = {
@@ -290,6 +297,9 @@ export type StoreBasket = {
     summaryHref?: string | null;
     informationHref?: string | null;
   };
+  vulnerabilityAndAccessibility?:
+    | (string | null)
+    | VulnerabilityAndAccessibility;
   updatedAt: string;
   createdAt: string;
 };

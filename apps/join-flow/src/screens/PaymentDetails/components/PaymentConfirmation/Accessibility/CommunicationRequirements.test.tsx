@@ -281,7 +281,7 @@ describe("CommunicationRequirements", () => {
     expect(form).toHaveAttribute("id", "communication-requirements-form");
   });
 
-  it("handles form submission with empty data, unchecking the formatNeeded checkbox", async () => {
+  it("prevents form submission with empty data, showing error messages", async () => {
     render(<CommunicationRequirements />);
 
     const checkbox = screen.getByLabelText(
@@ -299,7 +299,10 @@ describe("CommunicationRequirements", () => {
       expect(
         mockSetAccessibilityCommunicationPreferences,
       ).not.toHaveBeenCalled();
-      expect(checkbox).not.toBeChecked();
+      expect(screen.getByText("Please select a format")).toBeInTheDocument();
+      expect(
+        screen.getByText("Please select at least one document"),
+      ).toBeInTheDocument();
     });
   });
 

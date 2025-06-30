@@ -5,6 +5,7 @@ import useJoinFlowStore, { StoreBasket } from "@store/useJoinFlowStore";
 import React, { useCallback, useEffect, useState } from "react";
 
 import Stepper from "@/components/Stepper";
+import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import { payloadAPI } from "@/services/payloadClient";
@@ -32,6 +33,8 @@ export const PaymentConfirmation = ({
     affiliateSession,
     selectedPackage,
     eeroSelection,
+    accessibilityRequirements,
+    accessibilityCommunicationPreferences,
   } = useJoinFlowStore();
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsState, setTermsState] = useState({
@@ -72,6 +75,20 @@ export const PaymentConfirmation = ({
   );
 
   const handleConfirm = useCallback(async () => {
+    let vulnerabilityAndAccessibility;
+
+    if (accessibilityRequirements) {
+      try {
+        const result = await createVulnerabilityAndAccessibility(
+          accessibilityRequirements,
+          accessibilityCommunicationPreferences,
+        );
+        vulnerabilityAndAccessibility = result.vulnerabilityAndAccessibility;
+      } catch (error) {
+        console.error("Error creating vulnerability and accessibility:", error);
+      }
+    }
+
     if (paymentDetails) {
       setPaymentDetails({
         ...paymentDetails,
@@ -94,6 +111,7 @@ export const PaymentConfirmation = ({
           directDebitAgreed: true,
           termsAgreed: true,
         },
+        vulnerabilityAndAccessibility,
       });
 
       if (result.error) {
@@ -125,6 +143,8 @@ export const PaymentConfirmation = ({
     basket,
     onComplete,
     setPaymentDetails,
+    accessibilityRequirements,
+    accessibilityCommunicationPreferences,
     termsState.termsAgreed,
     termsState.directDebitAgreed,
     termsState.creditSearchAgreed,

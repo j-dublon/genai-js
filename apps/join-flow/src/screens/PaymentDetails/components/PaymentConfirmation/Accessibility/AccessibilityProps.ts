@@ -2,15 +2,15 @@ export const accessibilityModalText = {
   accessibilityCheckboxes: [
     {
       label: "Blind or Vision impaired",
-      name: "visionImpaired",
+      name: "blindVisionImpaired",
     },
     {
       label: "Deaf or Hearing impaired",
-      name: "hearingImpaired",
+      name: "deafOrHardOfHearing",
     },
     {
       label: "ADHD, Autism, Dyslexia or other Neurodivergent need",
-      name: "neurodiverse",
+      name: "neurodivergent",
     },
     {
       label: "Learning Disability",
@@ -44,11 +44,11 @@ export const accessibilityModalText = {
     },
     {
       label: "Communication difficulties",
-      name: "communicationNeeds",
+      name: "communicationDifficulties",
     },
     {
       label: "Mental Illness",
-      name: "mentalIllness",
+      name: "otherIllness",
     },
   ],
   submitButtonText: "Save my requirements",

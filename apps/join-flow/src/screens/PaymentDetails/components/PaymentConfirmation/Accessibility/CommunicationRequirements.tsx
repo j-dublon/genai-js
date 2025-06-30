@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { filterTrueBooleans } from "@/lib/filterTrueValues";
-import useJoinFlowStore from "@/store/useJoinFlowStore";
+import useJoinFlowStore, {
+  AccessibilityCommunicationPreferences,
+} from "@/store/useJoinFlowStore";
 import {
   AccessibilityCommunicationPreferencesFormData,
   accessibilityCommunicationPreferencesSchema,
@@ -13,6 +15,16 @@ import {
 import { accessibilityCommunicationPreferencesText } from "./AccessibilityProps";
 import { DocumentSelection } from "./DocumentSelection";
 import { FormatSelection } from "./FormatSelection";
+
+function toFormContactPreferences(
+  pref: { audio?: boolean; braille?: boolean; largePrint?: boolean } = {},
+) {
+  return {
+    audio: !!pref.audio,
+    braille: !!pref.braille,
+    largePrint: !!pref.largePrint,
+  };
+}
 
 export const CommunicationRequirements = () => {
   const {
@@ -65,7 +77,9 @@ export const CommunicationRequirements = () => {
       );
       setValue(
         "contactPreferences",
-        accessibilityCommunicationPreferences.contactPreferences,
+        toFormContactPreferences(
+          accessibilityCommunicationPreferences.contactPreferences,
+        ),
       );
     }
   }, [accessibilityCommunicationPreferences, setValue]);
@@ -92,7 +106,9 @@ export const CommunicationRequirements = () => {
       Object.keys(filteredData).length === 0 ? null : filteredData;
 
     if (dataToUpdate) {
-      setAccessibilityCommunicationPreferences(dataToUpdate);
+      setAccessibilityCommunicationPreferences(
+        dataToUpdate as AccessibilityCommunicationPreferences,
+      );
       setEditing(false);
     } else {
       setFormatNeeded(false);

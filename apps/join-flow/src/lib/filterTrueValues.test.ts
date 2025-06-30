@@ -85,14 +85,14 @@ describe("filterTrueValues", () => {
 
     it("should preserve the original object structure keys", () => {
       const input = {
-        visionImpaired: true,
-        hearingImpaired: false,
+        blindVisionImpaired: true,
+        deafOrHardOfHearing: false,
         additionalInformation: "Some info",
         thirdPartyName: "",
       };
       const result = filterTrueValues(input);
       expect(result).toEqual({
-        visionImpaired: true,
+        blindVisionImpaired: true,
         additionalInformation: "Some info",
       });
     });

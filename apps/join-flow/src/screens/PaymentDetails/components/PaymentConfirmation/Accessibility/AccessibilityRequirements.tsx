@@ -44,9 +44,9 @@ export const AccessibilityRequirements = () => {
     useForm<AccessibilityRequirementsFormData>({
       resolver: zodResolver(accessibilityRequirementsSchema),
       defaultValues: {
-        visionImpaired: false,
-        hearingImpaired: false,
-        neurodiverse: false,
+        blindVisionImpaired: false,
+        deafOrHardOfHearing: false,
+        neurodivergent: false,
         learningDisability: false,
         thirdPartyAssistance: false,
         thirdPartyName: "",
@@ -54,8 +54,8 @@ export const AccessibilityRequirements = () => {
         thirdPartyEmail: "",
         physicalIllness: false,
         physicalDisability: false,
-        communicationNeeds: false,
-        mentalIllness: false,
+        communicationDifficulties: false,
+        otherIllness: false,
         additionalInformation: "",
       },
     });
