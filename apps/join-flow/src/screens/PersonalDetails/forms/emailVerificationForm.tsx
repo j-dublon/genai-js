@@ -2,9 +2,9 @@ import { TipCard } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import { useEffect, useRef, useState } from "react";
 
+import { TextInput } from "@/components/TextInput";
 import { getAssetPath } from "@/lib/get-asset-path";
 
-import { TextInput } from "../components/textInput";
 import { EmailVerificationFormProps } from "./formValues";
 
 const NUM_FIELDS = 6;

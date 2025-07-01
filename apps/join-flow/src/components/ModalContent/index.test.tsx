@@ -69,4 +69,31 @@ describe("ModalContent Component", () => {
       "modal-content-1",
     );
   });
+
+  it("should append class names to the container, title and text elements", () => {
+    const mockContent: ModalContent[] = [
+      { title: "First Title", text: "First text content" },
+      { title: "Second Title", text: "Second text content" },
+    ];
+    const className = "test-class";
+    const titleClassName = "test-title-class";
+    const textClassName = "test-text-class";
+
+    render(
+      <ModalContentComponent
+        content={mockContent}
+        className={className}
+        titleClassName={titleClassName}
+        textClassName={textClassName}
+      />,
+    );
+
+    expect(screen.getByTestId("modal-content-container")).toHaveClass(
+      className,
+    );
+    expect(screen.getByText("First Title")).toHaveClass(titleClassName);
+    expect(screen.getByText("Second Title")).toHaveClass(titleClassName);
+    expect(screen.getByText("First text content")).toHaveClass(textClassName);
+    expect(screen.getByText("Second text content")).toHaveClass(textClassName);
+  });
 });

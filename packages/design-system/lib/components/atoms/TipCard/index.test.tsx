@@ -51,6 +51,29 @@ describe("TipCard Component", () => {
     expect(card).toHaveTextContent("Content with image");
   });
 
+  it("should render an image with a custom class name", () => {
+    render(
+      <TipCard
+        image={{
+          src: "/test-image.jpg",
+          alt: "Test image",
+          className: "test-image-class",
+        }}
+      >
+        Content with image
+      </TipCard>,
+    );
+
+    const image = screen.getByRole("img", { name: "Test image" });
+
+    expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute(
+      "src",
+      expect.stringContaining("test-image.jpg"),
+    );
+    expect(image).toHaveClass("test-image-class");
+  });
+
   it("applies custom background color", () => {
     render(<TipCard backgroundColor="blue">Content</TipCard>);
 

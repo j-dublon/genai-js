@@ -10,10 +10,10 @@ import { useRef, useState } from "react";
 import { Controller } from "react-hook-form";
 
 import { ModalContent } from "@/components/ModalContent";
+import { TextInput } from "@/components/TextInput";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
 
-import { TextInput } from "../components/textInput";
 import type { AdditionalPersonalDetailsFormProps } from "./formValues";
 
 export const AdditionalPersonalDetailsForm = ({
@@ -57,6 +57,30 @@ export const AdditionalPersonalDetailsForm = ({
   useClearFocus(dobModalRef, "close");
   useClearFocus(teleHealthModalRef, "close");
 
+  const handleDobInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.id === "dob-day" && event.currentTarget.value.length === 2) {
+      document.getElementById("dob-month")?.focus();
+      event.preventDefault();
+    } else if (event.currentTarget.id === "dob-month" && event.currentTarget.value.length === 2) {
+      document.getElementById("dob-year")?.focus();
+      event.preventDefault();
+    }
+  }
+
+  const handleDobKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Backspace") {
+      if (event.currentTarget.id === "dob-month" && event.currentTarget.value.length === 1) {
+        event.currentTarget.value = "";
+        document.getElementById("dob-day")?.focus();
+        event.preventDefault();
+      } else if (event.currentTarget.id === "dob-year" && event.currentTarget.value.length === 1) {
+        event.currentTarget.value = "";
+        document.getElementById("dob-month")?.focus();
+        event.preventDefault();
+      }
+    }
+  };
+
   return (
     <form id="additionalDetailsForm">
       <TipCard
@@ -76,9 +100,9 @@ export const AdditionalPersonalDetailsForm = ({
         </span>
       </TipCard>
       <div className="flex flex-col gap-6 mb-12 items-start">
-        <p className="text-md font-bold">
+        <h2 className="text-md font-bold">
           {personalDetailsProps.additionalSection.dobTitle}
-        </p>
+        </h2>
         <div className="flex flex-row gap-4 items-center">
           <TextInput
             type="text"
@@ -87,6 +111,7 @@ export const AdditionalPersonalDetailsForm = ({
             id="dob-day"
             aria-invalid={!!errors.dobDay}
             className="w-21 h-16 rounded-sm"
+            onInput={handleDobInput}
             hasSubmitted={hasSubmitted}
             {...register("dobDay")}
           />
@@ -97,6 +122,8 @@ export const AdditionalPersonalDetailsForm = ({
             id="dob-month"
             aria-invalid={!!errors.dobMonth}
             className="w-21 h-16 rounded-sm"
+            onKeyDown={handleDobKeyDown}
+            onInput={handleDobInput}
             {...register("dobMonth")}
             hasSubmitted={hasSubmitted}
           />
@@ -107,6 +134,7 @@ export const AdditionalPersonalDetailsForm = ({
             id="dob-year"
             aria-invalid={!!errors.dobYear}
             className="w-21 h-16 rounded-sm"
+            onKeyDown={handleDobKeyDown}
             {...register("dobYear")}
             hasSubmitted={hasSubmitted}
           />
@@ -139,9 +167,9 @@ export const AdditionalPersonalDetailsForm = ({
       </div>
 
       <div className="flex flex-col gap-4 mb-12">
-        <p className="text-md font-bold">
+        <h2 className="text-md font-bold">
           {personalDetailsProps.additionalSection.addressTitle}
-        </p>
+        </h2>
         {address && (
           <p className="mb-4 font-medium">
             {[address.line1, address.line2, address.line3, address.postcode]
@@ -176,9 +204,9 @@ export const AdditionalPersonalDetailsForm = ({
         )}
       </div>
       <div className="flex flex-col gap-4 mb-16">
-        <p className="text-md font-bold">
+        <h2 className="text-md font-bold">
           {personalDetailsProps.additionalSection.landlineTitle}
-        </p>
+        </h2>
         <p>
           {personalDetailsProps.additionalSection.landlineText}{" "}
           <button

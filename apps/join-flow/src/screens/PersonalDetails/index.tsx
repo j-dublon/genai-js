@@ -419,6 +419,10 @@ const PersonalDetails = () => {
         error = creditCheckResult.error;
       }
 
+      if (softCreditCheckAttempts > 2 && latestStatus === "NO_MATCH") {
+        latestStatus = "FAILED";
+      }
+
       if (error) {
         console.error("Failed to run soft credit check:", error);
         return;
@@ -437,7 +441,7 @@ const PersonalDetails = () => {
           router.push("/join-flow/eero-selection");
           break;
         case "NO_MATCH":
-          // TODO: Handle no match response
+          router.push("/join-flow/personal-details/retry-check");
           break;
         default:
           break;

@@ -71,7 +71,7 @@ vi.mock("@react-component-library/ui/icons", () => ({
 vi.mock("@/lib/get-asset-path", () => ({
   getAssetPath: (path: string) => path,
 }));
-vi.mock("../components/textInput", () => ({
+vi.mock("@/components/TextInput", () => ({
   TextInput: (
     props: React.InputHTMLAttributes<HTMLInputElement> & { id: string },
   ) => <input data-testid={`text-input-${props.id}`} {...props} />,
