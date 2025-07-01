@@ -74,13 +74,12 @@ describe("NotReadyToJoin", () => {
     expect(tipCard).toBeInTheDocument();
     expect(tipCard).toHaveClass("bg-core-white", "sm:max-w-[505px]");
 
-    const tipCardImage = within(tipCard).getByRole("img");
+    const tipCardImage = within(tipCard).getByRole("presentation");
     expect(tipCardImage).toBeInTheDocument();
     expect(tipCardImage).toHaveAttribute(
       "src",
       getAssetPath("/images/love.svg"),
     );
-    expect(tipCardImage).toHaveAttribute("alt", "Love heart speech bubble");
   });
 
   it("renders the ContactInfo component with correct props", () => {

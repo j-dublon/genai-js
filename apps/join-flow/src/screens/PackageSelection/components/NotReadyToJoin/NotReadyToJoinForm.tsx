@@ -1,9 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, DatePicker } from "@react-component-library/ui";
+import { Button, DatePicker, InsertLink } from "@react-component-library/ui";
 import { Controller, useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
-import { InsertLink } from "@/components/InsertLink";
 import { notReadyToJoinSchema } from "@/validation/join-flow-schema";
 
 import { notReadyToJoinProps } from "./NotReadyToJoinProps";

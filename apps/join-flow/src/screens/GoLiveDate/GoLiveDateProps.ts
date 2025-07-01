@@ -10,6 +10,7 @@ export interface GoLiveDateProps {
   timeSlotPlaceHolder: string;
   continueButtonText: string;
   otsFailBannerText: string;
+  otsFailBannerHighlightText: string;
   engineerVisitModal: {
     title: string;
     paragraphs: string[];
@@ -34,6 +35,7 @@ export const goLiveDateText: GoLiveDateProps = {
   continueButtonText: "Continue to payment",
   otsFailBannerText:
     "We couldn't find your current provider, so you'll need to let them know that you're switching to Cuckoo after you've signed up.",
+  otsFailBannerHighlightText: "let them know",
   engineerVisitModal: {
     title: "What happens if I need an engineer?",
     paragraphs: [

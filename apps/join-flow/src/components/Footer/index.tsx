@@ -24,10 +24,7 @@ export const Footer = () => {
                 Prefer to talk to someone?
               </h2>
               <TipCard
-                image={{
-                  src: getAssetPath("/images/love.svg"),
-                  alt: "Love heart speech bubble",
-                }}
+                image={getAssetPath("/images/love.svg")}
                 className="mt-10 md:mt-0 mb-10 md:mb-12 bg-ui-grey-100 md:bg-core-white sm:max-w-[505px]"
               >
                 <ContactInfo
@@ -44,7 +41,7 @@ export const Footer = () => {
             </div>
           </div>
           <div className="flex flex-col max-w-[505px] w-full md:w-1/2">
-            <h2 className="hidden md:block font-semibold text-medium text-core-black pb-6">
+            <h2 className="font-semibold text-sm md:text-md text-core-black pb-6 leading-[1.6]">
               {heading}
             </h2>
             <div className="flex flex-col gap-3">

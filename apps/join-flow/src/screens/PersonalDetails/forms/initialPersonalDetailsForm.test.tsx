@@ -30,7 +30,7 @@ vi.mock("@/components/Tooltip", () => ({
 vi.mock("@react-component-library/ui", () => ({
   TipCard: (
     props: React.PropsWithChildren<{
-      image: { src: string; alt: string };
+      image: string;
       className: string;
     }>,
   ) => <div data-testid="tip-card">{props.children}</div>,

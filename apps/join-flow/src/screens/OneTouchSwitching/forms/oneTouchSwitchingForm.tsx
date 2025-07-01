@@ -1,17 +1,24 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Checkbox,
+  InsertFormattedText,
+  TipCard,
+} from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
+import { FormDropdown } from "@/components/FormDropdown";
 import FormInput from "@/components/FormInput";
+import { getAssetPath } from "@/lib/get-asset-path";
 import { oneTouchSwitchingText } from "@/screens/OneTouchSwitching/oneTouchSwitchingProps";
 
 import {
+  createOneTouchSwitchingSchema,
   OneTouchSwitchingFormData,
   OneTouchSwitchingFormProps,
-  oneTouchSwitchingSchema,
 } from "./formValues";
 
 export const OneTouchSwitchingForm = ({
@@ -31,14 +38,19 @@ export const OneTouchSwitchingForm = ({
   const shouldShowAccountNumber =
     switchingDetails?.otsSwitchStatus === "FIRST_ATTEMPT_FAILED";
 
+  const schema = createOneTouchSwitchingSchema(
+    switchingDetails?.otsSwitchStatus,
+  );
+
   const {
     register,
     handleSubmit,
     watch,
     setValue,
+    control,
     formState: { errors },
   } = useForm<OneTouchSwitchingFormData>({
-    resolver: zodResolver(oneTouchSwitchingSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       provider: defaultProvider,
       consentGiven: false,
@@ -46,7 +58,8 @@ export const OneTouchSwitchingForm = ({
     },
   });
 
-  const selectedProvider = watch("provider");
+  const currentProvider = watch("provider");
+  const currentConsent = watch("consentGiven");
 
   const handleFormSubmit = async (data: OneTouchSwitchingFormData) => {
     setCustomProviderError(null);
@@ -59,106 +72,130 @@ export const OneTouchSwitchingForm = ({
     await onSubmit(data);
   };
 
-  const handleProviderChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setValue("provider", e.target.value);
-    setValue("consentGiven", false);
-    setMatchResult(null);
-    setCustomProviderError(null);
-  };
+  const providerOptions = providers.reduce(
+    (acc, provider) => {
+      acc[provider.name] = provider.losingRcpid;
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
+
+  useEffect(() => {
+    if (matchResult?.provider?.losingRcpid && !currentProvider) {
+      setValue("provider", matchResult.provider.losingRcpid);
+    }
+  }, [matchResult?.provider?.losingRcpid, currentProvider, setValue]);
+
+  useEffect(() => {
+    if (currentProvider) {
+      setValue("consentGiven", false, { shouldValidate: false });
+      setMatchResult(null);
+      setCustomProviderError(null);
+    }
+  }, [currentProvider, setValue, setMatchResult]);
+
+  const errorTextStyling = "text-ui-error text-xs md:text-sm mt-1";
 
   return (
-    <form id="oneTouchSwitchingForm" onSubmit={handleSubmit(handleFormSubmit)}>
-      <div className="mb-8 p-5 border border-ui-grey-300 rounded-md bg-ui-grey-100">
-        <h3 className="font-medium mb-3 text-core-black">
-          {oneTouchSwitchingText.providerSelectionTitle}
-        </h3>
-
-        <select
-          {...register("provider")}
-          value={matchResult?.provider?.losingRcpid || selectedProvider}
-          onChange={handleProviderChange}
-          className={`w-full p-3 border ${
-            errors.provider || customProviderError
-              ? "border-ui-error"
-              : "border-ui-grey-300"
-          } rounded-md`}
-          aria-label="provider"
-        >
-          <option value="" disabled>
-            {oneTouchSwitchingText.providerSelectorDefault}
-          </option>
-          {providers.map((provider) => (
-            <option key={provider.losingRcpid} value={provider.losingRcpid}>
-              {provider.name}
-            </option>
-          ))}
-        </select>
-
-        {providerError && (
-          <p className="text-ui-error text-sm mt-1">
-            {oneTouchSwitchingText.providerErrorMessage}
-          </p>
-        )}
-
-        {(errors.provider || customProviderError) && (
-          <p className="text-ui-error text-sm mt-1">
-            {customProviderError || errors.provider?.message}
-          </p>
-        )}
-
-        <p className="mt-3 text-sm text-ui-grey-500">
-          {oneTouchSwitchingText.oneTouchExplanation}
+    <>
+      {!shouldShowAccountNumber && (
+        <p className="font-semibold text-xs md:text-sm leading-[1.6]">
+          {oneTouchSwitchingText.subtitle}
         </p>
-      </div>
-
-      <div className="my-4">
-        <div className="flex items-center mb-4">
-          <input
-            type="checkbox"
-            id="consent-checkbox"
-            {...register("consentGiven")}
-            className="mr-2"
-            disabled={isSubmitting}
-          />
-          <label htmlFor="consent-checkbox">
-            {oneTouchSwitchingText.consentLabel}
-          </label>
-        </div>
-        {errors.consentGiven && (
-          <p className="text-ui-error text-sm mt-1">
-            {errors.consentGiven.message}
-          </p>
-        )}
-      </div>
-
-      {isSubmitting && (
-        <div className="flex justify-center items-center mt-6 h-20">
-          <div className="spinner animate-spin w-10 h-10 border-4 border-ui-grey-300 border-t-yellow-500 rounded-full"></div>
-        </div>
       )}
-
-      {shouldShowAccountNumber && (
-        <div className="mb-8">
-          <p className="font-medium">
-            {matchResult?.message || oneTouchSwitchingText.noMatchMessage}
-          </p>
-
-          <div className="mt-4">
-            <p className="text-sm mb-6">
-              {oneTouchSwitchingText.accountNumberPrompt}
-            </p>
-            <FormInput
-              id="account-number"
-              placeholder={oneTouchSwitchingText.accountNumberPlaceholder}
-              {...register("accountNumber")}
-              className="mb-4"
-              disabled={isSubmitting}
-              aria-label="accountNumber"
+      <form
+        id="oneTouchSwitchingForm"
+        onSubmit={handleSubmit(handleFormSubmit)}
+      >
+        <div className="flex flex-col gap-4 md:gap-6">
+          {shouldShowAccountNumber && (
+            <>
+              <TipCard
+                backgroundColor="orange"
+                subtitle={oneTouchSwitchingText.firstAttemptFailTitle}
+                subtitleColor="tertiary-peach"
+                image={getAssetPath("/images/signingUp.svg")}
+                hideImageOnMobile
+              >
+                {oneTouchSwitchingText.firstAttemptFailText}
+              </TipCard>
+              <div className="flex flex-col gap-4 md:gap-6">
+                <p className="text-xs md:text-sm leading-[1.6] font-semibold">
+                  {oneTouchSwitchingText.accountNumberPrompt}
+                </p>
+                <div>
+                  <FormInput
+                    id="account-number"
+                    placeholder={oneTouchSwitchingText.accountNumberPlaceholder}
+                    {...register("accountNumber")}
+                    disabled={isSubmitting}
+                    aria-label="accountNumber"
+                  />
+                  {errors.accountNumber && (
+                    <p className={errorTextStyling}>
+                      {errors.accountNumber.message}
+                    </p>
+                  )}
+                </div>
+                <p className="text-xs md:text-sm leading-[1.6] font-normal">
+                  {oneTouchSwitchingText.helpText}
+                </p>
+              </div>
+            </>
+          )}
+          <h3 className="font-semibold text-xs md:text-sm text-core-black">
+            {oneTouchSwitchingText.providerSelectionTitle}
+          </h3>
+          <div>
+            <FormDropdown
+              control={control}
+              name="provider"
+              dropdownPlaceholder={
+                oneTouchSwitchingText.providerSelectorDefault
+              }
+              options={providerOptions}
+              errorMessage={
+                providerError && !currentProvider
+                  ? oneTouchSwitchingText.providerErrorMessage
+                  : !currentProvider &&
+                      (customProviderError || errors.provider?.message)
+                    ? customProviderError || errors.provider?.message
+                    : undefined
+              }
+              showLabel={false}
+              errorMessageStyling={errorTextStyling}
             />
           </div>
+
+          <div className="flex flex-col">
+            <Checkbox
+              label={oneTouchSwitchingText.consentLabel}
+              value="consent"
+              checked={currentConsent}
+              onChange={(checked) => setValue("consentGiven", checked)}
+              disabled={isSubmitting}
+              labelClassName="text-core-black"
+            />
+            {!currentConsent && errors.consentGiven && (
+              <p className={errorTextStyling}>{errors.consentGiven.message}</p>
+            )}
+          </div>
+          <TipCard
+            backgroundColor="blue"
+            subtitle={oneTouchSwitchingText.tipSubtitle}
+            subtitleColor="tertiary-blue-dark"
+            image={getAssetPath("/images/linked-hands.svg")}
+            hideImageOnMobile
+          >
+            <InsertFormattedText
+              text={oneTouchSwitchingText.tipText}
+              searchText={oneTouchSwitchingText.tipTextHighlight}
+              className="font-medium"
+            />
+          </TipCard>
         </div>
-      )}
-    </form>
+      </form>
+    </>
   );
 };
 

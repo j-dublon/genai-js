@@ -15,6 +15,7 @@ export interface FormDropDownProps<T extends Record<string, unknown>, V> {
   bottomButtonText?: string;
   bottomButtonOnClick?: () => void;
   showTick?: boolean;
+  errorMessageStyling?: string;
 }
 
 export const FormDropdown = <T extends Record<string, unknown>, V>({
@@ -28,6 +29,7 @@ export const FormDropdown = <T extends Record<string, unknown>, V>({
   bottomButtonText,
   bottomButtonOnClick,
   showTick = true,
+  errorMessageStyling = "text-ui-error text-sm mt-1",
 }: FormDropDownProps<T, V>) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(initiallyOpen);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -111,9 +113,7 @@ export const FormDropdown = <T extends Record<string, unknown>, V>({
           }}
         />
       </div>
-      {errorMessage && (
-        <p className="text-ui-error text-sm mt-1">{errorMessage}</p>
-      )}
+      {errorMessage && <p className={errorMessageStyling}>{errorMessage}</p>}
     </>
   );
 };

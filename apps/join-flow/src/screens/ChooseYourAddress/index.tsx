@@ -56,10 +56,7 @@ export const ChooseYourAddress = () => {
         </h1>
         <AddressLookupForm />
         <TipCard
-          image={{
-            src: getAssetPath("/images/love.svg"),
-            alt: "Love heart speech bubble",
-          }}
+          image={getAssetPath("/images/love.svg")}
           className="my-8 md:my-10 bg-ui-grey-100"
         >
           <ContactInfo

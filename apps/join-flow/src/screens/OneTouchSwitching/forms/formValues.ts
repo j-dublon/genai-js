@@ -1,8 +1,8 @@
-import { BroadbandProvider } from "@store/useJoinFlowStore";
+import { BroadbandProvider, OTSSwitchStatus } from "@store/useJoinFlowStore";
 import * as z from "zod";
 
-// Update schema with custom error message
-export const oneTouchSwitchingSchema = z.object({
+// Base schema
+const baseOneTouchSwitchingSchema = z.object({
   provider: z
     .string({ required_error: "Please select a provider from the list" })
     .min(1, "Please select a provider from the list"),
@@ -10,6 +10,21 @@ export const oneTouchSwitchingSchema = z.object({
     message:
       "Please confirm you're the accountholder and consent to the switch",
   }),
+});
+
+export const createOneTouchSwitchingSchema = (
+  otsSwitchStatus?: OTSSwitchStatus,
+) => {
+  const isSecondAttempt = otsSwitchStatus === "FIRST_ATTEMPT_FAILED";
+
+  return baseOneTouchSwitchingSchema.extend({
+    accountNumber: isSecondAttempt
+      ? z.string().min(1, "Account number is required for verification")
+      : z.string().optional(),
+  });
+};
+
+export const oneTouchSwitchingSchema = baseOneTouchSwitchingSchema.extend({
   accountNumber: z.string().optional(),
 });
 
@@ -24,7 +39,7 @@ export type MatchResultType = {
 export type OneTouchSwitchingFormProps = {
   onSubmit: (data: OneTouchSwitchingFormData) => Promise<void>;
   defaultProvider?: string;
-  matchResult: MatchResultType | null;
+  matchResult?: MatchResultType | null;
   setMatchResult: (result: MatchResultType | null) => void;
   isSubmitting?: boolean;
   providers: BroadbandProvider[];

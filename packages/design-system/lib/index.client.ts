@@ -16,6 +16,8 @@ import {
   DropdownInputField,
 } from "@components/atoms/InputField";
 import { InputSlider } from "@components/atoms/InputSlider";
+import { InsertFormattedText } from "@components/atoms/InsertFormattedText";
+import { InsertLink, InsertLinkProps } from "@components/atoms/InsertLink";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { PillButton } from "@components/atoms/PillButton";
 import { Radio } from "@components/atoms/Radio";
@@ -94,6 +96,8 @@ export {
   InfoModal,
   DropdownInputField as InputField,
   InputSlider,
+  InsertFormattedText,
+  InsertLink,
   MobileApp,
   MobilePhone,
   NavBar,
@@ -135,6 +139,7 @@ export type {
   DatePickerProps,
   GuideCardProps,
   InfoCardProps,
+  InsertLinkProps,
   ReviewCardProps,
   TextColors,
   TextWithTickProps,

@@ -12,14 +12,11 @@ export const tipCardColors = {
 
 interface TipCardProps {
   subtitle?: string;
-  image?: {
-    src: string;
-    alt: string;
-    className?: string;
-  };
+  image?: string;
   backgroundColor?: keyof typeof tipCardColors;
   subtitleColor?: TextColors;
   className?: string;
+  hideImageOnMobile?: boolean;
 }
 
 export const TipCard = ({
@@ -29,6 +26,7 @@ export const TipCard = ({
   backgroundColor = "white",
   subtitleColor = "black",
   className,
+  hideImageOnMobile = false,
 }: PropsWithChildren<TipCardProps>) => {
   return (
     <div
@@ -37,11 +35,12 @@ export const TipCard = ({
     >
       {image && (
         <Image
-          src={image.src}
-          alt={image.alt}
+          src={image}
+          alt=""
           width={60}
           height={60}
-          className={`ds:max-w-10 ds:md:max-w-12 ds:h-auto ${image.className || ""}`}
+          className={`ds:max-w-10 ds:md:max-w-12 ds:h-auto ${hideImageOnMobile ? "ds:hidden ds:md:block" : ""}`}
+          role="presentation"
         />
       )}
       <p className="ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:font-normal ds:text-core-black ds:flex-1">

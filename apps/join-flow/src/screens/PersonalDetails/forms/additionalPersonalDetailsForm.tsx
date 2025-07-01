@@ -58,22 +58,34 @@ export const AdditionalPersonalDetailsForm = ({
   useClearFocus(teleHealthModalRef, "close");
 
   const handleDobInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.currentTarget.id === "dob-day" && event.currentTarget.value.length === 2) {
+    if (
+      event.currentTarget.id === "dob-day" &&
+      event.currentTarget.value.length === 2
+    ) {
       document.getElementById("dob-month")?.focus();
       event.preventDefault();
-    } else if (event.currentTarget.id === "dob-month" && event.currentTarget.value.length === 2) {
+    } else if (
+      event.currentTarget.id === "dob-month" &&
+      event.currentTarget.value.length === 2
+    ) {
       document.getElementById("dob-year")?.focus();
       event.preventDefault();
     }
-  }
+  };
 
   const handleDobKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Backspace") {
-      if (event.currentTarget.id === "dob-month" && event.currentTarget.value.length === 1) {
+      if (
+        event.currentTarget.id === "dob-month" &&
+        event.currentTarget.value.length === 1
+      ) {
         event.currentTarget.value = "";
         document.getElementById("dob-day")?.focus();
         event.preventDefault();
-      } else if (event.currentTarget.id === "dob-year" && event.currentTarget.value.length === 1) {
+      } else if (
+        event.currentTarget.id === "dob-year" &&
+        event.currentTarget.value.length === 1
+      ) {
         event.currentTarget.value = "";
         document.getElementById("dob-month")?.focus();
         event.preventDefault();
@@ -84,10 +96,7 @@ export const AdditionalPersonalDetailsForm = ({
   return (
     <form id="additionalDetailsForm">
       <TipCard
-        image={{
-          src: getAssetPath("/images/linked-hands.svg"),
-          alt: "linked hands",
-        }}
+        image={getAssetPath("/images/linked-hands.svg")}
         className="mt-10 md:mt-12 mb-10 md:mb-12 bg-tertiary-blue-light justify-center md:w-full items-center"
       >
         <span>
@@ -237,10 +246,7 @@ export const AdditionalPersonalDetailsForm = ({
         />
         {requiresLandline && (
           <TipCard
-            image={{
-              src: getAssetPath("/images/stop-hand.svg"),
-              alt: "Hand indicating a stop",
-            }}
+            image={getAssetPath("/images/stop-hand.svg")}
             className="bg-tertiary-peach-light justify-center md:w-full items-center"
           >
             You&apos;ll need a smartphone to get Cuckoo. We can&apos;t provide

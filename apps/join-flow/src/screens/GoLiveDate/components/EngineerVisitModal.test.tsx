@@ -4,19 +4,23 @@ import { describe, expect, test, vi } from "vitest";
 
 import { EngineerVisitModal } from "./EngineerVisitModal";
 
-vi.mock("@react-component-library/ui", () => ({
-  InfoModal: vi.fn(({ title, buttonText, children }) => (
-    <div data-testid="info-modal" role="dialog" aria-labelledby="modal-title">
-      <h2 id="modal-title" className="modal-title">
-        {title}
-      </h2>
-      <div className="modal-content">{children}</div>
-      <button type="button" className="modal-button">
-        {buttonText}
-      </button>
-    </div>
-  )),
-}));
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    InfoModal: vi.fn(({ title, buttonText, children }) => (
+      <div data-testid="info-modal" role="dialog" aria-labelledby="modal-title">
+        <h2 id="modal-title" className="modal-title">
+          {title}
+        </h2>
+        <div className="modal-content">{children}</div>
+        <button type="button" className="modal-button">
+          {buttonText}
+        </button>
+      </div>
+    )),
+  };
+});
 
 const mockModalContent = {
   title: "Mock Modal Title",

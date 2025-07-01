@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
-import { accountNumberSchema } from "@/screens/OneTouchSwitching/forms/formValues";
 import { createSwitchMatchLookup } from "@/services/helpers/createSwitchMatchLookup";
 import { getAllProviders } from "@/services/helpers/getAllProviders";
 import { updateBasket } from "@/services/helpers/updateBasket";
@@ -78,29 +77,6 @@ export const OneTouchSwitching = () => {
     }
 
     const provider = providers.find((p) => p.losingRcpid === data.provider);
-    const accountNumberProvided =
-      data.accountNumber && data.accountNumber.trim().length > 0;
-
-    if (accountNumberProvided) {
-      const result = accountNumberSchema.safeParse(data.accountNumber);
-      if (!result.success) {
-        setMatchResult({
-          success: false,
-          message: result.error.errors[0].message,
-        });
-        setIsSubmitting(false);
-        return;
-      }
-    }
-
-    if (isSecondAttempt && !accountNumberProvided) {
-      setMatchResult({
-        success: false,
-        message: "Account number is required for verification",
-      });
-      setIsSubmitting(false);
-      return;
-    }
 
     try {
       const result = await createSwitchMatchLookup(
@@ -175,16 +151,12 @@ export const OneTouchSwitching = () => {
   return (
     <>
       <StepNavigationWithBasket step={3} />
-      <div className="container mx-auto px-4 pb-8 pt-6 md:pt-10 lg:pt-20">
-        <div className="max-w-[570px] mx-auto">
-          <div className="bg-core-white p-8 rounded-md">
-            <h1 className="text-2xl font-bold mb-2 text-center">
-              {oneTouchSwitchingText.title}
-            </h1>
-            <p className="text-ui-grey-500 mb-6">
-              {oneTouchSwitchingText.subtitle}
-            </p>
-
+      <div className="container mx-auto flex flex-col items-center md:mt-6 lg:mt-12 md:mb-16">
+        <div className="max-w-[720px] px-5 md:px-22 pt-10 md:pt-12 bg-core-white rounded-md">
+          <h1 className="text-[26px] md:text-3xl font-semibold text-center pb-10 md:pb-12">
+            {oneTouchSwitchingText.title}
+          </h1>
+          <div className="flex flex-col gap-10 md:gap-12">
             <OneTouchSwitchingForm
               onSubmit={handleSubmit}
               defaultProvider={
@@ -197,30 +169,41 @@ export const OneTouchSwitching = () => {
               providerError={providerError}
             />
 
-            <div className="flex justify-between mt-8">
-              <Button
-                onClick={handleSkip}
-                tint="white"
-                variant="outline"
-                type="button"
-                disabled={isSubmitting}
-              >
-                {oneTouchSwitchingText.skipButtonText}
-              </Button>
+            {/* TODO: Add loading animation */}
 
-              <Button
-                onClick={handleFormSubmit}
-                tint="yellow"
-                variant="solid"
-                disabled={isSubmitting}
-                type="button"
-              >
-                {isSubmitting
-                  ? oneTouchSwitchingText.loadingButtonText
-                  : oneTouchSwitchingText.submitButtonText}
-              </Button>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+              <div className="w-full md:w-1/2">
+                <Button
+                  onClick={handleSkip}
+                  tint="white"
+                  variant="outline"
+                  type="button"
+                  disabled={isSubmitting}
+                  fullWidth
+                >
+                  {oneTouchSwitchingText.skipButtonText}
+                </Button>
+              </div>
+
+              <div className="w-full md:w-1/2">
+                <Button
+                  onClick={handleFormSubmit}
+                  tint="yellow"
+                  variant="solid"
+                  disabled={isSubmitting}
+                  type="button"
+                  fullWidth
+                >
+                  {isSubmitting
+                    ? oneTouchSwitchingText.loadingButtonText
+                    : isSecondAttempt
+                      ? oneTouchSwitchingText.retryButtonText
+                      : oneTouchSwitchingText.submitButtonText}
+                </Button>
+              </div>
             </div>
           </div>
+          <hr className="mt-10 md:hidden border-ui-grey-300 bg-ui-grey-300 border w-full" />
         </div>
       </div>
 

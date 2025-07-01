@@ -1,7 +1,5 @@
-import { InfoModal } from "@react-component-library/ui";
+import { InfoModal, InsertLink } from "@react-component-library/ui";
 import { RefObject } from "react";
-
-import { InsertLink } from "@/components/InsertLink";
 
 import { GoLiveDateProps } from "../GoLiveDateProps";
 

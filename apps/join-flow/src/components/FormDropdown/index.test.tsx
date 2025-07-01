@@ -37,7 +37,13 @@ const mockOptions = {
 const mockLabel = "Select Time Slot";
 const mockPlaceholder = "Choose a time slot";
 
-function TestComponent({ errorMessage }: { errorMessage?: string }) {
+function TestComponent({
+  errorMessage,
+  errorMessageStyling,
+}: {
+  errorMessage?: string;
+  errorMessageStyling?: string;
+}) {
   const { control } = useForm<MockFormData>({
     defaultValues: { timeSlot: "", selectedDate: "" },
   });
@@ -50,6 +56,7 @@ function TestComponent({ errorMessage }: { errorMessage?: string }) {
       dropdownPlaceholder={mockPlaceholder}
       options={mockOptions}
       errorMessage={errorMessage}
+      errorMessageStyling={errorMessageStyling}
     />
   );
 }
@@ -130,9 +137,28 @@ describe("FormDropdown Component", () => {
 
   it("displays error message when provided", () => {
     const errorMessage = "Please select a time slot";
-    render(<TestComponent errorMessage={errorMessage} />);
+    render(
+      <TestComponent
+        errorMessage={errorMessage}
+        errorMessageStyling="custom-class"
+      />,
+    );
 
-    expect(screen.getByText(errorMessage)).toBeInTheDocument();
+    const errorMessageElement = screen.getByText(errorMessage);
+    expect(errorMessageElement).toBeInTheDocument();
+    expect(errorMessageElement).toHaveClass("custom-class");
+  });
+
+  it("applies default error message styling when not provided", () => {
+    const errorMessage = "Please select a time slot";
+    render(
+      <TestComponent
+        errorMessage={errorMessage}
+        errorMessageStyling={undefined}
+      />,
+    );
+    const errorMessageElement = screen.getByText(/please select/i);
+    expect(errorMessageElement).toHaveClass("text-ui-error text-sm mt-1");
   });
 
   it("doesn't display error message when not provided", () => {

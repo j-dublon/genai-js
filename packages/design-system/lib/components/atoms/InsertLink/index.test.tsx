@@ -1,31 +1,6 @@
 import { render, screen } from "@testing-library/react";
-import { vi } from "vitest";
 
 import { InsertLink } from "./index";
-
-vi.mock("next/link", () => {
-  return {
-    default: function MockLink({
-      children,
-      href,
-      className,
-      target,
-      rel,
-    }: {
-      children: React.ReactNode;
-      href: string;
-      className?: string;
-      target?: string;
-      rel?: string;
-    }) {
-      return (
-        <a href={href} className={className} target={target} rel={rel}>
-          {children}
-        </a>
-      );
-    },
-  };
-});
 
 describe("InsertLink", () => {
   it("should render text with link when searchText is found", () => {
@@ -40,7 +15,11 @@ describe("InsertLink", () => {
     const link = screen.getByRole("link");
     expect(link).toHaveAttribute("href", "/continue");
     expect(link).toHaveTextContent(/here/i);
-    expect(link).toHaveClass("text-ui-link", "font-medium", "underline");
+    expect(link).toHaveClass(
+      "ds:text-ui-link",
+      "ds:font-medium",
+      "ds:underline",
+    );
     expect(screen.getByText(/to continue/i)).toBeInTheDocument();
   });
 

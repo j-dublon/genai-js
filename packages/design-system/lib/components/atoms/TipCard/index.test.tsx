@@ -33,14 +33,10 @@ describe("TipCard Component", () => {
   });
 
   it("renders with an image", () => {
-    render(
-      <TipCard image={{ src: "/test-image.jpg", alt: "Test image" }}>
-        Content with image
-      </TipCard>,
-    );
+    render(<TipCard image="/test-image.jpg">Content with image</TipCard>);
 
     const card = screen.getByLabelText("Tip card");
-    const image = screen.getByRole("img", { name: "Test image" });
+    const image = screen.getByRole("presentation");
 
     expect(card).toBeInTheDocument();
     expect(image).toBeInTheDocument();
@@ -49,29 +45,6 @@ describe("TipCard Component", () => {
       expect.stringContaining("test-image.jpg"),
     );
     expect(card).toHaveTextContent("Content with image");
-  });
-
-  it("should render an image with a custom class name", () => {
-    render(
-      <TipCard
-        image={{
-          src: "/test-image.jpg",
-          alt: "Test image",
-          className: "test-image-class",
-        }}
-      >
-        Content with image
-      </TipCard>,
-    );
-
-    const image = screen.getByRole("img", { name: "Test image" });
-
-    expect(image).toBeInTheDocument();
-    expect(image).toHaveAttribute(
-      "src",
-      expect.stringContaining("test-image.jpg"),
-    );
-    expect(image).toHaveClass("test-image-class");
   });
 
   it("applies custom background color", () => {
@@ -106,7 +79,7 @@ describe("TipCard Component", () => {
     render(
       <TipCard
         subtitle="Important"
-        image={{ src: "/test-image.jpg", alt: "Test image" }}
+        image="/test-image.jpg"
         backgroundColor="blue"
         subtitleColor="secondary-blue"
         className="custom-class"
@@ -117,11 +90,15 @@ describe("TipCard Component", () => {
 
     const card = screen.getByLabelText("Tip card");
     const subtitle = screen.getByText("Important");
-    const image = screen.getByRole("img", { name: "Test image" });
+    const image = screen.getByRole("presentation");
 
     expect(card).toBeInTheDocument();
     expect(subtitle).toBeInTheDocument();
     expect(image).toBeInTheDocument();
+    expect(image).toHaveAttribute(
+      "src",
+      expect.stringContaining("test-image.jpg"),
+    );
     expect(card).toHaveClass(tipCardColors.blue);
     expect(subtitle).toHaveClass("ds:text-secondary-blue");
     expect(card).toHaveClass("custom-class");
@@ -136,5 +113,52 @@ describe("TipCard Component", () => {
 
     expect(card).toHaveClass(tipCardColors.white);
     expect(subtitle).toHaveClass(textColorVariants.black);
+  });
+
+  it("hides image on mobile when hideImageOnMobile is true", () => {
+    render(
+      <TipCard image="/test-image.jpg" hideImageOnMobile={true}>
+        Content with hidden mobile image
+      </TipCard>,
+    );
+
+    const image = screen.getByRole("presentation");
+    expect(image).toHaveClass("ds:hidden");
+    expect(image).toHaveClass("ds:md:block");
+  });
+
+  it("shows image on mobile when hideImageOnMobile is false", () => {
+    render(
+      <TipCard image="/test-image.jpg" hideImageOnMobile={false}>
+        Content with visible mobile image
+      </TipCard>,
+    );
+
+    const image = screen.getByRole("presentation");
+    expect(image).not.toHaveClass("ds:hidden");
+    expect(image).not.toHaveClass("ds:md:block");
+  });
+
+  it("shows image on mobile by default when hideImageOnMobile is not provided", () => {
+    render(
+      <TipCard image="/test-image.jpg">
+        Content with default mobile image visibility
+      </TipCard>,
+    );
+
+    const image = screen.getByRole("presentation");
+    expect(image).not.toHaveClass("ds:hidden");
+    expect(image).not.toHaveClass("ds:md:block");
+  });
+
+  it("hideImageOnMobile prop has no effect when no image is provided", () => {
+    render(<TipCard hideImageOnMobile={true}>Content without image</TipCard>);
+
+    const card = screen.getByLabelText("Tip card");
+    const image = screen.queryByRole("presentation");
+
+    expect(card).toBeInTheDocument();
+    expect(image).not.toBeInTheDocument();
+    expect(card).toHaveTextContent("Content without image");
   });
 });

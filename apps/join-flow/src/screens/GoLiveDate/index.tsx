@@ -41,6 +41,7 @@ export const GoLiveDate = () => {
     timeSlotPlaceHolder,
     continueButtonText,
     otsFailBannerText,
+    otsFailBannerHighlightText,
   } = goLiveDateText;
 
   const router = useRouter();
@@ -181,12 +182,19 @@ export const GoLiveDate = () => {
     return;
   }
 
+  const otsSwitchFailedOrSkipped =
+    switchingDetails?.otsSwitchStatus === "OTS_FAILED" ||
+    switchingDetails?.otsSwitchStatus === "SKIPPED";
+
   return (
     <>
       <StepNavigationWithBasket step={3} />
-      <div className="container md:max-w-[565px] mx-auto px-4 pb-8 pt-10 lg:pt-20">
-        {switchingDetails?.otsSwitchStatus === "OTS_FAILED" && (
-          <OtsFailBanner bannerText={otsFailBannerText} />
+      <div className="container md:max-w-[758px] mx-auto px-4 pb-8 pt-10 lg:pt-20">
+        {otsSwitchFailedOrSkipped && (
+          <OtsFailBanner
+            bannerText={otsFailBannerText}
+            highlightText={otsFailBannerHighlightText}
+          />
         )}
 
         {/* TODO: replace with Toast pill once we have it */}
@@ -194,15 +202,16 @@ export const GoLiveDate = () => {
           <p className="mb-4">Switch successful!</p>
         )}
 
-        <div className="max-w-3xl mx-auto pt-[38px]">
+        <div
+          className={`max-w-[758px] px-5 md:px-24 ${
+            otsSwitchFailedOrSkipped ? "pt-20" : ""
+          }`}
+        >
           <h1 className="grid text-2xl font-bold pb-2 md:pb-16 justify-center">
             {title}
           </h1>
           <TipCard
-            image={{
-              src: getAssetPath("/images/love.svg"),
-              alt: "Love heart speech bubble",
-            }}
+            image={getAssetPath("/images/love.svg")}
             className="mt-10 md:mt-0 mb-10 md:mb-6 bg-secondary-green justify-center md:w-full items-center"
           >
             Yay! We can get you live as early as{" "}

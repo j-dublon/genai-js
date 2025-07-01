@@ -1,34 +1,19 @@
 import { render, screen } from "@testing-library/react";
-import { vi } from "vitest";
 
 import { OtsFailBanner } from "./OtsFailBanner";
 
-vi.mock("next/link", () => {
-  return {
-    default: function MockLink({
-      children,
-      href,
-      className,
-    }: {
-      children: React.ReactNode;
-      href: string;
-      className?: string;
-    }) {
-      return (
-        <a href={href} className={className}>
-          {children}
-        </a>
-      );
-    },
-  };
-});
-
 const mockBannerText =
   "We couldn't find your current provider. Please let them know you are switching!";
+const mockHighlightText = "let them know";
 
 describe("OtsFailBanner", () => {
   it("should render the banner with correct content", () => {
-    render(<OtsFailBanner bannerText={mockBannerText} />);
+    render(
+      <OtsFailBanner
+        bannerText={mockBannerText}
+        highlightText={mockHighlightText}
+      />,
+    );
 
     expect(screen.getByText("Important info:")).toBeInTheDocument();
     expect(
@@ -36,11 +21,15 @@ describe("OtsFailBanner", () => {
     ).toBeInTheDocument();
   });
 
-  it("should render the InsertLink component with correct props", () => {
-    render(<OtsFailBanner bannerText={mockBannerText} />);
+  it("should render the InsertFormattedText component with correct props", () => {
+    render(
+      <OtsFailBanner
+        bannerText={mockBannerText}
+        highlightText={mockHighlightText}
+      />,
+    );
 
-    const link = screen.getByRole("link");
-    expect(link).toHaveAttribute("href", "/");
-    expect(link).toHaveTextContent("let them know");
+    const span = screen.getByText(/let them know/);
+    expect(span).toHaveClass("font-medium underline");
   });
 });

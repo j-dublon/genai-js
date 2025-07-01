@@ -111,10 +111,7 @@ export const EmailVerificationForm = ({
       <h2 className="text-md font-bold mb-6">{verificationSection.title}</h2>
       <p className="text-md mb-6">{verificationSection.description}</p>
       <TipCard
-        image={{
-          src: getAssetPath("/images/envelope.svg"),
-          alt: "Envelope icon",
-        }}
+        image={getAssetPath("/images/envelope.svg")}
         className="mt-10 md:mt-0 mb-10 md:mb-6 bg-secondary-green justify-center md:w-full items-center"
       >
         <span>

@@ -175,13 +175,16 @@ describe("OneTouchSwitching", () => {
 
     render(<OneTouchSwitching />);
 
-    // Wait for providers to be loaded into the dropdown
+    // Wait for providers to be loaded
     await waitFor(() => {
-      const providerSelect = screen.getByRole("combobox", { name: "provider" });
-      expect(providerSelect).toHaveTextContent("Provider 1");
+      expect(getAllProviders).toHaveBeenCalled();
     });
-    const providerSelect = screen.getByRole("combobox", { name: "provider" });
-    await user.selectOptions(providerSelect, "rcp1");
+
+    const dropdownButton = screen.getByText("Pick your provider");
+    await user.click(dropdownButton);
+
+    const provider1Option = screen.getByRole("button", { name: "Provider 1" });
+    await user.click(provider1Option);
 
     const checkbox = screen.getByRole("checkbox", {
       name: "I'm the account holder and happy for Cuckoo to manage my switch",
@@ -193,7 +196,7 @@ describe("OneTouchSwitching", () => {
     });
     await user.type(accountNumberInput, "12345678");
     const submitButton = screen.getByRole("button", {
-      name: "Match my details",
+      name: "Retry",
     });
     await user.click(submitButton);
 
@@ -235,13 +238,16 @@ describe("OneTouchSwitching", () => {
 
     render(<OneTouchSwitching />);
 
-    // Wait for providers to be loaded into the dropdown
+    // Wait for providers to be loaded
     await waitFor(() => {
-      const providerSelect = screen.getByRole("combobox", { name: "provider" });
-      expect(providerSelect).toHaveTextContent("Provider 1");
+      expect(getAllProviders).toHaveBeenCalled();
     });
-    const providerSelect = screen.getByRole("combobox", { name: "provider" });
-    await user.selectOptions(providerSelect, "rcp1");
+
+    const dropdownButton = screen.getByText("Pick your provider");
+    await user.click(dropdownButton);
+
+    const provider1Option = screen.getByRole("button", { name: "Provider 1" });
+    await user.click(provider1Option);
 
     const checkbox = screen.getByRole("checkbox", {
       name: "I'm the account holder and happy for Cuckoo to manage my switch",
@@ -253,7 +259,7 @@ describe("OneTouchSwitching", () => {
     });
     await user.type(accountNumberInput, "11111111");
     const submitButton = screen.getByRole("button", {
-      name: "Match my details",
+      name: "Retry",
     });
     await user.click(submitButton);
 
@@ -298,13 +304,16 @@ describe("OneTouchSwitching", () => {
 
     render(<OneTouchSwitching />);
 
-    // Wait for providers to be loaded into the dropdown
+    // Wait for providers to be loaded
     await waitFor(() => {
-      const providerSelect = screen.getByRole("combobox", { name: "provider" });
-      expect(providerSelect).toHaveTextContent("Provider 1");
+      expect(getAllProviders).toHaveBeenCalled();
     });
-    const providerSelect = screen.getByRole("combobox", { name: "provider" });
-    await user.selectOptions(providerSelect, "rcp1");
+
+    const dropdownButton = screen.getByText("Pick your provider");
+    await user.click(dropdownButton);
+
+    const provider1Option = screen.getByRole("button", { name: "Provider 1" });
+    await user.click(provider1Option);
 
     const checkbox = screen.getByRole("checkbox", {
       name: "I'm the account holder and happy for Cuckoo to manage my switch",

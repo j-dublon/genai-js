@@ -24,49 +24,47 @@ interface FormInputProps {
   [key: string]: unknown;
 }
 
-interface InsertLinkProps {
-  text: string;
-  searchText: string;
-  href: string;
-}
-
-vi.mock("@react-component-library/ui", () => ({
-  Button: ({ children, ...props }: ButtonProps) => (
-    <button {...props}>{children}</button>
-  ),
-  DatePicker: ({
-    onDateSelect,
-    selectedDate,
-    placeholderText,
-    disabled,
-    ...props
-  }: DatePickerProps) => {
-    // Remove DatePicker-specific props that shouldn't be passed to DOM for mock
-    const {
-      availableDates,
-      buttonClassName,
-      outerClassName,
-      overlay,
-      ...domProps
-    } = props;
-    void availableDates;
-    void buttonClassName;
-    void outerClassName;
-    void overlay;
-    return (
-      <div data-testid="date-picker" {...domProps}>
-        <button
-          type="button"
-          onClick={() => onDateSelect && onDateSelect("2024-12-31")}
-          data-testid="date-picker-button"
-          disabled={disabled}
-        >
-          {selectedDate || placeholderText}
-        </button>
-      </div>
-    );
-  },
-}));
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    Button: ({ children, ...props }: ButtonProps) => (
+      <button {...props}>{children}</button>
+    ),
+    DatePicker: ({
+      onDateSelect,
+      selectedDate,
+      placeholderText,
+      disabled,
+      ...props
+    }: DatePickerProps) => {
+      // Remove DatePicker-specific props that shouldn't be passed to DOM for mock
+      const {
+        availableDates,
+        buttonClassName,
+        outerClassName,
+        overlay,
+        ...domProps
+      } = props;
+      void availableDates;
+      void buttonClassName;
+      void outerClassName;
+      void overlay;
+      return (
+        <div data-testid="date-picker" {...domProps}>
+          <button
+            type="button"
+            onClick={() => onDateSelect && onDateSelect("2024-12-31")}
+            data-testid="date-picker-button"
+            disabled={disabled}
+          >
+            {selectedDate || placeholderText}
+          </button>
+        </div>
+      );
+    },
+  };
+});
 
 vi.mock("@/components/FormInput", () => ({
   default: ({ error, ...props }: FormInputProps) => (
@@ -74,14 +72,6 @@ vi.mock("@/components/FormInput", () => ({
       <input {...props} />
       {error && <p data-testid={`${props.id}-error`}>{error.message}</p>}
     </div>
-  ),
-}));
-
-vi.mock("@/components/InsertLink", () => ({
-  InsertLink: ({ text, searchText, href }: InsertLinkProps) => (
-    <span>
-      {text.replace(searchText, `<a href="${href}">${searchText}</a>`)}
-    </span>
   ),
 }));
 

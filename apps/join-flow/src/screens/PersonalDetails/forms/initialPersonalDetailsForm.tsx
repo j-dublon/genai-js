@@ -145,10 +145,7 @@ export const InitialPersonalDetailsForm = ({
         )}
         {hasSmartphoneValue === "no" && (
           <TipCard
-            image={{
-              src: getAssetPath("/images/stop-hand.svg"),
-              alt: "Hand indicating a stop",
-            }}
+            image={getAssetPath("/images/stop-hand.svg")}
             className="bg-tertiary-peach-light justify-center md:w-full items-center"
           >
             You&apos;ll need a smartphone to get Cuckoo. We can&apos;t provide

@@ -1,16 +1,16 @@
-import Link from "next/link";
+export interface InsertLinkProps {
+  text: string;
+  searchText: string;
+  href: string;
+  openInNewTab?: boolean;
+}
 
 export const InsertLink = ({
   text,
   searchText,
   href,
   openInNewTab = false,
-}: {
-  text: string;
-  searchText: string;
-  href: string;
-  openInNewTab?: boolean;
-}) => {
+}: InsertLinkProps) => {
   const index = text.indexOf(searchText);
 
   if (index === -1 || !text || !searchText || !href) {
@@ -23,14 +23,14 @@ export const InsertLink = ({
   return (
     <>
       {beforeText}
-      <Link
+      <a
         href={href}
-        className="text-ui-link font-medium underline"
+        className="ds:text-ui-link ds:font-medium ds:underline"
         target={openInNewTab ? "_blank" : undefined}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
       >
         {searchText}
-      </Link>
+      </a>
       {afterText}
     </>
   );

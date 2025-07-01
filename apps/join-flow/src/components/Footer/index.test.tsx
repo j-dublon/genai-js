@@ -34,9 +34,7 @@ describe("Footer Component", () => {
     const footer = screen.getByRole("contentinfo");
     expect(footer).toBeInTheDocument();
     expect(screen.getByText(heading)).toBeInTheDocument();
-    const tipCard = screen.getByRole("img", {
-      name: "Love heart speech bubble",
-    });
+    const tipCard = screen.getByRole("presentation");
     expect(tipCard).toBeInTheDocument();
     expect(screen.getByText("0330 912 9955")).toBeInTheDocument();
     expect(screen.getByText(/We're open Monday - Friday/)).toBeInTheDocument();

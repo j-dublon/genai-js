@@ -30,10 +30,7 @@ export const NotReadyToJoin = () => {
               {contactInfoHeading}
             </h3>
             <TipCard
-              image={{
-                src: getAssetPath("/images/love.svg"),
-                alt: "Love heart speech bubble",
-              }}
+              image={getAssetPath("/images/love.svg")}
               className="bg-core-white sm:max-w-[505px]"
             >
               <ContactInfo
