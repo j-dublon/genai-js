@@ -1,5 +1,5 @@
 export const paymentConfirmationText = {
-  title: "Pay and Join Cuckoo",
+  title: "Review your info and join",
   accountHolderLabel: "Account holder",
   accountNumberLabel: "Account number",
   addressDetailsLabel: "Your home and installation address",

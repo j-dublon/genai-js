@@ -8,9 +8,13 @@ import { headerText, nextStepPillText } from "./StepNavigationWithBasketProps";
 export const StepNavigationWithBasket = ({
   step,
   totalSteps = 4,
+  hideBasket,
+  hideLabels,
 }: {
   step: number;
   totalSteps?: number;
+  hideBasket?: boolean;
+  hideLabels?: boolean;
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const text = nextStepPillText[step as keyof typeof nextStepPillText];
@@ -18,7 +22,7 @@ export const StepNavigationWithBasket = ({
   return (
     <>
       <SimpleNavBar>
-        <Stepper showLabels={!isDialogOpen} />
+        <Stepper showLabels={!hideLabels && !isDialogOpen} />
         {step <= totalSteps && (
           <p className="block md:hidden text-xs leading-[1.6] font-normal text-ui-grey-500">
             Step <span className="font-semibold">{step}</span> of{" "}
@@ -39,10 +43,12 @@ export const StepNavigationWithBasket = ({
           </div>
         )}
       </SimpleNavBar>
-      <ReviewYourBasket
-        isDialogOpen={isDialogOpen}
-        setIsDialogOpen={setIsDialogOpen}
-      />
+      {!hideBasket && (
+        <ReviewYourBasket
+          isDialogOpen={isDialogOpen}
+          setIsDialogOpen={setIsDialogOpen}
+        />
+      )}
     </>
   );
 };

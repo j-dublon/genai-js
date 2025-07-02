@@ -4,7 +4,7 @@ import { Button } from "@react-component-library/ui";
 import useJoinFlowStore, { StoreBasket } from "@store/useJoinFlowStore";
 import React, { useCallback, useEffect, useState } from "react";
 
-import Stepper from "@/components/Stepper";
+import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
@@ -215,76 +215,77 @@ export const PaymentConfirmation = ({
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <Stepper />
+    <>
+      <StepNavigationWithBasket step={4} hideBasket hideLabels />
+      <div className="container mx-auto px-4 py-8 mt-20">
+        <div className="max-w-xl mx-auto">
+          <div className="bg-core-white p-8 rounded-md">
+            <h1 className="text-2xl font-bold mb-6">{title}</h1>
 
-      <div className="max-w-xl mx-auto">
-        <div className="bg-core-white p-8 rounded-md">
-          <h1 className="text-2xl font-bold mb-6">{title}</h1>
-
-          <PaymentDocuments
-            title="Your Cuckoo Documents"
-            disclaimer="Please read and download the following before joining Cuckoo:"
-            items={documentItems}
-          />
-
-          <p className="text-md font-bold mb-6">{directDebitDetailsTitle}</p>
-
-          <div className="mb-6">
-            <PaymentSummary />
-          </div>
-          <p className="text-md font-bold mb-6">{accountDetailsTitle}</p>
-          <div className="mb-6">
-            <PaymentAccountDetails />
-          </div>
-
-          <p className="text-md font-bold mb-6">{goLiveDetailsTitle}</p>
-          <div className="mb-6">
-            <PaymentGoLiveDetails />
-          </div>
-
-          <div className="mb-6">
-            <AccessibilityRequirements />
-          </div>
-
-          <p
-            className="text-md font-bold mb-6"
-            data-testid="termsAndConditions"
-          >
-            {termsAndConditionsTitle}
-          </p>
-          <div className="mb-6">
-            <PaymentTermsAndConditions
-              onChange={handleTermsChange}
-              initialState={termsState}
+            <PaymentDocuments
+              title="Your Cuckoo Documents"
+              disclaimer="Please read and download the following before joining Cuckoo:"
+              items={documentItems}
             />
-          </div>
 
-          <div className="mt-8">
-            <div className="flex justify-between">
-              <Button
-                onClick={handleBack}
-                tint="white"
-                variant="outline"
-                type="button"
-              >
-                {backButtonText}
-              </Button>
+            <p className="text-md font-bold mb-6">{directDebitDetailsTitle}</p>
 
-              <Button
-                onClick={handleConfirm}
-                tint="yellow"
-                variant="solid"
-                type="button"
-                disabled={!termsAgreed}
-              >
-                {signUpText}
-              </Button>
+            <div className="mb-6">
+              <PaymentSummary />
+            </div>
+            <p className="text-md font-bold mb-6">{accountDetailsTitle}</p>
+            <div className="mb-6">
+              <PaymentAccountDetails />
+            </div>
+
+            <p className="text-md font-bold mb-6">{goLiveDetailsTitle}</p>
+            <div className="mb-6">
+              <PaymentGoLiveDetails />
+            </div>
+
+            <div className="mb-6">
+              <AccessibilityRequirements />
+            </div>
+
+            <p
+              className="text-md font-bold mb-6"
+              data-testid="termsAndConditions"
+            >
+              {termsAndConditionsTitle}
+            </p>
+            <div className="mb-6">
+              <PaymentTermsAndConditions
+                onChange={handleTermsChange}
+                initialState={termsState}
+              />
+            </div>
+
+            <div className="mt-8">
+              <div className="flex justify-between">
+                <Button
+                  onClick={handleBack}
+                  tint="white"
+                  variant="outline"
+                  type="button"
+                >
+                  {backButtonText}
+                </Button>
+
+                <Button
+                  onClick={handleConfirm}
+                  tint="yellow"
+                  variant="solid"
+                  type="button"
+                  disabled={!termsAgreed}
+                >
+                  {signUpText}
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

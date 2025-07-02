@@ -10,7 +10,11 @@ vi.mock("../ReviewYourBasket", () => ({
 }));
 
 vi.mock("../Stepper", () => ({
-  default: () => <div data-testid="stepper">Navigation Mock</div>,
+  default: ({ showLabels }: { showLabels?: boolean }) => (
+    <div data-testid="stepper" data-show-labels={showLabels}>
+      Navigation Mock
+    </div>
+  ),
 }));
 
 vi.mock("@react-component-library/ui", () => ({
@@ -147,5 +151,58 @@ describe("NavAndBasket", () => {
       return element?.textContent === "Step 2 of 5";
     });
     expect(stepText).toBeInTheDocument();
+  });
+
+  describe("hideBasket prop", () => {
+    it("hides ReviewYourBasket when hideBasket is true", () => {
+      render(<StepNavigationWithBasket step={1} hideBasket={true} />);
+
+      expect(
+        screen.queryByTestId("review-your-basket"),
+      ).not.toBeInTheDocument();
+      expect(screen.getByTestId("stepper")).toBeInTheDocument();
+    });
+
+    it("shows ReviewYourBasket when hideBasket is false", () => {
+      render(<StepNavigationWithBasket step={1} hideBasket={false} />);
+
+      expect(screen.getByTestId("review-your-basket")).toBeInTheDocument();
+    });
+
+    it("shows ReviewYourBasket by default when hideBasket is not provided", () => {
+      render(<StepNavigationWithBasket step={1} />);
+
+      expect(screen.getByTestId("review-your-basket")).toBeInTheDocument();
+    });
+  });
+
+  describe("hideLabels prop", () => {
+    it("passes showLabels=false to Stepper when hideLabels is true", () => {
+      render(<StepNavigationWithBasket step={1} hideLabels={true} />);
+
+      const stepper = screen.getByTestId("stepper");
+      expect(stepper).toHaveAttribute("data-show-labels", "false");
+    });
+
+    it("passes showLabels=true to Stepper when hideLabels is false", () => {
+      render(<StepNavigationWithBasket step={1} hideLabels={false} />);
+
+      const stepper = screen.getByTestId("stepper");
+      expect(stepper).toHaveAttribute("data-show-labels", "true");
+    });
+
+    it("passes showLabels=true to Stepper by default when hideLabels is not provided", () => {
+      render(<StepNavigationWithBasket step={1} />);
+
+      const stepper = screen.getByTestId("stepper");
+      expect(stepper).toHaveAttribute("data-show-labels", "true");
+    });
+
+    it("always passes showLabels=false when hideLabels is true, regardless of dialog state", () => {
+      render(<StepNavigationWithBasket step={1} hideLabels={true} />);
+
+      const stepper = screen.getByTestId("stepper");
+      expect(stepper).toHaveAttribute("data-show-labels", "false");
+    });
   });
 });
