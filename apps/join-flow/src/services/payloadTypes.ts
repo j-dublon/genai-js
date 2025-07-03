@@ -4,7 +4,7 @@ import {
   Basket,
   CreditCheckExecution,
   EngineerAppointment,
-  QuoteLookup,
+  NewSaleQuoteLookup,
   ReferralSession,
   SwitchMatchLookup,
   VulnerabilityAndAccessibility,
@@ -17,7 +17,7 @@ export type GenericSyncAsyncResponse =
   | AffiliateSession
   | EngineerAppointment
   | SwitchMatchLookup
-  | QuoteLookup
+  | NewSaleQuoteLookup
   | ReferralSession;
 
 export type ResponseStates = NonNullable<
@@ -140,14 +140,16 @@ export type ReferralSessionInputs = Omit<
 
 export type QuoteLookupSuccess = {
   documentID: string;
-  response: NonNullable<NonNullable<QuoteLookup["outputs"]>["apiSuccess"]>;
+  response: NonNullable<
+    NonNullable<NewSaleQuoteLookup["outputs"]>["apiSuccess"]
+  >;
 };
 export type QuoteLookupErrors = {
   documentID: string;
-  errors: NonNullable<NonNullable<QuoteLookup["outputs"]>["apiErrors"]>;
+  errors: NonNullable<NonNullable<NewSaleQuoteLookup["outputs"]>["apiErrors"]>;
 };
 export type QuoteLookupInputs = Omit<
-  NonNullable<NonNullable<QuoteLookup["inputs"]>>,
+  NonNullable<NonNullable<NewSaleQuoteLookup["inputs"]>>,
   "requestProcessingType"
 >;
 

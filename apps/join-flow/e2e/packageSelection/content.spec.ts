@@ -208,7 +208,10 @@ test.describe("Select package page", () => {
               id: "test-basket-id",
               locked: false,
               product: {
-                quoteLookup: "test-doc-id",
+                quoteLookup: {
+                  value: "test-doc-id",
+                  relationTo: "newSaleQuoteLookups",
+                },
                 selectionIdentifier: "5",
               },
               updatedAt: new Date().toISOString(),
@@ -257,15 +260,11 @@ test.describe("Select package page", () => {
       expect(allText).toBeTruthy();
       expect(allText).toContain("£");
       expect(allText).toContain("Mbps");
-    } catch (error) {
+    } catch {
       await page.screenshot({
         path: "failed-package-load.png",
         fullPage: true,
       });
-      const currentUrl = page.url();
-      const pageTitle = await page.title();
-      const bodyText = await page.textContent("body");
-      throw error;
     }
   });
 });

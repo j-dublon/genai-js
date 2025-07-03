@@ -140,7 +140,10 @@ export const ChooseYourPackage = () => {
         const result = await createBasket({
           product: {
             selectionIdentifier: selectedStorePackage.selectionIdentifier,
-            quoteLookup: quoteResponse.documentID,
+            quoteLookup: {
+              relationTo: "newSaleQuoteLookups",
+              value: quoteResponse.documentID,
+            },
           },
         });
 

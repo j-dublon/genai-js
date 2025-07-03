@@ -100,7 +100,7 @@ export const GoLiveDate = () => {
     const fetchAppointments = async () => {
       try {
         const response = await getEngineerAppointments(
-          basket?.product?.quoteLookup as string,
+          basket?.product?.quoteLookup?.value as string,
         );
         if (response.error) {
           console.error("Failed to fetch engineer appointments");
@@ -119,7 +119,7 @@ export const GoLiveDate = () => {
     };
 
     fetchAppointments();
-  }, [basket?.product?.quoteLookup]);
+  }, [basket?.product?.quoteLookup?.value]);
 
   useEffect(() => {
     const getTimeSlotsForDate = (
@@ -177,7 +177,7 @@ export const GoLiveDate = () => {
     router.push("/join-flow/payment-details");
   };
 
-  if (!basket?.product?.quoteLookup) {
+  if (!basket?.product?.quoteLookup?.value) {
     console.error("no quoting code available");
     return;
   }

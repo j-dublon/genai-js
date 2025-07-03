@@ -7,7 +7,9 @@ import { QuoteLookupSuccess } from "@/services/payloadTypes";
 
 import {
   Affiliate,
-  QuoteLookup,
+  NewSaleQuoteLookup,
+  RegradeQuoteLookup,
+  RenewalQuoteLookup,
   SwitchMatchLookup,
   VulnerabilityAndAccessibility,
 } from "../../payload-types";
@@ -254,7 +256,19 @@ export type StoreBasket = {
     marketingConsent?: boolean | null;
   };
   product?: {
-    quoteLookup?: (string | null) | QuoteLookup;
+    quoteLookup?:
+      | ({
+          relationTo: "newSaleQuoteLookups";
+          value: string | NewSaleQuoteLookup;
+        } | null)
+      | ({
+          relationTo: "regradeQuoteLookups";
+          value: string | RegradeQuoteLookup;
+        } | null)
+      | ({
+          relationTo: "renewalQuoteLookups";
+          value: string | RenewalQuoteLookup;
+        } | null);
     selectionIdentifier?: string | null;
     extras?:
       | { family: string; selectionIdentifier: string; id?: string | null }[]

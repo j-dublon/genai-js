@@ -125,7 +125,11 @@ describe("GoLiveDate component", () => {
       goLiveDetails: {},
       setCurrentStep: mockSetCurrentStep,
       switchingDetails: {},
-      basket: { product: { quoteLookup: "quote123" } },
+      basket: {
+        product: {
+          quoteLookup: { value: "quote123", relationTo: "newSaleQuoteLookups" },
+        },
+      },
     });
 
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({

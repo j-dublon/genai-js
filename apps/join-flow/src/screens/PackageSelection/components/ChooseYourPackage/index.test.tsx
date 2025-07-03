@@ -366,7 +366,7 @@ describe("ChooseYourPackage", () => {
     id: "basket-123",
     locked: false,
     product: {
-      quoteLookup: "quote-123",
+      quoteLookup: { value: "quote-123", relationTo: "newSaleQuoteLookups" },
       selectionIdentifier: "product-selection-123",
     },
     updatedAt: "2025-01-01T00:00:00.000Z",
@@ -419,7 +419,10 @@ describe("ChooseYourPackage", () => {
       expect(mockCreateBasket).toHaveBeenCalledWith({
         product: {
           selectionIdentifier: expect.any(String),
-          quoteLookup: "quote-123",
+          quoteLookup: {
+            value: "quote-123",
+            relationTo: "newSaleQuoteLookups",
+          },
         },
       });
     });

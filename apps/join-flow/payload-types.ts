@@ -73,7 +73,7 @@ export interface Config {
     baskets: Basket;
     addressLookups: AddressLookup;
     affiliateSessions: AffiliateSession;
-    quoteLookups: QuoteLookup;
+    newSaleQuoteLookups: NewSaleQuoteLookup;
     engineerAppointments: EngineerAppointment;
     emailValidators: EmailValidator;
     creditCheckExecutions: CreditCheckExecution;
@@ -81,12 +81,14 @@ export interface Config {
     referralSessions: ReferralSession;
     vulnerabilityAndAccessibility: VulnerabilityAndAccessibility;
     renewalQuoteLookups: RenewalQuoteLookup;
-    renewalQuoteSelections: RenewalQuoteSelection;
+    regradeQuoteLookups: RegradeQuoteLookup;
     affiliates: Affiliate;
     renewals: Renewal;
     products: Product;
     promotions: Promotion;
     giftcardCampaigns: GiftcardCampaign;
+    Discriminators: Discriminator;
+    regrades: Regrade;
     media: Media;
     pages: Page;
     postcodeRecords: PostcodeRecord;
@@ -124,7 +126,9 @@ export interface Config {
     affiliateSessions:
       | AffiliateSessionsSelect<false>
       | AffiliateSessionsSelect<true>;
-    quoteLookups: QuoteLookupsSelect<false> | QuoteLookupsSelect<true>;
+    newSaleQuoteLookups:
+      | NewSaleQuoteLookupsSelect<false>
+      | NewSaleQuoteLookupsSelect<true>;
     engineerAppointments:
       | EngineerAppointmentsSelect<false>
       | EngineerAppointmentsSelect<true>;
@@ -144,9 +148,9 @@ export interface Config {
     renewalQuoteLookups:
       | RenewalQuoteLookupsSelect<false>
       | RenewalQuoteLookupsSelect<true>;
-    renewalQuoteSelections:
-      | RenewalQuoteSelectionsSelect<false>
-      | RenewalQuoteSelectionsSelect<true>;
+    regradeQuoteLookups:
+      | RegradeQuoteLookupsSelect<false>
+      | RegradeQuoteLookupsSelect<true>;
     affiliates: AffiliatesSelect<false> | AffiliatesSelect<true>;
     renewals: RenewalsSelect<false> | RenewalsSelect<true>;
     products: ProductsSelect<false> | ProductsSelect<true>;
@@ -154,6 +158,8 @@ export interface Config {
     giftcardCampaigns:
       | GiftcardCampaignsSelect<false>
       | GiftcardCampaignsSelect<true>;
+    Discriminators: DiscriminatorsSelect<false> | DiscriminatorsSelect<true>;
+    regrades: RegradesSelect<false> | RegradesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     postcodeRecords: PostcodeRecordsSelect<false> | PostcodeRecordsSelect<true>;
@@ -255,6 +261,7 @@ export interface UserAuthOperations {
  */
 export interface Order {
   id: string;
+  type: "newSale" | "renewal" | "regrade";
   krakenAccountNumber: string;
   basketData:
     | {
@@ -555,7 +562,19 @@ export interface Basket {
     /**
      * The quote which dictates what products are selectable on this basket
      */
-    quoteLookup?: (string | null) | QuoteLookup;
+    quoteLookup?:
+      | ({
+          relationTo: "newSaleQuoteLookups";
+          value: string | NewSaleQuoteLookup;
+        } | null)
+      | ({
+          relationTo: "regradeQuoteLookups";
+          value: string | RegradeQuoteLookup;
+        } | null)
+      | ({
+          relationTo: "renewalQuoteLookups";
+          value: string | RenewalQuoteLookup;
+        } | null);
     /**
      * The identifier of the item on hte quoteLookup that should be selected as a product for this basket
      */
@@ -679,9 +698,9 @@ export interface Basket {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "quoteLookups".
+ * via the `definition` "newSaleQuoteLookups".
  */
-export interface QuoteLookup {
+export interface NewSaleQuoteLookup {
   id: string;
   inputs: {
     requestProcessingType: "async" | "sync";
@@ -929,13 +948,7 @@ export interface QuoteLookup {
               errorMessage?: string | null;
               id?: string | null;
               blockName?: string | null;
-              blockType: "QuoteLookupNoProductsAvailableForAffiliate";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "QuoteLookupNoProductsAvailableForAffiliateAddress";
+              blockType: "QuoteLookupNoProductsAvailableForDiscriminator";
             }
           | {
               errorMessage?: string | null;
@@ -1151,6 +1164,20 @@ export interface Affiliate {
    * A date time when the affiliate is no longer valid and anyone landing on the link should not see any offers.
    */
   activeToDateTime: string;
+  discriminator: string | Discriminator;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Discriminators".
+ */
+export interface Discriminator {
+  id: string;
+  /**
+   * The name we, and this CMS, use to identify the discriminator
+   */
+  name: string;
   productConfig: {
     /**
      * The product that will be shown for this config line
@@ -1496,13 +1523,408 @@ export interface AddressLookup {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regradeQuoteLookups".
+ */
+export interface RegradeQuoteLookup {
+  id: string;
+  inputs: {
+    requestProcessingType: "async" | "sync";
+    accountNumber?: string | null;
+  };
+  outputs?: {
+    state?: ("pending" | "success" | "error") | null;
+    apiSuccess?: {
+      quotingCode?: string | null;
+      products?:
+        | {
+            krakenProductCode: string;
+            frontendIdentifier: string;
+            frontendTitle: string;
+            termMonths: number;
+            selectionIdentifier: string;
+            installationRequired: boolean;
+            appliedPromotionUUIDs?:
+              | {
+                  id: string | null;
+                }[]
+              | null;
+            prices: {
+              basePrice: number;
+              discountedPrice: number;
+              annualPriceRise?:
+                | {
+                    price: number;
+                    date: string;
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            speeds: {
+              download: number;
+              upload: number;
+            };
+            extras?:
+              | {
+                  family: string;
+                  availableExtras?:
+                    | {
+                        code: string;
+                        name: string;
+                        description: string;
+                        price: number;
+                        selectionIdentifier: string;
+                        family: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Add any combination of gift cards, promotions, and bill credits - max 2.
+             */
+            offers?:
+              | (
+                  | {
+                      /**
+                       * Select the gift card campaign
+                       */
+                      campaign: string | GiftcardCampaign;
+                      /**
+                       * Value of the gift card
+                       */
+                      value: number;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "giftCardBlock";
+                    }
+                  | {
+                      /**
+                       * Select a promotion
+                       */
+                      promotion: string | Promotion;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "promotionBlock";
+                    }
+                  | {
+                      /**
+                       * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
+                       */
+                      value: number;
+                      /**
+                       * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
+                       */
+                      isDiscretionary?: boolean | null;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "billCreditBlock";
+                    }
+                )[]
+              | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    apiErrors?:
+      | (
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1124CredentialsExpired";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1111KrakenUnauthorized";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "MyAccountSuspended";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RegradeQuoteLookupResultPollingTimeout";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RegradeQuoteLookupNoProductsAvailableForDiscriminator";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RegradeQuoteLookupKrakenFormatError";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "UnknownError";
+            }
+        )[]
+      | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewalQuoteLookups".
+ */
+export interface RenewalQuoteLookup {
+  id: string;
+  inputs: {
+    requestProcessingType: "async" | "sync";
+    accountNumber?: string | null;
+  };
+  outputs?: {
+    state?: ("pending" | "success" | "error") | null;
+    apiSuccess?: {
+      newContractStartDate?: string | null;
+      quotingCode?: string | null;
+      products?:
+        | {
+            krakenProductCode: string;
+            frontendIdentifier: string;
+            frontendTitle: string;
+            termMonths: number;
+            selectionIdentifier: string;
+            installationRequired: boolean;
+            appliedPromotionUUIDs?:
+              | {
+                  id: string | null;
+                }[]
+              | null;
+            prices: {
+              basePrice: number;
+              discountedPrice: number;
+              annualPriceRise?:
+                | {
+                    price: number;
+                    date: string;
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            speeds: {
+              download: number;
+              upload: number;
+            };
+            extras?:
+              | {
+                  family: string;
+                  availableExtras?:
+                    | {
+                        code: string;
+                        name: string;
+                        description: string;
+                        price: number;
+                        selectionIdentifier: string;
+                        family: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Add any combination of gift cards, promotions, and bill credits - max 2.
+             */
+            offers?:
+              | (
+                  | {
+                      /**
+                       * Select the gift card campaign
+                       */
+                      campaign: string | GiftcardCampaign;
+                      /**
+                       * Value of the gift card
+                       */
+                      value: number;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "giftCardBlock";
+                    }
+                  | {
+                      /**
+                       * Select a promotion
+                       */
+                      promotion: string | Promotion;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "promotionBlock";
+                    }
+                  | {
+                      /**
+                       * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
+                       */
+                      value: number;
+                      /**
+                       * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
+                       */
+                      isDiscretionary?: boolean | null;
+                      conditions?:
+                        | (
+                            | {
+                                /**
+                                 * The age of the account in days, after this goes by, the reward can trigger
+                                 */
+                                age: number;
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountAgeBlock";
+                              }
+                            | {
+                                id?: string | null;
+                                blockName?: string | null;
+                                blockType: "rewardConditionsAccountNotInDebtBlock";
+                              }
+                          )[]
+                        | null;
+                      id?: string | null;
+                      blockName?: string | null;
+                      blockType: "billCreditBlock";
+                    }
+                )[]
+              | null;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    apiErrors?:
+      | (
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1124CredentialsExpired";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "KT-CT-1111KrakenUnauthorized";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "MyAccountSuspended";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupKrakenFormatError";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupResultPollingTimeout";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupNoProductsAvailableForDiscriminator";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "UnknownError";
+            }
+        )[]
+      | null;
+    apiTraceIDs?:
+      | {
+          value?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "engineerAppointments".
  */
 export interface EngineerAppointment {
   id: string;
   inputs: {
     requestProcessingType: "async" | "sync";
-    quoteLookup: string | QuoteLookup;
+    quoteLookup: string | NewSaleQuoteLookup;
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
@@ -2027,286 +2449,6 @@ export interface VulnerabilityAndAccessibility {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "renewalQuoteLookups".
- */
-export interface RenewalQuoteLookup {
-  id: string;
-  inputs: {
-    requestProcessingType: "async" | "sync";
-    accountNumber?: string | null;
-  };
-  outputs?: {
-    state?: ("pending" | "success" | "error") | null;
-    apiSuccess?: {
-      quotingCode?: string | null;
-      products?:
-        | {
-            krakenProductCode: string;
-            frontendIdentifier: string;
-            frontendTitle: string;
-            termMonths: number;
-            selectionIdentifier: string;
-            installationRequired: boolean;
-            appliedPromotionUUIDs?:
-              | {
-                  id: string | null;
-                }[]
-              | null;
-            prices: {
-              basePrice: number;
-              discountedPrice: number;
-              annualPriceRise?:
-                | {
-                    price: number;
-                    date: string;
-                    id?: string | null;
-                  }[]
-                | null;
-            };
-            speeds: {
-              download: number;
-              upload: number;
-            };
-            /**
-             * Add any combination of gift cards, promotions, and bill credits - max 2.
-             */
-            offers?:
-              | (
-                  | {
-                      /**
-                       * Select the gift card campaign
-                       */
-                      campaign: string | GiftcardCampaign;
-                      /**
-                       * Value of the gift card
-                       */
-                      value: number;
-                      conditions?:
-                        | (
-                            | {
-                                /**
-                                 * The age of the account in days, after this goes by, the reward can trigger
-                                 */
-                                age: number;
-                                id?: string | null;
-                                blockName?: string | null;
-                                blockType: "rewardConditionsAccountAgeBlock";
-                              }
-                            | {
-                                id?: string | null;
-                                blockName?: string | null;
-                                blockType: "rewardConditionsAccountNotInDebtBlock";
-                              }
-                          )[]
-                        | null;
-                      id?: string | null;
-                      blockName?: string | null;
-                      blockType: "giftCardBlock";
-                    }
-                  | {
-                      /**
-                       * Select a promotion
-                       */
-                      promotion: string | Promotion;
-                      id?: string | null;
-                      blockName?: string | null;
-                      blockType: "promotionBlock";
-                    }
-                  | {
-                      /**
-                       * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
-                       */
-                      value: number;
-                      /**
-                       * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
-                       */
-                      isDiscretionary?: boolean | null;
-                      conditions?:
-                        | (
-                            | {
-                                /**
-                                 * The age of the account in days, after this goes by, the reward can trigger
-                                 */
-                                age: number;
-                                id?: string | null;
-                                blockName?: string | null;
-                                blockType: "rewardConditionsAccountAgeBlock";
-                              }
-                            | {
-                                id?: string | null;
-                                blockName?: string | null;
-                                blockType: "rewardConditionsAccountNotInDebtBlock";
-                              }
-                          )[]
-                        | null;
-                      id?: string | null;
-                      blockName?: string | null;
-                      blockType: "billCreditBlock";
-                    }
-                )[]
-              | null;
-            id?: string | null;
-          }[]
-        | null;
-    };
-    apiErrors?:
-      | (
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "KT-CT-1124CredentialsExpired";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "KT-CT-1111KrakenUnauthorized";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "MyAccountSuspended";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "RenewalQuoteLookupKrakenFormatError";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "RenewalQuoteLookupResultPollingTimeout";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "RenewalQuoteLookupNoProductsAvailableForAffiliate";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "UnknownError";
-            }
-        )[]
-      | null;
-    apiTraceIDs?:
-      | {
-          value?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "renewalQuoteSelections".
- */
-export interface RenewalQuoteSelection {
-  id: string;
-  inputs: {
-    requestProcessingType: "async" | "sync";
-    /**
-     * The renewalQuoteLookup item that you want to pick products from
-     */
-    renewalQuoteLookup: string | RenewalQuoteLookup;
-    /**
-     * The selectionIdentifier for the product row on the renewalQuoteLookup
-     */
-    renewalQuoteLookupSelectionIdentifier: string;
-  };
-  outputs?: {
-    state?: ("pending" | "success" | "error") | null;
-    apiSuccess?: {
-      extras?:
-        | {
-            family: string;
-            availableExtras?:
-              | {
-                  code: string;
-                  name: string;
-                  description: string;
-                  price: number;
-                  selectionIdentifier: string;
-                  family: string;
-                  id?: string | null;
-                }[]
-              | null;
-            id?: string | null;
-          }[]
-        | null;
-    };
-    apiErrors?:
-      | (
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "KT-CT-1124CredentialsExpired";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "KT-CT-1111KrakenUnauthorized";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "MyAccountSuspended";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "RenewalQuoteSelectionCouldNotLoadRenewalQuoteLookup";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "RenewalQuoteSelectionCouldNotFindProductWithSelectedSelectionIdentifier";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "RenewalQuoteSelectionResultPollingTimeout";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "RenewalQuoteSelectionsKrakenFormatError";
-            }
-          | {
-              errorMessage?: string | null;
-              id?: string | null;
-              blockName?: string | null;
-              blockType: "UnknownError";
-            }
-        )[]
-      | null;
-    apiTraceIDs?:
-      | {
-          value?: string | null;
-          id?: string | null;
-        }[]
-      | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "renewals".
  */
 export interface Renewal {
@@ -2323,181 +2465,29 @@ export interface Renewal {
    * This is a link to the privacy policy
    */
   privacyPolicyLink: string;
-  productConfig: {
-    /**
-     * The product that will be shown for this config line
-     */
-    products: (string | Product)[];
-    /**
-     * These are offers that are applied based on specific postcodes. If multiple are specified and an address qualifies for more than 1, the top one is used. Order matters. Think of these are offers ontop of the base price if you win the postcode lottery based on this config. Note that if an address qualifies for this, and there is a main offer of the same type (i.e. giftcard on postcode, giftcard on main offer) the postcode based one will always win.
-     */
-    postcodeOffers?:
-      | {
-          postcodeList: string | PostcodeList;
-          /**
-           * Add any combination of gift cards, promotions, and bill credits - max 2.
-           */
-          offers: (
-            | {
-                /**
-                 * Select the gift card campaign
-                 */
-                campaign: string | GiftcardCampaign;
-                /**
-                 * Value of the gift card
-                 */
-                value: number;
-                conditions?:
-                  | (
-                      | {
-                          /**
-                           * The age of the account in days, after this goes by, the reward can trigger
-                           */
-                          age: number;
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountAgeBlock";
-                        }
-                      | {
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountNotInDebtBlock";
-                        }
-                    )[]
-                  | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: "giftCardBlock";
-              }
-            | {
-                /**
-                 * Select a promotion
-                 */
-                promotion: string | Promotion;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: "promotionBlock";
-              }
-            | {
-                /**
-                 * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
-                 */
-                value: number;
-                /**
-                 * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
-                 */
-                isDiscretionary?: boolean | null;
-                conditions?:
-                  | (
-                      | {
-                          /**
-                           * The age of the account in days, after this goes by, the reward can trigger
-                           */
-                          age: number;
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountAgeBlock";
-                        }
-                      | {
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountNotInDebtBlock";
-                        }
-                    )[]
-                  | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: "billCreditBlock";
-              }
-          )[];
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * These are offers that are applied to all products in this context, regardless of postcode..
-     */
-    mainOffers?: {
-      /**
-       * Add any combination of gift cards, promotions, and bill credits - max 2.
-       */
-      offers?:
-        | (
-            | {
-                /**
-                 * Select the gift card campaign
-                 */
-                campaign: string | GiftcardCampaign;
-                /**
-                 * Value of the gift card
-                 */
-                value: number;
-                conditions?:
-                  | (
-                      | {
-                          /**
-                           * The age of the account in days, after this goes by, the reward can trigger
-                           */
-                          age: number;
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountAgeBlock";
-                        }
-                      | {
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountNotInDebtBlock";
-                        }
-                    )[]
-                  | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: "giftCardBlock";
-              }
-            | {
-                /**
-                 * Select a promotion
-                 */
-                promotion: string | Promotion;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: "promotionBlock";
-              }
-            | {
-                /**
-                 * Amount of bill credit to apply, or the upper limit to allow if isDiscretionary is true
-                 */
-                value: number;
-                /**
-                 * NOTE: this should only be true on sales-agent affiliates NOT public affiliates - i.e. this is for door sales, phone agents etc. If this is true, the ammount is not auto applied and the sales agent is allowed to enter a value up to the amount specified in value field. If this is false, this value is auto applied to all transactions.
-                 */
-                isDiscretionary?: boolean | null;
-                conditions?:
-                  | (
-                      | {
-                          /**
-                           * The age of the account in days, after this goes by, the reward can trigger
-                           */
-                          age: number;
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountAgeBlock";
-                        }
-                      | {
-                          id?: string | null;
-                          blockName?: string | null;
-                          blockType: "rewardConditionsAccountNotInDebtBlock";
-                        }
-                    )[]
-                  | null;
-                id?: string | null;
-                blockName?: string | null;
-                blockType: "billCreditBlock";
-              }
-          )[]
-        | null;
-    };
-    id?: string | null;
-  }[];
+  discriminator: string | Discriminator;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "regrades".
+ */
+export interface Regrade {
+  id: string;
+  /**
+   * The name we, and this CMS, use to identify the regrade
+   */
+  name: string;
+  /**
+   * This is a link to the Ts and Cs to be used in the join flow
+   */
+  termsAndConditionsLink: string;
+  /**
+   * This is a link to the privacy policy
+   */
+  privacyPolicyLink: string;
+  discriminator: string | Discriminator;
   updatedAt: string;
   createdAt: string;
 }
@@ -2961,15 +2951,28 @@ export interface ApiLog {
  */
 export interface ApiTest {
   id: string;
-  input:
-    | {
-        [k: string]: unknown;
-      }
-    | unknown[]
-    | string
-    | number
-    | boolean
-    | null;
+  testType?: ("newSale" | "renewal" | "regrade") | null;
+  newSale: {
+    data:
+      | {
+          [k: string]: unknown;
+        }
+      | unknown[]
+      | string
+      | number
+      | boolean
+      | null;
+  };
+  renewal?: {
+    token?: string | null;
+    accountNumber?: string | null;
+    selectionIdentifier?: string | null;
+  };
+  regrade?: {
+    token?: string | null;
+    accountNumber?: string | null;
+    selectionIdentifier?: string | null;
+  };
   steps?:
     | {
         value?: string | null;
@@ -3345,8 +3348,8 @@ export interface PayloadLockedDocument {
         value: string | AffiliateSession;
       } | null)
     | ({
-        relationTo: "quoteLookups";
-        value: string | QuoteLookup;
+        relationTo: "newSaleQuoteLookups";
+        value: string | NewSaleQuoteLookup;
       } | null)
     | ({
         relationTo: "engineerAppointments";
@@ -3377,8 +3380,8 @@ export interface PayloadLockedDocument {
         value: string | RenewalQuoteLookup;
       } | null)
     | ({
-        relationTo: "renewalQuoteSelections";
-        value: string | RenewalQuoteSelection;
+        relationTo: "regradeQuoteLookups";
+        value: string | RegradeQuoteLookup;
       } | null)
     | ({
         relationTo: "affiliates";
@@ -3399,6 +3402,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: "giftcardCampaigns";
         value: string | GiftcardCampaign;
+      } | null)
+    | ({
+        relationTo: "Discriminators";
+        value: string | Discriminator;
+      } | null)
+    | ({
+        relationTo: "regrades";
+        value: string | Regrade;
       } | null)
     | ({
         relationTo: "media";
@@ -3523,6 +3534,7 @@ export interface PayloadMigration {
  * via the `definition` "orders_select".
  */
 export interface OrdersSelect<T extends boolean = true> {
+  type?: T;
   krakenAccountNumber?: T;
   basketData?: T;
   softCreditCheck?: T;
@@ -3919,9 +3931,9 @@ export interface AffiliateSessionsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "quoteLookups_select".
+ * via the `definition` "newSaleQuoteLookups_select".
  */
-export interface QuoteLookupsSelect<T extends boolean = true> {
+export interface NewSaleQuoteLookupsSelect<T extends boolean = true> {
   inputs?:
     | T
     | {
@@ -4161,14 +4173,7 @@ export interface QuoteLookupsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
-              QuoteLookupNoProductsAvailableForAffiliate?:
-                | T
-                | {
-                    errorMessage?: T;
-                    id?: T;
-                    blockName?: T;
-                  };
-              QuoteLookupNoProductsAvailableForAffiliateAddress?:
+              QuoteLookupNoProductsAvailableForDiscriminator?:
                 | T
                 | {
                     errorMessage?: T;
@@ -4963,6 +4968,7 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
         apiSuccess?:
           | T
           | {
+              newContractStartDate?: T;
               quotingCode?: T;
               products?:
                 | T
@@ -4996,6 +5002,23 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
                       | {
                           download?: T;
                           upload?: T;
+                        };
+                    extras?:
+                      | T
+                      | {
+                          family?: T;
+                          availableExtras?:
+                            | T
+                            | {
+                                code?: T;
+                                name?: T;
+                                description?: T;
+                                price?: T;
+                                selectionIdentifier?: T;
+                                family?: T;
+                                id?: T;
+                              };
+                          id?: T;
                         };
                     offers?:
                       | T
@@ -5099,7 +5122,7 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
-              RenewalQuoteLookupNoProductsAvailableForAffiliate?:
+              RenewalQuoteLookupNoProductsAvailableForDiscriminator?:
                 | T
                 | {
                     errorMessage?: T;
@@ -5126,15 +5149,14 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "renewalQuoteSelections_select".
+ * via the `definition` "regradeQuoteLookups_select".
  */
-export interface RenewalQuoteSelectionsSelect<T extends boolean = true> {
+export interface RegradeQuoteLookupsSelect<T extends boolean = true> {
   inputs?:
     | T
     | {
         requestProcessingType?: T;
-        renewalQuoteLookup?: T;
-        renewalQuoteLookupSelectionIdentifier?: T;
+        accountNumber?: T;
       };
   outputs?:
     | T
@@ -5143,20 +5165,117 @@ export interface RenewalQuoteSelectionsSelect<T extends boolean = true> {
         apiSuccess?:
           | T
           | {
-              extras?:
+              quotingCode?: T;
+              products?:
                 | T
                 | {
-                    family?: T;
-                    availableExtras?:
+                    krakenProductCode?: T;
+                    frontendIdentifier?: T;
+                    frontendTitle?: T;
+                    termMonths?: T;
+                    selectionIdentifier?: T;
+                    installationRequired?: T;
+                    appliedPromotionUUIDs?:
                       | T
                       | {
-                          code?: T;
-                          name?: T;
-                          description?: T;
-                          price?: T;
-                          selectionIdentifier?: T;
-                          family?: T;
                           id?: T;
+                        };
+                    prices?:
+                      | T
+                      | {
+                          basePrice?: T;
+                          discountedPrice?: T;
+                          annualPriceRise?:
+                            | T
+                            | {
+                                price?: T;
+                                date?: T;
+                                id?: T;
+                              };
+                        };
+                    speeds?:
+                      | T
+                      | {
+                          download?: T;
+                          upload?: T;
+                        };
+                    extras?:
+                      | T
+                      | {
+                          family?: T;
+                          availableExtras?:
+                            | T
+                            | {
+                                code?: T;
+                                name?: T;
+                                description?: T;
+                                price?: T;
+                                selectionIdentifier?: T;
+                                family?: T;
+                                id?: T;
+                              };
+                          id?: T;
+                        };
+                    offers?:
+                      | T
+                      | {
+                          giftCardBlock?:
+                            | T
+                            | {
+                                campaign?: T;
+                                value?: T;
+                                conditions?:
+                                  | T
+                                  | {
+                                      rewardConditionsAccountAgeBlock?:
+                                        | T
+                                        | {
+                                            age?: T;
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      rewardConditionsAccountNotInDebtBlock?:
+                                        | T
+                                        | {
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                    };
+                                id?: T;
+                                blockName?: T;
+                              };
+                          promotionBlock?:
+                            | T
+                            | {
+                                promotion?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                          billCreditBlock?:
+                            | T
+                            | {
+                                value?: T;
+                                isDiscretionary?: T;
+                                conditions?:
+                                  | T
+                                  | {
+                                      rewardConditionsAccountAgeBlock?:
+                                        | T
+                                        | {
+                                            age?: T;
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                      rewardConditionsAccountNotInDebtBlock?:
+                                        | T
+                                        | {
+                                            id?: T;
+                                            blockName?: T;
+                                          };
+                                    };
+                                id?: T;
+                                blockName?: T;
+                              };
                         };
                     id?: T;
                   };
@@ -5185,28 +5304,21 @@ export interface RenewalQuoteSelectionsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
-              RenewalQuoteSelectionCouldNotLoadRenewalQuoteLookup?:
+              RegradeQuoteLookupResultPollingTimeout?:
                 | T
                 | {
                     errorMessage?: T;
                     id?: T;
                     blockName?: T;
                   };
-              RenewalQuoteSelectionCouldNotFindProductWithSelectedSelectionIdentifier?:
+              RegradeQuoteLookupNoProductsAvailableForDiscriminator?:
                 | T
                 | {
                     errorMessage?: T;
                     id?: T;
                     blockName?: T;
                   };
-              RenewalQuoteSelectionResultPollingTimeout?:
-                | T
-                | {
-                    errorMessage?: T;
-                    id?: T;
-                    blockName?: T;
-                  };
-              RenewalQuoteSelectionsKrakenFormatError?:
+              RegradeQuoteLookupKrakenFormatError?:
                 | T
                 | {
                     errorMessage?: T;
@@ -5258,6 +5370,86 @@ export interface AffiliatesSelect<T extends boolean = true> {
   active?: T;
   activeFromDateTime?: T;
   activeToDateTime?: T;
+  discriminator?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "renewals_select".
+ */
+export interface RenewalsSelect<T extends boolean = true> {
+  name?: T;
+  termsAndConditionsLink?: T;
+  privacyPolicyLink?: T;
+  discriminator?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  frontendIdentifier?: T;
+  frontendTitle?: T;
+  krakenProductCodeFragment?: T;
+  term?: T;
+  speeds?:
+    | T
+    | {
+        upload?: T;
+        download?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "promotions_select".
+ */
+export interface PromotionsSelect<T extends boolean = true> {
+  name?: T;
+  krakenPromotionCode?: T;
+  term?: T;
+  value?:
+    | T
+    | {
+        percentageBased?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+              blockName?: T;
+            };
+        fixedValue?:
+          | T
+          | {
+              value?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "giftcardCampaigns_select".
+ */
+export interface GiftcardCampaignsSelect<T extends boolean = true> {
+  name?: T;
+  campaignIdentifier?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Discriminators_select".
+ */
+export interface DiscriminatorsSelect<T extends boolean = true> {
+  name?: T;
   productConfig?:
     | T
     | {
@@ -5407,208 +5599,13 @@ export interface AffiliatesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "renewals_select".
+ * via the `definition` "regrades_select".
  */
-export interface RenewalsSelect<T extends boolean = true> {
+export interface RegradesSelect<T extends boolean = true> {
   name?: T;
   termsAndConditionsLink?: T;
   privacyPolicyLink?: T;
-  productConfig?:
-    | T
-    | {
-        products?: T;
-        postcodeOffers?:
-          | T
-          | {
-              postcodeList?: T;
-              offers?:
-                | T
-                | {
-                    giftCardBlock?:
-                      | T
-                      | {
-                          campaign?: T;
-                          value?: T;
-                          conditions?:
-                            | T
-                            | {
-                                rewardConditionsAccountAgeBlock?:
-                                  | T
-                                  | {
-                                      age?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                rewardConditionsAccountNotInDebtBlock?:
-                                  | T
-                                  | {
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    promotionBlock?:
-                      | T
-                      | {
-                          promotion?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    billCreditBlock?:
-                      | T
-                      | {
-                          value?: T;
-                          isDiscretionary?: T;
-                          conditions?:
-                            | T
-                            | {
-                                rewardConditionsAccountAgeBlock?:
-                                  | T
-                                  | {
-                                      age?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                rewardConditionsAccountNotInDebtBlock?:
-                                  | T
-                                  | {
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                  };
-              id?: T;
-            };
-        mainOffers?:
-          | T
-          | {
-              offers?:
-                | T
-                | {
-                    giftCardBlock?:
-                      | T
-                      | {
-                          campaign?: T;
-                          value?: T;
-                          conditions?:
-                            | T
-                            | {
-                                rewardConditionsAccountAgeBlock?:
-                                  | T
-                                  | {
-                                      age?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                rewardConditionsAccountNotInDebtBlock?:
-                                  | T
-                                  | {
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                    promotionBlock?:
-                      | T
-                      | {
-                          promotion?: T;
-                          id?: T;
-                          blockName?: T;
-                        };
-                    billCreditBlock?:
-                      | T
-                      | {
-                          value?: T;
-                          isDiscretionary?: T;
-                          conditions?:
-                            | T
-                            | {
-                                rewardConditionsAccountAgeBlock?:
-                                  | T
-                                  | {
-                                      age?: T;
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                                rewardConditionsAccountNotInDebtBlock?:
-                                  | T
-                                  | {
-                                      id?: T;
-                                      blockName?: T;
-                                    };
-                              };
-                          id?: T;
-                          blockName?: T;
-                        };
-                  };
-            };
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "products_select".
- */
-export interface ProductsSelect<T extends boolean = true> {
-  name?: T;
-  frontendIdentifier?: T;
-  frontendTitle?: T;
-  krakenProductCodeFragment?: T;
-  term?: T;
-  speeds?:
-    | T
-    | {
-        upload?: T;
-        download?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "promotions_select".
- */
-export interface PromotionsSelect<T extends boolean = true> {
-  name?: T;
-  krakenPromotionCode?: T;
-  term?: T;
-  value?:
-    | T
-    | {
-        percentageBased?:
-          | T
-          | {
-              value?: T;
-              id?: T;
-              blockName?: T;
-            };
-        fixedValue?:
-          | T
-          | {
-              value?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "giftcardCampaigns_select".
- */
-export interface GiftcardCampaignsSelect<T extends boolean = true> {
-  name?: T;
-  campaignIdentifier?: T;
+  discriminator?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -6012,7 +6009,26 @@ export interface ApiLogsSelect<T extends boolean = true> {
  * via the `definition` "apiTests_select".
  */
 export interface ApiTestsSelect<T extends boolean = true> {
-  input?: T;
+  testType?: T;
+  newSale?:
+    | T
+    | {
+        data?: T;
+      };
+  renewal?:
+    | T
+    | {
+        token?: T;
+        accountNumber?: T;
+        selectionIdentifier?: T;
+      };
+  regrade?:
+    | T
+    | {
+        token?: T;
+        accountNumber?: T;
+        selectionIdentifier?: T;
+      };
   steps?:
     | T
     | {
@@ -6225,6 +6241,7 @@ export interface GeneralConfig {
   id: string;
   defaultAffiliate: string | Affiliate;
   defaultRenewal: string | Renewal;
+  defaultRegrade: string | Regrade;
   testing?: {
     /**
      * If set, this code can be used in the email validation step and will always pass validation, this probably should not have a value in production
@@ -6234,6 +6251,15 @@ export interface GeneralConfig {
      * Any address in a postcode in this list will always fail credit check regardless of the actual results the API comes back with. Note the credit check still runs, we just replace results with failure.
      */
     alwaysFailCreditCheckPostcodes?:
+      | {
+          postcode?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Any address in a postcode in this list will always pass credit check regardless of the actual results the API comes back with. Note the credit check still runs, we just replace results with failure.
+     */
+    alwaysPassCreditCheckPostcodes?:
       | {
           postcode?: string | null;
           id?: string | null;
@@ -6411,7 +6437,7 @@ export interface GeneralConfig {
        */
       pollIntervalMs: number;
     };
-    renewalQuoteSelection: {
+    regradeQuote: {
       /**
        * This is the time, in miliseconds, we wait before we timeout polling.
        */
@@ -6572,11 +6598,18 @@ export interface OSSEvent {
 export interface GeneralConfigSelect<T extends boolean = true> {
   defaultAffiliate?: T;
   defaultRenewal?: T;
+  defaultRegrade?: T;
   testing?:
     | T
     | {
         alwaysValidEmailCode?: T;
         alwaysFailCreditCheckPostcodes?:
+          | T
+          | {
+              postcode?: T;
+              id?: T;
+            };
+        alwaysPassCreditCheckPostcodes?:
           | T
           | {
               postcode?: T;
@@ -6752,7 +6785,7 @@ export interface GeneralConfigSelect<T extends boolean = true> {
               pollTimeoutMs?: T;
               pollIntervalMs?: T;
             };
-        renewalQuoteSelection?:
+        regradeQuote?:
           | T
           | {
               pollTimeoutMs?: T;

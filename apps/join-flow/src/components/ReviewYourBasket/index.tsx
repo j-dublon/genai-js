@@ -135,7 +135,10 @@ export const ReviewYourBasket = ({
 
         const result = await updateBasket(basket.id, {
           product: {
-            quoteLookup: quoteResponse?.documentID,
+            quoteLookup: {
+              relationTo: "newSaleQuoteLookups",
+              value: quoteResponse?.documentID || "",
+            },
             selectionIdentifier: newPackage.selectionIdentifier,
           },
         });

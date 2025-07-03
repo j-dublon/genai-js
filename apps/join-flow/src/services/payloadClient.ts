@@ -329,19 +329,19 @@ export const payloadAPI = {
   // Quote Lookups
   createQuoteLookupSync: (input: QuoteLookupInputs) =>
     postPayloadWithDocumentAsync<QuoteLookupSuccess, QuoteLookupErrors>(
-      "/quoteLookups",
+      "/newSaleQuoteLookups",
       input,
       "sync",
     ),
   createQuoteLookupAsync: (input: QuoteLookupInputs) =>
     postPayloadWithDocumentAsync<QuoteLookupSuccess, QuoteLookupErrors>(
-      "/quoteLookups",
+      "/newSaleQuoteLookups",
       input,
       "async",
     ),
   getQuoteLookup: (id: string) =>
     getPayLoadWithDocumentAsync<QuoteLookupSuccess, QuoteLookupErrors>(
-      `/quoteLookups/${id}`,
+      `/newSaleQuoteLookups/${id}`,
     ),
 
   // Affiliate Sessions

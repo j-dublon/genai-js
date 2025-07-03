@@ -34,7 +34,10 @@ describe("submitBasket", () => {
           marketingConsent: false,
         },
         product: {
-          quoteLookup: "quote-123",
+          quoteLookup: {
+            value: "quote-123",
+            relationTo: "newSaleQuoteLookups",
+          },
           selectionIdentifier: "selection-123",
           extras: [],
         },

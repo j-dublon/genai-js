@@ -17,17 +17,23 @@ vi.mock("@/services/payloadClient", () => ({
 }));
 
 describe("createBasket", () => {
-  const mockBasketData = {
+  const mockBasketData: Partial<Basket> = {
     product: {
       selectionIdentifier: "test-selection-id",
-      quoteLookup: "test-quote-lookup-id",
+      quoteLookup: {
+        value: "test-quote-lookup-id",
+        relationTo: "newSaleQuoteLookups",
+      },
     },
   };
 
   const mockBasketResponse: Basket = {
     id: "basket-123",
     product: {
-      quoteLookup: "test-quote-lookup-id",
+      quoteLookup: {
+        value: "test-quote-lookup-id",
+        relationTo: "newSaleQuoteLookups",
+      },
       selectionIdentifier: "test-selection-id",
       extras: null,
     },
@@ -118,7 +124,7 @@ describe("createBasket", () => {
         {
           label: "Quote Lookup",
           message: "Quote lookup ID is invalid",
-          path: "product.quoteLookup",
+          path: "product.quoteLookup.value",
         },
       ];
       const validationError = new ValidationError(validationDetails);
@@ -131,7 +137,7 @@ describe("createBasket", () => {
         "product.selectionIdentifier is invalid: Selection identifier is required",
       );
       expect(result.error?.details).toContain(
-        "product.quoteLookup is invalid: Quote lookup ID is invalid",
+        "product.quoteLookup.value is invalid: Quote lookup ID is invalid",
       );
     });
 
