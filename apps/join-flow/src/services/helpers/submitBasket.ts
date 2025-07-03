@@ -1,6 +1,4 @@
-import type { StoreBasket } from "@store/useJoinFlowStore";
-
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 export type SubmitBasketResult =
@@ -18,7 +16,6 @@ export type SubmitBasketResult =
     }
   | {
       type: "success";
-      basket: StoreBasket;
     };
 
 export const submitBasket = async (
@@ -36,12 +33,24 @@ export const submitBasket = async (
   }
 
   try {
-    const basket = (await payloadAPI.signUpToKraken(basketId)) as StoreBasket;
+    const response = await squidAPI.doSignup(basketId);
 
-    return {
-      type: "success",
-      basket,
-    };
+    if (response.success) {
+      return {
+        type: "success",
+      };
+    } else {
+      return {
+        type: "error",
+        error: {
+          type: "unknownError",
+          message: "An unexpected error occurred",
+          details: response.errorBlocks?.map(
+            (block) => block.errorMessage || "Unknown error",
+          ),
+        },
+      };
+    }
   } catch (error) {
     console.error("Error in submitBasket:", error);
 

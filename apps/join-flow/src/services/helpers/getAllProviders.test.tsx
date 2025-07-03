@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "../payloadClient";
+import { squidAPI } from "../payloadClient";
 import { FetchError } from "../payloadTypes";
 import { getAllProviders } from "./getAllProviders";
 
 vi.mock("../payloadClient", () => ({
-  payloadAPI: {
-    getAllSwitchMatchServiceProviders: vi.fn(),
+  squidAPI: {
+    getSwitchMatchServiceProviders: vi.fn(),
   },
 }));
 
@@ -33,18 +33,16 @@ describe("getAllProviders", () => {
   ];
 
   it("should return providers when the API call is successful", async () => {
-    vi.mocked(
-      payloadAPI.getAllSwitchMatchServiceProviders,
-    ).mockResolvedValueOnce(mockProviders);
+    vi.mocked(squidAPI.getSwitchMatchServiceProviders).mockResolvedValueOnce(
+      mockProviders,
+    );
 
     const result = await getAllProviders();
 
     expect(result).toEqual({
       providers: mockProviders,
     });
-    expect(payloadAPI.getAllSwitchMatchServiceProviders).toHaveBeenCalledTimes(
-      1,
-    );
+    expect(squidAPI.getSwitchMatchServiceProviders).toHaveBeenCalledTimes(1);
   });
 
   it("should handle network errors", async () => {
@@ -55,9 +53,9 @@ describe("getAllProviders", () => {
       {},
       new Response(null, { status: 500, statusText: "Internal Server Error" }),
     );
-    vi.mocked(
-      payloadAPI.getAllSwitchMatchServiceProviders,
-    ).mockRejectedValueOnce(networkError);
+    vi.mocked(squidAPI.getSwitchMatchServiceProviders).mockRejectedValueOnce(
+      networkError,
+    );
 
     const result = await getAllProviders();
 
@@ -68,16 +66,14 @@ describe("getAllProviders", () => {
         details: ["Status: 500"],
       },
     });
-    expect(payloadAPI.getAllSwitchMatchServiceProviders).toHaveBeenCalledTimes(
-      1,
-    );
+    expect(squidAPI.getSwitchMatchServiceProviders).toHaveBeenCalledTimes(1);
   });
 
   it("should handle unknown errors", async () => {
     const unknownError = new Error("Something went wrong");
-    vi.mocked(
-      payloadAPI.getAllSwitchMatchServiceProviders,
-    ).mockRejectedValueOnce(unknownError);
+    vi.mocked(squidAPI.getSwitchMatchServiceProviders).mockRejectedValueOnce(
+      unknownError,
+    );
 
     const result = await getAllProviders();
 
@@ -88,16 +84,14 @@ describe("getAllProviders", () => {
         details: ["Something went wrong"],
       },
     });
-    expect(payloadAPI.getAllSwitchMatchServiceProviders).toHaveBeenCalledTimes(
-      1,
-    );
+    expect(squidAPI.getSwitchMatchServiceProviders).toHaveBeenCalledTimes(1);
   });
 
   it("should handle non-error instances", async () => {
     const nonErrorObject = "This is not an Error object";
-    vi.mocked(
-      payloadAPI.getAllSwitchMatchServiceProviders,
-    ).mockRejectedValueOnce(nonErrorObject);
+    vi.mocked(squidAPI.getSwitchMatchServiceProviders).mockRejectedValueOnce(
+      nonErrorObject,
+    );
 
     const result = await getAllProviders();
 
@@ -108,8 +102,6 @@ describe("getAllProviders", () => {
         details: ["Unknown error"],
       },
     });
-    expect(payloadAPI.getAllSwitchMatchServiceProviders).toHaveBeenCalledTimes(
-      1,
-    );
+    expect(squidAPI.getSwitchMatchServiceProviders).toHaveBeenCalledTimes(1);
   });
 });

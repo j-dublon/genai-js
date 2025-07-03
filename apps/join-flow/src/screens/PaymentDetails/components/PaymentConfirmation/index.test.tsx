@@ -85,11 +85,6 @@ describe("PaymentConfirmation", () => {
     });
     mockSubmitBasket.mockResolvedValue({
       type: "success",
-      basket: {
-        id: "123",
-        updatedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-      },
     });
 
     const store = useJoinFlowStore.getState();

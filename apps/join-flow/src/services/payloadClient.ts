@@ -5,6 +5,7 @@ export const API_BASE_URL =
 import type {
   Basket,
   KrakenSwitchMatchServiceProvider,
+  Page,
   VulnerabilityAndAccessibility,
 } from "../../payload-types";
 import {
@@ -14,7 +15,6 @@ import {
   AffiliateSessionErrors,
   AffiliateSessionInputs,
   AffiliateSessionSuccess,
-  ApiErrorResponse,
   EngineerAppointmentErrors,
   EngineerAppointmentInputs,
   EngineerAppointmentSuccess,
@@ -28,9 +28,18 @@ import {
   ReferralSessionErrors,
   ReferralSessionInputs,
   ReferralSessionSuccess,
+  RegradeQuoteLookupErrors,
+  RegradeQuoteLookupInputs,
+  RegradeQuoteLookupSuccess,
+  RegradeResponse,
+  RenewalQuoteLookupErrors,
+  RenewalQuoteLookupInputs,
+  RenewalQuoteLookupSuccess,
+  RenewalResponse,
   ResponseStates,
   RunCreditCheckResponse,
   SendEmailCodeResponse,
+  SignupResponse,
   SwitchMatchLookupErrors,
   SwitchMatchLookupInputs,
   SwitchMatchLookupSuccess,
@@ -39,16 +48,33 @@ import {
   ValidationErrorDetail,
 } from "./payloadTypes";
 
-export const fetchFromPayload = async <T>(
+async function doSquidRequest(
   path: string,
   method: "POST" | "GET" | "PATCH",
+  token: string | null,
   bodyObject?: Record<string, unknown>,
-): Promise<T> => {
+) {
+  if (API_BASE_URL === null) {
+    throw new Error(
+      "API_BASE_URL/NEXT_PUBLIC_PAYLOAD_ENDPOINT must be set but is currently null",
+    );
+  }
+
   const url = `${API_BASE_URL}${path}`;
 
-  const params: Record<string, unknown> = {
-    method: method,
-    headers: { "Content-Type": "application/json" },
+  // do the headers
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (token !== null) {
+    headers["Authorization"] = token;
+  }
+
+  // make the request
+  const params: RequestInit = {
+    method,
+    headers,
   };
 
   if (bodyObject) {
@@ -78,12 +104,14 @@ export const fetchFromPayload = async <T>(
   getBodyValidationErrors(body);
 
   const data = body;
-  return data as T;
-};
+  return data;
+}
 
-const getBodyValidationErrors = (body: ApiErrorResponse) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getBodyValidationErrors = (body: any) => {
   if (body.errors) {
-    const details: ValidationErrorDetail[] = body.errors.map((err) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const details: ValidationErrorDetail[] = body.errors.map((err: any) => ({
       label: err?.data?.errors?.[0]?.label || undefined,
       message: err.message,
       path: err?.data?.errors?.[0]?.path || undefined,
@@ -93,96 +121,47 @@ const getBodyValidationErrors = (body: ApiErrorResponse) => {
   }
 };
 
-const getPayloadEndpoint = async <T>(path: string) => {
-  return (await fetchFromPayload(path, "GET")) as T;
-};
+async function doGetSquidEndpoint<T>(path: string, token: string | null) {
+  return (await doSquidRequest(path, "GET", token)) as T;
+}
 
-const postPayLoadEndpoint = async <TInput, TResponse>(
+async function doCreateSquidEndpoint<TInput, TResponse>(
   path: string,
   data: TInput,
-) => {
-  const response = await fetchFromPayload<{ doc: TResponse }>(
+  token: string | null,
+) {
+  const response = await doSquidRequest(
     path,
     "POST",
+    token,
     data as Record<string, unknown>,
   );
   return response.doc as TResponse;
-};
+}
 
-const updatePayLoadEndpoint = async <TInput, TResponse>(
+async function doUpdateSquidEndpoint<TInput, TResponse>(
   path: string,
   data: TInput,
-) => {
-  const response = await fetchFromPayload<{ doc: TResponse }>(
+  token: string | null,
+) {
+  const response = await doSquidRequest(
     path,
     "PATCH",
+    token,
     data as Record<string, unknown>,
   );
   return response.doc as TResponse;
-};
-
-// For the async functions, you need to define an interface for the response structure
-interface AsyncResponseData<TSuccess = unknown, TError = unknown> {
-  id: string;
-  outputs?: {
-    state?: "success" | "error" | "pending";
-    apiSuccess?: TSuccess;
-    apiErrors?: TError;
-  };
-  doc?: {
-    id: string;
-    outputs?: {
-      state?: "success" | "error" | "pending";
-      apiSuccess?: TSuccess;
-      apiErrors?: TError;
-    };
-  };
 }
-const getPayLoadWithDocumentAsync = async <TSuccess, TError>(
+
+async function doGetSquidDocumentAsyncSyncStyle<TSuccess, TError>(
   path: string,
+  token: string | null,
 ): Promise<
   | { state: Extract<ResponseStates, "success">; data: TSuccess }
   | { state: Extract<ResponseStates, "error">; data: TError }
   | { state: Extract<ResponseStates, "pending">; documentID: string }
-> => {
-  try {
-    const data = await fetchFromPayload<AsyncResponseData>(path, "GET");
-
-    switch (data.outputs?.state) {
-      case "success":
-        return {
-          state: "success",
-          data: {
-            documentID: data.id,
-            response: data.outputs.apiSuccess,
-          } as TSuccess,
-        };
-      case "error":
-        return {
-          state: "error",
-          data: {
-            documentID: data.id,
-            errors: data.outputs.apiErrors,
-          } as TError,
-        };
-      case "pending":
-        return { state: "pending", documentID: data.id };
-      default:
-        throw new Error("Unexpected state for sync request.");
-    }
-  } catch (error) {
-    throw error;
-  }
-};
-
-const getPayloadWithDocumentRawAsync = async <TSuccess, TError>(
-  path: string,
-): Promise<
-  | { state: Extract<ResponseStates, "success">; data: TSuccess }
-  | { state: Extract<ResponseStates, "error">; data: TError }
-  | { state: Extract<ResponseStates, "pending">; documentID: string }
-> => {
-  const data = await fetchFromPayload<AsyncResponseData>(path, "GET");
+> {
+  const data = await doSquidRequest(path, "GET", token);
 
   switch (data.outputs?.state) {
     case "success":
@@ -196,224 +175,395 @@ const getPayloadWithDocumentRawAsync = async <TSuccess, TError>(
     case "error":
       return {
         state: "error",
-        data: { documentID: data.id, errors: data.outputs.apiErrors } as TError,
+        data: {
+          documentID: data.id,
+          errors: data.outputs.apiErrors,
+        } as TError,
       };
     case "pending":
       return { state: "pending", documentID: data.id };
     default:
       throw new Error("Unexpected state for sync request.");
   }
-};
+}
 
-const postPayloadWithDocumentAsync = async <TSuccess, TError>(
+async function doAsyncSyncStyleFetchRequest<TSuccess, TError>(
   path: string,
-  inputs: Record<string, unknown>,
-  requestProcessingType: "sync" | "async",
+  token: string | null,
 ): Promise<
   | { state: Extract<ResponseStates, "success">; data: TSuccess }
   | { state: Extract<ResponseStates, "error">; data: TError }
   | { state: Extract<ResponseStates, "pending">; documentID: string }
-> => {
-  try {
-    const apiRequest = { inputs: { ...inputs, requestProcessingType } };
+> {
+  const data = await doSquidRequest(path, "GET", token);
 
-    const data = await fetchFromPayload<AsyncResponseData>(
-      path,
-      "POST",
-      apiRequest,
-    );
-
-    if (requestProcessingType === "sync") {
-      switch (data.doc?.outputs?.state) {
-        case "success":
-          return {
-            state: "success",
-            data: {
-              documentID: data.doc.id,
-              response: data.doc.outputs.apiSuccess,
-            } as TSuccess,
-          };
-        case "error":
-          return {
-            state: "error",
-            data: {
-              documentID: data.doc.id,
-              errors: data.doc.outputs.apiErrors,
-            } as TError,
-          };
-        default:
-          throw new Error("Unexpected state for sync request.");
-      }
-    } else if (requestProcessingType === "async") {
-      if (data.doc?.outputs?.state === "pending") {
-        return { state: "pending", documentID: data.doc.id };
-      } else {
-        throw new Error("Unexpected state for async request.");
-      }
-    }
-
-    throw new Error("The API did not respond properly");
-  } catch (error) {
-    throw error;
+  switch (data.outputs?.state) {
+    case "success":
+      return {
+        state: "success",
+        data: {
+          documentID: data.id,
+          response: data.outputs.apiSuccess,
+        } as TSuccess,
+      };
+    case "error":
+      return {
+        state: "error",
+        data: {
+          documentID: data.id,
+          errors: data.outputs.apiErrors,
+        } as TError,
+      };
+    case "pending":
+      return { state: "pending", documentID: data.id };
+    default:
+      throw new Error("Unexpected state for sync request.");
   }
-};
+}
 
-export const payloadAPI = {
-  createAddressLookupSync: (input: AddressLookupInputs) =>
-    postPayloadWithDocumentAsync<AddressLookupSuccess, AddressLookupErrors>(
+function doAsyncSyncStyleCreateRequest<TSuccess, TError>(
+  path: string,
+  inputs: Record<string, unknown>,
+  requestProcessingType: "sync",
+  token: string | null,
+): Promise<
+  | { state: Extract<ResponseStates, "success">; data: TSuccess }
+  | { state: Extract<ResponseStates, "error">; data: TError }
+>;
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function doAsyncSyncStyleCreateRequest<TSuccess, TError>(
+  path: string,
+  inputs: Record<string, unknown>,
+  requestProcessingType: "async",
+  token: string | null,
+): Promise<{ state: Extract<ResponseStates, "pending">; documentID: string }>;
+
+async function doAsyncSyncStyleCreateRequest<TSuccess, TError>(
+  path: string,
+  inputs: Record<string, unknown>,
+  requestProcessingType: "sync" | "async",
+  token: string | null,
+): Promise<
+  | { state: Extract<ResponseStates, "success">; data: TSuccess }
+  | { state: Extract<ResponseStates, "error">; data: TError }
+  | { state: Extract<ResponseStates, "pending">; documentID: string }
+> {
+  const apiRequest = { inputs: { ...inputs, requestProcessingType } };
+  const data = await doSquidRequest(path, "POST", token, apiRequest);
+
+  if (requestProcessingType === "sync") {
+    switch (data.doc.outputs?.state) {
+      case "success":
+        return {
+          state: "success",
+          data: {
+            documentID: data.doc.id,
+            response: data.doc.outputs.apiSuccess,
+          } as TSuccess,
+        };
+      case "error":
+        return {
+          state: "error",
+          data: {
+            documentID: data.doc.id,
+            errors: data.doc.outputs.apiErrors,
+          } as TError,
+        };
+      default:
+        throw new Error("Unexpected state for sync request.");
+    }
+  } else if (requestProcessingType === "async") {
+    if (data.doc.outputs?.state === "pending") {
+      return { state: "pending", documentID: data.doc.id };
+    } else {
+      throw new Error("Unexpected state for async request.");
+    }
+  }
+
+  throw new Error("The API did not respond properly");
+}
+
+export const squidAPI = {
+  // Address Lookups
+  createAddressLookupSync: (
+    input: AddressLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<AddressLookupSuccess, AddressLookupErrors>(
       "/addressLookups",
       input,
       "sync",
+      token || null,
     ),
-  createAddressLookupAsync: (input: AddressLookupInputs) =>
-    postPayloadWithDocumentAsync<AddressLookupSuccess, AddressLookupErrors>(
+  createAddressLookupAsync: (
+    input: AddressLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<AddressLookupSuccess, AddressLookupErrors>(
       "/addressLookups",
       input,
       "async",
+      token || null,
     ),
-  getAddressLookup: (id: string) =>
-    getPayLoadWithDocumentAsync<AddressLookupSuccess, AddressLookupErrors>(
+  getAddressLookup: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<AddressLookupSuccess, AddressLookupErrors>(
       `/addressLookups/${id}`,
+      token || null,
     ),
-  createEngineerAppointmentSync: (input: EngineerAppointmentInputs) =>
-    postPayloadWithDocumentAsync<
+
+  // Engineer Appointments
+  createEngineerAppointmentSync: (
+    input: EngineerAppointmentInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
       EngineerAppointmentSuccess,
       EngineerAppointmentErrors
-    >("/engineerAppointments", input, "sync"),
-  createEngineerAppointmentAsync: (input: EngineerAppointmentInputs) =>
-    postPayloadWithDocumentAsync<
+    >("/engineerAppointments", input, "sync", token || null),
+  createEngineerAppointmentAsync: (
+    input: EngineerAppointmentInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
       EngineerAppointmentSuccess,
       EngineerAppointmentErrors
-    >("/engineerAppointments", input, "async"),
-  getEngineerAppointment: (id: string) =>
-    getPayLoadWithDocumentAsync<
+    >("/engineerAppointments", input, "async", token || null),
+  getEngineerAppointment: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<
       EngineerAppointmentSuccess,
       EngineerAppointmentErrors
-    >(`/engineerAppointments/${id}`),
+    >(`/engineerAppointments/${id}`, token || null),
 
   // Switch Match Lookups
-  createSwitchMatchLookupSync: (input: SwitchMatchLookupInputs) =>
-    postPayloadWithDocumentAsync<
+  createSwitchMatchLookupSync: (
+    input: SwitchMatchLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
       SwitchMatchLookupSuccess,
       SwitchMatchLookupErrors
-    >("/switchMatchLookups", input, "sync"),
-  createSwitchMatchLookupAsync: (input: SwitchMatchLookupInputs) =>
-    postPayloadWithDocumentAsync<
+    >("/switchMatchLookups", input, "sync", token || null),
+  createSwitchMatchLookupAsync: (
+    input: SwitchMatchLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
       SwitchMatchLookupSuccess,
       SwitchMatchLookupErrors
-    >("/switchMatchLookups", input, "async"),
-  getSwitchMatchLookup: (id: string) =>
-    getPayLoadWithDocumentAsync<
+    >("/switchMatchLookups", input, "async", token || null),
+  getSwitchMatchLookup: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<
       SwitchMatchLookupSuccess,
       SwitchMatchLookupErrors
-    >(`/switchMatchLookups/${id}`),
+    >(`/switchMatchLookups/${id}`, token || null),
+  getSwitchMatchServiceProviders: (token?: string | null) =>
+    doGetSquidEndpoint<KrakenSwitchMatchServiceProvider[]>(
+      `/krakenSwitchMatchServiceProviders/all-active`,
+      token || null,
+    ),
 
   // Referral Sessions
-  createReferralSessionSync: (input: ReferralSessionInputs) =>
-    postPayloadWithDocumentAsync<ReferralSessionSuccess, ReferralSessionErrors>(
-      "/referralSessions",
-      input,
-      "sync",
-    ),
-  createReferralSessionAsync: (input: ReferralSessionInputs) =>
-    postPayloadWithDocumentAsync<ReferralSessionSuccess, ReferralSessionErrors>(
-      "/referralSessions",
-      input,
-      "async",
-    ),
-  getReferralSession: (id: string) =>
-    getPayLoadWithDocumentAsync<ReferralSessionSuccess, ReferralSessionErrors>(
-      `/referralSessions/${id}`,
-    ),
+  createReferralSessionSync: (
+    input: ReferralSessionInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      ReferralSessionSuccess,
+      ReferralSessionErrors
+    >("/referralSessions", input, "sync", token || null),
+  createReferralSessionAsync: (
+    input: ReferralSessionInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      ReferralSessionSuccess,
+      ReferralSessionErrors
+    >("/referralSessions", input, "async", token || null),
+  getReferralSession: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<
+      ReferralSessionSuccess,
+      ReferralSessionErrors
+    >(`/referralSessions/${id}`, token || null),
 
   // Quote Lookups
-  createQuoteLookupSync: (input: QuoteLookupInputs) =>
-    postPayloadWithDocumentAsync<QuoteLookupSuccess, QuoteLookupErrors>(
+  createQuoteLookupSync: (input: QuoteLookupInputs, token?: string | null) =>
+    doAsyncSyncStyleCreateRequest<QuoteLookupSuccess, QuoteLookupErrors>(
       "/newSaleQuoteLookups",
       input,
       "sync",
+      token || null,
     ),
-  createQuoteLookupAsync: (input: QuoteLookupInputs) =>
-    postPayloadWithDocumentAsync<QuoteLookupSuccess, QuoteLookupErrors>(
+  createQuoteLookupAsync: (input: QuoteLookupInputs, token?: string | null) =>
+    doAsyncSyncStyleCreateRequest<QuoteLookupSuccess, QuoteLookupErrors>(
       "/newSaleQuoteLookups",
       input,
       "async",
+      token || null,
     ),
-  getQuoteLookup: (id: string) =>
-    getPayLoadWithDocumentAsync<QuoteLookupSuccess, QuoteLookupErrors>(
+  getQuoteLookup: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<QuoteLookupSuccess, QuoteLookupErrors>(
       `/newSaleQuoteLookups/${id}`,
+      token || null,
     ),
 
   // Affiliate Sessions
-  createAffiliateSessionSync: (input: AffiliateSessionInputs) =>
-    postPayloadWithDocumentAsync<
+  createAffiliateSessionSync: (
+    input: AffiliateSessionInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >("/affiliateSessions", input, "sync"),
-  createAffiliateSessionAsync: (input: AffiliateSessionInputs) =>
-    postPayloadWithDocumentAsync<
+    >("/affiliateSessions", input, "sync", token || null),
+  createAffiliateSessionAsync: (
+    input: AffiliateSessionInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >("/affiliateSessions", input, "async"),
-  getAffiliateSession: (id: string) =>
-    getPayLoadWithDocumentAsync<
+    >("/affiliateSessions", input, "async", token || null),
+  getAffiliateSession: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >(`/affiliateSessions/${id}`),
+    >(`/affiliateSessions/${id}`, token || null),
 
-  getDefaultAffiliate: () =>
-    getPayloadWithDocumentRawAsync<
+  getDefaultAffiliate: (token?: string | null) =>
+    doAsyncSyncStyleFetchRequest<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >("/affiliateSessions/default"),
+    >("/affiliateSessions/default", token || null),
 
   // Basket
-  getBasket: (id: string) => getPayloadEndpoint<Basket>(`/baskets/${id}`),
-  createBasket: (data: InitialBasket) =>
-    postPayLoadEndpoint<InitialBasket, Basket>("/baskets", data),
-  updateBasket: (id: string, data: Partial<Basket>) =>
-    updatePayLoadEndpoint(`/baskets/${id}`, data),
-  generateCICS: (basketID: string) =>
-    getPayloadEndpoint(`/baskets/${basketID}/generate-cics`),
-  runCreditCheck: (id: string) =>
-    getPayloadEndpoint<RunCreditCheckResponse>(
-      `/baskets/${id}/run-credit-check`,
+  getBasket: (id: string, token?: string | null) =>
+    doGetSquidEndpoint<Basket>(`/baskets/${id}`, token || null),
+  createBasket: (data: InitialBasket, token?: string | null) =>
+    doCreateSquidEndpoint<InitialBasket, Basket>(
+      "/baskets",
+      data,
+      token || null,
     ),
-  sendEmailCode: (id: string) =>
-    getPayloadEndpoint<SendEmailCodeResponse>(`/baskets/${id}/send-email-code`),
-  validateEmailCode: (id: string, code: string) =>
-    getPayloadEndpoint<ValidateEmailCodeResponse>(
-      `/baskets/${id}/validate-email-code/${code}`,
+  updateBasket: (id: string, data: Partial<Basket>, token?: string | null) =>
+    doUpdateSquidEndpoint<Partial<Basket>, Basket>(
+      `/baskets/${id}`,
+      data,
+      token || null,
     ),
-
-  // CI/CS
-  getCICS: (basketID: string) =>
-    getPayloadEndpoint<GetCICSResponse>(`/baskets/${basketID}/get-cics`),
+  runCreditCheck: (basketID: string, token?: string | null) =>
+    doGetSquidEndpoint<RunCreditCheckResponse>(
+      `/baskets/${basketID}/run-credit-check`,
+      token || null,
+    ),
+  emailValidationSendCode: (basketID: string, token?: string | null) =>
+    doGetSquidEndpoint<SendEmailCodeResponse>(
+      `/baskets/${basketID}/send-email-code`,
+      token || null,
+    ),
+  emailValidationCheckCode: (
+    basketID: string,
+    code: string,
+    token?: string | null,
+  ) =>
+    doGetSquidEndpoint<ValidateEmailCodeResponse>(
+      `/baskets/${basketID}/validate-email-code/${code}`,
+      token || null,
+    ),
+  doSignup: (basketID: string, token?: string | null) =>
+    doGetSquidEndpoint<SignupResponse>(
+      `/baskets/${basketID}/signup`,
+      token || null,
+    ),
+  doRenewal: (basketID: string, token?: string | null) =>
+    doGetSquidEndpoint<RenewalResponse>(
+      `/baskets/${basketID}/renew`,
+      token || null,
+    ),
+  doRegrade: (basketID: string, token?: string | null) =>
+    doGetSquidEndpoint<RegradeResponse>(
+      `/baskets/${basketID}/regrade`,
+      token || null,
+    ),
+  getGoLiveDates: (token?: string | null) =>
+    doGetSquidEndpoint<string[]>("/baskets/go-live-dates", token || null),
+  getCICS: (basketID: string, token?: string | null) =>
+    doGetSquidEndpoint<GetCICSResponse>(
+      `/baskets/${basketID}/get-cics`,
+      token || null,
+    ),
 
   // V&A
-  getVulnerabilityAndAccessibility: (id: string) =>
-    getPayloadEndpoint<VulnerabilityAndAccessibility>(
+  getVulnerabilityAndAccessibility: (id: string, token?: string | null) =>
+    doGetSquidEndpoint<VulnerabilityAndAccessibility>(
       `/vulnerabilityAndAccessibility/${id}`,
+      token || null,
     ),
   createVulnerabilityAndAccessibility: (
     data: InitialVulnerabilityAndAccessibility,
+    token?: string | null,
   ) =>
-    postPayLoadEndpoint<
+    doCreateSquidEndpoint<
       InitialVulnerabilityAndAccessibility,
       VulnerabilityAndAccessibility
-    >("/vulnerabilityAndAccessibility", data),
+    >("/vulnerabilityAndAccessibility", data, token || null),
   updateVulnerabilityAndAccessibility: (
     id: string,
     data: Partial<VulnerabilityAndAccessibility>,
-  ) => updatePayLoadEndpoint(`/vulnerabilityAndAccessibility/${id}`, data),
+    token?: string | null,
+  ) =>
+    doUpdateSquidEndpoint<
+      Partial<VulnerabilityAndAccessibility>,
+      VulnerabilityAndAccessibility
+    >(`/vulnerabilityAndAccessibility/${id}`, data, token || null),
 
-  // Kraken reference
-  getAllSwitchMatchServiceProviders: () =>
-    getPayloadEndpoint<KrakenSwitchMatchServiceProvider[]>(
-      "/krakenSwitchMatchServiceProviders/all-active",
-    ),
+  // Content
+  getPageContentBySlug: (slug: string, token?: string | null) =>
+    doGetSquidEndpoint<Page>(`/pages/${slug}`, token || null),
 
-  //Signup
-  signUpToKraken: (basketId: string) =>
-    getPayloadEndpoint<Basket>(`/baskets/${basketId}/signup`),
+  // RenewalQuoteLookups
+  createRenewalQuoteLookupSync: (
+    input: RenewalQuoteLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      RenewalQuoteLookupSuccess,
+      RenewalQuoteLookupErrors
+    >("/renewalQuoteLookups", input, "sync", token || null),
+  createRenewalQuoteLookupAsync: (
+    input: RenewalQuoteLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      RenewalQuoteLookupSuccess,
+      RenewalQuoteLookupErrors
+    >("/renewalQuoteLookups", input, "async", token || null),
+  getRenewalQuoteLookup: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<
+      RenewalQuoteLookupSuccess,
+      RenewalQuoteLookupErrors
+    >(`/renewalQuoteLookup/${id}`, token || null),
+
+  // RegradeQuoteLookups
+  createRegradeQuoteLookupSync: (
+    input: RegradeQuoteLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      RegradeQuoteLookupSuccess,
+      RegradeQuoteLookupErrors
+    >("/regradeQuoteLookups", input, "sync", token || null),
+  createRegradeQuoteLookupAsync: (
+    input: RegradeQuoteLookupInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      RegradeQuoteLookupSuccess,
+      RegradeQuoteLookupErrors
+    >("/regradeQuoteLookups", input, "async", token || null),
+  getRegradeQuoteLookup: (id: string, token?: string | null) =>
+    doGetSquidDocumentAsyncSyncStyle<
+      RegradeQuoteLookupSuccess,
+      RegradeQuoteLookupErrors
+    >(`/regradeQuoteLookup/${id}`, token || null),
 };

@@ -1,4 +1,4 @@
-import { payloadAPI } from "../payloadClient";
+import { squidAPI } from "../payloadClient";
 import {
   FetchError,
   RunCreditCheckResponse,
@@ -19,7 +19,7 @@ export const runCreditCheck = async (
   basketId: string,
 ): Promise<RunCreditCheckResult> => {
   try {
-    const response = await payloadAPI.runCreditCheck(basketId);
+    const response = await squidAPI.runCreditCheck(basketId);
 
     return {
       status: response.status,

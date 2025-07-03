@@ -1,4 +1,4 @@
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { AffiliateSessionSuccessData } from "../payloadTypes";
@@ -22,7 +22,7 @@ export const getAffiliateSessionByCode = async (
   affiliateCode: string,
 ): Promise<AffiliateSessionResult> => {
   try {
-    const response = await payloadAPI.createAffiliateSessionSync({
+    const response = await squidAPI.createAffiliateSessionSync({
       subdomain: affiliateCode,
     });
 

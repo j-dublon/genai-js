@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { createSwitchMatchLookup } from "./createSwitchMatchLookup";
 
 vi.mock("@/services/payloadClient", () => ({
-  payloadAPI: {
+  squidAPI: {
     createSwitchMatchLookupSync: vi.fn(),
   },
 }));
@@ -35,7 +35,7 @@ describe("createSwitchMatchLookup", () => {
 
   describe("successful requests", () => {
     it("should return switch match lookup ID on successful API call with all parameters", async () => {
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockResolvedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockResolvedValue(
         mockSuccessResponse,
       );
 
@@ -49,16 +49,16 @@ describe("createSwitchMatchLookup", () => {
         switchMatchLookup: mockSuccessResponse.data.documentID,
       });
       expect(result.error).toBeUndefined();
-      expect(payloadAPI.createSwitchMatchLookupSync).toHaveBeenCalledWith({
+      expect(squidAPI.createSwitchMatchLookupSync).toHaveBeenCalledWith({
         basket: mockBasketId,
         losingRcpid: mockLosingRcpid,
         losingProviderAccountID: mockLosingProviderAccountID,
       });
-      expect(payloadAPI.createSwitchMatchLookupSync).toHaveBeenCalledTimes(1);
+      expect(squidAPI.createSwitchMatchLookupSync).toHaveBeenCalledTimes(1);
     });
 
     it("should return switch match lookup ID on successful API call without optional parameter", async () => {
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockResolvedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockResolvedValue(
         mockSuccessResponse,
       );
 
@@ -70,7 +70,7 @@ describe("createSwitchMatchLookup", () => {
       expect(result).toEqual({
         switchMatchLookup: mockSuccessResponse.data.documentID,
       });
-      expect(payloadAPI.createSwitchMatchLookupSync).toHaveBeenCalledWith({
+      expect(squidAPI.createSwitchMatchLookupSync).toHaveBeenCalledWith({
         basket: mockBasketId,
         losingRcpid: mockLosingRcpid,
         losingProviderAccountID: undefined,
@@ -96,7 +96,7 @@ describe("createSwitchMatchLookup", () => {
         },
       };
 
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockResolvedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockResolvedValue(
         mockErrorResponse,
       );
 
@@ -122,7 +122,7 @@ describe("createSwitchMatchLookup", () => {
         { message: "Missing required field", path: "losingRcpid" },
       ]);
 
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockRejectedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockRejectedValue(
         validationError,
       );
 
@@ -152,7 +152,7 @@ describe("createSwitchMatchLookup", () => {
         { message: "General validation error" },
       ]);
 
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockRejectedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockRejectedValue(
         validationError,
       );
 
@@ -181,7 +181,7 @@ describe("createSwitchMatchLookup", () => {
         { status: 500 } as Response,
       );
 
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockRejectedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockRejectedValue(
         fetchError,
       );
 
@@ -212,7 +212,7 @@ describe("createSwitchMatchLookup", () => {
         {} as Response,
       );
 
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockRejectedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockRejectedValue(
         fetchError,
       );
 
@@ -235,7 +235,7 @@ describe("createSwitchMatchLookup", () => {
     it("should handle unexpected errors", async () => {
       const unexpectedError = new Error("Unexpected error occurred");
 
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockRejectedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockRejectedValue(
         unexpectedError,
       );
 
@@ -260,7 +260,7 @@ describe("createSwitchMatchLookup", () => {
     it("should handle non-Error thrown values", async () => {
       const nonError = "String error";
 
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockRejectedValue(
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockRejectedValue(
         nonError,
       );
 
@@ -280,8 +280,8 @@ describe("createSwitchMatchLookup", () => {
   });
 
   describe("function call verification", () => {
-    it("should call payloadAPI.createSwitchMatchLookupSync with correct parameters", async () => {
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockResolvedValue(
+    it("should call squidAPI.createSwitchMatchLookupSync with correct parameters", async () => {
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockResolvedValue(
         mockSuccessResponse,
       );
 
@@ -291,19 +291,17 @@ describe("createSwitchMatchLookup", () => {
         mockLosingProviderAccountID,
       );
 
-      expect(payloadAPI.createSwitchMatchLookupSync).toHaveBeenCalledWith({
+      expect(squidAPI.createSwitchMatchLookupSync).toHaveBeenCalledWith({
         basket: mockBasketId,
         losingRcpid: mockLosingRcpid,
         losingProviderAccountID: mockLosingProviderAccountID,
       });
-      expect(payloadAPI.createSwitchMatchLookupSync).toHaveBeenCalledTimes(1);
+      expect(squidAPI.createSwitchMatchLookupSync).toHaveBeenCalledTimes(1);
     });
 
     it("should log errors to console", async () => {
       const error = new Error("Test error");
-      vi.mocked(payloadAPI.createSwitchMatchLookupSync).mockRejectedValue(
-        error,
-      );
+      vi.mocked(squidAPI.createSwitchMatchLookupSync).mockRejectedValue(error);
 
       await createSwitchMatchLookup(mockBasketId, mockLosingRcpid);
 

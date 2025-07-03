@@ -1,4 +1,4 @@
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import {
   FetchError,
   InitialBasket,
@@ -20,7 +20,7 @@ export const createBasket = async (
   basketData: InitialBasket,
 ): Promise<CreateBasketResult> => {
   try {
-    const basket = await payloadAPI.createBasket(basketData);
+    const basket = await squidAPI.createBasket(basketData);
 
     return {
       basket,

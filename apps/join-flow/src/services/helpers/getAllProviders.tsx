@@ -1,5 +1,5 @@
 import type { KrakenSwitchMatchServiceProvider } from "../../../payload-types";
-import { payloadAPI } from "../payloadClient";
+import { squidAPI } from "../payloadClient";
 import { FetchError } from "../payloadTypes";
 
 interface GetAllProvidersResult {
@@ -13,7 +13,7 @@ interface GetAllProvidersResult {
 
 export const getAllProviders = async (): Promise<GetAllProvidersResult> => {
   try {
-    const response = await payloadAPI.getAllSwitchMatchServiceProviders();
+    const response = await squidAPI.getSwitchMatchServiceProviders();
 
     return {
       providers: response,

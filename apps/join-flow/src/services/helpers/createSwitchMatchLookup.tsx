@@ -1,4 +1,4 @@
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import {
   FetchError,
   SwitchMatchLookupInputs,
@@ -21,7 +21,7 @@ export const createSwitchMatchLookup = async (
   losingProviderAccountID?: SwitchMatchLookupInputs["losingProviderAccountID"],
 ): Promise<CreateSwitchMatchLookupResult> => {
   try {
-    const switchMatchLookup = await payloadAPI.createSwitchMatchLookupSync({
+    const switchMatchLookup = await squidAPI.createSwitchMatchLookupSync({
       basket,
       losingRcpid,
       losingProviderAccountID,

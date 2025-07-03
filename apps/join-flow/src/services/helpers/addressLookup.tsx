@@ -1,4 +1,4 @@
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { AddressLookupSuccess } from "../payloadTypes";
@@ -22,7 +22,7 @@ export const getAddressesByPostcode = async (
   postcode: string,
 ): Promise<AddressLookupResult> => {
   try {
-    const response = await payloadAPI.createAddressLookupSync({
+    const response = await squidAPI.createAddressLookupSync({
       postcode,
     });
     if (response.state === "success" && response.data?.response?.addresses) {

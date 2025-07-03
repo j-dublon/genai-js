@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { getEngineerAppointments } from "./getEngineerAppointments";
 
 vi.mock("@/services/payloadClient", () => ({
-  payloadAPI: {
+  squidAPI: {
     createEngineerAppointmentSync: vi.fn(),
   },
 }));
@@ -31,7 +31,7 @@ describe("getEngineerAppointments", () => {
         },
       },
     };
-    (payloadAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
+    (squidAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
       mockResponse,
     );
 
@@ -55,7 +55,7 @@ describe("getEngineerAppointments", () => {
         ],
       },
     };
-    (payloadAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
+    (squidAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
       mockResponse,
     );
 
@@ -83,7 +83,7 @@ describe("getEngineerAppointments", () => {
         ],
       },
     };
-    (payloadAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
+    (squidAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
       mockResponse,
     );
 
@@ -102,7 +102,7 @@ describe("getEngineerAppointments", () => {
       state: "success",
       data: {},
     };
-    (payloadAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
+    (squidAPI.createEngineerAppointmentSync as Mock).mockResolvedValue(
       mockResponse,
     );
 
@@ -119,7 +119,7 @@ describe("getEngineerAppointments", () => {
     const validationError = new ValidationError([
       { path: "id", message: "Must be a string" },
     ]);
-    (payloadAPI.createEngineerAppointmentSync as Mock).mockRejectedValue(
+    (squidAPI.createEngineerAppointmentSync as Mock).mockRejectedValue(
       validationError,
     );
 
@@ -141,7 +141,7 @@ describe("getEngineerAppointments", () => {
       {},
       new Response(null, { status: 500, statusText: "Internal Server Error" }),
     );
-    (payloadAPI.createEngineerAppointmentSync as Mock).mockRejectedValue(
+    (squidAPI.createEngineerAppointmentSync as Mock).mockRejectedValue(
       fetchError,
     );
 
@@ -160,7 +160,7 @@ describe("getEngineerAppointments", () => {
 
   it("returns unknownError for unexpected errors", async () => {
     const unknownError = new Error("Unexpected failure");
-    (payloadAPI.createEngineerAppointmentSync as Mock).mockRejectedValue(
+    (squidAPI.createEngineerAppointmentSync as Mock).mockRejectedValue(
       unknownError,
     );
 

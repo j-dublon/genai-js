@@ -1,4 +1,4 @@
-import { payloadAPI } from "../payloadClient";
+import { squidAPI } from "../payloadClient";
 import { FetchError, ValidationError } from "../payloadTypes";
 
 interface SendEmailCodeResult {
@@ -14,7 +14,7 @@ export const sendEmailCode = async (
   basketId: string,
 ): Promise<SendEmailCodeResult> => {
   try {
-    const response = await payloadAPI.sendEmailCode(basketId);
+    const response = await squidAPI.emailValidationSendCode(basketId);
 
     return {
       success: response.success,

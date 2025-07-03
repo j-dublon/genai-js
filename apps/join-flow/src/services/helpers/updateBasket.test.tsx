@@ -1,36 +1,43 @@
+import { StoreBasket } from "@store/useJoinFlowStore";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 
+import { Basket } from "../../../payload-types";
 import { updateBasket } from "./updateBasket";
 
 vi.mock("@/services/payloadClient", () => ({
-  payloadAPI: {
+  squidAPI: {
     updateBasket: vi.fn(),
   },
 }));
 
 const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-interface Basket {
-  id: string;
-  items: Array<{ id: string; quantity: number; price: number }>;
-  total: number;
-  userId: string;
-}
-
 describe("updateBasket", () => {
   const mockBasketId = "basket-123";
-  const mockBasketData: Partial<Basket> = {
-    items: [{ id: "item-1", quantity: 2, price: 10.99 }],
-    total: 21.98,
+  const mockBasketData: Partial<StoreBasket> = {
+    id: mockBasketId,
+    product: {
+      selectionIdentifier: "item-1",
+      quoteLookup: {
+        value: "quote-123",
+        relationTo: "newSaleQuoteLookups",
+      },
+    },
   };
 
   const mockBasket: Basket = {
     id: mockBasketId,
-    items: [{ id: "item-1", quantity: 2, price: 10.99 }],
-    total: 21.98,
-    userId: "user-123",
+    product: {
+      selectionIdentifier: "item-1",
+      quoteLookup: {
+        value: "quote-123",
+        relationTo: "newSaleQuoteLookups",
+      },
+    },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
   beforeEach(() => {
@@ -40,7 +47,7 @@ describe("updateBasket", () => {
 
   describe("successful updates", () => {
     it("should return updated basket on successful API call", async () => {
-      vi.mocked(payloadAPI.updateBasket).mockResolvedValue(mockBasket);
+      vi.mocked(squidAPI.updateBasket).mockResolvedValue(mockBasket);
 
       const result = await updateBasket(mockBasketId, mockBasketData);
 
@@ -48,23 +55,23 @@ describe("updateBasket", () => {
         basket: mockBasket,
       });
       expect(result.error).toBeUndefined();
-      expect(payloadAPI.updateBasket).toHaveBeenCalledWith(
+      expect(squidAPI.updateBasket).toHaveBeenCalledWith(
         mockBasketId,
         mockBasketData,
       );
-      expect(payloadAPI.updateBasket).toHaveBeenCalledTimes(1);
+      expect(squidAPI.updateBasket).toHaveBeenCalledTimes(1);
     });
 
     it("should handle empty basket data", async () => {
       const emptyBasketData = {};
-      vi.mocked(payloadAPI.updateBasket).mockResolvedValue(mockBasket);
+      vi.mocked(squidAPI.updateBasket).mockResolvedValue(mockBasket);
 
       const result = await updateBasket(mockBasketId, emptyBasketData);
 
       expect(result).toEqual({
         basket: mockBasket,
       });
-      expect(payloadAPI.updateBasket).toHaveBeenCalledWith(
+      expect(squidAPI.updateBasket).toHaveBeenCalledWith(
         mockBasketId,
         emptyBasketData,
       );
@@ -79,26 +86,26 @@ describe("updateBasket", () => {
         message: "Basket ID is required",
         details: ["ID parameter cannot be empty"],
       });
-      expect(payloadAPI.updateBasket).not.toHaveBeenCalled();
+      expect(squidAPI.updateBasket).not.toHaveBeenCalled();
     });
   });
 
   describe("function call verification", () => {
     it("should call payloadAPI.updateBasket with correct parameters", async () => {
-      vi.mocked(payloadAPI.updateBasket).mockResolvedValue(mockBasket);
+      vi.mocked(squidAPI.updateBasket).mockResolvedValue(mockBasket);
 
       await updateBasket(mockBasketId, mockBasketData);
 
-      expect(payloadAPI.updateBasket).toHaveBeenCalledWith(
+      expect(squidAPI.updateBasket).toHaveBeenCalledWith(
         mockBasketId,
         mockBasketData,
       );
-      expect(payloadAPI.updateBasket).toHaveBeenCalledTimes(1);
+      expect(squidAPI.updateBasket).toHaveBeenCalledTimes(1);
     });
 
     it("should log errors to console", async () => {
       const error = new Error("Test error");
-      vi.mocked(payloadAPI.updateBasket).mockRejectedValue(error);
+      vi.mocked(squidAPI.updateBasket).mockRejectedValue(error);
 
       await updateBasket(mockBasketId, mockBasketData);
 

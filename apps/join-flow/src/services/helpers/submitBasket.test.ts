@@ -1,19 +1,18 @@
-import type { StoreBasket } from "@store/useJoinFlowStore";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { submitBasket } from "./submitBasket";
 
 vi.mock("@/services/payloadClient", () => ({
-  payloadAPI: {
-    signUpToKraken: vi.fn(),
+  squidAPI: {
+    doSignup: vi.fn(),
   },
 }));
 
 describe("submitBasket", () => {
-  const mockPayloadAPI = vi.mocked(payloadAPI);
+  const mockSquidAPI = vi.mocked(squidAPI);
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -22,76 +21,16 @@ describe("submitBasket", () => {
 
   describe("success cases", () => {
     it("should successfully submit a basket with valid basketId", async () => {
-      const mockBasket: StoreBasket = {
-        id: "basket-123",
-        locked: false,
-        optIns: {
-          termsAgreed: true,
-          directDebitAgreed: true,
-          creditSearchAgreed: true,
-          isAccountHolder: true,
-          hasSmartPhone: true,
-          marketingConsent: false,
-        },
-        product: {
-          quoteLookup: {
-            value: "quote-123",
-            relationTo: "newSaleQuoteLookups",
-          },
-          selectionIdentifier: "selection-123",
-          extras: [],
-        },
-        engineer: {
-          selectionIdentifier: "engineer-123",
-        },
-        goLiveDate: "2024-01-01",
-        addressHistory: [
-          {
-            line1: "123 Test Street",
-            line2: "Test Area",
-            line3: "Test City",
-            postcode: "TE1 1ST",
-            id: "address-123",
-          },
-        ],
-        billingAddress: {
-          line1: "123 Test Street",
-          line2: "Test Area",
-          line3: "Test City",
-          postcode: "TE1 1ST",
-        },
-        payment: {
-          bankAccountHolder: "John Doe",
-          bankAccountNumber: "12345678",
-          bankSortCode: "12-34-56",
-        },
-        personalDetails: {
-          firstName: "John",
-          lastName: "Doe",
-          dateOfBirth: "1990-01-01",
-          email: "john.doe@example.com",
-          phone: "07123456789",
-        },
-        switchMatchLookup: "switch-123",
-        sales: {
-          discretionaryBillCreditsAmount: 1000,
-        },
-        cics: {
-          summaryHref: "https://example.com/summary",
-          informationHref: "https://example.com/info",
-        },
-        updatedAt: new Date().toISOString(),
-        createdAt: new Date().toISOString(),
-      };
-
-      mockPayloadAPI.signUpToKraken.mockResolvedValue(mockBasket);
+      mockSquidAPI.doSignup.mockResolvedValue({
+        success: true,
+        accountNumber: "1234567890",
+      });
 
       const result = await submitBasket("basket-123");
 
-      expect(mockPayloadAPI.signUpToKraken).toHaveBeenCalledWith("basket-123");
+      expect(mockSquidAPI.doSignup).toHaveBeenCalledWith("basket-123");
       expect(result).toEqual({
         type: "success",
-        basket: mockBasket,
       });
     });
   });
@@ -100,7 +39,7 @@ describe("submitBasket", () => {
     it("should return a validation error when basketId is an empty string", async () => {
       const result = await submitBasket("");
 
-      expect(mockPayloadAPI.signUpToKraken).not.toHaveBeenCalled();
+      expect(mockSquidAPI.doSignup).not.toHaveBeenCalled();
       expect(result).toEqual({
         type: "error",
         error: {
@@ -115,7 +54,7 @@ describe("submitBasket", () => {
       // @ts-expect-error - we want to test the case where basketId is undefined
       const result = await submitBasket(undefined);
 
-      expect(mockPayloadAPI.signUpToKraken).not.toHaveBeenCalled();
+      expect(mockSquidAPI.doSignup).not.toHaveBeenCalled();
       expect(result).toEqual({
         type: "error",
         error: {
@@ -130,7 +69,7 @@ describe("submitBasket", () => {
       // @ts-expect-error - we want to test the case where basketId is null
       const result = await submitBasket(null);
 
-      expect(mockPayloadAPI.signUpToKraken).not.toHaveBeenCalled();
+      expect(mockSquidAPI.doSignup).not.toHaveBeenCalled();
       expect(result).toEqual({
         type: "error",
         error: {
@@ -147,11 +86,11 @@ describe("submitBasket", () => {
         { message: "General validation error" },
       ];
       const validationError = new ValidationError(validationDetails);
-      mockPayloadAPI.signUpToKraken.mockRejectedValue(validationError);
+      mockSquidAPI.doSignup.mockRejectedValue(validationError);
 
       const result = await submitBasket("basket-123");
 
-      expect(mockPayloadAPI.signUpToKraken).toHaveBeenCalledWith("basket-123");
+      expect(mockSquidAPI.doSignup).toHaveBeenCalledWith("basket-123");
       expect(result).toEqual({
         type: "error",
         error: {
@@ -178,11 +117,11 @@ describe("submitBasket", () => {
           statusText: "Internal Server Error",
         }),
       );
-      mockPayloadAPI.signUpToKraken.mockRejectedValue(fetchError);
+      mockSquidAPI.doSignup.mockRejectedValue(fetchError);
 
       const result = await submitBasket("basket-123");
 
-      expect(mockPayloadAPI.signUpToKraken).toHaveBeenCalledWith("basket-123");
+      expect(mockSquidAPI.doSignup).toHaveBeenCalledWith("basket-123");
       expect(result).toEqual({
         type: "error",
         error: {
@@ -197,11 +136,11 @@ describe("submitBasket", () => {
   describe("unknown error cases", () => {
     it("should handle a generic Error", async () => {
       const genericError = new Error("Something went wrong");
-      mockPayloadAPI.signUpToKraken.mockRejectedValue(genericError);
+      mockSquidAPI.doSignup.mockRejectedValue(genericError);
 
       const result = await submitBasket("basket-123");
 
-      expect(mockPayloadAPI.signUpToKraken).toHaveBeenCalledWith("basket-123");
+      expect(mockSquidAPI.doSignup).toHaveBeenCalledWith("basket-123");
       expect(result).toEqual({
         type: "error",
         error: {
@@ -214,11 +153,11 @@ describe("submitBasket", () => {
 
     it("should handle non-Error objects", async () => {
       const nonErrorObject = "This is not an error object";
-      mockPayloadAPI.signUpToKraken.mockRejectedValue(nonErrorObject);
+      mockSquidAPI.doSignup.mockRejectedValue(nonErrorObject);
 
       const result = await submitBasket("basket-123");
 
-      expect(mockPayloadAPI.signUpToKraken).toHaveBeenCalledWith("basket-123");
+      expect(mockSquidAPI.doSignup).toHaveBeenCalledWith("basket-123");
       expect(result).toEqual({
         type: "error",
         error: {
@@ -230,11 +169,11 @@ describe("submitBasket", () => {
     });
 
     it("should handle null/undefined errors", async () => {
-      mockPayloadAPI.signUpToKraken.mockRejectedValue(null);
+      mockSquidAPI.doSignup.mockRejectedValue(null);
 
       const result = await submitBasket("basket-123");
 
-      expect(mockPayloadAPI.signUpToKraken).toHaveBeenCalledWith("basket-123");
+      expect(mockSquidAPI.doSignup).toHaveBeenCalledWith("basket-123");
       expect(result).toEqual({
         type: "error",
         error: {

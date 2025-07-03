@@ -1,4 +1,4 @@
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { QuoteLookupSuccess } from "../payloadTypes";
@@ -27,60 +27,35 @@ export const createQuoteLookupPoll = async (
   addressLookupSelectionIdentifier: string,
 ): Promise<QuoteLookupResult> => {
   try {
-    const initialResponse = await payloadAPI.createQuoteLookupAsync({
+    const initialResponse = await squidAPI.createQuoteLookupAsync({
       affiliateSession: affiliateSessionId,
       addressLookup: addressLookupId,
       addressLookupSelectionIdentifier: addressLookupSelectionIdentifier,
     });
 
-    if (initialResponse.state === "success") {
-      return {
-        products: initialResponse.data.response.products || [],
-        quotingCode: initialResponse.data.response.quotingCode || undefined,
-        documentID: initialResponse.data.documentID,
-      };
+    const documentID = initialResponse.documentID;
+    let nextResponse = null;
+
+    while (true) {
+      nextResponse = await squidAPI.getQuoteLookup(documentID);
+      if (nextResponse.state === "pending") {
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      } else {
+        break;
+      }
     }
 
-    if (initialResponse.state === "error") {
+    if (nextResponse.state === "error") {
       return handleErrors(
-        initialResponse.data.errors,
-        initialResponse.data.documentID,
+        nextResponse.data.errors,
+        nextResponse.data.documentID,
       );
     }
 
-    if (initialResponse.state === "pending") {
-      const documentID = initialResponse.documentID;
-      let nextResponse = null;
-
-      while (true) {
-        nextResponse = await payloadAPI.getQuoteLookup(documentID);
-        if (nextResponse.state === "pending") {
-          await new Promise((resolve) => setTimeout(resolve, 5000));
-        } else {
-          break;
-        }
-      }
-
-      if (nextResponse.state === "error") {
-        return handleErrors(
-          nextResponse.data.errors,
-          nextResponse.data.documentID,
-        );
-      }
-
-      return {
-        products: nextResponse.data.response.products || [],
-        quotingCode: nextResponse.data.response.quotingCode || undefined,
-        documentID: nextResponse.data.documentID,
-      };
-    }
-
     return {
-      products: [],
-      error: {
-        type: "unknownError",
-        message: "No quote data was returned",
-      },
+      products: nextResponse.data.response.products || [],
+      quotingCode: nextResponse.data.response.quotingCode || undefined,
+      documentID: nextResponse.data.documentID,
     };
   } catch (error) {
     return handleExceptions(error);

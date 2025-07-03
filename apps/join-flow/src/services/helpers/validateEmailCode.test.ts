@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "../payloadClient";
+import { squidAPI } from "../payloadClient";
 import {
   FetchError,
   ValidateEmailCodeResponse,
@@ -9,26 +9,26 @@ import {
 import { validateEmailCode } from "./validateEmailCode";
 
 vi.mock("../payloadClient", () => ({
-  payloadAPI: {
-    validateEmailCode: vi.fn(),
+  squidAPI: {
+    emailValidationCheckCode: vi.fn(),
   },
 }));
 
-describe("sendEmailCode", () => {
+describe("validateEmailCode", () => {
   const mockValidateEmailCodeResponse: ValidateEmailCodeResponse = {
     success: true,
     message: "Email code validated successfully",
   };
 
   it("should return a success flag when the API call is successful", async () => {
-    vi.mocked(payloadAPI.validateEmailCode).mockResolvedValueOnce(
+    vi.mocked(squidAPI.emailValidationCheckCode).mockResolvedValueOnce(
       mockValidateEmailCodeResponse,
     );
 
     const result = await validateEmailCode("123", "123456");
 
     expect(result).toEqual({ success: true });
-    expect(payloadAPI.validateEmailCode).toHaveBeenCalledTimes(1);
+    expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
   });
 
   it("should handle network errors", async () => {
@@ -39,7 +39,9 @@ describe("sendEmailCode", () => {
       {},
       new Response(null, { status: 500, statusText: "Internal Server Error" }),
     );
-    vi.mocked(payloadAPI.validateEmailCode).mockRejectedValueOnce(networkError);
+    vi.mocked(squidAPI.emailValidationCheckCode).mockRejectedValueOnce(
+      networkError,
+    );
 
     const result = await validateEmailCode("123", "123456");
 
@@ -50,14 +52,14 @@ describe("sendEmailCode", () => {
         details: ["Status: 500"],
       },
     });
-    expect(payloadAPI.validateEmailCode).toHaveBeenCalledTimes(1);
+    expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
   });
 
   it("should handle validation errors", async () => {
     const validationError = new ValidationError([
       { message: "Validate Email Code failed", path: "validateEmailCode" },
     ]);
-    vi.mocked(payloadAPI.validateEmailCode).mockRejectedValueOnce(
+    vi.mocked(squidAPI.emailValidationCheckCode).mockRejectedValueOnce(
       validationError,
     );
 
@@ -70,12 +72,14 @@ describe("sendEmailCode", () => {
         details: ["validateEmailCode is invalid: Validate Email Code failed"],
       },
     });
-    expect(payloadAPI.validateEmailCode).toHaveBeenCalledTimes(1);
+    expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
   });
 
   it("should handle unknown errors", async () => {
     const unknownError = new Error("Something went wrong");
-    vi.mocked(payloadAPI.validateEmailCode).mockRejectedValueOnce(unknownError);
+    vi.mocked(squidAPI.emailValidationCheckCode).mockRejectedValueOnce(
+      unknownError,
+    );
 
     const result = await validateEmailCode("123", "123456");
 
@@ -86,12 +90,12 @@ describe("sendEmailCode", () => {
         details: ["Something went wrong"],
       },
     });
-    expect(payloadAPI.validateEmailCode).toHaveBeenCalledTimes(1);
+    expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
   });
 
   it("should handle non-error instances", async () => {
     const nonErrorObject = "This is not an Error object";
-    vi.mocked(payloadAPI.validateEmailCode).mockRejectedValueOnce(
+    vi.mocked(squidAPI.emailValidationCheckCode).mockRejectedValueOnce(
       nonErrorObject,
     );
 
@@ -104,6 +108,6 @@ describe("sendEmailCode", () => {
         details: ["Unknown error"],
       },
     });
-    expect(payloadAPI.validateEmailCode).toHaveBeenCalledTimes(1);
+    expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
   });
 });

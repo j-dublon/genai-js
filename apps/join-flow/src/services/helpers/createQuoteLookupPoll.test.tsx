@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createQuoteLookupPoll } from "@/services/helpers/createQuoteLookupPoll";
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 
 vi.mock("@/services/payloadClient", () => ({
-  payloadAPI: {
+  squidAPI: {
     createQuoteLookupAsync: vi.fn(),
     getQuoteLookup: vi.fn(),
   },
@@ -50,65 +50,7 @@ describe("createQuoteLookupPoll", () => {
     vi.useRealTimers();
   });
 
-  describe("successful responses", () => {
-    it("should return products when initial response is successful", async () => {
-      const mockResponse = {
-        state: "success" as const,
-        data: {
-          response: {
-            products: mockProducts,
-            quotingCode: "quote-123",
-          },
-          documentID: "doc-123",
-        },
-      };
-
-      vi.mocked(payloadAPI.createQuoteLookupAsync).mockResolvedValue(
-        mockResponse,
-      );
-
-      const result = await createQuoteLookupPoll(
-        mockAffiliateSessionId,
-        mockAddressLookupId,
-        mockAddressLookupSelectionIdentifier,
-      );
-
-      expect(result).toEqual({
-        products: mockProducts,
-        quotingCode: "quote-123",
-        documentID: "doc-123",
-      });
-    });
-
-    it("should handle undefined quotingCode in successful response", async () => {
-      const mockResponse = {
-        state: "success" as const,
-        data: {
-          response: {
-            products: mockProducts,
-            quotingCode: undefined,
-          },
-          documentID: "doc-123",
-        },
-      };
-
-      vi.mocked(payloadAPI.createQuoteLookupAsync).mockResolvedValue(
-        mockResponse,
-      );
-
-      const result = await createQuoteLookupPoll(
-        mockAffiliateSessionId,
-        mockAddressLookupId,
-        mockAddressLookupSelectionIdentifier,
-      );
-
-      expect(result).toEqual({
-        products: mockProducts,
-        quotingCode: undefined,
-        documentID: "doc-123",
-      });
-    });
-
+  describe("responses", () => {
     it("should poll until completion when initial response is pending", async () => {
       vi.useFakeTimers();
 
@@ -128,11 +70,11 @@ describe("createQuoteLookupPoll", () => {
         },
       };
 
-      vi.mocked(payloadAPI.createQuoteLookupAsync).mockResolvedValue(
+      vi.mocked(squidAPI.createQuoteLookupAsync).mockResolvedValue(
         mockPendingResponse,
       );
 
-      vi.mocked(payloadAPI.getQuoteLookup)
+      vi.mocked(squidAPI.getQuoteLookup)
         .mockResolvedValueOnce({
           state: "pending" as const,
           documentID: "doc-123",
@@ -149,8 +91,8 @@ describe("createQuoteLookupPoll", () => {
 
       const result = await resultPromise;
 
-      expect(payloadAPI.getQuoteLookup).toHaveBeenCalledTimes(2);
-      expect(payloadAPI.getQuoteLookup).toHaveBeenCalledWith("doc-123");
+      expect(squidAPI.getQuoteLookup).toHaveBeenCalledTimes(2);
+      expect(squidAPI.getQuoteLookup).toHaveBeenCalledWith("doc-123");
       expect(result).toEqual({
         products: mockProducts,
         quotingCode: "quote-123",

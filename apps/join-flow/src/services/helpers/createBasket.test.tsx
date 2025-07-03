@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import {
   FetchError,
   ValidationError,
@@ -11,7 +11,7 @@ import { Basket } from "../../../payload-types";
 import { createBasket } from "./createBasket";
 
 vi.mock("@/services/payloadClient", () => ({
-  payloadAPI: {
+  squidAPI: {
     createBasket: vi.fn(),
   },
 }));
@@ -47,15 +47,15 @@ describe("createBasket", () => {
 
   describe("Successful basket creation", () => {
     it("should return basket data when API call is successful", async () => {
-      vi.mocked(payloadAPI.createBasket).mockResolvedValue(mockBasketResponse);
+      vi.mocked(squidAPI.createBasket).mockResolvedValue(mockBasketResponse);
 
       const result = await createBasket(mockBasketData);
 
       expect(result).toEqual({
         basket: mockBasketResponse,
       });
-      expect(payloadAPI.createBasket).toHaveBeenCalledWith(mockBasketData);
-      expect(payloadAPI.createBasket).toHaveBeenCalledTimes(1);
+      expect(squidAPI.createBasket).toHaveBeenCalledWith(mockBasketData);
+      expect(squidAPI.createBasket).toHaveBeenCalledTimes(1);
     });
 
     it("should handle basket with all optional fields populated", async () => {
@@ -79,9 +79,7 @@ describe("createBasket", () => {
           postcode: "TE5T 1NG",
         },
       };
-      vi.mocked(payloadAPI.createBasket).mockResolvedValue(
-        complexBasketResponse,
-      );
+      vi.mocked(squidAPI.createBasket).mockResolvedValue(complexBasketResponse);
 
       const result = await createBasket(mockBasketData);
 
@@ -100,7 +98,7 @@ describe("createBasket", () => {
         },
       ];
       const validationError = new ValidationError(validationDetails);
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(validationError);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(validationError);
 
       const result = await createBasket(mockBasketData);
 
@@ -128,7 +126,7 @@ describe("createBasket", () => {
         },
       ];
       const validationError = new ValidationError(validationDetails);
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(validationError);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(validationError);
 
       const result = await createBasket(mockBasketData);
 
@@ -148,7 +146,7 @@ describe("createBasket", () => {
         },
       ];
       const validationError = new ValidationError(validationDetails);
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(validationError);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(validationError);
 
       const result = await createBasket(mockBasketData);
 
@@ -168,10 +166,10 @@ describe("createBasket", () => {
         400,
         "Bad Request",
         "/api/baskets",
-        { error: "Invalid data" },
+        {},
         mockResponse,
       );
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(fetchError);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(fetchError);
 
       const result = await createBasket(mockBasketData);
 
@@ -194,10 +192,10 @@ describe("createBasket", () => {
         500,
         "Internal Server Error",
         "/api/baskets",
-        { error: "Server error" },
+        {},
         mockResponse,
       );
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(fetchError);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(fetchError);
 
       const result = await createBasket(mockBasketData);
 
@@ -209,7 +207,7 @@ describe("createBasket", () => {
   describe("Unknown errors", () => {
     it("should handle generic Error instances", async () => {
       const genericError = new Error("Something went wrong");
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(genericError);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(genericError);
 
       const result = await createBasket(mockBasketData);
 
@@ -222,7 +220,7 @@ describe("createBasket", () => {
     });
 
     it("should handle non-Error thrown values", async () => {
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue("String error");
+      vi.mocked(squidAPI.createBasket).mockRejectedValue("String error");
 
       const result = await createBasket(mockBasketData);
 
@@ -234,7 +232,7 @@ describe("createBasket", () => {
     });
 
     it("should handle null/undefined errors", async () => {
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(null);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(null);
 
       const result = await createBasket(mockBasketData);
 
@@ -245,12 +243,12 @@ describe("createBasket", () => {
   describe("Edge cases", () => {
     it("should handle empty basket data", async () => {
       const emptyBasketData = {};
-      vi.mocked(payloadAPI.createBasket).mockResolvedValue(mockBasketResponse);
+      vi.mocked(squidAPI.createBasket).mockResolvedValue(mockBasketResponse);
 
       const result = await createBasket(emptyBasketData);
 
       expect(result.basket).toEqual(mockBasketResponse);
-      expect(payloadAPI.createBasket).toHaveBeenCalledWith(emptyBasketData);
+      expect(squidAPI.createBasket).toHaveBeenCalledWith(emptyBasketData);
     });
 
     it("should log errors to console", async () => {
@@ -258,7 +256,7 @@ describe("createBasket", () => {
         .spyOn(console, "error")
         .mockImplementation(() => {});
       const testError = new Error("Test error");
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(testError);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(testError);
 
       await createBasket(mockBasketData);
 
@@ -273,7 +271,7 @@ describe("createBasket", () => {
 
   describe("Type safety", () => {
     it("should return correct TypeScript types for success case", async () => {
-      vi.mocked(payloadAPI.createBasket).mockResolvedValue(mockBasketResponse);
+      vi.mocked(squidAPI.createBasket).mockResolvedValue(mockBasketResponse);
 
       const result = await createBasket(mockBasketData);
 
@@ -286,7 +284,7 @@ describe("createBasket", () => {
 
     it("should return correct TypeScript types for error case", async () => {
       const error = new ValidationError([{ message: "test error" }]);
-      vi.mocked(payloadAPI.createBasket).mockRejectedValue(error);
+      vi.mocked(squidAPI.createBasket).mockRejectedValue(error);
 
       const result = await createBasket(mockBasketData);
 

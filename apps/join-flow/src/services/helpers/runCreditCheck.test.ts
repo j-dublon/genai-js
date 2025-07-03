@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "../payloadClient";
+import { squidAPI } from "../payloadClient";
 import {
   FetchError,
   RunCreditCheckResponse,
@@ -9,7 +9,7 @@ import {
 import { runCreditCheck } from "./runCreditCheck";
 
 vi.mock("../payloadClient", () => ({
-  payloadAPI: {
+  squidAPI: {
     runCreditCheck: vi.fn(),
   },
 }));
@@ -21,14 +21,14 @@ describe("runCreditCheck", () => {
   };
 
   it("should return a status and message when the API call is successful", async () => {
-    vi.mocked(payloadAPI.runCreditCheck).mockResolvedValueOnce(
+    vi.mocked(squidAPI.runCreditCheck).mockResolvedValueOnce(
       mockCreditCheckResponse,
     );
 
     const result = await runCreditCheck("123");
 
     expect(result).toEqual(mockCreditCheckResponse);
-    expect(payloadAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
   });
 
   it("should handle network errors", async () => {
@@ -39,7 +39,7 @@ describe("runCreditCheck", () => {
       {},
       new Response(null, { status: 500, statusText: "Internal Server Error" }),
     );
-    vi.mocked(payloadAPI.runCreditCheck).mockRejectedValueOnce(networkError);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(networkError);
 
     const result = await runCreditCheck("123");
 
@@ -50,14 +50,14 @@ describe("runCreditCheck", () => {
         details: ["Status: 500"],
       },
     });
-    expect(payloadAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
   });
 
   it("should handle validation errors", async () => {
     const validationError = new ValidationError([
       { message: "Credit check failed", path: "creditCheck" },
     ]);
-    vi.mocked(payloadAPI.runCreditCheck).mockRejectedValueOnce(validationError);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(validationError);
 
     const result = await runCreditCheck("123");
 
@@ -68,12 +68,12 @@ describe("runCreditCheck", () => {
         details: ["creditCheck is invalid: Credit check failed"],
       },
     });
-    expect(payloadAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
   });
 
   it("should handle unknown errors", async () => {
     const unknownError = new Error("Something went wrong");
-    vi.mocked(payloadAPI.runCreditCheck).mockRejectedValueOnce(unknownError);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(unknownError);
 
     const result = await runCreditCheck("123");
 
@@ -84,12 +84,12 @@ describe("runCreditCheck", () => {
         details: ["Something went wrong"],
       },
     });
-    expect(payloadAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
   });
 
   it("should handle non-error instances", async () => {
     const nonErrorObject = "This is not an Error object";
-    vi.mocked(payloadAPI.runCreditCheck).mockRejectedValueOnce(nonErrorObject);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(nonErrorObject);
 
     const result = await runCreditCheck("123");
 
@@ -100,6 +100,6 @@ describe("runCreditCheck", () => {
         details: ["Unknown error"],
       },
     });
-    expect(payloadAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
   });
 });

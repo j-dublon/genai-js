@@ -6,6 +6,8 @@ import {
   EngineerAppointment,
   NewSaleQuoteLookup,
   ReferralSession,
+  RegradeQuoteLookup,
+  RenewalQuoteLookup,
   SwitchMatchLookup,
   VulnerabilityAndAccessibility,
 } from "../../payload-types";
@@ -25,7 +27,7 @@ export type ResponseStates = NonNullable<
 >;
 
 export class FetchError extends Error {
-  public body: Record<string, unknown>;
+  public params: RequestInit;
   public bodyString: string;
   public url: string;
   public response: Response;
@@ -34,16 +36,16 @@ export class FetchError extends Error {
     status: number,
     statusText: string,
     url: string,
-    body: Record<string, unknown>,
+    params: RequestInit,
     response: Response,
   ) {
     super(`HTTP Error: ${status} ${statusText}`);
     this.name = "FetchError";
 
-    this.body = body;
+    this.params = params;
     this.url = url;
     this.response = response;
-    this.bodyString = JSON.stringify(body);
+    this.bodyString = JSON.stringify(params.body);
   }
 }
 
@@ -179,17 +181,45 @@ export type InitialVulnerabilityAndAccessibility = Omit<
   "updatedAt"
 >;
 
-export type ApiErrorResponse = {
-  errors?: Array<{
-    message: string;
-    data?: {
-      errors?: Array<{
-        label?: string;
-        path?: string;
-      }>;
+export type SignupResponse =
+  | {
+      success: true;
+      accountNumber: string;
+    }
+  | {
+      success: false;
+      // NOTE because this is not linked to payload we don't get actual block type hints, once in monorepo this will be much better
+      errorBlocks?: {
+        errorMessage?: string;
+        blockType?: string;
+      }[];
     };
-  }>;
-};
+
+export type RegradeResponse =
+  | {
+      success: true;
+    }
+  | {
+      success: false;
+      // NOTE because this is not linked to payload we don't get actual block type hints, once in monorepo this will be much better
+      errorBlocks?: {
+        errorMessage?: string;
+        blockType?: string;
+      }[];
+    };
+
+export type RenewalResponse =
+  | {
+      success: true;
+    }
+  | {
+      success: false;
+      // NOTE because this is not linked to payload we don't get actual block type hints, once in monorepo this will be much better
+      errorBlocks?: {
+        errorMessage?: string;
+        blockType?: string;
+      }[];
+    };
 
 export type GenerateCICSResponse =
   | {
@@ -209,3 +239,33 @@ export type GenerateCICSResponse =
     };
 
 export type GetCICSResponse = Basket["cics"];
+
+export type RenewalQuoteLookupSuccess = {
+  documentID: string;
+  response: NonNullable<
+    NonNullable<RenewalQuoteLookup["outputs"]>["apiSuccess"]
+  >;
+};
+export type RenewalQuoteLookupErrors = {
+  documentID: string;
+  errors: NonNullable<NonNullable<RenewalQuoteLookup["outputs"]>["apiErrors"]>;
+};
+export type RenewalQuoteLookupInputs = Omit<
+  NonNullable<NonNullable<RenewalQuoteLookup["inputs"]>>,
+  "requestProcessingType"
+>;
+
+export type RegradeQuoteLookupSuccess = {
+  documentID: string;
+  response: NonNullable<
+    NonNullable<RegradeQuoteLookup["outputs"]>["apiSuccess"]
+  >;
+};
+export type RegradeQuoteLookupErrors = {
+  documentID: string;
+  errors: NonNullable<NonNullable<RegradeQuoteLookup["outputs"]>["apiErrors"]>;
+};
+export type RegradeQuoteLookupInputs = Omit<
+  NonNullable<NonNullable<RegradeQuoteLookup["inputs"]>>,
+  "requestProcessingType"
+>;

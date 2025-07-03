@@ -1,4 +1,4 @@
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 export interface Appointment {
@@ -25,7 +25,7 @@ export const getEngineerAppointments = async (
   id: string,
 ): Promise<EngineerAppointmentLookupResult> => {
   try {
-    const response = await payloadAPI.createEngineerAppointmentSync({
+    const response = await squidAPI.createEngineerAppointmentSync({
       quoteLookup: id,
     });
 

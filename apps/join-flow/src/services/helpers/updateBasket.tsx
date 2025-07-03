@@ -1,6 +1,6 @@
 import type { StoreBasket } from "@store/useJoinFlowStore";
 
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 interface UpdateBasketResult {
@@ -27,10 +27,7 @@ export const updateBasket = async (
   }
 
   try {
-    const basket = (await payloadAPI.updateBasket(
-      id,
-      basketData,
-    )) as StoreBasket;
+    const basket = (await squidAPI.updateBasket(id, basketData)) as StoreBasket;
 
     return {
       basket,

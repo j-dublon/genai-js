@@ -8,7 +8,7 @@ import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket"
 import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 
 import { PaymentDocuments } from "../PaymentDocuments";
 import { AccessibilityRequirements } from "./Accessibility/AccessibilityRequirements";
@@ -174,7 +174,8 @@ export const PaymentConfirmation = ({
     const getContractLinks = async () => {
       if (typeof basket?.id === "string") {
         try {
-          const response: StoreBasket["cics"] = await payloadAPI.getCICS(
+          // TODO: Create service helper for this for ease of future payload updates
+          const response: StoreBasket["cics"] = await squidAPI.getCICS(
             basket.id,
           );
 

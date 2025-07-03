@@ -1,13 +1,13 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { payloadAPI } from "@/services/payloadClient";
+import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { getAffiliateSessionByCode } from "./affiliateSession";
 
 describe("getAffiliateSessionByCode", () => {
   vi.mock("@/services/payloadClient", () => ({
-    payloadAPI: {
+    squidAPI: {
       createAffiliateSessionSync: vi.fn(),
     },
   }));
@@ -16,7 +16,7 @@ describe("getAffiliateSessionByCode", () => {
     vi.resetAllMocks();
   });
 
-  it("should call payloadAPI.createAffiliateSessionSync and return successful result", async () => {
+  it("should call squidAPI.createAffiliateSessionSync and return successful result", async () => {
     const affiliateCode = "testAffiliate";
     const mockApiSuccess = {
       sessionID: "session123",
@@ -33,13 +33,13 @@ describe("getAffiliateSessionByCode", () => {
       },
     };
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
       mockResponse,
     );
 
     const result = await getAffiliateSessionByCode(affiliateCode);
 
-    expect(payloadAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
+    expect(squidAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
       subdomain: "testAffiliate",
     });
 
@@ -62,13 +62,13 @@ describe("getAffiliateSessionByCode", () => {
       },
     };
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
       mockResponse,
     );
 
     const result = await getAffiliateSessionByCode(affiliateCode);
 
-    expect(payloadAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
+    expect(squidAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
       subdomain: "invalidAffiliate",
     });
 
@@ -95,13 +95,13 @@ describe("getAffiliateSessionByCode", () => {
       },
     };
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
       mockResponse,
     );
 
     const result = await getAffiliateSessionByCode(affiliateCode);
 
-    expect(payloadAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
+    expect(squidAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
       subdomain: "inactiveAffiliate",
     });
 
@@ -128,7 +128,7 @@ describe("getAffiliateSessionByCode", () => {
       },
     };
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
       mockResponse,
     );
 
@@ -150,7 +150,7 @@ describe("getAffiliateSessionByCode", () => {
       { message: "Invalid input", path: "subdomain" },
     ]);
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
       validationError,
     );
 
@@ -176,7 +176,7 @@ describe("getAffiliateSessionByCode", () => {
       {} as Response,
     );
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
       fetchError,
     );
 
@@ -196,7 +196,7 @@ describe("getAffiliateSessionByCode", () => {
     const affiliateCode = "unexpectedError";
     const unexpectedError = new Error("Unexpected error");
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
       unexpectedError,
     );
 
@@ -221,7 +221,7 @@ describe("getAffiliateSessionByCode", () => {
       },
     };
 
-    (payloadAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
+    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
       mockResponse,
     );
 
