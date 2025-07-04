@@ -15,7 +15,7 @@ import { getAssetPath } from "@/lib/get-asset-path";
 import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 import { ChooseYourAddressText } from "./ChooseYourAddressProps";
-import { AddressLookupForm } from "./forms/AddressLookupForm";
+import { ServiceAddressLookupForm } from "./forms/ServiceAddressLookupForm";
 
 export const ChooseYourAddress = () => {
   const {
@@ -54,7 +54,7 @@ export const ChooseYourAddress = () => {
         <h1 className="mt-10 mb-4 text-md md:text-xl font-semibold">
           {pageTitle}
         </h1>
-        <AddressLookupForm />
+        <ServiceAddressLookupForm />
         <TipCard
           image={getAssetPath("/images/love.svg")}
           className="my-8 md:my-10 bg-ui-grey-100"

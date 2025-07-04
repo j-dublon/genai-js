@@ -16,8 +16,13 @@ export const PaymentForm = ({
 }: {
   onSubmit: (data: PaymentFormValues) => Promise<boolean>;
 }) => {
-  const { paymentDetails, personalDetails, setPaymentDetails, serviceAddress } =
-    useJoinFlowStore();
+  const {
+    paymentDetails,
+    personalDetails,
+    setPaymentDetails,
+    serviceAddress,
+    billingAddress,
+  } = useJoinFlowStore();
 
   const {
     accountholderNamePlaceholder,
@@ -37,8 +42,7 @@ export const PaymentForm = ({
     accountholderName: initialAccountHolderName,
     accountNumber: initialAccountNumber,
     sortCode: initialSortCode,
-    sameAsServiceAddress:
-      paymentDetails?.sameAsServiceAddress === false ? false : true,
+    sameAsServiceAddress: billingAddress ? false : true,
     isAccountHolder: paymentDetails?.isAccountHolder || false,
   };
 
@@ -85,23 +89,24 @@ export const PaymentForm = ({
         return false;
       }
 
-      let billingAddress = null;
+      let resolvedBillingAddress = undefined;
 
       if (useSameAddress) {
-        billingAddress = {
+        resolvedBillingAddress = {
           line1: serviceAddress.line1,
           line2: serviceAddress.line2,
           line3: serviceAddress.line3,
           postcode: serviceAddress.postcode,
         };
       } else {
-        // TODO: Handle different address (change billing address modal)
-        billingAddress = {
-          line1: serviceAddress.line1,
-          line2: serviceAddress.line2,
-          line3: serviceAddress.line3,
-          postcode: serviceAddress.postcode,
-        };
+        resolvedBillingAddress = billingAddress
+          ? {
+              line1: billingAddress.line1,
+              line2: billingAddress.line2,
+              line3: billingAddress.line3,
+              postcode: billingAddress.postcode,
+            }
+          : undefined;
       }
 
       setPaymentDetails({
@@ -109,7 +114,7 @@ export const PaymentForm = ({
         cardToken: "bank_account",
         accountNumber: data.accountNumber,
         sortCode: data.sortCode,
-        billingAddress,
+        billingAddress: resolvedBillingAddress,
         sameAsServiceAddress: useSameAddress,
         isAccountHolder: data.isAccountHolder,
         termsAgreed: paymentDetails?.termsAgreed || false,
@@ -127,6 +132,7 @@ export const PaymentForm = ({
       paymentDetails?.creditSearchAgreed,
       paymentDetails?.allTermsAgreed,
       serviceAddress,
+      billingAddress,
     ],
   );
 

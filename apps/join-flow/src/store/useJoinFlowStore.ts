@@ -95,7 +95,7 @@ export type PaymentDetails = {
   cardToken: string;
   accountNumber?: string;
   sortCode?: string;
-  billingAddress: Omit<StoreAddress, "identifiers"> | null;
+  billingAddress: Omit<StoreAddress, "identifiers"> | undefined;
   sameAsServiceAddress?: boolean;
   termsAgreed: boolean;
   isAccountHolder: boolean;

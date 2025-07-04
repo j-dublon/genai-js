@@ -7,6 +7,7 @@ import React, { useCallback, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { isBillingAddressesEqual } from "@/services/helpers/isBillingAddressEqual";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
 import PaymentAddressDetails from "./components/PaymentAddressDetails";
@@ -22,8 +23,10 @@ export const PaymentDetails = () => {
     setCurrentStep,
     basket,
     serviceAddress,
+    billingAddress,
     switchingDetails,
     paymentDetails,
+    setBasket,
   } = useJoinFlowStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -53,31 +56,35 @@ export const PaymentDetails = () => {
           return false;
         }
 
-        let billingAddress = null;
+        let resolvedBillingAddress = undefined;
 
         if (data.sameAsServiceAddress) {
-          billingAddress = {
+          resolvedBillingAddress = {
             line1: serviceAddress.line1,
             line2: serviceAddress.line2,
             line3: serviceAddress.line3,
             postcode: serviceAddress.postcode,
           };
         } else {
-          // TODO: Handle different address (change billing address modal)
-          billingAddress = {
-            line1: serviceAddress.line1,
-            line2: serviceAddress.line2,
-            line3: serviceAddress.line3,
-            postcode: serviceAddress.postcode,
-          };
+          resolvedBillingAddress = billingAddress
+            ? {
+                line1: billingAddress.line1,
+                line2: billingAddress.line2,
+                line3: billingAddress.line3,
+                postcode: billingAddress.postcode,
+              }
+            : undefined;
         }
 
         // Check if any details have changed to avoid unnecessary API calls
-        // TODO: As part of change billing address work we'll need to deeply compare the billing address objects
         const havePaymentDetailsChanged =
           data.accountholderName !== paymentDetails?.accountholderName ||
           data.accountNumber !== paymentDetails?.accountNumber ||
-          data.sortCode !== paymentDetails?.sortCode;
+          data.sortCode !== paymentDetails?.sortCode ||
+          !isBillingAddressesEqual(
+            resolvedBillingAddress,
+            paymentDetails?.billingAddress,
+          );
 
         if (!havePaymentDetailsChanged) {
           setShowConfirmation(true);
@@ -85,7 +92,7 @@ export const PaymentDetails = () => {
         }
 
         const result = await updateBasket(basket.id, {
-          billingAddress,
+          billingAddress: resolvedBillingAddress,
           optIns: {
             isAccountHolder: true,
           },
@@ -102,6 +109,28 @@ export const PaymentDetails = () => {
           return false;
         }
 
+        //TO DO: fix payment details in next pr
+
+        // setPaymentDetails({
+        //   ...paymentDetails,
+        //   accountholderName: data.accountholderName,
+        //   accountNumber: data.accountNumber,
+        //   sortCode: data.sortCode,
+        //   billingAddress: resolvedBillingAddress,
+        //   sameAsServiceAddress: data.sameAsServiceAddress,
+        //   isAccountHolder: data.isAccountHolder,
+        // });
+
+        setBasket({
+          ...basket,
+          billingAddress: resolvedBillingAddress,
+          payment: {
+            bankAccountHolder: data.accountholderName,
+            bankAccountNumber: data.accountNumber,
+            bankSortCode: data.sortCode.replace(/-/g, ""),
+          },
+        });
+
         setShowPaymentDetailsError(false);
         setShowConfirmation(true);
 
@@ -116,10 +145,13 @@ export const PaymentDetails = () => {
       }
     },
     [
-      basket?.id,
+      basket,
+      setBasket,
+      paymentDetails?.billingAddress,
       paymentDetails?.accountNumber,
       paymentDetails?.accountholderName,
       paymentDetails?.sortCode,
+      billingAddress,
       serviceAddress,
     ],
   );

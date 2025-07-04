@@ -1,10 +1,10 @@
-import type { StoreBasket } from "@store/useJoinFlowStore";
-
 import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
+import { Basket } from "../../../payload-types";
+
 interface UpdateBasketResult {
-  basket?: StoreBasket;
+  basket?: Basket;
   error?: {
     type: "generalError" | "validationError" | "networkError" | "unknownError";
     message: string;
@@ -14,7 +14,7 @@ interface UpdateBasketResult {
 
 export const updateBasket = async (
   id: string,
-  basketData: Partial<StoreBasket>,
+  basketData: Partial<Basket>,
 ): Promise<UpdateBasketResult> => {
   if (!id) {
     return {
@@ -27,7 +27,7 @@ export const updateBasket = async (
   }
 
   try {
-    const basket = (await squidAPI.updateBasket(id, basketData)) as StoreBasket;
+    const basket = (await squidAPI.updateBasket(id, basketData)) as Basket;
 
     return {
       basket,

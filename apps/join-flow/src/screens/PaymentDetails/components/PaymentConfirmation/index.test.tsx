@@ -94,7 +94,7 @@ describe("PaymentConfirmation", () => {
       accountNumber: "12345678",
       sortCode: "12-34-56",
       isAccountHolder: true,
-      billingAddress: null,
+      billingAddress: undefined,
       sameAsServiceAddress: true,
       termsAgreed: false,
       directDebitAgreed: false,
