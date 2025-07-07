@@ -1,12 +1,32 @@
+#!/bin/sh
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g')
+[ -z "$FILES" ] && exit 0
+
 npm i
-npm run format
+
+# Formatting and sorting file imports will auto add files to staging
+# Linting and type-checking will exit if there are errors
+echo "🔎 Running pre-commit checks..."
+
+# Prettify all selected files
+echo "$FILES" | xargs ./node_modules/.bin/prettier --ignore-unknown --write
+# Add back the modified/prettified files to staging
+echo "$FILES" | xargs git add
+echo "🌟 Prettified files"
+
+# Run import sorting
 npm run sort
+echo "$FILES" | xargs git add
+echo "🌟 Sorted file imports"
+
+# Run linting
 npm run lint
+echo "🌟 Linting passed"
 
-echo "Running type-check for all workspaces..."
+# Run type-check
 npx turbo run check-types
+echo "🌟 Type-checking passed"
 
-if [ $? -ne 0 ]; then
-  echo "Pre-commit hook failed!"
-  exit 1
-fi
+
+echo "✅ All checks passed!"
+exit 0
