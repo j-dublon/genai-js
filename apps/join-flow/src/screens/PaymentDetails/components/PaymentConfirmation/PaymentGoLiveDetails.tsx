@@ -8,8 +8,8 @@ import { formatDisplayDate } from "@/lib/formatDate";
 export const PaymentGoLiveDetails = ({}) => {
   const { goLiveDetails } = useJoinFlowStore();
 
-  const formattedSchedule = goLiveDetails?.engineerSlot
-    ? `${formatDisplayDate(goLiveDetails.engineerSlot.date)} - ${goLiveDetails.engineerSlot.timeSlot}`
+  const formattedSchedule = goLiveDetails?.engineerTimeSlot
+    ? `${formatDisplayDate(goLiveDetails.selectedDate)} - ${goLiveDetails.engineerTimeSlot}`
     : "";
 
   return (

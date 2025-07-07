@@ -20,6 +20,7 @@ describe("getEngineerAppointments", () => {
     const mockResponse = {
       state: "success",
       data: {
+        documentID: "testingID",
         response: {
           appointments: [
             {
@@ -38,6 +39,7 @@ describe("getEngineerAppointments", () => {
     const result = await getEngineerAppointments("some-id");
 
     expect(result.error).toBeUndefined();
+    expect(result.documentID).toBe("testingID");
     expect(result.appointments).toHaveLength(1);
     expect(result.appointments[0].type).toBe("inspection");
     expect(result.appointments[0].startDateTime).toBeInstanceOf(Date);
@@ -149,6 +151,7 @@ describe("getEngineerAppointments", () => {
 
     expect(result.appointments).toEqual([]);
     expect(result).toEqual({
+      documentID: "",
       appointments: [],
       error: {
         type: "networkError",

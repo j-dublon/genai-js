@@ -91,7 +91,7 @@ describe("updateBasket", () => {
   });
 
   describe("function call verification", () => {
-    it("should call payloadAPI.updateBasket with correct parameters", async () => {
+    it("should call squidAPI.updateBasket with correct parameters", async () => {
       vi.mocked(squidAPI.updateBasket).mockResolvedValue(mockBasket);
 
       await updateBasket(mockBasketId, mockBasketData);

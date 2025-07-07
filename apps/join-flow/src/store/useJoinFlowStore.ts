@@ -7,6 +7,7 @@ import { QuoteLookupSuccess } from "@/services/payloadTypes";
 
 import {
   Affiliate,
+  EngineerAppointment,
   NewSaleQuoteLookup,
   RegradeQuoteLookup,
   RenewalQuoteLookup,
@@ -106,7 +107,7 @@ export type PaymentDetails = {
 
 export type GoLiveDetails = {
   selectedDate: string;
-  engineerSlot?: { date: string; timeSlot: string };
+  engineerTimeSlot?: string;
 };
 
 export type AccessibilityRequirements = {
@@ -274,7 +275,10 @@ export type StoreBasket = {
       | { family: string; selectionIdentifier: string; id?: string | null }[]
       | null;
   };
-  engineer?: { selectionIdentifier?: string | null };
+  engineer?: {
+    engineerAppointment?: (string | null) | EngineerAppointment;
+    selectionIdentifier?: string | null;
+  };
   goLiveDate?: string | null;
   addressHistory?:
     | {

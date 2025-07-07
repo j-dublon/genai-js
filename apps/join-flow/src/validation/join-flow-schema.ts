@@ -39,7 +39,7 @@ export const notReadyToJoinSchema = z.object({
 
 export const goLiveDateSchema = z.object({
   selectedDate: z.string().min(1, "Please select a date"),
-  timeSlot: z.string().min(1, "Please select a time slot"),
+  timeSlot: z.string().optional(),
 });
 
 export const accessibilityRequirementsSchema = z

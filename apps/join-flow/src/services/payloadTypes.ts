@@ -107,6 +107,14 @@ export type EngineerAppointmentErrors = {
   documentID: string;
   errors: NonNullable<NonNullable<EngineerAppointment["outputs"]>["apiErrors"]>;
 };
+export type GoLiveDateSuccess = {
+  documentID: string;
+  response: NonNullable<NonNullable<string[]>>;
+};
+export type GoLiveDateErrors = {
+  documentID: string;
+  errors: NonNullable<NonNullable<EngineerAppointment["outputs"]>["apiErrors"]>;
+};
 export type EngineerAppointmentInputs = Omit<
   NonNullable<NonNullable<EngineerAppointment["inputs"]>>,
   "requestProcessingType"

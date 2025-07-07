@@ -5,9 +5,11 @@ export interface Appointment {
   endDateTime: Date;
   startDateTime: Date;
   type: string;
+  selectionIdentifier?: string;
 }
 
 export interface EngineerAppointmentLookupResult {
+  documentID: string;
   appointments: Appointment[];
   error?: {
     type:
@@ -32,10 +34,12 @@ export const getEngineerAppointments = async (
     if (response.state === "success" && response.data?.response?.appointments) {
       const appointments = response.data.response.appointments;
       return {
+        documentID: response.data.documentID,
         appointments: appointments.map((item) => ({
           endDateTime: new Date(item.endDateTime),
           startDateTime: new Date(item.startDateTime),
           type: item.type,
+          selectionIdentifier: item.selectionIdentifier,
         })),
       };
     }
@@ -49,6 +53,7 @@ export const getEngineerAppointments = async (
 
       if (noAppointmentsError) {
         return {
+          documentID: "",
           appointments: [],
           error: {
             type: "noAppointmentsFound",
@@ -57,6 +62,7 @@ export const getEngineerAppointments = async (
         };
       }
       return {
+        documentID: "",
         appointments: [],
         error: {
           type: "generalError",
@@ -69,6 +75,7 @@ export const getEngineerAppointments = async (
     }
 
     return {
+      documentID: "",
       appointments: [],
       error: {
         type: "generalError",
@@ -80,6 +87,7 @@ export const getEngineerAppointments = async (
 
     if (error instanceof ValidationError) {
       return {
+        documentID: "",
         appointments: [],
         error: {
           type: "validationError",
@@ -93,6 +101,7 @@ export const getEngineerAppointments = async (
 
     if (error instanceof FetchError) {
       return {
+        documentID: "",
         appointments: [],
         error: {
           type: "networkError",
@@ -103,6 +112,7 @@ export const getEngineerAppointments = async (
     }
 
     return {
+      documentID: "",
       appointments: [],
       error: {
         type: "unknownError",

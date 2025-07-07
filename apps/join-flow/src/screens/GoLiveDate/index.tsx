@@ -9,7 +9,7 @@ import {
 } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { Footer } from "@/components/Footer";
@@ -17,10 +17,9 @@ import { FormDropdown } from "@/components/FormDropdown";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
-import {
-  Appointment,
-  getEngineerAppointments,
-} from "@/services/helpers/getEngineerAppointments";
+import { Appointment } from "@/services/helpers/getEngineerAppointments";
+import { getGoLiveDates } from "@/services/helpers/getGoLiveDates";
+import { updateBasket } from "@/services/helpers/updateBasket";
 import {
   GoLiveDateFormValues,
   goLiveDateSchema,
@@ -29,6 +28,10 @@ import {
 import { EngineerVisitModal } from "./components/EngineerVisitModal";
 import { OtsFailBanner } from "./components/OtsFailBanner";
 import { goLiveDateText } from "./GoLiveDateProps";
+import {
+  fetchEngineerAppointments,
+  getTimeSlotsForDate,
+} from "./utils/GoLiveDateUtils";
 
 export const GoLiveDate = () => {
   const {
@@ -51,6 +54,8 @@ export const GoLiveDate = () => {
     setCurrentStep,
     switchingDetails,
     basket,
+    setBasket,
+    selectedPackage,
   } = useJoinFlowStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,97 +72,81 @@ export const GoLiveDate = () => {
   const [availableAppointments, setAvailableAppointments] = useState<
     Appointment[]
   >([]);
-  const initialTimeslots: Record<string, string> = goLiveDetails?.engineerSlot
-    ?.timeSlot
-    ? {
-        [goLiveDetails.engineerSlot.timeSlot]:
-          goLiveDetails.engineerSlot.timeSlot,
-      }
-    : {};
+  const initialTimeslots: Record<string, string> =
+    goLiveDetails?.engineerTimeSlot
+      ? {
+          [goLiveDetails.engineerTimeSlot]: goLiveDetails.engineerTimeSlot,
+        }
+      : {};
 
   const [timeslots, setTimeslots] =
     useState<Record<string, string>>(initialTimeslots);
   const [loadingAppointments, setLoadingAppointments] = useState(true);
   const [appointmentError, setAppointmentError] = useState<string>();
+  const [documentID, setDocumentID] = useState<string>("");
+
+  const defaultValues = useMemo(
+    () => ({
+      selectedDate: goLiveDetails?.selectedDate || "",
+      timeSlot: goLiveDetails?.engineerTimeSlot || "",
+    }),
+    [goLiveDetails?.selectedDate, goLiveDetails?.engineerTimeSlot],
+  );
 
   const {
     control,
     handleSubmit,
     watch,
+    setError,
     formState: { errors },
   } = useForm<GoLiveDateFormValues>({
     resolver: zodResolver(goLiveDateSchema),
-    defaultValues: {
-      selectedDate: goLiveDetails?.selectedDate || "",
-      timeSlot: goLiveDetails?.engineerSlot?.timeSlot || "",
-    },
+    defaultValues,
     mode: "onSubmit",
   });
 
   const selectedDate = watch("selectedDate");
 
   useEffect(() => {
-    const fetchAppointments = async () => {
-      try {
-        const response = await getEngineerAppointments(
+    const fetchData = async () => {
+      if (selectedPackage?.installationRequired) {
+        fetchEngineerAppointments(
+          setAppointmentError,
+          setAvailableAppointments,
+          setLoadingAppointments,
+          setDocumentID,
           basket?.product?.quoteLookup?.value as string,
         );
-        if (response.error) {
-          console.error("Failed to fetch engineer appointments");
-          setAppointmentError("Failed to fetch engineer appointments");
-        }
-
-        const appointments = response.appointments || [];
-
-        setAvailableAppointments(appointments);
-      } catch (error) {
-        console.error("Failed to fetch engineer appointments", error);
-        setAppointmentError("Failed to fetch engineer appointments");
-      } finally {
+      } else {
+        const goLiveDates = await getGoLiveDates();
+        setAvailableAppointments(
+          goLiveDates.map((date) => ({
+            startDateTime: new Date(date),
+            endDateTime: new Date(date),
+            type: "allDay",
+          })),
+        );
         setLoadingAppointments(false);
       }
     };
-
-    fetchAppointments();
-  }, [basket?.product?.quoteLookup?.value]);
+    // TODO: take user to error screen if no quote lookup
+    if (basket?.product?.quoteLookup?.value) {
+      fetchData();
+    }
+  }, [
+    basket?.product?.quoteLookup?.value,
+    selectedPackage?.installationRequired,
+  ]);
 
   useEffect(() => {
-    const getTimeSlotsForDate = (
-      appointments: Appointment[],
-      selectedDate: string,
-    ): string[] => {
-      const timeSlotLabelMap: Record<string, string> = {
-        am: "8am - 1pm",
-        pm: "1pm - 6pm",
-      };
-      const selected = new Date(selectedDate);
-      selected.setHours(0, 0, 0, 0);
-
-      const appointmentsOnDate = appointments.filter((appt) => {
-        const apptDate = new Date(appt.startDateTime);
-        apptDate.setHours(0, 0, 0, 0);
-        return apptDate.getTime() === selected.getTime();
-      });
-
-      const uniqueTypes = Array.from(
-        new Set(appointmentsOnDate.map((appt) => appt.type)),
-      );
-
-      const availableSlots = uniqueTypes
-        .map((type) => timeSlotLabelMap[type])
-        .filter(Boolean) as string[];
-
-      return availableSlots;
-    };
-
     const availableTimeSlots = getTimeSlotsForDate(
       availableAppointments,
       selectedDate,
     );
     setTimeslots(
       availableTimeSlots.reduce(
-        (acc, label) => {
-          acc[label] = label;
+        (acc, slot) => {
+          acc[slot.label] = slot.selectionIdentifier;
           return acc;
         },
         {} as Record<string, string>,
@@ -165,13 +154,46 @@ export const GoLiveDate = () => {
     );
   }, [availableAppointments, selectedDate]);
 
-  const onSubmit = (data: GoLiveDateFormValues) => {
+  const onSubmit = async (data: GoLiveDateFormValues) => {
+    try {
+      if (!basket) {
+        console.error("No basket available");
+        return;
+      }
+      if (selectedPackage?.installationRequired && !data.timeSlot) {
+        setError("timeSlot", {
+          type: "manual",
+          message: "Please select a time slot",
+        });
+        return;
+      }
+      let result;
+      if (selectedPackage?.installationRequired) {
+        result = await updateBasket(basket.id, {
+          engineer: {
+            engineerAppointment: documentID,
+            selectionIdentifier: data.timeSlot,
+          },
+        });
+      } else {
+        result = await updateBasket(basket.id, {
+          goLiveDate: data.selectedDate,
+        });
+      }
+
+      if (result.basket) {
+        setBasket(result.basket);
+      } else if (result.error) {
+        console.error("Failed to update basket:", result.error);
+        return;
+      }
+    } catch (error) {
+      console.error("Unexpected error updating basket:", error);
+      return;
+    }
     setGoLiveDetails({
       selectedDate: data.selectedDate,
-      engineerSlot: {
-        date: data.selectedDate,
-        timeSlot: data.timeSlot,
-      },
+      engineerTimeSlot: data?.timeSlot || "",
     });
     setCurrentStep(4);
     router.push("/join-flow/payment-details");
@@ -282,7 +304,7 @@ export const GoLiveDate = () => {
                 )}
               </div>
 
-              {selectedDate && (
+              {selectedDate && selectedPackage?.installationRequired && (
                 <div className="mb-6">
                   <FormDropdown
                     dropdownLabel={timeSlotLabel}
@@ -298,7 +320,6 @@ export const GoLiveDate = () => {
 
             <div className="flex mt-8">
               <Button
-                disabled={!selectedDate}
                 tint="yellow"
                 variant="solid"
                 type="submit"

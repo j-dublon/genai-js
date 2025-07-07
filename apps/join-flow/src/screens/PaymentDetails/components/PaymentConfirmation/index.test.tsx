@@ -17,7 +17,7 @@ mockGetCICS.mockReturnValue({
 });
 
 vi.mock("@/services/payloadClient", () => ({
-  payloadAPI: {
+  squidAPI: {
     getBasket: vi.fn().mockReturnValue({
       id: "123",
       updatedAt: new Date().toISOString(),

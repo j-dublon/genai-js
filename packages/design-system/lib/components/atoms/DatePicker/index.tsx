@@ -89,6 +89,7 @@ export const DatePicker = ({
               calendarClassName="calendar-style ds:md:justify-center ds:px-2 ds:w-full"
               renderDayContents={(day, date) => (
                 <div
+                  key={date.toDateString()}
                   className={`.react-datepicker__day--selected ds:flex ds:justify-center ds:items-center ds:md:h-[55px] ds:md:w-[77px]`}
                 >
                   <div className={`ds:font-lg ${getDayClassName(date)}`}>
