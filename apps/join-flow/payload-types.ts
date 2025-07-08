@@ -1534,6 +1534,10 @@ export interface RegradeQuoteLookup {
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
     apiSuccess?: {
+      metaData?: {
+        termsAndConditionsLink?: string | null;
+        privacyPolicyLink?: string | null;
+      };
       quotingCode?: string | null;
       products?:
         | {
@@ -1731,6 +1735,10 @@ export interface RenewalQuoteLookup {
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
     apiSuccess?: {
+      metaData?: {
+        termsAndConditionsLink?: string | null;
+        privacyPolicyLink?: string | null;
+      };
       newContractStartDate?: string | null;
       quotingCode?: string | null;
       products?:
@@ -2760,6 +2768,7 @@ export interface PostcodeListImport {
  */
 export interface User {
   id: string;
+  masqueradeToken?: string | null;
   role: string | Role;
   updatedAt: string;
   createdAt: string;
@@ -3080,15 +3089,15 @@ export interface RegisterOfInterestSubmission {
       /**
        * The address key of the ROI (UPRN)
        */
-      addressKey: string;
+      addressKey?: string | null;
       /**
        * The address key type of the ROI
        */
-      addressKeyType: string;
+      addressKeyType?: string | null;
       /**
        * The formatted address of the ROI
        */
-      formattedAddress: string;
+      formattedAddress?: string | null;
       /**
        * The post code of the ROI
        */
@@ -4968,6 +4977,12 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
         apiSuccess?:
           | T
           | {
+              metaData?:
+                | T
+                | {
+                    termsAndConditionsLink?: T;
+                    privacyPolicyLink?: T;
+                  };
               newContractStartDate?: T;
               quotingCode?: T;
               products?:
@@ -5165,6 +5180,12 @@ export interface RegradeQuoteLookupsSelect<T extends boolean = true> {
         apiSuccess?:
           | T
           | {
+              metaData?:
+                | T
+                | {
+                    termsAndConditionsLink?: T;
+                    privacyPolicyLink?: T;
+                  };
               quotingCode?: T;
               products?:
                 | T
@@ -5924,6 +5945,7 @@ export interface KrakenSwitchMatchServiceProvidersSelect<
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  masqueradeToken?: T;
   role?: T;
   updatedAt?: T;
   createdAt?: T;

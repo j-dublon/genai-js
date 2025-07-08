@@ -28,6 +28,9 @@ import {
   ReferralSessionErrors,
   ReferralSessionInputs,
   ReferralSessionSuccess,
+  RegisterOfInterestSubmissionsErrors,
+  RegisterOfInterestSubmissionsInputs,
+  RegisterOfInterestSubmissionsSuccess,
   RegradeQuoteLookupErrors,
   RegradeQuoteLookupInputs,
   RegradeQuoteLookupSuccess,
@@ -521,6 +524,15 @@ export const squidAPI = {
   getPageContentBySlug: (slug: string, token?: string | null) =>
     doGetSquidEndpoint<Page>(`/pages/${slug}`, token || null),
 
+  // Register Of Interest
+  createRegisterOfInterestSubmissionSync: (
+    input: RegisterOfInterestSubmissionsInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      RegisterOfInterestSubmissionsSuccess,
+      RegisterOfInterestSubmissionsErrors
+    >("/registerOfInterestSubmissions", input, "sync", token || null),
   // RenewalQuoteLookups
   createRenewalQuoteLookupSync: (
     input: RenewalQuoteLookupInputs,

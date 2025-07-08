@@ -6,6 +6,7 @@ import {
   EngineerAppointment,
   NewSaleQuoteLookup,
   ReferralSession,
+  RegisterOfInterestSubmission,
   RegradeQuoteLookup,
   RenewalQuoteLookup,
   SwitchMatchLookup,
@@ -160,6 +161,23 @@ export type QuoteLookupErrors = {
 };
 export type QuoteLookupInputs = Omit<
   NonNullable<NonNullable<NewSaleQuoteLookup["inputs"]>>,
+  "requestProcessingType"
+>;
+
+export type RegisterOfInterestSubmissionsSuccess = {
+  documentID: string;
+  response: NonNullable<
+    NonNullable<RegisterOfInterestSubmission["outputs"]>["apiSuccess"]
+  >;
+};
+export type RegisterOfInterestSubmissionsErrors = {
+  documentID: string;
+  errors: NonNullable<
+    NonNullable<RegisterOfInterestSubmission["outputs"]>["apiErrors"]
+  >;
+};
+export type RegisterOfInterestSubmissionsInputs = Omit<
+  NonNullable<NonNullable<RegisterOfInterestSubmission["inputs"]>>,
   "requestProcessingType"
 >;
 
