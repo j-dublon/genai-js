@@ -1,30 +1,39 @@
 import Link from "next/link";
 
 import { getAssetPath } from "@/lib/get-asset-path";
-import { EeroProduct } from "@/store/useJoinFlowStore";
 
-export const eeroProducts: EeroProduct[] = [
+// TODO: This is a temporary type until we have the CMS setup
+export type EeroContent = {
+  code: string;
+  heading: string;
+  description: string;
+  totalCount: number;
+  imageURL: string;
+};
+
+export const eeroProducts: EeroContent[] = [
   {
-    id: "eero-6",
-    name: "eero 6",
+    code: "EERO_MESH_ROUTER_X1",
+    heading: "No additional Eero needed",
+    description: "Just one eero provided by us.",
+    totalCount: 1,
+    imageURL: getAssetPath("/images/x1_eeros.png"),
+  },
+  {
+    code: "EERO_MESH_ROUTER_X2",
     heading: "Add one extra eero to your plan",
     description:
       "2 eeros will cover an area of approximately XXX square metres and is perfect for most UK homes.",
     totalCount: 2,
     imageURL: getAssetPath("/images/x2_eeros.png"),
-    price: 700,
-    isSelected: false,
   },
   {
-    id: "eero-6-plus",
-    name: "eero 6 Plus",
+    code: "EERO_MESH_ROUTER_X3",
     heading: "Add 2 extra eeros to your plan",
     description:
       "3 eero routers will cover an area of approximately XXX square metres, and is perfect for really large homes, multiple floors and connection outside.",
     totalCount: 3,
     imageURL: getAssetPath("/images/x3_eeros.png"),
-    price: 1400,
-    isSelected: false,
   },
 ];
 

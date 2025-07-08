@@ -1,43 +1,36 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import useJoinFlowStore from "@store/useJoinFlowStore";
+import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { EeroCardProps } from "@/components/EeroCard";
+import { EeroCardProps } from "@/screens/EeroSelection/components/EeroCard";
+import { updateBasket } from "@/services/helpers/updateBasket";
 
 import EeroSelection from "./";
 
 // Mocks
 vi.mock("next/navigation", () => ({
-  useRouter: vi.fn(),
+  useRouter: vi.fn().mockReturnValue({
+    push: vi.fn(),
+  }),
 }));
 
-vi.mock("@store/useJoinFlowStore", async () => {
-  const actual = await vi.importActual<
-    typeof import("@store/useJoinFlowStore")
-  >("@store/useJoinFlowStore");
-  return {
-    ...actual,
-    default: () => ({
-      eeroSelection: null,
-      setCurrentStep: vi.fn(),
-    }),
-    setState: vi.fn(),
-  };
-});
-
-vi.mock("@/components/ReviewYourBasket", () => ({
-  ReviewYourBasket: () => <div data-testid="review-basket">Review Basket</div>,
+vi.mock("@store/useJoinFlowStore", async () => ({
+  default: vi.fn(),
 }));
-vi.mock("@/components/Stepper", () => ({
-  default: () => <div data-testid="stepper">Stepper</div>,
+const mockJoinFlowStore = vi.mocked(useJoinFlowStore);
+
+vi.mock("@/components/StepNavigationWithBasket", () => ({
+  StepNavigationWithBasket: () => <div data-testid="stepper">Stepper</div>,
 }));
 vi.mock("@/components/Footer", () => ({
   Footer: () => <div data-testid="footer">Footer</div>,
 }));
-vi.mock("@/components/EeroCard", () => ({
-  EeroCard: ({ product, isActive, handleSelectEero }: EeroCardProps) => (
-    <div data-testid={`eero-card-${product.id}`}>
-      <button onClick={() => handleSelectEero(product)}>
-        {isActive ? "Remove" : "Choose"} {product.name}
+vi.mock("./components/EeroCard", () => ({
+  EeroCard: ({ eero, isActive, handleSelectEero }: EeroCardProps) => (
+    <div data-testid={`eero-card-${eero.selectionIdentifier}`}>
+      <button onClick={() => handleSelectEero(eero)}>
+        {isActive ? "Remove" : "Choose"} {eero.heading}
       </button>
     </div>
   ),
@@ -61,54 +54,189 @@ vi.mock("./eeroSelectionProps", () => ({
     continueButtonText: "Continue",
     next: "Next",
   },
-  eeroProducts: [
+  eeroProducts: [],
+}));
+vi.mock("@/lib/createEeroOptions", () => ({
+  createEeroOptions: vi.fn().mockReturnValue([
     {
-      id: "eero-1",
-      name: "Eero One",
+      code: "EERO_MESH_ROUTER_X1",
+      family: "mesh_routers",
+      selectionIdentifier: "1",
+      price: 700,
       heading: "Basic Eero",
       imageURL: "",
       description: "One router.",
       totalCount: 1,
-      price: 500,
-      isSelected: false,
     },
     {
-      id: "eero-2",
-      name: "Eero Two",
-      heading: "Advanced Eero",
+      code: "EERO_MESH_ROUTER_X2",
+      family: "mesh_routers",
+      selectionIdentifier: "2",
+      price: 1400,
+      heading: "One extra Eero",
       imageURL: "",
       description: "Two routers.",
       totalCount: 2,
-      price: 1000,
-      isSelected: false,
     },
-  ],
+    {
+      code: "EERO_MESH_ROUTER_X3",
+      family: "mesh_routers",
+      selectionIdentifier: "3",
+      price: 2100,
+      heading: "Two extra Eeros",
+      imageURL: "",
+      description: "Three routers.",
+      totalCount: 3,
+    },
+  ]),
 }));
+
+vi.mock("@/services/helpers/updateBasket", () => ({
+  updateBasket: vi.fn(),
+}));
+const mockUpdateBasket = vi.mocked(updateBasket);
 
 describe("EeroSelection", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockJoinFlowStore.mockReturnValue({
+      eeroSelection: null,
+      setCurrentStep: vi.fn(),
+      selectEeroProduct: vi.fn(),
+    });
+    mockUpdateBasket.mockResolvedValue({
+      basket: {
+        id: "test-basket-id",
+        updatedAt: "2024-01-01",
+        createdAt: "2024-01-01",
+      },
+    });
   });
 
   it("renders title and description", () => {
     render(<EeroSelection />);
+
     expect(screen.getByText("Eero Selection")).toBeInTheDocument();
     expect(screen.getByText("Choose your Eero setup")).toBeInTheDocument();
   });
 
-  it("renders Eero cards", () => {
+  it("renders Eero cards for extra eero options", () => {
     render(<EeroSelection />);
-    expect(screen.getByTestId("eero-card-eero-1")).toBeInTheDocument();
-    expect(screen.getByTestId("eero-card-eero-2")).toBeInTheDocument();
+
+    expect(screen.getByTestId("eero-card-2")).toBeInTheDocument();
+    expect(screen.getByTestId("eero-card-3")).toBeInTheDocument();
   });
 
-  it("selects and toggles eero product", () => {
+  it("selects and toggles eero product", async () => {
+    const user = userEvent.setup();
     render(<EeroSelection />);
 
-    const chooseButton = screen.getByText("Choose Eero One");
-    fireEvent.click(chooseButton);
-    // Clicking again should remove it
-    const removeButton = screen.getByText("Remove Eero One");
+    const chooseButton = screen.getByText("Choose One extra Eero");
+    await user.click(chooseButton);
+    const removeButton = screen.getByText("Remove One extra Eero");
+
     expect(removeButton).toBeInTheDocument();
+  });
+
+  describe("updating the basket", () => {
+    it("shouldn't call update basket API if eero is already in basket", async () => {
+      const user = userEvent.setup();
+      mockJoinFlowStore.mockReturnValue({
+        basket: {
+          product: {
+            extras: [
+              {
+                selectionIdentifier: "2",
+              },
+            ],
+          },
+        },
+        setCurrentStep: vi.fn(),
+        selectEeroProduct: vi.fn(),
+      });
+      render(<EeroSelection />);
+
+      const chooseButton = screen.getByRole("button", {
+        name: "Choose One extra Eero",
+      });
+      await user.click(chooseButton);
+
+      const continueButton = screen.getByRole("button", { name: "Next" });
+      await user.click(continueButton);
+
+      expect(mockUpdateBasket).not.toHaveBeenCalled();
+    });
+
+    it("shouldn't call update basket API if no additional eero is selected and no extras in basket", async () => {
+      const user = userEvent.setup();
+      mockJoinFlowStore.mockReturnValue({
+        basket: {
+          product: {
+            extras: [],
+          },
+        },
+        setCurrentStep: vi.fn(),
+        selectEeroProduct: vi.fn(),
+      });
+      render(<EeroSelection />);
+
+      const continueButton = screen.getByRole("button", { name: "Continue" });
+      await user.click(continueButton);
+
+      expect(mockUpdateBasket).not.toHaveBeenCalled();
+    });
+
+    it("should call update basket API if no additional eero is selected and extras in basket", async () => {
+      const user = userEvent.setup();
+      mockJoinFlowStore.mockReturnValue({
+        basket: {
+          product: {
+            extras: [
+              {
+                selectionIdentifier: "2",
+              },
+            ],
+          },
+        },
+        setCurrentStep: vi.fn(),
+        selectEeroProduct: vi.fn(),
+        setBasket: vi.fn(),
+      });
+      render(<EeroSelection />);
+
+      const continueButton = screen.getByRole("button", { name: "Continue" });
+      await user.click(continueButton);
+
+      expect(mockUpdateBasket).toHaveBeenCalled();
+    });
+
+    it("should call update basket API if additional eero is selected that is not in basket", async () => {
+      const user = userEvent.setup();
+      mockJoinFlowStore.mockReturnValue({
+        basket: {
+          product: {
+            extras: [
+              {
+                selectionIdentifier: "2",
+              },
+            ],
+          },
+        },
+        setCurrentStep: vi.fn(),
+        selectEeroProduct: vi.fn(),
+        setBasket: vi.fn(),
+      });
+      render(<EeroSelection />);
+
+      const chooseButton = screen.getByRole("button", {
+        name: "Choose Two extra Eeros",
+      });
+      await user.click(chooseButton);
+
+      const continueButton = screen.getByRole("button", { name: "Next" });
+      await user.click(continueButton);
+
+      expect(mockUpdateBasket).toHaveBeenCalled();
+    });
   });
 });

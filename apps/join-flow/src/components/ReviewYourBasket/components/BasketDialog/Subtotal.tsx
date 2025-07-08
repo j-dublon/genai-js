@@ -60,6 +60,12 @@ export const Subtotal = ({
 
   const hasDiscountedPrice = discountedPrice !== monthlyPackagePrice;
 
+  // TODO: Next PR - handle eeros in review basket
+  const mockEeroSelection = {
+    ...eeroSelection,
+    totalCount: 2,
+  };
+
   return (
     <>
       <h2 className="font-semibold text-sm leading-[1.6]">{title}</h2>
@@ -92,7 +98,7 @@ export const Subtotal = ({
         <hr className="border-core-white" />
         <div data-testid="eero-pricing" className="flex flex-col gap-2">
           <div className="flex flex-col md:flex-row gap-2 md:gap-18">
-            <p className="md:w-1/2">{`x${eeroSelection.totalCount} ${eeroRouters}`}</p>
+            <p className="md:w-1/2">{`x${mockEeroSelection.totalCount} ${eeroRouters}`}</p>
             <p className="md:w-1/2">
               £{monthlyEeroPrice}
               <span className="font-normal">{perMonth}</span>

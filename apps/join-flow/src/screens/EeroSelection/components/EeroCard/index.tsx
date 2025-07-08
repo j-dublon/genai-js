@@ -3,19 +3,19 @@ import { Tick } from "@react-component-library/ui/icons";
 import Link from "next/link";
 
 import { convertPenceToPounds } from "@/hooks/usePricingCalculations";
-import { EeroProduct } from "@/store/useJoinFlowStore";
+import type { EeroOption } from "@/lib/createEeroOptions";
 
 export type EeroCardProps = {
-  product: EeroProduct;
+  eero: EeroOption;
   isActive: boolean;
   eeroChooseProductButtonText: {
     remove: string;
     choose: string;
   };
-  handleSelectEero: (product: EeroProduct) => void;
+  handleSelectEero: (product: EeroOption) => void;
 };
 
-const ProductImageAndInfo = ({ product }: { product: EeroProduct }) => (
+const ProductImageAndInfo = ({ product }: { product: EeroOption }) => (
   <div className="flex flex-col mb-2">
     {product.imageURL && (
       <div className="w-full aspect-[555/256]">
@@ -46,7 +46,7 @@ const PricingInfo = ({
   product,
   isActive,
 }: {
-  product: EeroProduct;
+  product: EeroOption;
   isActive: boolean;
 }) => {
   const price = convertPenceToPounds(product.price);
@@ -85,7 +85,7 @@ const PricingInfo = ({
 };
 
 export const EeroCard = ({
-  product,
+  eero,
   isActive,
   eeroChooseProductButtonText,
   handleSelectEero,
@@ -99,9 +99,9 @@ export const EeroCard = ({
       `}
     >
       <div className="p-4 pb-0 md:pb-4 md:mb-8 text-xs md:text-sm text-ui-grey-500">
-        <ProductImageAndInfo product={product} />
+        <ProductImageAndInfo product={eero} />
         <span>
-          {product.description}{" "}
+          {eero.description}{" "}
           <Link className="font-medium underline text-ui-link" href="">
             Help me decide
           </Link>
@@ -118,7 +118,7 @@ export const EeroCard = ({
             md:rounded-l-lg
           `}
         >
-          <PricingInfo product={product} isActive={isActive} />
+          <PricingInfo product={eero} isActive={isActive} />
         </div>
 
         <div
@@ -130,7 +130,7 @@ export const EeroCard = ({
           `}
         >
           <Button
-            onClick={() => handleSelectEero(product)}
+            onClick={() => handleSelectEero(eero)}
             tint={isActive ? "light-peach" : "yellow"}
             variant="solid"
             size="medium"

@@ -54,21 +54,17 @@ describe("Subtotal", () => {
   };
 
   const mockEeroSelection: EeroProduct = {
-    id: "no-additional-eero",
-    name: "No additional eero device",
-    description: "Just one eero provided by us.",
+    code: "EERO_MESH_ROUTER_X1",
+    family: "mesh_routers",
+    selectionIdentifier: "1",
     price: 0,
-    totalCount: 1,
-    isSelected: true,
   };
 
   const mockEeroSelectionWithPrice: EeroProduct = {
-    id: "eero-6",
-    name: "eero 6",
-    description: "Enhanced coverage with one additional eero.",
+    code: "EERO_MESH_ROUTER_X2",
+    family: "mesh_routers",
+    selectionIdentifier: "2",
     price: 500,
-    totalCount: 2,
-    isSelected: true,
   };
 
   describe("when product has discounted pricing", () => {

@@ -30,12 +30,10 @@ describe("usePricingCalculations", () => {
   };
 
   const mockEeroProduct: EeroProduct = {
-    id: "1",
-    name: "eero 6",
-    description: "Fast WiFi for your home",
+    code: "EERO_MESH_ROUTER_X1",
+    family: "mesh_routers",
+    selectionIdentifier: "1",
     price: 500,
-    isSelected: false,
-    totalCount: 2,
   };
 
   describe("convertPenceToPounds", () => {

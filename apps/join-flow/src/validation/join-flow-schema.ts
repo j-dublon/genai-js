@@ -20,14 +20,11 @@ export const packageSelectionSchema = z.object({
 });
 
 export const eeroSelectionSchema = z.object({
-  id: z.string().min(1, "Please select an eero product"),
-  name: z.string(),
+  code: z.string(),
+  family: z.string(),
+  selectionIdentifier: z.string().min(1, "Please select an eero product"),
   price: z.number(),
-  isSelected: z.boolean().optional(),
-  heading: z.string().min(1, "Heading is required"),
-  description: z.string(),
   totalCount: z.number().int(),
-  imageURL: z.string(),
 });
 
 export const notReadyToJoinSchema = z.object({

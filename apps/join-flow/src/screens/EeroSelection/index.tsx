@@ -6,12 +6,13 @@ import { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-import { EeroCard } from "@/components/EeroCard";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
-import { getAssetPath } from "@/lib/get-asset-path";
+import { createEeroOptions, type EeroOption } from "@/lib/createEeroOptions";
+import { updateBasket } from "@/services/helpers/updateBasket";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
+import { EeroCard } from "./components/EeroCard";
 import {
   eeroChooseProductButtonText,
   eeroContinueButtonText,
@@ -19,57 +20,87 @@ import {
   eeroProducts,
 } from "./eeroSelectionProps";
 
+const INCLUDED_EERO_CODE = "EERO_MESH_ROUTER_X1";
+
 const EeroSelection = () => {
   const router = useRouter();
-  const { eeroSelection, setCurrentStep, selectEeroProduct } =
-    useJoinFlowStore();
+  const {
+    eeroSelection,
+    setCurrentStep,
+    selectEeroProduct,
+    basket,
+    setBasket,
+    selectedPackage,
+  } = useJoinFlowStore();
 
-  // TO DO: might need to come from api eventually, but to be reviewed
-  const noAdditionalEero = {
-    id: "no-additional-eero",
-    name: "No additional eero device",
-    heading: "No additional Eero needed",
-    imageURL: getAssetPath("/images/x1_eeros.png"),
-    description: "Just one eero provided by us.",
-    totalCount: 1,
-    price: 0,
-    isSelected: true,
-  };
-
-  const [selectedEero, setSelectedEero] = useState<EeroProduct | null>(
-    eeroSelection ||
-      eeroProducts.find((p) => p.id === "no-eero") ||
-      noAdditionalEero,
+  const eeroOptions = createEeroOptions(
+    selectedPackage?.extras || [],
+    eeroProducts,
+  );
+  const noAdditionalEeroOption = eeroOptions.find(
+    (option) => option.totalCount === 1,
+  )!;
+  const additionalEeroOptions = eeroOptions.filter(
+    (option) => option.totalCount > 1,
   );
 
-  const handleSelectEero = (product: EeroProduct) => {
-    // If the product is already selected, reset to noEero
-    if (selectedEero?.id === product.id) {
-      setSelectedEero(noAdditionalEero);
+  const [selectedEero, setSelectedEero] = useState<EeroProduct>(
+    eeroSelection || noAdditionalEeroOption,
+  );
+
+  const handleSelectEero = (eero: EeroOption) => {
+    // If the product is already selected, reset to noEero - i.e. untoggle the additional eero
+    if (selectedEero?.selectionIdentifier === eero.selectionIdentifier) {
+      setSelectedEero(noAdditionalEeroOption);
     } else {
-      const updatedProduct = {
-        ...product,
-        isSelected: true,
-      };
-      setSelectedEero(updatedProduct);
+      setSelectedEero(eero);
     }
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
+    if (!basket) {
+      console.error("Basket not found"); // TODO: This shouldn't be possible but needs handling
+      return;
+    }
+
     try {
-      if (!selectedEero) {
-        selectEeroProduct(noAdditionalEero);
-        setCurrentStep(3);
-      } else {
+      if (
+        !basket.product?.extras?.find(
+          (extra) =>
+            extra.selectionIdentifier === selectedEero.selectionIdentifier,
+        ) &&
+        !(
+          selectedEero.code === INCLUDED_EERO_CODE &&
+          basket.product?.extras?.length === 0
+        )
+      ) {
+        // Update basket with selected eero if a different selection has been made
         eeroSelectionSchema.parse(selectedEero);
-        selectEeroProduct(selectedEero);
-        setCurrentStep(3);
+        const result = await updateBasket(basket.id, {
+          product: {
+            extras: [
+              {
+                family: selectedEero.family,
+                selectionIdentifier: selectedEero.selectionIdentifier,
+              },
+            ],
+          },
+        });
+
+        if (result.error) {
+          // TODO: Error handling
+          console.error("Error updating basket:", result.error);
+          return;
+        }
+
+        if (result.basket) {
+          setBasket(result.basket);
+        }
       }
 
-      // Add a small delay to ensure store updates before navigation
-      setTimeout(() => {
-        router.replace("/join-flow/one-touch-switching");
-      }, 100);
+      setCurrentStep(3);
+      selectEeroProduct(selectedEero);
+      router.push("/join-flow/one-touch-switching");
     } catch (error) {
       console.error("Error in handleContinue:", error);
     }
@@ -91,11 +122,14 @@ const EeroSelection = () => {
             </div>
 
             <div className="grid grid-cols-1 gap-5 mb-8 md:gap-19 md:grid-cols-2">
-              {eeroProducts.map((product) => (
+              {additionalEeroOptions.map((eero) => (
                 <EeroCard
-                  key={product.id}
-                  product={product}
-                  isActive={selectedEero?.id === product.id}
+                  key={eero.selectionIdentifier}
+                  eero={eero}
+                  isActive={
+                    selectedEero?.selectionIdentifier ===
+                    eero.selectionIdentifier
+                  }
                   eeroChooseProductButtonText={eeroChooseProductButtonText}
                   handleSelectEero={handleSelectEero}
                 />
@@ -122,7 +156,7 @@ const EeroSelection = () => {
                 onClick={handleContinue}
                 className="w-full md:w-fit"
               >
-                {selectedEero && selectedEero.id === "no-additional-eero"
+                {selectedEero && selectedEero.code === INCLUDED_EERO_CODE
                   ? eeroContinueButtonText.continueButtonText
                   : eeroContinueButtonText.next}
               </Button>

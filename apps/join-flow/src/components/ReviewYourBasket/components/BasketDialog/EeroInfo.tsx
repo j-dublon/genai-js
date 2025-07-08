@@ -1,6 +1,7 @@
 import { PillButton } from "@react-component-library/ui";
 import { Minus, Plus } from "@react-component-library/ui/icons";
 
+import { getAssetPath } from "@/lib/get-asset-path";
 import useJoinFlowStore, { EeroProduct } from "@/store/useJoinFlowStore";
 
 interface EeroInfoProps {
@@ -25,13 +26,28 @@ export const EeroInfo = ({
 
   if (!eeroSelection) return null;
 
+  // TODO: Next PR - handle eeros in review basket
+  const mockEeroSelection = {
+    ...eeroSelection,
+    totalCount: 1,
+    imageURL: getAssetPath("/images/x1_eeros.png"),
+    name: "Eero",
+    description: "The best eero router",
+  };
+  const mockEeroProducts = [
+    ...eeroProducts.map((product) => ({
+      ...product,
+      totalCount: 2,
+    })),
+  ];
+
   const maximumAvailableEeros = Math.max(
-    ...eeroProducts.map((product) => product.totalCount),
+    ...mockEeroProducts.map((product) => product.totalCount),
   );
 
   const handleIncreaseEeros = () => {
-    const nextEero = eeroProducts.find(
-      (product) => product.totalCount === eeroSelection.totalCount + 1,
+    const nextEero = mockEeroProducts.find(
+      (product) => product.totalCount === mockEeroSelection.totalCount + 1,
     );
     if (nextEero) {
       selectEeroProduct(nextEero);
@@ -40,8 +56,8 @@ export const EeroInfo = ({
   };
 
   const handleDecreaseEeros = () => {
-    const previousEero = eeroProducts.find(
-      (product) => product.totalCount === eeroSelection.totalCount - 1,
+    const previousEero = mockEeroProducts.find(
+      (product) => product.totalCount === mockEeroSelection.totalCount - 1,
     );
     if (previousEero) {
       selectEeroProduct(previousEero);
@@ -54,21 +70,21 @@ export const EeroInfo = ({
       <div className="flex flex-col md:flex-row text-xs md:text-sm leading-[1.6] gap-4 md:gap-1">
         <h3 className="font-normal whitespace-nowrap">{title}</h3>
         <p className="font-semibold">
-          {`You've got ${eeroSelection.totalCount}x eero router${eeroSelection.totalCount > 1 ? "s" : ""}`}
+          {`You've got ${mockEeroSelection.totalCount}x eero router${mockEeroSelection.totalCount > 1 ? "s" : ""}`}
         </p>
       </div>
       <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-        {eeroSelection.imageURL && (
+        {mockEeroSelection.imageURL && (
           <div className="aspect-[111/74] w-[110px] bg-ui-grey-300 rounded-md px-2">
             <img
-              src={eeroSelection.imageURL}
-              alt={eeroSelection.name}
+              src={mockEeroSelection.imageURL}
+              alt={mockEeroSelection.name}
               className="w-full h-full object-contain"
             />
           </div>
         )}
         <div>
-          {eeroSelection.description}
+          {mockEeroSelection.description}
           {eeroSelection.price > 0 && (
             <p className="mt-4 md:mt-1">
               <span className="font-semibold">+£{monthlyEeroPrice}</span>
@@ -79,7 +95,7 @@ export const EeroInfo = ({
       </div>
 
       <div className="flex gap-4 flex-col md:flex-row">
-        {eeroSelection.totalCount < maximumAvailableEeros && (
+        {mockEeroSelection.totalCount < maximumAvailableEeros && (
           <PillButton
             buttonText={addMoreEeros}
             backgroundColor="black"
@@ -91,7 +107,7 @@ export const EeroInfo = ({
             className="min-w-[175px]"
           />
         )}
-        {eeroSelection.totalCount !== 1 && (
+        {mockEeroSelection.totalCount !== 1 && (
           <PillButton
             buttonText={removeEeros}
             backgroundColor="white"

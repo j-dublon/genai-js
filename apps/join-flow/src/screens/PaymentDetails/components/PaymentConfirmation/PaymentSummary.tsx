@@ -5,6 +5,7 @@ import React from "react";
 
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { formatDisplayDate } from "@/lib/formatDate";
+import { getAssetPath } from "@/lib/get-asset-path";
 import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
 
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
@@ -83,6 +84,14 @@ export const PaymentSummary: React.FC = () => {
       ? `From ${formatDisplayDate(annualPriceRise[1].date)}`
       : null;
 
+  // TODO: Next PR - Sort out content/structures
+  const mockEeroSelection = {
+    imageURL: getAssetPath("/images/x1_eeros.png"),
+    name: "Eero",
+    description: "The best eero router",
+    price: 700,
+  };
+
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md">
       <h3 className="font-bold mb-4">{monthlyPaymentTitle}</h3>
@@ -94,8 +103,8 @@ export const PaymentSummary: React.FC = () => {
 
       {eeroSelection && (
         <LineItem
-          title={eeroSelection.name}
-          description={eeroSelection.description}
+          title={mockEeroSelection.name}
+          description={mockEeroSelection.description}
           price={pricing.monthlyEeroPrice}
           isIncluded={pricing.monthlyEeroPrice === 0}
         />

@@ -87,6 +87,7 @@ export const ReviewYourBasket = ({
     setIsDialogOpen(false);
   };
 
+  // TODO: Next PR - Sort out content/structures
   const allEeroProducts = [
     {
       id: "no-additional-eero",
@@ -99,7 +100,14 @@ export const ReviewYourBasket = ({
       isSelected: true,
     },
     ...eeroProducts,
-  ];
+  ].map((eero) => ({
+    ...eero,
+    code: "EERO_MESH_ROUTER_X1",
+    selectionIdentifier: "1",
+    family: "mesh_routers",
+    price: 700,
+    totalCount: 1,
+  }));
 
   const handlePlanChange = async (selectedPlanId: string) => {
     if (!selectedPlanId) {

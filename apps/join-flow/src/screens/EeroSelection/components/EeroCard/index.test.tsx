@@ -1,17 +1,17 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { EeroCard } from "./";
+import { EeroCard } from ".";
 
 export const mockEeroProduct = {
-  id: "eero-6-plus",
-  name: "Eero Pro 6",
+  code: "EERO_MESH_ROUTER_X3",
+  family: "mesh_routers",
+  selectionIdentifier: "0",
   heading: "Add 2 extra eeros to your plan",
   description: "Mocked description",
   totalCount: 3,
   imageURL: "/images/x3_eeros.png",
-  price: 1400,
-  isSelected: false,
+  price: 2100,
 };
 
 const buttonText = {
@@ -23,7 +23,7 @@ describe("EeroCard", () => {
   it("renders product heading, description, and image", () => {
     render(
       <EeroCard
-        product={mockEeroProduct}
+        eero={mockEeroProduct}
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
@@ -42,7 +42,7 @@ describe("EeroCard", () => {
   it("renders correct price and count info", () => {
     render(
       <EeroCard
-        product={mockEeroProduct}
+        eero={mockEeroProduct}
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
@@ -50,7 +50,7 @@ describe("EeroCard", () => {
     );
 
     expect(screen.getByText("Add 2 extra eeros")).toBeInTheDocument();
-    expect(screen.getByText("+£14")).toBeInTheDocument();
+    expect(screen.getByText("+£21")).toBeInTheDocument();
     const paragraph = screen.getByText((content, element) => {
       return (
         element?.tagName.toLowerCase() === "p" &&
@@ -64,7 +64,7 @@ describe("EeroCard", () => {
   it("renders 'choose' button when inactive", () => {
     render(
       <EeroCard
-        product={mockEeroProduct}
+        eero={mockEeroProduct}
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
@@ -79,7 +79,7 @@ describe("EeroCard", () => {
   it("renders 'remove' button when active", () => {
     render(
       <EeroCard
-        product={mockEeroProduct}
+        eero={mockEeroProduct}
         isActive={true}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
@@ -96,7 +96,7 @@ describe("EeroCard", () => {
 
     render(
       <EeroCard
-        product={mockEeroProduct}
+        eero={mockEeroProduct}
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={handleSelectEero}

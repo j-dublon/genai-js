@@ -64,14 +64,10 @@ export type PersonalDetails = {
 };
 
 export type EeroProduct = {
-  id: string;
-  name: string;
-  heading?: string | null;
-  imageURL?: string | null;
-  description?: string;
-  totalCount: number;
+  code: string;
+  family: string;
+  selectionIdentifier: string;
   price: number;
-  isSelected: boolean;
 };
 
 export type BroadbandProvider = {
