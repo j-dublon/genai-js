@@ -3,7 +3,6 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import useJoinFlowStore from "@/store/useJoinFlowStore";
-import { getNextPage } from "@/validation/getNextPage";
 
 import { ReviewYourBasket } from "./index";
 
@@ -18,19 +17,11 @@ vi.mock("@/store/useJoinFlowStore", () => ({
   default: vi.fn(),
 }));
 
-vi.mock("@/validation/getNextPage", () => ({
-  getNextPage: vi.fn(),
-}));
-
 const mockSetIsDialogOpen = vi.fn();
 
 describe("ReviewYourBasket", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-
-    (getNextPage as ReturnType<typeof vi.fn>).mockReturnValue({
-      name: "Next Page",
-    });
 
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       selectedPackage: {

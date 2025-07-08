@@ -8,7 +8,8 @@ import { formatServiceAddress } from "@/lib/formatServiceAddress";
 import { PaymentAddressModal } from "@/screens/PaymentDetails/components/PaymentAddressModal/index";
 import useJoinFlowStore from "@/store/useJoinFlowStore";
 
-import { paymentConfirmationText } from "./PaymentConfirmation/PaymentConfirmationProps";
+import { paymentConfirmationText } from "../PaymentConfirmation/PaymentConfirmationProps";
+import { paymentAddressDetailsText } from "./PaymentAddressDetailsProps";
 
 export const PaymentAddressDetails = () => {
   const { addressDetailsLabel, billingAddressLabel } = paymentConfirmationText;
@@ -60,7 +61,7 @@ export const PaymentAddressDetails = () => {
         )}
         {!displayBillingAddress && (
           <div className="text-sm text-ui-grey-400 italic">
-            No billing address set
+            {paymentAddressDetailsText.noBillingAddressSet}
           </div>
         )}
       </div>
@@ -70,7 +71,7 @@ export const PaymentAddressDetails = () => {
         className="font-normal underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
         onClick={handleChangeMyDetails}
       >
-        Change my billing address
+        {paymentAddressDetailsText.changeBillingAddress}
       </button>
 
       <PaymentAddressModal

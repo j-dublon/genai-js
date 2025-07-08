@@ -64,7 +64,7 @@ describe("PaymentAddressModal", () => {
     expect(screen.getByText("Important:")).toBeInTheDocument();
     expect(
       screen.getByText(
-        "Just so you know this will only affect your billing address.",
+        /Just so you know this will only affect your billing address/,
       ),
     ).toBeInTheDocument();
   });

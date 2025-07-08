@@ -90,7 +90,6 @@ describe("PaymentConfirmation", () => {
     const store = useJoinFlowStore.getState();
     store.setPaymentDetails({
       accountholderName: "Test User",
-      cardToken: "bank_account",
       accountNumber: "12345678",
       sortCode: "12-34-56",
       isAccountHolder: true,

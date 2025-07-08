@@ -8,6 +8,11 @@ import { PaymentFormValues } from "@/screens/PaymentDetails/forms/formValues";
 import { PaymentForm } from "@/screens/PaymentDetails/forms/PaymentForm";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
+import {
+  paymentAccountDetailsText,
+  paymentDetailsModalText,
+} from "./PaymentAccountDetailsProps";
+
 export const PaymentDetailsModal = () => {
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const { paymentDetails, basket } = useJoinFlowStore();
@@ -201,15 +206,14 @@ export const PaymentDetailsModal = () => {
 
   return (
     <>
-      <InfoModal title="Change your direct debit details" modalRef={modalRef}>
+      <InfoModal title={paymentDetailsModalText.title} modalRef={modalRef}>
         <p className="mb-6 mt-6 text-ui-grey-500 font-bold">
-          Enter your new details in the form below, then hit save.
+          {paymentDetailsModalText.formInstructions}
         </p>
         <PaymentForm onSubmit={handleSubmit} />
         {showPaymentDetailsError && (
           <p className="text-sm text-ui-error mb-6">
-            Unable to validate bank details, please check your details and try
-            again.
+            {paymentAccountDetailsText.validationErrorMessage}
           </p>
         )}
         <div className="ds:flex ds:justify-end">
@@ -222,7 +226,9 @@ export const PaymentDetailsModal = () => {
             aria-label="Save changes and close modal"
             disabled={isFormSubmitting}
           >
-            {isFormSubmitting ? "Loading..." : "Save changes"}
+            {isFormSubmitting
+              ? paymentDetailsModalText.loading
+              : paymentDetailsModalText.saveChanges}
           </Button>
         </div>
       </InfoModal>

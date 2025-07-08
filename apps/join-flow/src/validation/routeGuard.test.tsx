@@ -30,7 +30,6 @@ describe("RouteGuard", () => {
       eeroSelection: { id: "test-eero" },
       switchingDetails: { otsSwitchStatus: "SWITCH_SUCCESS" },
       goLiveDetails: { selectedDate: "2023-01-01" },
-      paymentDetails: { cardToken: "test-token" },
     });
   });
 

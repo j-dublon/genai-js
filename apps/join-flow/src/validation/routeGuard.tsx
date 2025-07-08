@@ -3,55 +3,41 @@ import useJoinFlowStore, { JoinFlowState } from "@store/useJoinFlowStore";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
+import { otsCompleted } from "@/lib/otsCompleted";
+
 export type FlowStep = {
   path: string;
-  field: string | null;
   index: number;
-  name?: string;
 };
 
-// TODO: "field" to be used in SummaryBar to indicate previous step - rename semantically
 export const FLOW_STEPS: FlowStep[] = [
-  { path: "/join-flow", field: null, index: 0 },
-  { path: "/join-flow/package-selection", field: null, index: 1 },
+  { path: "/join-flow", index: 0 },
+  { path: "/join-flow/package-selection", index: 1 },
   {
     path: "/join-flow/personal-details",
-    field: "selectedPackage",
     index: 1,
   },
   {
     path: "/join-flow/eero-selection",
-    field: "personalDetails",
     index: 2,
   },
   {
     path: "/join-flow/one-touch-switching",
-    field: "eeroSelection",
     index: 3,
   },
   {
     path: "/join-flow/go-live-date",
-    field: "switchingDetails",
     index: 4,
   },
   {
     path: "/join-flow/payment-details",
-    field: "goLiveDetails",
     index: 5,
   },
   {
     path: "/join-flow/order-summary",
-    field: "paymentDetails",
     index: 6,
   },
 ];
-
-const otsCompleted = (storeState: JoinFlowState): boolean => {
-  return (
-    storeState.switchingDetails?.otsSwitchStatus !== undefined &&
-    storeState.switchingDetails?.otsSwitchStatus !== "FIRST_ATTEMPT_FAILED"
-  );
-};
 
 const findNextRequiredStep = (storeState: JoinFlowState): string => {
   switch (true) {
@@ -64,7 +50,7 @@ const findNextRequiredStep = (storeState: JoinFlowState): string => {
       return "/join-flow/personal-details";
     case !storeState.eeroSelection:
       return "/join-flow/eero-selection";
-    case !otsCompleted(storeState):
+    case !otsCompleted(storeState.switchingDetails):
       return "/join-flow/one-touch-switching";
     case !storeState.goLiveDetails:
       return "/join-flow/go-live-date";
@@ -119,7 +105,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
 
         if (
           pathname === "/join-flow/one-touch-switching" &&
-          otsCompleted(store)
+          otsCompleted(store.switchingDetails)
         ) {
           router.replace("/join-flow/go-live-date");
           return;

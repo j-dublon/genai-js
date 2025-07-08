@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { BillingAddressLookupForm } from "@/screens/PaymentDetails/forms/BillingAddressLookupForm";
 
-import { paymentAddressModalText } from "../PaymentAddressProps";
+import { paymentAddressModalText } from "../PaymentAddressDetails/PaymentAddressDetailsProps";
 
 interface PaymentAddressModalProps {
   modalRef: React.RefObject<HTMLDialogElement | null>;

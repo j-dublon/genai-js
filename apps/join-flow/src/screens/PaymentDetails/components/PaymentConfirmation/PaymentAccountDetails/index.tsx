@@ -6,9 +6,10 @@ import React from "react";
 import {
   openPaymentDetailsModal,
   PaymentDetailsModal,
-} from "@/screens/PaymentDetails/components/PaymentDetailsModal";
+} from "@/screens/PaymentDetails/components/PaymentConfirmation/PaymentAccountDetails/PaymentDetailsModal";
 
-import { paymentConfirmationText } from "./PaymentConfirmationProps";
+import { paymentConfirmationText } from "../PaymentConfirmationProps";
+import { paymentAccountDetailsText } from "./PaymentAccountDetailsProps";
 
 export const PaymentAccountDetails = () => {
   const { paymentDetails } = useJoinFlowStore();
@@ -41,10 +42,11 @@ export const PaymentAccountDetails = () => {
         </h3>
 
         <button
-          className="mt-4 text-ui-error cursor-pointer border-none bg-transparent p-0"
+          type="button"
+          className="font-normal underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
           onClick={handleChangeMyDetails}
         >
-          Change my details
+          {paymentAccountDetailsText.changeMyDetails}
         </button>
       </div>
 

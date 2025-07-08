@@ -1,3 +1,8 @@
+export const paymentAddressDetailsText = {
+  noBillingAddressSet: "No billing address set",
+  changeBillingAddress: "Change my billing address",
+};
+
 export const paymentAddressModalText = {
   title: "Change my billing address",
   tipCardHighlight: "Important:",

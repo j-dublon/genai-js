@@ -89,7 +89,6 @@ export type SwitchingDetails = {
 
 export type PaymentDetails = {
   accountholderName: string;
-  cardToken: string;
   accountNumber?: string;
   sortCode?: string;
   billingAddress: Omit<StoreAddress, "identifiers"> | undefined;
@@ -388,8 +387,6 @@ const useJoinFlowStore = create<JoinFlowState>()(
 
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
-      // BROADBAND PACKAGE's selectpackage
-      // selectPackage: (pkg) => set({ selectedPackage: pkg, currentStep: 1 }),
       selectPackage: (pkg) =>
         set({
           selectedPackage: pkg,
@@ -414,6 +411,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
         set({
           currentStep: 0,
           selectedPackage: null,
+          billingAddress: null,
           serviceAddress: null,
           personalDetails: null,
           eeroSelection: null,

@@ -7,6 +7,7 @@ import React, { useCallback, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { otsCompleted } from "@/lib/otsCompleted";
 import { isBillingAddressesEqual } from "@/services/helpers/isBillingAddressEqual";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
@@ -18,14 +19,15 @@ import { PaymentForm } from "./forms/PaymentForm";
 import { paymentDetailsText } from "./PaymentDetailsProps";
 
 export const PaymentDetails = () => {
+  const store = useJoinFlowStore();
   const router = useRouter();
   const {
     setCurrentStep,
     basket,
     serviceAddress,
     billingAddress,
-    switchingDetails,
     paymentDetails,
+    setPaymentDetails,
     setBasket,
   } = useJoinFlowStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,7 +78,6 @@ export const PaymentDetails = () => {
             : undefined;
         }
 
-        // Check if any details have changed to avoid unnecessary API calls
         const havePaymentDetailsChanged =
           data.accountholderName !== paymentDetails?.accountholderName ||
           data.accountNumber !== paymentDetails?.accountNumber ||
@@ -109,17 +110,18 @@ export const PaymentDetails = () => {
           return false;
         }
 
-        //TO DO: fix payment details in next pr
-
-        // setPaymentDetails({
-        //   ...paymentDetails,
-        //   accountholderName: data.accountholderName,
-        //   accountNumber: data.accountNumber,
-        //   sortCode: data.sortCode,
-        //   billingAddress: resolvedBillingAddress,
-        //   sameAsServiceAddress: data.sameAsServiceAddress,
-        //   isAccountHolder: data.isAccountHolder,
-        // });
+        setPaymentDetails({
+          accountholderName: data.accountholderName,
+          accountNumber: data.accountNumber,
+          sortCode: data.sortCode,
+          billingAddress: resolvedBillingAddress,
+          sameAsServiceAddress: data.sameAsServiceAddress,
+          isAccountHolder: data.isAccountHolder,
+          termsAgreed: paymentDetails?.termsAgreed || false,
+          directDebitAgreed: paymentDetails?.directDebitAgreed || false,
+          creditSearchAgreed: paymentDetails?.creditSearchAgreed || false,
+          allTermsAgreed: paymentDetails?.allTermsAgreed || false,
+        });
 
         setBasket({
           ...basket,
@@ -130,7 +132,6 @@ export const PaymentDetails = () => {
             bankSortCode: data.sortCode.replace(/-/g, ""),
           },
         });
-
         setShowPaymentDetailsError(false);
         setShowConfirmation(true);
 
@@ -138,7 +139,6 @@ export const PaymentDetails = () => {
       } catch (error) {
         console.error("Error processing payment details:", error);
         setShowPaymentDetailsError(true);
-
         return false;
       } finally {
         setIsSubmitting(false);
@@ -147,12 +147,10 @@ export const PaymentDetails = () => {
     [
       basket,
       setBasket,
-      paymentDetails?.billingAddress,
-      paymentDetails?.accountNumber,
-      paymentDetails?.accountholderName,
-      paymentDetails?.sortCode,
+      paymentDetails,
       billingAddress,
       serviceAddress,
+      setPaymentDetails,
     ],
   );
 
@@ -163,10 +161,7 @@ export const PaymentDetails = () => {
       }
 
       // i.e. if the user has already switched, the switch failed or the switch option was skipped, no need to go back to OTS page
-      if (
-        switchingDetails?.otsSwitchStatus !== undefined ||
-        switchingDetails?.otsSwitchStatus !== "FIRST_ATTEMPT_FAILED"
-      ) {
+      if (!otsCompleted(store.switchingDetails)) {
         setCurrentStep(3);
         router.push("/join-flow/go-live-date");
       } else {
@@ -174,7 +169,7 @@ export const PaymentDetails = () => {
         router.push("/join-flow/one-touch-switching");
       }
     },
-    [switchingDetails?.otsSwitchStatus, setCurrentStep, router],
+    [setCurrentStep, store, router],
   );
 
   const handleConfirmationBack = useCallback(() => {
@@ -209,8 +204,7 @@ export const PaymentDetails = () => {
                 <PaymentForm onSubmit={handleFormSubmit} />
                 {showPaymentDetailsError && (
                   <p className="text-sm text-ui-error mb-6">
-                    Unable to validate bank details, please check your details
-                    and try again.
+                    {paymentDetailsText.validationErrorMessage}
                   </p>
                 )}
                 <p className="text-md font-bold mb-6">

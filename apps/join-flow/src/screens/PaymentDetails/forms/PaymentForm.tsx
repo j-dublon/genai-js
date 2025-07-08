@@ -111,7 +111,6 @@ export const PaymentForm = ({
 
       setPaymentDetails({
         accountholderName: data.accountholderName,
-        cardToken: "bank_account",
         accountNumber: data.accountNumber,
         sortCode: data.sortCode,
         billingAddress: resolvedBillingAddress,
@@ -138,18 +137,19 @@ export const PaymentForm = ({
 
   const formSubmitHandler = useCallback(
     async (data: FormValues) => {
-      const isValid = await trigger();
-
       if (!data.isAccountHolder) {
-        trigger("isAccountHolder");
+        await trigger("isAccountHolder");
         return;
       }
 
-      if (isValid) {
-        const submitSuccess = await onSubmit(data as PaymentFormValues);
-        if (submitSuccess) {
-          savePaymentDetails(data);
-        }
+      const isValid = await trigger();
+
+      if (!isValid) return;
+
+      const submitSuccess = await onSubmit(data as PaymentFormValues);
+
+      if (submitSuccess) {
+        savePaymentDetails(data);
       }
     },
     [savePaymentDetails, onSubmit, trigger],
@@ -262,7 +262,7 @@ export const PaymentForm = ({
             disabled={isSubmitting}
           />
           <span className="text-sm">
-            I confirm that I&apos;m the account holder
+            {paymentDetailsText.confirmAccountHolder}
           </span>
         </label>
         {errors.isAccountHolder && (
