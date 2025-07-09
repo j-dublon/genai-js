@@ -105,8 +105,8 @@ describe("PaymentConfirmation", () => {
       updatedAt: new Date().toISOString(),
       createdAt: new Date().toISOString(),
       cics: {
-        summaryHref: "https://s3.cuckoo.co/some-out-of-date-value",
-        informationHref: "https://s3.cuckoo.co/another-out-of-date-value",
+        summaryHref: "https://s3.cuckoo.co/contractSummary",
+        informationHref: "https://s3.cuckoo.co/contractInformation",
       },
     });
     store.setAccessibilityRequirements(null);
@@ -307,24 +307,21 @@ describe("PaymentConfirmation", () => {
     const termsAndConditionsBtn = screen.getByTestId("Terms & Conditions");
     const privacyNoticeBtn = screen.getByTestId("Privacy Notice");
 
-    // short wait while the data is fetched
-    setTimeout(() => {
-      expect(contractSummaryBtn).toHaveAttribute(
-        "href",
-        "https://s3.cuckoo.co/contractSummary",
-      );
-      expect(contractInformationBtn).toHaveAttribute(
-        "href",
-        "https://s3.cuckoo.co/contractInformation",
-      );
-      expect(termsAndConditionsBtn).toHaveAttribute(
-        "href",
-        "https://cms.cuckoo.co/tacs",
-      );
-      expect(privacyNoticeBtn).toHaveAttribute(
-        "href",
-        "https://cms.cuckoo.co/privacy",
-      );
-    }, 100);
+    expect(contractSummaryBtn).toHaveAttribute(
+      "href",
+      "https://s3.cuckoo.co/contractSummary",
+    );
+    expect(contractInformationBtn).toHaveAttribute(
+      "href",
+      "https://s3.cuckoo.co/contractInformation",
+    );
+    expect(termsAndConditionsBtn).toHaveAttribute(
+      "href",
+      "https://cms.cuckoo.co/tacs",
+    );
+    expect(privacyNoticeBtn).toHaveAttribute(
+      "href",
+      "https://cms.cuckoo.co/privacy",
+    );
   });
 });

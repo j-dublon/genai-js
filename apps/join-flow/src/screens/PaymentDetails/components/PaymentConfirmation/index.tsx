@@ -1,14 +1,13 @@
 "use client";
 
 import { Button } from "@react-component-library/ui";
-import useJoinFlowStore, { StoreBasket } from "@store/useJoinFlowStore";
+import useJoinFlowStore from "@store/useJoinFlowStore";
 import React, { useCallback, useEffect, useState } from "react";
 
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
-import { squidAPI } from "@/services/payloadClient";
 
 import { PaymentDocuments } from "../PaymentDocuments";
 import { AccessibilityRequirements } from "./Accessibility/AccessibilityRequirements";
@@ -31,8 +30,6 @@ export const PaymentConfirmation = ({
     basket,
     setBasket,
     affiliateSession,
-    selectedPackage,
-    eeroSelection,
     accessibilityRequirements,
     accessibilityCommunicationPreferences,
   } = useJoinFlowStore();
@@ -167,40 +164,15 @@ export const PaymentConfirmation = ({
     [],
   );
 
-  const [contractSummary, setContractSummary] = useState("/");
-  const [contractInformation, setContractInformation] = useState("/");
-
-  useEffect(() => {
-    const getContractLinks = async () => {
-      if (typeof basket?.id === "string") {
-        try {
-          // TODO: Create service helper for this for ease of future payload updates
-          const response: StoreBasket["cics"] = await squidAPI.getCICS(
-            basket.id,
-          );
-
-          if (response && response.summaryHref && response.informationHref) {
-            setContractSummary(response.summaryHref);
-            setContractInformation(response.informationHref);
-          }
-        } catch (error) {
-          // If we can't fetch CI/CS we can't finish the sale, need to redirect to an 'Oops' page
-          console.log("error: ", error);
-        }
-      }
-    };
-    getContractLinks();
-  }, [basket?.id, selectedPackage, eeroSelection]);
-
   const documentItems = [
     {
       text: "Contract Summary",
-      href: contractSummary,
+      href: basket?.cics?.summaryHref || "/",
       name: "contractSummary",
     },
     {
       text: "Contract Information",
-      href: contractInformation,
+      href: basket?.cics?.informationHref || "/",
       name: "contractInformation",
     },
     {

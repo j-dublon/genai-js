@@ -8,6 +8,7 @@ import React, { useCallback, useState } from "react";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { otsCompleted } from "@/lib/otsCompleted";
+import { getCICS } from "@/services/helpers/getCICS";
 import { isBillingAddressesEqual } from "@/services/helpers/isBillingAddressEqual";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
@@ -110,6 +111,17 @@ export const PaymentDetails = () => {
           return false;
         }
 
+        let contractInformation = "";
+        let contractSummary = "";
+
+        if (typeof basket?.id === "string") {
+          const response = await getCICS(basket.id);
+          if (response.success === true) {
+            contractInformation = response.data.contractInformation;
+            contractSummary = response.data.contractSummary;
+          }
+        }
+
         setPaymentDetails({
           accountholderName: data.accountholderName,
           accountNumber: data.accountNumber,
@@ -130,6 +142,10 @@ export const PaymentDetails = () => {
             bankAccountHolder: data.accountholderName,
             bankAccountNumber: data.accountNumber,
             bankSortCode: data.sortCode.replace(/-/g, ""),
+          },
+          cics: {
+            summaryHref: contractSummary,
+            informationHref: contractInformation,
           },
         });
         setShowPaymentDetailsError(false);

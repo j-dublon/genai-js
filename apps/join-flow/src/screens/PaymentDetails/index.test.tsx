@@ -20,6 +20,16 @@ vi.mock("@/services/helpers/isBillingAddressEqual", () => ({
   isBillingAddressesEqual: vi.fn(),
 }));
 
+vi.mock("@/services/helpers/getCICS", () => ({
+  getCICS: vi.fn().mockReturnValue({
+    success: true,
+    data: {
+      summaryHref: "https://s3.cuckoo.co/contractSummary",
+      informationHref: "https://s3.cuckoo.co/contractInformation",
+    },
+  }),
+}));
+
 vi.mock("@react-component-library/ui", () => ({
   Button: ({
     children,
@@ -226,5 +236,14 @@ describe("PaymentDetails", () => {
         }),
       );
     });
+
+    setTimeout(() => {
+      const cics = useJoinFlowStore.getState().basket?.cics;
+
+      expect(cics).toStrictEqual({
+        summaryHref: "https://s3.cuckoo.co/contractSummary",
+        informationHref: "https://s3.cuckoo.co/contractInformation",
+      });
+    }, 100);
   });
 });
