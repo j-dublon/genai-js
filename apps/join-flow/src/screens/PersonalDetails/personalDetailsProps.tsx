@@ -104,9 +104,18 @@ export const personalDetailsProps = {
 
   validationMessages: {
     firstNameRequired: "First name is required",
+    firstNameLengthTooLong: "First name length is too long",
+    firstNameInvalid:
+      "First name can only include letters, spaces, hyphens, and apostrophes",
     lastNameRequired: "Last name is required",
-    phoneRequired: "Please enter a valid phone number",
+    lastNameLengthTooLong: "Last name length is too long",
+    lastNameInvalid:
+      "Last name can only include letters, spaces, hyphens, and apostrophes",
+    phoneLengthTooLong: "Phone number length has to be 11 digits long or fewer",
+    phoneRequired: "Please enter a valid UK phone number",
     smartphoneConfirmation: "Please confirm you have a smartphone",
+    emailLengthTooShort: "Email must be at least 5 characters long",
+    emailLengthTooLong: "Email must be 254 characters long or fewer",
     emailInvalid: "Please enter a valid email",
     emailConfirmation: "Please confirm your email",
     emailsMustMatch: "Email addresses must match",

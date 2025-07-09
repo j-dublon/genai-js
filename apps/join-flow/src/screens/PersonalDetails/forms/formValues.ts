@@ -5,8 +5,7 @@ import { ModalContent } from "@/components/ModalContent";
 import { PersonalDetails, StoreAddress } from "@/store/useJoinFlowStore";
 
 import { personalDetailsProps } from "../personalDetailsProps";
-const UNWANTED_CHAR_SET = "[\\-\\(\\).\\s]";
-const MOBILE_PHONE_NUMBER_GB_PATTERN = `${UNWANTED_CHAR_SET}*0${UNWANTED_CHAR_SET}*7${UNWANTED_CHAR_SET}*(?:[1-57-9]${UNWANTED_CHAR_SET}*(?:${UNWANTED_CHAR_SET}*[0-9]){2}|6${UNWANTED_CHAR_SET}*2${UNWANTED_CHAR_SET}*4)(?:${UNWANTED_CHAR_SET}*[0-9]){6}${UNWANTED_CHAR_SET}*`;
+const PERSONAL_NAME_PATTERN = /^[\p{L}\s'-]+$/u;
 
 export const createStepBasedPersonalDetailsSchema = (
   props: typeof personalDetailsProps,
@@ -40,20 +39,45 @@ export const createStepBasedPersonalDetailsSchema = (
       .extend({
         firstName: z
           .string()
-          .min(1, props.validationMessages.firstNameRequired),
-        lastName: z.string().min(1, props.validationMessages.lastNameRequired),
+          .min(1, props.validationMessages.firstNameRequired)
+          .max(50, props.validationMessages.firstNameLengthTooLong)
+          .regex(
+            RegExp(PERSONAL_NAME_PATTERN),
+            props.validationMessages.firstNameInvalid,
+          ),
+        lastName: z
+          .string()
+          .min(1, props.validationMessages.lastNameRequired)
+          .max(50, props.validationMessages.lastNameLengthTooLong)
+          .regex(
+            RegExp(PERSONAL_NAME_PATTERN),
+            props.validationMessages.lastNameInvalid,
+          ),
         phone: z
           .string()
-          .regex(
-            RegExp(MOBILE_PHONE_NUMBER_GB_PATTERN),
-            props.validationMessages.phoneRequired,
-          ),
+          .refine((val) => !val || /^[\d\s().-]*$/.test(val), {
+            message: "Please enter only digits for your phone number",
+          })
+          .transform((val) => val?.replace(/\D/g, ""))
+          .refine((val) => !val || val.length === 11, {
+            message: "UK mobile number must be 11 digits",
+          })
+          .refine((val) => !val || /^07\d{9}$/.test(val || ""), {
+            message: "Please enter a valid UK mobile phone number",
+          }),
+
         hasSmartphone: z.enum(["yes", "no"], {
           message: props.validationMessages.smartphoneConfirmation, // invalid_type_error doesn't handle enum errors as you'd expect (https://github.com/colinhacks/zod/issues/2919)
         }),
-        email: z.string().email(props.validationMessages.emailInvalid),
+        email: z
+          .string()
+          .min(5, props.validationMessages.emailLengthTooShort)
+          .max(254, props.validationMessages.emailLengthTooLong)
+          .email(props.validationMessages.emailInvalid),
         confirmEmail: z
           .string()
+          .min(5, props.validationMessages.emailLengthTooShort)
+          .max(254, props.validationMessages.emailLengthTooLong)
           .email(props.validationMessages.emailConfirmation),
       })
       .refine((data) => data.email === data.confirmEmail, {
