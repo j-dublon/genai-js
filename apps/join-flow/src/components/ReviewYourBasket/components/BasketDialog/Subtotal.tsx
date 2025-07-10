@@ -1,9 +1,13 @@
 import { ColorPill } from "@react-component-library/ui";
 import { Tag } from "@react-component-library/ui/icons";
 
-import { PricingCalculations } from "@/hooks/usePricingCalculations";
+import type { PricingCalculations } from "@/hooks/usePricingCalculations";
+import type { EeroOption } from "@/lib/createEeroOptions";
 import { formatDisplayDateMonthYear } from "@/lib/formatDate";
-import { EeroProduct, StoreSelectedPackage } from "@/store/useJoinFlowStore";
+import type {
+  EeroProduct,
+  StoreSelectedPackage,
+} from "@/store/useJoinFlowStore";
 
 export const Subtotal = ({
   pricing,
@@ -11,10 +15,12 @@ export const Subtotal = ({
   pricingText,
   selectedPackage,
   eeroSelection,
+  eeroProducts,
 }: {
   offerText?: string;
   selectedPackage: StoreSelectedPackage;
   eeroSelection: EeroProduct;
+  eeroProducts: EeroOption[];
   pricing: PricingCalculations;
   pricingText: {
     title: string;
@@ -60,11 +66,9 @@ export const Subtotal = ({
 
   const hasDiscountedPrice = discountedPrice !== monthlyPackagePrice;
 
-  // TODO: Next PR - handle eeros in review basket
-  const mockEeroSelection = {
-    ...eeroSelection,
-    totalCount: 2,
-  };
+  const eeroSelectionWithContent = eeroProducts.find(
+    (product) => product.code === eeroSelection.code,
+  )!;
 
   return (
     <>
@@ -98,7 +102,7 @@ export const Subtotal = ({
         <hr className="border-core-white" />
         <div data-testid="eero-pricing" className="flex flex-col gap-2">
           <div className="flex flex-col md:flex-row gap-2 md:gap-18">
-            <p className="md:w-1/2">{`x${mockEeroSelection.totalCount} ${eeroRouters}`}</p>
+            <p className="md:w-1/2">{`x${eeroSelectionWithContent.totalCount} ${eeroRouters}`}</p>
             <p className="md:w-1/2">
               £{monthlyEeroPrice}
               <span className="font-normal">{perMonth}</span>

@@ -3,7 +3,11 @@ import { useState } from "react";
 
 import { ReviewYourBasket } from "../ReviewYourBasket";
 import Stepper from "../Stepper";
-import { headerText, nextStepPillText } from "./StepNavigationWithBasketProps";
+import {
+  headerText,
+  nextStepPillText,
+  reviewYourBasketContent,
+} from "./StepNavigationWithBasketProps";
 
 export const StepNavigationWithBasket = ({
   step,
@@ -47,6 +51,7 @@ export const StepNavigationWithBasket = ({
         <ReviewYourBasket
           isDialogOpen={isDialogOpen}
           setIsDialogOpen={setIsDialogOpen}
+          eeroProductContent={reviewYourBasketContent.eeroProducts}
         />
       )}
     </>

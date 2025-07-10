@@ -3,9 +3,9 @@ import { useEffect, useRef } from "react";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
 import { PricingCalculations } from "@/hooks/usePricingCalculations";
+import type { EeroOption } from "@/lib/createEeroOptions";
 import useJoinFlowStore, {
-  EeroProduct,
-  StoreSelectedPackage,
+  type StoreSelectedPackage,
 } from "@/store/useJoinFlowStore";
 
 import { AddressInfo } from "./AddressInfo";
@@ -19,7 +19,7 @@ interface BasketDialogProps {
   isOpen: boolean;
   onClose: () => void;
   availablePackages: StoreSelectedPackage[];
-  eeroProducts: EeroProduct[];
+  eeroProducts: EeroOption[];
   onPlanChange: (selectedPlanId: string) => Promise<void>;
   onAddressChange: () => void;
   pricing: PricingCalculations;
@@ -111,6 +111,7 @@ export const BasketDialog = ({
                         pricing={pricing}
                         selectedPackage={selectedPackage}
                         eeroSelection={eeroSelection}
+                        eeroProducts={eeroProducts}
                         // TODO: offer text should be based on any applicable offers?
                         offerText={reviewYourBasketText.offerText}
                         pricingText={{

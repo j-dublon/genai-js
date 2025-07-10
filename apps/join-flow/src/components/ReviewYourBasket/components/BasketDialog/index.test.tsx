@@ -3,9 +3,10 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import type { EeroOption } from "@/lib/createEeroOptions";
 import useJoinFlowStore, {
-  EeroProduct,
-  StoreSelectedPackage,
+  type EeroProduct,
+  type StoreSelectedPackage,
 } from "@/store/useJoinFlowStore";
 
 import { BasketDialog } from "./index";
@@ -14,8 +15,7 @@ vi.mock("@/store/useJoinFlowStore", () => ({
   default: vi.fn(),
 }));
 
-// TODO: Next PR - handle eeros in review basket
-describe.todo("BasketDialog", () => {
+describe("BasketDialog", () => {
   const mockOnClose = vi.fn();
   const mockOnPlanChange = vi.fn();
   const mockOnAddressChange = vi.fn();
@@ -53,26 +53,38 @@ describe.todo("BasketDialog", () => {
     id: "test-pkg-id",
   };
 
-  const mockEeroSelection: EeroProduct = {
+  const mockEeroSelection: EeroOption = {
     code: "EERO_MESH_ROUTER_X1",
     family: "mesh_routers",
     selectionIdentifier: "1",
     price: 0,
+    totalCount: 1,
+    heading: "No additional Eero needed",
+    description: "Just one eero provided by us.",
+    imageURL: "",
   };
 
-  const mockEeroProducts: EeroProduct[] = [
+  const mockEeroProducts: EeroOption[] = [
     mockEeroSelection,
     {
       code: "EERO_MESH_ROUTER_X2",
       family: "mesh_routers",
       selectionIdentifier: "2",
       price: 500,
+      totalCount: 2,
+      heading: "Add one extra eero to your plan",
+      description: "2 eeros are amazing",
+      imageURL: "",
     },
     {
       code: "EERO_MESH_ROUTER_X3",
       family: "mesh_routers",
       selectionIdentifier: "3",
       price: 800,
+      totalCount: 3,
+      heading: "Add 2 extra eeros to your plan",
+      description: "3 eeros are incredible",
+      imageURL: "",
     },
   ];
 

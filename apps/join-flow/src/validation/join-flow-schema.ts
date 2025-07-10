@@ -26,7 +26,6 @@ export const eeroSelectionSchema = z.object({
   family: z.string(),
   selectionIdentifier: z.string().min(1, "Please select an eero product"),
   price: z.number(),
-  totalCount: z.number().int(),
 });
 
 export const expressionOfInterestSchema = z.object({

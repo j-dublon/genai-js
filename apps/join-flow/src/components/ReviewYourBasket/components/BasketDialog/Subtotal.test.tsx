@@ -1,8 +1,12 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { PricingCalculations } from "@/hooks/usePricingCalculations";
-import { EeroProduct, StoreSelectedPackage } from "@/store/useJoinFlowStore";
+import type { PricingCalculations } from "@/hooks/usePricingCalculations";
+import type { EeroOption } from "@/lib/createEeroOptions";
+import type {
+  EeroProduct,
+  StoreSelectedPackage,
+} from "@/store/useJoinFlowStore";
 
 import { Subtotal } from "./Subtotal";
 
@@ -67,6 +71,39 @@ describe("Subtotal", () => {
     price: 500,
   };
 
+  const mockEeroProducts: EeroOption[] = [
+    {
+      code: "EERO_MESH_ROUTER_X1",
+      family: "mesh_routers",
+      selectionIdentifier: "1",
+      price: 0,
+      heading: "No additional Eero needed",
+      description: "Just one eero provided by us.",
+      imageURL: "",
+      totalCount: 1,
+    },
+    {
+      code: "EERO_MESH_ROUTER_X2",
+      family: "mesh_routers",
+      selectionIdentifier: "2",
+      price: 500,
+      heading: "Add one extra eero to your plan",
+      description: "2 eeros are amazing",
+      imageURL: "",
+      totalCount: 2,
+    },
+    {
+      code: "EERO_MESH_ROUTER_X3",
+      family: "mesh_routers",
+      selectionIdentifier: "3",
+      price: 1000,
+      heading: "Add 2 extra eeros to your plan",
+      description: "3 eeros are incredible",
+      imageURL: "",
+      totalCount: 3,
+    },
+  ];
+
   describe("when product has discounted pricing", () => {
     const mockDiscountedPricing: PricingCalculations = {
       monthlyPackagePrice: 32,
@@ -88,6 +125,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -105,6 +143,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -122,6 +161,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -139,6 +179,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -163,6 +204,7 @@ describe("Subtotal", () => {
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
           offerText="You're saving £100 on this plan"
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -178,6 +220,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -208,6 +251,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -255,6 +299,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelectionWithPrice}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -287,6 +332,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -303,6 +349,7 @@ describe("Subtotal", () => {
           selectedPackage={null!}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 
@@ -337,6 +384,7 @@ describe("Subtotal", () => {
           selectedPackage={packageWithoutRises}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
       const packagePricing = screen.getByTestId("package-pricing");
@@ -359,6 +407,7 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={null!}
           pricingText={mockPricingText}
+          eeroProducts={mockEeroProducts}
         />,
       );
 

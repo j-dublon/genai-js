@@ -19,10 +19,14 @@ type EeroContent = {
   imageURL: string;
 };
 
-export const hydrateEeroProduct = (
-  eero: EeroProduct,
+export const hydrateEeroProductWithContent = (
+  eero: EeroProduct | null,
   eeroProductContent: EeroContent[],
 ): EeroOption | null => {
+  if (!eero) {
+    return null;
+  }
+
   const eeroContent = eeroProductContent.find(
     (product) => product.code === eero.code,
   );

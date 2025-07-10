@@ -4,8 +4,8 @@ import useJoinFlowStore from "@store/useJoinFlowStore";
 import React from "react";
 
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
+import { hydrateEeroProductWithContent } from "@/lib/createEeroOptions";
 import { formatDisplayDate } from "@/lib/formatDate";
-import { getAssetPath } from "@/lib/get-asset-path";
 import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
 
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
@@ -57,10 +57,15 @@ const PriceProjection: React.FC<PriceProjectionProps> = ({ label, price }) => (
 export const PaymentSummary: React.FC = () => {
   const { selectedPackage, eeroSelection } = useJoinFlowStore();
 
-  const { monthlyPaymentTitle, totalMonthlyPaymentTitle } =
+  const { monthlyPaymentTitle, totalMonthlyPaymentTitle, eeroProductContent } =
     paymentConfirmationText;
 
   const pricing = usePricingCalculations(selectedPackage, eeroSelection);
+
+  const eeroSelectionWithContent = hydrateEeroProductWithContent(
+    eeroSelection,
+    eeroProductContent,
+  );
 
   if (!selectedPackage) {
     return null;
@@ -84,14 +89,6 @@ export const PaymentSummary: React.FC = () => {
       ? `From ${formatDisplayDate(annualPriceRise[1].date)}`
       : null;
 
-  // TODO: Next PR - Sort out content/structures
-  const mockEeroSelection = {
-    imageURL: getAssetPath("/images/x1_eeros.png"),
-    name: "Eero",
-    description: "The best eero router",
-    price: 700,
-  };
-
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md">
       <h3 className="font-bold mb-4">{monthlyPaymentTitle}</h3>
@@ -101,10 +98,10 @@ export const PaymentSummary: React.FC = () => {
         price={pricing.monthlyPackagePrice}
       />
 
-      {eeroSelection && (
+      {eeroSelectionWithContent && (
         <LineItem
-          title={mockEeroSelection.name}
-          description={mockEeroSelection.description}
+          title={eeroSelectionWithContent.heading}
+          description={eeroSelectionWithContent.description}
           price={pricing.monthlyEeroPrice}
           isIncluded={pricing.monthlyEeroPrice === 0}
         />
@@ -119,13 +116,16 @@ export const PaymentSummary: React.FC = () => {
 
       <div className="border-t border-ui-grey-300 pt-4 mt-4">
         {nextPriceLabel && (
-          <PriceProjection label={nextPriceLabel} price={pricing.nextPrice} />
+          <PriceProjection
+            label={nextPriceLabel}
+            price={pricing.predictedTotalNext}
+          />
         )}
 
         {followingPriceLabel && (
           <PriceProjection
             label={followingPriceLabel}
-            price={pricing.followingPrice}
+            price={pricing.predictedTotalFollowing}
           />
         )}
       </div>

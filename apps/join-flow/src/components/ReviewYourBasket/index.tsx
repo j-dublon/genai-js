@@ -4,8 +4,8 @@ import React, { Dispatch, SetStateAction, useMemo } from "react";
 import { BasketDialog } from "@/components/ReviewYourBasket/components/BasketDialog";
 import { SummaryBar } from "@/components/ReviewYourBasket/components/SummaryBar";
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
-import { getAssetPath } from "@/lib/get-asset-path";
-import { eeroProducts } from "@/screens/EeroSelection/eeroSelectionProps";
+import { createEeroOptions } from "@/lib/createEeroOptions";
+import { getCICS } from "@/services/helpers/getCICS";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import useJoinFlowStore, {
   StoreSelectedPackage,
@@ -14,11 +14,19 @@ import useJoinFlowStore, {
 interface ReviewYourBasketProps {
   isDialogOpen: boolean;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
+  eeroProductContent: {
+    code: string;
+    heading: string;
+    description: string;
+    totalCount: number;
+    imageURL: string;
+  }[];
 }
 
 export const ReviewYourBasket = ({
   isDialogOpen,
   setIsDialogOpen,
+  eeroProductContent,
 }: ReviewYourBasketProps) => {
   const {
     selectedPackage,
@@ -27,6 +35,7 @@ export const ReviewYourBasket = ({
     resetFlow,
     quoteResponse,
     basket,
+    setBasket,
   } = useJoinFlowStore();
   const router = useRouter();
 
@@ -87,27 +96,10 @@ export const ReviewYourBasket = ({
     setIsDialogOpen(false);
   };
 
-  // TODO: Next PR - Sort out content/structures
-  const allEeroProducts = [
-    {
-      id: "no-additional-eero",
-      name: "No additional eero device",
-      heading: "No additional Eero needed",
-      imageURL: getAssetPath("/images/x1_eeros.png"),
-      description: "Just one eero provided by us.",
-      totalCount: 1,
-      price: 0,
-      isSelected: true,
-    },
-    ...eeroProducts,
-  ].map((eero) => ({
-    ...eero,
-    code: "EERO_MESH_ROUTER_X1",
-    selectionIdentifier: "1",
-    family: "mesh_routers",
-    price: 700,
-    totalCount: 1,
-  }));
+  const allEeroProducts = createEeroOptions(
+    selectedPackage?.extras,
+    eeroProductContent,
+  );
 
   const handlePlanChange = async (selectedPlanId: string) => {
     if (!selectedPlanId) {
@@ -157,6 +149,20 @@ export const ReviewYourBasket = ({
         }
 
         if (result.basket) {
+          let contractInformation = "";
+          let contractSummary = "";
+          const response = await getCICS(basket.id);
+          if (response.success === true) {
+            contractInformation = response.data.contractInformation;
+            contractSummary = response.data.contractSummary;
+          }
+          setBasket({
+            ...result.basket,
+            cics: {
+              informationHref: contractInformation,
+              summaryHref: contractSummary,
+            },
+          });
           selectPackage(newPackage);
         }
       } catch (error) {
@@ -180,7 +186,7 @@ export const ReviewYourBasket = ({
     <div className="pt-32">
       <SummaryBar
         selectedPackage={selectedPackage}
-        predictedTotalNext={pricing.predictedTotalNext}
+        predictedTotalNext={pricing.nextPrice}
         openDialog={openDialog}
         isDialogOpen={isDialogOpen}
       />

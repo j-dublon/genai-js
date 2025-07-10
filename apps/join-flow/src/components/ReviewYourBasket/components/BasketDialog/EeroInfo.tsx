@@ -1,13 +1,16 @@
 import { PillButton } from "@react-component-library/ui";
 import { Minus, Plus } from "@react-component-library/ui/icons";
+import { useState } from "react";
 
-import { getAssetPath } from "@/lib/get-asset-path";
-import useJoinFlowStore, { EeroProduct } from "@/store/useJoinFlowStore";
+import type { EeroOption } from "@/lib/createEeroOptions";
+import { getCICS } from "@/services/helpers/getCICS";
+import { updateBasket } from "@/services/helpers/updateBasket";
+import useJoinFlowStore, { type EeroProduct } from "@/store/useJoinFlowStore";
 
 interface EeroInfoProps {
   eeroSelection: EeroProduct;
   monthlyEeroPrice: number;
-  eeroProducts: EeroProduct[];
+  eeroProducts: EeroOption[];
   eeroInfoText: {
     title: string;
     addMoreEeros: string;
@@ -22,46 +25,98 @@ export const EeroInfo = ({
   eeroInfoText,
 }: EeroInfoProps) => {
   const { title, addMoreEeros, removeEeros } = eeroInfoText;
-  const { selectEeroProduct } = useJoinFlowStore();
+  const { selectEeroProduct, basket, setBasket } = useJoinFlowStore();
+  const [isLoading, setIsLoading] = useState(false);
 
   if (!eeroSelection) return null;
 
-  // TODO: Next PR - handle eeros in review basket
-  const mockEeroSelection = {
-    ...eeroSelection,
-    totalCount: 1,
-    imageURL: getAssetPath("/images/x1_eeros.png"),
-    name: "Eero",
-    description: "The best eero router",
-  };
-  const mockEeroProducts = [
-    ...eeroProducts.map((product) => ({
-      ...product,
-      totalCount: 2,
-    })),
-  ];
+  const eeroSelectionWithContent = eeroProducts.find(
+    (product) => product.code === eeroSelection.code,
+  )!;
 
   const maximumAvailableEeros = Math.max(
-    ...mockEeroProducts.map((product) => product.totalCount),
+    ...eeroProducts.map((product) => product.totalCount),
   );
 
-  const handleIncreaseEeros = () => {
-    const nextEero = mockEeroProducts.find(
-      (product) => product.totalCount === mockEeroSelection.totalCount + 1,
+  const handleEeroChange = async (
+    eeroSelection: EeroOption,
+  ): Promise<boolean> => {
+    if (!basket?.id) {
+      console.error("No basket ID found");
+      return false;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const result = await updateBasket(basket.id, {
+        product: {
+          extras: [
+            {
+              family: eeroSelection.family,
+              selectionIdentifier: eeroSelection.selectionIdentifier,
+            },
+          ],
+        },
+      });
+
+      if (result.error) {
+        // TODO: Handle error cases
+        console.error("Error updating basket:", result.error);
+        return false;
+      }
+
+      if (result.basket) {
+        let contractInformation = "";
+        let contractSummary = "";
+        const response = await getCICS(basket.id);
+        if (response.success === true) {
+          contractInformation = response.data.contractInformation;
+          contractSummary = response.data.contractSummary;
+        }
+        setBasket({
+          ...result.basket,
+          cics: {
+            informationHref: contractInformation,
+            summaryHref: contractSummary,
+          },
+        });
+        return true;
+      }
+    } catch (error) {
+      // TODO: Handle error cases
+      console.error("Unexpected error updating basket:", error);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+
+    return false;
+  };
+
+  const handleIncreaseEeros = async () => {
+    const nextEero = eeroProducts.find(
+      (product) =>
+        product.totalCount === eeroSelectionWithContent.totalCount + 1,
     );
     if (nextEero) {
-      selectEeroProduct(nextEero);
-      //TODO: update basket in payload
+      const success = await handleEeroChange(nextEero);
+      if (success) {
+        selectEeroProduct(nextEero);
+      }
     }
   };
 
-  const handleDecreaseEeros = () => {
-    const previousEero = mockEeroProducts.find(
-      (product) => product.totalCount === mockEeroSelection.totalCount - 1,
+  const handleDecreaseEeros = async () => {
+    const previousEero = eeroProducts.find(
+      (product) =>
+        product.totalCount === eeroSelectionWithContent.totalCount - 1,
     );
     if (previousEero) {
-      selectEeroProduct(previousEero);
-      //TODO: update basket in payload
+      const success = await handleEeroChange(previousEero);
+      if (success) {
+        selectEeroProduct(previousEero);
+      }
     }
   };
 
@@ -70,21 +125,21 @@ export const EeroInfo = ({
       <div className="flex flex-col md:flex-row text-xs md:text-sm leading-[1.6] gap-4 md:gap-1">
         <h3 className="font-normal whitespace-nowrap">{title}</h3>
         <p className="font-semibold">
-          {`You've got ${mockEeroSelection.totalCount}x eero router${mockEeroSelection.totalCount > 1 ? "s" : ""}`}
+          {`You've got ${eeroSelectionWithContent.totalCount}x eero router${eeroSelectionWithContent.totalCount > 1 ? "s" : ""}`}
         </p>
       </div>
       <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
-        {mockEeroSelection.imageURL && (
+        {eeroSelectionWithContent.imageURL && (
           <div className="aspect-[111/74] w-[110px] bg-ui-grey-300 rounded-md px-2">
             <img
-              src={mockEeroSelection.imageURL}
-              alt={mockEeroSelection.name}
+              src={eeroSelectionWithContent.imageURL}
+              alt={eeroSelectionWithContent.heading}
               className="w-full h-full object-contain"
             />
           </div>
         )}
         <div>
-          {mockEeroSelection.description}
+          {eeroSelectionWithContent.description}
           {eeroSelection.price > 0 && (
             <p className="mt-4 md:mt-1">
               <span className="font-semibold">+£{monthlyEeroPrice}</span>
@@ -95,7 +150,7 @@ export const EeroInfo = ({
       </div>
 
       <div className="flex gap-4 flex-col md:flex-row">
-        {mockEeroSelection.totalCount < maximumAvailableEeros && (
+        {eeroSelectionWithContent.totalCount < maximumAvailableEeros && (
           <PillButton
             buttonText={addMoreEeros}
             backgroundColor="black"
@@ -105,9 +160,10 @@ export const EeroInfo = ({
             icon={<Plus fill="#FFFFFF" />}
             ariaLabel="Add more eeros"
             className="min-w-[175px]"
+            isLoading={isLoading}
           />
         )}
-        {mockEeroSelection.totalCount !== 1 && (
+        {eeroSelectionWithContent.totalCount !== 1 && (
           <PillButton
             buttonText={removeEeros}
             backgroundColor="white"
@@ -116,6 +172,7 @@ export const EeroInfo = ({
             icon={<Minus fill="#1F1F1F" />}
             ariaLabel="Remove eeros"
             className="min-w-[175px]"
+            isLoading={isLoading}
           />
         )}
       </div>

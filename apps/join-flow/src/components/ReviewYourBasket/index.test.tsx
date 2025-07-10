@@ -16,14 +16,39 @@ vi.mock("next/navigation", () => ({
 vi.mock("@/store/useJoinFlowStore", () => ({
   default: vi.fn(),
 }));
+const mockUseJoinFlowStore = vi.mocked(useJoinFlowStore);
 
 const mockSetIsDialogOpen = vi.fn();
+
+const mockEeroProductContent = [
+  {
+    code: "EERO_MESH_ROUTER_X1",
+    heading: "No additional Eero needed",
+    description: "Just one eero provided by us.",
+    totalCount: 1,
+    imageURL: "",
+  },
+  {
+    code: "EERO_MESH_ROUTER_X2",
+    heading: "Add one extra eero to your plan",
+    description: "2 eeros are amazing",
+    totalCount: 2,
+    imageURL: "",
+  },
+  {
+    code: "EERO_MESH_ROUTER_X3",
+    heading: "Add 2 extra eeros to your plan",
+    description: "3 eeros are incredible",
+    totalCount: 3,
+    imageURL: "",
+  },
+];
 
 describe("ReviewYourBasket", () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    mockUseJoinFlowStore.mockReturnValue({
       selectedPackage: {
         krakenProductCode: "test-package",
         frontendIdentifier: "test-package-24",
@@ -51,7 +76,31 @@ describe("ReviewYourBasket", () => {
           download: 100,
           upload: 20,
         },
-        extras: null,
+        extras: [
+          {
+            family: "mesh_routers",
+            availableExtras: [
+              {
+                code: "EERO_MESH_ROUTER_X1",
+                family: "mesh_routers",
+                selectionIdentifier: "1",
+                price: 0,
+              },
+              {
+                code: "EERO_MESH_ROUTER_X2",
+                family: "mesh_routers",
+                selectionIdentifier: "2",
+                price: 500,
+              },
+              {
+                code: "EERO_MESH_ROUTER_X3",
+                family: "mesh_routers",
+                selectionIdentifier: "3",
+                price: 1000,
+              },
+            ],
+          },
+        ],
         offers: null,
         id: "test-package-id",
       },
@@ -60,8 +109,6 @@ describe("ReviewYourBasket", () => {
         code: "EERO_MESH_ROUTER_X1",
         family: "mesh_routers",
         selectionIdentifier: "1",
-        price: 700,
-        totalCount: 3,
       },
       serviceAddress: {
         line1: "123",
@@ -119,9 +166,11 @@ describe("ReviewYourBasket", () => {
       <ReviewYourBasket
         isDialogOpen={false}
         setIsDialogOpen={mockSetIsDialogOpen}
+        eeroProductContent={mockEeroProductContent}
       />,
     );
     const button = screen.getByText("View Basket");
+
     expect(button).toBeInTheDocument();
   });
 
@@ -130,11 +179,14 @@ describe("ReviewYourBasket", () => {
       <ReviewYourBasket
         isDialogOpen={false}
         setIsDialogOpen={mockSetIsDialogOpen}
+        eeroProductContent={mockEeroProductContent}
       />,
     );
     const user = userEvent.setup();
+
     const button = screen.getByText("View Basket");
     await user.click(button);
+
     expect(mockSetIsDialogOpen).toHaveBeenCalledWith(true);
   });
 
@@ -143,26 +195,32 @@ describe("ReviewYourBasket", () => {
       <ReviewYourBasket
         isDialogOpen={true}
         setIsDialogOpen={mockSetIsDialogOpen}
+        eeroProductContent={mockEeroProductContent}
       />,
     );
     const user = userEvent.setup();
+
     const button = screen.getByLabelText("Close basket");
     await user.click(button);
+
     expect(mockSetIsDialogOpen).toHaveBeenCalledWith(false);
   });
 
-  // TODO: Next PR - handle eeros in review basket
-  it.todo("should display eero information when available", async () => {
+  it("should display eero information when available", async () => {
     render(
       <ReviewYourBasket
         isDialogOpen={true}
         setIsDialogOpen={mockSetIsDialogOpen}
+        eeroProductContent={mockEeroProductContent}
       />,
     );
+
+    const eeroElements = screen.getAllByText(/1x eero router/);
     expect(screen.getByText("Your mesh network:")).toBeInTheDocument();
-    const eeroElements = screen.getAllByText(/3x eero router/);
     expect(eeroElements.length).toBeGreaterThan(0);
-    expect(screen.getByText("The best eero router")).toBeInTheDocument();
+    expect(
+      screen.getByText("Just one eero provided by us."),
+    ).toBeInTheDocument();
   });
 
   it("should display address information when available", async () => {
@@ -170,8 +228,10 @@ describe("ReviewYourBasket", () => {
       <ReviewYourBasket
         isDialogOpen={true}
         setIsDialogOpen={mockSetIsDialogOpen}
+        eeroProductContent={mockEeroProductContent}
       />,
     );
+
     expect(
       screen.getByText(/123 Test Street, Test City, ABC 123/),
     ).toBeInTheDocument();
