@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const PERSONAL_NAME_PATTERN = /^[\p{L}\s'-]+$/u;
+
 export const addressSchema = z.object({
   line1: z.string().min(1, "Address line 1 is required"),
   line2: z.string().min(1, "Address line 2 is required"),
@@ -27,10 +29,36 @@ export const eeroSelectionSchema = z.object({
   totalCount: z.number().int(),
 });
 
-export const notReadyToJoinSchema = z.object({
-  fullName: z.string().min(1, "Full name is required"),
-  email: z.string().email("Invalid email address"),
-  phoneNumber: z.string().optional(),
+export const expressionOfInterestSchema = z.object({
+  fullName: z
+    .string()
+    .min(1, "Full name is required")
+    .max(100, "Name is too long")
+    .regex(
+      PERSONAL_NAME_PATTERN,
+      "Name can only contain letters, spaces, apostrophes, and hyphens",
+    ),
+  email: z
+    .string()
+    .email("Invalid email address")
+    .min(5, "Email must be at least 5 characters long")
+    .max(254, "Email must be 254 characters long or fewer"),
+  phoneNumber: z
+    .string()
+    .optional()
+    .refine((val) => !val || /^[\d\s().-]*$/.test(val), {
+      message: "Please enter only digits for your phone number",
+    })
+    .transform((val) => val?.replace(/\D/g, ""))
+    .refine((val) => !val || val.length === 11, {
+      message: "UK mobile number must be 11 digits",
+    })
+    .refine((val) => !val || /^07\d{9}$/.test(val || ""), {
+      message: "Please enter a valid UK mobile phone number",
+    }),
+});
+
+export const notReadyToJoinSchema = expressionOfInterestSchema.extend({
   selectedDate: z.string().min(1, "Please select a date"),
 });
 
@@ -133,3 +161,6 @@ export type AccessibilityRequirementsFormData = z.infer<
   typeof accessibilityRequirementsSchema
 >;
 export type GoLiveDateFormValues = z.infer<typeof goLiveDateSchema>;
+export type ExpressionOfInterestFormData = z.infer<
+  typeof expressionOfInterestSchema
+>;

@@ -17,6 +17,7 @@ import { ToolTip } from "../Tooltip";
 export interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string;
   error?: FieldError;
+  showErrorMessages?: boolean;
   iconTooltip?: string;
   modalTitle?: string;
   modalContent?: ModalContent[];
@@ -28,6 +29,7 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
     {
       id,
       error,
+      showErrorMessages = true,
       iconTooltip,
       className,
       placeholder,
@@ -89,7 +91,9 @@ const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
             </>
           )}
         </div>
-        {error && <p className="text-ui-error text-sm mt-1">{error.message}</p>}
+        {error && showErrorMessages && (
+          <p className="text-ui-error text-sm mt-1">{error.message}</p>
+        )}
         {modalTitle && modalContent && (
           <InfoModal
             title={modalTitle}

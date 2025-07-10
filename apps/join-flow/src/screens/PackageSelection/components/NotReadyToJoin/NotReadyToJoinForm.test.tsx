@@ -140,6 +140,39 @@ describe("NotReadyToJoinForm", () => {
     });
   });
 
+  it("displays various validation errors for invalid mobile phone number", async () => {
+    render(<NotReadyToJoinForm />);
+    const phoneInput = screen.getByPlaceholderText("Phone number (optional)");
+    await user.type(phoneInput, "01234567890");
+    const submitButton = screen.getByRole("button", {
+      name: "Mock Button Text",
+    });
+    await user.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByTestId("phoneNumber-error")).toHaveTextContent(
+        "Please enter a valid UK mobile phone number",
+      );
+    });
+
+    await user.clear(phoneInput);
+    await user.type(phoneInput, "0146ABC");
+    await user.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByTestId("phoneNumber-error")).toHaveTextContent(
+        "Please enter only digits for your phone number",
+      );
+    });
+
+    await user.clear(phoneInput);
+    await user.type(phoneInput, "071234567890");
+    await user.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByTestId("phoneNumber-error")).toHaveTextContent(
+        "UK mobile number must be 11 digits",
+      );
+    });
+  });
+
   it("allows valid form submission with all fields filled", async () => {
     render(<NotReadyToJoinForm />);
 
@@ -150,7 +183,7 @@ describe("NotReadyToJoinForm", () => {
     );
     await user.type(
       screen.getByPlaceholderText("Phone number (optional)"),
-      "01234567890",
+      "07123456789",
     );
     const datePickerButton = screen.getByTestId("date-picker-button");
     await user.click(datePickerButton);
@@ -164,7 +197,7 @@ describe("NotReadyToJoinForm", () => {
         fullName: "John Doe",
         email: "john.doe@example.com",
         selectedDate: "2024-12-31",
-        phoneNumber: "01234567890",
+        phoneNumber: "07123456789",
       });
     });
   });

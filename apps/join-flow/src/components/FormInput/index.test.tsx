@@ -56,6 +56,17 @@ describe("FormInput", () => {
     expect(input).toHaveAttribute("aria-invalid", "true");
   });
 
+  it("renders error border and no error message if showErrorMessages is false", () => {
+    const error: FieldError = { type: "required", message: "This is required" };
+    render(
+      <FormInput {...baseProps} error={error} showErrorMessages={false} />,
+    );
+    const input = screen.getByPlaceholderText("Type here...");
+    expect(input).toHaveClass("border-ui-error");
+    expect(screen.queryByText("This is required")).not.toBeInTheDocument();
+    expect(input).toHaveAttribute("aria-invalid", "true");
+  });
+
   it("renders tick icon if no error", () => {
     render(<FormInput hasSubmitted={true} {...baseProps} />);
     expect(screen.getByTestId("tick-icon")).toBeInTheDocument();

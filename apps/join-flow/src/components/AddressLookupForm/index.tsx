@@ -1,6 +1,6 @@
 import { Button } from "@react-component-library/ui";
 import { ExtendedStoreAddress, StoreAddress } from "@store/useJoinFlowStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { FormDropdown } from "@/components/FormDropdown";
@@ -24,6 +24,7 @@ interface AddressLookupFormProps {
   disabled?: boolean;
   fullWidth?: boolean;
   addressNotFoundAction?: () => void;
+  onPostcodeChange?: (postcode: string | null) => void;
 }
 
 const Loading = () => (
@@ -45,10 +46,17 @@ export const AddressLookupForm = ({
   disabled: externalDisabled = false,
   fullWidth = false,
   addressNotFoundAction,
+  onPostcodeChange,
 }: AddressLookupFormProps) => {
   const [postcode, setPostcode] = useState(initialPostcode);
   const [lastSearchedPostcode, setLastSearchedPostcode] =
     useState(initialPostcode);
+
+  useEffect(() => {
+    if (initialPostcode && onPostcodeChange) {
+      onPostcodeChange(initialPostcode);
+    }
+  }, [initialPostcode, onPostcodeChange]);
 
   const { error, loading, addresses, selectAddress, setError } = useAddress({
     initialPostcode: postcode,
@@ -76,6 +84,7 @@ export const AddressLookupForm = ({
     if (data.postcode !== lastSearchedPostcode) {
       setLastSearchedPostcode(data.postcode);
       setPostcode(data.postcode);
+      onPostcodeChange?.(data.postcode);
       form.setValue("selectedAddress", null);
       return;
     }
@@ -101,7 +110,9 @@ export const AddressLookupForm = ({
     setPostcode("");
     setLastSearchedPostcode("");
     setError(null);
-    form.reset();
+    form.setValue("postcode", "");
+    form.setValue("selectedAddress", null);
+    onPostcodeChange?.(null);
   };
 
   const isLoading = loading || externalLoading;

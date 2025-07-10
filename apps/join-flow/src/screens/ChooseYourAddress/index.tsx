@@ -7,6 +7,7 @@ import {
   TrustpilotHorizontal,
   useTrustpilotScore,
 } from "@react-component-library/ui";
+import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 import { ContactInfo } from "@/components/ContactInfo";
@@ -27,12 +28,17 @@ export const ChooseYourAddress = () => {
   } = ChooseYourAddressText;
   const { data: trustpilotRating } = useTrustpilotScore();
   const { trustScore, numberOfReviews } = trustpilotRating || {};
-  const { resetFlow } = useJoinFlowStore();
+  const { resetFlow, setRoiPostcode } = useJoinFlowStore();
+  const postcodeParam = useSearchParams().get("postcode");
 
   useAffiliateSession();
 
   useEffect(() => {
     resetFlow();
+    // Set postcode after reset if we have one from URL params
+    if (postcodeParam) {
+      setRoiPostcode(postcodeParam);
+    }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

@@ -1,7 +1,7 @@
 import { ExtendedStoreAddress } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
 import { AddressLookupForm } from "@/components/AddressLookupForm/index";
 import { createQuoteLookupPoll } from "@/services/helpers/createQuoteLookupPoll";
@@ -11,8 +11,12 @@ import { ChooseYourAddressText } from "../ChooseYourAddressProps";
 export const ServiceAddressLookupForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams().get("postcode");
-  const { setServiceAddress, affiliateSession, setQuoteResponse } =
-    useJoinFlowStore();
+  const {
+    setServiceAddress,
+    affiliateSession,
+    setQuoteResponse,
+    setRoiPostcode,
+  } = useJoinFlowStore();
   const [isQuoteLookupLoading, setIsQuoteLookupLoading] = useState(false);
 
   const handleAddressSelected = async (
@@ -35,13 +39,6 @@ export const ServiceAddressLookupForm = () => {
         selectedAddress.selectionIdentifier,
       );
 
-      if (quoteResult.error) {
-        throw new Error(
-          quoteResult.error.message ||
-            "Failed to get available packages for this address. Please try again.",
-        );
-      }
-
       if (
         quoteResult.products &&
         quoteResult.quotingCode &&
@@ -55,17 +52,29 @@ export const ServiceAddressLookupForm = () => {
           },
         });
         router.push("/join-flow/package-selection");
+      } else if (quoteResult?.error?.type === "noProductsAvailable") {
+        router.push("/join-flow/register-interest/cannot-service-address");
       } else {
         throw new Error("No products available for this address.");
       }
+    } catch (error) {
+      console.error("Error creating quote lookup:", error);
     } finally {
       setIsQuoteLookupLoading(false);
     }
   };
 
+  const handlePostcodeChange = useCallback(
+    (postcode: string | null) => {
+      setRoiPostcode(postcode || null);
+    },
+    [setRoiPostcode],
+  );
+
   return (
     <AddressLookupForm
       onAddressSelected={handleAddressSelected}
+      onPostcodeChange={handlePostcodeChange}
       initialPostcode={searchParams || ""}
       loading={isQuoteLookupLoading}
       fullWidth={true}
@@ -74,7 +83,7 @@ export const ServiceAddressLookupForm = () => {
         continue: ChooseYourAddressText.continueButtonText,
       }}
       addressNotFoundAction={() => {
-        router.push("/join-flow");
+        router.push("/join-flow/register-interest/not-shown");
       }}
     />
   );

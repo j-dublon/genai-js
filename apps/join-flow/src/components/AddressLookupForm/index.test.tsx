@@ -55,6 +55,7 @@ vi.mock("@react-component-library/ui", () => ({
 
 describe("AddressLookupForm", () => {
   const mockOnAddressSelected = vi.fn();
+  const mockOnPostcodeChange = vi.fn();
   const mockOnError = vi.fn();
   const user = userEvent.setup();
 
@@ -220,6 +221,28 @@ describe("AddressLookupForm", () => {
 
     const postcodeInput = screen.getByRole("textbox");
     expect(postcodeInput).toHaveValue("SW1A 1AA");
+  });
+
+  it("calls onPostcodeChange if provided and if postcode changes", async () => {
+    render(
+      <AddressLookupForm
+        {...defaultProps}
+        onPostcodeChange={mockOnPostcodeChange}
+        initialPostcode="NG31 8WZ"
+      />,
+    );
+
+    const postcodeInput = screen.getByRole("textbox");
+    expect(postcodeInput).toHaveValue("NG31 8WZ");
+    expect(mockOnPostcodeChange).toHaveBeenCalledWith("NG31 8WZ");
+
+    await user.clear(postcodeInput);
+    await user.type(postcodeInput, "SW1A 2AA");
+    await user.click(screen.getByRole("button", { name: "Search" }));
+
+    expect(mockOnPostcodeChange).toHaveBeenCalledTimes(2);
+    expect(mockOnPostcodeChange).toHaveBeenCalledWith("SW1A 2AA");
+    expect(postcodeInput).toHaveValue("SW1A 2AA");
   });
 
   it("disables form when disabled prop is true", () => {

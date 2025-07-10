@@ -339,6 +339,7 @@ export type JoinFlowState = {
   quoteResponse: QuoteLookupSuccess | null;
   basket: StoreBasket | null;
   softCreditCheck: SoftCreditCheck | null;
+  roiPostcode: string | null;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
@@ -361,6 +362,7 @@ export type JoinFlowState = {
   ) => void;
   setBasket: (basket: StoreBasket) => void;
   setSoftCreditCheck: (softCreditCheck: SoftCreditCheck) => void;
+  setRoiPostcode: (roiPostcode: string | null) => void;
   resetFlow: () => void;
 };
 
@@ -384,7 +386,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       quoteResponse: null,
       basket: null,
       softCreditCheck: null,
-
+      roiPostcode: null,
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
       selectPackage: (pkg) =>
@@ -407,6 +409,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setQuoteResponse: (response) => set({ quoteResponse: response }),
       setBasket: (basket) => set({ basket }),
       setSoftCreditCheck: (softCreditCheck) => set({ softCreditCheck }),
+      setRoiPostcode: (roiPostcode) => set({ roiPostcode }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -424,6 +427,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           quoteResponse: null,
           basket: null,
           softCreditCheck: null,
+          roiPostcode: null,
         }),
     }),
     {

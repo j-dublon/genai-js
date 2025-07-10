@@ -8,6 +8,7 @@ export const tipCardColors = {
   blue: "ds:bg-tertiary-blue-light",
   orange: "ds:bg-tertiary-orange-light",
   green: "ds:bg-secondary-green",
+  peach: "ds:bg-tertiary-peach-light",
 };
 
 interface TipCardProps {
@@ -43,7 +44,7 @@ export const TipCard = ({
           role="presentation"
         />
       )}
-      <p className="ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:font-normal ds:text-core-black ds:flex-1">
+      <div className="ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:font-normal ds:text-core-black ds:flex-1">
         {subtitle && (
           <span
             className={`ds:mr-1 ds:inline-block ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:font-semibold ${textColorVariants[subtitleColor]}`}
@@ -52,7 +53,7 @@ export const TipCard = ({
           </span>
         )}
         {children}
-      </p>
+      </div>
     </div>
   );
 };
