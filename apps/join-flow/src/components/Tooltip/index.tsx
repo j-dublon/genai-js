@@ -51,17 +51,19 @@ export const ToolTip = ({
           : { marginTop: gap };
 
   return (
-    <span className="relative group inline-flex items-center">
-      {children}
-      <span
-        className={`absolute ${tooltipPositionStyles} ${translateStyles} bg-core-grey-200 md:w-[180px] lg:w-[230px] rounded-sm p-4 z-20 opacity-0 pointer-events-auto transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 hover:opacity-100 ${className}`}
-        style={gapStyle}
-        tabIndex={-1}
-      >
-        <span className="text-white text-xxs font-normal leading-5 shadow">
-          {content}
+    <div role="tooltip" className="relative inline-flex items-center">
+      <span className="group inline-block">
+        {children}
+        <span
+          className={`absolute ${tooltipPositionStyles} ${translateStyles} bg-core-grey-200 md:w-[180px] lg:w-[230px] rounded-sm p-4 z-20 opacity-0 invisible group-hover:visible group-hover:opacity-100 transition-opacity ${className}`}
+          style={gapStyle}
+          tabIndex={-1}
+        >
+          <span className="text-white text-xxs font-normal leading-5 shadow">
+            {content}
+          </span>
         </span>
       </span>
-    </span>
+    </div>
   );
 };

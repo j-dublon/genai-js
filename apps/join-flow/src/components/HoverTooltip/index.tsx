@@ -29,6 +29,7 @@ export const HoverTooltip = ({
     setIsVisible(false);
   }, []);
 
+
   useEffect(() => {
     if (isVisible && tooltipRef.current) {
       setTooltipHeight(tooltipRef.current.offsetHeight);

@@ -30,7 +30,7 @@ export const useRoiAddress = (): RoiAddressApiData => {
         postcode,
       };
     }
-
+    
     const primaryIdentifier = serviceAddress.identifiers[0];
 
     const formattedAddress = [

@@ -91,11 +91,12 @@ export const InitialPersonalDetailsForm = ({
         />
       </div>
 
-      <p className="text-sm font-medium mb-4">
+      <p className="text-sm font-medium mb-6">
         {personalDetailsProps.smartphoneSection.mainText}{" "}
         <span className="hidden md:inline">
           <ToolTip
-            gap={46}
+            gap={16}
+            className="md:top-14"
             content={
               "Hover over the ‘i’ icon and copy will go here in a tooltip  to explain how we will be sending a code to their email address lorum ipsum dolor sit amet lorum conquistitor."
             }
