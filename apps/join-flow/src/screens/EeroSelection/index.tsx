@@ -50,6 +50,7 @@ const EeroSelection = () => {
   );
 
   const [showPill, setShowPill] = useState<boolean>(true);
+  const [fadeOut, setFadeOut] = useState<boolean>(false);
 
   const handleSelectEero = (eero: EeroOption) => {
     // If the product is already selected, reset to noEero - i.e. untoggle the additional eero
@@ -111,12 +112,15 @@ const EeroSelection = () => {
 
   useEffect(() => {
     setShowPill(true);
+    setFadeOut(false);
 
-    const timer = setTimeout(() => {
-      setShowPill(false);
-    }, 10000);
+    const fadeOuttimer = setTimeout(() => setFadeOut(true), 9000);
+    const hidePillTimer = setTimeout(() => setShowPill(false), 10000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(fadeOuttimer);
+      clearTimeout(hidePillTimer);
+    };
   }, []);
 
   return (
@@ -138,7 +142,7 @@ const EeroSelection = () => {
                     tickFill="black"
                   />
                 }
-                className="px-4 pt-2 pb-2.5"
+                className={`px-4 pt-2 pb-2.5 transition-opacity duration-1000 ${fadeOut ? "opacity-0" : "opacity-100"}`}
               />
             </div>
           )}

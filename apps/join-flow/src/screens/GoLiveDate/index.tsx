@@ -62,6 +62,7 @@ export const GoLiveDate = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPill, setShowPill] = useState<boolean>(true);
+  const [fadeOut, setFadeOut] = useState<boolean>(false);
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -159,12 +160,15 @@ export const GoLiveDate = () => {
 
   useEffect(() => {
     setShowPill(true);
+    setFadeOut(false);
 
-    const timer = setTimeout(() => {
-      setShowPill(false);
-    }, 10000);
+    const fadeOuttimer = setTimeout(() => setFadeOut(true), 9000);
+    const hidePillTimer = setTimeout(() => setShowPill(false), 10000);
 
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(fadeOuttimer);
+      clearTimeout(hidePillTimer);
+    };
   }, []);
 
   const onSubmit = async (data: GoLiveDateFormValues) => {
@@ -239,7 +243,7 @@ export const GoLiveDate = () => {
               backgroundColor="offer-gradient"
               size="small"
               icon={<TickWithCircle circleFill="none" tickFill="black" />}
-              className="px-4 pt-2 pb-2.5"
+              className={`px-4 pt-2 pb-2.5 transition-opacity duration-1000 ${fadeOut ? "opacity-0" : "opacity-100"}`}
             />
           </div>
         )}
