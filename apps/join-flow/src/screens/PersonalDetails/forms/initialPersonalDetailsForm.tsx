@@ -91,7 +91,7 @@ export const InitialPersonalDetailsForm = ({
         />
       </div>
 
-      <p className="text-sm font-medium mb-6">
+      <div className="text-sm font-medium mb-6">
         {personalDetailsProps.smartphoneSection.mainText}{" "}
         <span className="hidden md:inline">
           <ToolTip
@@ -115,7 +115,7 @@ export const InitialPersonalDetailsForm = ({
         >
           <span className="text-ui-link">Why is this?</span>
         </button>
-      </p>
+      </div>
 
       <div className="flex flex-col gap-6 mb-5 md:mb-6">
         <Controller
