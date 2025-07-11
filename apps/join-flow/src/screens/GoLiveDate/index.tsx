@@ -3,10 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Button,
+  ColorPill,
   DatePicker,
   TipCard,
   useClickOutside,
 } from "@react-component-library/ui";
+import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -59,6 +61,7 @@ export const GoLiveDate = () => {
   } = useJoinFlowStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPill, setShowPill] = useState<boolean>(true);
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -154,6 +157,16 @@ export const GoLiveDate = () => {
     );
   }, [availableAppointments, selectedDate]);
 
+  useEffect(() => {
+    setShowPill(true);
+
+    const timer = setTimeout(() => {
+      setShowPill(false);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   const onSubmit = async (data: GoLiveDateFormValues) => {
     try {
       if (!basket) {
@@ -219,9 +232,16 @@ export const GoLiveDate = () => {
           />
         )}
 
-        {/* TODO: replace with Toast pill once we have it */}
-        {switchingDetails?.otsSwitchStatus === "SWITCH_SUCCESS" && (
-          <p className="mb-4">Switch successful!</p>
+        {switchingDetails?.otsSwitchStatus === "SWITCH_SUCCESS" && showPill && (
+          <div className="flex justify-center mb-6 pt-6">
+            <ColorPill
+              colorPillText="Switching successful"
+              backgroundColor="offer-gradient"
+              size="small"
+              icon={<TickWithCircle circleFill="none" tickFill="black" />}
+              className="px-4 pt-2 pb-2.5"
+            />
+          </div>
         )}
 
         <div

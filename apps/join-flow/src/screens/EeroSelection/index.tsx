@@ -1,10 +1,11 @@
 "use client";
 
-import { Button } from "@react-component-library/ui";
+import { Button, ColorPill } from "@react-component-library/ui";
+import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
@@ -47,6 +48,8 @@ const EeroSelection = () => {
   const [selectedEero, setSelectedEero] = useState<EeroProduct>(
     eeroSelection || noAdditionalEeroOption,
   );
+
+  const [showPill, setShowPill] = useState<boolean>(true);
 
   const handleSelectEero = (eero: EeroOption) => {
     // If the product is already selected, reset to noEero - i.e. untoggle the additional eero
@@ -106,11 +109,40 @@ const EeroSelection = () => {
     }
   };
 
+  useEffect(() => {
+    setShowPill(true);
+
+    const timer = setTimeout(() => {
+      setShowPill(false);
+    }, 10000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <>
       <StepNavigationWithBasket step={2} />
       <div className="container px-4 pb-8 lg:pt-16 mx-auto">
         <div className="max-w-[1183px] mx-auto mt-16">
+          {showPill && (
+            <div className="flex justify-center mb-6">
+              <ColorPill
+                colorPillText="Your info has been saved"
+                backgroundColor="offer-gradient"
+                size="small"
+                icon={
+                  <TickWithCircle
+                    minY={-1}
+                    height={24}
+                    circleFill="none"
+                    tickFill="black"
+                  />
+                }
+                className="px-4 pt-2 pb-2.5"
+              />
+            </div>
+          )}
+
           <div className="p-5 md:p-8 rounded-md">
             <div className="flex flex-col items-center">
               <h1 className="mb-4 text-[26px] md:text-3xl font-semibold text-center [text-wrap:balance]">

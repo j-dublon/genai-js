@@ -277,4 +277,21 @@ describe("GoLiveDate component", () => {
 
     consoleErrorSpy.mockRestore();
   });
+
+  it("renders the toast message pill if switch is successful", async () => {
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      switchingDetails: { otsSwitchStatus: "SWITCH_SUCCESS" },
+      basket: {
+        product: {
+          quoteLookup: { value: "quote123", relationTo: "newSaleQuoteLookups" },
+        },
+      },
+    });
+
+    await act(async () => {
+      render(<GoLiveDate />);
+    });
+
+    expect(screen.getByText("Switching successful")).toBeInTheDocument();
+  });
 });

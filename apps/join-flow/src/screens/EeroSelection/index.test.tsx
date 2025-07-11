@@ -1,5 +1,5 @@
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -136,6 +136,26 @@ describe("EeroSelection", () => {
     const removeButton = screen.getByText("Remove One extra Eero");
 
     expect(removeButton).toBeInTheDocument();
+  });
+
+  it("renders the toast message pill", () => {
+    render(<EeroSelection />);
+    expect(screen.getByText("Your info has been saved")).toBeInTheDocument();
+  });
+
+  it("hides the toast message pill after 10 seconds", async () => {
+    vi.useFakeTimers();
+    render(<EeroSelection />);
+
+    await act(async () => {
+      vi.advanceTimersByTime(10000);
+    });
+
+    expect(
+      screen.queryByText("Your info has been saved"),
+    ).not.toBeInTheDocument();
+
+    vi.useRealTimers();
   });
 
   describe("updating the basket", () => {

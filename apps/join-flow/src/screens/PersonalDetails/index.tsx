@@ -1,7 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@react-component-library/ui";
+import { Button, ColorPill } from "@react-component-library/ui";
+import { TickWithCircle } from "@react-component-library/ui/icons";
 import type { PersonalDetails } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
@@ -67,6 +68,8 @@ const PersonalDetails = () => {
     "",
     "",
   ]);
+
+  const [showPill, setShowPill] = useState<boolean>(true);
 
   const getStepSchema = () => {
     return createStepBasedPersonalDetailsSchema(
@@ -202,6 +205,14 @@ const PersonalDetails = () => {
         keepDirty: false,
       },
     );
+
+    setShowPill(true);
+
+    const timer = setTimeout(() => {
+      setShowPill(false);
+    }, 10000);
+
+    return () => clearTimeout(timer);
   }, [currentFormStep, reset, personalDetails]);
 
   const hasSmartphoneValue = watch("hasSmartphone");
@@ -500,6 +511,31 @@ const PersonalDetails = () => {
       <StepNavigationWithBasket step={1} />
       <div className="container mx-auto px-6 py-8 lg:pt-24">
         <div className="max-w-[569px] mx-auto py-8 rounded-lg">
+          {showPill && (
+            <div className="flex justify-center mb-6">
+              <ColorPill
+                colorPillText={
+                  {
+                    details: "Plan added to your basket",
+                    verification: "We've added your details",
+                    additional: "We've validated your email",
+                  }[currentFormStep]
+                }
+                backgroundColor="offer-gradient"
+                size="small"
+                icon={
+                  <TickWithCircle
+                    minY={-1}
+                    height={24}
+                    circleFill="none"
+                    tickFill="black"
+                  />
+                }
+                className="px-4 pt-2 pb-2.5"
+              />
+            </div>
+          )}
+
           <h1 className="text-2xl text-center font-bold mb-6">
             {personalDetailsProps.pageTitle}
           </h1>
