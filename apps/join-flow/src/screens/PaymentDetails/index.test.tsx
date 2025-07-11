@@ -4,6 +4,7 @@ import { userEvent } from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { getCICS } from "@/services/helpers/getCICS";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
 import { PaymentDetails } from "./index";
@@ -21,13 +22,7 @@ vi.mock("@/services/helpers/isBillingAddressEqual", () => ({
 }));
 
 vi.mock("@/services/helpers/getCICS", () => ({
-  getCICS: vi.fn().mockReturnValue({
-    success: true,
-    data: {
-      contractSummary: "https://s3.cuckoo.co/contractSummary",
-      contractInformation: "https://s3.cuckoo.co/contractInformation",
-    },
-  }),
+  getCICS: vi.fn(),
 }));
 
 vi.mock("@react-component-library/ui", () => ({
@@ -124,17 +119,26 @@ vi.mock("./PaymentDetailsProps", () => ({
 }));
 
 const mockUpdateBasket = vi.mocked(updateBasket);
+const mockGetCICS = vi.mocked(getCICS);
 
 describe("PaymentDetails", () => {
   const mockRouter = {
     push: vi.fn(),
   };
+
   beforeEach(() => {
     vi.clearAllMocks();
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       mockRouter,
     );
     mockUpdateBasket.mockResolvedValue({ error: undefined });
+    mockGetCICS.mockResolvedValue({
+      success: true,
+      data: {
+        contractSummary: "https://s3.cuckoo.co/contractSummary",
+        contractInformation: "https://s3.cuckoo.co/contractInformation",
+      },
+    });
 
     const store = useJoinFlowStore.getState();
     store.setCurrentStep(4);
@@ -242,5 +246,25 @@ describe("PaymentDetails", () => {
       summaryHref: "https://s3.cuckoo.co/contractSummary",
       informationHref: "https://s3.cuckoo.co/contractInformation",
     });
+  });
+
+  it("redirects the user to an error page if the cics data cannot be retrieved", async () => {
+    mockGetCICS.mockResolvedValue({
+      success: false,
+      data: {
+        contractSummary: "",
+        contractInformation: "",
+      },
+    });
+
+    const user = userEvent.setup();
+    const { getByRole } = render(<PaymentDetails />);
+
+    const submitButton = getByRole("button", { name: /submit/i });
+    await user.click(submitButton);
+
+    expect(mockRouter.push).toHaveBeenCalledWith(
+      "/join-flow/payment-details/contract-retrieval-failed",
+    );
   });
 });

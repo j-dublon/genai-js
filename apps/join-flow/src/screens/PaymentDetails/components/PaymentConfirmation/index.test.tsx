@@ -10,12 +10,6 @@ import { accessibilityModalText } from "./Accessibility/AccessibilityProps";
 import { PaymentConfirmation } from "./index";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
-const mockGetCICS = vi.fn();
-mockGetCICS.mockReturnValue({
-  summaryHref: "https://s3.cuckoo.co/contractSummary",
-  informationHref: "https://s3.cuckoo.co/contractInformation",
-});
-
 vi.mock("@/services/payloadClient", () => ({
   squidAPI: {
     getBasket: vi.fn().mockReturnValue({

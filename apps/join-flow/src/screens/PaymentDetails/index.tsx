@@ -119,6 +119,8 @@ export const PaymentDetails = () => {
           if (response.success === true) {
             contractInformation = response.data.contractInformation;
             contractSummary = response.data.contractSummary;
+          } else {
+            router.push("/join-flow/payment-details/contract-retrieval-failed");
           }
         }
 
@@ -167,6 +169,7 @@ export const PaymentDetails = () => {
       billingAddress,
       serviceAddress,
       setPaymentDetails,
+      router,
     ],
   );
 
