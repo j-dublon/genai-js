@@ -1,10 +1,9 @@
-"use client";
-
-import { Button } from "@react-component-library/ui";
+import { Button, useClickOutside } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { useClearFocus } from "@/hooks/useClearFocus";
 import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
@@ -14,6 +13,7 @@ import { AccessibilityRequirements } from "./Accessibility/AccessibilityRequirem
 import PaymentAccountDetails from "./PaymentAccountDetails";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
+import { paymentGoLiveText } from "./paymentGoLiveDetailsProps";
 import PaymentSummary from "./PaymentSummary";
 import PaymentTermsAndConditions from "./PaymentTermsAndConditions";
 
@@ -33,12 +33,24 @@ export const PaymentConfirmation = ({
     accessibilityRequirements,
     accessibilityCommunicationPreferences,
   } = useJoinFlowStore();
+
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsState, setTermsState] = useState({
     termsAgreed: false,
     directDebitAgreed: false,
     creditSearchAgreed: false,
   });
+
+  const [isGoLiveModalOpen, setIsGoLiveModalOpen] = useState(false);
+  const goLiveModalRef = useRef<HTMLDialogElement>(null);
+
+  const closeGoLiveModal = useCallback(() => {
+    goLiveModalRef.current?.close();
+    setIsGoLiveModalOpen(false);
+  }, []);
+
+  useClickOutside(goLiveModalRef, isGoLiveModalOpen, closeGoLiveModal);
+  useClearFocus(goLiveModalRef, "close");
 
   useEffect(() => {
     if (paymentDetails) {
@@ -54,7 +66,6 @@ export const PaymentConfirmation = ({
   const {
     title,
     accountDetailsTitle,
-    goLiveDetailsTitle,
     directDebitDetailsTitle,
     backButtonText,
     signUpText,
@@ -112,7 +123,10 @@ export const PaymentConfirmation = ({
       });
 
       if (result.error) {
-        console.error("Error updating opt ins on basket:", result.error);
+        console.error(
+          "Error updating opt ins on basket:",
+          result.error.message || "Unknown error",
+        );
         return;
       }
 
@@ -124,7 +138,10 @@ export const PaymentConfirmation = ({
         const submitResult = await submitBasket(basket.id);
 
         if (submitResult.type === "error") {
-          console.error("Error submitting basket:", submitResult.error);
+          console.error(
+            "Error submitting basket:",
+            submitResult.error?.message ?? "Unknown error",
+          );
           return;
         }
 
@@ -210,13 +227,10 @@ export const PaymentConfirmation = ({
             <div className="mb-6">
               <PaymentAccountDetails />
             </div>
+            <p className="text-md font-bold mb-6">{paymentGoLiveText.title}</p>
+            <PaymentGoLiveDetails />
 
-            <p className="text-md font-bold mb-6">{goLiveDetailsTitle}</p>
-            <div className="mb-6">
-              <PaymentGoLiveDetails />
-            </div>
-
-            <div className="mb-6">
+            <div className="my-6">
               <AccessibilityRequirements />
             </div>
 

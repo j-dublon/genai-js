@@ -32,6 +32,128 @@ vi.mock("@/components/Stepper", () => ({
   default: () => <div data-testid="stepper">Stepper Component</div>,
 }));
 
+vi.mock("@/components/StepNavigationWithBasket", () => ({
+  StepNavigationWithBasket: () => (
+    <div data-testid="step-navigation">Step Navigation</div>
+  ),
+}));
+
+interface PaymentDocumentItem {
+  name: string;
+  text: string;
+  href: string;
+}
+
+vi.mock("../PaymentDocuments", () => ({
+  PaymentDocuments: ({ items }: { items: PaymentDocumentItem[] }) => (
+    <div data-testid="payment-documents">
+      {items.map((item: PaymentDocumentItem) => (
+        <a key={item.name} data-testid={item.text} href={item.href}>
+          {item.text}
+        </a>
+      ))}
+    </div>
+  ),
+}));
+
+vi.mock("./PaymentSummary", () => ({
+  default: () => <div data-testid="payment-summary">Payment Summary</div>,
+}));
+
+vi.mock("./PaymentAccountDetails", () => ({
+  default: () => (
+    <div data-testid="payment-account-details">Payment Account Details</div>
+  ),
+}));
+
+vi.mock("./PaymentGoLiveDetails", () => ({
+  default: () => (
+    <div data-testid="payment-go-live-details">Payment Go Live Details</div>
+  ),
+}));
+
+interface TermsState {
+  termsAgreed: boolean;
+  directDebitAgreed: boolean;
+  creditSearchAgreed: boolean;
+}
+
+vi.mock("./PaymentTermsAndConditions", () => ({
+  default: ({
+    onChange,
+    initialState,
+  }: {
+    onChange: (allChecked: boolean, state: TermsState) => void;
+    initialState: TermsState;
+  }) => {
+    const handleChange = (field: keyof TermsState) => {
+      const newState = { ...initialState, [field]: !initialState[field] };
+      const allChecked =
+        newState.termsAgreed &&
+        newState.directDebitAgreed &&
+        newState.creditSearchAgreed;
+      onChange(allChecked, newState);
+    };
+    return (
+      <div data-testid="payment-terms">
+        <input type="checkbox" onChange={() => handleChange("termsAgreed")} />
+        <input
+          type="checkbox"
+          onChange={() => handleChange("directDebitAgreed")}
+        />
+        <input
+          type="checkbox"
+          onChange={() => handleChange("creditSearchAgreed")}
+        />
+      </div>
+    );
+  },
+}));
+
+vi.mock("./Accessibility/AccessibilityRequirements", () => ({
+  AccessibilityRequirements: () => {
+    const { setAccessibilityRequirements } = useJoinFlowStore();
+    return (
+      <div data-testid="accessibility-requirements">
+        <input
+          type="checkbox"
+          aria-label="Yes, I have specific requirements or needs"
+          onChange={(e) => {
+            if (e.target.checked) {
+              const dialog = document.querySelector(
+                '[data-testid="accessibility-modal"]',
+              ) as HTMLDialogElement;
+              dialog?.showModal();
+            }
+          }}
+        />
+        <dialog data-testid="accessibility-modal">
+          <h2 id="modal-title">
+            {accessibilityModalText.accessibilityRequirementsModalTitle}
+          </h2>
+          <button
+            onClick={() =>
+              setAccessibilityRequirements({ blindVisionImpaired: true })
+            }
+          >
+            Blind or Vision impaired
+          </button>
+          <button
+            onClick={() => {
+              const dialog = document.querySelector(
+                '[data-testid="accessibility-modal"]',
+              ) as HTMLDialogElement;
+              dialog?.close();
+            }}
+          >
+            {accessibilityModalText.submitButtonText}
+          </button>
+        </dialog>
+      </div>
+    );
+  },
+}));
+
 vi.mock("@services/helpers/updateBasket", () => ({
   updateBasket: vi.fn(),
 }));
@@ -41,6 +163,12 @@ vi.mock("@services/helpers/submitBasket", () => ({
   submitBasket: vi.fn(),
 }));
 const mockSubmitBasket = vi.mocked(submitBasket);
+
+vi.mock("@services/helpers/createVulnerabilityAndAccessibility", () => ({
+  createVulnerabilityAndAccessibility: vi.fn().mockResolvedValue({
+    vulnerabilityAndAccessibility: { blindVisionImpaired: true },
+  }),
+}));
 
 describe("PaymentConfirmation", () => {
   const mockRouter = {
@@ -114,27 +242,27 @@ describe("PaymentConfirmation", () => {
       termsAndConditionsLink: "https://cms.cuckoo.co/tacs",
       privacyPolicyLink: "https://cms.cuckoo.co/privacy",
     });
+    store.setGoLiveDetails({
+      selectedDate: "2024-01-15",
+      engineerTimeSlot: {
+        startDateTime: "2024-01-15T09:00:00Z",
+        endDateTime: "2024-01-15T11:00:00Z",
+        selectionIdentifier: "slot-123",
+      },
+    });
   });
 
   afterAll(() => {
     vi.clearAllMocks();
   });
 
-  const {
-    title,
-    directDebitDetailsTitle,
-    accountDetailsTitle,
-    goLiveDetailsTitle,
-    signUpText,
-  } = paymentConfirmationText;
+  const { directDebitDetailsTitle, accountDetailsTitle, signUpText } =
+    paymentConfirmationText;
 
   it("renders the main sections", () => {
     render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
-
-    expect(screen.getByRole("heading", { name: title })).toBeInTheDocument();
     expect(screen.getByText(directDebitDetailsTitle)).toBeInTheDocument();
     expect(screen.getByText(accountDetailsTitle)).toBeInTheDocument();
-    expect(screen.getByText(goLiveDetailsTitle)).toBeInTheDocument();
     expect(screen.getByTestId("termsAndConditions")).toBeInTheDocument();
   });
 
@@ -147,10 +275,8 @@ describe("PaymentConfirmation", () => {
         onComplete={() => {}}
       />,
     );
-
     const backButton = screen.getByRole("button", { name: /back/i });
     await user.click(backButton);
-
     expect(mockOnGoBackHandler).toHaveBeenCalled();
   });
 
@@ -163,23 +289,17 @@ describe("PaymentConfirmation", () => {
         onComplete={mockOnCompleteHandler}
       />,
     );
-
     await act(async () => {
-      const termsSection = screen.getByTestId("termsAndConditions").nextSibling;
+      const termsSection = screen.getByTestId("payment-terms");
       const termsCheckboxes = within(termsSection as HTMLElement).getAllByRole(
         "checkbox",
       );
-
-      termsCheckboxes.forEach(async (checkbox) => {
+      for (const checkbox of termsCheckboxes) {
         await user.click(checkbox);
-      });
+      }
     });
-
-    const confirmButton = screen.getByRole("button", {
-      name: signUpText,
-    });
+    const confirmButton = screen.getByRole("button", { name: signUpText });
     await user.click(confirmButton);
-
     const paymentDetails = useJoinFlowStore.getState().paymentDetails;
     expect(paymentDetails).toEqual(
       expect.objectContaining({
@@ -189,13 +309,20 @@ describe("PaymentConfirmation", () => {
         allTermsAgreed: true,
       }),
     );
-
+    expect(mockUpdateBasket).toHaveBeenCalledWith("123", {
+      optIns: {
+        creditSearchAgreed: true,
+        directDebitAgreed: true,
+        termsAgreed: true,
+      },
+      vulnerabilityAndAccessibility: undefined,
+    });
+    expect(mockSubmitBasket).toHaveBeenCalledWith("123");
     expect(mockOnCompleteHandler).toHaveBeenCalled();
   });
 
   it("confirm button is disabled when terms are not agreed", () => {
     render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
-
     const confirmButton = screen.getByRole("button", {
       name: paymentConfirmationText.signUpText,
     });
@@ -211,111 +338,105 @@ describe("PaymentConfirmation", () => {
         onComplete={mockOnCompleteHandler}
       />,
     );
-
     await act(async () => {
-      const termsSection = screen.getByTestId("termsAndConditions").nextSibling;
+      const termsSection = screen.getByTestId("payment-terms");
       const termsCheckboxes = within(termsSection as HTMLElement).getAllByRole(
         "checkbox",
       );
-
-      termsCheckboxes.forEach(async (checkbox) => {
+      for (const checkbox of termsCheckboxes) {
         await user.click(checkbox);
-      });
+      }
     });
-
     const accessibilityCheckbox = screen.getByRole("checkbox", {
       name: "Yes, I have specific requirements or needs",
     });
     await user.click(accessibilityCheckbox);
-    await user.click(screen.getByText("Blind or Vision impaired"));
-    await user.click(
-      screen.getByRole("button", {
-        name: accessibilityModalText.submitButtonText,
-      }),
-    );
-
-    const confirmButton = screen.getByRole("button", {
-      name: signUpText,
+    const blindVisionButton = screen.getByText("Blind or Vision impaired");
+    await user.click(blindVisionButton);
+    const submitButton = screen.getByRole("button", {
+      name: accessibilityModalText.submitButtonText,
     });
+    await user.click(submitButton);
+    const confirmButton = screen.getByRole("button", { name: signUpText });
     await user.click(confirmButton);
-
     const accessibilityRequirements =
       useJoinFlowStore.getState().accessibilityRequirements;
     expect(accessibilityRequirements).toEqual(
-      expect.objectContaining({
-        blindVisionImpaired: true,
-      }),
+      expect.objectContaining({ blindVisionImpaired: true }),
     );
-
-    expect(mockUpdateBasket).toHaveBeenCalled();
+    expect(mockUpdateBasket).toHaveBeenCalledWith("123", {
+      optIns: {
+        creditSearchAgreed: true,
+        directDebitAgreed: true,
+        termsAgreed: true,
+      },
+      vulnerabilityAndAccessibility: { blindVisionImpaired: true },
+    });
     expect(mockOnCompleteHandler).toHaveBeenCalled();
   });
 
   it("opens accessibility modal when accessibility requirements checkbox is clicked", async () => {
-    // This test is written weirdly as the DOM tree is too large for the testing library and the modal is not in the truncated DOM tree
     const user = userEvent.setup();
-    const { container } = render(
-      <PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />,
-    );
-
+    render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
     const accessibilityCheckbox = screen.getByRole("checkbox", {
       name: "Yes, I have specific requirements or needs",
     });
-
-    // Find the accessibility modal by looking for the dialog that contains the accessibility modal title (there are multiple dialogs in the DOM)
-    const accessibilityModal = Array.from(
-      container.querySelectorAll("dialog"),
-    ).find((dialog) => {
-      const titleElement = dialog.querySelector('h2[id="modal-title"]');
-      return (
-        titleElement?.textContent ===
-        accessibilityModalText.accessibilityRequirementsModalTitle
-      );
-    }) as HTMLDialogElement;
-    const otherModal = Array.from(container.querySelectorAll("dialog")).find(
-      (dialog) => {
-        const titleElement = dialog.querySelector('h2[id="modal-title"]');
-        return (
-          titleElement?.textContent !==
-          accessibilityModalText.accessibilityRequirementsModalTitle
-        );
-      },
+    const accessibilityModal = screen.getByTestId(
+      "accessibility-modal",
     ) as HTMLDialogElement;
-
     expect(accessibilityModal).toBeInTheDocument();
     expect(accessibilityModal.open).toBe(false);
-    expect(otherModal.open).toBe(false);
-
     await user.click(accessibilityCheckbox);
-
     expect(accessibilityModal.open).toBe(true);
-    expect(otherModal.open).toBe(false);
     expect(screen.getByText("Blind or Vision impaired")).toBeVisible();
   });
 
-  it("shows the CICS buttons that that link to the intended resources", () => {
+  it("shows the CICS buttons that link to the intended resources", () => {
     render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
-
-    const contractSummaryBtn = screen.getByTestId("Contract Summary");
-    const contractInformationBtn = screen.getByTestId("Contract Information");
-    const termsAndConditionsBtn = screen.getByTestId("Terms & Conditions");
-    const privacyNoticeBtn = screen.getByTestId("Privacy Notice");
-
-    expect(contractSummaryBtn).toHaveAttribute(
+    expect(screen.getByTestId("Contract Summary")).toHaveAttribute(
       "href",
       "https://s3.cuckoo.co/contractSummary",
     );
-    expect(contractInformationBtn).toHaveAttribute(
+    expect(screen.getByTestId("Contract Information")).toHaveAttribute(
       "href",
       "https://s3.cuckoo.co/contractInformation",
     );
-    expect(termsAndConditionsBtn).toHaveAttribute(
+    expect(screen.getByTestId("Terms & Conditions")).toHaveAttribute(
       "href",
       "https://cms.cuckoo.co/tacs",
     );
-    expect(privacyNoticeBtn).toHaveAttribute(
+    expect(screen.getByTestId("Privacy Notice")).toHaveAttribute(
       "href",
       "https://cms.cuckoo.co/privacy",
     );
+  });
+
+  it("handles missing basket ID", async () => {
+    const user = userEvent.setup();
+    const consoleErrorSpy = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
+    const store = useJoinFlowStore.getState();
+    store.setBasket({
+      id: undefined as unknown as string,
+      updatedAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
+    });
+    render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
+    const termsSection = screen.getByTestId("payment-terms");
+    const termsCheckboxes = within(termsSection as HTMLElement).getAllByRole(
+      "checkbox",
+    );
+    for (const checkbox of termsCheckboxes) {
+      await user.click(checkbox);
+    }
+    const confirmButton = screen.getByRole("button", { name: signUpText });
+    await user.click(confirmButton);
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Basket ID is required to update basket",
+    );
+    expect(mockUpdateBasket).not.toHaveBeenCalled();
+    expect(mockSubmitBasket).not.toHaveBeenCalled();
+    consoleErrorSpy.mockRestore();
   });
 });

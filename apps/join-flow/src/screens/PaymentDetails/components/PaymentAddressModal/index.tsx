@@ -30,7 +30,8 @@ export const PaymentAddressModal = ({
     <InfoModal title={paymentAddressModalText.title} modalRef={modalRef}>
       <TipCard
         image={getAssetPath("/images/movingHome.svg")}
-        className="mb-4 items-center justify-center bg-tertiary-orange/30 md:mb-6 md:w-full mt-6"
+        backgroundColor="orange"
+        className="mb-4 items-center justify-center md:mb-6 md:w-full mt-6"
       >
         <span>
           <span className="text-xs font-semibold md:text-sm">
@@ -39,17 +40,20 @@ export const PaymentAddressModal = ({
           {paymentAddressModalText.tipCardText}
         </span>
       </TipCard>
-
       {showPaymentDetailsError && (
         <p className="text-sm text-ui-error mb-6">
           {paymentAddressModalText.paymentDetailsError}
         </p>
       )}
-
-      <BillingAddressLookupForm
-        onAddressSelected={handleAddressSelected}
-        onError={handleAddressError}
-      />
+      <span className="font-semibold text-xs md:text-sm">
+        {paymentAddressModalText.updateYourDetails}
+      </span>
+      <div className="mt-4">
+        <BillingAddressLookupForm
+          onAddressSelected={handleAddressSelected}
+          onError={handleAddressError}
+        />
+      </div>
     </InfoModal>
   );
 };

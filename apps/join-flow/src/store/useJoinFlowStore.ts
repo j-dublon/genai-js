@@ -102,7 +102,11 @@ export type PaymentDetails = {
 
 export type GoLiveDetails = {
   selectedDate: string;
-  engineerTimeSlot?: string;
+  engineerTimeSlot?: {
+    startDateTime: string;
+    endDateTime: string;
+    selectionIdentifier: string;
+  };
 };
 
 export type AccessibilityRequirements = {

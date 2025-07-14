@@ -1,39 +1,29 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Button,
   ColorPill,
-  DatePicker,
   TipCard,
   useClickOutside,
 } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
 
+import { DateTimeSelectionForm } from "@/components/DateTimeSelectionForm";
 import { Footer } from "@/components/Footer";
-import { FormDropdown } from "@/components/FormDropdown";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
 import { getGoLiveDates } from "@/services/helpers/getGoLiveDates";
 import { updateBasket } from "@/services/helpers/updateBasket";
-import {
-  GoLiveDateFormValues,
-  goLiveDateSchema,
-} from "@/validation/join-flow-schema";
+import { GoLiveDateFormValues } from "@/validation/join-flow-schema";
 
 import { EngineerVisitModal } from "./components/EngineerVisitModal";
 import { OtsFailBanner } from "./components/OtsFailBanner";
 import { goLiveDateText } from "./GoLiveDateProps";
-import {
-  fetchEngineerAppointments,
-  getTimeSlotsForDate,
-} from "./utils/GoLiveDateUtils";
+import { fetchEngineerAppointments } from "./utils/GoLiveDateUtils";
 
 export const GoLiveDate = () => {
   const {
@@ -63,7 +53,6 @@ export const GoLiveDate = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPill, setShowPill] = useState<boolean>(true);
   const [fadeOut, setFadeOut] = useState<boolean>(false);
-
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const closeEngineerModal = () => {
@@ -73,43 +62,13 @@ export const GoLiveDate = () => {
 
   useClickOutside(modalRef, isModalOpen, closeEngineerModal);
   useClearFocus(modalRef, "close");
+
   const [availableAppointments, setAvailableAppointments] = useState<
     Appointment[]
   >([]);
-  const initialTimeslots: Record<string, string> =
-    goLiveDetails?.engineerTimeSlot
-      ? {
-          [goLiveDetails.engineerTimeSlot]: goLiveDetails.engineerTimeSlot,
-        }
-      : {};
-
-  const [timeslots, setTimeslots] =
-    useState<Record<string, string>>(initialTimeslots);
   const [loadingAppointments, setLoadingAppointments] = useState(true);
   const [appointmentError, setAppointmentError] = useState<string>();
   const [documentID, setDocumentID] = useState<string>("");
-
-  const defaultValues = useMemo(
-    () => ({
-      selectedDate: goLiveDetails?.selectedDate || "",
-      timeSlot: goLiveDetails?.engineerTimeSlot || "",
-    }),
-    [goLiveDetails?.selectedDate, goLiveDetails?.engineerTimeSlot],
-  );
-
-  const {
-    control,
-    handleSubmit,
-    watch,
-    setError,
-    formState: { errors },
-  } = useForm<GoLiveDateFormValues>({
-    resolver: zodResolver(goLiveDateSchema),
-    defaultValues,
-    mode: "onSubmit",
-  });
-
-  const selectedDate = watch("selectedDate");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -133,6 +92,7 @@ export const GoLiveDate = () => {
         setLoadingAppointments(false);
       }
     };
+
     // TODO: take user to error screen if no quote lookup
     if (basket?.product?.quoteLookup?.value) {
       fetchData();
@@ -141,22 +101,6 @@ export const GoLiveDate = () => {
     basket?.product?.quoteLookup?.value,
     selectedPackage?.installationRequired,
   ]);
-
-  useEffect(() => {
-    const availableTimeSlots = getTimeSlotsForDate(
-      availableAppointments,
-      selectedDate,
-    );
-    setTimeslots(
-      availableTimeSlots.reduce(
-        (acc, slot) => {
-          acc[slot.label] = slot.selectionIdentifier;
-          return acc;
-        },
-        {} as Record<string, string>,
-      ),
-    );
-  }, [availableAppointments, selectedDate]);
 
   useEffect(() => {
     setShowPill(true);
@@ -171,19 +115,12 @@ export const GoLiveDate = () => {
     };
   }, []);
 
-  const onSubmit = async (data: GoLiveDateFormValues) => {
+  const handleFormSubmit = async (data: GoLiveDateFormValues) => {
     try {
       if (!basket) {
-        console.error("No basket available");
         return;
       }
-      if (selectedPackage?.installationRequired && !data.timeSlot) {
-        setError("timeSlot", {
-          type: "manual",
-          message: "Please select a time slot",
-        });
-        return;
-      }
+
       let result;
       if (selectedPackage?.installationRequired) {
         result = await updateBasket(basket.id, {
@@ -201,17 +138,46 @@ export const GoLiveDate = () => {
       if (result.basket) {
         setBasket(result.basket);
       } else if (result.error) {
-        console.error("Failed to update basket:", result.error);
         return;
       }
-    } catch (error) {
-      console.error("Unexpected error updating basket:", error);
+    } catch {
       return;
     }
+
+    let engineerTimeSlot = undefined;
+
+    if (selectedPackage?.installationRequired && data.timeSlot) {
+      const formDate = new Date(data.selectedDate);
+      const year = formDate.getFullYear();
+      const month = String(formDate.getMonth() + 1).padStart(2, "0");
+      const day = String(formDate.getDate()).padStart(2, "0");
+      const formDateISO = `${year}-${month}-${day}`;
+
+      const selectedAppointment = availableAppointments.find((appointment) => {
+        const appointmentDate = appointment.startDateTime
+          .toISOString()
+          .split("T")[0];
+
+        return (
+          appointmentDate === formDateISO &&
+          appointment.selectionIdentifier === data.timeSlot
+        );
+      });
+
+      if (selectedAppointment) {
+        engineerTimeSlot = {
+          startDateTime: selectedAppointment.startDateTime.toISOString(),
+          endDateTime: selectedAppointment.endDateTime.toISOString(),
+          selectionIdentifier: selectedAppointment.selectionIdentifier!,
+        };
+      }
+    }
+
     setGoLiveDetails({
       selectedDate: data.selectedDate,
-      engineerTimeSlot: data?.timeSlot || "",
+      engineerTimeSlot,
     });
+
     setCurrentStep(4);
     router.push("/join-flow/payment-details");
   };
@@ -296,63 +262,22 @@ export const GoLiveDate = () => {
             modalContent={goLiveDateText.engineerVisitModal}
           />
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="mb-8 pt-12">
-              <div className="mb-6">
-                <h2 className="text-md font-semibold mb-4">
-                  {availableDatesLabel}
-                </h2>
-
-                {appointmentError && (
-                  <div className="text-ui-error">{appointmentError}</div>
-                )}
-
-                <Controller
-                  name="selectedDate"
-                  control={control}
-                  render={({ field }) => (
-                    <DatePicker
-                      availableDates={availableAppointments.map(
-                        (appointment) => appointment.startDateTime,
-                      )}
-                      selectedDate={field.value}
-                      onDateSelect={(date) => field.onChange(date)}
-                      disabled={loadingAppointments}
-                    />
-                  )}
-                />
-                {errors.selectedDate && (
-                  <p className="text-ui-error text-sm mt-1">
-                    {errors.selectedDate.message}
-                  </p>
-                )}
-              </div>
-
-              {selectedDate && selectedPackage?.installationRequired && (
-                <div className="mb-6">
-                  <FormDropdown
-                    dropdownLabel={timeSlotLabel}
-                    control={control}
-                    name="timeSlot"
-                    dropdownPlaceholder={timeSlotPlaceHolder}
-                    options={timeslots}
-                    errorMessage={errors?.timeSlot?.message}
-                  />
-                </div>
-              )}
-            </div>
-
-            <div className="flex mt-8">
-              <Button
-                tint="yellow"
-                variant="solid"
-                type="submit"
-                fullWidth={true}
-              >
-                {continueButtonText}
-              </Button>
-            </div>
-          </form>
+          <DateTimeSelectionForm
+            availableAppointments={availableAppointments}
+            loadingAppointments={loadingAppointments}
+            appointmentError={appointmentError}
+            requiresTimeSlot={selectedPackage?.installationRequired || false}
+            defaultSelectedDate={goLiveDetails?.selectedDate}
+            defaultTimeSlot={
+              goLiveDetails?.engineerTimeSlot?.selectionIdentifier
+            }
+            availableDatesLabel={availableDatesLabel}
+            timeSlotLabel={timeSlotLabel}
+            timeSlotPlaceHolder={timeSlotPlaceHolder}
+            submitButtonText={continueButtonText}
+            onSubmit={handleFormSubmit}
+            className="pt-12"
+          />
         </div>
       </div>
       <Footer />
