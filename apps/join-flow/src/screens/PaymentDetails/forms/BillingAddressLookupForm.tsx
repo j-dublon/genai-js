@@ -4,6 +4,7 @@ import {
   StoreAddress,
 } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { AddressLookupForm } from "@/components/AddressLookupForm";
@@ -18,6 +19,7 @@ export const BillingAddressLookupForm = ({
   onAddressSelected,
   onError,
 }: BillingAddressLookupFormProps) => {
+  const router = useRouter();
   const {
     setBillingAddress,
     basket,
@@ -89,6 +91,9 @@ export const BillingAddressLookupForm = ({
       buttonText={{
         search: "Search for your address",
         continue: "Search for your address",
+      }}
+      addressNotFoundAction={() => {
+        router.push("/join-flow/register-interest/not-shown");
       }}
     />
   );

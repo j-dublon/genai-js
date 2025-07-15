@@ -12,6 +12,7 @@ import { PaymentGoLiveModal } from "./PaymentGoLiveModal";
 export const PaymentGoLiveDetails = ({}) => {
   const { goLiveDetails } = useJoinFlowStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { switchingDetails } = useJoinFlowStore();
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const closePaymentGoLiveModal = () => {
@@ -54,6 +55,10 @@ export const PaymentGoLiveDetails = ({}) => {
     setIsModalOpen(true);
   };
 
+  const otsSwitchFailedOrSkipped =
+    switchingDetails?.otsSwitchStatus === "OTS_FAILED" ||
+    switchingDetails?.otsSwitchStatus === "SKIPPED";
+
   return (
     <>
       <div className="bg-ui-grey-100 p-6 rounded-md">
@@ -71,7 +76,10 @@ export const PaymentGoLiveDetails = ({}) => {
           <span className="font-bold">
             {paymentGoLiveText.textHightlight}{" "}
             <span className="font-normal">
-              {paymentGoLiveText.changeGoLiveInstruction}
+              {otsSwitchFailedOrSkipped
+                ? paymentGoLiveText.goLiveInstructionSkipped
+                : paymentGoLiveText.goLiveInstruction}{" "}
+              {paymentGoLiveText.pleaseRead}
             </span>{" "}
           </span>
           <a

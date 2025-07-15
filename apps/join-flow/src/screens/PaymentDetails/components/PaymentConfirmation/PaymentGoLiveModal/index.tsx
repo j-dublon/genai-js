@@ -27,6 +27,8 @@ export const PaymentGoLiveModal = ({
   const { availableDatesLabel, timeSlotLabel, timeSlotPlaceHolder } =
     goLiveDateText;
 
+  const { switchingDetails } = useJoinFlowStore();
+
   const {
     setGoLiveDetails,
     goLiveDetails,
@@ -166,6 +168,10 @@ export const PaymentGoLiveModal = ({
     setIsModalOpen?.(false);
   };
 
+  const otsSwitchFailedOrSkipped =
+    switchingDetails?.otsSwitchStatus === "OTS_FAILED" ||
+    switchingDetails?.otsSwitchStatus === "SKIPPED";
+
   return (
     <InfoModal title={paymentGoLiveText.title} modalRef={modalRef}>
       <DateTimeSelectionForm
@@ -184,13 +190,15 @@ export const PaymentGoLiveModal = ({
         tipCard={
           <TipCard
             image={getAssetPath("/images/calender.svg")}
-            backgroundColor="orange"
+            backgroundColor={otsSwitchFailedOrSkipped ? "orange" : "green"}
             className="w-full"
           >
             <span className="font-bold">
               {paymentGoLiveText.textHightlight}{" "}
               <span className="font-normal">
-                {paymentGoLiveText.changeGoLiveInstruction}
+                {otsSwitchFailedOrSkipped
+                  ? paymentGoLiveText.goLiveInstructionSkipped
+                  : paymentGoLiveText.goLiveInstruction}
               </span>{" "}
             </span>
           </TipCard>
