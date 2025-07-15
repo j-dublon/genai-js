@@ -31,5 +31,6 @@ export default defineConfig({
       "@validation": resolve(__dirname, "src/validation"),
       "@schema": resolve(__dirname, "src/schema"),
     },
+    silent: "passed-only",
   },
 });

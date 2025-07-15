@@ -13,6 +13,10 @@ import {
   VulnerabilityAndAccessibility,
 } from "../../payload-types";
 
+//
+// generic response types
+//
+
 export type GenericSquidResponse = GenericSyncAsyncResponse;
 
 export type GenericSyncAsyncResponse =
@@ -26,6 +30,10 @@ export type GenericSyncAsyncResponse =
 export type ResponseStates = NonNullable<
   NonNullable<GenericSyncAsyncResponse["outputs"]>["state"]
 >;
+
+//
+// error classes
+//
 
 export class FetchError extends Error {
   public params: RequestInit;
@@ -68,6 +76,10 @@ export class ValidationError extends Error {
   }
 }
 
+//
+// input, output types
+//
+
 export type AddressLookupSuccess = {
   documentID: string;
   response: NonNullable<NonNullable<AddressLookup["outputs"]>["apiSuccess"]>;
@@ -94,10 +106,6 @@ export type AffiliateSessionInputs = Omit<
   "requestProcessingType"
 >;
 
-export type AffiliateSessionSuccessData = NonNullable<
-  NonNullable<AffiliateSession["outputs"]>["apiSuccess"]
->;
-
 export type EngineerAppointmentSuccess = {
   documentID: string;
   response: NonNullable<
@@ -105,14 +113,6 @@ export type EngineerAppointmentSuccess = {
   >;
 };
 export type EngineerAppointmentErrors = {
-  documentID: string;
-  errors: NonNullable<NonNullable<EngineerAppointment["outputs"]>["apiErrors"]>;
-};
-export type GoLiveDateSuccess = {
-  documentID: string;
-  response: NonNullable<NonNullable<string[]>>;
-};
-export type GoLiveDateErrors = {
   documentID: string;
   errors: NonNullable<NonNullable<EngineerAppointment["outputs"]>["apiErrors"]>;
 };
@@ -164,28 +164,17 @@ export type QuoteLookupInputs = Omit<
   "requestProcessingType"
 >;
 
-export type RegisterOfInterestSubmissionsSuccess = {
-  documentID: string;
-  response: NonNullable<
-    NonNullable<RegisterOfInterestSubmission["outputs"]>["apiSuccess"]
-  >;
-};
-export type RegisterOfInterestSubmissionsErrors = {
-  documentID: string;
-  errors: NonNullable<
-    NonNullable<RegisterOfInterestSubmission["outputs"]>["apiErrors"]
-  >;
-};
-export type RegisterOfInterestSubmissionsInputs = Omit<
-  NonNullable<NonNullable<RegisterOfInterestSubmission["inputs"]>>,
-  "requestProcessingType"
->;
-
 export type InitialBasket = Omit<
   Omit<Omit<Basket, "createdAt">, "id">,
   "updatedAt"
 >;
 
+export type InitialVulnerabilityAndAccessibility = Omit<
+  Omit<Omit<VulnerabilityAndAccessibility, "createdAt">, "id">,
+  "updatedAt"
+>;
+
+// TODO this should come from payload once monorepo has join flow in it
 export type RunCreditCheckResponse = {
   status: NonNullable<
     NonNullable<CreditCheckExecution["outputs"]>["apiSuccess"]
@@ -193,20 +182,15 @@ export type RunCreditCheckResponse = {
   message?: string;
 };
 
-export type SendEmailCodeResponse = {
-  success: boolean;
-};
+// TODO this should come from payload once monorepo has join flow in it
+export type GetGoLiveDatesResponse = string[];
 
-export type ValidateEmailCodeResponse = {
-  success: boolean;
-  message?: string;
-};
+export type GetCICSResponse = Basket["cics"];
 
-export type InitialVulnerabilityAndAccessibility = Omit<
-  Omit<Omit<VulnerabilityAndAccessibility, "createdAt">, "id">,
-  "updatedAt"
->;
+// TODO this should come from payload once monorepo has join flow in it
+export type ValidateEmailCodeResponse = { success: boolean };
 
+// TODO this should come from payload once monorepo has join flow in it
 export type SignupResponse =
   | {
       success: true;
@@ -221,6 +205,7 @@ export type SignupResponse =
       }[];
     };
 
+// TODO this should come from payload once monorepo has join flow in it
 export type RegradeResponse =
   | {
       success: true;
@@ -234,6 +219,7 @@ export type RegradeResponse =
       }[];
     };
 
+// TODO this should come from payload once monorepo has join flow in it
 export type RenewalResponse =
   | {
       success: true;
@@ -247,24 +233,8 @@ export type RenewalResponse =
       }[];
     };
 
-export type GenerateCICSResponse =
-  | {
-      success: true;
-      cics?: {
-        informationHref: string;
-        summaryHref: string;
-      };
-    }
-  | {
-      success: false;
-      // NOTE because this is not linked to payload we don't get actual block type hints, once in monorepo this will be much better
-      errorBlocks?: {
-        errorMessage?: string;
-        blockType?: string;
-      }[];
-    };
-
-export type GetCICSResponse = Basket["cics"];
+// TODO this should come from payload once monorepo has join flow in it
+export type SendEmailCodeResponse = { success: boolean };
 
 export type RenewalQuoteLookupSuccess = {
   documentID: string;
@@ -293,5 +263,22 @@ export type RegradeQuoteLookupErrors = {
 };
 export type RegradeQuoteLookupInputs = Omit<
   NonNullable<NonNullable<RegradeQuoteLookup["inputs"]>>,
+  "requestProcessingType"
+>;
+
+export type RegisterOfInterestSubmissionsSuccess = {
+  documentID: string;
+  response: NonNullable<
+    NonNullable<RegisterOfInterestSubmission["outputs"]>["apiSuccess"]
+  >;
+};
+export type RegisterOfInterestSubmissionsErrors = {
+  documentID: string;
+  errors: NonNullable<
+    NonNullable<RegisterOfInterestSubmission["outputs"]>["apiErrors"]
+  >;
+};
+export type RegisterOfInterestSubmissionsInputs = Omit<
+  NonNullable<NonNullable<RegisterOfInterestSubmission["inputs"]>>,
   "requestProcessingType"
 >;

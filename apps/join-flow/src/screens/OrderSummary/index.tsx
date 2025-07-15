@@ -6,9 +6,11 @@ import Link from "next/link";
 import React from "react";
 
 export const OrderSummary = () => {
-  const { personalDetails, resetFlow } = useJoinFlowStore();
+  const { personalDetails, resetFlow, resetAffiliateSession } =
+    useJoinFlowStore();
 
   const handleStartNewOrder = () => {
+    resetAffiliateSession();
     resetFlow();
   };
 

@@ -104,7 +104,6 @@ export interface Config {
     apiTests: ApiTest;
     databaseExports: DatabaseExport;
     databaseImports: DatabaseImport;
-    lambdaPrototype: LambdaPrototype;
     registerOfInterestSubmissions: RegisterOfInterestSubmission;
     WhatsNew: WhatsNew;
     "payload-jobs": PayloadJob;
@@ -183,7 +182,6 @@ export interface Config {
     apiTests: ApiTestsSelect<false> | ApiTestsSelect<true>;
     databaseExports: DatabaseExportsSelect<false> | DatabaseExportsSelect<true>;
     databaseImports: DatabaseImportsSelect<false> | DatabaseImportsSelect<true>;
-    lambdaPrototype: LambdaPrototypeSelect<false> | LambdaPrototypeSelect<true>;
     registerOfInterestSubmissions:
       | RegisterOfInterestSubmissionsSelect<false>
       | RegisterOfInterestSubmissionsSelect<true>;
@@ -735,7 +733,7 @@ export interface NewSaleQuoteLookup {
             installationRequired: boolean;
             appliedPromotionUUIDs?:
               | {
-                  id: string | null;
+                  id: string;
                 }[]
               | null;
             prices: {
@@ -1002,6 +1000,49 @@ export interface AffiliateSession {
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
     apiSuccess?: {
+      displayItems?: {
+        /**
+         * This is a link to the Ts and Cs to be used in the join flow
+         */
+        termsAndConditionsLink?: string | null;
+        /**
+         * This is a link to the privacy policy
+         */
+        privacyPolicyLink?: string | null;
+        headerBanner?:
+          | {
+              style: "default" | "apfn";
+              text: string;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "basicPageTitleBannerBlock";
+            }[]
+          | null;
+        landingPageBanner?:
+          | {
+              style: "default" | "apfn";
+              /**
+               * This is the top level title on an affiliate - the big headline
+               */
+              primaryTitle: string;
+              /**
+               * This is the next level title on an affiliate
+               */
+              secondaryTitle: string;
+              /**
+               * This is the other text displayed on the affiliate
+               */
+              descriptionText: string;
+              /**
+               * This is the other text displayed on the affiliate
+               */
+              image?: (string | null) | Media;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "basicLandingBannerBlock";
+            }[]
+          | null;
+      };
       sessionID?: string | null;
       affiliateName?: string | null;
       /**
@@ -1012,18 +1053,6 @@ export interface AffiliateSession {
        * If this is false, email validation will not be required
        */
       doEmailValidation?: boolean | null;
-      /**
-       * This is a link to the Ts and Cs to be used in the join flow
-       */
-      termsAndConditionsLink?: string | null;
-      /**
-       * This is a link to the privacy policy
-       */
-      privacyPolicyLink?: string | null;
-      /**
-       * This is a quick and dirty way to allow for differentiation between the affiliates visually, we would like for this to be a real CMS block in the future but the idea here is that the frontend just use this to pick some style options.
-       */
-      affiliateVisualStyle?: string | null;
       cuckooAffiliate?: (string | null) | Affiliate;
     };
     apiErrors?:
@@ -1102,6 +1131,25 @@ export interface AffiliateSession {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "media".
+ */
+export interface Media {
+  id: string;
+  alt: string;
+  updatedAt: string;
+  createdAt: string;
+  url?: string | null;
+  thumbnailURL?: string | null;
+  filename?: string | null;
+  mimeType?: string | null;
+  filesize?: number | null;
+  width?: number | null;
+  height?: number | null;
+  focalX?: number | null;
+  focalY?: number | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "affiliates".
  */
 export interface Affiliate {
@@ -1110,18 +1158,59 @@ export interface Affiliate {
    * The name we, and this CMS, use to identify this affiliate
    */
   name: string;
-  /**
-   * This is a link to the Ts and Cs to be used in the join flow
-   */
-  termsAndConditionsLink: string;
-  /**
-   * This is a link to the privacy policy
-   */
-  privacyPolicyLink: string;
-  /**
-   * This is a quick and dirty way to allow for differentiation between the affiliates visually, we would like for this to be a real CMS block in the future but the idea here is that the frontend just use this to pick some style options.
-   */
-  affiliateVisualStyle: string;
+  journeyModifiers: {
+    /**
+     * Should the credit check results be used to reject, or should we ignore them. Note the credit check will always run, its just the results won't be used if this is not selected
+     */
+    useCreditCheckResults: boolean;
+    /**
+     * If this is false, email validation will not be required
+     */
+    doEmailValidation: boolean;
+  };
+  displayItems: {
+    /**
+     * This is a link to the Ts and Cs to be used in the join flow
+     */
+    termsAndConditionsLink: string;
+    /**
+     * This is a link to the privacy policy
+     */
+    privacyPolicyLink: string;
+    headerBanner?:
+      | {
+          style: "default" | "apfn";
+          text: string;
+          id?: string | null;
+          blockName?: string | null;
+          blockType: "basicPageTitleBannerBlock";
+        }[]
+      | null;
+    landingPageBanner?:
+      | {
+          style: "default" | "apfn";
+          /**
+           * This is the top level title on an affiliate - the big headline
+           */
+          primaryTitle: string;
+          /**
+           * This is the next level title on an affiliate
+           */
+          secondaryTitle: string;
+          /**
+           * This is the other text displayed on the affiliate
+           */
+          descriptionText: string;
+          /**
+           * This is the other text displayed on the affiliate
+           */
+          image?: (string | null) | Media;
+          id?: string | null;
+          blockName?: string | null;
+          blockType: "basicLandingBannerBlock";
+        }[]
+      | null;
+  };
   /**
    * Used by the basket validation - referral sessions can only run on affiliates that have this set.
    */
@@ -1144,14 +1233,6 @@ export interface Affiliate {
         id?: string | null;
       }[]
     | null;
-  /**
-   * Should the credit check results be used to reject, or should we ignore them. Note the credit check will always run, its just the results won't be used if this is not selected
-   */
-  useCreditCheckResults: boolean;
-  /**
-   * If this is false, email validation will not be required
-   */
-  doEmailValidation: boolean;
   /**
    * This is an 'override' high level active true/false switch - if this is false then the config should be ignored by the frontend entirely but kept in the CMS for some reason, this overrides the start / end date values.
    */
@@ -1376,6 +1457,14 @@ export interface Product {
    */
   name: string;
   /**
+   * This is used for renewals and regrades to select which products are valid - i.e. if a user is currently on a CF product we will not show them BTW or ONNET regrade or renewal options
+   */
+  carrier: "CF" | "BT" | "ONNET";
+  /**
+   * This is used for renewals and regrades to help select which products are valid - i.e. if a user is currently on a specific productGroup, their renewal needs to stay in that product group and can not come from another.
+   */
+  productGroup: "employee" | "general";
+  /**
    * This is used by the frontend to know what type of product this is easily. This ID should be something that is unique among product types as we test for kraken config errors with it - i.e. 150-12 would denote the 150 package for 12 months, it should be impossible for kraken to supply two 150-12 products for any given address.
    */
   frontendIdentifier:
@@ -1529,13 +1618,19 @@ export interface RegradeQuoteLookup {
   id: string;
   inputs: {
     requestProcessingType: "async" | "sync";
-    accountNumber?: string | null;
+    accountNumber: string;
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
     apiSuccess?: {
-      metaData?: {
+      displayItems?: {
+        /**
+         * This is a link to the Ts and Cs to be used in the join flow
+         */
         termsAndConditionsLink?: string | null;
+        /**
+         * This is a link to the privacy policy
+         */
         privacyPolicyLink?: string | null;
       };
       quotingCode?: string | null;
@@ -1549,7 +1644,7 @@ export interface RegradeQuoteLookup {
             installationRequired: boolean;
             appliedPromotionUUIDs?:
               | {
-                  id: string | null;
+                  id: string;
                 }[]
               | null;
             prices: {
@@ -1730,13 +1825,20 @@ export interface RenewalQuoteLookup {
   id: string;
   inputs: {
     requestProcessingType: "async" | "sync";
-    accountNumber?: string | null;
+    accountNumber: string;
+    renewalType: "easyRenewal";
   };
   outputs?: {
     state?: ("pending" | "success" | "error") | null;
     apiSuccess?: {
-      metaData?: {
+      displayItems?: {
+        /**
+         * This is a link to the Ts and Cs to be used in the join flow
+         */
         termsAndConditionsLink?: string | null;
+        /**
+         * This is a link to the privacy policy
+         */
         privacyPolicyLink?: string | null;
       };
       newContractStartDate?: string | null;
@@ -1751,7 +1853,7 @@ export interface RenewalQuoteLookup {
             installationRequired: boolean;
             appliedPromotionUUIDs?:
               | {
-                  id: string | null;
+                  id: string;
                 }[]
               | null;
             prices: {
@@ -1905,6 +2007,18 @@ export interface RenewalQuoteLookup {
               id?: string | null;
               blockName?: string | null;
               blockType: "RenewalQuoteLookupNoProductsAvailableForDiscriminator";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupCouldNotLoadAccountData";
+            }
+          | {
+              errorMessage?: string | null;
+              id?: string | null;
+              blockName?: string | null;
+              blockType: "RenewalQuoteLookupCouldNotLoadProductData";
             }
           | {
               errorMessage?: string | null;
@@ -2465,14 +2579,16 @@ export interface Renewal {
    * The name we, and this CMS, use to identify the renewal
    */
   name: string;
-  /**
-   * This is a link to the Ts and Cs to be used in the join flow
-   */
-  termsAndConditionsLink: string;
-  /**
-   * This is a link to the privacy policy
-   */
-  privacyPolicyLink: string;
+  displayItems: {
+    /**
+     * This is a link to the Ts and Cs to be used in the join flow
+     */
+    termsAndConditionsLink: string;
+    /**
+     * This is a link to the privacy policy
+     */
+    privacyPolicyLink: string;
+  };
   discriminator: string | Discriminator;
   updatedAt: string;
   createdAt: string;
@@ -2487,36 +2603,19 @@ export interface Regrade {
    * The name we, and this CMS, use to identify the regrade
    */
   name: string;
-  /**
-   * This is a link to the Ts and Cs to be used in the join flow
-   */
-  termsAndConditionsLink: string;
-  /**
-   * This is a link to the privacy policy
-   */
-  privacyPolicyLink: string;
+  displayItems: {
+    /**
+     * This is a link to the Ts and Cs to be used in the join flow
+     */
+    termsAndConditionsLink: string;
+    /**
+     * This is a link to the privacy policy
+     */
+    privacyPolicyLink: string;
+  };
   discriminator: string | Discriminator;
   updatedAt: string;
   createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "media".
- */
-export interface Media {
-  id: string;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2779,6 +2878,13 @@ export interface User {
   hash?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
+  sessions?:
+    | {
+        id: string;
+        createdAt?: string | null;
+        expiresAt: string;
+      }[]
+    | null;
   password?: string | null;
 }
 /**
@@ -3062,15 +3168,6 @@ export interface DatabaseImport {
    * This is used by the system to create records of the imports after the import has happened - i.e. we import the database, but it won't know about the import anymore, so we create a new ghost one without reimporting and getting a loop
    */
   dontRun?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lambdaPrototype".
- */
-export interface LambdaPrototype {
-  id: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -3481,10 +3578,6 @@ export interface PayloadLockedDocument {
         value: string | DatabaseImport;
       } | null)
     | ({
-        relationTo: "lambdaPrototype";
-        value: string | LambdaPrototype;
-      } | null)
-    | ({
         relationTo: "registerOfInterestSubmissions";
         value: string | RegisterOfInterestSubmission;
       } | null)
@@ -3845,13 +3938,43 @@ export interface AffiliateSessionsSelect<T extends boolean = true> {
         apiSuccess?:
           | T
           | {
+              displayItems?:
+                | T
+                | {
+                    termsAndConditionsLink?: T;
+                    privacyPolicyLink?: T;
+                    headerBanner?:
+                      | T
+                      | {
+                          basicPageTitleBannerBlock?:
+                            | T
+                            | {
+                                style?: T;
+                                text?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                        };
+                    landingPageBanner?:
+                      | T
+                      | {
+                          basicLandingBannerBlock?:
+                            | T
+                            | {
+                                style?: T;
+                                primaryTitle?: T;
+                                secondaryTitle?: T;
+                                descriptionText?: T;
+                                image?: T;
+                                id?: T;
+                                blockName?: T;
+                              };
+                        };
+                  };
               sessionID?: T;
               affiliateName?: T;
               useCreditcheckResult?: T;
               doEmailValidation?: T;
-              termsAndConditionsLink?: T;
-              privacyPolicyLink?: T;
-              affiliateVisualStyle?: T;
               cuckooAffiliate?: T;
             };
         apiErrors?:
@@ -4969,6 +5092,7 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
     | {
         requestProcessingType?: T;
         accountNumber?: T;
+        renewalType?: T;
       };
   outputs?:
     | T
@@ -4977,7 +5101,7 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
         apiSuccess?:
           | T
           | {
-              metaData?:
+              displayItems?:
                 | T
                 | {
                     termsAndConditionsLink?: T;
@@ -5144,6 +5268,20 @@ export interface RenewalQuoteLookupsSelect<T extends boolean = true> {
                     id?: T;
                     blockName?: T;
                   };
+              RenewalQuoteLookupCouldNotLoadAccountData?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+              RenewalQuoteLookupCouldNotLoadProductData?:
+                | T
+                | {
+                    errorMessage?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
               UnknownError?:
                 | T
                 | {
@@ -5180,7 +5318,7 @@ export interface RegradeQuoteLookupsSelect<T extends boolean = true> {
         apiSuccess?:
           | T
           | {
-              metaData?:
+              displayItems?:
                 | T
                 | {
                     termsAndConditionsLink?: T;
@@ -5370,9 +5508,45 @@ export interface RegradeQuoteLookupsSelect<T extends boolean = true> {
  */
 export interface AffiliatesSelect<T extends boolean = true> {
   name?: T;
-  termsAndConditionsLink?: T;
-  privacyPolicyLink?: T;
-  affiliateVisualStyle?: T;
+  journeyModifiers?:
+    | T
+    | {
+        useCreditCheckResults?: T;
+        doEmailValidation?: T;
+      };
+  displayItems?:
+    | T
+    | {
+        termsAndConditionsLink?: T;
+        privacyPolicyLink?: T;
+        headerBanner?:
+          | T
+          | {
+              basicPageTitleBannerBlock?:
+                | T
+                | {
+                    style?: T;
+                    text?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
+        landingPageBanner?:
+          | T
+          | {
+              basicLandingBannerBlock?:
+                | T
+                | {
+                    style?: T;
+                    primaryTitle?: T;
+                    secondaryTitle?: T;
+                    descriptionText?: T;
+                    image?: T;
+                    id?: T;
+                    blockName?: T;
+                  };
+            };
+      };
   referralCanUse?: T;
   krakenSubdomainIdentifiers?:
     | T
@@ -5386,8 +5560,6 @@ export interface AffiliatesSelect<T extends boolean = true> {
         identifier?: T;
         id?: T;
       };
-  useCreditCheckResults?: T;
-  doEmailValidation?: T;
   active?: T;
   activeFromDateTime?: T;
   activeToDateTime?: T;
@@ -5401,8 +5573,12 @@ export interface AffiliatesSelect<T extends boolean = true> {
  */
 export interface RenewalsSelect<T extends boolean = true> {
   name?: T;
-  termsAndConditionsLink?: T;
-  privacyPolicyLink?: T;
+  displayItems?:
+    | T
+    | {
+        termsAndConditionsLink?: T;
+        privacyPolicyLink?: T;
+      };
   discriminator?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -5413,6 +5589,8 @@ export interface RenewalsSelect<T extends boolean = true> {
  */
 export interface ProductsSelect<T extends boolean = true> {
   name?: T;
+  carrier?: T;
+  productGroup?: T;
   frontendIdentifier?: T;
   frontendTitle?: T;
   krakenProductCodeFragment?: T;
@@ -5624,8 +5802,12 @@ export interface DiscriminatorsSelect<T extends boolean = true> {
  */
 export interface RegradesSelect<T extends boolean = true> {
   name?: T;
-  termsAndConditionsLink?: T;
-  privacyPolicyLink?: T;
+  displayItems?:
+    | T
+    | {
+        termsAndConditionsLink?: T;
+        privacyPolicyLink?: T;
+      };
   discriminator?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -5956,6 +6138,13 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+  sessions?:
+    | T
+    | {
+        id?: T;
+        createdAt?: T;
+        expiresAt?: T;
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -6091,14 +6280,6 @@ export interface DatabaseImportsSelect<T extends boolean = true> {
   status?: T;
   payloadJobID?: T;
   dontRun?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "lambdaPrototype_select".
- */
-export interface LambdaPrototypeSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
 }
@@ -6262,6 +6443,7 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface GeneralConfig {
   id: string;
   defaultAffiliate: string | Affiliate;
+  defaultReferralAffiliate: string | Affiliate;
   defaultRenewal: string | Renewal;
   defaultRegrade: string | Regrade;
   testing?: {
@@ -6305,6 +6487,12 @@ export interface GeneralConfig {
           id?: string | null;
         }[]
       | null;
+  };
+  customerAcctSelfServe: {
+    /**
+     * When an account has less than or equal to this many days left on their contract, the views in mobile and my account will show the renewal prompt
+     */
+    dayFromContractEndDateToShowRenewalPrompt: number;
   };
   extrasFilters: {
     /**
@@ -6619,6 +6807,7 @@ export interface OSSEvent {
  */
 export interface GeneralConfigSelect<T extends boolean = true> {
   defaultAffiliate?: T;
+  defaultReferralAffiliate?: T;
   defaultRenewal?: T;
   defaultRegrade?: T;
   testing?:
@@ -6649,6 +6838,11 @@ export interface GeneralConfigSelect<T extends boolean = true> {
               postcode?: T;
               id?: T;
             };
+      };
+  customerAcctSelfServe?:
+    | T
+    | {
+        dayFromContractEndDateToShowRenewalPrompt?: T;
       };
   extrasFilters?:
     | T

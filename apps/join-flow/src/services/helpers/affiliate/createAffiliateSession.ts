@@ -1,26 +1,31 @@
 import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
+import type { AffiliateSession } from "@/store/useJoinFlowStore";
 
-import { AffiliateSessionSuccessData } from "../payloadTypes";
+type CreateAffiliateSessionResult =
+  | {
+      type: "success";
+      id?: string;
+      affiliateSession: AffiliateSession;
+    }
+  | {
+      type: "error";
+      error: {
+        type:
+          | "noAffiliateFound"
+          | "invalidSubdomain"
+          | "generalError"
+          | "validationError"
+          | "networkError"
+          | "unknownError";
+        message: string;
+        details?: string[];
+      };
+    };
 
-interface AffiliateSessionResult {
-  affiliateSession: AffiliateSessionSuccessData;
-  id?: string;
-  error?: {
-    type:
-      | "noAffiliateFound"
-      | "invalidSubdomain"
-      | "generalError"
-      | "validationError"
-      | "networkError"
-      | "unknownError";
-    message: string;
-    details?: string[];
-  };
-}
-export const getAffiliateSessionByCode = async (
+export const createAffiliateSession = async (
   affiliateCode: string,
-): Promise<AffiliateSessionResult> => {
+): Promise<CreateAffiliateSessionResult> => {
   try {
     const response = await squidAPI.createAffiliateSessionSync({
       subdomain: affiliateCode,
@@ -28,8 +33,14 @@ export const getAffiliateSessionByCode = async (
 
     if (response.state === "success" && response.data?.response) {
       return {
+        type: "success",
         id: response.data.documentID,
-        affiliateSession: response.data.response,
+        affiliateSession: {
+          id: response.data.documentID,
+          sessionId: response.data.response.sessionID || "",
+          affiliateName: response.data.response.affiliateName || "",
+          displayItems: response.data.response.displayItems,
+        },
       };
     }
 
@@ -44,7 +55,7 @@ export const getAffiliateSessionByCode = async (
 
       if (badSubdomainError) {
         return {
-          affiliateSession: {},
+          type: "error",
           error: {
             type: "invalidSubdomain",
             message: "The affiliate code provided is not valid",
@@ -60,7 +71,7 @@ export const getAffiliateSessionByCode = async (
 
       if (inactiveError) {
         return {
-          affiliateSession: {},
+          type: "error",
           error: {
             type: "noAffiliateFound",
             message: "This affiliate link is no longer active",
@@ -69,7 +80,7 @@ export const getAffiliateSessionByCode = async (
       }
 
       return {
-        affiliateSession: {},
+        type: "error",
         error: {
           type: "generalError",
           message: "There was a problem with the affiliate lookup",
@@ -81,7 +92,7 @@ export const getAffiliateSessionByCode = async (
     }
 
     return {
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "generalError",
         message: "No affiliate data was returned",
@@ -92,7 +103,7 @@ export const getAffiliateSessionByCode = async (
 
     if (error instanceof ValidationError) {
       return {
-        affiliateSession: {},
+        type: "error",
         error: {
           type: "validationError",
           message: "The affiliate code format is invalid",
@@ -105,7 +116,7 @@ export const getAffiliateSessionByCode = async (
 
     if (error instanceof FetchError) {
       return {
-        affiliateSession: {},
+        type: "error",
         error: {
           type: "networkError",
           message: `Server error: ${error.message}`,
@@ -115,7 +126,7 @@ export const getAffiliateSessionByCode = async (
     }
 
     return {
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "unknownError",
         message: "An unexpected error occurred",

@@ -236,11 +236,10 @@ describe("PaymentConfirmation", () => {
       id: "abc",
       sessionId: "6852b406eb7af90001c66918",
       affiliateName: "default",
-      useCreditcheckResult: true,
-      doEmailValidation: true,
-      cuckooAffiliate: "",
-      termsAndConditionsLink: "https://cms.cuckoo.co/tacs",
-      privacyPolicyLink: "https://cms.cuckoo.co/privacy",
+      displayItems: {
+        termsAndConditionsLink: "https://cms.cuckoo.co/tacs",
+        privacyPolicyLink: "https://cms.cuckoo.co/privacy",
+      },
     });
     store.setGoLiveDetails({
       selectedDate: "2024-01-15",

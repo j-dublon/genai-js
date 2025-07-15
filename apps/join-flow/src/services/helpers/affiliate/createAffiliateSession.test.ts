@@ -3,77 +3,88 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { squidAPI } from "@/services/payloadClient";
 import { FetchError, ValidationError } from "@/services/payloadTypes";
 
-import { getAffiliateSessionByCode } from "./affiliateSession";
+import { createAffiliateSession } from "./createAffiliateSession";
 
-describe("getAffiliateSessionByCode", () => {
-  vi.mock("@/services/payloadClient", () => ({
-    squidAPI: {
-      createAffiliateSessionSync: vi.fn(),
-    },
-  }));
+vi.mock("@/services/payloadClient", () => ({
+  squidAPI: {
+    createAffiliateSessionSync: vi.fn(),
+  },
+}));
+const mockCreateAffiliateSessionSync = vi.mocked(
+  squidAPI.createAffiliateSessionSync,
+);
 
+describe("createAffiliateSession", () => {
   beforeEach(() => {
     vi.resetAllMocks();
   });
 
   it("should call squidAPI.createAffiliateSessionSync and return successful result", async () => {
     const affiliateCode = "testAffiliate";
-    const mockApiSuccess = {
-      sessionID: "session123",
-      affiliateName: "Test Affiliate",
-      useCreditcheckResult: true,
-      doEmailValidation: true,
-      cuckooAffiliate: "some-affiliate",
-    };
-
     const mockResponse = {
-      state: "success",
+      state: "success" as const,
       data: {
-        response: mockApiSuccess,
+        documentID: "aff-123",
+        response: {
+          sessionID: "session123",
+          affiliateName: "Test Affiliate",
+          displayItems: {
+            termsAndConditionsLink: "https://example.com/terms",
+            privacyPolicyLink: "https://example.com/privacy",
+          },
+        },
       },
     };
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
-      mockResponse,
-    );
+    mockCreateAffiliateSessionSync.mockResolvedValue(mockResponse);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
-    expect(squidAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
+    expect(mockCreateAffiliateSessionSync).toHaveBeenCalledWith({
       subdomain: "testAffiliate",
     });
 
     expect(result).toEqual({
-      affiliateSession: mockApiSuccess,
+      type: "success",
+      id: "aff-123",
+      affiliateSession: {
+        id: "aff-123",
+        sessionId: "session123",
+        affiliateName: "Test Affiliate",
+        displayItems: {
+          termsAndConditionsLink: "https://example.com/terms",
+          privacyPolicyLink: "https://example.com/privacy",
+        },
+      },
     });
   });
 
   it("should handle error when bad subdomain is provided", async () => {
     const affiliateCode = "invalidAffiliate";
     const mockResponse = {
-      state: "error",
+      state: "error" as const,
       data: {
+        documentID: "aff-123",
         errors: [
           {
-            blockType: "KT-CT-7713KrakenUnableToLoadAffiliateLinkBadSubdomain",
+            blockType:
+              "KT-CT-7713KrakenUnableToLoadAffiliateLinkBadSubdomain" as const,
             errorMessage: "Bad subdomain",
           },
         ],
       },
     };
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
-      mockResponse,
-    );
+    mockCreateAffiliateSessionSync.mockResolvedValue(mockResponse);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
     expect(squidAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
       subdomain: "invalidAffiliate",
     });
 
     expect(result).toEqual({
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "invalidSubdomain",
         message: "The affiliate code provided is not valid",
@@ -84,29 +95,28 @@ describe("getAffiliateSessionByCode", () => {
   it("should handle error when session is inactive", async () => {
     const affiliateCode = "inactiveAffiliate";
     const mockResponse = {
-      state: "error",
+      state: "error" as const,
       data: {
+        documentID: "aff-123",
         errors: [
           {
-            blockType: "AffiliateSessionInactive",
+            blockType: "AffiliateSessionInactive" as const,
             errorMessage: "Inactive session",
           },
         ],
       },
     };
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
-      mockResponse,
-    );
+    mockCreateAffiliateSessionSync.mockResolvedValue(mockResponse);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
     expect(squidAPI.createAffiliateSessionSync).toHaveBeenCalledWith({
       subdomain: "inactiveAffiliate",
     });
 
     expect(result).toEqual({
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "noAffiliateFound",
         message: "This affiliate link is no longer active",
@@ -117,25 +127,24 @@ describe("getAffiliateSessionByCode", () => {
   it("should handle generic API error", async () => {
     const affiliateCode = "errorAffiliate";
     const mockResponse = {
-      state: "error",
+      state: "error" as const,
       data: {
+        documentID: "aff-123",
         errors: [
           {
-            blockType: "UnknownError",
+            blockType: "UnknownError" as const,
             errorMessage: "Something went wrong",
           },
         ],
       },
     };
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
-      mockResponse,
-    );
+    mockCreateAffiliateSessionSync.mockResolvedValue(mockResponse);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
     expect(result).toEqual({
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "generalError",
         message: "There was a problem with the affiliate lookup",
@@ -150,14 +159,12 @@ describe("getAffiliateSessionByCode", () => {
       { message: "Invalid input", path: "subdomain" },
     ]);
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
-      validationError,
-    );
+    mockCreateAffiliateSessionSync.mockRejectedValue(validationError);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
     expect(result).toEqual({
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "validationError",
         message: "The affiliate code format is invalid",
@@ -176,14 +183,12 @@ describe("getAffiliateSessionByCode", () => {
       {} as Response,
     );
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
-      fetchError,
-    );
+    mockCreateAffiliateSessionSync.mockRejectedValue(fetchError);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
     expect(result).toEqual({
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "networkError",
         message: `Server error: HTTP Error: 500 Internal Server Error`,
@@ -196,14 +201,12 @@ describe("getAffiliateSessionByCode", () => {
     const affiliateCode = "unexpectedError";
     const unexpectedError = new Error("Unexpected error");
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockRejectedValue(
-      unexpectedError,
-    );
+    mockCreateAffiliateSessionSync.mockRejectedValue(unexpectedError);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
     expect(result).toEqual({
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "unknownError",
         message: "An unexpected error occurred",
@@ -215,20 +218,20 @@ describe("getAffiliateSessionByCode", () => {
   it("should handle undefined response", async () => {
     const affiliateCode = "emptyResponse";
     const mockResponse = {
-      state: "success",
+      state: "success" as const,
       data: {
+        documentID: "bla",
         response: undefined,
       },
     };
 
-    (squidAPI.createAffiliateSessionSync as jest.Mock).mockResolvedValue(
-      mockResponse,
-    );
+    // @ts-expect-error - we're not expecting undefined
+    mockCreateAffiliateSessionSync.mockResolvedValue(mockResponse);
 
-    const result = await getAffiliateSessionByCode(affiliateCode);
+    const result = await createAffiliateSession(affiliateCode);
 
     expect(result).toEqual({
-      affiliateSession: {},
+      type: "error",
       error: {
         type: "generalError",
         message: "No affiliate data was returned",

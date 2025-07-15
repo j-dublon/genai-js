@@ -194,12 +194,12 @@ export const PaymentConfirmation = ({
     },
     {
       text: "Terms & Conditions",
-      href: affiliateSession?.termsAndConditionsLink || "/",
+      href: affiliateSession?.displayItems?.termsAndConditionsLink || "/",
       name: "termsAndConditions",
     },
     {
       text: "Privacy Notice",
-      href: affiliateSession?.privacyPolicyLink || "/",
+      href: affiliateSession?.displayItems?.privacyPolicyLink || "/",
       name: "privacyPolicy",
     },
   ];

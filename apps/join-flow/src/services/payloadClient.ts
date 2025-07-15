@@ -1,8 +1,6 @@
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_PAYLOAD_ENDPOINT ||
-  "https://squid.cuckoohatchery-stage.com/api";
+export const API_BASE_URL = process.env.NEXT_PUBLIC_PAYLOAD_ENDPOINT || null;
 
-import type {
+import {
   Basket,
   KrakenSwitchMatchServiceProvider,
   Page,
@@ -20,6 +18,7 @@ import {
   EngineerAppointmentSuccess,
   FetchError,
   GetCICSResponse,
+  GetGoLiveDatesResponse,
   InitialBasket,
   InitialVulnerabilityAndAccessibility,
   QuoteLookupErrors,
@@ -69,6 +68,12 @@ async function doSquidRequest(
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
+
+  // we add a server side header so it works with the WAF
+  if (typeof window === "undefined") {
+    headers["User-Agent"] =
+      "Mozilla/5.0 (Macintosh; Intel Mac OS X 13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 CuckooBot/1.0";
+  }
 
   if (token !== null) {
     headers["Authorization"] = token;
@@ -294,7 +299,7 @@ export const squidAPI = {
     token?: string | null,
   ) =>
     doAsyncSyncStyleCreateRequest<AddressLookupSuccess, AddressLookupErrors>(
-      "/addressLookups",
+      "/api/addressLookups",
       input,
       "sync",
       token || null,
@@ -304,14 +309,14 @@ export const squidAPI = {
     token?: string | null,
   ) =>
     doAsyncSyncStyleCreateRequest<AddressLookupSuccess, AddressLookupErrors>(
-      "/addressLookups",
+      "/api/addressLookups",
       input,
       "async",
       token || null,
     ),
   getAddressLookup: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<AddressLookupSuccess, AddressLookupErrors>(
-      `/addressLookups/${id}`,
+      `/api/addressLookups/${id}`,
       token || null,
     ),
 
@@ -323,7 +328,7 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       EngineerAppointmentSuccess,
       EngineerAppointmentErrors
-    >("/engineerAppointments", input, "sync", token || null),
+    >("/api/engineerAppointments", input, "sync", token || null),
   createEngineerAppointmentAsync: (
     input: EngineerAppointmentInputs,
     token?: string | null,
@@ -331,12 +336,12 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       EngineerAppointmentSuccess,
       EngineerAppointmentErrors
-    >("/engineerAppointments", input, "async", token || null),
+    >("/api/engineerAppointments", input, "async", token || null),
   getEngineerAppointment: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<
       EngineerAppointmentSuccess,
       EngineerAppointmentErrors
-    >(`/engineerAppointments/${id}`, token || null),
+    >(`/api/engineerAppointments/${id}`, token || null),
 
   // Switch Match Lookups
   createSwitchMatchLookupSync: (
@@ -346,7 +351,7 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       SwitchMatchLookupSuccess,
       SwitchMatchLookupErrors
-    >("/switchMatchLookups", input, "sync", token || null),
+    >("/api/switchMatchLookups", input, "sync", token || null),
   createSwitchMatchLookupAsync: (
     input: SwitchMatchLookupInputs,
     token?: string | null,
@@ -354,15 +359,15 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       SwitchMatchLookupSuccess,
       SwitchMatchLookupErrors
-    >("/switchMatchLookups", input, "async", token || null),
+    >("/api/switchMatchLookups", input, "async", token || null),
   getSwitchMatchLookup: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<
       SwitchMatchLookupSuccess,
       SwitchMatchLookupErrors
-    >(`/switchMatchLookups/${id}`, token || null),
+    >(`/api/switchMatchLookups/${id}`, token || null),
   getSwitchMatchServiceProviders: (token?: string | null) =>
     doGetSquidEndpoint<KrakenSwitchMatchServiceProvider[]>(
-      `/krakenSwitchMatchServiceProviders/all-active`,
+      `/api/krakenSwitchMatchServiceProviders/all-active`,
       token || null,
     ),
 
@@ -374,7 +379,7 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       ReferralSessionSuccess,
       ReferralSessionErrors
-    >("/referralSessions", input, "sync", token || null),
+    >("/api/referralSessions", input, "sync", token || null),
   createReferralSessionAsync: (
     input: ReferralSessionInputs,
     token?: string | null,
@@ -382,31 +387,31 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       ReferralSessionSuccess,
       ReferralSessionErrors
-    >("/referralSessions", input, "async", token || null),
+    >("/api/referralSessions", input, "async", token || null),
   getReferralSession: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<
       ReferralSessionSuccess,
       ReferralSessionErrors
-    >(`/referralSessions/${id}`, token || null),
+    >(`/api/referralSessions/${id}`, token || null),
 
   // Quote Lookups
   createQuoteLookupSync: (input: QuoteLookupInputs, token?: string | null) =>
     doAsyncSyncStyleCreateRequest<QuoteLookupSuccess, QuoteLookupErrors>(
-      "/newSaleQuoteLookups",
+      "/api/newSaleQuoteLookups",
       input,
       "sync",
       token || null,
     ),
   createQuoteLookupAsync: (input: QuoteLookupInputs, token?: string | null) =>
     doAsyncSyncStyleCreateRequest<QuoteLookupSuccess, QuoteLookupErrors>(
-      "/newSaleQuoteLookups",
+      "/api/newSaleQuoteLookups",
       input,
       "async",
       token || null,
     ),
   getQuoteLookup: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<QuoteLookupSuccess, QuoteLookupErrors>(
-      `/newSaleQuoteLookups/${id}`,
+      `/api/newSaleQuoteLookups/${id}`,
       token || null,
     ),
 
@@ -418,7 +423,7 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >("/affiliateSessions", input, "sync", token || null),
+    >("/api/affiliateSessions", input, "sync", token || null),
   createAffiliateSessionAsync: (
     input: AffiliateSessionInputs,
     token?: string | null,
@@ -426,42 +431,48 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >("/affiliateSessions", input, "async", token || null),
+    >("/api/affiliateSessions", input, "async", token || null),
   getAffiliateSession: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >(`/affiliateSessions/${id}`, token || null),
+    >(`/api/affiliateSessions/${id}`, token || null),
 
   getDefaultAffiliate: (token?: string | null) =>
     doAsyncSyncStyleFetchRequest<
       AffiliateSessionSuccess,
       AffiliateSessionErrors
-    >("/affiliateSessions/default", token || null),
+    >("/api/affiliateSessions/default", token || null),
+
+  getDefaultReferralAffiliate: (token?: string | null) =>
+    doAsyncSyncStyleFetchRequest<
+      AffiliateSessionSuccess,
+      AffiliateSessionErrors
+    >("/api/affiliateSessions/default-referral", token || null),
 
   // Basket
   getBasket: (id: string, token?: string | null) =>
-    doGetSquidEndpoint<Basket>(`/baskets/${id}`, token || null),
+    doGetSquidEndpoint<Basket>(`/api/baskets/${id}`, token || null),
   createBasket: (data: InitialBasket, token?: string | null) =>
     doCreateSquidEndpoint<InitialBasket, Basket>(
-      "/baskets",
+      "/api/baskets",
       data,
       token || null,
     ),
   updateBasket: (id: string, data: Partial<Basket>, token?: string | null) =>
     doUpdateSquidEndpoint<Partial<Basket>, Basket>(
-      `/baskets/${id}`,
+      `/api/baskets/${id}`,
       data,
       token || null,
     ),
   runCreditCheck: (basketID: string, token?: string | null) =>
     doGetSquidEndpoint<RunCreditCheckResponse>(
-      `/baskets/${basketID}/run-credit-check`,
+      `/api/baskets/${basketID}/run-credit-check`,
       token || null,
     ),
   emailValidationSendCode: (basketID: string, token?: string | null) =>
     doGetSquidEndpoint<SendEmailCodeResponse>(
-      `/baskets/${basketID}/send-email-code`,
+      `/api/baskets/${basketID}/send-email-code`,
       token || null,
     ),
   emailValidationCheckCode: (
@@ -470,36 +481,39 @@ export const squidAPI = {
     token?: string | null,
   ) =>
     doGetSquidEndpoint<ValidateEmailCodeResponse>(
-      `/baskets/${basketID}/validate-email-code/${code}`,
+      `/api/baskets/${basketID}/validate-email-code/${code}`,
       token || null,
     ),
   doSignup: (basketID: string, token?: string | null) =>
     doGetSquidEndpoint<SignupResponse>(
-      `/baskets/${basketID}/signup`,
+      `/api/baskets/${basketID}/signup`,
       token || null,
     ),
   doRenewal: (basketID: string, token?: string | null) =>
     doGetSquidEndpoint<RenewalResponse>(
-      `/baskets/${basketID}/renew`,
+      `/api/baskets/${basketID}/renew`,
       token || null,
     ),
   doRegrade: (basketID: string, token?: string | null) =>
     doGetSquidEndpoint<RegradeResponse>(
-      `/baskets/${basketID}/regrade`,
+      `/api/baskets/${basketID}/regrade`,
       token || null,
     ),
   getGoLiveDates: (token?: string | null) =>
-    doGetSquidEndpoint<string[]>("/baskets/go-live-dates", token || null),
+    doGetSquidEndpoint<GetGoLiveDatesResponse>(
+      "/api/baskets/go-live-dates",
+      token || null,
+    ),
   getCICS: (basketID: string, token?: string | null) =>
     doGetSquidEndpoint<GetCICSResponse>(
-      `/baskets/${basketID}/get-cics`,
+      `/api/baskets/${basketID}/get-cics`,
       token || null,
     ),
 
   // V&A
   getVulnerabilityAndAccessibility: (id: string, token?: string | null) =>
     doGetSquidEndpoint<VulnerabilityAndAccessibility>(
-      `/vulnerabilityAndAccessibility/${id}`,
+      `/api/vulnerabilityAndAccessibility/${id}`,
       token || null,
     ),
   createVulnerabilityAndAccessibility: (
@@ -509,7 +523,7 @@ export const squidAPI = {
     doCreateSquidEndpoint<
       InitialVulnerabilityAndAccessibility,
       VulnerabilityAndAccessibility
-    >("/vulnerabilityAndAccessibility", data, token || null),
+    >("/api/vulnerabilityAndAccessibility", data, token || null),
   updateVulnerabilityAndAccessibility: (
     id: string,
     data: Partial<VulnerabilityAndAccessibility>,
@@ -518,21 +532,12 @@ export const squidAPI = {
     doUpdateSquidEndpoint<
       Partial<VulnerabilityAndAccessibility>,
       VulnerabilityAndAccessibility
-    >(`/vulnerabilityAndAccessibility/${id}`, data, token || null),
+    >(`/api/vulnerabilityAndAccessibility/${id}`, data, token || null),
 
   // Content
   getPageContentBySlug: (slug: string, token?: string | null) =>
-    doGetSquidEndpoint<Page>(`/pages/${slug}`, token || null),
+    doGetSquidEndpoint<Page>(`/api/pages/${slug}`, token || null),
 
-  // Register Of Interest
-  createRegisterOfInterestSubmissionSync: (
-    input: RegisterOfInterestSubmissionsInputs,
-    token?: string | null,
-  ) =>
-    doAsyncSyncStyleCreateRequest<
-      RegisterOfInterestSubmissionsSuccess,
-      RegisterOfInterestSubmissionsErrors
-    >("/registerOfInterestSubmissions", input, "sync", token || null),
   // RenewalQuoteLookups
   createRenewalQuoteLookupSync: (
     input: RenewalQuoteLookupInputs,
@@ -541,7 +546,7 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       RenewalQuoteLookupSuccess,
       RenewalQuoteLookupErrors
-    >("/renewalQuoteLookups", input, "sync", token || null),
+    >("/api/renewalQuoteLookups", input, "sync", token || null),
   createRenewalQuoteLookupAsync: (
     input: RenewalQuoteLookupInputs,
     token?: string | null,
@@ -549,12 +554,12 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       RenewalQuoteLookupSuccess,
       RenewalQuoteLookupErrors
-    >("/renewalQuoteLookups", input, "async", token || null),
+    >("/api/renewalQuoteLookups", input, "async", token || null),
   getRenewalQuoteLookup: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<
       RenewalQuoteLookupSuccess,
       RenewalQuoteLookupErrors
-    >(`/renewalQuoteLookup/${id}`, token || null),
+    >(`/api/renewalQuoteLookups/${id}`, token || null),
 
   // RegradeQuoteLookups
   createRegradeQuoteLookupSync: (
@@ -564,7 +569,7 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       RegradeQuoteLookupSuccess,
       RegradeQuoteLookupErrors
-    >("/regradeQuoteLookups", input, "sync", token || null),
+    >("/api/regradeQuoteLookups", input, "sync", token || null),
   createRegradeQuoteLookupAsync: (
     input: RegradeQuoteLookupInputs,
     token?: string | null,
@@ -572,10 +577,27 @@ export const squidAPI = {
     doAsyncSyncStyleCreateRequest<
       RegradeQuoteLookupSuccess,
       RegradeQuoteLookupErrors
-    >("/regradeQuoteLookups", input, "async", token || null),
+    >("/api/regradeQuoteLookups", input, "async", token || null),
   getRegradeQuoteLookup: (id: string, token?: string | null) =>
     doGetSquidDocumentAsyncSyncStyle<
       RegradeQuoteLookupSuccess,
       RegradeQuoteLookupErrors
-    >(`/regradeQuoteLookup/${id}`, token || null),
+    >(`/api/regradeQuoteLookup/${id}`, token || null),
+
+  // RegisterOfInterestSubmissions
+  createRegisterOfInterestSubmissionSync: (
+    input: RegisterOfInterestSubmissionsInputs,
+    token?: string | null,
+  ) =>
+    doAsyncSyncStyleCreateRequest<
+      RegisterOfInterestSubmissionsSuccess,
+      RegisterOfInterestSubmissionsErrors
+    >("/api/registerOfInterestSubmissions", input, "sync", token || null),
+
+  // self service account
+  // TODO better typing from source
+  accountGetRenewalStatus: (accountNumber: string, token: string) =>
+    doGetSquidEndpoint<{
+      renewalState: "available" | "pastDue" | "notAvailable";
+    }>(`/account-status/renewal/${accountNumber}`, token),
 };

@@ -3,10 +3,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-import { QuoteLookupSuccess } from "@/services/payloadTypes";
+import type {
+  AffiliateSessionSuccess,
+  QuoteLookupSuccess,
+} from "@/services/payloadTypes";
 
 import {
-  Affiliate,
   EngineerAppointment,
   NewSaleQuoteLookup,
   RegradeQuoteLookup,
@@ -19,11 +21,7 @@ export type AffiliateSession = {
   id: string;
   sessionId: string;
   affiliateName: string;
-  useCreditcheckResult: boolean;
-  doEmailValidation: boolean;
-  cuckooAffiliate: string | Affiliate;
-  termsAndConditionsLink: string;
-  privacyPolicyLink: string;
+  displayItems: AffiliateSessionSuccess["response"]["displayItems"];
 };
 
 export type StoreAddressIdentifier = {
@@ -368,6 +366,7 @@ export type JoinFlowState = {
   setSoftCreditCheck: (softCreditCheck: SoftCreditCheck) => void;
   setRoiPostcode: (roiPostcode: string | null) => void;
   resetFlow: () => void;
+  resetAffiliateSession: () => void;
 };
 
 // Create the store with persistence
@@ -425,7 +424,6 @@ const useJoinFlowStore = create<JoinFlowState>()(
           switchingDetails: null,
           paymentDetails: null,
           goLiveDetails: null,
-          affiliateSession: null,
           accessibilityRequirements: null,
           accessibilityCommunicationPreferences: null,
           quoteResponse: null,
@@ -433,6 +431,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           softCreditCheck: null,
           roiPostcode: null,
         }),
+      resetAffiliateSession: () => set({ affiliateSession: null }),
     }),
     {
       name: "cuckoo-join-flow-storage",

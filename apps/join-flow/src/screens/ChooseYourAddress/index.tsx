@@ -11,14 +11,21 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 import { ContactInfo } from "@/components/ContactInfo";
-import { useAffiliateSession } from "@/hooks/useAffiliateSession";
 import { getAssetPath } from "@/lib/get-asset-path";
-import useJoinFlowStore from "@/store/useJoinFlowStore";
+import useJoinFlowStore, {
+  type AffiliateSession,
+} from "@/store/useJoinFlowStore";
 
 import { ChooseYourAddressText } from "./ChooseYourAddressProps";
 import { ServiceAddressLookupForm } from "./forms/ServiceAddressLookupForm";
 
-export const ChooseYourAddress = () => {
+export const ChooseYourAddress = ({
+  affiliateSession,
+  sessionDocumentId,
+}: {
+  affiliateSession?: AffiliateSession;
+  sessionDocumentId?: string;
+}) => {
   const {
     pageTitle,
     openingHoursText,
@@ -28,10 +35,14 @@ export const ChooseYourAddress = () => {
   } = ChooseYourAddressText;
   const { data: trustpilotRating } = useTrustpilotScore();
   const { trustScore, numberOfReviews } = trustpilotRating || {};
-  const { resetFlow, setRoiPostcode } = useJoinFlowStore();
+  const { resetFlow, setRoiPostcode, setAffiliateSession } = useJoinFlowStore();
   const postcodeParam = useSearchParams().get("postcode");
 
-  useAffiliateSession();
+  useEffect(() => {
+    if (affiliateSession) {
+      setAffiliateSession(affiliateSession);
+    }
+  }, [sessionDocumentId, setAffiliateSession, affiliateSession]);
 
   useEffect(() => {
     resetFlow();

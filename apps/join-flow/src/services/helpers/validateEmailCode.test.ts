@@ -17,7 +17,6 @@ vi.mock("../payloadClient", () => ({
 describe("validateEmailCode", () => {
   const mockValidateEmailCodeResponse: ValidateEmailCodeResponse = {
     success: true,
-    message: "Email code validated successfully",
   };
 
   it("should return a success flag when the API call is successful", async () => {
