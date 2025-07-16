@@ -5,7 +5,9 @@ import { useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
 import { useRoiAddress } from "@/hooks/useRoiAddress";
+import { formatRoiData } from "@/lib/formatRoiData";
 import { getAssetPath } from "@/lib/get-asset-path";
+import { registerInterest } from "@/services/helpers/registerInterest";
 import useJoinFlowStore from "@/store/useJoinFlowStore";
 import {
   ExpressionOfInterestFormData,
@@ -19,6 +21,8 @@ export interface RegisterOfInterestFormProps {
   privacyNoticeLinkText: string;
   privacyNoticeUrl: string;
   errorTipCardTitle: string;
+  formErrorText: string;
+  onSuccess: () => void;
 }
 
 export const RegisterOfInterestForm = ({
@@ -28,6 +32,8 @@ export const RegisterOfInterestForm = ({
   privacyNoticeLinkText,
   privacyNoticeUrl,
   errorTipCardTitle,
+  formErrorText,
+  onSuccess,
 }: RegisterOfInterestFormProps) => {
   const {
     register,
@@ -45,25 +51,37 @@ export const RegisterOfInterestForm = ({
   const roiAddressData = useRoiAddress();
   const { affiliateSession } = useJoinFlowStore();
 
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+
+  // TODO: add a loading state
 
   const onSubmit = async (data: ExpressionOfInterestFormData) => {
-    setHasSubmitted(true);
+    setHasAttemptedSubmit(true);
 
-    // TODO: Prepare to send to API - awaiting route and helper function
-    const apiPayload = {
-      fullName: data.fullName,
-      email: data.email,
-      phoneNumber: data.phoneNumber || null,
-      ...roiAddressData,
-      originJourney: source,
-      affiliateCode: affiliateSession?.affiliateName || null,
-    };
+    if (!roiAddressData || roiAddressData.length === 0) {
+      setFormError("Please return to the previous page and select an address.");
+      return;
+    } else {
+      setFormError(null);
+      const apiPayload = formatRoiData(
+        data,
+        roiAddressData,
+        source,
+        affiliateSession?.affiliateName,
+      );
 
-    console.log("API payload:", apiPayload);
-
-    // TODO: Make an API call here
-    // eg. submitRegisterOfInterest(apiPayload);
+      try {
+        const result = await registerInterest(apiPayload);
+        if (result.roi) {
+          onSuccess();
+        } else {
+          setFormError(formErrorText);
+        }
+      } catch {
+        setFormError(formErrorText);
+      }
+    }
   };
 
   return (
@@ -74,7 +92,7 @@ export const RegisterOfInterestForm = ({
       name="register-your-interest"
       noValidate
     >
-      {(errors.fullName || errors.email || errors.phoneNumber) && (
+      {(errors.fullName || errors.email || errors.phoneNumber || formError) && (
         <TipCard
           subtitle={errorTipCardTitle}
           image={getAssetPath("/images/stop-hand.svg")}
@@ -82,19 +100,25 @@ export const RegisterOfInterestForm = ({
           subtitleColor="black"
         >
           <ul className="ml-4 list-disc list-inside">
-            {(["fullName", "email", "phoneNumber"] as const).map((field) => {
-              const error = errors[field];
-              return (
-                error && (
-                  <li
-                    key={`${field}-error`}
-                    className="text-core-black text-xs md:text-sm mt-1"
-                  >
-                    {error.message}
-                  </li>
-                )
-              );
-            })}
+            {!formError ? (
+              (["fullName", "email", "phoneNumber"] as const).map((field) => {
+                const error = errors[field];
+                return (
+                  error && (
+                    <li
+                      key={`${field}-error`}
+                      className="text-core-black text-xs md:text-sm mt-1"
+                    >
+                      {error.message}
+                    </li>
+                  )
+                );
+              })
+            ) : (
+              <li className="text-core-black text-xs md:text-sm mt-1">
+                {formError}
+              </li>
+            )}
           </ul>
         </TipCard>
       )}
@@ -109,7 +133,7 @@ export const RegisterOfInterestForm = ({
         placeholder="Full name"
         error={errors.fullName}
         showErrorMessages={false}
-        hasSubmitted={hasSubmitted}
+        hasSubmitted={hasAttemptedSubmit}
         className="bg-core-white placeholder:text-ui-grey-500"
       />
 
@@ -124,7 +148,7 @@ export const RegisterOfInterestForm = ({
         placeholder="Email"
         error={errors.email}
         showErrorMessages={false}
-        hasSubmitted={hasSubmitted}
+        hasSubmitted={hasAttemptedSubmit}
         className="bg-core-white placeholder:text-ui-grey-500"
       />
 
@@ -137,7 +161,7 @@ export const RegisterOfInterestForm = ({
         placeholder="Phone number (optional)"
         error={errors.phoneNumber}
         showErrorMessages={false}
-        hasSubmitted={hasSubmitted}
+        hasSubmitted={hasAttemptedSubmit}
         className="bg-core-white placeholder:text-ui-grey-500"
       />
 

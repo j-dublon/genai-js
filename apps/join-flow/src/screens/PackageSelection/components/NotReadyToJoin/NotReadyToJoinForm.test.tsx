@@ -3,6 +3,9 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { useRoiAddress } from "@/hooks/useRoiAddress";
+import { registerInterest } from "@/services/helpers/registerInterest";
+
 import { NotReadyToJoinForm } from "./NotReadyToJoinForm";
 
 vi.mock("./NotReadyToJoinProps", () => ({
@@ -10,8 +13,24 @@ vi.mock("./NotReadyToJoinProps", () => ({
     buttonText: "Mock Button Text",
     confirmationMessage: "Mock Confirmation Message",
     privacyNoticeText: "Mock Privacy Notice Text",
+    errorTipCardTitle: "Mock Error Tip Card Title",
+    noAddressError: "Mock No Address Error",
+    errorMessage: "Mock Error Message",
   },
 }));
+
+const TEST_FULL_NAME = "John Doe";
+const TEST_EMAIL = "john.doe@example.com";
+const TEST_PHONE = "07123456789";
+const TEST_DATE = "2024-12-31";
+const TEST_ADDRESS = {
+  addressKey: "abc-123",
+  addressKeyType: "URN",
+  postcode: "AB12 3CD",
+  formattedAddress:
+    "line1=123&line2=Main+St&line3=Anytown&postcode=AB12+3CD&addressKey=abc-123&addressKeyType=URN",
+  additionalAddressKeys: [],
+};
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -54,7 +73,7 @@ vi.mock("@react-component-library/ui", async () => {
         <div data-testid="date-picker" {...domProps}>
           <button
             type="button"
-            onClick={() => onDateSelect && onDateSelect("2024-12-31")}
+            onClick={() => onDateSelect && onDateSelect(TEST_DATE)}
             data-testid="date-picker-button"
             disabled={disabled}
           >
@@ -75,14 +94,26 @@ vi.mock("@/components/FormInput", () => ({
   ),
 }));
 
-// Mock console.log to test form submission until real functionality added
-const mockConsoleLog = vi.spyOn(console, "log").mockImplementation(() => {});
+vi.mock("@/hooks/useRoiAddress", () => ({
+  useRoiAddress: vi.fn(),
+}));
+
+vi.mock("@/store/useJoinFlowStore", () => ({
+  __esModule: true,
+  default: () => ({ affiliateSession: { affiliateName: "test-affiliate" } }),
+}));
+
+vi.mock("@/services/helpers/registerInterest", () => ({
+  registerInterest: vi.fn(),
+}));
 
 describe("NotReadyToJoinForm", () => {
   const user = userEvent.setup();
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.mocked(registerInterest).mockResolvedValue({ roi: "abc-123" });
+    vi.mocked(useRoiAddress).mockReturnValue([TEST_ADDRESS]);
   });
 
   it("renders the form with all required fields", () => {
@@ -176,14 +207,11 @@ describe("NotReadyToJoinForm", () => {
   it("allows valid form submission with all fields filled", async () => {
     render(<NotReadyToJoinForm />);
 
-    await user.type(screen.getByPlaceholderText("Full name"), "John Doe");
-    await user.type(
-      screen.getByPlaceholderText("Email address"),
-      "john.doe@example.com",
-    );
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email address"), TEST_EMAIL);
     await user.type(
       screen.getByPlaceholderText("Phone number (optional)"),
-      "07123456789",
+      TEST_PHONE,
     );
     const datePickerButton = screen.getByTestId("date-picker-button");
     await user.click(datePickerButton);
@@ -193,11 +221,15 @@ describe("NotReadyToJoinForm", () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(mockConsoleLog).toHaveBeenCalledWith({
-        fullName: "John Doe",
-        email: "john.doe@example.com",
-        selectedDate: "2024-12-31",
-        phoneNumber: "07123456789",
+      expect(registerInterest).toHaveBeenCalledWith({
+        fullName: TEST_FULL_NAME,
+        email: TEST_EMAIL,
+        endOfContractDate: TEST_DATE,
+        phoneNumber: TEST_PHONE,
+        address: [TEST_ADDRESS],
+        originJourney: "SERVICEABLE_ROI",
+        affiliateCode: "test-affiliate",
+        isServiceable: true,
       });
     });
   });
@@ -205,11 +237,8 @@ describe("NotReadyToJoinForm", () => {
   it("allows valid form submission with only required fields filled", async () => {
     render(<NotReadyToJoinForm />);
 
-    await user.type(screen.getByPlaceholderText("Full name"), "John Doe");
-    await user.type(
-      screen.getByPlaceholderText("Email address"),
-      "john.doe@example.com",
-    );
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email address"), TEST_EMAIL);
     const datePickerButton = screen.getByTestId("date-picker-button");
     await user.click(datePickerButton);
     const submitButton = screen.getByRole("button", {
@@ -218,23 +247,25 @@ describe("NotReadyToJoinForm", () => {
     await user.click(submitButton);
 
     await waitFor(() => {
-      expect(mockConsoleLog).toHaveBeenCalledWith({
-        fullName: "John Doe",
-        email: "john.doe@example.com",
-        selectedDate: "2024-12-31",
-        phoneNumber: "",
+      expect(registerInterest).toHaveBeenCalledWith({
+        fullName: TEST_FULL_NAME,
+        email: TEST_EMAIL,
+        phoneNumber: undefined,
+        endOfContractDate: TEST_DATE,
+        address: [TEST_ADDRESS],
+        originJourney: "SERVICEABLE_ROI",
+        affiliateCode: "test-affiliate",
+        isServiceable: true,
       });
+      expect(screen.getByText("Mock Confirmation Message")).toBeInTheDocument();
     });
   });
 
   it("shows success state after form submission and hides submit button", async () => {
     render(<NotReadyToJoinForm />);
 
-    await user.type(screen.getByPlaceholderText("Full name"), "John Doe");
-    await user.type(
-      screen.getByPlaceholderText("Email address"),
-      "john.doe@example.com",
-    );
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email address"), TEST_EMAIL);
     const datePickerButton = screen.getByTestId("date-picker-button");
     await user.click(datePickerButton);
     const submitButton = screen.getByRole("button", {
@@ -250,6 +281,40 @@ describe("NotReadyToJoinForm", () => {
       ).toBeDisabled();
       expect(screen.queryByText(/Privacy Notice/)).not.toBeInTheDocument();
       expect(submitButton).not.toBeInTheDocument();
+    });
+  });
+
+  it("shows error state if address can't be found on store", async () => {
+    vi.mocked(useRoiAddress).mockReturnValue([]);
+    render(<NotReadyToJoinForm />);
+
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email address"), TEST_EMAIL);
+    const datePickerButton = screen.getByTestId("date-picker-button");
+    await user.click(datePickerButton);
+    const submitButton = screen.getByRole("button", {
+      name: "Mock Button Text",
+    });
+    await user.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText("Mock No Address Error")).toBeInTheDocument();
+    });
+  });
+
+  it("shows error state if there is an error submitting the form", async () => {
+    vi.mocked(registerInterest).mockRejectedValue({ error: "Mock Error" });
+    render(<NotReadyToJoinForm />);
+
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email address"), TEST_EMAIL);
+    const datePickerButton = screen.getByTestId("date-picker-button");
+    await user.click(datePickerButton);
+    const submitButton = screen.getByRole("button", {
+      name: "Mock Button Text",
+    });
+    await user.click(submitButton);
+    await waitFor(() => {
+      expect(screen.getByText("Mock Error Message")).toBeInTheDocument();
     });
   });
 });

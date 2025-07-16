@@ -160,6 +160,9 @@ export type AccessibilityRequirementsFormData = z.infer<
   typeof accessibilityRequirementsSchema
 >;
 export type GoLiveDateFormValues = z.infer<typeof goLiveDateSchema>;
+
 export type ExpressionOfInterestFormData = z.infer<
   typeof expressionOfInterestSchema
 >;
+
+export type NotReadyToJoinFormData = z.infer<typeof notReadyToJoinSchema>;

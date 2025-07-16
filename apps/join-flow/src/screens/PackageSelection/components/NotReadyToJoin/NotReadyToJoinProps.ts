@@ -11,6 +11,10 @@ export const notReadyToJoinProps = {
   },
   privacyNoticeText:
     "By clicking the button below, you're confirming that you consent to Cuckoo Fibre processing and storing your details in line with our Privacy Notice. We'll use these details to send you info about our services. Don't worry - you can change your mind or hit 'unsubscribe' anytime you like.",
-  confirmationMessage:
-    "Thanks for your interest in Cuckoo Fibre. We'll keep you updated!",
+  confirmationTipCardTitle: "Thanks for your interest in Cuckoo Fibre.",
+  confirmationMessage: "We'll keep you updated!",
+  errorTipCardTitle: "Oops there was an error!",
+  noAddressError: "Please return to the previous page and select an address.",
+  errorMessage:
+    "There was an error submitting your details. Please try again, or contact our Customer Care team.",
 };

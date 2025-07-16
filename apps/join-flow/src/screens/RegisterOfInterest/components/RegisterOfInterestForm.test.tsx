@@ -3,6 +3,10 @@ import userEvent from "@testing-library/user-event";
 import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { useRoiAddress } from "@/hooks/useRoiAddress";
+import { ROIOriginJourney } from "@/lib/constants";
+import { registerInterest } from "@/services/helpers/registerInterest";
+
 import {
   RegisterOfInterestForm,
   RegisterOfInterestFormProps,
@@ -27,7 +31,7 @@ vi.mock("@react-component-library/ui", async () => {
 });
 
 vi.mock("@/hooks/useRoiAddress", () => ({
-  useRoiAddress: () => ({ postcode: "AB12 3CD" }),
+  useRoiAddress: vi.fn(),
 }));
 
 vi.mock("@/store/useJoinFlowStore", () => ({
@@ -35,9 +39,27 @@ vi.mock("@/store/useJoinFlowStore", () => ({
   default: () => ({ affiliateSession: { affiliateName: "test-affiliate" } }),
 }));
 
+vi.mock("@/services/helpers/registerInterest", () => ({
+  registerInterest: vi.fn(),
+}));
+
 const user = userEvent.setup();
 
+const TEST_FULL_NAME = "John Doe";
+const TEST_EMAIL = "john@example.com";
+const TEST_PHONE = "07123456789";
+const TEST_ADDRESS_POSTCODE_ONLY = { postcode: "AB12 3CD" };
+const TEST_ADDRESS_FULL = {
+  postcode: "AB12 3CD",
+  addressKey: "123",
+  addressKeyType: "URN",
+  formattedAddress:
+    "line1=123+Main+St&postcode=AB12+3CD&addressKeyType=URN&addressKey=123",
+  additionalAddressKeys: [],
+};
+
 describe("RegisterOfInterestForm", () => {
+  const onSuccessMock = vi.fn();
   const defaultProps: RegisterOfInterestFormProps = {
     source: "not-shown",
     buttonText: "Submit",
@@ -45,10 +67,16 @@ describe("RegisterOfInterestForm", () => {
     privacyNoticeLinkText: "Privacy Notice",
     privacyNoticeUrl: "https://example.com/privacy",
     errorTipCardTitle: "Error!",
+    formErrorText:
+      "There was an error submitting your details. Please try again or contact us.",
+    onSuccess: onSuccessMock,
   };
 
   beforeEach(() => {
     vi.clearAllMocks();
+    defaultProps.onSuccess = vi.fn();
+    vi.mocked(registerInterest).mockResolvedValue({ roi: "abc-123" });
+    vi.mocked(useRoiAddress).mockReturnValue([TEST_ADDRESS_POSTCODE_ONLY]);
   });
 
   it("renders all required fields and the submit button", () => {
@@ -86,13 +114,51 @@ describe("RegisterOfInterestForm", () => {
 
   it("submits the form with valid data", async () => {
     render(<RegisterOfInterestForm {...defaultProps} />);
-    await user.type(screen.getByPlaceholderText("Full name"), "John Doe");
-    await user.type(screen.getByPlaceholderText("Email"), "john@example.com");
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email"), TEST_EMAIL);
     await user.type(
       screen.getByPlaceholderText("Phone number (optional)"),
-      "07123456789",
+      TEST_PHONE,
     );
     await user.click(screen.getByTestId("mock-button"));
+
     expect(screen.queryByTestId("mock-tip-card")).not.toBeInTheDocument();
+    expect(registerInterest).toHaveBeenCalledWith({
+      fullName: TEST_FULL_NAME,
+      email: TEST_EMAIL,
+      phoneNumber: TEST_PHONE,
+      address: [TEST_ADDRESS_POSTCODE_ONLY],
+      originJourney: ROIOriginJourney.ERROR_ROI,
+      affiliateCode: "test-affiliate",
+      isServiceable: null,
+    });
+    expect(defaultProps.onSuccess).toHaveBeenCalled();
+  });
+
+  it("submits the full address data when available", async () => {
+    vi.mocked(useRoiAddress).mockReturnValue([TEST_ADDRESS_FULL]);
+    render(
+      <RegisterOfInterestForm
+        {...defaultProps}
+        source="cannot-service-address"
+      />,
+    );
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email"), TEST_EMAIL);
+    await user.type(
+      screen.getByPlaceholderText("Phone number (optional)"),
+      TEST_PHONE,
+    );
+    await user.click(screen.getByTestId("mock-button"));
+    expect(registerInterest).toHaveBeenCalledWith({
+      fullName: TEST_FULL_NAME,
+      email: TEST_EMAIL,
+      phoneNumber: TEST_PHONE,
+      address: [TEST_ADDRESS_FULL],
+      originJourney: ROIOriginJourney.PRE_REG,
+      affiliateCode: "test-affiliate",
+      isServiceable: false,
+    });
+    expect(defaultProps.onSuccess).toHaveBeenCalled();
   });
 });

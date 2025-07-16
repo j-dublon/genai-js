@@ -4,33 +4,22 @@ import { useMemo } from "react";
 
 import useJoinFlowStore from "@/store/useJoinFlowStore";
 
-type RoiAddressApiData = {
-  postcode: string | null;
-  address?: {
-    addressKey?: string;
-    addressKeyType?: string;
-    formattedAddress: string;
-    additionalAddressKeys?: {
-      addressKey?: string | null;
-      addressKeyType?: string | null;
-      id?: string | null;
-    }[];
-  }[];
-  isServiceable?: boolean | null;
-};
+import { RegisterOfInterestSubmission } from "../../payload-types";
 
-export const useRoiAddress = (): RoiAddressApiData => {
+export const useRoiAddress = ():
+  | RegisterOfInterestSubmission["inputs"]["address"]
+  | null => {
   const { serviceAddress, roiPostcode } = useJoinFlowStore();
 
   return useMemo(() => {
-    const postcode = serviceAddress?.postcode || roiPostcode;
+    const postcode = serviceAddress?.postcode || roiPostcode || null;
+
+    if (!postcode) return null;
 
     if (!serviceAddress) {
-      return {
-        postcode,
-      };
+      return [{ postcode }];
     }
-    
+
     const primaryIdentifier = serviceAddress.identifiers[0];
 
     const formattedAddress = [
@@ -39,10 +28,11 @@ export const useRoiAddress = (): RoiAddressApiData => {
       serviceAddress.line3 && `line3=${serviceAddress.line3}`,
       serviceAddress.postcode && `postcode=${serviceAddress.postcode}`,
       primaryIdentifier &&
-        `${primaryIdentifier.scheme}=${primaryIdentifier.value}`,
+        `addressKeyType=${primaryIdentifier.scheme}&addressKey=${primaryIdentifier.value}`,
     ]
       .filter(Boolean)
-      .join(",");
+      .join("&")
+      .replace(/\s/g, "+");
 
     const additionalAddressKeys =
       serviceAddress.identifiers.slice(1).map((identifier) => ({
@@ -51,24 +41,15 @@ export const useRoiAddress = (): RoiAddressApiData => {
         id: identifier.id,
       })) || [];
 
-    return {
-      postcode,
-      address: [
-        primaryIdentifier
-          ? {
-              addressKey: primaryIdentifier.value,
-              addressKeyType: primaryIdentifier.scheme,
-              formattedAddress,
-              additionalAddressKeys:
-                additionalAddressKeys.length > 0
-                  ? additionalAddressKeys
-                  : undefined,
-            }
-          : {
-              formattedAddress,
-            },
-      ],
-      isServiceable: false, // in this case the address was found but no products available
-    };
+    return [
+      {
+        postcode,
+        addressKey: primaryIdentifier?.value,
+        addressKeyType: primaryIdentifier?.scheme,
+        formattedAddress,
+        additionalAddressKeys:
+          additionalAddressKeys.length > 0 ? additionalAddressKeys : undefined,
+      },
+    ];
   }, [serviceAddress, roiPostcode]);
 };

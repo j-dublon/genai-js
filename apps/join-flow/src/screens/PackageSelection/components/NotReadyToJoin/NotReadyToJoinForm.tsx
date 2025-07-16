@@ -1,29 +1,50 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, DatePicker, InsertLink } from "@react-component-library/ui";
+import {
+  Button,
+  DatePicker,
+  InsertLink,
+  TipCard,
+} from "@react-component-library/ui";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
-import { notReadyToJoinSchema } from "@/validation/join-flow-schema";
+import { useRoiAddress } from "@/hooks/useRoiAddress";
+import { formatRoiData } from "@/lib/formatRoiData";
+import { getAssetPath } from "@/lib/get-asset-path";
+import { registerInterest } from "@/services/helpers/registerInterest";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
+import {
+  NotReadyToJoinFormData,
+  notReadyToJoinSchema,
+} from "@/validation/join-flow-schema";
 
 import { notReadyToJoinProps } from "./NotReadyToJoinProps";
 
-interface NotReadyFormData {
-  fullName: string;
-  email: string;
-  selectedDate: string;
-  phoneNumber?: string;
-}
-
 export const NotReadyToJoinForm = () => {
-  const { buttonText, confirmationMessage, privacyNoticeText } =
-    notReadyToJoinProps;
+  const {
+    buttonText,
+    confirmationMessage,
+    privacyNoticeText,
+    errorMessage,
+    noAddressError,
+    errorTipCardTitle,
+    confirmationTipCardTitle,
+  } = notReadyToJoinProps;
+
+  const [formError, setFormError] = useState<string | null>(null);
+  const [submissionStatus, setSubmissionStatus] = useState<
+    null | "submitting" | "success" | "error"
+  >(null);
+
+  // TODO: add a loading state
 
   const {
     register,
     handleSubmit,
     control,
-    formState: { errors, isSubmitSuccessful },
-  } = useForm<NotReadyFormData>({
+    formState: { errors },
+  } = useForm<NotReadyToJoinFormData>({
     resolver: zodResolver(notReadyToJoinSchema),
     defaultValues: {
       fullName: "",
@@ -33,14 +54,43 @@ export const NotReadyToJoinForm = () => {
     },
   });
 
-  const onSubmit = (
-    data: NotReadyFormData,
+  const roiAddressData = useRoiAddress();
+  const { affiliateSession } = useJoinFlowStore();
+
+  const onSubmit = async (
+    data: NotReadyToJoinFormData,
     event?: React.BaseSyntheticEvent,
   ) => {
     event?.stopPropagation();
+    setFormError(null);
+    setSubmissionStatus("submitting");
 
-    // TODO: Add submit handler
-    console.log(data);
+    if (!roiAddressData || roiAddressData.length === 0) {
+      // this shouldn't happen, but just in case
+      setFormError(noAddressError);
+      setSubmissionStatus("error");
+      return;
+    } else {
+      setFormError(null);
+      const formattedData = formatRoiData(
+        data,
+        roiAddressData,
+        "not-ready-to-join",
+        affiliateSession?.affiliateName,
+      );
+      try {
+        const result = await registerInterest(formattedData);
+        if (result.roi) {
+          setSubmissionStatus("success");
+        } else {
+          setFormError(errorMessage);
+          setSubmissionStatus("error");
+        }
+      } catch {
+        setFormError(errorMessage);
+        setSubmissionStatus("error");
+      }
+    }
   };
 
   const getDates = (): Date[] => {
@@ -51,12 +101,13 @@ export const NotReadyToJoinForm = () => {
     for (let i = 0; i < 365; i++) {
       const date = new Date(today);
       date.setDate(today.getDate() + i);
-
       dates.push(date);
     }
 
     return dates;
   };
+
+  const formInputStyling = `bg-core-white placeholder:text-ui-grey-500 ${submissionStatus === "success" ? "cursor-not-allowed" : ""}`;
 
   return (
     <form
@@ -70,24 +121,24 @@ export const NotReadyToJoinForm = () => {
           id="fullName"
           placeholder="Full name"
           error={errors.fullName}
-          className={`bg-core-white placeholder:text-ui-grey-500 ${isSubmitSuccessful ? "cursor-not-allowed" : ""}`}
-          disabled={isSubmitSuccessful}
+          className={formInputStyling}
+          disabled={submissionStatus === "success"}
         />
         <FormInput
           {...register("email")}
           id="email"
           placeholder="Email address"
           error={errors.email}
-          className={`bg-core-white placeholder:text-ui-grey-500 ${isSubmitSuccessful ? "cursor-not-allowed" : ""}`}
-          disabled={isSubmitSuccessful}
+          className={formInputStyling}
+          disabled={submissionStatus === "success"}
         />
         <FormInput
           {...register("phoneNumber")}
           id="phoneNumber"
           placeholder="Phone number (optional)"
           error={errors.phoneNumber}
-          className={`bg-core-white placeholder:text-ui-grey-500 ${isSubmitSuccessful ? "cursor-not-allowed" : ""}`}
-          disabled={isSubmitSuccessful}
+          className={formInputStyling}
+          disabled={submissionStatus === "success"}
         />
         <div className="flex flex-col w-full">
           <Controller
@@ -101,7 +152,7 @@ export const NotReadyToJoinForm = () => {
                 placeholderText="Estimated end of contract date"
                 buttonClassName="bg-core-white border-2 border-ui-grey-300"
                 outerClassName="my-0"
-                disabled={isSubmitSuccessful}
+                disabled={submissionStatus === "success"}
                 overlay={true}
               />
             )}
@@ -113,10 +164,31 @@ export const NotReadyToJoinForm = () => {
           )}
         </div>
       </div>
-      {isSubmitSuccessful ? (
-        <p className="text-sm text-core-black">{confirmationMessage}</p>
+      {submissionStatus === "success" ? (
+        <TipCard
+          subtitle={confirmationTipCardTitle}
+          image={getAssetPath("/images/linked-hands.svg")}
+          backgroundColor="green"
+          subtitleColor="black"
+        >
+          <p className="text-core-black text-xs md:text-sm mt-1">
+            {confirmationMessage}
+          </p>
+        </TipCard>
       ) : (
         <>
+          {submissionStatus === "error" && formError && (
+            <TipCard
+              subtitle={errorTipCardTitle}
+              image={getAssetPath("/images/stop-hand.svg")}
+              backgroundColor="peach"
+              subtitleColor="black"
+            >
+              <p className="text-core-black text-xs md:text-sm mt-1">
+                {formError}
+              </p>
+            </TipCard>
+          )}
           <p className="text-xs text-core-black leading-[1.6] opacity-80">
             <InsertLink
               text={privacyNoticeText}
@@ -129,7 +201,7 @@ export const NotReadyToJoinForm = () => {
             tint="black"
             size="medium"
             variant="solid"
-            disabled={isSubmitSuccessful}
+            disabled={submissionStatus === "submitting"}
             className="w-full md:w-auto"
           >
             {buttonText}
