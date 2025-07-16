@@ -1,4 +1,4 @@
-import { Button } from "@react-component-library/ui";
+import { AccessibleLoadingEgg, Button } from "@react-component-library/ui";
 import { ExtendedStoreAddress, StoreAddress } from "@store/useJoinFlowStore";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -27,13 +27,6 @@ interface AddressLookupFormProps {
   onPostcodeChange?: (postcode: string | null) => void;
 }
 
-const Loading = () => (
-  <div className="flex items-center justify-center mt-4">
-    <div className="mr-4 h-4 w-4 rounded-full border-2 border-ui-link border-t-transparent animate-spin"></div>
-    <p>Loading...</p>
-  </div>
-);
-
 export const AddressLookupForm = ({
   onAddressSelected,
   onError,
@@ -58,7 +51,13 @@ export const AddressLookupForm = ({
     }
   }, [initialPostcode, onPostcodeChange]);
 
-  const { error, loading, addresses, selectAddress, setError } = useAddress({
+  const {
+    error,
+    loading: addressLoading,
+    addresses,
+    selectAddress,
+    setError,
+  } = useAddress({
     initialPostcode: postcode,
   });
 
@@ -115,7 +114,7 @@ export const AddressLookupForm = ({
     onPostcodeChange?.(null);
   };
 
-  const isLoading = loading || externalLoading;
+  const isLoading = addressLoading || externalLoading;
   const isDisabled =
     externalDisabled ||
     isLoading ||
@@ -151,7 +150,7 @@ export const AddressLookupForm = ({
       </div>
 
       {isLoading ? (
-        <Loading />
+        <AccessibleLoadingEgg wrapperClassName="flex items-center justify-center mt-4" />
       ) : (
         isPostcodeSearched &&
         formattedAddresses &&

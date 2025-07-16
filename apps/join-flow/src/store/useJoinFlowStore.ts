@@ -342,6 +342,7 @@ export type JoinFlowState = {
   basket: StoreBasket | null;
   softCreditCheck: SoftCreditCheck | null;
   roiPostcode: string | null;
+  isLoadingModalOpen: boolean;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
@@ -365,6 +366,7 @@ export type JoinFlowState = {
   setBasket: (basket: StoreBasket) => void;
   setSoftCreditCheck: (softCreditCheck: SoftCreditCheck) => void;
   setRoiPostcode: (roiPostcode: string | null) => void;
+  setIsLoadingModalOpen: (open: boolean) => void;
   resetFlow: () => void;
   resetAffiliateSession: () => void;
 };
@@ -390,6 +392,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       basket: null,
       softCreditCheck: null,
       roiPostcode: null,
+      isLoadingModalOpen: false,
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
       selectPackage: (pkg) =>
@@ -413,6 +416,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setBasket: (basket) => set({ basket }),
       setSoftCreditCheck: (softCreditCheck) => set({ softCreditCheck }),
       setRoiPostcode: (roiPostcode) => set({ roiPostcode }),
+      setIsLoadingModalOpen: (open) => set({ isLoadingModalOpen: open }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -430,6 +434,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           basket: null,
           softCreditCheck: null,
           roiPostcode: null,
+          isLoadingModalOpen: false,
         }),
       resetAffiliateSession: () => set({ affiliateSession: null }),
     }),

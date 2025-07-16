@@ -3,3 +3,17 @@
 @config '../tailwind.config.js';
 @import "react-datepicker/dist/react-datepicker.css";
 @import "./components/atoms/DatePicker/datepicker.css";
+
+@keyframes egg-outline-spin {
+  0% {
+    stroke-dashoffset: 1302;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-egg {
+  animation: egg-outline-spin 1.6s cubic-bezier(0.66, 0.17, 0.53, 0.78) infinite
+    reverse;
+}

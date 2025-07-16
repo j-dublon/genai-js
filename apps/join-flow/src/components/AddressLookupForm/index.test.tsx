@@ -45,13 +45,17 @@ vi.mock("@/screens/ChooseYourAddress/ChooseYourAddressProps", () => ({
   },
 }));
 
-vi.mock("@react-component-library/ui", () => ({
-  Button: vi.fn(({ children, disabled, onClick, type, ...props }) => (
-    <button disabled={disabled} onClick={onClick} type={type} {...props}>
-      {children}
-    </button>
-  )),
-}));
+vi.mock("@react-component-library/ui", async (importOriginal) => {
+  const actual = (await importOriginal()) as object;
+  return {
+    ...actual,
+    Button: vi.fn(({ children, disabled, onClick, type, ...props }) => (
+      <button disabled={disabled} onClick={onClick} type={type} {...props}>
+        {children}
+      </button>
+    )),
+  };
+});
 
 describe("AddressLookupForm", () => {
   const mockOnAddressSelected = vi.fn();
@@ -131,10 +135,16 @@ describe("AddressLookupForm", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("shows loading state when loading prop is true", () => {
+  it("shows loading egg when loading prop is true", () => {
     render(<AddressLookupForm {...defaultProps} loading={true} />);
 
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    const screenReaderLoadingText = screen.getByText("Loading...");
+    expect(screenReaderLoadingText).toBeInTheDocument();
+    expect(screenReaderLoadingText).toHaveClass("sr-only");
+    expect(screenReaderLoadingText.parentElement).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
   });
 
   it("shows addresses when postcode is searched", async () => {

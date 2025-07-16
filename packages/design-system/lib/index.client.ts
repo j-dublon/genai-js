@@ -1,6 +1,7 @@
 "use client";
 import "./index.css";
 
+import { AccessibleLoadingEgg } from "@components/atoms/AccessibleLoadingEgg";
 import { AccountAppButton } from "@components/atoms/AccountAppButton";
 import { Button } from "@components/atoms/Button";
 import { Checkbox } from "@components/atoms/Checkbox";
@@ -40,10 +41,12 @@ import { FullScreenModal } from "@components/molecules/FullScreenModal";
 import { ImageMarquee } from "@components/molecules/ImageMarquee";
 import { InfoCard, InfoCardProps } from "@components/molecules/InfoCard";
 import { InfoModal } from "@components/molecules/InfoModal";
+import { LoadingModal } from "@components/molecules/LoadingModal";
 import { MobileApp } from "@components/molecules/MobileApp";
 import { MobilePhone } from "@components/molecules/MobilePhone";
 import { PostcodeChecker } from "@components/molecules/PostcodeChecker";
 import { ProductCard } from "@components/molecules/ProductCard";
+import { PromotionCard } from "@components/molecules/PromotionCard";
 import { ReasonCard } from "@components/molecules/ReasonCard";
 import { ReferAFriendHero } from "@components/molecules/ReferAFriendHero";
 import {
@@ -64,7 +67,6 @@ import { useTrustpilotScore } from "@hooks/useTrustPilotScore";
 import { InfoIcon } from "@icons/InfoIcon";
 import { RadioIcon } from "@icons/Radio";
 
-import { PromotionCard } from "./components/molecules/PromotionCard";
 import {
   BACKGROUND_COLORS,
   BackgroundColors,
@@ -73,6 +75,7 @@ import {
 } from "./types";
 
 export {
+  AccessibleLoadingEgg,
   AccordionSection,
   AccountAppButton,
   ArticleCard,
@@ -98,6 +101,7 @@ export {
   InputSlider,
   InsertFormattedText,
   InsertLink,
+  LoadingModal,
   MobileApp,
   MobilePhone,
   NavBar,

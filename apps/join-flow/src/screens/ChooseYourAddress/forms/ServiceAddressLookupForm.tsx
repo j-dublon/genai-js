@@ -1,7 +1,7 @@
 import { ExtendedStoreAddress } from "@store/useJoinFlowStore";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback } from "react";
 
 import { AddressLookupForm } from "@/components/AddressLookupForm/index";
 import { createQuoteLookupPoll } from "@/services/helpers/createQuoteLookupPoll";
@@ -16,8 +16,8 @@ export const ServiceAddressLookupForm = () => {
     affiliateSession,
     setQuoteResponse,
     setRoiPostcode,
+    setIsLoadingModalOpen,
   } = useJoinFlowStore();
-  const [isQuoteLookupLoading, setIsQuoteLookupLoading] = useState(false);
 
   const handleAddressSelected = async (
     selectedAddress: ExtendedStoreAddress,
@@ -31,7 +31,7 @@ export const ServiceAddressLookupForm = () => {
       );
     }
 
-    setIsQuoteLookupLoading(true);
+    setIsLoadingModalOpen(true);
     try {
       const quoteResult = await createQuoteLookupPoll(
         affiliateSession.id,
@@ -52,15 +52,16 @@ export const ServiceAddressLookupForm = () => {
           },
         });
         router.push("/join-flow/package-selection");
+        return;
       } else if (quoteResult?.error?.type === "noProductsAvailable") {
         router.push("/join-flow/register-interest/cannot-service-address");
+        return;
       } else {
         throw new Error("No products available for this address.");
       }
     } catch (error) {
       console.error("Error creating quote lookup:", error);
-    } finally {
-      setIsQuoteLookupLoading(false);
+      setIsLoadingModalOpen(false);
     }
   };
 
@@ -76,7 +77,6 @@ export const ServiceAddressLookupForm = () => {
       onAddressSelected={handleAddressSelected}
       onPostcodeChange={handlePostcodeChange}
       initialPostcode={searchParams || ""}
-      loading={isQuoteLookupLoading}
       fullWidth={true}
       buttonText={{
         search: ChooseYourAddressText.searchForMyAddressButtonText,

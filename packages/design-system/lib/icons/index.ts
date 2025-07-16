@@ -6,6 +6,7 @@ export { ChevronVertical } from "./ChevronVertical";
 export { ChevronVerticalWithCircle } from "./ChevronVerticalWithCircle";
 export { CloseIcon } from "./CloseIcon";
 export { InfoIcon } from "./InfoIcon";
+export { LoadingEgg } from "./LoadingEgg";
 export { Minus } from "./Minus";
 export { Plus } from "./Plus";
 export { RadioIcon } from "./Radio";

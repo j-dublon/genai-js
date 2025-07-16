@@ -11,3 +11,18 @@ export const ChooseYourAddressText = {
   nextStepPillText: "Choosing your plan",
   navBarText: "What's next?",
 };
+
+export const slides = [
+  {
+    src: "/images/world-animated.gif",
+    message: "Sit tight! We're checking out your area",
+  },
+  {
+    src: "/images/sunglasses-animated.gif",
+    message: "Oooh, some lovely parts round where you live",
+  },
+  {
+    src: "/images/rocket-animated.gif",
+    message: "Just putting all your eggs in one broadband basket",
+  },
+];
