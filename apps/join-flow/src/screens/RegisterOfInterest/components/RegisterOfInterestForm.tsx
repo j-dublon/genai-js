@@ -1,5 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, InsertLink, TipCard } from "@react-component-library/ui";
+import {
+  AccessibleLoadingEgg,
+  Button,
+  InsertLink,
+  TipCard,
+} from "@react-component-library/ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -53,6 +58,7 @@ export const RegisterOfInterestForm = ({
 
   const [formError, setFormError] = useState<string | null>(null);
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // TODO: add a loading state
 
@@ -72,6 +78,7 @@ export const RegisterOfInterestForm = ({
       );
 
       try {
+        setIsLoading(true);
         const result = await registerInterest(apiPayload);
         if (result.roi) {
           onSuccess();
@@ -80,6 +87,8 @@ export const RegisterOfInterestForm = ({
         }
       } catch {
         setFormError(formErrorText);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -174,15 +183,19 @@ export const RegisterOfInterestForm = ({
         />
       </p>
 
-      <Button
-        type="submit"
-        variant="solid"
-        tint="yellow"
-        size="large"
-        fullWidth
-      >
-        {buttonText}
-      </Button>
+      {isLoading ? (
+        <AccessibleLoadingEgg wrapperClassName="flex justify-center" />
+      ) : (
+        <Button
+          type="submit"
+          variant="solid"
+          tint="yellow"
+          size="large"
+          fullWidth
+        >
+          {buttonText}
+        </Button>
+      )}
     </form>
   );
 };

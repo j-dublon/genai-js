@@ -1,3 +1,5 @@
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
+
 export const ChooseYourAddressText = {
   pageTitle: "Tell us where you live",
   continueButtonText: "See if I can get Cuckoo",
@@ -12,7 +14,7 @@ export const ChooseYourAddressText = {
   navBarText: "What's next?",
 };
 
-export const slides = [
+export const slides: LoadingModalSlide[] = [
   {
     src: "/images/world-animated.gif",
     message: "Sit tight! We're checking out your area",

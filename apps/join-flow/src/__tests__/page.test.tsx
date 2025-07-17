@@ -92,6 +92,12 @@ vi.mock(
 );
 
 describe("PackageSelection Component", () => {
+  beforeAll(() => {
+    HTMLDialogElement.prototype.show = vi.fn();
+    HTMLDialogElement.prototype.showModal = vi.fn();
+    HTMLDialogElement.prototype.close = vi.fn();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
   });

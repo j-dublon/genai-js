@@ -15,7 +15,7 @@ export const AccessibleLoadingEgg = ({
   width,
   color,
 }: AccessibleLoadingEggProps) => (
-  <div aria-live="polite" className={wrapperClassName}>
+  <div role="status" aria-live="polite" className={wrapperClassName}>
     <LoadingEgg
       className={className}
       height={height}

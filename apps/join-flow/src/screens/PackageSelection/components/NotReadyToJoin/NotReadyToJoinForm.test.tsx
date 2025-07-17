@@ -112,7 +112,9 @@ describe("NotReadyToJoinForm", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.mocked(registerInterest).mockResolvedValue({ roi: "abc-123" });
+    vi.mocked(registerInterest).mockImplementation(
+      () => new Promise((resolve) => resolve({ roi: "abc-123" })),
+    );
     vi.mocked(useRoiAddress).mockReturnValue([TEST_ADDRESS]);
   });
 
@@ -315,6 +317,41 @@ describe("NotReadyToJoinForm", () => {
     await user.click(submitButton);
     await waitFor(() => {
       expect(screen.getByText("Mock Error Message")).toBeInTheDocument();
+    });
+  });
+
+  it("shows loading indicator and hides submit button when submitting", async () => {
+    let resolvePromise: (value: { roi: string }) => void;
+    const promise = new Promise<{ roi: string }>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    vi.mocked(registerInterest).mockImplementation(() => promise);
+
+    render(<NotReadyToJoinForm />);
+
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email address"), TEST_EMAIL);
+    const datePickerButton = screen.getByTestId("date-picker-button");
+    await user.click(datePickerButton);
+
+    const submitButton = screen.getByRole("button", {
+      name: "Mock Button Text",
+    });
+    expect(submitButton).toBeInTheDocument();
+
+    await user.click(submitButton);
+
+    expect(await screen.findByRole("status")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "Mock Button Text" }),
+    ).not.toBeInTheDocument();
+
+    resolvePromise!({ roi: "abc-123" });
+
+    await waitFor(() => {
+      expect(screen.getByText("Mock Confirmation Message")).toBeInTheDocument();
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
     });
   });
 });

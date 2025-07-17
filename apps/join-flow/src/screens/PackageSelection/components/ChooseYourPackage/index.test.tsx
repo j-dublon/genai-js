@@ -361,11 +361,18 @@ describe("ChooseYourPackage", () => {
     createdAt: "2025-01-01T00:00:00.000Z",
   };
 
+  const mockSetIsLoadingModalOpen = vi.fn();
+  let mockIsLoadingModalOpen = false;
+
   const mockStore = {
     selectPackage: vi.fn(),
     setBasket: vi.fn(),
     setSoftCreditCheck: vi.fn(),
     quoteResponse: mockQuoteResponse,
+    setIsLoadingModalOpen: mockSetIsLoadingModalOpen,
+    get isLoadingModalOpen() {
+      return mockIsLoadingModalOpen;
+    },
   };
 
   const mockRouter = {
@@ -376,6 +383,24 @@ describe("ChooseYourPackage", () => {
     replace: vi.fn(),
     prefetch: vi.fn(),
   };
+
+  beforeAll(() => {
+    HTMLDialogElement.prototype.show = vi.fn(function mock(
+      this: HTMLDialogElement,
+    ) {
+      this.open = true;
+    });
+    HTMLDialogElement.prototype.showModal = vi.fn(function mock(
+      this: HTMLDialogElement,
+    ) {
+      this.open = true;
+    });
+    HTMLDialogElement.prototype.close = vi.fn(function mock(
+      this: HTMLDialogElement,
+    ) {
+      this.open = false;
+    });
+  });
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -506,5 +531,33 @@ describe("ChooseYourPackage", () => {
 
     expect(mockStore.selectPackage).toHaveBeenCalled();
     expect(mockRouter.push).toHaveBeenCalledWith("/join-flow/personal-details");
+  });
+
+  it("opens the loading modal when the package is selected", async () => {
+    mockCreateBasket.mockImplementation(
+      () => new Promise((resolve) => resolve({ basket: mockBasketResponse })),
+    );
+
+    const { rerender } = render(<ChooseYourPackage />);
+
+    const packageCards = screen.getAllByTestId("select-package");
+    await userEvent.click(packageCards[0]);
+
+    const loadingDialog = screen.queryAllByRole("dialog", { hidden: true })[0];
+    expect(loadingDialog).toBeInTheDocument();
+    expect(loadingDialog).toHaveAttribute("aria-modal", "true");
+    expect(loadingDialog).not.toHaveAttribute("open");
+
+    expect(mockStore.selectPackage).toHaveBeenCalled();
+    expect(mockSetIsLoadingModalOpen).toHaveBeenCalledWith(true);
+    expect(mockCreateBasket).toHaveBeenCalled();
+
+    // Simulate the store state change and force a re-render
+    mockIsLoadingModalOpen = true;
+    rerender(<ChooseYourPackage />);
+
+    await waitFor(() => {
+      expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+    });
   });
 });

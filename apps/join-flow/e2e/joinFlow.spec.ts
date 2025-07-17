@@ -31,7 +31,7 @@ test.describe("JoinFlowPage", () => {
 
     try {
       await Promise.race([
-        page.waitForSelector(".spinner", { timeout: 2000 }),
+        page.getByText("Loading...", { exact: true }),
         page.waitForSelector(".grid, h1, h2, [role='heading']", {
           timeout: 2000,
         }),

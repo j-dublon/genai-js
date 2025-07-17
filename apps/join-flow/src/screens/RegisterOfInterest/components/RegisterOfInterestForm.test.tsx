@@ -1,6 +1,5 @@
-import { render, screen, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useRoiAddress } from "@/hooks/useRoiAddress";
@@ -133,6 +132,30 @@ describe("RegisterOfInterestForm", () => {
       isServiceable: null,
     });
     expect(defaultProps.onSuccess).toHaveBeenCalled();
+  });
+
+  it("displays a loading indicator when submitting", async () => {
+    let resolvePromise: (value: { roi: string }) => void;
+    const promise = new Promise<{ roi: string }>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    vi.mocked(registerInterest).mockImplementation(() => promise);
+
+    render(<RegisterOfInterestForm {...defaultProps} />);
+    await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);
+    await user.type(screen.getByPlaceholderText("Email"), TEST_EMAIL);
+    await user.click(screen.getByTestId("mock-button"));
+
+    // Spinner should be visible before the promise resolves
+    expect(await screen.findByRole("status")).toBeInTheDocument();
+
+    resolvePromise!({ roi: "abc-123" });
+
+    // Spinner should be hidden after the promise resolves
+    await waitFor(() => {
+      expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
   });
 
   it("submits the full address data when available", async () => {

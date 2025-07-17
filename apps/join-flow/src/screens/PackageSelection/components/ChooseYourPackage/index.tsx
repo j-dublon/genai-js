@@ -1,7 +1,11 @@
 "use client";
 
-import { FullScreenModal } from "@react-component-library/ui";
-import { ToggleSwitch, useScrollable } from "@react-component-library/ui";
+import {
+  FullScreenModal,
+  LoadingModal,
+  ToggleSwitch,
+  useScrollable,
+} from "@react-component-library/ui";
 import useJoinFlowStore, {
   type Offer,
   type StoreSelectedPackage,
@@ -10,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { useTopSpeedPackage } from "@/hooks/useTopSpeedPackage";
 import { PackageCard } from "@/screens/PackageSelection/components/PackageCard";
 import { createBasket } from "@/services/helpers/createBasket";
@@ -18,6 +23,7 @@ import { PackageSelectionDetails } from "../PackageSelectionDetails";
 import { SpeedCalculator } from "../SpeedCalculator";
 import {
   packageSelectionPageText,
+  slides,
   speedCalculatorText,
 } from "./ChooseYourPackageProps";
 
@@ -25,11 +31,21 @@ type ModalContent = "speed-calculator" | "package-details";
 
 export const ChooseYourPackage = () => {
   const router = useRouter();
-  const { selectPackage, quoteResponse, setBasket, setSoftCreditCheck } =
-    useJoinFlowStore();
+  const {
+    selectPackage,
+    quoteResponse,
+    setBasket,
+    setSoftCreditCheck,
+    setIsLoadingModalOpen,
+    isLoadingModalOpen,
+  } = useJoinFlowStore();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
 
   const [modalContent, setModalContent] =
     useState<ModalContent>("speed-calculator");
@@ -141,8 +157,10 @@ export const ChooseYourPackage = () => {
   ) => {
     if (selectedStorePackage && quoteResponse?.response?.products?.[0]) {
       selectPackage(selectedStorePackage);
+      modalRef.current?.close();
 
       try {
+        setIsLoadingModalOpen(true);
         const result = await createBasket({
           product: {
             selectionIdentifier: selectedStorePackage.selectionIdentifier,
@@ -162,9 +180,11 @@ export const ChooseYourPackage = () => {
           router.push("/join-flow/personal-details");
         } else if (result.error) {
           console.error("Failed to create basket:", result.error);
+          setIsLoadingModalOpen(false);
         }
       } catch (error) {
         console.error("Unexpected error creating basket:", error);
+        setIsLoadingModalOpen(false);
       }
     }
   };
@@ -214,7 +234,13 @@ export const ChooseYourPackage = () => {
   };
 
   return (
-    <section
+    <>
+      <LoadingModal
+        modalRef={loadingModalRef}
+        loading={isLoadingModalOpen}
+        slides={slidesWithAssetPath}
+      />
+      <section
       className="bg-ui-grey-100 py-10 md:py-20"
       aria-label="Choose Your Package"
     >
@@ -224,7 +250,7 @@ export const ChooseYourPackage = () => {
             {pageTitle}
           </h2>
           <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-center">
-            {!hasOnly12MonthPackages && !hasOnly24MonthPackages && (
+          {!hasOnly12MonthPackages && !hasOnly24MonthPackages && (
               <>
                 <p className="leading-[1.6] text-xs md:text-sm font-semibold">
                   {pageSubtitle}
@@ -288,5 +314,6 @@ export const ChooseYourPackage = () => {
         {getModalContent()}
       </FullScreenModal>
     </section>
+    </>
   );
 };

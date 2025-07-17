@@ -1,4 +1,5 @@
 "use client";
+import { AccessibleLoadingEgg } from "@react-component-library/ui";
 import useJoinFlowStore, { JoinFlowState } from "@store/useJoinFlowStore";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
@@ -139,12 +140,10 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
 
   if (isValidating) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div
-          className="spinner animate-spin w-10 h-10 border-4 border-ui-grey-300 border-t-yellow-500 rounded-full"
-          role="status"
-        ></div>
-      </div>
+      <AccessibleLoadingEgg
+        wrapperClassName="flex items-center justify-center min-h-screen"
+        height={200}
+      />
     );
   }
 

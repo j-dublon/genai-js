@@ -181,6 +181,7 @@ const setupInitialState = (page: Page) => {
       paymentDetails: null,
       goLiveDetails: null,
       basket: null,
+      isLoadingModalOpen: false,
     };
 
     localStorage.setItem(

@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  AccessibleLoadingEgg,
   Button,
   DatePicker,
   InsertLink,
@@ -196,16 +197,22 @@ export const NotReadyToJoinForm = () => {
               href="/legal/privacy"
             />
           </p>
-          <Button
-            type="submit"
-            tint="black"
-            size="medium"
-            variant="solid"
-            disabled={submissionStatus === "submitting"}
-            className="w-full md:w-auto"
-          >
-            {buttonText}
-          </Button>
+          {submissionStatus === "submitting" ? (
+            <AccessibleLoadingEgg
+              wrapperClassName="flex justify-center"
+              height={60}
+            />
+          ) : (
+            <Button
+              type="submit"
+              tint="black"
+              size="medium"
+              variant="solid"
+              className="w-full md:w-auto"
+            >
+              {buttonText}
+            </Button>
+          )}
         </>
       )}
     </form>

@@ -1,3 +1,4 @@
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
 import { StoreAddress } from "@/store/useJoinFlowStore";
 
 export const packageSelectionPageText = {
@@ -35,3 +36,19 @@ export const MOCK_ADDRESS: StoreAddress = {
     },
   ],
 };
+
+// TODO: Images / messages to be adjusted
+export const slides: LoadingModalSlide[] = [
+  {
+    src: "/images/world-animated.gif",
+    message: "Sit tight! We're checking out your area",
+  },
+  {
+    src: "/images/sunglasses-animated.gif",
+    message: "Oooh, some lovely parts round where you live",
+  },
+  {
+    src: "/images/rocket-animated.gif",
+    message: "Just putting all your eggs in one broadband basket",
+  },
+];

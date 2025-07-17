@@ -40,6 +40,7 @@ describe("RouteGuard", () => {
       </RouteGuard>,
     );
     expect(screen.queryByText(mockChildrenText)).not.toBeInTheDocument();
+    expect(screen.getByRole("status")).toBeInTheDocument();
   });
 
   test("should show children after validation completes", async () => {

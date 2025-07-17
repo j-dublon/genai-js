@@ -9,9 +9,10 @@ import {
   useTrustpilotScore,
 } from "@react-component-library/ui";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect } from "react";
 
 import { ContactInfo } from "@/components/ContactInfo";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { getAssetPath } from "@/lib/get-asset-path";
 import useJoinFlowStore, {
   type AffiliateSession,
@@ -39,7 +40,10 @@ export const ChooseYourAddress = ({
   const { resetFlow, setRoiPostcode, isLoadingModalOpen, setAffiliateSession } =
     useJoinFlowStore();
   const postcodeParam = useSearchParams().get("postcode");
-  const loadingModalRef = useRef<HTMLDialogElement | null>(null);
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
 
   useEffect(() => {
     if (affiliateSession) {
@@ -54,23 +58,6 @@ export const ChooseYourAddress = ({
       setRoiPostcode(postcodeParam);
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    if (isLoadingModalOpen) {
-      loadingModalRef.current?.showModal();
-    } else {
-      loadingModalRef.current?.close();
-    }
-  }, [isLoadingModalOpen]);
-
-  const slidesWithAssetPath = useMemo(
-    () =>
-      slides.map((slide) => ({
-        ...slide,
-        src: getAssetPath(slide.src),
-      })),
-    [],
-  );
 
   return (
     <>
