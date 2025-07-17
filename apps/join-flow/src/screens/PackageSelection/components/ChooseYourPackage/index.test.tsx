@@ -1,24 +1,199 @@
-import { StoreSelectedPackage } from "@store/useJoinFlowStore";
+import useJoinFlowStore, {
+  type StoreSelectedPackage,
+} from "@store/useJoinFlowStore";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { createBasket } from "@/services/helpers/createBasket";
 
 import { speedCalculatorText } from "./ChooseYourPackageProps";
 import { ChooseYourPackage } from "./index";
 
-const {
-  mockSelectPackage,
-  mockSetBasket,
-  mockCreateBasket,
-  mockRouterPush,
-  mockSetSoftCreditCheck,
-} = vi.hoisted(() => ({
-  mockSelectPackage: vi.fn(),
-  mockSetBasket: vi.fn(),
-  mockCreateBasket: vi.fn(),
-  mockRouterPush: vi.fn(),
-  mockSetSoftCreditCheck: vi.fn(),
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    ToggleSwitch: ({
+      isOn,
+      onChange,
+    }: {
+      isOn: boolean;
+      onChange: (isOn: boolean) => void;
+    }) => (
+      <button
+        data-testid="toggle-switch"
+        onClick={() => onChange(!isOn)}
+        aria-pressed={isOn}
+      >
+        {isOn ? "24-months" : "12-months"}
+      </button>
+    ),
+    PromotionCard: ({
+      heading,
+      features,
+      mainPrice,
+      onButtonClick,
+      onDetailsClick,
+      buttonText,
+      detailsButtonText,
+      tint,
+      featured,
+      promotionPillsText,
+    }: {
+      heading: string;
+      features: Array<{ value: number; unit: string; label: string }>;
+      mainPrice: number;
+      onButtonClick: () => void;
+      onDetailsClick?: () => void;
+      buttonText: string;
+      detailsButtonText?: string;
+      tint: string;
+      featured?: boolean;
+      promotionPillsText?: string[];
+    }) => (
+      <div data-testid="package-card">
+        <div>{heading}</div>
+        <div>
+          {features.map((feature, index) => (
+            <div key={index}>
+              {feature.value}
+              {feature.unit} {feature.label}
+            </div>
+          ))}
+        </div>
+        <div>£{mainPrice}/month</div>
+        {featured && <div data-testid="feature-package">Feature Package</div>}
+        {promotionPillsText && promotionPillsText.length > 0 && (
+          <div data-testid="promotion">{promotionPillsText[0]}</div>
+        )}
+        <div data-testid="tint">{tint}</div>
+        <button data-testid="select-package" onClick={onButtonClick}>
+          {buttonText}
+        </button>
+        {onDetailsClick && detailsButtonText && (
+          <button data-testid="view-details" onClick={onDetailsClick}>
+            {detailsButtonText}
+          </button>
+        )}
+      </div>
+    ),
+    useScrollable: () => mockUseScrollable,
+  };
+});
+
+vi.mock("@/lib/formatDate", () => ({
+  formatDisplayDate: () => "1 April 2026",
 }));
+
+vi.mock("@/hooks/usePricingCalculations", () => ({
+  convertPenceToPounds: (pence: number) => pence / 100,
+}));
+
+vi.mock("@store/useJoinFlowStore", () => ({
+  default: vi.fn(),
+}));
+const mockUseJoinFlowStore = vi.mocked(useJoinFlowStore);
+
+vi.mock("@/services/helpers/createBasket", () => ({
+  createBasket: vi.fn(),
+}));
+const mockCreateBasket = vi.mocked(createBasket);
+
+vi.mock("@/hooks/useAddress", () => ({
+  useAddress: () => ({
+    selectedAddress: {
+      line1: "123 Test Street",
+      postcode: "SW1A 2AA",
+      addressKey: "test-key",
+      addressKeyType: "NAD",
+    },
+  }),
+}));
+
+vi.mock("@/hooks/useTopSpeedPackage", () => ({
+  useTopSpeedPackage: () => null,
+}));
+
+vi.mock("@/hooks/useClearFocus", () => ({
+  useClearFocus: () => {},
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+  usePathname: () => "/test-path",
+}));
+const mockUseRouter = vi.mocked(useRouter);
+
+vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
+  SpeedCalculator: ({
+    onShowPackageDetails,
+  }: {
+    onShowPackageDetails: (pkg: StoreSelectedPackage) => void;
+  }) => (
+    <dialog data-testid="speed-calculator-mock">
+      Speed Calculator Mock
+      <button
+        onClick={() =>
+          onShowPackageDetails({
+            frontendIdentifier: "test-package",
+            frontendTitle: "test-package",
+            krakenProductCode: "TEST-CODE",
+            termMonths: 24,
+            selectionIdentifier: "test-selection",
+            installationRequired: false,
+            appliedPromotionUUIDs: null,
+            prices: {
+              basePrice: 3000,
+              discountedPrice: 3000,
+              annualPriceRise: null,
+            },
+            speeds: {
+              download: 150,
+              upload: 30,
+            },
+            extras: null,
+            offers: null,
+            id: null,
+          } as StoreSelectedPackage)
+        }
+      >
+        Show Package Details
+      </button>
+    </dialog>
+  ),
+}));
+
+vi.mock(
+  "@/screens/PackageSelection/components/PackageSelectionDetails",
+  () => ({
+    PackageSelectionDetails: ({
+      packageDetails,
+      handlePackageSelection,
+    }: {
+      packageDetails: StoreSelectedPackage;
+      handlePackageSelection: (pkg: StoreSelectedPackage) => void;
+    }) => (
+      <div data-testid="package-selection-details">
+        <div data-testid="package-name">
+          {packageDetails.speeds.download}Mbps
+        </div>
+        <div data-testid="package-contract-length">
+          {packageDetails.termMonths}
+        </div>
+        <button
+          data-testid="package-selection-button"
+          onClick={() =>
+            handlePackageSelection(packageDetails as StoreSelectedPackage)
+          }
+        >
+          Add to basket
+        </button>
+      </div>
+    ),
+  }),
+);
 
 const mockQuoteResponse = {
   documentID: "quote-123",
@@ -100,7 +275,12 @@ const mockQuoteResponse = {
           upload: 100,
         },
         extras: null,
-        offers: null,
+        offers: [
+          {
+            blockType: "giftCardBlock",
+            value: 100,
+          },
+        ],
         id: "c-900",
       },
       {
@@ -166,211 +346,35 @@ const mockUseScrollable = {
   onMouseMove: vi.fn(),
 };
 
-vi.mock("@react-component-library/ui", async () => {
-  const actual = await vi.importActual("@react-component-library/ui");
-  return {
-    ...actual,
-    ToggleSwitch: ({
-      isOn,
-      onChange,
-    }: {
-      isOn: boolean;
-      onChange: (isOn: boolean) => void;
-    }) => (
-      <button
-        data-testid="toggle-switch"
-        onClick={() => onChange(!isOn)}
-        aria-pressed={isOn}
-      >
-        {isOn ? "24-months" : "12-months"}
-      </button>
-    ),
-    PromotionCard: ({
-      heading,
-      features,
-      mainPrice,
-      onButtonClick,
-      onDetailsClick,
-      buttonText,
-      detailsButtonText,
-      tint,
-      featured,
-      promotionText,
-    }: {
-      heading: string;
-      features: Array<{ value: number; unit: string; label: string }>;
-      mainPrice: number;
-      onButtonClick: () => void;
-      onDetailsClick?: () => void;
-      buttonText: string;
-      detailsButtonText?: string;
-      tint: string;
-      featured?: boolean;
-      promotionText?: string;
-    }) => (
-      <div data-testid="package-card">
-        <div>{heading}</div>
-        <div>
-          {features.map((feature, index) => (
-            <div key={index}>
-              {feature.value}
-              {feature.unit} {feature.label}
-            </div>
-          ))}
-        </div>
-        <div>£{mainPrice}/month</div>
-        {featured && <div data-testid="feature-package">Feature Package</div>}
-        {promotionText && <div data-testid="promotion">{promotionText}</div>}
-        <div data-testid="tint">{tint}</div>
-        <button data-testid="select-package" onClick={onButtonClick}>
-          {buttonText}
-        </button>
-        {onDetailsClick && detailsButtonText && (
-          <button data-testid="view-details" onClick={onDetailsClick}>
-            {detailsButtonText}
-          </button>
-        )}
-      </div>
-    ),
-    useScrollable: () => mockUseScrollable,
-  };
-});
-
-vi.mock("@/screens/PackageSelection/components/PackageCard", async () => {
-  const { PackageCard: RealPackageCard } = await vi.importActual(
-    "@/screens/PackageSelection/components/PackageCard",
-  );
-  return {
-    PackageCard: RealPackageCard,
-  };
-});
-
-vi.mock("@/lib/formatDate", () => ({
-  formatDisplayDate: () => "1 April 2026",
-}));
-
-vi.mock("@/hooks/usePricingCalculations", () => ({
-  convertPenceToPounds: (pence: number) => pence / 100,
-}));
-
-vi.mock("@store/useJoinFlowStore", () => ({
-  default: () => ({
-    selectPackage: mockSelectPackage,
-    setBasket: mockSetBasket,
-    setSoftCreditCheck: mockSetSoftCreditCheck,
-    quoteResponse: mockQuoteResponse,
-  }),
-}));
-
-vi.mock("@/services/helpers/createBasket", () => ({
-  createBasket: mockCreateBasket,
-}));
-
-vi.mock("@/hooks/useAddress", () => ({
-  useAddress: () => ({
-    selectedAddress: {
-      line1: "123 Test Street",
-      postcode: "SW1A 2AA",
-      addressKey: "test-key",
-      addressKeyType: "NAD",
-    },
-  }),
-}));
-
-vi.mock("@/hooks/useTopSpeedPackage", () => ({
-  useTopSpeedPackage: () => null,
-}));
-
-vi.mock("@/hooks/useClearFocus", () => ({
-  useClearFocus: () => {},
-}));
-
-vi.mock("next/navigation", () => ({
-  useRouter: () => ({
-    push: mockRouterPush,
-  }),
-  usePathname: () => "/test-path",
-}));
-
-vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
-  SpeedCalculator: ({
-    onShowPackageDetails,
-  }: {
-    onShowPackageDetails: (pkg: StoreSelectedPackage) => void;
-  }) => (
-    <dialog data-testid="speed-calculator-mock">
-      Speed Calculator Mock
-      <button
-        onClick={() =>
-          onShowPackageDetails({
-            frontendIdentifier: "test-package",
-            frontendTitle: "test-package",
-            krakenProductCode: "TEST-CODE",
-            termMonths: 24,
-            selectionIdentifier: "test-selection",
-            installationRequired: false,
-            appliedPromotionUUIDs: null,
-            prices: {
-              basePrice: 3000,
-              discountedPrice: 3000,
-              annualPriceRise: null,
-            },
-            speeds: {
-              download: 150,
-              upload: 30,
-            },
-            extras: null,
-            offers: null,
-            id: null,
-          } as StoreSelectedPackage)
-        }
-      >
-        Show Package Details
-      </button>
-    </dialog>
-  ),
-}));
-
-vi.mock(
-  "@/screens/PackageSelection/components/PackageSelectionDetails",
-  () => ({
-    PackageSelectionDetails: ({
-      packageDetails,
-      handlePackageSelection,
-    }: {
-      packageDetails: StoreSelectedPackage;
-      handlePackageSelection: (pkg: StoreSelectedPackage) => void;
-    }) => (
-      <div data-testid="package-selection-details">
-        <div data-testid="package-name">
-          {packageDetails.speeds.download}Mbps
-        </div>
-        <div data-testid="package-contract-length">
-          {packageDetails.termMonths}
-        </div>
-        <button
-          data-testid="package-selection-button"
-          onClick={() =>
-            handlePackageSelection(packageDetails as StoreSelectedPackage)
-          }
-        >
-          Add to basket
-        </button>
-      </div>
-    ),
-  }),
-);
-
 describe("ChooseYourPackage", () => {
   const mockBasketResponse = {
     id: "basket-123",
     locked: false,
     product: {
-      quoteLookup: { value: "quote-123", relationTo: "newSaleQuoteLookups" },
+      quoteLookup: {
+        value: "quote-123",
+        relationTo: "newSaleQuoteLookups" as const,
+      },
       selectionIdentifier: "product-selection-123",
     },
     updatedAt: "2025-01-01T00:00:00.000Z",
     createdAt: "2025-01-01T00:00:00.000Z",
+  };
+
+  const mockStore = {
+    selectPackage: vi.fn(),
+    setBasket: vi.fn(),
+    setSoftCreditCheck: vi.fn(),
+    quoteResponse: mockQuoteResponse,
+  };
+
+  const mockRouter = {
+    push: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    replace: vi.fn(),
+    prefetch: vi.fn(),
   };
 
   beforeEach(() => {
@@ -378,6 +382,8 @@ describe("ChooseYourPackage", () => {
     mockCreateBasket.mockResolvedValue({
       basket: mockBasketResponse,
     });
+    mockUseJoinFlowStore.mockReturnValue(mockStore);
+    mockUseRouter.mockReturnValue(mockRouter);
   });
 
   afterAll(() => {
@@ -413,7 +419,7 @@ describe("ChooseYourPackage", () => {
     const packageCards = screen.getAllByTestId("select-package");
     await userEvent.click(packageCards[0]);
 
-    expect(mockSelectPackage).toHaveBeenCalled();
+    expect(mockStore.selectPackage).toHaveBeenCalled();
 
     await waitFor(() => {
       expect(mockCreateBasket).toHaveBeenCalledWith({
@@ -427,12 +433,8 @@ describe("ChooseYourPackage", () => {
       });
     });
 
-    await waitFor(() => {
-      expect(mockSetBasket).toHaveBeenCalled();
-      expect(mockRouterPush).toHaveBeenCalledWith(
-        "/join-flow/personal-details",
-      );
-    });
+    expect(mockStore.setBasket).toHaveBeenCalled();
+    expect(mockRouter.push).toHaveBeenCalledWith("/join-flow/personal-details");
   });
 
   it("renders the toggle switch with correct initial state", () => {
@@ -502,7 +504,7 @@ describe("ChooseYourPackage", () => {
     const addToBasketButton = screen.getByTestId("package-selection-button");
     await userEvent.click(addToBasketButton);
 
-    expect(mockSelectPackage).toHaveBeenCalled();
-    expect(mockRouterPush).toHaveBeenCalledWith("/join-flow/personal-details");
+    expect(mockStore.selectPackage).toHaveBeenCalled();
+    expect(mockRouter.push).toHaveBeenCalledWith("/join-flow/personal-details");
   });
 });

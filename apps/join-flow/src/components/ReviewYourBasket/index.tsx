@@ -8,7 +8,8 @@ import { createEeroOptions } from "@/lib/createEeroOptions";
 import { getCICS } from "@/services/helpers/getCICS";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import useJoinFlowStore, {
-  StoreSelectedPackage,
+  type Offer,
+  type StoreSelectedPackage,
 } from "@/store/useJoinFlowStore";
 
 interface ReviewYourBasketProps {
@@ -83,7 +84,7 @@ export const ReviewYourBasket = ({
             })) || null,
           id: extra.id || null,
         })) || null,
-      offers: product.offers || null,
+      offers: (product.offers as Offer[]) || null,
       id: product.id || null,
     }));
   }, [quoteResponse]);

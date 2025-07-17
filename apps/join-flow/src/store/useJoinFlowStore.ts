@@ -138,38 +138,39 @@ export type AccessibilityCommunicationPreferences = {
   contactPreferences: ContactPreference;
 };
 
-export type GiftcardCampaign = {
+type Promotion = {
   id: string;
-  name: string;
-  campaignIdentifier: string;
-  updatedAt: string;
-  createdAt: string;
-};
-
-export type Promotion = {
-  id: string;
-  name: string;
-  krakenPromotionCode: string;
   term?: "wholeContract" | null;
   value?:
     | (
         | {
             value: number;
             id?: string | null;
-            blockName?: string | null;
             blockType: "percentageBased";
           }
         | {
             value: number;
             id?: string | null;
-            blockName?: string | null;
             blockType: "fixedValue";
           }
       )[]
     | null;
-  updatedAt: string;
-  createdAt: string;
 };
+
+export type Offer =
+  | {
+      blockType: "giftCardBlock";
+      value: number;
+    }
+  | {
+      blockType: "promotionBlock";
+      promotion: Promotion;
+    }
+  | {
+      blockType: "billCreditBlock";
+      value: number;
+      isDiscretionary?: boolean | null;
+    };
 
 export type StoreSelectedPackage = {
   krakenProductCode: string;
@@ -215,30 +216,7 @@ export type StoreSelectedPackage = {
         id?: string | null;
       }[]
     | null;
-  offers?:
-    | (
-        | {
-            campaign: string | GiftcardCampaign;
-            value: number;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: "giftCardBlock";
-          }
-        | {
-            promotion: string | Promotion;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: "promotionBlock";
-          }
-        | {
-            value: number;
-            isDiscretionary?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: "billCreditBlock";
-          }
-      )[]
-    | null;
+  offers?: Offer[] | null;
   id?: string | null;
 };
 

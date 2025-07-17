@@ -9,6 +9,7 @@ export { InfoIcon } from "./InfoIcon";
 export { LoadingEgg } from "./LoadingEgg";
 export { Minus } from "./Minus";
 export { Plus } from "./Plus";
+export { Present } from "./Present";
 export { RadioIcon } from "./Radio";
 export { Tag } from "./Tag";
 export { Tick } from "./Tick";

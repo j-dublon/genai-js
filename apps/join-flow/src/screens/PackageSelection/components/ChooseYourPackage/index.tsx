@@ -3,7 +3,8 @@
 import { FullScreenModal } from "@react-component-library/ui";
 import { ToggleSwitch, useScrollable } from "@react-component-library/ui";
 import useJoinFlowStore, {
-  StoreSelectedPackage,
+  type Offer,
+  type StoreSelectedPackage,
 } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useMemo, useRef, useState } from "react";
@@ -30,7 +31,6 @@ export const ChooseYourPackage = () => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const [is24Month, setIs24Month] = useState(true);
   const [modalContent, setModalContent] =
     useState<ModalContent>("speed-calculator");
   const [packageDetails, setPackageDetails] =
@@ -78,27 +78,33 @@ export const ChooseYourPackage = () => {
             })) || null,
           id: extra.id || null,
         })) || null,
-      offers: product.offers || null,
+      offers: (product.offers as Offer[]) || null,
       id: product.id || null,
     }));
   }, [quoteResponse]);
 
-  const {
-    toggleSwitchLabels,
-    pageTitle,
-    pageSubtitle,
-    packageDetailsModalTitle,
-    promotionText,
-    promotionActive,
-  } = packageSelectionPageText;
-  const { calculatorModalTitle, title, subtitle, speedCalculatorButtonText } =
-    speedCalculatorText;
+  const hasOnly12MonthPackages = storeSelectedPackages.every(
+    (pkg) => pkg.termMonths === 12,
+  );
+  const hasOnly24MonthPackages = storeSelectedPackages.every(
+    (pkg) => pkg.termMonths === 24,
+  );
+  const [is24Month, setIs24Month] = useState(!hasOnly12MonthPackages);
 
   const filteredPackages = storeSelectedPackages
     .filter((pkg) => pkg.termMonths === (is24Month ? 24 : 12))
     .sort((a, b) => a.speeds.download - b.speeds.download);
 
   const topSpeedPackage = useTopSpeedPackage(filteredPackages);
+
+  const {
+    toggleSwitchLabels,
+    pageTitle,
+    pageSubtitle,
+    packageDetailsModalTitle,
+  } = packageSelectionPageText;
+  const { calculatorModalTitle, title, subtitle, speedCalculatorButtonText } =
+    speedCalculatorText;
 
   const handleToggleSwitch = (isOn: boolean) => {
     setIs24Month(isOn);
@@ -218,15 +224,19 @@ export const ChooseYourPackage = () => {
             {pageTitle}
           </h2>
           <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-center">
-            <p className="leading-[1.6] text-xs md:text-sm font-semibold">
-              {pageSubtitle}
-            </p>
-            <ToggleSwitch
-              leftLabel={toggleSwitchLabels.left}
-              rightLabel={toggleSwitchLabels.right}
-              isOn={is24Month}
-              onChange={setIs24Month}
-            />
+            {!hasOnly12MonthPackages && !hasOnly24MonthPackages && (
+              <>
+                <p className="leading-[1.6] text-xs md:text-sm font-semibold">
+                  {pageSubtitle}
+                </p>
+                <ToggleSwitch
+                  leftLabel={toggleSwitchLabels.left}
+                  rightLabel={toggleSwitchLabels.right}
+                  isOn={is24Month}
+                  onChange={setIs24Month}
+                />
+              </>
+            )}
             {filteredPackages.length > 1 && (
               <button
                 onClick={() => handleOpenModal("speed-calculator")}
@@ -263,13 +273,6 @@ export const ChooseYourPackage = () => {
                 featurePackage={
                   pkg.frontendIdentifier === "900-12" ||
                   pkg.frontendIdentifier === "900-24"
-                }
-                promotion={
-                  promotionActive &&
-                  (pkg.frontendIdentifier === "900-12" ||
-                    pkg.frontendIdentifier === "900-24")
-                    ? promotionText
-                    : undefined
                 }
               />
             ))}

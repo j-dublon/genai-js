@@ -2,6 +2,7 @@ import { PromotionCard } from "@react-component-library/ui";
 import { ArrowWithCircle } from "@react-component-library/ui/icons";
 
 import { convertPenceToPounds } from "@/hooks/usePricingCalculations";
+import { createPromotionPillText } from "@/lib/createPromotionPillText";
 import { packageSelectionPageText } from "@/screens/PackageSelection/components/ChooseYourPackage/ChooseYourPackageProps";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
@@ -13,7 +14,6 @@ interface PackageCardProps {
   buttonText: string;
   className?: string;
   featurePackage?: boolean;
-  promotion?: string;
 }
 
 export const PackageCard = ({
@@ -24,7 +24,6 @@ export const PackageCard = ({
   buttonText,
   className = "",
   featurePackage = false,
-  promotion,
 }: PackageCardProps) => {
   const features = [
     {
@@ -42,6 +41,7 @@ export const PackageCard = ({
   ];
 
   const additionalPrices: { price: number; label: string; date: string }[] = [];
+  const promotionPillsText = createPromotionPillText(pkg.offers);
 
   if (pkg.prices.annualPriceRise?.[0]?.price) {
     additionalPrices.push({
@@ -74,7 +74,7 @@ export const PackageCard = ({
       tint={tint}
       className={className}
       featured={featurePackage}
-      promotionText={promotion}
+      promotionPillsText={promotionPillsText}
       data={{ ...pkg, id: pkg.id ?? undefined }}
     />
   );

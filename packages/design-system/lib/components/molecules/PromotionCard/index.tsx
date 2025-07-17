@@ -1,4 +1,5 @@
 import { InfoIcon } from "@icons/InfoIcon";
+import { Present } from "@icons/Present";
 import { Button } from "@lib/components/atoms/Button";
 import { format } from "date-fns";
 import { ReactNode } from "react";
@@ -21,16 +22,20 @@ export interface FeatureItem {
   unit?: string;
 }
 
-const PromotionBadge = ({ text }: { text: string }) => {
-  const mobile = "ds:top-[-16px] ds:right-[10px] ds:w-[115px] ds:h-[32px]";
-  const desktop =
-    "ds:md:top-[-25px] ds:md:right-5 ds:md:w-[170px] ds:md:h-[50px]";
+const PromotionBadge = ({
+  text,
+  showIcon = true,
+}: {
+  text: string;
+  showIcon?: boolean;
+}) => {
   return (
     <div
       aria-label="Promotion"
-      className={`ds:absolute ds:bg-offer-gradient ds:rounded-full ds:flex ds:items-center ds:justify-center ${mobile} ${desktop}`}
+      className="ds:flex ds:min-w-[115px] ds:flex-shrink-0 ds:items-center ds:justify-center ds:gap-1 ds:rounded-full ds:bg-offer-gradient ds:px-4 ds:py-2 ds:align-middle"
     >
-      <span className="ds:leading-[1.6] ds:text-xxs ds:md:text-sm ds:font-semibold ds:text-core-black">
+      <span className="ds:hidden ds:md:block">{showIcon && <Present />}</span>
+      <span className="ds:text-xxs ds:leading-[1.6] ds:font-semibold ds:text-core-black ds:md:text-xs">
         {text}
       </span>
     </div>
@@ -86,7 +91,7 @@ interface PromotionCardProps {
   tint: ColorTint;
   className?: string;
   featured?: boolean;
-  promotionText?: string;
+  promotionPillsText?: string[];
 
   data?: CardData;
 }
@@ -131,7 +136,7 @@ export const PromotionCard = ({
   tint,
   className = "",
   featured = false,
-  promotionText,
+  promotionPillsText,
   data,
 }: PromotionCardProps) => {
   const getBorderClasses = (isFeatured: boolean) =>
@@ -147,21 +152,33 @@ export const PromotionCard = ({
   return (
     <div
       aria-label={`${heading} card`}
-      className={`ds:relative ds:mb-4 ds:mt-4 ds:md:mt-[25px] ds:flex-shrink-0 ds:w-[260px] ds:md:w-[346px] ds:rounded-lg ds:flex ds:flex-col ds:border-2 ds:group ${getBorderClasses(featured)} ${className}`}
+      className={`ds:group ds:relative ds:mt-4 ds:mb-4 ds:flex ds:min-w-[260px] ds:flex-shrink-0 ds:flex-col ds:rounded-lg ds:border-2 ds:md:mt-[25px] ds:md:min-w-[346px] ${getBorderClasses(featured)} ${className}`}
     >
-      {promotionText && <PromotionBadge text={promotionText} />}
-
+      {promotionPillsText && promotionPillsText.length === 1 && (
+        <div className="ds:absolute ds:top-[-16px] ds:right-[10px] ds:flex ds:flex-col ds:gap-1 ds:md:top-[-25px] ds:md:right-5">
+          <PromotionBadge text={promotionPillsText[0]} />
+        </div>
+      )}
       <div
-        className={`ds:flex-shrink-0 ds:h-[104px] ds:md:h-[142px] ds:p-4 ds:md:p-6 ds:rounded-t-lg ${cardColors[tint].dark} ds:border-b-2 ${getBorderBottomClasses(featured)}`}
+        className={`ds:flex ds:flex-shrink-0 ds:flex-col ds:gap-2 ds:rounded-t-lg ds:p-4 ds:md:flex-row ds:md:p-6 ${cardColors[tint].dark} ds:border-b-2 ${getBorderBottomClasses(featured)}`}
       >
-        <h2 className="ds:font-semibold ds:text-3xl ds:md:text-5xl ds:leading-[1.4] ds:md:leading-[1.2]">
-          {heading}
-        </h2>
-        {subtitle && (
-          <p className="ds:font-medium ds:text-sm ds:md:text-md ds:leading-[1.4] ds:md:leading-[1.5]">
-            {subtitle}
-          </p>
-        )}
+        <div className="ds:flex ds:flex-col ds:gap-1">
+          <h2 className="ds:text-3xl ds:leading-[1.4] ds:font-semibold ds:md:text-5xl ds:md:leading-[1.2]">
+            {heading}
+          </h2>
+          {subtitle && (
+            <p className="ds:text-sm ds:leading-[1.4] ds:font-medium ds:md:text-md ds:md:leading-[1.5]">
+              {subtitle}
+            </p>
+          )}
+        </div>
+        <div className="ds:flex ds:flex-row ds:gap-2 ds:self-center ds:md:flex-col">
+          {promotionPillsText &&
+            promotionPillsText.length > 1 &&
+            promotionPillsText.map((text, index) => (
+              <PromotionBadge key={index} text={text} showIcon={false} />
+            ))}
+        </div>
       </div>
 
       {features.length > 0 && (

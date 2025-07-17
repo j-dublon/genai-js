@@ -11,8 +11,6 @@ export const packageSelectionPageText = {
     right: "24-months",
   },
   promotionSubtitle: "Full fibre speed",
-  promotionText: "3 months free",
-  promotionActive: true,
   promotionDetailsButton: "Is this plan for me?",
 };
 
