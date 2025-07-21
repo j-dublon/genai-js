@@ -241,79 +241,79 @@ export const ChooseYourPackage = () => {
         slides={slidesWithAssetPath}
       />
       <section
-      className="bg-ui-grey-100 py-10 md:py-20"
-      aria-label="Choose Your Package"
-    >
-      <div className="px-mobile sm:px-tablet lg:px-desktop">
-        <div className="flex flex-col gap-4 md:gap-8 pb-6 md:pb-10 mx-auto md:max-w-[1152px]">
-          <h2 className="text-[26px] md:text-3xl md:leading-[1.4] font-semibold">
-            {pageTitle}
-          </h2>
-          <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-center">
-          {!hasOnly12MonthPackages && !hasOnly24MonthPackages && (
-              <>
-                <p className="leading-[1.6] text-xs md:text-sm font-semibold">
-                  {pageSubtitle}
-                </p>
-                <ToggleSwitch
-                  leftLabel={toggleSwitchLabels.left}
-                  rightLabel={toggleSwitchLabels.right}
-                  isOn={is24Month}
-                  onChange={setIs24Month}
+        className="bg-ui-grey-100 py-10 md:py-20"
+        aria-label="Choose Your Package"
+      >
+        <div className="px-mobile sm:px-tablet lg:px-desktop">
+          <div className="flex flex-col gap-4 md:gap-8 pb-6 md:pb-10 mx-auto md:max-w-[1152px]">
+            <h2 className="text-[26px] md:text-3xl md:leading-[1.4] font-semibold">
+              {pageTitle}
+            </h2>
+            <div className="flex flex-col md:flex-row gap-4 md:gap-6 md:items-center">
+              {!hasOnly12MonthPackages && !hasOnly24MonthPackages && (
+                <>
+                  <p className="leading-[1.6] text-xs md:text-sm font-semibold">
+                    {pageSubtitle}
+                  </p>
+                  <ToggleSwitch
+                    leftLabel={toggleSwitchLabels.left}
+                    rightLabel={toggleSwitchLabels.right}
+                    isOn={is24Month}
+                    onChange={setIs24Month}
+                  />
+                </>
+              )}
+              {filteredPackages.length > 1 && (
+                <button
+                  onClick={() => handleOpenModal("speed-calculator")}
+                  className="w-fit text-ui-link underline cursor-pointer leading-[1.4] md:leading-[1.6] text-xs md:text-sm font-medium bg-transparent border-0 p-0"
+                  aria-label="Open speed calculator modal"
+                >
+                  {speedCalculatorButtonText}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+        <div
+          ref={scrollContainerRef}
+          className={`flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pl-mobile sm:pl-tablet lg:px-desktop ${isMouseDown ? "cursor-grabbing" : "cursor-grab"}`}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
+          onMouseMove={onMouseMove}
+        >
+          <div className="mx-auto md:max-w-[1152px] w-full">
+            <div className="flex gap-3 md:gap-6 lg:gap-13 flex-row-reverse md:flex-row justify-end md:justify-start pr-mobile sm:pr-tablet md:pr-desktop">
+              <div className="pr-3 md:hidden block" />
+              {filteredPackages.map((pkg, index) => (
+                //to do: The feature package depends needs to be changed on offer or promotion
+                <PackageCard
+                  key={pkg.id}
+                  pkg={pkg}
+                  onPackageSelect={handlePackageSelection}
+                  onViewDetails={(pkg: StoreSelectedPackage) =>
+                    handleOpenModal("package-details", pkg)
+                  }
+                  buttonText={packageSelectionPageText.buttonText}
+                  tint={getTint(index)}
+                  featurePackage={
+                    pkg.frontendIdentifier === "900-12" ||
+                    pkg.frontendIdentifier === "900-24"
+                  }
                 />
-              </>
-            )}
-            {filteredPackages.length > 1 && (
-              <button
-                onClick={() => handleOpenModal("speed-calculator")}
-                className="w-fit text-ui-link underline cursor-pointer leading-[1.4] md:leading-[1.6] text-xs md:text-sm font-medium bg-transparent border-0 p-0"
-                aria-label="Open speed calculator modal"
-              >
-                {speedCalculatorButtonText}
-              </button>
-            )}
+              ))}
+              <div className="md:pr-6 hidden md:block" />
+            </div>
           </div>
         </div>
-      </div>
-      <div
-        ref={scrollContainerRef}
-        className={`flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] pl-mobile sm:pl-tablet lg:px-desktop ${isMouseDown ? "cursor-grabbing" : "cursor-grab"}`}
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
-        onMouseMove={onMouseMove}
-      >
-        <div className="mx-auto md:max-w-[1152px] w-full">
-          <div className="flex gap-3 md:gap-6 lg:gap-13 flex-row-reverse md:flex-row justify-end md:justify-start pr-mobile sm:pr-tablet md:pr-desktop">
-            <div className="pr-3 md:hidden block" />
-            {filteredPackages.map((pkg, index) => (
-              //to do: The feature package depends needs to be changed on offer or promotion
-              <PackageCard
-                key={pkg.id}
-                pkg={pkg}
-                onPackageSelect={handlePackageSelection}
-                onViewDetails={(pkg: StoreSelectedPackage) =>
-                  handleOpenModal("package-details", pkg)
-                }
-                buttonText={packageSelectionPageText.buttonText}
-                tint={getTint(index)}
-                featurePackage={
-                  pkg.frontendIdentifier === "900-12" ||
-                  pkg.frontendIdentifier === "900-24"
-                }
-              />
-            ))}
-            <div className="md:pr-6 hidden md:block" />
-          </div>
-        </div>
-      </div>
-      <FullScreenModal
-        title={modalTitle}
-        modalRef={modalRef}
-        toggle={packageDetailsToggle}
-      >
-        {getModalContent()}
-      </FullScreenModal>
-    </section>
+        <FullScreenModal
+          title={modalTitle}
+          modalRef={modalRef}
+          toggle={packageDetailsToggle}
+        >
+          {getModalContent()}
+        </FullScreenModal>
+      </section>
     </>
   );
 };

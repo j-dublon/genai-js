@@ -80,7 +80,7 @@ const mockBasket = {
 
 const defaultProps = {
   eeroSelection: mockEeroSelection,
-  monthlyEeroPrice: 10,
+  monthlyEeroPrice: "10",
   eeroProducts: mockEeroProducts,
   eeroInfoText: mockEeroInfoText,
 };

@@ -49,7 +49,21 @@ describe("BasketDialog", () => {
       upload: 30,
     },
     extras: null,
-    offers: null,
+    offers: [
+      {
+        blockType: "promotionBlock",
+        promotion: {
+          id: "test-promotion-id",
+          term: "wholeContract",
+          value: [
+            {
+              blockType: "fixedValue" as const,
+              value: 3,
+            },
+          ],
+        },
+      },
+    ],
     id: "test-pkg-id",
   };
 
@@ -113,7 +127,21 @@ describe("BasketDialog", () => {
         upload: 50,
       },
       extras: null,
-      offers: null,
+      offers: [
+        {
+          blockType: "promotionBlock",
+          promotion: {
+            id: "test-promotion-id",
+            term: "wholeContract",
+            value: [
+              {
+                blockType: "fixedValue" as const,
+                value: 2,
+              },
+            ],
+          },
+        },
+      ],
       id: "test-pkg-2-id",
     },
   ];
@@ -126,15 +154,16 @@ describe("BasketDialog", () => {
   };
 
   const mockPricing = {
-    monthlyPackagePrice: 32,
-    monthlyEeroPrice: 0,
-    monthlyTotal: 32,
-    discountedPrice: 30,
-    discountedMonthlyTotal: 30,
-    predictedTotalNext: 38,
-    predictedTotalFollowing: 42,
-    nextPrice: 38,
-    followingPrice: 42,
+    monthlyPackagePrice: "32",
+    monthlyEeroPrice: "0",
+    monthlyTotal: "32",
+    discountedPrice: "30",
+    discountedMonthlyTotal: "30",
+    predictedTotalNext: "35",
+    predictedTotalFollowing: "38",
+    nextPrice: "35",
+    followingPrice: "38",
+    totalPlanSaving: "2",
     packageName: "C-300",
   };
 
@@ -209,7 +238,7 @@ describe("BasketDialog", () => {
     expect(screen.getByText(/150Mbps/)).toBeInTheDocument();
     expect(screen.getByText(/150Mbps download speed/)).toBeInTheDocument();
     expect(screen.getByText(/30Mbps upload speed/)).toBeInTheDocument();
-    expect(screen.getByText(/24 months/)).toBeInTheDocument();
+    expect(screen.getByText("24 months")).toBeInTheDocument();
   });
 
   it("should display the change plan option", async () => {
@@ -289,15 +318,16 @@ describe("BasketDialog", () => {
 
     renderComponent({
       pricing: {
-        monthlyPackagePrice: 32,
-        monthlyEeroPrice: 5,
-        monthlyTotal: 37,
-        discountedPrice: 32,
-        discountedMonthlyTotal: 37,
-        predictedTotalNext: 43,
-        predictedTotalFollowing: 47,
-        nextPrice: 38,
-        followingPrice: 42,
+        monthlyPackagePrice: "32",
+        monthlyEeroPrice: "5",
+        monthlyTotal: "37",
+        discountedPrice: "32",
+        discountedMonthlyTotal: "37",
+        predictedTotalNext: "43",
+        predictedTotalFollowing: "47",
+        nextPrice: "38",
+        followingPrice: "42",
+        totalPlanSaving: "0",
         packageName: "C-300",
       },
     });
@@ -325,7 +355,7 @@ describe("BasketDialog", () => {
     // Test for package price with discount suffix
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£30/month for the first 3 months";
+        return element?.textContent === "£30/month for the first 24 months";
       }),
     ).toBeInTheDocument();
 
@@ -339,20 +369,20 @@ describe("BasketDialog", () => {
     // Test for package price after discount period
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£32/month after discounted period";
+        return element?.textContent === "£32/month afterwards";
       }),
     ).toBeInTheDocument();
 
     // Test for future pricing
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£38/month from April 2026";
+        return element?.textContent === "£35/month from April 2026";
       }),
     ).toBeInTheDocument();
 
     expect(
       screen.getByText((content, element) => {
-        return element?.textContent === "£42/month from April 2027";
+        return element?.textContent === "£38/month from April 2027";
       }),
     ).toBeInTheDocument();
   });

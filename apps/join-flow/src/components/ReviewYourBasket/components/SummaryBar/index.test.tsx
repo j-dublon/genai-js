@@ -78,7 +78,19 @@ describe("SummaryBar", () => {
   const mockProps = {
     selectedPackage: mockSelectedPackage,
     isDialogOpen: false,
-    predictedTotalNext: 45,
+    formattedPricing: {
+      discountedPrice: "39",
+      monthlyPackagePrice: "42",
+      nextPrice: "45",
+      followingPrice: "48",
+      totalPlanSaving: "3",
+      monthlyEeroPrice: "0",
+      monthlyTotal: "42",
+      discountedMonthlyTotal: "39",
+      predictedTotalNext: "45",
+      predictedTotalFollowing: "48",
+      packageName: "150Mbps",
+    },
     openDialog: vi.fn(),
   };
 
@@ -103,7 +115,7 @@ describe("SummaryBar", () => {
       screen.getByText(/150Mbps upload & download speed/),
     ).toBeInTheDocument();
 
-    expect(screen.getByText(/12\/month/)).toBeInTheDocument();
+    expect(screen.getByText(/12\-month/)).toBeInTheDocument();
     expect(screen.getByText(/£39/)).toBeInTheDocument();
 
     const monthlyElements = screen.getAllByText(/\/month/);
@@ -154,13 +166,7 @@ describe("SummaryBar", () => {
       },
     };
 
-    render(
-      <SummaryBar
-        {...mockProps}
-        selectedPackage={customPackage}
-        predictedTotalNext={48}
-      />,
-    );
+    render(<SummaryBar {...mockProps} selectedPackage={customPackage} />);
 
     expect(
       screen.getByText(customPackage.frontendIdentifier),
@@ -169,22 +175,7 @@ describe("SummaryBar", () => {
       screen.getByText(/300Mbps upload & download speed/),
     ).toBeInTheDocument();
 
-    expect(screen.getByText(/24\/month/)).toBeInTheDocument();
+    expect(screen.getByText(/24\-month/)).toBeInTheDocument();
     expect(screen.getByText(/£45/)).toBeInTheDocument();
-  });
-
-  it("handles price conversion correctly", () => {
-    const packageWithOddPrice: StoreSelectedPackage = {
-      ...mockSelectedPackage,
-      prices: {
-        basePrice: 3300,
-        discountedPrice: 3300,
-        annualPriceRise: null,
-      },
-    };
-
-    render(<SummaryBar {...mockProps} selectedPackage={packageWithOddPrice} />);
-
-    expect(screen.getByText(/£33/)).toBeInTheDocument();
   });
 });

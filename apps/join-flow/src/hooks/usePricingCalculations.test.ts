@@ -27,6 +27,21 @@ describe("usePricingCalculations", () => {
     termMonths: 18,
     selectionIdentifier: "superfast-67",
     installationRequired: false,
+    offers: [
+      {
+        blockType: "promotionBlock",
+        promotion: {
+          id: "test-promotion-id",
+          term: "wholeContract",
+          value: [
+            {
+              blockType: "fixedValue" as const,
+              value: 4,
+            },
+          ],
+        },
+      },
+    ],
   };
 
   const mockEeroProduct: EeroProduct = {
@@ -38,10 +53,11 @@ describe("usePricingCalculations", () => {
 
   describe("convertPenceToPounds", () => {
     it("should convert pence to pounds correctly", () => {
-      expect(convertPenceToPounds(3000)).toBe(30);
-      expect(convertPenceToPounds(500)).toBe(5);
-      expect(convertPenceToPounds(0)).toBe(0);
-      expect(convertPenceToPounds(100)).toBe(1);
+      expect(convertPenceToPounds(3000)).toBe("30");
+      expect(convertPenceToPounds(500)).toBe("5");
+      expect(convertPenceToPounds(0)).toBe("0");
+      expect(convertPenceToPounds(100)).toBe("1");
+      expect(convertPenceToPounds(150)).toBe("1.50");
     });
   });
 
@@ -50,15 +66,16 @@ describe("usePricingCalculations", () => {
       const { result } = renderHook(() => usePricingCalculations(null, null));
 
       expect(result.current).toEqual({
-        monthlyPackagePrice: 0,
-        discountedPrice: 0,
-        nextPrice: 0,
-        followingPrice: 0,
-        monthlyEeroPrice: 0,
-        monthlyTotal: 0,
-        discountedMonthlyTotal: 0,
-        predictedTotalNext: 0,
-        predictedTotalFollowing: 0,
+        monthlyPackagePrice: "0",
+        discountedPrice: "0",
+        nextPrice: "0",
+        followingPrice: "0",
+        monthlyEeroPrice: "0",
+        monthlyTotal: "0",
+        discountedMonthlyTotal: "0",
+        predictedTotalNext: "0",
+        predictedTotalFollowing: "0",
+        totalPlanSaving: "0",
         packageName: "",
       });
     });
@@ -71,15 +88,16 @@ describe("usePricingCalculations", () => {
       );
 
       expect(result.current).toEqual({
-        monthlyPackagePrice: 30,
-        discountedPrice: 25.99,
-        nextPrice: 33,
-        followingPrice: 36,
-        monthlyEeroPrice: 0,
-        monthlyTotal: 30,
-        discountedMonthlyTotal: 25.99,
-        predictedTotalNext: 33,
-        predictedTotalFollowing: 36,
+        monthlyPackagePrice: "30",
+        discountedPrice: "25.99",
+        nextPrice: "33",
+        followingPrice: "36",
+        monthlyEeroPrice: "0",
+        monthlyTotal: "30",
+        discountedMonthlyTotal: "25.99",
+        predictedTotalNext: "33",
+        predictedTotalFollowing: "36",
+        totalPlanSaving: "96.24",
         packageName: "67Mbps",
       });
     });
@@ -90,15 +108,16 @@ describe("usePricingCalculations", () => {
       );
 
       expect(result.current).toEqual({
-        monthlyPackagePrice: 30,
-        discountedPrice: 25.99,
-        nextPrice: 33,
-        followingPrice: 36,
-        monthlyEeroPrice: 5,
-        monthlyTotal: 35,
-        discountedMonthlyTotal: 30.99,
-        predictedTotalNext: 38,
-        predictedTotalFollowing: 41,
+        monthlyPackagePrice: "30",
+        discountedPrice: "25.99",
+        nextPrice: "33",
+        followingPrice: "36",
+        monthlyEeroPrice: "5",
+        monthlyTotal: "35",
+        discountedMonthlyTotal: "30.99",
+        predictedTotalNext: "38",
+        predictedTotalFollowing: "41",
+        totalPlanSaving: "96.24",
         packageName: "67Mbps",
       });
     });
@@ -116,12 +135,12 @@ describe("usePricingCalculations", () => {
         usePricingCalculations(packageWithoutRises, null),
       );
 
-      expect(result.current.nextPrice).toBe(30);
-      expect(result.current.followingPrice).toBe(30);
-      expect(result.current.predictedTotalNext).toBe(30);
-      expect(result.current.predictedTotalFollowing).toBe(30);
-      expect(result.current.discountedPrice).toBe(25.99);
-      expect(result.current.discountedMonthlyTotal).toBe(25.99);
+      expect(result.current.nextPrice).toBe("30");
+      expect(result.current.followingPrice).toBe("30");
+      expect(result.current.predictedTotalNext).toBe("30");
+      expect(result.current.predictedTotalFollowing).toBe("30");
+      expect(result.current.discountedPrice).toBe("25.99");
+      expect(result.current.discountedMonthlyTotal).toBe("25.99");
     });
 
     it("should handle package with only one annual price rise", () => {
@@ -137,10 +156,10 @@ describe("usePricingCalculations", () => {
         usePricingCalculations(packageWithOneRise, null),
       );
 
-      expect(result.current.nextPrice).toBe(33);
-      expect(result.current.followingPrice).toBe(33);
-      expect(result.current.discountedPrice).toBe(25.99);
-      expect(result.current.discountedMonthlyTotal).toBe(25.99);
+      expect(result.current.nextPrice).toBe("33");
+      expect(result.current.followingPrice).toBe("33");
+      expect(result.current.discountedPrice).toBe("25.99");
+      expect(result.current.discountedMonthlyTotal).toBe("25.99");
     });
 
     it("should handle empty annual price rises array", () => {
@@ -156,10 +175,10 @@ describe("usePricingCalculations", () => {
         usePricingCalculations(packageWithEmptyRises, null),
       );
 
-      expect(result.current.nextPrice).toBe(30);
-      expect(result.current.followingPrice).toBe(30);
-      expect(result.current.discountedPrice).toBe(25.99);
-      expect(result.current.discountedMonthlyTotal).toBe(25.99);
+      expect(result.current.nextPrice).toBe("30");
+      expect(result.current.followingPrice).toBe("30");
+      expect(result.current.discountedPrice).toBe("25.99");
+      expect(result.current.discountedMonthlyTotal).toBe("25.99");
     });
   });
 
@@ -174,11 +193,11 @@ describe("usePricingCalculations", () => {
         usePricingCalculations(mockPackage, eeroWithDecimalPrice),
       );
 
-      expect(result.current.monthlyEeroPrice).toBe(5.67);
-      expect(result.current.monthlyPackagePrice).toBe(30);
-      expect(result.current.discountedPrice).toBe(25.99);
-      expect(result.current.monthlyTotal).toBe(35.67);
-      expect(result.current.discountedMonthlyTotal).toBe(31.66);
+      expect(result.current.monthlyEeroPrice).toBe("5.67");
+      expect(result.current.monthlyPackagePrice).toBe("30");
+      expect(result.current.discountedPrice).toBe("25.99");
+      expect(result.current.monthlyTotal).toBe("35.67");
+      expect(result.current.discountedMonthlyTotal).toBe("31.66");
     });
 
     it("should handle zero price eero", () => {
@@ -191,8 +210,8 @@ describe("usePricingCalculations", () => {
         usePricingCalculations(mockPackage, freeEero),
       );
 
-      expect(result.current.monthlyEeroPrice).toBe(0);
-      expect(result.current.monthlyTotal).toBe(30);
+      expect(result.current.monthlyEeroPrice).toBe("0");
+      expect(result.current.monthlyTotal).toBe("30");
     });
   });
 

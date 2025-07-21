@@ -36,8 +36,8 @@ export const reviewYourBasketText = {
   installationText: "Installation / set-up fee",
   yourTotal: "Your total",
   eeroRouters: "eero routers",
-  discountPeriodText: "/month for the first 3 months",
+  discountPeriodText: "/month for the first TERM_LENGTH months",
   afterText: "/month afterwards",
-  afterDiscountPeriod: "/month after discounted period",
-  offerText: "You're saving £100 on this plan",
+  savingText: "You're saving £TOTAL_PLAN_SAVING on this plan",
+  promotionPillText: "PROMOTION_TEXT is in the bag",
 };

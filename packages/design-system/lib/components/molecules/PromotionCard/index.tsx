@@ -78,10 +78,11 @@ interface PromotionCardProps {
 
   features?: FeatureItem[];
 
-  mainPrice: number;
+  mainPrice: string;
+  basePrice?: string;
   currency?: string;
   priceLabel?: string;
-  additionalPrices?: { price: number; label: string; date?: string }[];
+  additionalPrices?: { price: string; label: string; date?: string }[];
 
   buttonText: string;
   onButtonClick: (data?: CardData) => void;
@@ -106,7 +107,7 @@ export const PriceDetail = ({
   label,
   date,
   currency = "£",
-}: { price: number; label: string; date?: string } & { currency?: string }) => {
+}: { price: string; label: string; date?: string } & { currency?: string }) => {
   return (
     <div className="ds:flex ds:flex-col">
       <hr className="ds:border-ui-grey-300" />
@@ -126,6 +127,7 @@ export const PromotionCard = ({
   subtitle,
   features = [],
   mainPrice,
+  basePrice,
   currency = "£",
   priceLabel = "/month",
   additionalPrices = [],
@@ -192,13 +194,21 @@ export const PromotionCard = ({
       )}
 
       <div className="ds:flex-shrink-0 ds:h-[263px] ds:md:h-[348px] ds:p-4 ds:md:p-6 ds:bg-core-white ds:rounded-b-lg ds:flex-grow ds:flex ds:flex-col">
-        <p className={`${TEXT_CLASS} ds:pb-2`}>
-          {currency}
-          <span className="ds:font-semibold ds:text-3xl ds:md:text-5xl ds:leading-[1.2]">
-            {mainPrice}
-          </span>
-          {priceLabel}
-        </p>
+        <div className="ds:flex ds:flex-row ds:justify-between ds:py-2 ds:md:py-3 ds:font-normal ds:text-xs ds:md:text-sm ds:leading-[1.6]">
+          <p className={`${TEXT_CLASS}`}>
+            {currency}
+            <span className="ds:font-semibold ds:text-3xl ds:md:text-5xl ds:leading-[1.2]">
+              {mainPrice}
+            </span>
+            {priceLabel}
+          </p>
+          {basePrice && (
+            <p className="ds:font-semibold ds:self-end">
+              {currency}
+              {basePrice}/month
+            </p>
+          )}
+        </div>
 
         {additionalPrices.map((priceDetail, index) => (
           <PriceDetail key={index} {...priceDetail} currency={currency} />

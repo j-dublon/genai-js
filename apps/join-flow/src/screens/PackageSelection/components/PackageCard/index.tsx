@@ -2,7 +2,10 @@ import { PromotionCard } from "@react-component-library/ui";
 import { ArrowWithCircle } from "@react-component-library/ui/icons";
 
 import { convertPenceToPounds } from "@/hooks/usePricingCalculations";
-import { createPromotionPillText } from "@/lib/createPromotionPillText";
+import {
+  createDiscountPriceLabel,
+  createPromotionPillText,
+} from "@/lib/createOfferContent";
 import { packageSelectionPageText } from "@/screens/PackageSelection/components/ChooseYourPackage/ChooseYourPackageProps";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
@@ -40,8 +43,9 @@ export const PackageCard = ({
     },
   ];
 
-  const additionalPrices: { price: number; label: string; date: string }[] = [];
+  const additionalPrices: { price: string; label: string; date: string }[] = [];
   const promotionPillsText = createPromotionPillText(pkg.offers);
+  const discountPriceLabel = createDiscountPriceLabel(pkg.offers);
 
   if (pkg.prices.annualPriceRise?.[0]?.price) {
     additionalPrices.push({
@@ -63,9 +67,16 @@ export const PackageCard = ({
       heading={pkg.frontendTitle}
       subtitle={packageSelectionPageText.promotionSubtitle}
       features={features}
-      mainPrice={convertPenceToPounds(pkg.prices.basePrice)}
+      mainPrice={convertPenceToPounds(
+        pkg.prices.discountedPrice ?? pkg.prices.basePrice,
+      )}
+      basePrice={
+        pkg.prices.discountedPrice !== pkg.prices.basePrice
+          ? convertPenceToPounds(pkg.prices.basePrice)
+          : ""
+      }
       currency="£"
-      priceLabel="/month"
+      priceLabel={discountPriceLabel ? discountPriceLabel : "/month"}
       additionalPrices={additionalPrices}
       buttonText={buttonText}
       onButtonClick={() => onPackageSelect(pkg)}

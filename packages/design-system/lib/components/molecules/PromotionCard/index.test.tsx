@@ -15,7 +15,7 @@ vi.mock("@icons/Present", () => ({
 describe("PromotionCard", () => {
   const defaultProps = {
     heading: "Test Package",
-    mainPrice: 25,
+    mainPrice: "25",
     buttonText: "Select Package",
     onButtonClick: vi.fn(),
     tint: "pink" as const,
@@ -89,8 +89,8 @@ describe("PromotionCard", () => {
 
   describe("Additional prices", () => {
     const additionalPrices = [
-      { price: 30, label: "After 12 months" },
-      { price: 35, label: "After 24 months", date: "2024-01-15" },
+      { price: "30", label: "After 12 months" },
+      { price: "35", label: "After 24 months", date: "2024-01-15" },
     ];
 
     it("renders additional prices", () => {
@@ -191,7 +191,7 @@ describe("PromotionCard", () => {
 
 describe("PriceDetail", () => {
   const defaultProps = {
-    price: 30,
+    price: "30",
     label: "After 12 months",
   };
 

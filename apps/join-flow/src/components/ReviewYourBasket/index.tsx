@@ -187,7 +187,7 @@ export const ReviewYourBasket = ({
     <div className="pt-32">
       <SummaryBar
         selectedPackage={selectedPackage}
-        predictedTotalNext={pricing.nextPrice}
+        formattedPricing={pricing}
         openDialog={openDialog}
         isDialogOpen={isDialogOpen}
       />

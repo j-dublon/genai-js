@@ -2,21 +2,22 @@ import { Button } from "@react-component-library/ui";
 import { ChevronVerticalWithCircle } from "@react-component-library/ui/icons";
 
 import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import type { PricingCalculations } from "@/hooks/usePricingCalculations";
+import { createPromotionPillText } from "@/lib/createOfferContent";
 import { formatDisplayDateMonthYear, nextApril } from "@/lib/formatDate";
-import { formatPriceHideZeroPence } from "@/lib/formatPriceHideZeroPence";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 interface SummaryBarProps {
   selectedPackage: StoreSelectedPackage | null;
+  formattedPricing: PricingCalculations;
   isDialogOpen: boolean;
-  predictedTotalNext: number;
   openDialog: () => void;
 }
 
 export const SummaryBar: React.FC<SummaryBarProps> = ({
   selectedPackage,
+  formattedPricing,
   isDialogOpen,
-  predictedTotalNext,
   openDialog,
 }) => {
   if (!selectedPackage) {
@@ -25,6 +26,12 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
 
   const annualPriceRise = selectedPackage.prices?.annualPriceRise ?? [];
   const nextPriceDate = annualPriceRise[0]?.date;
+
+  const nonDiscountOffers = selectedPackage.offers?.filter(
+    (offer) => offer.blockType !== "promotionBlock",
+  );
+
+  const promotionText = createPromotionPillText(nonDiscountOffers)?.[0];
 
   return (
     <div
@@ -62,23 +69,24 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
 
             <div className="whitespace-nowrap font-semibold text-sm lg:text-md hidden lg:flex lg:flex-col">
               <p>
-                {selectedPackage.termMonths}/month{" "}
+                {selectedPackage.termMonths}-month{" "}
                 <span className="font-normal text-xs lg:text-sm">contract</span>
               </p>
-              <div className="text-xxs leading-[1.6]">
-                {/* TODO: This needs to come from offers on the selectedPackage */}
-                <p>£150 Amazon gift card included</p>
+              <div className="text-xxs leading-[1.6] min-h-[1.2rem]">
+                {promotionText && <p>{promotionText} included</p>}
               </div>
             </div>
 
             <div className="flex flex-col whitespace-nowrap font-semibold text-sm lg:text-md">
               <p>
-                {formatPriceHideZeroPence(selectedPackage.prices.basePrice)}
+                £
+                {formattedPricing.discountedPrice ||
+                  formattedPricing.monthlyPackagePrice}
                 <span className="font-normal text-xs lg:text-sm">/month</span>
               </p>
               <div className="text-xxs hidden lg:flex leading-[1.6]">
                 <p>
-                  £{predictedTotalNext}/month from{" "}
+                  £{formattedPricing.nextPrice}/month from{" "}
                   {nextPriceDate
                     ? formatDisplayDateMonthYear(nextPriceDate)
                     : nextApril(new Date())}

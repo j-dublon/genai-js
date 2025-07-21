@@ -10,12 +10,10 @@ import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
 
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
-const formatPrice = (amount: number): string => `£${amount}`;
-
 interface LineItemProps {
   title: string;
   description?: string;
-  price: number | string;
+  price: string;
   isIncluded?: boolean;
 }
 
@@ -31,26 +29,20 @@ const LineItem: React.FC<LineItemProps> = ({
       {description && <p className="text-sm text-ui-grey-500">{description}</p>}
     </div>
     <div className="text-right">
-      <p className="font-bold">
-        {isIncluded
-          ? "Included"
-          : typeof price === "number"
-            ? formatPrice(price)
-            : price}
-      </p>
+      <p className="font-bold">{isIncluded ? "Included" : `£${price}`}</p>
     </div>
   </div>
 );
 
 interface PriceProjectionProps {
   label: string;
-  price: number;
+  price: string;
 }
 
 const PriceProjection: React.FC<PriceProjectionProps> = ({ label, price }) => (
   <div className="flex justify-between items-center mb-2">
     <p className="text-sm text-ui-grey-500">{label}</p>
-    <p className="font-bold">{formatPrice(price)}</p>
+    <p className="font-bold">£{price}</p>
   </div>
 );
 
@@ -103,14 +95,14 @@ export const PaymentSummary: React.FC = () => {
           title={eeroSelectionWithContent.heading}
           description={eeroSelectionWithContent.description}
           price={pricing.monthlyEeroPrice}
-          isIncluded={pricing.monthlyEeroPrice === 0}
+          isIncluded={pricing.monthlyEeroPrice === "0"}
         />
       )}
 
       <div className="border-t border-ui-grey-300 pt-4 mt-4">
         <div className="flex justify-between items-center">
           <h3 className="font-bold">{totalMonthlyPaymentTitle}</h3>
-          <p className="font-bold">{formatPrice(pricing.monthlyTotal)}</p>
+          <p className="font-bold">£{pricing.monthlyTotal}</p>
         </div>
       </div>
 

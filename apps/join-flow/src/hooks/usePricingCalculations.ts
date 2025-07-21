@@ -1,23 +1,37 @@
 import { StoreSelectedPackage } from "@store/useJoinFlowStore";
 import { useMemo } from "react";
 
+import { TermLength } from "@/lib/createOfferContent";
 import { EeroProduct } from "@/store/useJoinFlowStore";
 
-export const convertPenceToPounds = (pence: number): number => pence / 100;
+export const convertPenceToPounds = (pence: number): string =>
+  (pence / 100).toFixed(2).replace(/\.00/, "");
 
 const generatePackageName = (speeds: { download: number }): string =>
   `${speeds.download}Mbps`;
 
 export interface PricingCalculations {
-  monthlyPackagePrice: number;
-  discountedPrice: number;
-  nextPrice: number;
-  followingPrice: number;
-  monthlyEeroPrice: number;
-  monthlyTotal: number;
-  discountedMonthlyTotal: number;
-  predictedTotalNext: number;
-  predictedTotalFollowing: number;
+  // base price of core broadband product
+  monthlyPackagePrice: string;
+  // discounted price of core broadband product
+  discountedPrice: string;
+  // price of core broadband product after first year
+  nextPrice: string;
+  // price of core broadband product after second year
+  followingPrice: string;
+  // price of eero products
+  monthlyEeroPrice: string;
+  // total price of core broadband product and eero products
+  monthlyTotal: string;
+  // total price of core broadband product and eero products after discount
+  discountedMonthlyTotal: string;
+  // total price of core broadband product and eero products after first year
+  predictedTotalNext: string;
+  // total price of core broadband product and eero products after second year
+  predictedTotalFollowing: string;
+  // total saving of core broadband product with discount
+  totalPlanSaving: string;
+  // download speed of core broadband product (150Mbps)
   packageName: string;
 }
 
@@ -28,15 +42,16 @@ export const usePricingCalculations = (
   return useMemo(() => {
     if (!selectedPackage) {
       return {
-        monthlyPackagePrice: 0,
-        discountedPrice: 0,
-        nextPrice: 0,
-        followingPrice: 0,
-        monthlyEeroPrice: 0,
-        monthlyTotal: 0,
-        discountedMonthlyTotal: 0,
-        predictedTotalNext: 0,
-        predictedTotalFollowing: 0,
+        monthlyPackagePrice: "0",
+        discountedPrice: "0",
+        nextPrice: "0",
+        followingPrice: "0",
+        monthlyEeroPrice: "0",
+        monthlyTotal: "0",
+        discountedMonthlyTotal: "0",
+        predictedTotalNext: "0",
+        predictedTotalFollowing: "0",
+        totalPlanSaving: "0",
         packageName: "",
       };
     }
@@ -57,7 +72,7 @@ export const usePricingCalculations = (
 
     const monthlyEeroPrice = eeroSelection
       ? convertPenceToPounds(eeroSelection.price)
-      : 0;
+      : "0";
 
     // Calculate totals in pence first, then convert to pounds to avoid floating point precision issues
     const eeroSelectionPence = eeroSelection ? eeroSelection.price : 0;
@@ -80,6 +95,21 @@ export const usePricingCalculations = (
       followingPricePence + eeroSelectionPence,
     );
 
+    let totalPlanSaving = "0";
+    const discountOffer = selectedPackage.offers?.find(
+      (offer) => offer.blockType === "promotionBlock",
+    );
+
+    if (discountOffer) {
+      const discountTermLength = discountOffer.promotion.term;
+
+      totalPlanSaving = convertPenceToPounds(
+        (selectedPackage.prices.basePrice -
+          selectedPackage.prices.discountedPrice) *
+          Number(TermLength[discountTermLength || "wholeContract"]),
+      );
+    }
+
     const packageName = generatePackageName(selectedPackage.speeds);
 
     return {
@@ -92,6 +122,7 @@ export const usePricingCalculations = (
       discountedMonthlyTotal,
       predictedTotalNext,
       predictedTotalFollowing,
+      totalPlanSaving,
       packageName,
     };
   }, [selectedPackage, eeroSelection]);

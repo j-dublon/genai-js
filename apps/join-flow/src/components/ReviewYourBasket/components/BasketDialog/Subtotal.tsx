@@ -3,6 +3,7 @@ import { Tag } from "@react-component-library/ui/icons";
 
 import type { PricingCalculations } from "@/hooks/usePricingCalculations";
 import type { EeroOption } from "@/lib/createEeroOptions";
+import { createPromotionPillText, TermLength } from "@/lib/createOfferContent";
 import { formatDisplayDateMonthYear } from "@/lib/formatDate";
 import type {
   EeroProduct,
@@ -11,13 +12,11 @@ import type {
 
 export const Subtotal = ({
   pricing,
-  offerText,
   pricingText,
   selectedPackage,
   eeroSelection,
   eeroProducts,
 }: {
-  offerText?: string;
   selectedPackage: StoreSelectedPackage;
   eeroSelection: EeroProduct;
   eeroProducts: EeroOption[];
@@ -31,8 +30,9 @@ export const Subtotal = ({
     installationText: string;
     fullFiber: string;
     discountPeriodText: string;
-    afterDiscountPeriod: string;
     afterText: string;
+    savingText: string;
+    promotionPillText: string;
   };
 }) => {
   const {
@@ -43,7 +43,6 @@ export const Subtotal = ({
     fullFiber,
     installationText,
     contractText,
-    afterDiscountPeriod,
     discountPeriodText,
     afterText,
   } = pricingText;
@@ -53,6 +52,7 @@ export const Subtotal = ({
     monthlyPackagePrice,
     monthlyEeroPrice,
     monthlyTotal,
+    discountedMonthlyTotal,
     predictedTotalNext,
     predictedTotalFollowing,
   } = pricing;
@@ -63,6 +63,15 @@ export const Subtotal = ({
     selectedPackage.prices.annualPriceRise?.[0]?.date;
   const followingYearsIncreaseDate =
     selectedPackage.prices.annualPriceRise?.[1]?.date;
+
+  const promotionPillText = createPromotionPillText(
+    selectedPackage.offers,
+    "Monthly discount",
+  );
+
+  const discountOfferTerm = selectedPackage.offers?.find(
+    (offer) => offer.blockType === "promotionBlock",
+  )?.promotion.term;
 
   const hasDiscountedPrice = discountedPrice !== monthlyPackagePrice;
 
@@ -88,7 +97,12 @@ export const Subtotal = ({
             <p>
               £{hasDiscountedPrice ? discountedPrice : monthlyPackagePrice}
               <span className="font-normal">
-                {hasDiscountedPrice ? discountPeriodText : perMonth}
+                {hasDiscountedPrice
+                  ? discountPeriodText.replace(
+                      "TERM_LENGTH",
+                      TermLength[discountOfferTerm || "wholeContract"],
+                    )
+                  : perMonth}
               </span>
             </p>
             {hasDiscountedPrice && (
@@ -120,21 +134,38 @@ export const Subtotal = ({
         >
           <div className="flex flex-col md:w-1/2 gap-4">
             <p>{subtitle}</p>
-            {offerText && (
+            {pricing.totalPlanSaving !== "0" && (
               <ColorPill
                 icon={<Tag />}
-                colorPillText={offerText}
+                colorPillText={pricingText.savingText.replace(
+                  "TOTAL_PLAN_SAVING",
+                  pricing.totalPlanSaving,
+                )}
                 backgroundColor="white"
                 size="small"
                 className="bg-offer-gradient"
                 textClassName="font-medium text-xxs md:text-xs"
               />
             )}
+            {promotionPillText.length > 0 &&
+              promotionPillText.map((text, index) => (
+                <ColorPill
+                  key={index}
+                  icon={<Tag />}
+                  colorPillText={pricingText.promotionPillText.replace(
+                    "PROMOTION_TEXT",
+                    text,
+                  )}
+                  backgroundColor="secondary-teal"
+                  size="small"
+                  textClassName="font-medium text-xxs md:text-xs"
+                />
+              ))}
           </div>
           <div className="flex flex-col md:w-1/2 gap-2">
             <p>
-              £{monthlyTotal}
-              <span className="font-normal">{`${hasDiscountedPrice ? afterDiscountPeriod : perMonth}`}</span>
+              £{discountedMonthlyTotal || monthlyTotal}
+              <span className="font-normal">{`${perMonth}`}</span>
             </p>
             {nextYearsIncreaseDate && (
               <p>

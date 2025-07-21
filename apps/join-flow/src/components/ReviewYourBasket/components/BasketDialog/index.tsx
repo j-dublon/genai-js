@@ -112,8 +112,6 @@ export const BasketDialog = ({
                         selectedPackage={selectedPackage}
                         eeroSelection={eeroSelection}
                         eeroProducts={eeroProducts}
-                        // TODO: offer text should be based on any applicable offers?
-                        offerText={reviewYourBasketText.offerText}
                         pricingText={{
                           title: reviewYourBasketText.yourSubtotal,
                           subtitle: reviewYourBasketText.yourTotal,
@@ -126,8 +124,9 @@ export const BasketDialog = ({
                           discountPeriodText:
                             reviewYourBasketText.discountPeriodText,
                           afterText: reviewYourBasketText.afterText,
-                          afterDiscountPeriod:
-                            reviewYourBasketText.afterDiscountPeriod,
+                          savingText: reviewYourBasketText.savingText,
+                          promotionPillText:
+                            reviewYourBasketText.promotionPillText,
                         }}
                       />
                     </>

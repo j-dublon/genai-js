@@ -9,7 +9,7 @@ import useJoinFlowStore, { type EeroProduct } from "@/store/useJoinFlowStore";
 
 interface EeroInfoProps {
   eeroSelection: EeroProduct;
-  monthlyEeroPrice: number;
+  monthlyEeroPrice: string;
   eeroProducts: EeroOption[];
   eeroInfoText: {
     title: string;

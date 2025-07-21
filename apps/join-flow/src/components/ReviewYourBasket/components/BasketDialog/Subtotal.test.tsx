@@ -20,8 +20,9 @@ describe("Subtotal", () => {
     installationText: "Installation / set-up fee",
     fullFiber: "full fibre",
     discountPeriodText: "/month for the first 6 months",
-    afterDiscountPeriod: "/month after discounted period",
     afterText: "/month afterwards",
+    savingText: "You're saving £TOTAL_PLAN_SAVING on this plan",
+    promotionPillText: "PROMOTION_TEXT is in the bag",
   };
 
   const mockSelectedPackage: StoreSelectedPackage = {
@@ -53,7 +54,21 @@ describe("Subtotal", () => {
       upload: 30,
     },
     extras: null,
-    offers: null,
+    offers: [
+      {
+        blockType: "promotionBlock",
+        promotion: {
+          id: "test-promotion-id",
+          term: "wholeContract",
+          value: [
+            {
+              blockType: "fixedValue" as const,
+              value: 2,
+            },
+          ],
+        },
+      },
+    ],
     id: "test-pkg-id",
   };
 
@@ -106,15 +121,16 @@ describe("Subtotal", () => {
 
   describe("when product has discounted pricing", () => {
     const mockDiscountedPricing: PricingCalculations = {
-      monthlyPackagePrice: 32,
-      discountedPrice: 30,
-      monthlyEeroPrice: 0,
-      monthlyTotal: 32,
-      discountedMonthlyTotal: 30,
-      predictedTotalNext: 38,
-      predictedTotalFollowing: 42,
-      nextPrice: 35,
-      followingPrice: 38,
+      monthlyPackagePrice: "32",
+      discountedPrice: "30",
+      monthlyEeroPrice: "0",
+      monthlyTotal: "32",
+      discountedMonthlyTotal: "30",
+      predictedTotalNext: "38",
+      predictedTotalFollowing: "42",
+      nextPrice: "35",
+      followingPrice: "38",
+      totalPlanSaving: "48",
       packageName: "150Mbps",
     };
 
@@ -167,7 +183,7 @@ describe("Subtotal", () => {
 
       expect(
         screen.getByText((content, element) => {
-          return element?.textContent === "£32/month after discounted period";
+          return element?.textContent === "£32/month afterwards";
         }),
       ).toBeInTheDocument();
     });
@@ -203,13 +219,12 @@ describe("Subtotal", () => {
           selectedPackage={mockSelectedPackage}
           eeroSelection={mockEeroSelection}
           pricingText={mockPricingText}
-          offerText="You're saving £100 on this plan"
           eeroProducts={mockEeroProducts}
         />,
       );
 
       expect(
-        screen.getByText("You're saving £100 on this plan"),
+        screen.getByText("You're saving £48 on this plan"),
       ).toBeInTheDocument();
     });
 
@@ -232,15 +247,16 @@ describe("Subtotal", () => {
 
   describe("when product has no discount", () => {
     const mockNonDiscountedPricing: PricingCalculations = {
-      monthlyPackagePrice: 32,
-      discountedPrice: 32, // Same as monthlyPackagePrice = no discount
-      monthlyEeroPrice: 0,
-      monthlyTotal: 32,
-      discountedMonthlyTotal: 32,
-      predictedTotalNext: 38,
-      predictedTotalFollowing: 42,
-      nextPrice: 35,
-      followingPrice: 38,
+      monthlyPackagePrice: "32",
+      discountedPrice: "32", // Same as monthlyPackagePrice = no discount
+      monthlyEeroPrice: "0",
+      monthlyTotal: "32",
+      discountedMonthlyTotal: "32",
+      predictedTotalNext: "38",
+      predictedTotalFollowing: "42",
+      nextPrice: "35",
+      followingPrice: "38",
+      totalPlanSaving: "0",
       packageName: "150Mbps",
     };
 
@@ -281,15 +297,16 @@ describe("Subtotal", () => {
   describe("eero pricing section", () => {
     it("should display correct eero count and pricing", () => {
       const mockPricingWithEero: PricingCalculations = {
-        monthlyPackagePrice: 32,
-        discountedPrice: 32,
-        monthlyEeroPrice: 5,
-        monthlyTotal: 37,
-        discountedMonthlyTotal: 37,
-        predictedTotalNext: 43,
-        predictedTotalFollowing: 46,
-        nextPrice: 35,
-        followingPrice: 38,
+        monthlyPackagePrice: "32",
+        discountedPrice: "32",
+        monthlyEeroPrice: "5",
+        monthlyTotal: "37",
+        discountedMonthlyTotal: "37",
+        predictedTotalNext: "43",
+        predictedTotalFollowing: "46",
+        nextPrice: "35",
+        followingPrice: "38",
+        totalPlanSaving: "0",
         packageName: "150Mbps",
       };
 
@@ -314,15 +331,16 @@ describe("Subtotal", () => {
   describe("package information", () => {
     it("should display package details correctly", () => {
       const mockPricing: PricingCalculations = {
-        monthlyPackagePrice: 32,
-        discountedPrice: 32,
-        monthlyEeroPrice: 0,
-        monthlyTotal: 32,
-        discountedMonthlyTotal: 32,
-        predictedTotalNext: 38,
-        predictedTotalFollowing: 42,
-        nextPrice: 35,
-        followingPrice: 38,
+        monthlyPackagePrice: "32",
+        discountedPrice: "32",
+        monthlyEeroPrice: "0",
+        monthlyTotal: "32",
+        discountedMonthlyTotal: "32",
+        predictedTotalNext: "38",
+        predictedTotalFollowing: "42",
+        nextPrice: "35",
+        followingPrice: "38",
+        totalPlanSaving: "0",
         packageName: "150Mbps",
       };
 
@@ -366,15 +384,16 @@ describe("Subtotal", () => {
       };
 
       const mockPricing: PricingCalculations = {
-        monthlyPackagePrice: 32,
-        discountedPrice: 32,
-        monthlyEeroPrice: 0,
-        monthlyTotal: 32,
-        discountedMonthlyTotal: 32,
-        predictedTotalNext: 32,
-        predictedTotalFollowing: 32,
-        nextPrice: 32,
-        followingPrice: 32,
+        monthlyPackagePrice: "32",
+        discountedPrice: "32",
+        monthlyEeroPrice: "0",
+        monthlyTotal: "32",
+        discountedMonthlyTotal: "32",
+        predictedTotalNext: "32",
+        predictedTotalFollowing: "32",
+        nextPrice: "32",
+        followingPrice: "32",
+        totalPlanSaving: "0",
         packageName: "150Mbps",
       };
 
