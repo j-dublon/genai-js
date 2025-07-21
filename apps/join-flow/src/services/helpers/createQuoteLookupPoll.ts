@@ -1,7 +1,9 @@
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError, ValidationError } from "@/services/payloadTypes";
-
-import { QuoteLookupSuccess } from "../payloadTypes";
+import {
+  FetchError,
+  type QuoteLookupSuccess,
+  squidAPI,
+  ValidationError,
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface QuoteLookupResult {
   products?: QuoteLookupSuccess["response"]["products"];

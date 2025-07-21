@@ -1,5 +1,8 @@
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError } from "@/services/payloadTypes";
+import {
+  FetchError,
+  squidAPI,
+} from "@cuckoointernet/util-squid-network-requests";
+
 import type { AffiliateSession } from "@/store/useJoinFlowStore";
 
 type DefaultAffiliateSessionResult =

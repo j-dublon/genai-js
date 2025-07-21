@@ -1,10 +1,9 @@
 "use client";
 
+import { RegisterOfInterestSubmission } from "@cuckoointernet/util-squid-network-requests";
 import { useMemo } from "react";
 
 import useJoinFlowStore from "@/store/useJoinFlowStore";
-
-import { RegisterOfInterestSubmission } from "../../payload-types";
 
 export const useRoiAddress = ():
   | RegisterOfInterestSubmission["inputs"]["address"]

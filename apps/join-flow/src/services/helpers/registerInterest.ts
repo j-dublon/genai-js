@@ -1,10 +1,10 @@
-import { squidAPI } from "@/services/payloadClient";
 import {
   FetchError,
   RegisterOfInterestSubmissionsInputs,
   RegisterOfInterestSubmissionsSuccess,
+  squidAPI,
   ValidationError,
-} from "@/services/payloadTypes";
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface RegisterInterestResult {
   roi?: RegisterOfInterestSubmissionsSuccess["documentID"];

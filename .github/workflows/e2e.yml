@@ -34,6 +34,8 @@ jobs:
 
       - name: Install node_modules
         id: INSTALL_NODE_MODULES
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.SQUID_UTIL_TOKEN }}
         uses: ./.github/actions/install-node-modules
 
       - name: Install playwright
@@ -44,7 +46,7 @@ jobs:
         uses: ./.github/actions/build-apps
 
       - name: Run E2E Tests
-        env: 
+        env:
           HOME: /root
         run: npx playwright test
         working-directory: ./apps/${{ matrix.app }}

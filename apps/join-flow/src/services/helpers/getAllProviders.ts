@@ -1,6 +1,8 @@
-import type { KrakenSwitchMatchServiceProvider } from "../../../payload-types";
-import { squidAPI } from "../payloadClient";
-import { FetchError } from "../payloadTypes";
+import {
+  FetchError,
+  type KrakenSwitchMatchServiceProvider,
+  squidAPI,
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface GetAllProvidersResult {
   providers?: KrakenSwitchMatchServiceProvider[];

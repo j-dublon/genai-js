@@ -27,6 +27,8 @@ jobs:
 
       - name: Install node_modules
         id: INSTALL_NODE_MODULES
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.SQUID_UTIL_TOKEN }}
         uses: ./.github/actions/install-node-modules
 
       - name: Build apps

@@ -1,5 +1,8 @@
-import { squidAPI } from "../payloadClient";
-import { FetchError, ValidationError } from "../payloadTypes";
+import {
+  FetchError,
+  squidAPI,
+  ValidationError,
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface SendEmailCodeResult {
   success?: boolean;

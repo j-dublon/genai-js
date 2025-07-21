@@ -1,6 +1,8 @@
 ## Getting Started
 
-First, run the development server:
+You will need a NODE_AUTH_TOKEN (provided by one of the team) before running npm install.
+
+Run the development server:
 
 ```bash
 npm run dev

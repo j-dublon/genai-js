@@ -10,7 +10,7 @@ import { accessibilityModalText } from "./Accessibility/AccessibilityProps";
 import { PaymentConfirmation } from "./index";
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
-vi.mock("@/services/payloadClient", () => ({
+vi.mock("@cuckoointernet/util-squid-network-requests", () => ({
   squidAPI: {
     getBasket: vi.fn().mockReturnValue({
       id: "123",

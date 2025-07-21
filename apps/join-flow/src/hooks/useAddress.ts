@@ -1,9 +1,9 @@
 "use client";
 
+import { AddressLookupSuccess } from "@cuckoointernet/util-squid-network-requests";
 import { useEffect, useState } from "react";
 
 import { getAddressesByPostcode } from "@/services/helpers/addressLookup";
-import { AddressLookupSuccess } from "@/services/payloadTypes";
 import type { ExtendedStoreAddress } from "@/store/useJoinFlowStore";
 
 interface UseAddressProps {

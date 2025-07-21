@@ -1,15 +1,22 @@
+import {
+  FetchError,
+  squidAPI,
+} from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError } from "@/services/payloadTypes";
 
 import { getDefaultAffiliateSession } from "./getDefaultAffiliate";
 
-vi.mock("@/services/payloadClient", () => ({
-  squidAPI: {
-    getDefaultAffiliate: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      getDefaultAffiliate: vi.fn(),
+    },
+  };
+});
 const mockGetDefaultAffiliate = vi.mocked(squidAPI.getDefaultAffiliate);
 
 describe("getDefaultAffiliateSession", () => {

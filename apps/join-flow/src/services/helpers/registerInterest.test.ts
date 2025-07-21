@@ -1,15 +1,23 @@
+import {
+  FetchError,
+  squidAPI,
+  ValidationError,
+} from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { registerInterest } from "./registerInterest";
 
-vi.mock("@/services/payloadClient", () => ({
-  squidAPI: {
-    createRegisterOfInterestSubmissionSync: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      createRegisterOfInterestSubmissionSync: vi.fn(),
+    },
+  };
+});
 
 const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 

@@ -1,18 +1,24 @@
-import { describe, expect, it, vi } from "vitest";
-
-import { squidAPI } from "../payloadClient";
 import {
   FetchError,
   RunCreditCheckResponse,
+  squidAPI,
   ValidationError,
-} from "../payloadTypes";
+} from "@cuckoointernet/util-squid-network-requests";
+import { describe, expect, it, vi } from "vitest";
+
 import { runCreditCheck } from "./runCreditCheck";
 
-vi.mock("../payloadClient", () => ({
-  squidAPI: {
-    runCreditCheck: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      runCreditCheck: vi.fn(),
+    },
+  };
+});
 
 describe("runCreditCheck", () => {
   const mockCreditCheckResponse: RunCreditCheckResponse = {

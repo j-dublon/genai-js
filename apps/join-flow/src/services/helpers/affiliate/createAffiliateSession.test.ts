@@ -1,15 +1,23 @@
+import {
+  FetchError,
+  squidAPI,
+  ValidationError,
+} from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { createAffiliateSession } from "./createAffiliateSession";
 
-vi.mock("@/services/payloadClient", () => ({
-  squidAPI: {
-    createAffiliateSessionSync: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      createAffiliateSessionSync: vi.fn(),
+    },
+  };
+});
 const mockCreateAffiliateSessionSync = vi.mocked(
   squidAPI.createAffiliateSessionSync,
 );

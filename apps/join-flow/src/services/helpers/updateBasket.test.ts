@@ -1,16 +1,23 @@
-import { StoreBasket } from "@store/useJoinFlowStore";
+import {
+  type Basket,
+  squidAPI,
+} from "@cuckoointernet/util-squid-network-requests";
+import type { StoreBasket } from "@store/useJoinFlowStore";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { squidAPI } from "@/services/payloadClient";
-
-import { Basket } from "../../../payload-types";
 import { updateBasket } from "./updateBasket";
 
-vi.mock("@/services/payloadClient", () => ({
-  squidAPI: {
-    updateBasket: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      updateBasket: vi.fn(),
+    },
+  };
+});
 
 const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 

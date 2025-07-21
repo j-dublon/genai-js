@@ -1,9 +1,9 @@
+import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
 import { getGoLiveDates } from "@/services/helpers/getGoLiveDates";
-import { squidAPI } from "@/services/payloadClient";
 
-vi.mock("@/services/payloadClient");
+vi.mock("@cuckoointernet/util-squid-network-requests");
 
 describe("getGoLiveDates", () => {
   const mockedSquidAPI = squidAPI as unknown as {

@@ -1,9 +1,8 @@
+import { InitialVulnerabilityAndAccessibility } from "@cuckoointernet/util-squid-network-requests";
 import type {
   AccessibilityCommunicationPreferences,
   AccessibilityRequirements,
 } from "@store/useJoinFlowStore";
-
-import { InitialVulnerabilityAndAccessibility } from "@/services/payloadTypes";
 
 function buildSelectedObject<T extends Record<string, boolean | undefined>>(
   obj: T,

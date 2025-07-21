@@ -1,14 +1,22 @@
+import {
+  FetchError,
+  squidAPI,
+} from "@cuckoointernet/util-squid-network-requests";
 import { describe, expect, it, vi } from "vitest";
 
-import { squidAPI } from "../payloadClient";
-import { FetchError } from "../payloadTypes";
 import { getAllProviders } from "./getAllProviders";
 
-vi.mock("../payloadClient", () => ({
-  squidAPI: {
-    getSwitchMatchServiceProviders: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      getSwitchMatchServiceProviders: vi.fn(),
+    },
+  };
+});
 
 describe("getAllProviders", () => {
   const mockProviders = [

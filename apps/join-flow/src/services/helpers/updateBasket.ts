@@ -1,7 +1,9 @@
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError, ValidationError } from "@/services/payloadTypes";
-
-import { Basket } from "../../../payload-types";
+import {
+  type Basket,
+  FetchError,
+  squidAPI,
+  ValidationError,
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface UpdateBasketResult {
   basket?: Basket;

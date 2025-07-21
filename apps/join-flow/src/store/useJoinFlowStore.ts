@@ -1,21 +1,17 @@
 "use client";
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-
 import type {
   AffiliateSessionSuccess,
-  QuoteLookupSuccess,
-} from "@/services/payloadTypes";
-
-import {
   EngineerAppointment,
   NewSaleQuoteLookup,
+  QuoteLookupSuccess,
   RegradeQuoteLookup,
   RenewalQuoteLookup,
   SwitchMatchLookup,
   VulnerabilityAndAccessibility,
-} from "../../payload-types";
+} from "@cuckoointernet/util-squid-network-requests";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export type AffiliateSession = {
   id: string;

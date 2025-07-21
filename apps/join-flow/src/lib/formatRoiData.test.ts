@@ -1,6 +1,6 @@
+import { RegisterOfInterestSubmissionsInputs } from "@cuckoointernet/util-squid-network-requests";
 import { describe, expect, it } from "vitest";
 
-import { RegisterOfInterestSubmissionsInputs } from "@/services/payloadTypes";
 import type {
   ExpressionOfInterestFormData,
   NotReadyToJoinFormData,

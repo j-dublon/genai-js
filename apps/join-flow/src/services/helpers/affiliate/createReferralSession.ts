@@ -1,4 +1,5 @@
-import { squidAPI } from "@/services/payloadClient";
+import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
+
 import type { AffiliateSession } from "@/store/useJoinFlowStore";
 
 type CreateReferralSessionResult =

@@ -1,15 +1,23 @@
+import {
+  FetchError,
+  squidAPI,
+  ValidationError,
+} from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
-
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError, ValidationError } from "@/services/payloadTypes";
 
 import { getEngineerAppointments } from "./getEngineerAppointments";
 
-vi.mock("@/services/payloadClient", () => ({
-  squidAPI: {
-    createEngineerAppointmentSync: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      createEngineerAppointmentSync: vi.fn(),
+    },
+  };
+});
 
 describe("getEngineerAppointments", () => {
   beforeEach(() => {

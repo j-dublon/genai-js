@@ -1,20 +1,25 @@
+import {
+  type Basket,
+  FetchError,
+  squidAPI,
+  ValidationError,
+  type ValidationErrorDetail,
+} from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { squidAPI } from "@/services/payloadClient";
-import {
-  FetchError,
-  ValidationError,
-  ValidationErrorDetail,
-} from "@/services/payloadTypes";
-
-import { Basket } from "../../../payload-types";
 import { createBasket } from "./createBasket";
 
-vi.mock("@/services/payloadClient", () => ({
-  squidAPI: {
-    createBasket: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      createBasket: vi.fn(),
+    },
+  };
+});
 
 describe("createBasket", () => {
   const mockBasketData: Partial<Basket> = {

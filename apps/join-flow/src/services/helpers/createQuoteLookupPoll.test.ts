@@ -1,9 +1,9 @@
+import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createQuoteLookupPoll } from "@/services/helpers/createQuoteLookupPoll";
-import { squidAPI } from "@/services/payloadClient";
 
-vi.mock("@/services/payloadClient", () => ({
+vi.mock("@cuckoointernet/util-squid-network-requests", () => ({
   squidAPI: {
     createQuoteLookupAsync: vi.fn(),
     getQuoteLookup: vi.fn(),
@@ -18,6 +18,7 @@ describe("createQuoteLookupPoll", () => {
   const mockProducts = [
     {
       krakenProductCode: "BT-150-12M_38",
+      cuckooTradingProductID: "123",
       frontendIdentifier: "150-12",
       frontendTitle: "C-150",
       termMonths: 12,

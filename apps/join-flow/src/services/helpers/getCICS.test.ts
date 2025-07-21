@@ -1,7 +1,8 @@
-import { squidAPI } from "../payloadClient";
+import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
+
 import { CicsResponse, getCICS } from "./getCICS";
 
-vi.mock("@/services/payloadClient", () => ({
+vi.mock("@cuckoointernet/util-squid-network-requests", () => ({
   squidAPI: {
     getCICS: vi.fn(),
   },

@@ -1,5 +1,5 @@
 name: Install node_modules
-description: Install and Cache node_modules for use in later jobs
+description: Install and Cache node_modules for use in later jobs (requires SQUID_UTIL_TOKEN)
 
 outputs:
   LOCKFILE_CONTENTS_HASH:

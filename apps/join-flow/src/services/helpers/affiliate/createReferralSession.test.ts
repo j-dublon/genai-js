@@ -1,10 +1,9 @@
+import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-
-import { squidAPI } from "@/services/payloadClient";
 
 import { createReferralSession } from "./createReferralSession";
 
-vi.mock("@/services/payloadClient", () => ({
+vi.mock("@cuckoointernet/util-squid-network-requests", () => ({
   squidAPI: {
     createReferralSessionSync: vi.fn(),
     getDefaultReferralAffiliate: vi.fn(),

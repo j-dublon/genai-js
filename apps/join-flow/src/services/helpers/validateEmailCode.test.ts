@@ -1,18 +1,24 @@
-import { describe, expect, it, vi } from "vitest";
-
-import { squidAPI } from "../payloadClient";
 import {
   FetchError,
-  ValidateEmailCodeResponse,
+  squidAPI,
+  type ValidateEmailCodeResponse,
   ValidationError,
-} from "../payloadTypes";
+} from "@cuckoointernet/util-squid-network-requests";
+import { describe, expect, it, vi } from "vitest";
+
 import { validateEmailCode } from "./validateEmailCode";
 
-vi.mock("../payloadClient", () => ({
-  squidAPI: {
-    emailValidationCheckCode: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      emailValidationCheckCode: vi.fn(),
+    },
+  };
+});
 
 describe("validateEmailCode", () => {
   const mockValidateEmailCodeResponse: ValidateEmailCodeResponse = {

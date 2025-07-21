@@ -1,4 +1,4 @@
-import { squidAPI } from "@services/payloadClient";
+import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
 
 import { StoreBasket } from "@/store/useJoinFlowStore";
 

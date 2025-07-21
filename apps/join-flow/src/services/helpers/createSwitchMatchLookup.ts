@@ -1,10 +1,10 @@
-import { squidAPI } from "@/services/payloadClient";
 import {
   FetchError,
-  SwitchMatchLookupInputs,
-  SwitchMatchLookupSuccess,
+  squidAPI,
+  type SwitchMatchLookupInputs,
+  type SwitchMatchLookupSuccess,
   ValidationError,
-} from "@/services/payloadTypes";
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface CreateSwitchMatchLookupResult {
   switchMatchLookup?: SwitchMatchLookupSuccess["documentID"];

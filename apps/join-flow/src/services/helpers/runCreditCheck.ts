@@ -1,9 +1,9 @@
-import { squidAPI } from "../payloadClient";
 import {
   FetchError,
-  RunCreditCheckResponse,
+  type RunCreditCheckResponse,
+  squidAPI,
   ValidationError,
-} from "../payloadTypes";
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface RunCreditCheckResult {
   status?: RunCreditCheckResponse["status"];

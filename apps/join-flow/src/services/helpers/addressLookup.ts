@@ -1,7 +1,9 @@
-import { squidAPI } from "@/services/payloadClient";
-import { FetchError, ValidationError } from "@/services/payloadTypes";
-
-import { AddressLookupSuccess } from "../payloadTypes";
+import {
+  type AddressLookupSuccess,
+  FetchError,
+  squidAPI,
+  ValidationError,
+} from "@cuckoointernet/util-squid-network-requests";
 
 interface AddressLookupResult {
   addresses: AddressLookupSuccess["response"]["addresses"];

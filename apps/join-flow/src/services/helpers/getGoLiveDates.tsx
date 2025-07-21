@@ -1,4 +1,4 @@
-import { squidAPI } from "../payloadClient";
+import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
 
 export const getGoLiveDates = async (): Promise<string[]> => {
   try {
