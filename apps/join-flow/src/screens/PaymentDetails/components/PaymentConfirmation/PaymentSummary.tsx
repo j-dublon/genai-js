@@ -87,7 +87,7 @@ export const PaymentSummary: React.FC = () => {
 
       <LineItem
         title={pricing.packageName}
-        price={pricing.monthlyPackagePrice}
+        price={pricing.discountedPrice || pricing.monthlyPackagePrice}
       />
 
       {eeroSelectionWithContent && (
@@ -102,7 +102,9 @@ export const PaymentSummary: React.FC = () => {
       <div className="border-t border-ui-grey-300 pt-4 mt-4">
         <div className="flex justify-between items-center">
           <h3 className="font-bold">{totalMonthlyPaymentTitle}</h3>
-          <p className="font-bold">£{pricing.monthlyTotal}</p>
+          <p className="font-bold">
+            £{pricing.discountedMonthlyTotal || pricing.monthlyTotal}
+          </p>
         </div>
       </div>
 
