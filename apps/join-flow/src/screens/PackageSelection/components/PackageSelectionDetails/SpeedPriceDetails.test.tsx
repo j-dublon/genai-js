@@ -52,7 +52,7 @@ describe("SpeedPriceDetails", () => {
   };
 
   it("renders speed details correctly", () => {
-    render(<SpeedPriceDetails pkg={mockPackage} promotion={false} />);
+    render(<SpeedPriceDetails pkg={mockPackage} />);
 
     expect(screen.getByText("Our speed promise")).toBeInTheDocument();
     expect(screen.getByLabelText("Upload speed")).toHaveTextContent("20Mbps");
@@ -62,7 +62,7 @@ describe("SpeedPriceDetails", () => {
   });
 
   it("renders price details correctly without promotion", () => {
-    render(<SpeedPriceDetails pkg={mockPackage} promotion={false} />);
+    render(<SpeedPriceDetails pkg={mockPackage} />);
 
     expect(screen.getByText("What you'll be paying")).toBeInTheDocument();
     expect(screen.getByLabelText("Current monthly price")).toHaveTextContent(
@@ -77,11 +77,30 @@ describe("SpeedPriceDetails", () => {
   });
 
   it("renders price details correctly with promotion", () => {
-    render(<SpeedPriceDetails pkg={mockPackage} promotion={true} />);
+    const mockPackageWithPromotion: StoreSelectedPackage = {
+      ...mockPackage,
+      offers: [
+        {
+          blockType: "promotionBlock",
+          promotion: {
+            id: "test-promotion-id",
+            term: "wholeContract",
+            value: [
+              {
+                blockType: "fixedValue",
+                value: 2,
+              },
+            ],
+          },
+        },
+      ],
+    };
+
+    render(<SpeedPriceDetails pkg={mockPackageWithPromotion} />);
 
     expect(screen.getByText("What you'll be paying")).toBeInTheDocument();
     expect(screen.getByLabelText("Current monthly price")).toHaveTextContent(
-      "£0",
+      "£25/for 24 months",
     );
     expect(screen.getByLabelText("Price after promotion")).toHaveTextContent(
       "£25",
@@ -103,7 +122,7 @@ describe("SpeedPriceDetails", () => {
       },
     };
 
-    render(<SpeedPriceDetails pkg={packageWithoutRises} promotion={false} />);
+    render(<SpeedPriceDetails pkg={packageWithoutRises} />);
 
     expect(
       screen.queryByLabelText("Price next displayed"),
@@ -128,7 +147,7 @@ describe("SpeedPriceDetails", () => {
       },
     };
 
-    render(<SpeedPriceDetails pkg={packageWithSingleRise} promotion={false} />);
+    render(<SpeedPriceDetails pkg={packageWithSingleRise} />);
 
     expect(screen.getByLabelText("Price next displayed")).toHaveTextContent(
       "£30",

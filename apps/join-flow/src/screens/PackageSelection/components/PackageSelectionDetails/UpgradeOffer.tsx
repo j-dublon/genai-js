@@ -7,6 +7,7 @@ import {
   formatDisplayDateMonthYear,
   nextApril,
 } from "@/lib/formatDate";
+import { formatPriceHideZeroPence } from "@/lib/formatPriceHideZeroPence";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { upgradeOfferText } from "./PackageSelectionDetailsProps";
@@ -14,26 +15,27 @@ import { upgradeOfferText } from "./PackageSelectionDetailsProps";
 export const UpgradeOffer = ({
   topSpeedPackage,
   toggle,
-  offer,
   priceDifference,
   handlePackageSelection,
+  hasOnlyOneContractLengthAvailable,
 }: {
-  topSpeedPackage: StoreSelectedPackage | null;
+  topSpeedPackage: StoreSelectedPackage;
   toggle: {
     isOn: boolean;
     onChange: (isOn: boolean) => void;
     leftLabel: string;
     rightLabel: string;
   };
-  offer: boolean;
   priceDifference: number;
   handlePackageSelection: (selectedStorePackage: StoreSelectedPackage) => void;
+  hasOnlyOneContractLengthAvailable: boolean;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const pricing = usePricingCalculations(topSpeedPackage, null);
 
-  if (!topSpeedPackage || priceDifference <= 0) return null;
+  if (priceDifference <= 0) return null;
+
   const value = toggle.isOn ? toggle.rightLabel : toggle.leftLabel;
 
   const handleChange = (value: string) => {
@@ -51,30 +53,23 @@ export const UpgradeOffer = ({
     >
       <div className="flex flex-col gap-3">
         <p className="font-semibold text-lg md:text-xl md:max-w-[90%]">
-          For just £{priceDifference} more per month, you could get a super
-          speedy {topSpeedPackage.speeds.download}Mbps
+          For just {formatPriceHideZeroPence(priceDifference)} more per month,
+          you could get a super speedy {topSpeedPackage.speeds.download}Mbps
         </p>
-        {/* TO DO: We don't have offers yet, but when this gets returned change it */}
-        {offer && (
-          <p
-            className="font-medium text-sm md:text-md"
-            data-testid="upgrade-offer-subtitle"
-          >
-            {upgradeOfferText.upgradeOffer}
-          </p>
-        )}
       </div>
-      <DropdownPill
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        value={value}
-        setValue={handleChange}
-        options={[toggle.leftLabel, toggle.rightLabel]}
-      />
+      {!hasOnlyOneContractLengthAvailable && (
+        <DropdownPill
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          value={value}
+          setValue={handleChange}
+          options={[toggle.leftLabel, toggle.rightLabel]}
+        />
+      )}
       <div className="bg-core-yellow rounded-lg py-4 px-3 max-w-[272px]">
         <p className="pb-1 text-sm" data-testid="monthly-price">
           <span className="font-semibold text-xl">
-            £{pricing.monthlyPackagePrice}
+            £{pricing.discountedPrice || pricing.monthlyPackagePrice}
           </span>
           /month
         </p>

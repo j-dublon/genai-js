@@ -8,7 +8,6 @@ const defaultTickConfig = {
 } as const;
 
 const tickItems = [
-  { textInput: "First 3 months free" },
   {
     textInput: "eero Pro 6E router",
     additionalTextInput: "worth £249.00",
@@ -59,7 +58,6 @@ export const moreInformationItems = [
 ];
 
 export const upgradeOfferText = {
-  upgradeOffer: "Plus, you'll get the first 3 months free",
   hideOfferButton: "No thanks",
   upgradeButton: "Upgrade me",
 };

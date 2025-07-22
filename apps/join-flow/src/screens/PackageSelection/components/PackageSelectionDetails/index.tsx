@@ -17,13 +17,14 @@ import { UpgradeOffer } from "./UpgradeOffer";
 interface PackageSelectionDetailsProps {
   packageDetails: StoreSelectedPackage;
   handlePackageSelection: (selectedStorePackage: StoreSelectedPackage) => void;
-  topSpeedPackage: StoreSelectedPackage | null;
+  topSpeedPackage: StoreSelectedPackage;
   toggle: {
     isOn: boolean;
     onChange: (isOn: boolean) => void;
     leftLabel: string;
     rightLabel: string;
   };
+  hasOnlyOneContractLengthAvailable: boolean;
 }
 
 export const PackageSelectionDetails = ({
@@ -31,6 +32,7 @@ export const PackageSelectionDetails = ({
   handlePackageSelection,
   topSpeedPackage,
   toggle,
+  hasOnlyOneContractLengthAvailable,
 }: PackageSelectionDetailsProps) => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const { trustScore, numberOfReviews } = trustpilotRating || {};
@@ -51,10 +53,7 @@ export const PackageSelectionDetails = ({
         <div className="flex gap-10">
           <div className="flex flex-col gap-12 w-1/2">
             <EeroImage packageSpeed={packageDetails.speeds.download} />
-            <SpeedPriceDetails
-              pkg={packageDetails}
-              promotion={isHighSpeedPackage}
-            />
+            <SpeedPriceDetails pkg={packageDetails} />
           </div>
           <div className="flex flex-col gap-12 w-1/2">
             <PackageTitle pkg={packageDetails} />
@@ -79,15 +78,14 @@ export const PackageSelectionDetails = ({
               <UpgradeOffer
                 topSpeedPackage={topSpeedPackage}
                 toggle={toggle}
-                offer={
-                  topSpeedPackage?.frontendIdentifier === "900-12" ||
-                  topSpeedPackage?.frontendIdentifier === "900-24"
-                }
                 priceDifference={
-                  (topSpeedPackage?.prices.basePrice || 0) / 100 -
-                  packageDetails.prices.basePrice / 100
+                  topSpeedPackage.prices.discountedPrice -
+                  packageDetails.prices.discountedPrice
                 }
                 handlePackageSelection={handlePackageSelection}
+                hasOnlyOneContractLengthAvailable={
+                  hasOnlyOneContractLengthAvailable
+                }
               />
             )}
             {trustScore && (
@@ -119,23 +117,19 @@ export const PackageSelectionDetails = ({
             />
           </div>
         </div>
-        <SpeedPriceDetails
-          pkg={packageDetails}
-          promotion={isHighSpeedPackage}
-        />
+        <SpeedPriceDetails pkg={packageDetails} />
         {!isTopSpeedPackage && (
           <UpgradeOffer
             topSpeedPackage={topSpeedPackage}
             toggle={toggle}
-            offer={
-              topSpeedPackage?.frontendIdentifier === "900-12" ||
-              topSpeedPackage?.frontendIdentifier === "900-24"
-            }
             priceDifference={
-              (topSpeedPackage?.prices.basePrice || 0) / 100 -
-              packageDetails.prices.basePrice / 100
+              topSpeedPackage.prices.discountedPrice / 100 -
+              packageDetails.prices.discountedPrice / 100
             }
             handlePackageSelection={handlePackageSelection}
+            hasOnlyOneContractLengthAvailable={
+              hasOnlyOneContractLengthAvailable
+            }
           />
         )}
         <Button

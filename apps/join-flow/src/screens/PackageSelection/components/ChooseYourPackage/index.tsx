@@ -105,6 +105,8 @@ export const ChooseYourPackage = () => {
   const hasOnly24MonthPackages = storeSelectedPackages.every(
     (pkg) => pkg.termMonths === 24,
   );
+  const hasOnlyOneContractLengthAvailable =
+    hasOnly12MonthPackages || hasOnly24MonthPackages;
   const [is24Month, setIs24Month] = useState(!hasOnly12MonthPackages);
 
   const filteredPackages = storeSelectedPackages
@@ -118,6 +120,7 @@ export const ChooseYourPackage = () => {
     pageTitle,
     pageSubtitle,
     packageDetailsModalTitle,
+    packageDetailsModalTitleFallback,
   } = packageSelectionPageText;
   const { calculatorModalTitle, title, subtitle, speedCalculatorButtonText } =
     speedCalculatorText;
@@ -149,7 +152,9 @@ export const ChooseYourPackage = () => {
 
   const modalTitle =
     modalContent === "package-details"
-      ? packageDetailsModalTitle
+      ? hasOnlyOneContractLengthAvailable
+        ? packageDetailsModalTitleFallback
+        : packageDetailsModalTitle
       : calculatorModalTitle;
 
   const handlePackageSelection = async (
@@ -228,6 +233,9 @@ export const ChooseYourPackage = () => {
             handlePackageSelection={handlePackageSelection}
             topSpeedPackage={topSpeedPackage}
             toggle={packageDetailsToggle}
+            hasOnlyOneContractLengthAvailable={
+              hasOnlyOneContractLengthAvailable
+            }
           />
         ) : null;
     }
@@ -309,7 +317,11 @@ export const ChooseYourPackage = () => {
         <FullScreenModal
           title={modalTitle}
           modalRef={modalRef}
-          toggle={packageDetailsToggle}
+          toggle={
+            !hasOnlyOneContractLengthAvailable
+              ? packageDetailsToggle
+              : undefined
+          }
         >
           {getModalContent()}
         </FullScreenModal>

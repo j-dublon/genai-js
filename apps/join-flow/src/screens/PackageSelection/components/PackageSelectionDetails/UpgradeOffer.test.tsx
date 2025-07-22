@@ -129,26 +129,12 @@ describe("UpgradeOffer", () => {
     vi.clearAllMocks();
   });
 
-  it("should not render when topSpeedPackage is null", () => {
-    render(
-      <UpgradeOffer
-        topSpeedPackage={null}
-        toggle={mockToggle}
-        offer={true}
-        priceDifference={10}
-        handlePackageSelection={mockHandlePackageSelection}
-      />,
-    );
-
-    expect(screen.queryByTestId("upgrade-offer")).not.toBeInTheDocument();
-  });
-
   it("should not render when priceDifference is 0 or negative", () => {
     render(
       <UpgradeOffer
         topSpeedPackage={mockTopSpeedPackage}
         toggle={mockToggle}
-        offer={true}
+        hasOnlyOneContractLengthAvailable={false}
         priceDifference={0}
         handlePackageSelection={mockHandlePackageSelection}
       />,
@@ -160,7 +146,7 @@ describe("UpgradeOffer", () => {
       <UpgradeOffer
         topSpeedPackage={mockTopSpeedPackage}
         toggle={mockToggle}
-        offer={true}
+        hasOnlyOneContractLengthAvailable={false}
         priceDifference={-5}
         handlePackageSelection={mockHandlePackageSelection}
       />,
@@ -170,12 +156,12 @@ describe("UpgradeOffer", () => {
   });
 
   it("should render with correct package information", () => {
-    const mockPriceDifference = 10;
+    const mockPriceDifference = 1000;
     render(
       <UpgradeOffer
         topSpeedPackage={mockTopSpeedPackage}
         toggle={mockToggle}
-        offer={true}
+        hasOnlyOneContractLengthAvailable={false}
         priceDifference={mockPriceDifference}
         handlePackageSelection={mockHandlePackageSelection}
       />,
@@ -183,9 +169,7 @@ describe("UpgradeOffer", () => {
 
     expect(screen.getByTestId("upgrade-offer")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        new RegExp(`For just £${mockPriceDifference} more per month`),
-      ),
+      screen.getByText(new RegExp(`For just £10 more per month`)),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
@@ -199,7 +183,7 @@ describe("UpgradeOffer", () => {
       <UpgradeOffer
         topSpeedPackage={mockTopSpeedPackage}
         toggle={mockToggle}
-        offer={true}
+        hasOnlyOneContractLengthAvailable={false}
         priceDifference={10}
         handlePackageSelection={mockHandlePackageSelection}
       />,
@@ -221,7 +205,7 @@ describe("UpgradeOffer", () => {
       <UpgradeOffer
         topSpeedPackage={mockTopSpeedPackage}
         toggle={mockToggle}
-        offer={true}
+        hasOnlyOneContractLengthAvailable={false}
         priceDifference={10}
         handlePackageSelection={mockHandlePackageSelection}
       />,
@@ -239,7 +223,7 @@ describe("UpgradeOffer", () => {
       <UpgradeOffer
         topSpeedPackage={mockTopSpeedPackage}
         toggle={mockToggle}
-        offer={true}
+        hasOnlyOneContractLengthAvailable={false}
         priceDifference={10}
         handlePackageSelection={mockHandlePackageSelection}
       />,
@@ -251,36 +235,6 @@ describe("UpgradeOffer", () => {
     expect(mockHandlePackageSelection).toHaveBeenCalledWith(
       mockTopSpeedPackage,
     );
-  });
-
-  it("should show offer text when offer prop is true", () => {
-    render(
-      <UpgradeOffer
-        topSpeedPackage={mockTopSpeedPackage}
-        toggle={mockToggle}
-        offer={true}
-        priceDifference={10}
-        handlePackageSelection={mockHandlePackageSelection}
-      />,
-    );
-
-    expect(screen.getByTestId("upgrade-offer-subtitle")).toBeInTheDocument();
-  });
-
-  it("should not show offer text when offer prop is false", () => {
-    render(
-      <UpgradeOffer
-        topSpeedPackage={mockTopSpeedPackage}
-        toggle={mockToggle}
-        offer={false}
-        priceDifference={10}
-        handlePackageSelection={mockHandlePackageSelection}
-      />,
-    );
-
-    expect(
-      screen.queryByTestId("upgrade-offer-subtitle"),
-    ).not.toBeInTheDocument();
   });
 
   it("should handle missing price rises", () => {
@@ -296,7 +250,7 @@ describe("UpgradeOffer", () => {
       <UpgradeOffer
         topSpeedPackage={packageWithoutRises}
         toggle={mockToggle}
-        offer={true}
+        hasOnlyOneContractLengthAvailable={false}
         priceDifference={10}
         handlePackageSelection={mockHandlePackageSelection}
       />,

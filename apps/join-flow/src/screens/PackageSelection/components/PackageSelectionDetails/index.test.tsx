@@ -179,6 +179,7 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 
@@ -198,6 +199,7 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 
@@ -238,6 +240,7 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 
@@ -286,6 +289,7 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 
@@ -316,6 +320,7 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 
@@ -329,6 +334,7 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockSpeedyPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 
@@ -356,28 +362,13 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 
     const eeroImages = screen.getAllByTestId("eero-image");
     eeroImages.forEach((image) => {
       expect(image).toHaveTextContent("500");
-    });
-  });
-
-  it("shows promotion for high speed packages", () => {
-    render(
-      <PackageSelectionDetails
-        packageDetails={mockSpeedyPackage}
-        handlePackageSelection={mockHandlePackageSelection}
-        topSpeedPackage={mockSpeedyPackage}
-        toggle={mockToggle}
-      />,
-    );
-
-    const speedPriceDetails = screen.getAllByTestId("speed-price-details");
-    speedPriceDetails.forEach((detail) => {
-      expect(detail).toHaveTextContent("with promotion");
     });
   });
 
@@ -388,6 +379,7 @@ describe("PackageSelectionDetails", () => {
         handlePackageSelection={mockHandlePackageSelection}
         topSpeedPackage={mockPackage}
         toggle={mockToggle}
+        hasOnlyOneContractLengthAvailable={false}
       />,
     );
 

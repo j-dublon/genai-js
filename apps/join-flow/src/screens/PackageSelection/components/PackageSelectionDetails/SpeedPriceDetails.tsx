@@ -1,16 +1,11 @@
 import { Arrow } from "@react-component-library/ui/icons";
 
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
+import { TermLength } from "@/lib/createOfferContent";
 import { formatDisplayDateMonthYear } from "@/lib/formatDate";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
-export const SpeedPriceDetails = ({
-  pkg,
-  promotion,
-}: {
-  pkg: StoreSelectedPackage;
-  promotion: boolean;
-}) => {
+export const SpeedPriceDetails = ({ pkg }: { pkg: StoreSelectedPackage }) => {
   const { speeds } = pkg;
   const { download, upload } = speeds;
 
@@ -18,6 +13,10 @@ export const SpeedPriceDetails = ({
   const annualPriceRise = pkg.prices?.annualPriceRise ?? [];
   const nextPriceDate = annualPriceRise[0]?.date;
   const followingPriceDate = annualPriceRise[1]?.date;
+
+  const discountPromotion = pkg.offers?.find(
+    (offer) => offer.blockType === "promotionBlock",
+  )?.promotion;
 
   return (
     <div className="flex flex-col gap-6 pb-2 md:pb-0">
@@ -62,15 +61,18 @@ export const SpeedPriceDetails = ({
             >
               £
               <span className="font-semibold text-[26px] md:text-3xl leading-[1.5]">
-                {promotion ? "0" : pricing.monthlyPackagePrice}
+                {pricing.discountedPrice || pricing.monthlyPackagePrice}
               </span>
-              {promotion ? (
-                <span className="text-ui-grey-500">/for 3 months</span>
+              {discountPromotion ? (
+                <span className="text-ui-grey-500">
+                  /for {TermLength[discountPromotion.term || "wholeContract"]}{" "}
+                  months
+                </span>
               ) : (
                 "/monthly"
               )}
             </p>
-            {promotion && (
+            {discountPromotion && (
               <p
                 className="text-sm md:text-md leading-[1.6] md:leading-[1.5] text-core-black"
                 aria-label="Price after promotion"

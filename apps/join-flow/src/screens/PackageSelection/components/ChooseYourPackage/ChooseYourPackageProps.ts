@@ -7,6 +7,7 @@ export const packageSelectionPageText = {
   errorMessage: "Please select a package to continue",
   buttonText: "Add to bag",
   packageDetailsModalTitle: "Choose your contract length",
+  packageDetailsModalTitleFallback: "Is this plan for me?",
   toggleSwitchLabels: {
     left: "12-months",
     right: "24-months",
