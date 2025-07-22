@@ -2,9 +2,10 @@ import React from "react";
 
 interface Props {
   text: string;
+  className?: string;
 }
 
-export const PhoneTextContent = ({ text }: Props) => {
+export const PhoneTextContent = ({ text, className = "" }: Props) => {
   // UK phone number regex
   // Matches formats like:
   // 0330 912 9955
@@ -57,7 +58,7 @@ export const PhoneTextContent = ({ text }: Props) => {
             {phoneNumber && (
               <a
                 href={`tel:${formattedNumber}`}
-                className="ds:text-inherit ds:underline ds:pointer-events-auto ds:md:no-underline ds:md:pointer-events-none"
+                className={`ds:text-inherit ds:underline ds:pointer-events-auto ds:md:no-underline ds:md:pointer-events-none ${className}`}
                 aria-label={`Call us directly on ${phoneNumber}`}
                 title={`Call us directly on ${phoneNumber}`}
               >

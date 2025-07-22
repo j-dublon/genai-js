@@ -1,4 +1,8 @@
-import { TipCard } from "@react-component-library/ui";
+import {
+  AccessibleLoadingEgg,
+  PhoneTextContent,
+  TipCard,
+} from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import { useEffect, useRef, useState } from "react";
 
@@ -16,13 +20,27 @@ export const EmailVerificationForm = ({
   onVerificationSuccess,
   currentEmail,
   handleBack,
-  validateCode,
   handleCodeChange,
   handleResendCode,
   userVerificationErrorMessage,
+  emailCodeLoading,
+  validationAttempts = 0,
 }: EmailVerificationFormProps) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [code, setCode] = useState<string[]>(Array(NUM_FIELDS).fill(""));
+
+  const {
+    title,
+    description,
+    tipCardText,
+    inputLabelText,
+    loadingText,
+    codeSentText,
+    validCodeText,
+    errorCardText,
+    resendButtonText,
+    changeEmailText,
+  } = verificationSection;
 
   // Skip this page if already verified
   useEffect(() => {
@@ -31,7 +49,7 @@ export const EmailVerificationForm = ({
     }
   }, [isVerified, onVerificationSuccess]);
 
-  const handleInput = (
+  const handleInput = async (
     index: number,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -52,10 +70,8 @@ export const EmailVerificationForm = ({
       const indexToPass =
         lastFilledIndex >= 0 ? lastFilledIndex : NUM_FIELDS - 1;
 
-      handleCodeChange(joinedCode, indexToPass);
-
       if (joinedCode.length === NUM_FIELDS && !newCode.includes("")) {
-        validateCode(joinedCode);
+        handleCodeChange(joinedCode, indexToPass);
       }
     }
   };
@@ -82,7 +98,7 @@ export const EmailVerificationForm = ({
   };
 
   useEffect(() => {
-    const handlePaste = (ev: ClipboardEvent) => {
+    const handlePaste = async (ev: ClipboardEvent) => {
       if ((ev.target as HTMLElement).localName !== "input") return;
       ev.preventDefault();
 
@@ -96,7 +112,7 @@ export const EmailVerificationForm = ({
 
       inputRefs.current[NUM_FIELDS - 1]?.focus();
 
-      validateCode(paste);
+      handleCodeChange(paste, NUM_FIELDS - 1);
     };
 
     document.addEventListener("paste", handlePaste);
@@ -104,28 +120,42 @@ export const EmailVerificationForm = ({
     return () => {
       document.removeEventListener("paste", handlePaste);
     };
-  }, [validateCode]);
+  }, [handleCodeChange]);
+
+  const handleResendCodeWrapper = () => {
+    setCode(Array(NUM_FIELDS).fill(""));
+    handleResendCode();
+  };
 
   return (
     <div>
-      <h2 className="text-md font-bold mb-6">{verificationSection.title}</h2>
-      <p className="text-md mb-6">{verificationSection.description}</p>
+      {errorCardText && validationAttempts > 3 && !isCodeValid && (
+        <TipCard
+          image={getAssetPath("/images/stop-hand.svg")}
+          className="mt-10 md:mt-0 mb-10 md:mb-6 bg-tertiary-peach-light justify-center md:w-full items-center"
+          textStyling="font-semibold"
+          hideImageOnMobile
+        >
+          <PhoneTextContent text={errorCardText} className="text-ui-link" />
+        </TipCard>
+      )}
+      <h2 className="text-md font-bold mb-6">{title}</h2>
+      <p className="text-md mb-6">{description}</p>
       <TipCard
         image={getAssetPath("/images/envelope.svg")}
         className="mt-10 md:mt-0 mb-10 md:mb-6 bg-secondary-green justify-center md:w-full items-center"
+        hideImageOnMobile
       >
         <span>
-          {verificationSection.tipCardText}{" "}
-          <span className="font-medium">{currentEmail}</span>. Also, here’s our{" "}
+          {tipCardText} <span className="font-medium">{currentEmail}</span>.
+          Also, here’s our{" "}
           <a href="" className="text-ui-link">
             Privacy Notice.
           </a>
         </span>
       </TipCard>
       <div className="mb-6">
-        <p className="font-semibold mb-6">
-          {verificationSection.inputLabelText}
-        </p>
+        <p className="font-semibold mb-6">{inputLabelText}</p>
         <div className="flex gap-2 md:gap-4">
           {[...Array(NUM_FIELDS)].map((_, idx) => (
             <TextInput
@@ -147,26 +177,34 @@ export const EmailVerificationForm = ({
           ))}
         </div>
       </div>
-      {userVerificationErrorMessage && (
-        <p className="text-ui-error text-sm mb-6">
-          {userVerificationErrorMessage}
-        </p>
-      )}
-      <div className="flex gap-2 mb-6">
-        <TickWithCircle width={22} height={22} circleFill={"#009EA8"} />
-        {isCodeValid ? (
-          <span>Lovely – that&apos;s just the code we&apos;re after</span>
-        ) : (
-          <span>
-            You should receive your code within 2 minutes.{" "}
-            <button
-              type="button"
-              onClick={handleResendCode}
-              className="text-ui-link underline font-medium cursor-pointer"
-            >
-              Resend
-            </button>
-          </span>
+      <div className="flex flex-wrap mb-6 items-center gap-2">
+        {emailCodeLoading && <AccessibleLoadingEgg height={22} />}
+        {!userVerificationErrorMessage && !emailCodeLoading && (
+          <TickWithCircle width={22} height={22} circleFill={"#009EA8"} />
+        )}
+        <span
+          className={
+            userVerificationErrorMessage && !emailCodeLoading
+              ? "text-ui-error"
+              : ""
+          }
+        >
+          {emailCodeLoading
+            ? loadingText
+            : isCodeValid
+              ? validCodeText
+              : userVerificationErrorMessage
+                ? userVerificationErrorMessage
+                : codeSentText}
+        </span>
+        {!emailCodeLoading && !isCodeValid && (
+          <button
+            type="button"
+            onClick={handleResendCodeWrapper}
+            className="text-ui-link underline font-medium cursor-pointer"
+          >
+            {resendButtonText}
+          </button>
         )}
       </div>
       <button
@@ -177,7 +215,7 @@ export const EmailVerificationForm = ({
         }}
         className="leading-[1.6] underline font-medium cursor-pointer text-ui-link"
       >
-        I want to use a different email address
+        {changeEmailText}
       </button>
     </div>
   );

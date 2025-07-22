@@ -15,17 +15,25 @@ const defaultProps = {
     description: "Enter the code we sent to your email",
     tipCardText: "We sent a code to",
     inputLabelText: "Verification code",
+    codeSentText: "You should receive your code within 2 minutes",
+    invalidCodeText: "Invalid code",
+    errorCardText: "Too many attempts",
+    validCodeText: "Lovely - that's just the code we're after",
+    loadingText: "Verifying your code...",
+    resendButtonText: "Resend code",
+    changeEmailText: "I want to use a different email address",
   },
   isVerified: false,
   isCodeValid: undefined,
   onVerificationSuccess: vi.fn(),
   currentEmail: "test@example.com",
   handleBack: vi.fn(),
-  validateCode: vi.fn(),
   handleCodeChange: vi.fn(),
   handleResendCode: vi.fn(),
   register: vi.fn() as unknown as UseFormRegister<PersonalDetails>,
   errors: {} as FieldErrors<PersonalDetails>,
+  emailCodeLoading: false,
+  validationAttempts: 0,
 };
 
 describe("EmailVerificationForm", () => {
@@ -69,7 +77,7 @@ describe("EmailVerificationForm", () => {
     await userEvent.type(inputs[1], "b");
     expect(inputs[1]).toHaveValue("b");
 
-    expect(defaultProps.validateCode).not.toHaveBeenCalled();
+    expect(defaultProps.handleCodeChange).not.toHaveBeenCalled();
   });
 
   it("calls validateCode when all inputs are filled", async () => {
@@ -87,7 +95,10 @@ describe("EmailVerificationForm", () => {
       .join("");
 
     await waitFor(() => {
-      expect(defaultProps.validateCode).toHaveBeenCalledWith(expectedCode);
+      expect(defaultProps.handleCodeChange).toHaveBeenCalledWith(
+        expectedCode,
+        NUM_FIELDS - 1,
+      );
     });
   });
 
@@ -147,34 +158,149 @@ describe("EmailVerificationForm", () => {
       expect(inputs[5]).toHaveValue("3");
     });
 
-    expect(defaultProps.validateCode).toHaveBeenCalledWith(pasteData);
+    expect(defaultProps.handleCodeChange).toHaveBeenCalledWith(
+      pasteData,
+      NUM_FIELDS - 1,
+    );
   });
 
   it("displays success message when isCodeValid true", () => {
     render(<EmailVerificationForm {...defaultProps} isCodeValid={true} />);
 
     expect(
-      screen.getByText(/Lovely – that['’]s just the code we['’]re after/i),
+      screen.getByText(defaultProps.verificationSection.validCodeText),
     ).toBeInTheDocument();
   });
 
-  it("displays resend message when isCodeValid false", () => {
-    render(<EmailVerificationForm {...defaultProps} isCodeValid={false} />);
-
+  it("displays resend message when isCodeValid false, no error messages and not loading", () => {
+    render(
+      <EmailVerificationForm
+        {...defaultProps}
+        isCodeValid={false}
+        userVerificationErrorMessage={undefined}
+        emailCodeLoading={false}
+      />,
+    );
     expect(
-      screen.getByText(/You should receive your code within 2 minutes/i),
+      screen.getByText(defaultProps.verificationSection.codeSentText),
     ).toBeInTheDocument();
+  });
+
+  it("displays resend message when isCodeValid undefined, no error messages and not loading", () => {
+    render(
+      <EmailVerificationForm
+        {...defaultProps}
+        isCodeValid={undefined}
+        userVerificationErrorMessage={undefined}
+        emailCodeLoading={false}
+      />,
+    );
+    expect(
+      screen.getByText(defaultProps.verificationSection.codeSentText),
+    ).toBeInTheDocument();
+  });
+
+  it("displays error message when present, with resend button", () => {
+    render(
+      <EmailVerificationForm
+        {...defaultProps}
+        userVerificationErrorMessage="Error message"
+      />,
+    );
+    expect(screen.getByText("Error message")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: defaultProps.verificationSection.resendButtonText,
+      }),
+    ).toBeInTheDocument();
+  });
+
+  it("displays loading egg and text when emailCodeLoading is true, with no resend button", () => {
+    render(<EmailVerificationForm {...defaultProps} emailCodeLoading={true} />);
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(
+      screen.getByText(defaultProps.verificationSection.loadingText),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", {
+        name: defaultProps.verificationSection.resendButtonText,
+      }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("does not display loading egg or message when emailCodeLoading is false", () => {
+    render(
+      <EmailVerificationForm {...defaultProps} emailCodeLoading={false} />,
+    );
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(defaultProps.verificationSection.loadingText),
+    ).not.toBeInTheDocument();
+  });
+
+  it("calls handleResendCode when resend button is clicked", async () => {
+    render(<EmailVerificationForm {...defaultProps} />);
+
+    const resendButton = screen.getByRole("button", {
+      name: defaultProps.verificationSection.resendButtonText,
+    });
+
+    await userEvent.click(resendButton);
+
+    expect(defaultProps.handleResendCode).toHaveBeenCalled();
   });
 
   it("calls handleBack when back button clicked", async () => {
     render(<EmailVerificationForm {...defaultProps} />);
 
     const button = screen.getByRole("button", {
-      name: /I want to use a different email address/i,
+      name: defaultProps.verificationSection.changeEmailText,
     });
 
     await userEvent.click(button);
 
     expect(defaultProps.handleBack).toHaveBeenCalled();
+  });
+
+  it("displays error tip card when validationAttempts is greater than 3 and isCodeValid is false", () => {
+    render(
+      <EmailVerificationForm
+        {...defaultProps}
+        validationAttempts={4}
+        isCodeValid={false}
+        userVerificationErrorMessage="Test error message"
+      />,
+    );
+    expect(
+      screen.getByText(defaultProps.verificationSection.errorCardText),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Test error message")).toBeInTheDocument();
+  });
+
+  it("hides the error tip card if user has attempted more than 3 times but then gets the code correct", () => {
+    render(
+      <EmailVerificationForm
+        {...defaultProps}
+        validationAttempts={4}
+        isCodeValid={true}
+      />,
+    );
+    expect(
+      screen.queryByText(defaultProps.verificationSection.errorCardText),
+    ).not.toBeInTheDocument();
+  });
+
+  it("does not display error tip card when validationAttempts is 3 or less", () => {
+    render(
+      <EmailVerificationForm
+        {...defaultProps}
+        validationAttempts={3}
+        userVerificationErrorMessage="Test error message"
+      />,
+    );
+    expect(
+      screen.queryByText(defaultProps.verificationSection.errorCardText),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText("Test error message")).toBeInTheDocument();
   });
 });

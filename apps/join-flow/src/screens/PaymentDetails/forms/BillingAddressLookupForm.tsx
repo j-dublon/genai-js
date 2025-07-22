@@ -1,9 +1,8 @@
-import {
+import useJoinFlowStore, {
   ExtendedStoreAddress,
   PaymentDetails,
   StoreAddress,
 } from "@store/useJoinFlowStore";
-import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

@@ -14,6 +14,7 @@ import { DateTimeSelectionForm } from "@/components/DateTimeSelectionForm";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { PILL_FADE_OUT_DELAY, PILL_HIDE_DELAY } from "@/lib/constants";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
 import { getGoLiveDates } from "@/services/helpers/getGoLiveDates";
@@ -106,8 +107,11 @@ export const GoLiveDate = () => {
     setShowPill(true);
     setFadeOut(false);
 
-    const fadeOuttimer = setTimeout(() => setFadeOut(true), 9000);
-    const hidePillTimer = setTimeout(() => setShowPill(false), 10000);
+    const fadeOuttimer = setTimeout(
+      () => setFadeOut(true),
+      PILL_FADE_OUT_DELAY,
+    );
+    const hidePillTimer = setTimeout(() => setShowPill(false), PILL_HIDE_DELAY);
 
     return () => {
       clearTimeout(fadeOuttimer);

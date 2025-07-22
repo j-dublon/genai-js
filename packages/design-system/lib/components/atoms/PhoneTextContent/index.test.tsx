@@ -83,4 +83,13 @@ describe("PhoneTextContent", () => {
       "ds:md:pointer-events-none",
     );
   });
+
+  it("applies custom className to phone number links", () => {
+    render(
+      <PhoneTextContent text="Call 0330 912 9955" className="custom-class" />,
+    );
+
+    const link = screen.getByRole("link");
+    expect(link).toHaveClass("custom-class");
+  });
 });

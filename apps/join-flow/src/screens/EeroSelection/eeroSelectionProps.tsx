@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
 import { getAssetPath } from "@/lib/get-asset-path";
 
 // TODO: This is a temporary type until we have the CMS setup
@@ -73,3 +74,18 @@ export const eeroContinueButtonText = {
   next: "Next",
   continueButtonText: "No thanks, I only want 1 eero",
 };
+
+export const slides: LoadingModalSlide[] = [
+  {
+    src: "/images/world-animated.gif",
+    message: "Figuring out how many Eeros will keep your nest connected.",
+  },
+  {
+    src: "/images/sunglasses-animated.gif",
+    message: "Making sure every room gets a cozy signal.",
+  },
+  {
+    src: "/images/rocket-animated.gif",
+    message: "Just checking which extras will give your broadband wings!",
+  },
+];

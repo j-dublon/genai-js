@@ -1,14 +1,15 @@
 "use client";
 
-import { Button, ColorPill } from "@react-component-library/ui";
+import { Button, ColorPill, LoadingModal } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
-import useJoinFlowStore from "@store/useJoinFlowStore";
-import { EeroProduct } from "@store/useJoinFlowStore";
+import useJoinFlowStore, { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
+import { PILL_FADE_OUT_DELAY, PILL_HIDE_DELAY } from "@/lib/constants";
 import { createEeroOptions, type EeroOption } from "@/lib/createEeroOptions";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
@@ -19,6 +20,7 @@ import {
   eeroContinueButtonText,
   eeroPageContent,
   eeroProducts,
+  slides,
 } from "./eeroSelectionProps";
 
 const INCLUDED_EERO_CODE = "EERO_MESH_ROUTER_X1";
@@ -32,7 +34,14 @@ const EeroSelection = () => {
     basket,
     setBasket,
     selectedPackage,
+    isLoadingModalOpen,
+    setIsLoadingModalOpen,
   } = useJoinFlowStore();
+
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
 
   const eeroOptions = createEeroOptions(
     selectedPackage?.extras || [],
@@ -80,6 +89,7 @@ const EeroSelection = () => {
       ) {
         // Update basket with selected eero if a different selection has been made
         eeroSelectionSchema.parse(selectedEero);
+        setIsLoadingModalOpen(true);
         const result = await updateBasket(basket.id, {
           product: {
             extras: [
@@ -94,6 +104,7 @@ const EeroSelection = () => {
         if (result.error) {
           // TODO: Error handling
           console.error("Error updating basket:", result.error);
+          setIsLoadingModalOpen(false);
           return;
         }
 
@@ -107,6 +118,7 @@ const EeroSelection = () => {
       router.push("/join-flow/one-touch-switching");
     } catch (error) {
       console.error("Error in handleContinue:", error);
+      setIsLoadingModalOpen(false);
     }
   };
 
@@ -114,8 +126,11 @@ const EeroSelection = () => {
     setShowPill(true);
     setFadeOut(false);
 
-    const fadeOuttimer = setTimeout(() => setFadeOut(true), 9000);
-    const hidePillTimer = setTimeout(() => setShowPill(false), 10000);
+    const fadeOuttimer = setTimeout(
+      () => setFadeOut(true),
+      PILL_FADE_OUT_DELAY,
+    );
+    const hidePillTimer = setTimeout(() => setShowPill(false), PILL_HIDE_DELAY);
 
     return () => {
       clearTimeout(fadeOuttimer);
@@ -126,6 +141,11 @@ const EeroSelection = () => {
   return (
     <>
       <StepNavigationWithBasket step={2} />
+      <LoadingModal
+        modalRef={loadingModalRef}
+        slides={slidesWithAssetPath}
+        loading={isLoadingModalOpen}
+      />
       <div className="container px-4 pb-8 lg:pt-16 mx-auto">
         <div className="max-w-[1183px] mx-auto mt-16">
           {showPill && (

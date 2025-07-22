@@ -1,10 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, ColorPill } from "@react-component-library/ui";
+import { Button, ColorPill, LoadingModal } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
-import type { PersonalDetails } from "@store/useJoinFlowStore";
-import useJoinFlowStore from "@store/useJoinFlowStore";
+import useJoinFlowStore, {
+  type PersonalDetails,
+} from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -12,6 +13,12 @@ import { z } from "zod";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
+import {
+  PILL_FADE_OUT_DELAY,
+  PILL_HIDE_DELAY,
+  VALIDATION_CODE_LENGTH,
+} from "@/lib/constants";
 import { formatDateOfBirth } from "@/lib/formatDate";
 import { AdditionalPersonalDetailsForm } from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
 import { EmailVerificationForm } from "@/screens/PersonalDetails/forms/emailVerificationForm";
@@ -27,7 +34,7 @@ import {
   EmailVerificationFormProps,
   InitialPersonalDetailsProps,
 } from "./forms/formValues";
-import { personalDetailsProps } from "./personalDetailsProps";
+import { personalDetailsProps, slides } from "./personalDetailsProps";
 
 const PersonalDetails = () => {
   const router = useRouter();
@@ -40,7 +47,14 @@ const PersonalDetails = () => {
     softCreditCheck,
     setBasket,
     setSoftCreditCheck,
+    isLoadingModalOpen,
+    setIsLoadingModalOpen,
   } = useJoinFlowStore();
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
+  const [emailCodeLoading, setEmailCodeLoading] = useState<boolean>(false);
 
   const initialStep = personalDetails?.personalDetailsStep || "details";
   const [currentFormStep, setCurrentFormStep] = useState<
@@ -56,6 +70,7 @@ const PersonalDetails = () => {
   const [emailCodeErrorMessage, setEmailCodeErrorMessage] = useState<
     string | undefined
   >(undefined);
+  const [validationAttempts, setValidationAttempts] = useState(0);
 
   const [previousEmail, setPreviousEmail] = useState<string | undefined>(
     personalDetails?.email,
@@ -83,6 +98,7 @@ const PersonalDetails = () => {
     if (!basket) {
       console.error("No basket available");
       setIsEmailCodeValid(false);
+      setValidationAttempts((prev) => prev + 1);
       return;
     }
 
@@ -92,10 +108,13 @@ const PersonalDetails = () => {
       if (
         response.error.details.find((detail) => detail.includes("invalidCode"))
       ) {
-        setEmailCodeErrorMessage("This code does not match what we expected");
+        setEmailCodeErrorMessage(
+          personalDetailsProps.verificationSection.invalidCodeText,
+        );
       }
       console.error("Failed to validate email code:", response.error);
       setIsEmailCodeValid(false);
+      setValidationAttempts((prev) => prev + 1);
       return;
     }
 
@@ -104,10 +123,22 @@ const PersonalDetails = () => {
       setEmailCodeErrorMessage(undefined);
     } else {
       setIsEmailCodeValid(false);
+      setValidationAttempts((prev) => prev + 1);
     }
   };
 
   const handleCodeChange = async (value: string, index: number) => {
+    // If a full code is passed (6 characters), validate it directly
+    if (value.length === VALIDATION_CODE_LENGTH) {
+      if (isEmailCodeValid !== true) {
+        setEmailCodeLoading(true);
+        await validateCode(value);
+        setEmailCodeLoading(false);
+      }
+      return;
+    }
+
+    // Handle individual character input
     const newCode = [...validationCode];
     newCode[index] = value;
 
@@ -116,8 +147,13 @@ const PersonalDetails = () => {
 
       if (newCode.every((digit) => digit !== "")) {
         const code = newCode.join("");
-        if (code.length === 6 && !isEmailCodeValid) {
+        if (
+          code.length === VALIDATION_CODE_LENGTH &&
+          isEmailCodeValid !== true
+        ) {
+          setEmailCodeLoading(true);
           await validateCode(code);
+          setEmailCodeLoading(false);
         }
       }
     }
@@ -129,7 +165,8 @@ const PersonalDetails = () => {
         console.error("No basket available");
         return;
       }
-
+      setIsEmailCodeValid(undefined);
+      setEmailCodeErrorMessage(undefined);
       const response = await sendEmailCode(basket.id);
       if (response.error) {
         if (
@@ -138,21 +175,19 @@ const PersonalDetails = () => {
           )
         ) {
           setEmailCodeErrorMessage(
-            "An email validation code was already requested recently. Please wait a moment.",
+            personalDetailsProps.verificationSection.tooRecentRequestText,
           );
         } else if (
           response.error.details.find((detail) =>
             detail.includes("emailCodeSpam"),
           )
         ) {
-          setEmailCodeErrorMessage("Too many code requests.");
+          setEmailCodeErrorMessage(
+            personalDetailsProps.verificationSection.tooManyRequestsText,
+          );
         }
         console.error("Failed to send email code:", response.error);
         return;
-      }
-
-      if (response.success) {
-        setEmailCodeErrorMessage(undefined);
       }
     }
   };
@@ -210,8 +245,11 @@ const PersonalDetails = () => {
     setShowPill(true);
     setFadeOut(false);
 
-    const fadeOuttimer = setTimeout(() => setFadeOut(true), 9000);
-    const hidePillTimer = setTimeout(() => setShowPill(false), 10000);
+    const fadeOuttimer = setTimeout(
+      () => setFadeOut(true),
+      PILL_FADE_OUT_DELAY,
+    );
+    const hidePillTimer = setTimeout(() => setShowPill(false), PILL_HIDE_DELAY);
 
     return () => {
       clearTimeout(fadeOuttimer);
@@ -274,7 +312,7 @@ const PersonalDetails = () => {
           console.error("No basket available");
           return;
         }
-
+        setIsLoadingModalOpen(true);
         const result = await updateBasket(basket.id, {
           personalDetails: {
             firstName: formValues.firstName,
@@ -302,9 +340,11 @@ const PersonalDetails = () => {
 
       setPersonalDetails(updatedDetails);
       setCurrentFormStep(nextStep);
+      setIsLoadingModalOpen(false);
     } catch (error) {
       //Keep this for now while we're dev-ing
       console.log(error);
+      setIsLoadingModalOpen(false);
     }
   };
 
@@ -391,6 +431,7 @@ const PersonalDetails = () => {
         return;
       }
 
+      setIsLoadingModalOpen(true);
       const result = await updateBasket(basket.id, {
         ...basket,
         personalDetails: {
@@ -419,6 +460,7 @@ const PersonalDetails = () => {
       }
     } catch (error) {
       console.error("Unexpected error updating basket:", error);
+      setIsLoadingModalOpen(false);
       return;
     }
 
@@ -440,6 +482,7 @@ const PersonalDetails = () => {
 
       if (error) {
         console.error("Failed to run soft credit check:", error);
+        setIsLoadingModalOpen(false);
         return;
       }
 
@@ -459,10 +502,12 @@ const PersonalDetails = () => {
           router.push("/join-flow/personal-details/retry-check");
           break;
         default:
+          setIsLoadingModalOpen(false);
           break;
       }
     } catch (error) {
       console.error("Unexpected error during soft credit check:", error);
+      setIsLoadingModalOpen(false);
       return;
     }
   };
@@ -513,6 +558,11 @@ const PersonalDetails = () => {
   return (
     <>
       <StepNavigationWithBasket step={1} />
+      <LoadingModal
+        modalRef={loadingModalRef}
+        slides={slidesWithAssetPath}
+        loading={isLoadingModalOpen}
+      />
       <div className="container mx-auto px-6 py-8 lg:pt-24">
         <div className="max-w-[569px] mx-auto py-8 rounded-lg">
           {showPill && (
@@ -582,6 +632,9 @@ const PersonalDetails = () => {
               isCodeValid={isEmailCodeValid}
               handleBack={handleBack}
               handleResendCode={handleSendCode}
+              emailCodeLoading={emailCodeLoading}
+              setEmailCodeLoading={setEmailCodeLoading}
+              validationAttempts={validationAttempts}
             />
           )}
 

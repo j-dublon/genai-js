@@ -41,14 +41,15 @@ export const MOCK_ADDRESS: StoreAddress = {
 export const slides: LoadingModalSlide[] = [
   {
     src: "/images/world-animated.gif",
-    message: "Sit tight! We're checking out your area",
+    message: "Hatching your broadband plan...",
   },
   {
     src: "/images/sunglasses-animated.gif",
-    message: "Oooh, some lovely parts round where you live",
+    message:
+      "Cooking up your basket... Just the right mix of speed, value, and extras.",
   },
   {
     src: "/images/rocket-animated.gif",
-    message: "Just putting all your eggs in one broadband basket",
+    message: "Checking for any egg-stra goodies available at your address.",
   },
 ];

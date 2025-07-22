@@ -1,5 +1,6 @@
-import { ExtendedStoreAddress } from "@store/useJoinFlowStore";
-import useJoinFlowStore from "@store/useJoinFlowStore";
+import useJoinFlowStore, {
+  ExtendedStoreAddress,
+} from "@store/useJoinFlowStore";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback } from "react";
 

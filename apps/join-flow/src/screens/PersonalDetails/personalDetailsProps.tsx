@@ -1,3 +1,5 @@
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
+
 export const personalDetailsProps = {
   nextStepPillText: "Choosing your eero(s)",
   pageTitle: "Your info",
@@ -34,9 +36,20 @@ export const personalDetailsProps = {
     title: "We've just sent a code to your email address",
     description: "Come back here to paste it",
     tipCardText:
-      "We take your security seriously here at Cuckoo, so to make sure we know it’s really you, we’ve sent a unique verification code to",
+      "We take your security seriously here at Cuckoo, so to make sure we know it's really you, we've sent a unique verification code to",
     inputLabelText: "Pop the code in below",
-    invalidCodeText: "Invalid verification code. Please try again.",
+    loadingText: "Checking...",
+    codeSentText: "You should receive your code within 2 minutes.",
+    validCodeText: "Lovely - that's just the code we're after",
+    errorCardText:
+      "Having trouble with the code? If you think something's wrong, please give our friendly Customer Care team a ring on 0330 912 9955.",
+    resendButtonText: "Resend",
+    changeEmailText: "I want to use a different email address",
+    invalidCodeText:
+      "Oops! That code doesn't look right. Try entering a valid one.",
+    tooManyRequestsText: "Too many code requests.",
+    tooRecentRequestText:
+      "An email validation code was already requested recently. Please wait a moment.",
   },
 
   additionalSection: {
@@ -127,5 +140,21 @@ export const personalDetailsProps = {
       "Please select how long you've lived at this address",
   },
 };
+
+// TODO: Images / messages to be adjusted
+export const slides: LoadingModalSlide[] = [
+  {
+    src: "/images/world-animated.gif",
+    message: "Just getting your name and address in the mix.",
+  },
+  {
+    src: "/images/sunglasses-animated.gif",
+    message: "Verifying your email and making sure everything's sunny side up.",
+  },
+  {
+    src: "/images/rocket-animated.gif",
+    message: "Running a quick check before we strut to the next step!",
+  },
+];
 
 export default personalDetailsProps;

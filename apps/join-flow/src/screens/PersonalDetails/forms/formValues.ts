@@ -228,7 +228,13 @@ type verificationSection = {
   description: string;
   inputLabelText: string;
   tipCardText: string;
-  invalidCodeText?: string;
+  codeSentText: string;
+  invalidCodeText: string;
+  errorCardText: string;
+  validCodeText: string;
+  loadingText: string;
+  resendButtonText: string;
+  changeEmailText: string;
 };
 
 export type PersonalDetailsUIConfig = {
@@ -290,8 +296,11 @@ export type EmailVerificationFormProps = {
   currentEmail?: string;
   previousEmail?: string;
   handleCodeChange: (arg1: string, arg2: number) => void;
-  validateCode: (code: string) => void;
+  validateCode?: (code: string) => Promise<void>;
   handleBack: () => void;
   handleResendCode: () => Promise<void>;
   userVerificationErrorMessage?: string;
+  emailCodeLoading: boolean;
+  setEmailCodeLoading?: (loading: boolean) => void;
+  validationAttempts?: number;
 };

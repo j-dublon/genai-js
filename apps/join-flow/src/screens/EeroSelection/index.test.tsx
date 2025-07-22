@@ -55,7 +55,22 @@ vi.mock("./eeroSelectionProps", () => ({
     next: "Next",
   },
   eeroProducts: [],
+  slides: [
+    {
+      src: "/images/world-animated.gif",
+      message: "Sit tight! We're checking out your area",
+    },
+    {
+      src: "/images/sunglasses-animated.gif",
+      message: "Oooh, some lovely parts round where you live",
+    },
+    {
+      src: "/images/rocket-animated.gif",
+      message: "Just putting all your eggs in one broadband basket",
+    },
+  ],
 }));
+
 vi.mock("@/lib/createEeroOptions", () => ({
   createEeroOptions: vi.fn().mockReturnValue([
     {
@@ -96,6 +111,18 @@ vi.mock("@/services/helpers/updateBasket", () => ({
 }));
 const mockUpdateBasket = vi.mocked(updateBasket);
 
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
+
 describe("EeroSelection", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -103,6 +130,8 @@ describe("EeroSelection", () => {
       eeroSelection: null,
       setCurrentStep: vi.fn(),
       selectEeroProduct: vi.fn(),
+      isLoadingModalOpen: false,
+      setIsLoadingModalOpen: vi.fn(),
     });
     mockUpdateBasket.mockResolvedValue({
       basket: {
@@ -173,6 +202,8 @@ describe("EeroSelection", () => {
         },
         setCurrentStep: vi.fn(),
         selectEeroProduct: vi.fn(),
+        isLoadingModalOpen: false,
+        setIsLoadingModalOpen: vi.fn(),
       });
       render(<EeroSelection />);
 
@@ -197,6 +228,8 @@ describe("EeroSelection", () => {
         },
         setCurrentStep: vi.fn(),
         selectEeroProduct: vi.fn(),
+        isLoadingModalOpen: false,
+        setIsLoadingModalOpen: vi.fn(),
       });
       render(<EeroSelection />);
 
@@ -221,6 +254,8 @@ describe("EeroSelection", () => {
         setCurrentStep: vi.fn(),
         selectEeroProduct: vi.fn(),
         setBasket: vi.fn(),
+        isLoadingModalOpen: false,
+        setIsLoadingModalOpen: vi.fn(),
       });
       render(<EeroSelection />);
 
@@ -245,6 +280,8 @@ describe("EeroSelection", () => {
         setCurrentStep: vi.fn(),
         selectEeroProduct: vi.fn(),
         setBasket: vi.fn(),
+        isLoadingModalOpen: false,
+        setIsLoadingModalOpen: vi.fn(),
       });
       render(<EeroSelection />);
 
@@ -258,5 +295,37 @@ describe("EeroSelection", () => {
 
       expect(mockUpdateBasket).toHaveBeenCalled();
     });
+  });
+
+  it("should open the loading modal when clicking continue button", async () => {
+    const user = userEvent.setup();
+    const mockSetIsLoadingModalOpen = vi.fn();
+    mockJoinFlowStore.mockReturnValue({
+      basket: {
+        product: {
+          extras: [
+            {
+              selectionIdentifier: "2",
+            },
+          ],
+        },
+      },
+      setCurrentStep: vi.fn(),
+      selectEeroProduct: vi.fn(),
+      setBasket: vi.fn(),
+      isLoadingModalOpen: false,
+      setIsLoadingModalOpen: mockSetIsLoadingModalOpen,
+    });
+    render(<EeroSelection />);
+
+    const chooseButton = screen.getByRole("button", {
+      name: "Choose Two extra Eeros",
+    });
+    await user.click(chooseButton);
+
+    const continueButton = screen.getByRole("button", { name: "Next" });
+    await user.click(continueButton);
+
+    expect(mockSetIsLoadingModalOpen).toHaveBeenCalledWith(true);
   });
 });

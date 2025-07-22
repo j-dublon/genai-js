@@ -161,4 +161,30 @@ describe("TipCard Component", () => {
     expect(image).not.toBeInTheDocument();
     expect(card).toHaveTextContent("Content without image");
   });
+
+  it("applies custom text styling", () => {
+    render(
+      <TipCard textStyling="custom-class">Content with custom styling</TipCard>,
+    );
+
+    const card = screen.getByLabelText("Tip card");
+    const contentDiv = card.querySelector("div");
+
+    expect(card).toBeInTheDocument();
+    expect(contentDiv).toHaveClass("custom-class");
+    expect(card).toHaveTextContent("Content with custom styling");
+  });
+
+  it("applies default text classes regardless of textStyling prop", () => {
+    render(<TipCard>Content with default text styling</TipCard>);
+
+    const card = screen.getByLabelText("Tip card");
+    const contentDiv = card.querySelector("div");
+
+    expect(card).toBeInTheDocument();
+    expect(contentDiv).toHaveClass(
+      "ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:font-normal ds:text-core-black",
+    );
+    expect(card).toHaveTextContent("Content with default text styling");
+  });
 });
