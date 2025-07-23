@@ -1,3 +1,4 @@
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
 import { getAssetPath } from "@/lib/get-asset-path";
 
 export const paymentConfirmationText = {
@@ -47,3 +48,18 @@ export const paymentConfirmationText = {
     },
   ],
 };
+
+export const slides: LoadingModalSlide[] = [
+  {
+    src: "/images/world-animated.gif",
+    message: "Nesting your order safely...",
+  },
+  {
+    src: "/images/sunglasses-animated.gif",
+    message: "Just finalising the contract so everything's sunny side up.",
+  },
+  {
+    src: "/images/rocket-animated.gif",
+    message: "You're one peck away from broadband bliss!",
+  },
+];

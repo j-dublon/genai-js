@@ -1,5 +1,5 @@
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { render, waitFor } from "@testing-library/react";
+import { act, render, waitFor } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -25,23 +25,39 @@ vi.mock("@/services/helpers/getCICS", () => ({
   getCICS: vi.fn(),
 }));
 
-vi.mock("@react-component-library/ui", () => ({
-  Button: ({
-    children,
-    onClick,
-    disabled,
-    type,
-  }: {
-    children: React.ReactNode;
-    onClick?: () => void;
-    disabled?: boolean;
-    type?: "button" | "submit" | "reset";
-  }) => (
-    <button onClick={onClick} disabled={disabled} type={type}>
-      {children}
-    </button>
-  ),
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
 }));
+
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
+  return {
+    ...actual,
+    Button: ({
+      children,
+      onClick,
+      disabled,
+      type,
+    }: {
+      children: React.ReactNode;
+      onClick?: () => void;
+      disabled?: boolean;
+      type?: "button" | "submit" | "reset";
+    }) => (
+      <button onClick={onClick} disabled={disabled} type={type}>
+        {children}
+      </button>
+    ),
+  };
+});
 
 vi.mock("@/components/Footer", () => ({
   Footer: () => <div data-testid="footer" />,
@@ -116,6 +132,12 @@ vi.mock("./PaymentDetailsProps", () => ({
     submittingButtonText: "Processing...",
     addressDetailsTitle: "Address Details",
   },
+  slides: [
+    {
+      src: "/images/world-animated.gif",
+      message: "Nesting your order safely...",
+    },
+  ],
 }));
 
 const mockUpdateBasket = vi.mocked(updateBasket);
@@ -170,7 +192,7 @@ describe("PaymentDetails", () => {
     expect(getByTestId("payment-summary")).toBeInTheDocument();
   });
 
-  it("calls updateBasket when payment details have changed", async () => {
+  it("calls updateBasket when payment details have changed, and opens loading modal", async () => {
     const user = userEvent.setup();
 
     const store = useJoinFlowStore.getState();
@@ -189,9 +211,14 @@ describe("PaymentDetails", () => {
     const { getByRole } = render(<PaymentDetails />);
 
     const submitButton = getByRole("button", { name: /submit/i });
-    await user.click(submitButton);
+    expect(useJoinFlowStore.getState().isLoadingModalOpen).toBe(false);
+
+    act(() => {
+      user.click(submitButton);
+    });
 
     await waitFor(() => {
+      expect(useJoinFlowStore.getState().isLoadingModalOpen).toBe(true);
       expect(mockUpdateBasket).toHaveBeenCalledWith("basket-123", {
         billingAddress: {
           line1: "123 Test St",
@@ -216,6 +243,7 @@ describe("PaymentDetails", () => {
     const { getByRole } = render(<PaymentDetails />);
 
     const submitButton = getByRole("button", { name: /submit/i });
+
     await user.click(submitButton);
 
     await waitFor(() => {

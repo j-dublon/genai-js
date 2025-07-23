@@ -1,7 +1,6 @@
 "use client";
 
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import React from "react";
 
 import {
   openPaymentDetailsModal,
@@ -32,18 +31,18 @@ export const PaymentAccountDetails = () => {
         </h3>
 
         <h3 className="mb-2">
-          <span className="font-bold">{accountNumberLabel}</span>{" "}
+          <span className="font-semibold">{accountNumberLabel}</span>{" "}
           <span className="font-normal">{paymentDetails?.accountNumber}</span>
         </h3>
 
         <h3>
-          <span className="font-bold">{sortCodeLabel}</span>{" "}
+          <span className="font-semibold">{sortCodeLabel}</span>{" "}
           <span className="font-normal">{paymentDetails?.sortCode}</span>
         </h3>
 
         <button
           type="button"
-          className="font-normal underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
+          className="underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
           onClick={handleChangeMyDetails}
         >
           {paymentAccountDetailsText.changeMyDetails}

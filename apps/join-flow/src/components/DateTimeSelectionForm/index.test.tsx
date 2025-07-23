@@ -244,6 +244,34 @@ describe("DateTimeSelectionForm - Business Logic", () => {
       expect(buttonContainer).toHaveClass("justify-end");
     });
 
+    it("shows loading stat on button when isSubmitting is true", () => {
+      render(
+        <DateTimeSelectionForm
+          {...defaultProps}
+          submitButtonText="Save Changes"
+          isSubmitting={true}
+        />,
+      );
+
+      const submitButton = screen.getByTestId("submit-button");
+      expect(submitButton).toHaveTextContent("Loading...");
+      expect(submitButton).toBeDisabled();
+    });
+
+    it("shows normal button text when isSubmitting is false", () => {
+      render(
+        <DateTimeSelectionForm
+          {...defaultProps}
+          submitButtonText="Save Changes"
+          isSubmitting={false}
+        />,
+      );
+
+      const submitButton = screen.getByTestId("submit-button");
+      expect(submitButton).toHaveTextContent("Save Changes");
+      expect(submitButton).not.toBeDisabled();
+    });
+
     it("applies correct alignment classes", () => {
       const { rerender } = render(
         <DateTimeSelectionForm

@@ -1,5 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  AccessibleLoadingEgg,
   Button,
   DatePicker,
   LoadingSlide,
@@ -37,6 +38,7 @@ interface DateTimeSelectionFormProps {
   className?: string;
   showSubmitButton?: boolean;
   tipCard?: React.ReactNode;
+  isSubmitting?: boolean;
 }
 
 export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
@@ -56,6 +58,7 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
   className = "",
   showSubmitButton = true,
   tipCard,
+  isSubmitting,
 }) => {
   const router = useRouter();
   const initialTimeslots: Record<string, string> = defaultTimeSlot
@@ -207,8 +210,16 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
               variant="solid"
               type="submit"
               fullWidth={submitButtonFullWidth}
+              disabled={isSubmitting}
             >
-              {submitButtonText}
+              {isSubmitting ? (
+                <div className="flex items-center gap-2">
+                  <AccessibleLoadingEgg />
+                  Updating...
+                </div>
+              ) : (
+                submitButtonText
+              )}
             </Button>
           </div>
         )}

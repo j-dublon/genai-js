@@ -1,9 +1,14 @@
-import { Button, useClickOutside } from "@react-component-library/ui";
+import {
+  Button,
+  LoadingModal,
+  useClickOutside,
+} from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
@@ -11,7 +16,7 @@ import { updateBasket } from "@/services/helpers/updateBasket";
 import { PaymentDocuments } from "../PaymentDocuments";
 import { AccessibilityRequirements } from "./Accessibility/AccessibilityRequirements";
 import PaymentAccountDetails from "./PaymentAccountDetails";
-import { paymentConfirmationText } from "./PaymentConfirmationProps";
+import { paymentConfirmationText, slides } from "./PaymentConfirmationProps";
 import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
 import { paymentGoLiveText } from "./paymentGoLiveDetailsProps";
 import PaymentSummary from "./PaymentSummary";
@@ -32,7 +37,13 @@ export const PaymentConfirmation = ({
     affiliateSession,
     accessibilityRequirements,
     accessibilityCommunicationPreferences,
+    setIsLoadingModalOpen,
+    isLoadingModalOpen,
   } = useJoinFlowStore();
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
 
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsState, setTermsState] = useState({
@@ -85,6 +96,7 @@ export const PaymentConfirmation = ({
   const handleConfirm = useCallback(async () => {
     let vulnerabilityAndAccessibility;
 
+    setIsLoadingModalOpen(true);
     if (accessibilityRequirements) {
       try {
         const result = await createVulnerabilityAndAccessibility(
@@ -109,6 +121,7 @@ export const PaymentConfirmation = ({
 
     if (!basket?.id) {
       console.error("Basket ID is required to update basket");
+      setIsLoadingModalOpen(false);
       return;
     }
 
@@ -127,6 +140,7 @@ export const PaymentConfirmation = ({
           "Error updating opt ins on basket:",
           result.error.message || "Unknown error",
         );
+        setIsLoadingModalOpen(false);
         return;
       }
 
@@ -142,15 +156,18 @@ export const PaymentConfirmation = ({
             "Error submitting basket:",
             submitResult.error?.message ?? "Unknown error",
           );
+          setIsLoadingModalOpen(false);
           return;
         }
 
         onComplete();
       } catch (error) {
         console.error("Unexpected error submitting basket:", error);
+        setIsLoadingModalOpen(false);
       }
     } catch (error) {
       console.error("Unexpected error updating opt ins on basket:", error);
+      setIsLoadingModalOpen(false);
     }
   }, [
     paymentDetails,
@@ -164,6 +181,7 @@ export const PaymentConfirmation = ({
     termsState.creditSearchAgreed,
     termsAgreed,
     setBasket,
+    setIsLoadingModalOpen,
   ]);
 
   const handleTermsChange = useCallback(
@@ -272,6 +290,11 @@ export const PaymentConfirmation = ({
           </div>
         </div>
       </div>
+      <LoadingModal
+        modalRef={loadingModalRef}
+        slides={slidesWithAssetPath}
+        loading={isLoadingModalOpen}
+      />
     </>
   );
 };

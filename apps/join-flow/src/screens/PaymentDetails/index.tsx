@@ -1,12 +1,13 @@
 "use client";
 
-import { Button } from "@react-component-library/ui";
+import { Button, LoadingModal } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { otsCompleted } from "@/lib/otsCompleted";
 import { getCICS } from "@/services/helpers/getCICS";
 import { isBillingAddressesEqual } from "@/services/helpers/isBillingAddressEqual";
@@ -17,7 +18,7 @@ import PaymentConfirmation from "./components/PaymentConfirmation";
 import PaymentSummary from "./components/PaymentConfirmation/PaymentSummary";
 import type { PaymentFormValues } from "./forms/formValues";
 import { PaymentForm } from "./forms/PaymentForm";
-import { paymentDetailsText } from "./PaymentDetailsProps";
+import { paymentDetailsText, slides } from "./PaymentDetailsProps";
 
 export const PaymentDetails = () => {
   const store = useJoinFlowStore();
@@ -30,7 +31,13 @@ export const PaymentDetails = () => {
     paymentDetails,
     setPaymentDetails,
     setBasket,
+    isLoadingModalOpen,
+    setIsLoadingModalOpen,
   } = useJoinFlowStore();
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPaymentDetailsError, setShowPaymentDetailsError] = useState(false);
@@ -93,6 +100,7 @@ export const PaymentDetails = () => {
           return false;
         }
 
+        setIsLoadingModalOpen(true);
         const result = await updateBasket(basket.id, {
           billingAddress: resolvedBillingAddress,
           optIns: {
@@ -108,6 +116,7 @@ export const PaymentDetails = () => {
         if (result.error) {
           console.error("Error updating basket:", result.error);
           setShowPaymentDetailsError(true);
+          setIsLoadingModalOpen(false);
           return false;
         }
 
@@ -152,11 +161,12 @@ export const PaymentDetails = () => {
         });
         setShowPaymentDetailsError(false);
         setShowConfirmation(true);
-
+        setIsLoadingModalOpen(false);
         return true;
       } catch (error) {
         console.error("Error processing payment details:", error);
         setShowPaymentDetailsError(true);
+        setIsLoadingModalOpen(false);
         return false;
       } finally {
         setIsSubmitting(false);
@@ -170,6 +180,7 @@ export const PaymentDetails = () => {
       serviceAddress,
       setPaymentDetails,
       router,
+      setIsLoadingModalOpen,
     ],
   );
 
@@ -266,6 +277,11 @@ export const PaymentDetails = () => {
         </div>
       </div>
       <Footer />
+      <LoadingModal
+        modalRef={loadingModalRef}
+        slides={slidesWithAssetPath}
+        loading={isLoadingModalOpen}
+      />
     </>
   );
 };

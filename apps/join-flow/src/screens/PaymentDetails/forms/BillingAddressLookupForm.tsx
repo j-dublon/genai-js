@@ -1,4 +1,4 @@
-import { Button } from "@react-component-library/ui";
+import { AccessibleLoadingEgg, Button } from "@react-component-library/ui";
 import useJoinFlowStore, {
   ExtendedStoreAddress,
   PaymentDetails,
@@ -127,7 +127,14 @@ export const BillingAddressLookupForm = ({
             tint="yellow"
             disabled={isUpdatingBasket}
           >
-            {paymentDetailsText.saveBillingAddress}
+            {isUpdatingBasket ? (
+              <div className="flex items-center gap-2">
+                <AccessibleLoadingEgg />
+                Updating...
+              </div>
+            ) : (
+              paymentDetailsText.saveBillingAddress
+            )}
           </Button>
         </div>
       </>

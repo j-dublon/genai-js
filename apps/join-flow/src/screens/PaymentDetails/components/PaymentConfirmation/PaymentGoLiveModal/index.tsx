@@ -44,6 +44,7 @@ export const PaymentGoLiveModal = ({
   const [appointmentError, setAppointmentError] = useState<string>();
   const [documentID, setDocumentID] = useState<string>("");
   const [hasDataBeenFetched, setHasDataBeenFetched] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,8 +71,8 @@ export const PaymentGoLiveModal = ({
               type: "allDay",
             })),
           );
-          setLoadingAppointments(false);
         }
+        setLoadingAppointments(false);
         setHasDataBeenFetched(true);
       } catch (error) {
         console.error("Error fetching appointment data:", error);
@@ -101,6 +102,7 @@ export const PaymentGoLiveModal = ({
         return;
       }
 
+      setIsSubmitting(true);
       let result;
       if (selectedPackage?.installationRequired) {
         result = await updateBasket(basket.id, {
@@ -117,12 +119,15 @@ export const PaymentGoLiveModal = ({
 
       if (result.basket) {
         setBasket(result.basket);
+        setIsSubmitting(false);
       } else if (result.error) {
         console.error("Failed to update basket:", result.error);
+        setIsSubmitting(false);
         return;
       }
     } catch (error) {
       console.error("Unexpected error updating basket:", error);
+      setIsSubmitting(false);
       return;
     }
 
@@ -203,6 +208,7 @@ export const PaymentGoLiveModal = ({
           </TipCard>
         }
         onSubmit={handleFormSubmit}
+        isSubmitting={isSubmitting}
         className="pt-12"
       />
     </InfoModal>

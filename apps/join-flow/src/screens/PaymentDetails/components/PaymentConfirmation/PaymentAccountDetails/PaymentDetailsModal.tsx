@@ -1,6 +1,10 @@
 "use client";
 
-import { Button, InfoModal } from "@react-component-library/ui";
+import {
+  AccessibleLoadingEgg,
+  Button,
+  InfoModal,
+} from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useEffect, useRef, useState } from "react";
 
@@ -207,7 +211,7 @@ export const PaymentDetailsModal = () => {
   return (
     <>
       <InfoModal title={paymentDetailsModalText.title} modalRef={modalRef}>
-        <p className="mb-6 mt-6 text-ui-grey-500 font-bold">
+        <p className="mb-6 mt-6 text-ui-grey-500 font-semibold">
           {paymentDetailsModalText.formInstructions}
         </p>
         <PaymentForm onSubmit={handleSubmit} />
@@ -226,9 +230,14 @@ export const PaymentDetailsModal = () => {
             aria-label="Save changes and close modal"
             disabled={isFormSubmitting}
           >
-            {isFormSubmitting
-              ? paymentDetailsModalText.loading
-              : paymentDetailsModalText.saveChanges}
+            {isFormSubmitting ? (
+              <div className="flex items-center gap-2">
+                <AccessibleLoadingEgg />
+                {paymentDetailsModalText.loading}
+              </div>
+            ) : (
+              paymentDetailsModalText.saveChanges
+            )}
           </Button>
         </div>
       </InfoModal>
