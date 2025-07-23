@@ -16,4 +16,5 @@ export const paymentDetailsText = {
   backButtonText: "Back",
   submitButtonText: "Next",
   submittingButtonText: "Processing...",
+  saveBillingAddress: "Save Billing Address",
 };

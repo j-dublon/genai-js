@@ -2,11 +2,11 @@ import { z } from "zod";
 
 const PERSONAL_NAME_PATTERN = /^[\p{L}\s'-]+$/u;
 
-export const addressSchema = z.object({
-  line1: z.string().min(1, "Address line 1 is required"),
-  line2: z.string().min(1, "Address line 2 is required"),
-  line3: z.string().min(1, "Address line 3 is required"),
-  postcode: z.string().min(1, "Postcode is required"),
+const baseAddressSchema = z.object({
+  line1: z.string(),
+  line2: z.string(),
+  line3: z.string().optional(),
+  postcode: z.string(),
   identifiers: z.array(
     z.object({
       value: z.string(),
@@ -16,9 +16,16 @@ export const addressSchema = z.object({
   ),
 });
 
+export const additionalAddressSchema = baseAddressSchema.extend({
+  line1: z.string().min(1, "House number is required "),
+  line2: z.string().min(1, "First line of your address is required"),
+  line3: z.string().min(1, "Second line of your address is required"),
+  postcode: z.string().min(1, "Postcode is a required field"),
+});
+
 export const packageSelectionSchema = z.object({
   packageId: z.string().min(1, "Please select a package"),
-  serviceAddress: addressSchema,
+  serviceAddress: baseAddressSchema,
 });
 
 export const eeroSelectionSchema = z.object({
