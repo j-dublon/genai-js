@@ -9,6 +9,7 @@ import {
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef, useState } from "react";
 
 import { DateTimeSelectionForm } from "@/components/DateTimeSelectionForm";
@@ -44,6 +45,7 @@ export const GoLiveDate = () => {
   } = goLiveDateText;
 
   const router = useRouter();
+  const posthog = usePostHog();
   const {
     setGoLiveDetails,
     goLiveDetails,
@@ -136,6 +138,7 @@ export const GoLiveDate = () => {
   }, []);
 
   const handleFormSubmit = async (data: GoLiveDateFormValues) => {
+    posthog.capture("join_flow_submitted_go_live_date");
     try {
       if (!basket) {
         return;

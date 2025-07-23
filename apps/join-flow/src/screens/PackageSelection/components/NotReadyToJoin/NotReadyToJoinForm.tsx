@@ -6,6 +6,7 @@ import {
   InsertLink,
   TipCard,
 } from "@react-component-library/ui";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -40,6 +41,8 @@ export const NotReadyToJoinForm = () => {
 
   // TODO: add a loading state
 
+  const posthog = usePostHog();
+
   const {
     register,
     handleSubmit,
@@ -63,6 +66,7 @@ export const NotReadyToJoinForm = () => {
     event?: React.BaseSyntheticEvent,
   ) => {
     event?.stopPropagation();
+    posthog.capture("join_flow_submitted_not_ready_to_join");
     setFormError(null);
     setSubmissionStatus("submitting");
 

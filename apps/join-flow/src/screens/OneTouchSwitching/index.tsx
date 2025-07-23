@@ -6,6 +6,7 @@ import useJoinFlowStore, {
   SwitchingDetails,
 } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
@@ -21,6 +22,7 @@ import { oneTouchSwitchingText, slides } from "./oneTouchSwitchingProps";
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
+  const posthog = usePostHog();
   const {
     setSwitchingDetails,
     switchingDetails,
@@ -29,6 +31,7 @@ export const OneTouchSwitching = () => {
     isLoadingModalOpen,
     setIsLoadingModalOpen,
   } = useJoinFlowStore();
+
 
   const [matchResult, setMatchResult] = useState<MatchResultType | null>(null);
   const [providerError, setProviderError] = useState<boolean>(false);
@@ -77,6 +80,7 @@ export const OneTouchSwitching = () => {
   };
 
   const handleSubmit = async (data: OneTouchSwitchingFormData) => {
+    posthog.capture("join_flow_submitted_one_touch_switch");
     setIsLoadingModalOpen(true);
 
     // this should never happen
@@ -141,6 +145,7 @@ export const OneTouchSwitching = () => {
   };
 
   const handleSkip = () => {
+    posthog.capture("join_flow_skipped_one_touch_switch");
     const switchData: SwitchingDetails = {
       otsSwitchStatus: "SKIPPED",
     };

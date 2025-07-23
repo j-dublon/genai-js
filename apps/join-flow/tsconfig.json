@@ -25,7 +25,7 @@
       "@schema/*": ["./src/schema/*"],
       "@validation/*": ["./src/validation/*"]
     },
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "gtag.js"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

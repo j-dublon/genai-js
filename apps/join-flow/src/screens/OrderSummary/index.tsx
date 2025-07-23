@@ -3,13 +3,16 @@
 import { Button } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import Link from "next/link";
-import React from "react";
+import { usePostHog } from "posthog-js/react";
 
 export const OrderSummary = () => {
   const { personalDetails, resetFlow, resetAffiliateSession } =
     useJoinFlowStore();
 
+  const posthog = usePostHog();
+
   const handleStartNewOrder = () => {
+    posthog.capture("join_flow_reset_basket");
     resetAffiliateSession();
     resetFlow();
   };

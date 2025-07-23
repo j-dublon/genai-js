@@ -1,4 +1,4 @@
-import { test, expect, Page } from "@playwright/test";
+import { expect, Page, test } from "@playwright/test";
 
 const setupInitialState = (page: Page) => {
   return page.addInitScript(() => {
@@ -188,6 +188,20 @@ const setupInitialState = (page: Page) => {
       "cuckoo-join-flow-storage",
       JSON.stringify({ state: initialState, version: 0 }),
     );
+
+    localStorage.setItem(
+      "cookieNotice",
+      JSON.stringify({
+        functionality_storage: "granted",
+        ad_storage: "granted",
+        ad_user_data: "granted",
+        ad_personalization: "granted",
+        analytics_storage: "granted",
+        personalization_storage: "granted",
+        security_storage: "granted",
+        ads_backend_tracking: "granted",
+      }),
+    );
   });
 };
 
@@ -243,7 +257,7 @@ test.describe("Select package page", () => {
   });
 
   test("Basic page load test", async ({ page }) => {
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     const bodyExists = await page.locator("body").isVisible();
     expect(bodyExists).toBe(true);
     const pageText = await page.textContent("body");
@@ -252,7 +266,7 @@ test.describe("Select package page", () => {
   });
 
   test("Packages should render on page", async ({ page }) => {
-    await page.waitForLoadState("networkidle");
+    await page.waitForLoadState("load");
     try {
       await page.waitForSelector(':has-text("24")', { timeout: 10000 });
       await page.waitForSelector(':has-text("£")', { timeout: 5000 });

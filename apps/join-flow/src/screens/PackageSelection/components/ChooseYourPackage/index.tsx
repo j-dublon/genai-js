@@ -11,6 +11,7 @@ import useJoinFlowStore, {
   type StoreSelectedPackage,
 } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { useMemo, useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
@@ -30,6 +31,7 @@ import {
 type ModalContent = "speed-calculator" | "package-details";
 
 export const ChooseYourPackage = () => {
+  const posthog = usePostHog();
   const router = useRouter();
   const {
     selectPackage,
@@ -171,6 +173,7 @@ export const ChooseYourPackage = () => {
   const handlePackageSelection = async (
     selectedStorePackage: StoreSelectedPackage,
   ) => {
+    posthog.capture("join_flow_selected_choose_your_package");
     if (selectedStorePackage && quoteResponse?.response?.products?.[0]) {
       selectPackage(selectedStorePackage);
       modalRef.current?.close();

@@ -4,6 +4,7 @@ import { Button, ColorPill, LoadingModal } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore, { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
@@ -38,6 +39,8 @@ const EeroSelection = () => {
     setIsLoadingModalOpen,
   } = useJoinFlowStore();
 
+  const posthog = usePostHog();
+
   const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
     isLoadingModalOpen,
     slides,
@@ -71,6 +74,7 @@ const EeroSelection = () => {
   };
 
   const handleContinue = async () => {
+    posthog.capture("join_flow_selected_eero_router");
     if (!basket) {
       console.error("Basket not found"); // TODO: This shouldn't be possible but needs handling
       return;

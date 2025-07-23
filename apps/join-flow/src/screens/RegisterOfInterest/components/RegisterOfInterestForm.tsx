@@ -5,6 +5,7 @@ import {
   InsertLink,
   TipCard,
 } from "@react-component-library/ui";
+import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -52,6 +53,7 @@ export const RegisterOfInterestForm = ({
       phoneNumber: "",
     },
   });
+  const posthog = usePostHog();
 
   const roiAddressData = useRoiAddress();
   const { affiliateSession } = useJoinFlowStore();
@@ -60,10 +62,9 @@ export const RegisterOfInterestForm = ({
   const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // TODO: add a loading state
-
   const onSubmit = async (data: ExpressionOfInterestFormData) => {
     setHasAttemptedSubmit(true);
+    posthog.capture("join_flow_submitted_register_of_interest");
 
     if (!roiAddressData || roiAddressData.length === 0) {
       setFormError("Please return to the previous page and select an address.");

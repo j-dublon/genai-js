@@ -2,6 +2,7 @@ import useJoinFlowStore, {
   ExtendedStoreAddress,
 } from "@store/useJoinFlowStore";
 import { useRouter, useSearchParams } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 
 import { AddressLookupForm } from "@/components/AddressLookupForm/index";
@@ -20,10 +21,13 @@ export const ServiceAddressLookupForm = () => {
     setIsLoadingModalOpen,
   } = useJoinFlowStore();
 
+  const posthog = usePostHog();
+
   const handleAddressSelected = async (
     selectedAddress: ExtendedStoreAddress,
   ) => {
     setServiceAddress(selectedAddress);
+    posthog.capture("join_flow_selected_address");
 
     if (!affiliateSession) {
       console.error("No affiliate session available");
