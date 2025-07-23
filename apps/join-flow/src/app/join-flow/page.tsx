@@ -1,14 +1,46 @@
+"use client";
+
+import { AccessibleLoadingEgg } from "@react-component-library/ui";
+import { useEffect, useState } from "react";
+
 import { ChooseYourAddress } from "@/screens/ChooseYourAddress";
 import { getDefaultAffiliateSession } from "@/services/helpers/affiliate/getDefaultAffiliate";
+import { AffiliateSession } from "@/store/useJoinFlowStore";
 
-const JoinFlowPage = async () => {
-  const defaultAffiliateSession = await getDefaultAffiliateSession();
+const JoinFlowPage = () => {
+  const [response, setResponse] = useState<AffiliateSession | null>(null);
+  const [documentId, setDocumentId] = useState<string | undefined>(undefined);
+  const [isLoading, setIsLoading] = useState(true);
 
-  if (defaultAffiliateSession.type === "success") {
+  useEffect(() => {
+    const loadDefaultAffiliateSession = async () => {
+      const defaultAffiliateSessionResponse =
+        await getDefaultAffiliateSession();
+      if (defaultAffiliateSessionResponse.type === "success") {
+        setResponse(defaultAffiliateSessionResponse.affiliateSession);
+        setDocumentId(defaultAffiliateSessionResponse.id);
+      }
+
+      setIsLoading(false);
+    };
+
+    loadDefaultAffiliateSession();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <AccessibleLoadingEgg
+        wrapperClassName="flex items-center justify-center min-h-screen"
+        height={200}
+      />
+    );
+  }
+
+  if (response) {
     return (
       <ChooseYourAddress
-        affiliateSession={defaultAffiliateSession.affiliateSession}
-        sessionDocumentId={defaultAffiliateSession.id}
+        affiliateSession={response}
+        sessionDocumentId={documentId}
       />
     );
   }
