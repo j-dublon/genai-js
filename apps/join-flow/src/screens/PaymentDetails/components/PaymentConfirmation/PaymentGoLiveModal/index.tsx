@@ -58,7 +58,6 @@ export const PaymentGoLiveModal = ({
           await fetchEngineerAppointments(
             setAppointmentError,
             setAvailableAppointments,
-            setLoadingAppointments,
             setDocumentID,
             basket.product.quoteLookup.value as string,
           );

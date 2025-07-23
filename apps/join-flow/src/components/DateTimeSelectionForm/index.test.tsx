@@ -3,7 +3,19 @@ import { userEvent } from "@testing-library/user-event";
 import { Control } from "react-hook-form";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+import { text } from "./DateTimeSelectionFormProps";
 import { DateTimeSelectionForm } from "./index";
+
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(() => ({
+    refresh: vi.fn(),
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    prefetch: vi.fn(),
+  })),
+}));
 
 vi.mock("@/screens/GoLiveDate/utils/GoLiveDateUtils", () => ({
   getTimeSlotsForDate: vi.fn(() => [
@@ -189,7 +201,7 @@ describe("DateTimeSelectionForm - Business Logic", () => {
       expect(screen.queryByTestId("form-dropdown")).not.toBeInTheDocument();
     });
 
-    it("shows appointment error when provided", () => {
+    it("shows the error tip card when appointment error is provided", () => {
       render(
         <DateTimeSelectionForm
           {...defaultProps}
@@ -197,21 +209,17 @@ describe("DateTimeSelectionForm - Business Logic", () => {
         />,
       );
 
-      expect(
-        screen.getByText("Failed to load appointments"),
-      ).toBeInTheDocument();
-      expect(screen.getByText("Failed to load appointments")).toHaveClass(
-        "text-ui-error",
-      );
+      expect(screen.getByText(text.errorTipCardText)).toBeInTheDocument();
     });
 
-    it("disables date picker when loading", () => {
+    it("shows a loading slide when loading appointments, and no drop down or date picker", () => {
       render(
         <DateTimeSelectionForm {...defaultProps} loadingAppointments={true} />,
       );
 
-      const dateSelect = screen.getByTestId("date-select");
-      expect(dateSelect).toBeDisabled();
+      expect(screen.getByRole("status")).toBeInTheDocument();
+      expect(screen.queryByTestId("form-dropdown")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("date-select")).not.toBeInTheDocument();
     });
   });
 

@@ -1,3 +1,5 @@
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
+
 export const oneTouchSwitchingText = {
   nextStepPillText: "Payment & join Cuckoo",
   title: "Switching to Cuckoo",
@@ -29,3 +31,18 @@ export const oneTouchSwitchingText = {
   loadingButtonText: "Checking...",
   errorMessage: "An error occurred while processing your request",
 };
+
+export const slides: LoadingModalSlide[] = [
+  {
+    src: "/images/megaphone-animated.gif",
+    message: "Crossing all the T's and dotting all the I's",
+  },
+  {
+    src: "/images/news-animated.gif",
+    message: "What do those T's and I's stand for anyway?",
+  },
+  {
+    src: "/images/egg-animated.gif",
+    message: "Never mind - we're very nearly there...",
+  },
+];

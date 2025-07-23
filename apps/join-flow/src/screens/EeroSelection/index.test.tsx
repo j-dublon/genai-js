@@ -40,6 +40,19 @@ vi.mock("@/validation/join-flow-schema", () => ({
     parse: vi.fn(),
   },
 }));
+
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
+
 vi.mock("./eeroSelectionProps", () => ({
   eeroPageContent: {
     title: "Eero Selection",

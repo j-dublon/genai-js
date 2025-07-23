@@ -54,6 +54,23 @@ export const ChooseYourPackage = () => {
   const { isMouseDown, onMouseDown, onMouseUp, onMouseMove } =
     useScrollable(scrollContainerRef);
 
+  useClearFocus(modalRef, "close");
+
+  const {
+    toggleSwitchLabels,
+    pageTitle,
+    pageSubtitle,
+    packageDetailsModalTitle,
+    packageDetailsModalTitleFallback,
+  } = packageSelectionPageText;
+  const { calculatorModalTitle, title, subtitle, speedCalculatorButtonText } =
+    speedCalculatorText;
+
+  const getTint = (index: number) => {
+    const cardColors = ["pink", "blue", "yellow"] as const;
+    return cardColors[index % cardColors.length];
+  };
+
   const storeSelectedPackages = useMemo((): StoreSelectedPackage[] => {
     if (!quoteResponse?.response?.products) return [];
 
@@ -115,15 +132,9 @@ export const ChooseYourPackage = () => {
 
   const topSpeedPackage = useTopSpeedPackage(filteredPackages);
 
-  const {
-    toggleSwitchLabels,
-    pageTitle,
-    pageSubtitle,
-    packageDetailsModalTitle,
-    packageDetailsModalTitleFallback,
-  } = packageSelectionPageText;
-  const { calculatorModalTitle, title, subtitle, speedCalculatorButtonText } =
-    speedCalculatorText;
+  if (storeSelectedPackages.length === 0) {
+    return null;
+  }
 
   const handleToggleSwitch = (isOn: boolean) => {
     setIs24Month(isOn);
@@ -193,13 +204,6 @@ export const ChooseYourPackage = () => {
       }
     }
   };
-
-  const getTint = (index: number) => {
-    const cardColors = ["pink", "blue", "yellow"] as const;
-    return cardColors[index % cardColors.length];
-  };
-
-  useClearFocus(modalRef, "close");
 
   const handleOpenModal = (
     content: ModalContent,

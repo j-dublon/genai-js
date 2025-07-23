@@ -1,9 +1,16 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, DatePicker } from "@react-component-library/ui";
+import {
+  Button,
+  DatePicker,
+  LoadingSlide,
+  TipCard,
+} from "@react-component-library/ui";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import { FormDropdown } from "@/components/FormDropdown";
+import { getAssetPath } from "@/lib/get-asset-path";
 import { getTimeSlotsForDate } from "@/screens/GoLiveDate/utils/GoLiveDateUtils";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
 import {
@@ -11,21 +18,19 @@ import {
   goLiveDateSchema,
 } from "@/validation/join-flow-schema";
 
+import { slide, text } from "./DateTimeSelectionFormProps";
+
 interface DateTimeSelectionFormProps {
   availableAppointments: Appointment[];
   loadingAppointments: boolean;
   appointmentError?: string;
-
   requiresTimeSlot: boolean;
-
   defaultSelectedDate?: string | undefined;
   defaultTimeSlot?: string;
-
   availableDatesLabel: string;
   timeSlotLabel: string;
   timeSlotPlaceHolder: string;
   submitButtonText: string;
-
   onSubmit: (data: GoLiveDateFormValues) => void | Promise<void>;
   submitButtonAlignment?: "left" | "center" | "right";
   submitButtonFullWidth?: boolean;
@@ -52,6 +57,7 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
   showSubmitButton = true,
   tipCard,
 }) => {
+  const router = useRouter();
   const initialTimeslots: Record<string, string> = defaultTimeSlot
     ? { [defaultTimeSlot]: defaultTimeSlot }
     : {};
@@ -127,48 +133,66 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
               {availableDatesLabel}
             </h2>
 
-            {appointmentError && (
-              <div className="text-ui-error">{appointmentError}</div>
-            )}
-
-            <Controller
-              name="selectedDate"
-              control={control}
-              render={({ field }) => (
-                <DatePicker
-                  availableDates={availableAppointments.map(
-                    (appointment) => appointment.startDateTime,
-                  )}
-                  selectedDate={field.value}
-                  onDateSelect={(date) => field.onChange(date)}
-                  disabled={loadingAppointments}
+            {loadingAppointments ? (
+              <div className="flex justify-center">
+                <LoadingSlide
+                  src={getAssetPath(slide.src)}
+                  message={slide.message || ""}
                 />
-              )}
-            />
-            {errors.selectedDate && (
-              <p className="text-ui-error text-sm mt-1">
-                {errors.selectedDate.message}
-              </p>
+              </div>
+            ) : appointmentError ? (
+              <TipCard
+                image={getAssetPath("/images/stop-hand.svg")}
+                backgroundColor="orange"
+                className="mt-10 md:mt-0 mb-10 md:mb-6 justify-center md:w-full items-center"
+              >
+                <span className="font-semibold">{text.errorTipCardText}</span>
+              </TipCard>
+            ) : (
+              <>
+                <Controller
+                  name="selectedDate"
+                  control={control}
+                  render={({ field }) => (
+                    <DatePicker
+                      availableDates={availableAppointments.map(
+                        (appointment) => appointment.startDateTime,
+                      )}
+                      selectedDate={field.value}
+                      onDateSelect={(date) => field.onChange(date)}
+                      disabled={loadingAppointments}
+                    />
+                  )}
+                />
+                {errors.selectedDate && (
+                  <p className="text-ui-error text-sm mt-1">
+                    {errors.selectedDate.message}
+                  </p>
+                )}
+              </>
             )}
           </div>
 
-          {selectedDate && requiresTimeSlot && (
-            <div className="mb-6">
-              <FormDropdown
-                dropdownLabel={timeSlotLabel}
-                control={control}
-                name="timeSlot"
-                dropdownPlaceholder={timeSlotPlaceHolder}
-                options={timeslots}
-                errorMessage={errors?.timeSlot?.message}
-              />
-            </div>
-          )}
+          {selectedDate &&
+            requiresTimeSlot &&
+            !appointmentError &&
+            !loadingAppointments && (
+              <div className="mb-6">
+                <FormDropdown
+                  dropdownLabel={timeSlotLabel}
+                  control={control}
+                  name="timeSlot"
+                  dropdownPlaceholder={timeSlotPlaceHolder}
+                  options={timeslots}
+                  errorMessage={errors?.timeSlot?.message}
+                />
+              </div>
+            )}
         </div>
 
         {tipCard && <div className="mb-6">{tipCard}</div>}
 
-        {showSubmitButton && (
+        {showSubmitButton && !appointmentError && (
           <div
             className={`flex mt-8 ${
               submitButtonAlignment === "right"
@@ -187,6 +211,20 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
               {submitButtonText}
             </Button>
           </div>
+        )}
+
+        {appointmentError && (
+          <Button
+            type="button"
+            tint="yellow"
+            variant="solid"
+            fullWidth={submitButtonFullWidth}
+            onClick={() => {
+              router.refresh();
+            }}
+          >
+            {text.retryButtonText}
+          </Button>
         )}
       </form>
     </div>

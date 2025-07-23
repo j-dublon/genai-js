@@ -1,11 +1,22 @@
 "use client";
 
+import { LoadingModal } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export const Address = () => {
+import { LoadingModalSlide, useLoadingModal } from "@/hooks/useLoadingModal";
+
+export const Address = ({ slides }: { slides: LoadingModalSlide[] }) => {
   const router = useRouter();
-  const { serviceAddress, resetFlow } = useJoinFlowStore();
+  const { serviceAddress } = useJoinFlowStore();
+  const [isAddressLoadingModalOpen, setIsAddressLoadingModalOpen] =
+    useState(false);
+
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen: isAddressLoadingModalOpen,
+    slides,
+  });
 
   const formattedAddress = serviceAddress
     ? [
@@ -19,12 +30,17 @@ export const Address = () => {
     : "No address information available";
 
   const handleChangeAddress = () => {
+    setIsAddressLoadingModalOpen(true);
     router.push("/join-flow");
-    resetFlow();
   };
 
   return (
     <>
+      <LoadingModal
+        modalRef={loadingModalRef}
+        loading={isAddressLoadingModalOpen}
+        slides={slidesWithAssetPath}
+      />
       <p className="text-core-black text-sm font-medium leading-[1.4] md:text-md md:font-semibold md:leading-[1.5]">
         {formattedAddress}
       </p>

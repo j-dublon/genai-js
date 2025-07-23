@@ -6,7 +6,6 @@ import {
 export const fetchEngineerAppointments = async (
   setAppointmentError: (error: string) => void,
   setAvailableAppointments: (appointments: Appointment[]) => void,
-  setLoadingAppointments: (loading: boolean) => void,
   setDocumentID: (documentID: string) => void,
   quoteLookup: string,
 ) => {
@@ -24,8 +23,6 @@ export const fetchEngineerAppointments = async (
   } catch (error) {
     console.error("Failed to fetch engineer appointments", error);
     setAppointmentError("Failed to fetch engineer appointments");
-  } finally {
-    setLoadingAppointments(false);
   }
 };
 

@@ -560,4 +560,20 @@ describe("ChooseYourPackage", () => {
       expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
     });
   });
+
+  it("returns null when there are no packages available", () => {
+    const mockStoreWithNoProducts = {
+      ...mockStore,
+      quoteResponse: {
+        documentID: "quote-123",
+        response: {
+          products: [],
+        },
+      },
+    };
+    mockUseJoinFlowStore.mockReturnValue(mockStoreWithNoProducts);
+
+    const { container } = render(<ChooseYourPackage />);
+    expect(container.firstChild).toBeNull();
+  });
 });

@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+  AccessibleLoadingEgg,
   Checkbox,
   InsertFormattedText,
   TipCard,
@@ -29,6 +30,7 @@ export const OneTouchSwitchingForm = ({
   isSubmitting = false,
   providers,
   providerError,
+  isLoadingProviders,
 }: OneTouchSwitchingFormProps) => {
   const { switchingDetails } = useJoinFlowStore();
   const [customProviderError, setCustomProviderError] = useState<string | null>(
@@ -96,6 +98,14 @@ export const OneTouchSwitchingForm = ({
 
   const errorTextStyling = "text-ui-error text-xs md:text-sm mt-1";
 
+  const showProviderError =
+    !currentProvider &&
+    (providerError || customProviderError || errors.provider?.message);
+
+  const providerErrorMessage = providerError
+    ? oneTouchSwitchingText.providerErrorMessage
+    : customProviderError || errors.provider?.message;
+
   return (
     <>
       {!shouldShowAccountNumber && (
@@ -147,24 +157,31 @@ export const OneTouchSwitchingForm = ({
             {oneTouchSwitchingText.providerSelectionTitle}
           </h3>
           <div>
-            <FormDropdown
-              control={control}
-              name="provider"
-              dropdownPlaceholder={
-                oneTouchSwitchingText.providerSelectorDefault
-              }
-              options={providerOptions}
-              errorMessage={
-                providerError && !currentProvider
-                  ? oneTouchSwitchingText.providerErrorMessage
-                  : !currentProvider &&
-                      (customProviderError || errors.provider?.message)
-                    ? customProviderError || errors.provider?.message
-                    : undefined
-              }
-              showLabel={false}
-              errorMessageStyling={errorTextStyling}
-            />
+            {isLoadingProviders ? (
+              <div className="flex flex-row gap-2 items-center justify-center">
+                <AccessibleLoadingEgg
+                  height={40}
+                  wrapperClassName="flex justify-center"
+                />
+                <span className="text-xs md:text-sm leading-[1.6] font-normal">
+                  Loading providers...
+                </span>
+              </div>
+            ) : (
+              <FormDropdown
+                control={control}
+                name="provider"
+                dropdownPlaceholder={
+                  oneTouchSwitchingText.providerSelectorDefault
+                }
+                options={providerOptions}
+                errorMessage={
+                  showProviderError ? providerErrorMessage : undefined
+                }
+                showLabel={false}
+                errorMessageStyling={errorTextStyling}
+              />
+            )}
           </div>
 
           <div className="flex flex-col">

@@ -2,6 +2,7 @@
 
 import {
   ColorPill,
+  LoadingModal,
   TipCard,
   useClickOutside,
 } from "@react-component-library/ui";
@@ -14,6 +15,7 @@ import { DateTimeSelectionForm } from "@/components/DateTimeSelectionForm";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { PILL_FADE_OUT_DELAY, PILL_HIDE_DELAY } from "@/lib/constants";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
@@ -23,7 +25,7 @@ import { GoLiveDateFormValues } from "@/validation/join-flow-schema";
 
 import { EngineerVisitModal } from "./components/EngineerVisitModal";
 import { OtsFailBanner } from "./components/OtsFailBanner";
-import { goLiveDateText } from "./GoLiveDateProps";
+import { goLiveDateText, slides } from "./GoLiveDateProps";
 import { fetchEngineerAppointments } from "./utils/GoLiveDateUtils";
 
 export const GoLiveDate = () => {
@@ -38,6 +40,7 @@ export const GoLiveDate = () => {
     continueButtonText,
     otsFailBannerText,
     otsFailBannerHighlightText,
+    tipCardText,
   } = goLiveDateText;
 
   const router = useRouter();
@@ -49,12 +52,18 @@ export const GoLiveDate = () => {
     basket,
     setBasket,
     selectedPackage,
+    isLoadingModalOpen,
+    setIsLoadingModalOpen,
   } = useJoinFlowStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showPill, setShowPill] = useState<boolean>(true);
   const [fadeOut, setFadeOut] = useState<boolean>(false);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
 
   const closeEngineerModal = () => {
     modalRef.current?.close();
@@ -73,23 +82,30 @@ export const GoLiveDate = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      if (selectedPackage?.installationRequired) {
-        fetchEngineerAppointments(
-          setAppointmentError,
-          setAvailableAppointments,
-          setLoadingAppointments,
-          setDocumentID,
-          basket?.product?.quoteLookup?.value as string,
-        );
-      } else {
-        const goLiveDates = await getGoLiveDates();
-        setAvailableAppointments(
-          goLiveDates.map((date) => ({
-            startDateTime: new Date(date),
-            endDateTime: new Date(date),
-            type: "allDay",
-          })),
-        );
+      setLoadingAppointments(true);
+
+      try {
+        if (selectedPackage?.installationRequired) {
+          await fetchEngineerAppointments(
+            setAppointmentError,
+            setAvailableAppointments,
+            setDocumentID,
+            basket?.product?.quoteLookup?.value as string,
+          );
+        } else {
+          const goLiveDates = await getGoLiveDates();
+          setAvailableAppointments(
+            goLiveDates.map((date) => ({
+              startDateTime: new Date(date),
+              endDateTime: new Date(date),
+              type: "allDay",
+            })),
+          );
+        }
+        setLoadingAppointments(false);
+      } catch (error) {
+        setAppointmentError("Failed to fetch go-live dates");
+        console.error("Failed to fetch dates", error);
         setLoadingAppointments(false);
       }
     };
@@ -126,6 +142,8 @@ export const GoLiveDate = () => {
       }
 
       let result;
+      setIsLoadingModalOpen(true);
+
       if (selectedPackage?.installationRequired) {
         result = await updateBasket(basket.id, {
           engineer: {
@@ -142,9 +160,12 @@ export const GoLiveDate = () => {
       if (result.basket) {
         setBasket(result.basket);
       } else if (result.error) {
+        setIsLoadingModalOpen(false);
         return;
       }
-    } catch {
+    } catch (error) {
+      setIsLoadingModalOpen(false);
+      console.error("Error in handleFormSubmit", error);
       return;
     }
 
@@ -188,6 +209,7 @@ export const GoLiveDate = () => {
 
   if (!basket?.product?.quoteLookup?.value) {
     console.error("no quoting code available");
+    setIsLoadingModalOpen(false);
     return;
   }
 
@@ -197,6 +219,11 @@ export const GoLiveDate = () => {
 
   return (
     <>
+      <LoadingModal
+        modalRef={loadingModalRef}
+        slides={slidesWithAssetPath}
+        loading={isLoadingModalOpen}
+      />
       <StepNavigationWithBasket step={3} />
       <div className="container md:max-w-[758px] mx-auto px-4 pb-8 pt-10 lg:pt-20">
         {otsSwitchFailedOrSkipped && (
@@ -226,26 +253,27 @@ export const GoLiveDate = () => {
           <h1 className="grid text-2xl font-bold pb-2 md:pb-16 justify-center">
             {title}
           </h1>
-          <TipCard
-            image={getAssetPath("/images/love.svg")}
-            className="mt-10 md:mt-0 mb-10 md:mb-6 bg-secondary-green justify-center md:w-full items-center"
-          >
-            Yay! We can get you live as early as{" "}
-            {availableAppointments.length > 0 ? (
-              <span className="font-medium">
-                {availableAppointments[0].startDateTime.toLocaleDateString(
-                  "en-GB",
-                  {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  },
-                )}
-              </span>
-            ) : (
-              <span>....</span>
+          {!loadingAppointments &&
+            !appointmentError &&
+            availableAppointments.length > 0 && (
+              <TipCard
+                image={getAssetPath("/images/love.svg")}
+                backgroundColor="green"
+                className="mt-10 md:mt-0 mb-10 md:mb-6 justify-center md:w-full items-center"
+              >
+                {tipCardText}
+                <span className="font-medium">
+                  {availableAppointments[0].startDateTime.toLocaleDateString(
+                    "en-GB",
+                    {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    },
+                  )}
+                </span>
+              </TipCard>
             )}
-          </TipCard>
           <p className="text-core-black text-sm leading-[26px] font-medium mb-3">
             {subtitle}
           </p>
@@ -257,7 +285,7 @@ export const GoLiveDate = () => {
               modalRef.current?.showModal();
               setIsModalOpen(true);
             }}
-            className="text-ui-link underline text-sm leading-[26px] font-medium pb-12 bg-transparent border-none cursor-pointer p-0"
+            className="text-ui-link underline text-sm leading-[26px] font-medium bg-transparent border-none cursor-pointer p-0"
           >
             {engineerLink}
           </button>
@@ -281,6 +309,7 @@ export const GoLiveDate = () => {
             submitButtonText={continueButtonText}
             onSubmit={handleFormSubmit}
             className="pt-12"
+            submitButtonFullWidth
           />
         </div>
       </div>

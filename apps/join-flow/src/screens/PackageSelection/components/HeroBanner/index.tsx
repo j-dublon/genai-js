@@ -8,7 +8,7 @@ import {
 import { getAssetPath } from "@/lib/get-asset-path";
 import { Address } from "@/screens/PackageSelection/components/Address";
 
-import { bannerTitle } from "./HeroBannerProps";
+import { bannerTitle, slides } from "./HeroBannerProps";
 
 export const HeroBanner = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
@@ -29,7 +29,7 @@ export const HeroBanner = () => {
         </h1>
       </div>
       <div className="md:max-w-[805px] text-center pb-0 md:pb-6">
-        <Address />
+        <Address slides={slides} />
       </div>
       {trustScore && (
         <TrustpilotHorizontal

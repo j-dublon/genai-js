@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@react-component-library/ui";
+import { Button, LoadingModal } from "@react-component-library/ui";
 import useJoinFlowStore, {
   BroadbandProvider,
   SwitchingDetails,
@@ -10,23 +10,34 @@ import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { createSwitchMatchLookup } from "@/services/helpers/createSwitchMatchLookup";
 import { getAllProviders } from "@/services/helpers/getAllProviders";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
 import { MatchResultType, OneTouchSwitchingFormData } from "./forms/formValues";
 import OneTouchSwitchingForm from "./forms/oneTouchSwitchingForm";
-import { oneTouchSwitchingText } from "./oneTouchSwitchingProps";
+import { oneTouchSwitchingText, slides } from "./oneTouchSwitchingProps";
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
-  const { setSwitchingDetails, switchingDetails, setCurrentStep, basket } =
-    useJoinFlowStore();
+  const {
+    setSwitchingDetails,
+    switchingDetails,
+    setCurrentStep,
+    basket,
+    isLoadingModalOpen,
+    setIsLoadingModalOpen,
+  } = useJoinFlowStore();
 
   const [matchResult, setMatchResult] = useState<MatchResultType | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [providerError, setProviderError] = useState<boolean>(false);
   const [providers, setProviders] = useState<BroadbandProvider[]>([]);
+  const [isLoadingProviders, setIsLoadingProviders] = useState(false);
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen,
+    slides,
+  });
 
   const otsSwitchStatus = switchingDetails?.otsSwitchStatus;
   const isSecondAttempt = otsSwitchStatus === "FIRST_ATTEMPT_FAILED";
@@ -47,23 +58,26 @@ export const OneTouchSwitching = () => {
         currentProvider: provider,
         otsSwitchStatus: "FIRST_ATTEMPT_FAILED",
       });
+      setIsLoadingModalOpen(false);
     }
   };
 
   const fetchProviders = async () => {
+    setIsLoadingProviders(true);
     const result = await getAllProviders();
 
     if (result.error) {
       console.error("Error fetching providers:", result.error);
       setProviderError(true);
+      setIsLoadingProviders(false);
       return;
     }
-
+    setIsLoadingProviders(false);
     setProviders(result.providers || []);
   };
 
   const handleSubmit = async (data: OneTouchSwitchingFormData) => {
-    setIsSubmitting(true);
+    setIsLoadingModalOpen(true);
 
     // this should never happen
     if (!basket?.id) {
@@ -72,7 +86,7 @@ export const OneTouchSwitching = () => {
         success: false,
         message: oneTouchSwitchingText.errorMessage,
       });
-      setIsSubmitting(false);
+      setIsLoadingModalOpen(false);
       return;
     }
 
@@ -123,8 +137,6 @@ export const OneTouchSwitching = () => {
       });
 
       handleOTSFailure(provider);
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -150,6 +162,11 @@ export const OneTouchSwitching = () => {
 
   return (
     <>
+      <LoadingModal
+        modalRef={loadingModalRef}
+        slides={slidesWithAssetPath}
+        loading={isLoadingModalOpen}
+      />
       <StepNavigationWithBasket step={3} />
       <div className="container mx-auto flex flex-col items-center md:mt-6 lg:mt-12 md:mb-16">
         <div className="max-w-[720px] px-5 md:px-22 pt-10 md:pt-12 bg-core-white rounded-md">
@@ -164,13 +181,11 @@ export const OneTouchSwitching = () => {
               }
               matchResult={matchResult}
               setMatchResult={setMatchResult}
-              isSubmitting={isSubmitting}
+              isSubmitting={isLoadingModalOpen}
               providers={providers}
               providerError={providerError}
+              isLoadingProviders={isLoadingProviders}
             />
-
-            {/* TODO: Add loading animation */}
-
             <div className="flex flex-col md:flex-row gap-4 md:gap-6">
               <div className="w-full md:w-1/2">
                 <Button
@@ -178,7 +193,7 @@ export const OneTouchSwitching = () => {
                   tint="white"
                   variant="outline"
                   type="button"
-                  disabled={isSubmitting}
+                  disabled={isLoadingModalOpen}
                   fullWidth
                 >
                   {oneTouchSwitchingText.skipButtonText}
@@ -190,11 +205,11 @@ export const OneTouchSwitching = () => {
                   onClick={handleFormSubmit}
                   tint="yellow"
                   variant="solid"
-                  disabled={isSubmitting}
+                  disabled={isLoadingModalOpen}
                   type="button"
                   fullWidth
                 >
-                  {isSubmitting
+                  {isLoadingModalOpen
                     ? oneTouchSwitchingText.loadingButtonText
                     : isSecondAttempt
                       ? oneTouchSwitchingText.retryButtonText

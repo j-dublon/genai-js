@@ -1,8 +1,9 @@
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import { useRouter } from "next/navigation";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
 import { Address } from "@/screens/PackageSelection/components/Address";
 import { StoreAddress } from "@/store/useJoinFlowStore";
 
@@ -14,9 +15,28 @@ vi.mock("@store/useJoinFlowStore", () => ({
   default: vi.fn(),
 }));
 
+beforeAll(() => {
+  HTMLDialogElement.prototype.showModal = vi.fn();
+  HTMLDialogElement.prototype.close = vi.fn();
+});
+
 describe("Address", () => {
   const mockPush = vi.fn();
-  const mockResetFlow = vi.fn();
+  const mockSlides: LoadingModalSlide[] = [
+    {
+      src: "/images/world-animated.gif",
+      message: "We're clearing the nest for a new address.",
+    },
+    {
+      src: "/images/sunglasses-animated.gif",
+      message: "Let's hatch a brand new broadband plan just for you.",
+    },
+    {
+      src: "/images/rocket-animated.gif",
+      message:
+        "Rebuilding your quote from the ground up—egg-sactly how you like it!",
+    },
+  ];
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -38,7 +58,7 @@ describe("Address", () => {
       serviceAddress: mockAddress,
     });
 
-    render(<Address />);
+    render(<Address slides={mockSlides} />);
     expect(
       screen.getByText("123 Test Street, Apt 4B, Test Area, ABC 123"),
     ).toBeInTheDocument();
@@ -49,19 +69,18 @@ describe("Address", () => {
       serviceAddress: null,
     });
 
-    render(<Address />);
+    render(<Address slides={mockSlides} />);
     expect(
       screen.getByText("No address information available"),
     ).toBeInTheDocument();
   });
 
-  it("renders the 'Change my address' link and handles click, sending user to start page and clearing the join flow store", () => {
+  it("renders the 'Change my address' link and handles click, sending user to start page", () => {
     vi.mocked(useJoinFlowStore).mockReturnValue({
       serviceAddress: null,
-      resetFlow: mockResetFlow,
     } as ReturnType<typeof useJoinFlowStore>);
 
-    render(<Address />);
+    render(<Address slides={mockSlides} />);
     const changeAddressButton = screen.getByRole("button", {
       name: "Change my address",
     });
@@ -69,6 +88,24 @@ describe("Address", () => {
 
     changeAddressButton.click();
     expect(mockPush).toHaveBeenCalledWith("/join-flow");
-    expect(mockResetFlow).toHaveBeenCalled();
+  });
+
+  it("opens the loading modal when 'Change my address' is clicked", () => {
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      serviceAddress: null,
+    } as ReturnType<typeof useJoinFlowStore>);
+
+    render(<Address slides={mockSlides} />);
+    const changeAddressButton = screen.getByRole("button", {
+      name: "Change my address",
+    });
+
+    act(() => {
+      changeAddressButton.click();
+    });
+
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+    expect(screen.getByText(mockSlides[0].message!)).toBeInTheDocument();
+    expect(mockPush).toHaveBeenCalledWith("/join-flow");
   });
 });

@@ -1,7 +1,10 @@
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
+
 export interface GoLiveDateProps {
   nextStepPillText: string;
   title: string;
   subtitle: string;
+  tipCardText: string;
   paragraph: string;
   engineerLink: string;
   availableDatesLabel: string;
@@ -22,6 +25,7 @@ export interface GoLiveDateProps {
 export const goLiveDateText: GoLiveDateProps = {
   nextStepPillText: "Pay & join Cuckoo",
   title: "Your go-live Date",
+  tipCardText: "Yay! We can get you live as early as ",
   subtitle:
     "This is the earliest date we can connect you to our full fibre. If this date doesn't suit you, pick another below.",
   paragraph:
@@ -50,3 +54,18 @@ export const goLiveDateText: GoLiveDateProps = {
     buttonText: "Okay, got it",
   },
 };
+
+export const slides: LoadingModalSlide[] = [
+  {
+    src: "/images/megaphone-animated.gif",
+    message: "Crossing all the T's and dotting all the I's",
+  },
+  {
+    src: "/images/news-animated.gif",
+    message: "What do those T's and I's stand for anyway?",
+  },
+  {
+    src: "/images/egg-animated.gif",
+    message: "Never mind - we're very nearly there...",
+  },
+];

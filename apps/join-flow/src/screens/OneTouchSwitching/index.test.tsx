@@ -9,6 +9,7 @@ import { getAllProviders } from "@/services/helpers/getAllProviders";
 import { updateBasket } from "@/services/helpers/updateBasket";
 
 import { OneTouchSwitching } from "./index";
+import { oneTouchSwitchingText } from "./oneTouchSwitchingProps";
 
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),
@@ -43,6 +44,18 @@ vi.mock("@/components/Footer", () => ({
   Footer: vi.fn(),
 }));
 
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
+
 describe("OneTouchSwitching", () => {
   const mockRouter = {
     push: vi.fn(),
@@ -62,6 +75,8 @@ describe("OneTouchSwitching", () => {
       updatedAt: "2024-01-01",
       createdAt: "2024-01-01",
     },
+    isLoadingModalOpen: false,
+    setIsLoadingModalOpen: vi.fn(),
   };
 
   const mockProviders = [
@@ -110,23 +125,25 @@ describe("OneTouchSwitching", () => {
       expect(getAllProviders).toHaveBeenCalled();
     });
 
-    expect(screen.getByText("Switching to Cuckoo")).toBeInTheDocument();
+    expect(screen.getByText(oneTouchSwitchingText.title)).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "We'll tell your current broadband provider that you're leaving them and joining us, so you won't have to. They'll let you know if there are any final charges from them. Find out more about one touch switching",
-      ),
+      screen.getByText(oneTouchSwitchingText.subtitle),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("Select your current broadband provider from the list"),
+      screen.getByText(oneTouchSwitchingText.providerSelectionTitle),
     ).toBeInTheDocument();
-    expect(screen.getByText("Pick your provider")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "I'm the account holder and happy for Cuckoo to manage my switch",
-      ),
+      screen.getByText(oneTouchSwitchingText.providerSelectorDefault),
     ).toBeInTheDocument();
-    expect(screen.getByText("Skip this step")).toBeInTheDocument();
-    expect(screen.getByText("Match my details")).toBeInTheDocument();
+    expect(
+      screen.getByText(oneTouchSwitchingText.consentLabel),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(oneTouchSwitchingText.skipButtonText),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(oneTouchSwitchingText.submitButtonText),
+    ).toBeInTheDocument();
   });
 
   it("should fetch providers on initial render", async () => {
@@ -150,25 +167,56 @@ describe("OneTouchSwitching", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText(
-          "Sorry, an error occurred. Please try again later or skip this step.",
-        ),
+        screen.getByText(oneTouchSwitchingText.providerErrorMessage),
       ).toBeInTheDocument();
     });
   });
 
-  it("should handle form submission with valid account number", async () => {
+  it("should handle successful form submission on first attempt", async () => {
+    const user = userEvent.setup();
+
+    render(<OneTouchSwitching />);
+
+    // Wait for providers to be loaded
+    await waitFor(() => {
+      expect(getAllProviders).toHaveBeenCalled();
+    });
+
+    const dropdownButton = screen.getByText(
+      oneTouchSwitchingText.providerSelectorDefault,
+    );
+    await user.click(dropdownButton);
+
+    const provider1Option = screen.getByRole("button", { name: "Provider 1" });
+    await user.click(provider1Option);
+
+    const checkbox = screen.getByRole("checkbox", {
+      name: oneTouchSwitchingText.consentLabel,
+    });
+    await user.click(checkbox);
+
+    const submitButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.submitButtonText,
+    });
+    await user.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockRouter.push).toHaveBeenCalledWith("/join-flow/go-live-date");
+    });
+    expect(mockStore.setSwitchingDetails).toHaveBeenCalledWith({
+      currentProvider: mockProviders[0],
+      switchOrderReference: "12345678",
+      otsSwitchStatus: "SWITCH_SUCCESS",
+    });
+    expect(mockStore.setCurrentStep).toHaveBeenCalledWith(3);
+  });
+
+  it("should handle form submission with valid account number on second attempt", async () => {
     const user = userEvent.setup();
     const mockFirstAttemptFailedStore = {
-      setSwitchingDetails: vi.fn(),
+      ...mockStore,
       switchingDetails: {
         otsSwitchStatus: "FIRST_ATTEMPT_FAILED",
-      },
-      setCurrentStep: vi.fn(),
-      basket: {
-        id: "test-basket-id",
-        updatedAt: "2024-01-01",
-        createdAt: "2024-01-01",
       },
     };
     mockUseJoinFlowStore.mockReturnValue(mockFirstAttemptFailedStore);
@@ -180,14 +228,24 @@ describe("OneTouchSwitching", () => {
       expect(getAllProviders).toHaveBeenCalled();
     });
 
-    const dropdownButton = screen.getByText("Pick your provider");
+    // Should show account number input on second attempt
+    expect(
+      screen.getByText(oneTouchSwitchingText.firstAttemptFailTitle),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(oneTouchSwitchingText.accountNumberPrompt),
+    ).toBeInTheDocument();
+
+    const dropdownButton = screen.getByText(
+      oneTouchSwitchingText.providerSelectorDefault,
+    );
     await user.click(dropdownButton);
 
     const provider1Option = screen.getByRole("button", { name: "Provider 1" });
     await user.click(provider1Option);
 
     const checkbox = screen.getByRole("checkbox", {
-      name: "I'm the account holder and happy for Cuckoo to manage my switch",
+      name: oneTouchSwitchingText.consentLabel,
     });
     await user.click(checkbox);
 
@@ -195,8 +253,9 @@ describe("OneTouchSwitching", () => {
       name: "accountNumber",
     });
     await user.type(accountNumberInput, "12345678");
+
     const submitButton = screen.getByRole("button", {
-      name: "Retry",
+      name: oneTouchSwitchingText.retryButtonText,
     });
     await user.click(submitButton);
 
@@ -213,18 +272,12 @@ describe("OneTouchSwitching", () => {
     expect(mockFirstAttemptFailedStore.setCurrentStep).toHaveBeenCalledWith(3);
   });
 
-  it("should handle form submission with invalid account number", async () => {
+  it("should handle form submission with invalid account number on second attempt", async () => {
     const user = userEvent.setup();
     const mockFirstAttemptFailedStore = {
-      setSwitchingDetails: vi.fn(),
+      ...mockStore,
       switchingDetails: {
         otsSwitchStatus: "FIRST_ATTEMPT_FAILED",
-      },
-      setCurrentStep: vi.fn(),
-      basket: {
-        id: "test-basket-id",
-        updatedAt: "2024-01-01",
-        createdAt: "2024-01-01",
       },
     };
     mockUseJoinFlowStore.mockReturnValue(mockFirstAttemptFailedStore);
@@ -243,14 +296,16 @@ describe("OneTouchSwitching", () => {
       expect(getAllProviders).toHaveBeenCalled();
     });
 
-    const dropdownButton = screen.getByText("Pick your provider");
+    const dropdownButton = screen.getByText(
+      oneTouchSwitchingText.providerSelectorDefault,
+    );
     await user.click(dropdownButton);
 
     const provider1Option = screen.getByRole("button", { name: "Provider 1" });
     await user.click(provider1Option);
 
     const checkbox = screen.getByRole("checkbox", {
-      name: "I'm the account holder and happy for Cuckoo to manage my switch",
+      name: oneTouchSwitchingText.consentLabel,
     });
     await user.click(checkbox);
 
@@ -258,8 +313,9 @@ describe("OneTouchSwitching", () => {
       name: "accountNumber",
     });
     await user.type(accountNumberInput, "11111111");
+
     const submitButton = screen.getByRole("button", {
-      name: "Retry",
+      name: oneTouchSwitchingText.retryButtonText,
     });
     await user.click(submitButton);
 
@@ -274,11 +330,56 @@ describe("OneTouchSwitching", () => {
     expect(mockFirstAttemptFailedStore.setCurrentStep).toHaveBeenCalledWith(3);
   });
 
+  it("should handle first attempt failure and save provider for retry", async () => {
+    const user = userEvent.setup();
+    mockCreateSwitchMatchLookup.mockResolvedValue({
+      error: {
+        type: "validationError",
+        message: "No match found",
+        details: ["No match found"],
+      },
+    });
+
+    render(<OneTouchSwitching />);
+
+    // Wait for providers to be loaded
+    await waitFor(() => {
+      expect(getAllProviders).toHaveBeenCalled();
+    });
+
+    const dropdownButton = screen.getByText(
+      oneTouchSwitchingText.providerSelectorDefault,
+    );
+    await user.click(dropdownButton);
+
+    const provider1Option = screen.getByRole("button", { name: "Provider 1" });
+    await user.click(provider1Option);
+
+    const checkbox = screen.getByRole("checkbox", {
+      name: oneTouchSwitchingText.consentLabel,
+    });
+    await user.click(checkbox);
+
+    const submitButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.submitButtonText,
+    });
+    await user.click(submitButton);
+
+    // Should save provider and set status to FIRST_ATTEMPT_FAILED
+    expect(mockStore.setSwitchingDetails).toHaveBeenCalledWith({
+      currentProvider: mockProviders[0],
+      otsSwitchStatus: "FIRST_ATTEMPT_FAILED",
+    });
+    expect(mockStore.setIsLoadingModalOpen).toHaveBeenCalledWith(false);
+  });
+
   it("should handle skip button click", async () => {
     const user = userEvent.setup();
     render(<OneTouchSwitching />);
 
-    const skipButton = screen.getByRole("button", { name: "Skip this step" });
+    const skipButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.skipButtonText,
+    });
     await user.click(skipButton);
 
     expect(mockStore.setSwitchingDetails).toHaveBeenCalledWith({
@@ -288,19 +389,13 @@ describe("OneTouchSwitching", () => {
     expect(mockRouter.push).toHaveBeenCalledWith("/join-flow/go-live-date");
   });
 
-  it("should disable buttons during submission", async () => {
-    const user = userEvent.setup();
-    mockCreateSwitchMatchLookup.mockImplementation(
-      () =>
-        new Promise((resolve) => {
-          // Delay the response to ensure we can check the disabled state
-          setTimeout(() => {
-            resolve({
-              switchMatchLookup: "12345678",
-            });
-          }, 100);
-        }),
-    );
+  it("should disable buttons when loading modal is open", async () => {
+    // Mock the store to return isLoadingModalOpen: true
+    const mockStoreWithLoading = {
+      ...mockStore,
+      isLoadingModalOpen: true,
+    };
+    mockUseJoinFlowStore.mockReturnValue(mockStoreWithLoading);
 
     render(<OneTouchSwitching />);
 
@@ -309,31 +404,158 @@ describe("OneTouchSwitching", () => {
       expect(getAllProviders).toHaveBeenCalled();
     });
 
-    const dropdownButton = screen.getByText("Pick your provider");
+    const skipButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.skipButtonText,
+    });
+    const submitButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.loadingButtonText,
+    });
+
+    // Check that buttons are disabled when loading modal is open
+    expect(submitButton).toBeDisabled();
+    expect(skipButton).toBeDisabled();
+  });
+
+  it("should enable buttons when loading modal is closed", async () => {
+    // Mock the store to return isLoadingModalOpen: false
+    const mockStoreWithoutLoading = {
+      ...mockStore,
+      isLoadingModalOpen: false,
+    };
+    mockUseJoinFlowStore.mockReturnValue(mockStoreWithoutLoading);
+
+    render(<OneTouchSwitching />);
+
+    // Wait for providers to be loaded
+    await waitFor(() => {
+      expect(getAllProviders).toHaveBeenCalled();
+    });
+
+    const skipButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.skipButtonText,
+    });
+    const submitButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.submitButtonText,
+    });
+
+    // Check that buttons are enabled when loading modal is closed
+    expect(submitButton).not.toBeDisabled();
+    expect(skipButton).not.toBeDisabled();
+  });
+
+  it("should handle API error during submission", async () => {
+    const user = userEvent.setup();
+    mockCreateSwitchMatchLookup.mockRejectedValue(new Error("API Error"));
+
+    render(<OneTouchSwitching />);
+
+    // Wait for providers to be loaded
+    await waitFor(() => {
+      expect(getAllProviders).toHaveBeenCalled();
+    });
+
+    const dropdownButton = screen.getByText(
+      oneTouchSwitchingText.providerSelectorDefault,
+    );
     await user.click(dropdownButton);
 
     const provider1Option = screen.getByRole("button", { name: "Provider 1" });
     await user.click(provider1Option);
 
     const checkbox = screen.getByRole("checkbox", {
-      name: "I'm the account holder and happy for Cuckoo to manage my switch",
+      name: oneTouchSwitchingText.consentLabel,
     });
     await user.click(checkbox);
 
-    const skipButton = screen.getByRole("button", { name: "Skip this step" });
     const submitButton = screen.getByRole("button", {
-      name: "Match my details",
+      name: oneTouchSwitchingText.submitButtonText,
     });
     await user.click(submitButton);
 
-    // Check that buttons are disabled immediately after clicking
-    expect(submitButton).toBeDisabled();
-    expect(skipButton).toBeDisabled();
-
-    // Wait for the submission to complete
-    await waitFor(() => {
-      expect(submitButton).not.toBeDisabled();
-      expect(skipButton).not.toBeDisabled();
+    // Should handle error and save provider for retry
+    expect(mockStore.setSwitchingDetails).toHaveBeenCalledWith({
+      currentProvider: mockProviders[0],
+      otsSwitchStatus: "FIRST_ATTEMPT_FAILED",
     });
+    expect(mockStore.setIsLoadingModalOpen).toHaveBeenCalledWith(false);
+  });
+
+  it("should handle missing basket ID", async () => {
+    const user = userEvent.setup();
+    const mockStoreWithoutBasket = {
+      ...mockStore,
+      basket: null,
+    };
+    mockUseJoinFlowStore.mockReturnValue(mockStoreWithoutBasket);
+
+    render(<OneTouchSwitching />);
+
+    // Wait for providers to be loaded
+    await waitFor(() => {
+      expect(getAllProviders).toHaveBeenCalled();
+    });
+
+    const dropdownButton = screen.getByText(
+      oneTouchSwitchingText.providerSelectorDefault,
+    );
+    await user.click(dropdownButton);
+
+    const provider1Option = screen.getByRole("button", { name: "Provider 1" });
+    await user.click(provider1Option);
+
+    const checkbox = screen.getByRole("checkbox", {
+      name: oneTouchSwitchingText.consentLabel,
+    });
+    await user.click(checkbox);
+
+    const submitButton = screen.getByRole("button", {
+      name: oneTouchSwitchingText.submitButtonText,
+    });
+    await user.click(submitButton);
+
+    // Should handle missing basket ID gracefully
+    expect(mockStore.setIsLoadingModalOpen).toHaveBeenCalledWith(false);
+  });
+
+  it("should show loading state when providers are being fetched", async () => {
+    mockGetAllProviders.mockImplementation(
+      () =>
+        new Promise((resolve) => {
+          setTimeout(() => {
+            resolve({ providers: mockProviders });
+          }, 100);
+        }),
+    );
+
+    render(<OneTouchSwitching />);
+
+    // Should show loading state
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(screen.getByText("Loading providers...")).toBeInTheDocument();
+
+    // Wait for loading to complete
+    await waitFor(() => {
+      expect(screen.queryByText("Loading providers..")).not.toBeInTheDocument();
+    });
+  });
+
+  it("should pre-select provider when switchingDetails has currentProvider", async () => {
+    const mockStoreWithProvider = {
+      ...mockStore,
+      switchingDetails: {
+        currentProvider: mockProviders[0],
+      },
+    };
+    mockUseJoinFlowStore.mockReturnValue(mockStoreWithProvider);
+
+    render(<OneTouchSwitching />);
+
+    // Wait for providers to be loaded
+    await waitFor(() => {
+      expect(getAllProviders).toHaveBeenCalled();
+    });
+
+    // Should show the pre-selected provider
+    expect(screen.getByText("Provider 1")).toBeInTheDocument();
   });
 });

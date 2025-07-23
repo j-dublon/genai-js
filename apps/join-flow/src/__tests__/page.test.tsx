@@ -18,6 +18,30 @@ vi.mock("@store/useJoinFlowStore", () => ({
   default: () => ({
     selectPackage: vi.fn(),
     setServiceAddress: vi.fn(),
+    quoteResponse: {
+      response: {
+        products: [
+          {
+            krakenProductCode: "test-product",
+            frontendIdentifier: "test-12",
+            frontendTitle: "Test Package",
+            termMonths: 12,
+            selectionIdentifier: "test-selection",
+            installationRequired: false,
+            prices: {
+              basePrice: 25,
+              discountedPrice: 20,
+            },
+            speeds: {
+              download: 100,
+              upload: 20,
+            },
+            id: "test-id",
+          },
+        ],
+      },
+      documentID: "test-document",
+    },
   }),
 }));
 

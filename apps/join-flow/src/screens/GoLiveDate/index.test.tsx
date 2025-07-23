@@ -30,6 +30,18 @@ vi.mock("./utils/GoLiveDateUtils", async () => {
   };
 });
 
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
+
 interface FormDropdownProps<TFieldValues extends FieldValues, TValue> {
   control: Control<TFieldValues>;
   name: Path<TFieldValues>;
@@ -114,6 +126,7 @@ describe("GoLiveDate component", () => {
   const mockSetGoLiveDetails = vi.fn();
   const mockSetCurrentStep = vi.fn();
   const mockPush = vi.fn();
+  const mockSetIsLoadingModalOpen = vi.fn();
 
   beforeAll(() => {
     HTMLDialogElement.prototype.show = vi.fn();
@@ -136,6 +149,8 @@ describe("GoLiveDate component", () => {
       },
       setBasket: vi.fn(),
       selectedPackage: { installationRequired: true },
+      setIsLoadingModalOpen: mockSetIsLoadingModalOpen,
+      isLoadingModalOpen: false,
     });
 
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
@@ -146,7 +161,6 @@ describe("GoLiveDate component", () => {
       async (
         setAppointmentError: (err: string) => void,
         setAvailableAppointments: (appts: Appointment[]) => void,
-        setLoadingAppointments: (loading: boolean) => void,
         setDocumentID: (id: string) => void,
       ) => {
         setAvailableAppointments([
@@ -159,7 +173,6 @@ describe("GoLiveDate component", () => {
         ]);
         setAppointmentError("");
         setDocumentID("doc123");
-        setLoadingAppointments(false);
       },
     );
 
@@ -179,23 +192,30 @@ describe("GoLiveDate component", () => {
       expect.any(Function),
       expect.any(Function),
       expect.any(Function),
-      expect.any(Function),
       "quote123",
     );
     expect(screen.getByTestId("date-picker")).not.toBeDisabled();
   });
 
-  it("shows error message if fetching appointments fails", async () => {
+  it("shows a tip card with first available appointment date when available appointments are found", async () => {
+    await act(async () => {
+      render(<GoLiveDate />);
+    });
+    expect(
+      screen.getByText(/we can get you live as early as/i),
+    ).toBeInTheDocument();
+    expect(screen.getByText("1 January 2023")).toBeInTheDocument();
+  });
+
+  it("shows error tip card and retry button if fetching appointments fails, and no tip card with first available appointment", async () => {
     (fetchEngineerAppointments as Mock).mockImplementationOnce(
       async (
         setAppointmentError: (msg: string) => void,
         setAvailableAppointments: (appts: Appointment[]) => void,
-        setLoadingAppointments: (loading: boolean) => void,
         setDocumentID: (id: string) => void,
       ) => {
         setAvailableAppointments([]);
         setAppointmentError("Failed to fetch engineer appointments");
-        setLoadingAppointments(false);
         setDocumentID("");
       },
     );
@@ -205,8 +225,14 @@ describe("GoLiveDate component", () => {
     });
 
     expect(
-      screen.getByText("Failed to fetch engineer appointments"),
-    ).toBeDefined();
+      screen.queryByText(/we can get you live as early as/i),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(/whoops/i)).toBeDefined();
+    expect(
+      screen.getByRole("button", {
+        name: /Retry for available go live dates/i,
+      }),
+    ).toBeInTheDocument();
   });
 
   it("enables continue button when date and time slot are selected", async () => {
@@ -264,6 +290,8 @@ describe("GoLiveDate component", () => {
 
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       basket: { product: {} },
+      setIsLoadingModalOpen: vi.fn(),
+      isLoadingModalOpen: false,
     });
 
     let container: HTMLElement;
@@ -286,6 +314,8 @@ describe("GoLiveDate component", () => {
           quoteLookup: { value: "quote123", relationTo: "newSaleQuoteLookups" },
         },
       },
+      setIsLoadingModalOpen: vi.fn(),
+      isLoadingModalOpen: false,
     });
 
     await act(async () => {
@@ -293,5 +323,42 @@ describe("GoLiveDate component", () => {
     });
 
     expect(screen.getByText("Switching successful")).toBeInTheDocument();
+  });
+
+  it("shows the loading modal when the user clicks continue", async () => {
+    (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      setGoLiveDetails: mockSetGoLiveDetails,
+      goLiveDetails: {},
+      setCurrentStep: mockSetCurrentStep,
+      switchingDetails: {},
+      basket: {
+        id: "basket-123",
+        product: {
+          quoteLookup: { value: "quote123", relationTo: "newSaleQuoteLookups" },
+        },
+      },
+      setBasket: vi.fn(),
+      selectedPackage: { installationRequired: false }, // Changed to false to avoid timeSlot requirement
+      setIsLoadingModalOpen: mockSetIsLoadingModalOpen,
+      isLoadingModalOpen: false,
+    });
+
+    await act(async () => {
+      render(<GoLiveDate />);
+    });
+
+    const datePicker = screen.getByTestId("date-picker");
+    fireEvent.change(datePicker, { target: { value: "2023-01-01" } });
+
+    const button = screen.getByRole("button", { name: /continue/i });
+
+    await act(async () => {
+      fireEvent.click(button);
+    });
+
+    expect(mockSetIsLoadingModalOpen).toHaveBeenCalledWith(true);
+    expect(
+      screen.getByText("Sit tight! We're checking out your area"),
+    ).toBeInTheDocument();
   });
 });

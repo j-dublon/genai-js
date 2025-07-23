@@ -15,7 +15,6 @@ import {
 describe("fetchEngineerAppointments", () => {
   const setAppointmentError = vi.fn();
   const setAvailableAppointments = vi.fn();
-  const setLoadingAppointments = vi.fn();
   const setDocumentID = vi.fn();
 
   beforeEach(() => {
@@ -44,7 +43,6 @@ describe("fetchEngineerAppointments", () => {
     await fetchEngineerAppointments(
       setAppointmentError,
       setAvailableAppointments,
-      setLoadingAppointments,
       setDocumentID,
       "quote123",
     );
@@ -54,7 +52,6 @@ describe("fetchEngineerAppointments", () => {
       mockResponse.appointments,
     );
     expect(setDocumentID).toHaveBeenCalledWith(mockResponse.documentID);
-    expect(setLoadingAppointments).toHaveBeenCalledWith(false);
   });
 
   it("handles response with error property true", async () => {
@@ -78,7 +75,6 @@ describe("fetchEngineerAppointments", () => {
     await fetchEngineerAppointments(
       setAppointmentError,
       setAvailableAppointments,
-      setLoadingAppointments,
       setDocumentID,
       "quote123",
     );
@@ -91,8 +87,6 @@ describe("fetchEngineerAppointments", () => {
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       "Failed to fetch engineer appointments",
     );
-
-    expect(setLoadingAppointments).toHaveBeenCalledWith(false);
 
     consoleErrorSpy.mockRestore();
   });
@@ -110,7 +104,6 @@ describe("fetchEngineerAppointments", () => {
     await fetchEngineerAppointments(
       setAppointmentError,
       setAvailableAppointments,
-      setLoadingAppointments,
       setDocumentID,
       "quote123",
     );
@@ -124,7 +117,6 @@ describe("fetchEngineerAppointments", () => {
       "Failed to fetch engineer appointments",
       error,
     );
-    expect(setLoadingAppointments).toHaveBeenCalledWith(false);
 
     consoleErrorSpy.mockRestore();
   });

@@ -44,6 +44,7 @@ export type OneTouchSwitchingFormProps = {
   isSubmitting?: boolean;
   providers: BroadbandProvider[];
   providerError: boolean;
+  isLoadingProviders: boolean;
 };
 
 export const accountNumberSchema = z

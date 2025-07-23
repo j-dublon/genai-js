@@ -10,7 +10,7 @@ export interface LoadingModalProps {
   slidesClassName?: string;
   slides: Slide[];
   modalRef?: React.RefObject<HTMLDialogElement | null>;
-  loading?: boolean;
+  loading: boolean;
 }
 
 export const LoadingModal = ({
@@ -18,7 +18,7 @@ export const LoadingModal = ({
   className = "",
   slidesClassName = "",
   modalRef,
-  loading = false,
+  loading,
 }: LoadingModalProps) => {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const prevLoadingRef = useRef<boolean>(false);
