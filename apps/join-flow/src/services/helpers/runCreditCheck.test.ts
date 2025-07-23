@@ -23,7 +23,6 @@ vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
 describe("runCreditCheck", () => {
   const mockCreditCheckResponse: RunCreditCheckResponse = {
     status: "PASSED",
-    message: "Credit check passed",
   };
 
   it("should return a status and message when the API call is successful", async () => {

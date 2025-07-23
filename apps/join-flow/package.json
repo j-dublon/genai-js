@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@axe-core/playwright": "4.10.1",
-    "@cuckoointernet/util-squid-network-requests": "^5.0.5",
+    "@cuckoointernet/util-squid-network-requests": "^5.0.7",
     "@hookform/resolvers": "5.0.1",
     "@react-component-library/ui": "*",
     "lodash": "4.17.21",

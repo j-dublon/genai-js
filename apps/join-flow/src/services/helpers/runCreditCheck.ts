@@ -7,7 +7,6 @@ import {
 
 interface RunCreditCheckResult {
   status?: RunCreditCheckResponse["status"];
-  message?: RunCreditCheckResponse["message"];
   error?: {
     type: "networkError" | "unknownError" | "validationError";
     message: string;
@@ -23,7 +22,6 @@ export const runCreditCheck = async (
 
     return {
       status: response.status,
-      message: response.message,
     };
   } catch (error) {
     if (error instanceof FetchError) {
