@@ -29,10 +29,12 @@ type CreateAffiliateSessionResult =
 
 export const createAffiliateSession = async (
   affiliateCode: string,
+  awinID?: string | null,
 ): Promise<CreateAffiliateSessionResult> => {
   try {
     const response = await squidAPI.createAffiliateSessionSync({
       subdomain: affiliateCode,
+      awinID,
     });
 
     if (response.state === "success" && response.data?.response) {

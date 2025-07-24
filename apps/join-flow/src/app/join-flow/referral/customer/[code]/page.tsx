@@ -1,6 +1,7 @@
 "use client";
 
 import { AccessibleLoadingEgg } from "@react-component-library/ui";
+import { useSearchParams } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
 import { ChooseYourAddress } from "@/screens/ChooseYourAddress";
@@ -13,13 +14,18 @@ const CustomerReferralPage = ({
   params: Promise<{ code: string }>;
 }) => {
   const { code } = use(params);
+  const searchParams = useSearchParams();
+  const awc = searchParams.get("awc");
   const [response, setResponse] = useState<AffiliateSession | null>(null);
   const [documentId, setDocumentId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadReferralSession = async () => {
-      const referralSessionResponse = await createReferralSession(code);
+      const referralSessionResponse = await createReferralSession(
+        code,
+        awc || undefined,
+      );
 
       if (referralSessionResponse.type === "success") {
         setResponse(referralSessionResponse.affiliateSession);
@@ -29,7 +35,7 @@ const CustomerReferralPage = ({
     };
 
     loadReferralSession();
-  }, [code]);
+  }, [code, awc]);
 
   if (isLoading) {
     return (

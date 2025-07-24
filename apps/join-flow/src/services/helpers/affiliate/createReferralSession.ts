@@ -19,13 +19,14 @@ type CreateReferralSessionResult =
 
 export const createReferralSession = async (
   code: string,
+  awinID?: string,
 ): Promise<CreateReferralSessionResult> => {
   try {
     const [referralResponse, defaultAffiliateResponse] = await Promise.all([
       squidAPI.createReferralSessionSync({
         code,
       }),
-      squidAPI.getDefaultReferralAffiliate(),
+      squidAPI.getDefaultReferralAffiliate(awinID),
     ]);
 
     if (
