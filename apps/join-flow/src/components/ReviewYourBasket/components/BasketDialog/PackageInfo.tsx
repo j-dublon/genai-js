@@ -11,6 +11,7 @@ export const PackageInfo = ({
   changePlanButtonText,
   broadbandPlanText,
   planDescriptionText,
+  setBasketIsLoading,
 }: {
   availablePackages: StoreSelectedPackage[];
   onPlanChange: (selectedPlanId: string) => Promise<void>;
@@ -18,15 +19,15 @@ export const PackageInfo = ({
   changePlanButtonText: string;
   broadbandPlanText: string;
   planDescriptionText: string;
+  setBasketIsLoading: (isLoading: boolean) => void;
 }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
 
   const handlePlanChange = async (selectedPlanId: string) => {
-    setIsLoading(true);
+    setBasketIsLoading(true);
     setDropdownOpen(false);
     await onPlanChange(selectedPlanId);
-    setIsLoading(false);
+    setBasketIsLoading(false);
   };
 
   const getOptionLabel = (pkg: StoreSelectedPackage) => {
@@ -57,7 +58,6 @@ export const PackageInfo = ({
           label: getOptionLabel(p),
           value: p.frontendIdentifier,
         }))}
-        isLoading={isLoading}
       />
     </>
   );

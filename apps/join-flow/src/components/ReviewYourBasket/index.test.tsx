@@ -20,6 +20,18 @@ const mockUseJoinFlowStore = vi.mocked(useJoinFlowStore);
 
 const mockSetIsDialogOpen = vi.fn();
 
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
+
 const mockEeroProductContent = [
   {
     code: "EERO_MESH_ROUTER_X1",

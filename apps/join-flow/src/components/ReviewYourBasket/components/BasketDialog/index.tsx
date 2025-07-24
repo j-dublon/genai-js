@@ -1,7 +1,12 @@
-import { useClickOutside } from "@react-component-library/ui";
-import { useEffect, useRef } from "react";
+import { LoadingModal, useClickOutside } from "@react-component-library/ui";
+import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
-import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import {
+  reviewYourBasketText,
+  slides,
+} from "@/components/ReviewYourBasket/ReviewYourBasketProps";
+import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { PricingCalculations } from "@/hooks/usePricingCalculations";
 import type { EeroOption } from "@/lib/createEeroOptions";
 import useJoinFlowStore, {
@@ -21,7 +26,6 @@ interface BasketDialogProps {
   availablePackages: StoreSelectedPackage[];
   eeroProducts: EeroOption[];
   onPlanChange: (selectedPlanId: string) => Promise<void>;
-  onAddressChange: () => void;
   pricing: PricingCalculations;
 }
 
@@ -31,10 +35,15 @@ export const BasketDialog = ({
   availablePackages,
   eeroProducts,
   onPlanChange,
-  onAddressChange,
   pricing,
 }: BasketDialogProps) => {
+  const router = useRouter();
   const modalRef = useRef<HTMLDivElement>(null);
+  const [basketIsLoading, setBasketIsLoading] = useState(false);
+  const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
+    isLoadingModalOpen: basketIsLoading,
+    slides,
+  });
 
   const { serviceAddress, selectedPackage, eeroSelection } = useJoinFlowStore();
 
@@ -56,6 +65,11 @@ export const BasketDialog = ({
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
+
+  const handleAddressChange = () => {
+    setBasketIsLoading(true);
+    router.push("/join-flow");
+  };
 
   return (
     <div className="fixed inset-0 z-40 overflow-hidden">
@@ -91,6 +105,7 @@ export const BasketDialog = ({
                       availablePackages={availablePackages}
                       onPlanChange={onPlanChange}
                       selectedPackage={selectedPackage}
+                      setBasketIsLoading={setBasketIsLoading}
                     />
                   )}
                   <hr className="border-ui-grey-300 bg-ui-grey-300 md:border-ui-grey-400 md:bg-ui-grey-400" />
@@ -105,6 +120,7 @@ export const BasketDialog = ({
                           addMoreEeros,
                           removeEeros,
                         }}
+                        setBasketIsLoading={setBasketIsLoading}
                       />
                       <hr className="border-ui-grey-300 bg-ui-grey-300 md:border-ui-grey-400 md:bg-ui-grey-400" />
                       <Subtotal
@@ -135,13 +151,18 @@ export const BasketDialog = ({
                     subtitle={reviewYourBasketText.addressWrong}
                     restartText={reviewYourBasketText.startAgain}
                     warningText={reviewYourBasketText.addressChangeWarning}
-                    onRestart={onAddressChange}
+                    onRestart={handleAddressChange}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <LoadingModal
+          slides={slidesWithAssetPath}
+          loading={basketIsLoading}
+          modalRef={loadingModalRef}
+        />
       </div>
     </div>
   );

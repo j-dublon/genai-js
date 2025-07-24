@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -6,6 +6,18 @@ import { convertPenceToPounds } from "@/hooks/usePricingCalculations";
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { PackageInfo } from "./PackageInfo";
+
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
 
 describe("PackageInfo", () => {
   const mockOnPlanChange = vi.fn();
@@ -80,6 +92,7 @@ describe("PackageInfo", () => {
     changePlanButtonText: mockChangePlanButtonText,
     broadbandPlanText: mockBroadbandPlanText,
     planDescriptionText: mockPlanDescriptionText,
+    setBasketIsLoading: vi.fn(),
   };
 
   beforeEach(() => {
@@ -133,5 +146,20 @@ describe("PackageInfo", () => {
       mockAvailablePackages[1].frontendIdentifier,
     );
     expect(screen.queryByTestId("dropdown-options")).not.toBeInTheDocument();
+  });
+
+  it("should set loading state when updating basket", async () => {
+    render(<PackageInfo {...defaultProps} />);
+    const user = userEvent.setup();
+
+    await user.click(screen.getByText(mockChangePlanButtonText));
+    const dropdownOptions = screen.getByTestId("dropdown-options");
+    await user.click(dropdownOptions.children[1]);
+
+    expect(defaultProps.setBasketIsLoading).toHaveBeenCalledWith(true);
+
+    await waitFor(() => {
+      expect(defaultProps.setBasketIsLoading).toHaveBeenCalledWith(false);
+    });
   });
 });

@@ -1,3 +1,4 @@
+import { LoadingModalSlide } from "@/hooks/useLoadingModal";
 import { getAssetPath } from "@/lib/get-asset-path";
 
 export const reviewYourBasketText = {
@@ -41,3 +42,15 @@ export const reviewYourBasketText = {
   savingText: "You're saving £TOTAL_PLAN_SAVING on this plan",
   promotionPillText: "PROMOTION_TEXT is in the bag",
 };
+
+export const slides: LoadingModalSlide[] = [
+  {
+    src: "/images/world-animated.gif",
+    message:
+      "We're updating your plan and checking everything still fits just right.",
+  },
+  {
+    src: "/images/sunglasses-animated.gif",
+    message: "Almost done making your basket egg-stra perfect!",
+  },
+];

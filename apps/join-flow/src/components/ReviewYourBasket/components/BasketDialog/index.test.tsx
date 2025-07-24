@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
@@ -15,10 +15,29 @@ vi.mock("@/store/useJoinFlowStore", () => ({
   default: vi.fn(),
 }));
 
+const mockPush = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: mockPush,
+  }),
+}));
+
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
+
 describe("BasketDialog", () => {
   const mockOnClose = vi.fn();
   const mockOnPlanChange = vi.fn();
-  const mockOnAddressChange = vi.fn();
 
   const mockSelectedPackage: StoreSelectedPackage = {
     krakenProductCode: "BT-150-24M_38",
@@ -185,7 +204,6 @@ describe("BasketDialog", () => {
         availablePackages={mockAvailablePackages}
         eeroProducts={mockEeroProducts}
         onPlanChange={mockOnPlanChange}
-        onAddressChange={mockOnAddressChange}
         pricing={mockPricing}
         {...props}
       />,
@@ -204,7 +222,6 @@ describe("BasketDialog", () => {
         availablePackages={mockAvailablePackages}
         eeroProducts={mockEeroProducts}
         onPlanChange={mockOnPlanChange}
-        onAddressChange={mockOnAddressChange}
         pricing={mockPricing}
       />,
     );
@@ -299,7 +316,7 @@ describe("BasketDialog", () => {
     const startAgainButton = screen.getByText(reviewYourBasketText.startAgain);
     await user.click(startAgainButton);
 
-    expect(mockOnAddressChange).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledTimes(1);
   });
 
   it("should show eero price in subtotal when premium eero is selected", () => {
@@ -443,5 +460,17 @@ describe("BasketDialog", () => {
     expect(
       screen.getByText(reviewYourBasketText.removeEeros),
     ).toBeInTheDocument();
+  });
+
+  it("should set loading state to trigger loading modal when choosing a new address", async () => {
+    renderComponent();
+    const user = userEvent.setup();
+
+    const startAgainButton = screen.getByText(reviewYourBasketText.startAgain);
+    await user.click(startAgainButton);
+
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith("/join-flow");
+    });
   });
 });

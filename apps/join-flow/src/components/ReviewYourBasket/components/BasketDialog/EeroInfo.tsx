@@ -1,6 +1,5 @@
 import { PillButton } from "@react-component-library/ui";
 import { Minus, Plus } from "@react-component-library/ui/icons";
-import { useState } from "react";
 
 import type { EeroOption } from "@/lib/createEeroOptions";
 import { getCICS } from "@/services/helpers/getCICS";
@@ -16,6 +15,7 @@ interface EeroInfoProps {
     addMoreEeros: string;
     removeEeros: string;
   };
+  setBasketIsLoading: (isLoading: boolean) => void;
 }
 
 export const EeroInfo = ({
@@ -23,10 +23,10 @@ export const EeroInfo = ({
   monthlyEeroPrice,
   eeroProducts,
   eeroInfoText,
+  setBasketIsLoading,
 }: EeroInfoProps) => {
   const { title, addMoreEeros, removeEeros } = eeroInfoText;
   const { selectEeroProduct, basket, setBasket } = useJoinFlowStore();
-  const [isLoading, setIsLoading] = useState(false);
 
   if (!eeroSelection) return null;
 
@@ -46,7 +46,7 @@ export const EeroInfo = ({
       return false;
     }
 
-    setIsLoading(true);
+    setBasketIsLoading(true);
 
     try {
       const result = await updateBasket(basket.id, {
@@ -63,6 +63,7 @@ export const EeroInfo = ({
       if (result.error) {
         // TODO: Handle error cases
         console.error("Error updating basket:", result.error);
+        setBasketIsLoading(false);
         return false;
       }
 
@@ -81,16 +82,16 @@ export const EeroInfo = ({
             summaryHref: contractSummary,
           },
         });
+        setBasketIsLoading(false);
         return true;
       }
     } catch (error) {
       // TODO: Handle error cases
       console.error("Unexpected error updating basket:", error);
+      setBasketIsLoading(false);
       return false;
-    } finally {
-      setIsLoading(false);
     }
-
+    setBasketIsLoading(false);
     return false;
   };
 
@@ -160,7 +161,6 @@ export const EeroInfo = ({
             icon={<Plus fill="#FFFFFF" />}
             ariaLabel="Add more eeros"
             className="min-w-[175px]"
-            isLoading={isLoading}
           />
         )}
         {eeroSelectionWithContent.totalCount !== 1 && (
@@ -172,7 +172,6 @@ export const EeroInfo = ({
             icon={<Minus fill="#1F1F1F" />}
             ariaLabel="Remove eeros"
             className="min-w-[175px]"
-            isLoading={isLoading}
           />
         )}
       </div>

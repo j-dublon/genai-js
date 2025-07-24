@@ -24,6 +24,18 @@ vi.mock("@/services/helpers/getCICS", () => ({
 }));
 const mockGetCICS = vi.mocked(getCICS);
 
+vi.mock("@/hooks/useLoadingModal", () => ({
+  useLoadingModal: vi.fn().mockReturnValue({
+    loadingModalRef: vi.fn(),
+    slidesWithAssetPath: [
+      {
+        src: "/images/world-animated.gif",
+        message: "Sit tight! We're checking out your area",
+      },
+    ],
+  }),
+}));
+
 const mockEeroSelection: EeroProduct = {
   code: "EERO_MESH_ROUTER_X2",
   family: "mesh_routers",
@@ -83,6 +95,7 @@ const defaultProps = {
   monthlyEeroPrice: "10",
   eeroProducts: mockEeroProducts,
   eeroInfoText: mockEeroInfoText,
+  setBasketIsLoading: vi.fn(),
 };
 
 describe("EeroInfo", () => {
@@ -333,6 +346,19 @@ describe("EeroInfo", () => {
       expect(mockUpdateBasket).not.toHaveBeenCalled();
       expect(mockSelectEeroProduct).not.toHaveBeenCalled();
       expect(console.error).toHaveBeenCalledWith("No basket ID found");
+    });
+  });
+  it("should set loading state when updating basket", async () => {
+    const user = userEvent.setup();
+    render(<EeroInfo {...defaultProps} />);
+
+    const addButton = screen.getByRole("button", { name: "Add more eeros" });
+    await user.click(addButton);
+
+    expect(defaultProps.setBasketIsLoading).toHaveBeenCalledWith(true);
+
+    await waitFor(() => {
+      expect(defaultProps.setBasketIsLoading).toHaveBeenCalledWith(false);
     });
   });
 });

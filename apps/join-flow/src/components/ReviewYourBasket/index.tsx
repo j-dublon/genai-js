@@ -1,5 +1,4 @@
-import { useRouter } from "next/navigation";
-import React, { Dispatch, SetStateAction, useMemo } from "react";
+import { Dispatch, SetStateAction, useMemo } from "react";
 
 import { BasketDialog } from "@/components/ReviewYourBasket/components/BasketDialog";
 import { SummaryBar } from "@/components/ReviewYourBasket/components/SummaryBar";
@@ -33,12 +32,10 @@ export const ReviewYourBasket = ({
     selectedPackage,
     eeroSelection,
     selectPackage,
-    resetFlow,
     quoteResponse,
     basket,
     setBasket,
   } = useJoinFlowStore();
-  const router = useRouter();
 
   const storeSelectedPackages = useMemo((): StoreSelectedPackage[] => {
     if (!quoteResponse?.response?.products) return [];
@@ -174,11 +171,6 @@ export const ReviewYourBasket = ({
     }
   };
 
-  const handleAddressChange = () => {
-    resetFlow();
-    router.push("/join-flow");
-  };
-
   const pricing = usePricingCalculations(selectedPackage, eeroSelection);
 
   if (!selectedPackage) return null;
@@ -191,14 +183,12 @@ export const ReviewYourBasket = ({
         openDialog={openDialog}
         isDialogOpen={isDialogOpen}
       />
-
       <BasketDialog
         isOpen={isDialogOpen}
         onClose={closeDialog}
         availablePackages={storeSelectedPackages}
         eeroProducts={allEeroProducts}
         onPlanChange={handlePlanChange}
-        onAddressChange={handleAddressChange}
         pricing={pricing}
       />
     </div>
