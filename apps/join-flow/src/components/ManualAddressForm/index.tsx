@@ -3,8 +3,9 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import FormInput from "@/components/FormInput";
 import { additionalAddressSchema } from "@/validation/join-flow-schema";
+
+import { ManualAddressFields } from "./ManualAddressFields";
 
 export type ManualAddressFormInputs = z.infer<typeof additionalAddressSchema>;
 
@@ -39,12 +40,6 @@ export const ManualAddressForm = ({
     line3: "",
     postcode: "",
     identifiers: [],
-  },
-  fieldLabels = {
-    line1: "Address line 1",
-    line2: "Address line 2",
-    line3: "Town/City",
-    postcode: "Postcode",
   },
   fieldPlaceholders = {
     line1: "House number/name",
@@ -95,42 +90,13 @@ export const ManualAddressForm = ({
         </div>
       )}
 
-      <div className="flex flex-col gap-6 mb-6 items-start">
-        <div className="flex flex-col gap-6 w-full">
-          <FormInput
-            id="line1"
-            placeholder={fieldPlaceholders.line1}
-            error={errors.line1}
-            {...register("line1")}
-            hasSubmitted={hasSubmitted}
-            aria-label={fieldLabels.line1}
-          />
-          <FormInput
-            id="line2"
-            placeholder={fieldPlaceholders.line2}
-            error={errors.line2}
-            {...register("line2")}
-            hasSubmitted={hasSubmitted}
-            aria-label={fieldLabels.line2}
-          />
-          <FormInput
-            id="line3"
-            placeholder={fieldPlaceholders.line3}
-            error={errors.line3}
-            {...register("line3")}
-            hasSubmitted={hasSubmitted}
-            aria-label={fieldLabels.line3}
-          />
-          <FormInput
-            id="postcode"
-            placeholder={fieldPlaceholders.postcode}
-            error={errors.postcode}
-            {...register("postcode")}
-            hasSubmitted={hasSubmitted}
-            aria-label={fieldLabels.postcode}
-          />
-        </div>
-      </div>
+      <ManualAddressFields
+        register={register}
+        errors={errors}
+        hasSubmitted={hasSubmitted}
+        fieldPlaceholders={fieldPlaceholders}
+        fieldPrefix="addressHistory"
+      />
     </form>
   );
 };

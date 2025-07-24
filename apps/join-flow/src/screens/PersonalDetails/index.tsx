@@ -128,7 +128,6 @@ const PersonalDetails = () => {
   };
 
   const handleCodeChange = async (value: string, index: number) => {
-    // If a full code is passed (6 characters), validate it directly
     if (value.length === VALIDATION_CODE_LENGTH) {
       if (isEmailCodeValid !== true) {
         setEmailCodeLoading(true);
@@ -138,7 +137,6 @@ const PersonalDetails = () => {
       return;
     }
 
-    // Handle individual character input
     const newCode = [...validationCode];
     newCode[index] = value;
 
@@ -219,6 +217,12 @@ const PersonalDetails = () => {
       personalDetailsCompleted:
         personalDetails?.personalDetailsCompleted || false,
       requiresLandline: personalDetails?.requiresLandline ?? false,
+      addressHistory: {
+        line1: personalDetails?.addressHistory?.line1 || "",
+        line2: personalDetails?.addressHistory?.line2 || "",
+        line3: personalDetails?.addressHistory?.line3 || "",
+        postcode: personalDetails?.addressHistory?.postcode || "",
+      },
     },
   });
 
@@ -305,6 +309,10 @@ const PersonalDetails = () => {
           formValues.requiresLandline !== undefined
             ? formValues.requiresLandline
             : false,
+        addressHistory:
+          formValues.residencyDuration === "under-year"
+            ? formValues.addressHistory
+            : null,
       } as PersonalDetails;
 
       try {
@@ -342,7 +350,6 @@ const PersonalDetails = () => {
       setCurrentFormStep(nextStep);
       setIsLoadingModalOpen(false);
     } catch (error) {
-      //Keep this for now while we're dev-ing
       console.log(error);
       setIsLoadingModalOpen(false);
     }
@@ -394,7 +401,10 @@ const PersonalDetails = () => {
   };
 
   const onSubmitAdditionalDetails = async () => {
+    const formValues = getValues();
+
     setHasSubmittedAdditional(true);
+
     const isFormValid = await trigger();
 
     if (!isFormValid) {
@@ -411,6 +421,19 @@ const PersonalDetails = () => {
       return;
     }
 
+    const updatedAddressHistory = [];
+    if (serviceAddress) {
+      updatedAddressHistory.push({
+        line1: serviceAddress.line1,
+        line2: serviceAddress.line2,
+        line3: serviceAddress.line3,
+        postcode: serviceAddress.postcode,
+      });
+    }
+    if (residencyDuration === "under-year" && formValues.addressHistory) {
+      updatedAddressHistory.push(formValues.addressHistory);
+    }
+
     const updatedDetails: PersonalDetails = {
       ...personalDetails,
       dobDay,
@@ -421,10 +444,13 @@ const PersonalDetails = () => {
       personalDetailsCompleted: true,
       marketingConsent: personalDetails.marketingConsent,
       personalDetailsStep: "additional",
+      addressHistory:
+        updatedAddressHistory.length > 0 ? updatedAddressHistory : null,
     } as PersonalDetails;
 
     setPersonalDetails(updatedDetails);
     setCurrentStep(2);
+
     try {
       if (!basket) {
         console.error("No basket available");
@@ -432,6 +458,29 @@ const PersonalDetails = () => {
       }
 
       setIsLoadingModalOpen(true);
+
+      const updatedAddressHistory = [];
+
+      if (serviceAddress) {
+        updatedAddressHistory.push({
+          line1: serviceAddress.line1 || null,
+          line2: serviceAddress.line2 || null,
+          line3: serviceAddress.line3 || null,
+          postcode: serviceAddress.postcode || null,
+          id: null,
+        });
+      }
+
+      if (residencyDuration === "under-year" && formValues.addressHistory) {
+        updatedAddressHistory.push({
+          line1: formValues.addressHistory.line1 || null,
+          line2: formValues.addressHistory.line2 || null,
+          line3: formValues.addressHistory.line3 || null,
+          postcode: formValues.addressHistory.postcode || null,
+          id: null,
+        });
+      }
+
       const result = await updateBasket(basket.id, {
         ...basket,
         personalDetails: {
@@ -441,22 +490,15 @@ const PersonalDetails = () => {
           email: personalDetails.email,
           phone: personalDetails.phone,
         },
-        // TODO: this is temporary to get the address history to the credit check endpoint, until address form is completed
-        addressHistory: [
-          {
-            line1: serviceAddress?.line1,
-            line2: serviceAddress?.line2,
-            line3: serviceAddress?.line3,
-            postcode: serviceAddress?.postcode,
-            id: serviceAddress?.identifiers?.[0]?.id,
-          },
-        ],
+        addressHistory: updatedAddressHistory,
       });
 
       if (result.basket) {
         setBasket(result.basket);
       } else if (result.error) {
         console.error("Failed to update basket:", result.error);
+        setIsLoadingModalOpen(false);
+        return;
       }
     } catch (error) {
       console.error("Unexpected error updating basket:", error);
@@ -534,7 +576,6 @@ const PersonalDetails = () => {
           marketingConsent: personalDetails.marketingConsent,
           personalDetailsCompleted:
             personalDetails.personalDetailsCompleted ?? false,
-
           isVerified: isEmailVerified ?? false,
         } as PersonalDetails;
         setPersonalDetails(updatedDetails);
@@ -642,7 +683,6 @@ const PersonalDetails = () => {
             <AdditionalFormComponent
               register={register}
               errors={errors}
-              personalDetailsProps={personalDetailsProps}
               address={serviceAddress}
               control={control}
               requiresLandline={requiresLandline}

@@ -32,6 +32,12 @@ export const personalDetailsProps = {
     ],
   },
 
+  tipCard: {
+    goodToKnow: "Good to know:",
+    signUpCheckDetails:
+      "As part of your sign up process, we'll be running a soft credit check to make sure Cuckoo is right for you. We'll let you know before this happens.",
+  },
+
   verificationSection: {
     title: "We've just sent a code to your email address",
     description: "Come back here to paste it",
@@ -60,17 +66,23 @@ export const personalDetailsProps = {
     dobLink: "Why do you need my date of birth?",
     addressTitle: "Your address",
     residencyOptions: [
-      { value: "over-year", label: "I've lived here for a year or more" },
+      {
+        value: "over-year",
+        label: "I've lived at this address for more than 1 year",
+      },
       {
         value: "under-year",
-        label: "I've lived here for under a year I'm moving",
+        label: "Haven't moved in yet or living here for less than 1 year",
       },
     ],
+    previousAddress: "Please provide us with your current or previous address:",
     landlineTitle: "Are you fully dependant on a landline for your health?",
     landlineText:
       "If you have a telehealth device that you rely on, it’s really important we know about it.",
     landlineTextLink: "Why are you asking me this?",
     landlineCheckboxText: "Yes, I have or need a telehealth care device ",
+    requiresLandlineText:
+      "You'll need a smartphone in order to set up your new router in an app. Cuckoo won’t work without one.",
     dobModalTitle: "Why do you need my date of birth?",
     dobModal: [
       {
@@ -103,7 +115,7 @@ export const personalDetailsProps = {
   buttons: {
     back: "Back",
     continue: "Continue",
-    continueToEero: "Continue to choose my eero(s)",
+    continueToEero: "Continue to choosing my eero(s)",
     verify: "Next",
   },
 

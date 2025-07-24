@@ -7,6 +7,26 @@ import { PersonalDetails, StoreAddress } from "@/store/useJoinFlowStore";
 import { personalDetailsProps } from "../personalDetailsProps";
 const PERSONAL_NAME_PATTERN = /^[\p{L}\s'-]+$/u;
 
+const baseAddressSchema = z.object({
+  line1: z.string(),
+  line2: z.string(),
+  line3: z.string().optional(),
+  postcode: z.string(),
+});
+
+const additionalAddressSchema = baseAddressSchema.extend({
+  line1: z.string().min(1, "House number/name is required"),
+  line2: z.string().min(1, "First line of your address is required"),
+  line3: z.string().min(1, "Second line of your address is required"),
+  postcode: z
+    .string()
+    .min(1, "Postcode is required")
+    .regex(
+      /^[A-Z]{1,2}[0-9]{1,2}[A-Z]?\s?[0-9][A-Z]{2}$/i,
+      "Please enter a valid UK postcode",
+    ),
+});
+
 export const createStepBasedPersonalDetailsSchema = (
   props: typeof personalDetailsProps,
   step: "details" | "verification" | "additional",
@@ -32,6 +52,7 @@ export const createStepBasedPersonalDetailsSchema = (
       .optional(),
     personalDetailsCompleted: z.boolean().optional(),
     requiresLandline: z.boolean().optional(),
+    addressHistory: baseAddressSchema.nullable().optional(),
   });
 
   if (step === "details") {
@@ -67,7 +88,7 @@ export const createStepBasedPersonalDetailsSchema = (
           }),
 
         hasSmartphone: z.enum(["yes", "no"], {
-          message: props.validationMessages.smartphoneConfirmation, // invalid_type_error doesn't handle enum errors as you'd expect (https://github.com/colinhacks/zod/issues/2919)
+          message: props.validationMessages.smartphoneConfirmation,
         }),
         email: z
           .string()
@@ -167,6 +188,24 @@ export const createStepBasedPersonalDetailsSchema = (
             );
           }
         }
+
+        if (
+          values.residencyDuration === "under-year" &&
+          values.addressHistory
+        ) {
+          const result = additionalAddressSchema.safeParse(
+            values.addressHistory,
+          );
+          if (!result.success) {
+            result.error.issues.forEach((issue) => {
+              ctx.addIssue({
+                path: ["addressHistory", ...issue.path],
+                message: issue.message,
+                code: z.ZodIssueCode.custom,
+              });
+            });
+          }
+        }
       });
   }
 
@@ -198,29 +237,6 @@ export type AdditionalPersonalDetailsFormProps = {
   requiresLandline: boolean;
   control: Control<PersonalDetails>;
   hasSubmitted: boolean;
-  personalDetailsProps: {
-    additionalSection: {
-      dobTitle: string;
-      dobDayPlaceholder: string;
-      dobMonthPlaceholder: string;
-      dobYearPlaceholder: string;
-      dobLink: string;
-      addressTitle: string;
-      residencyOptions: Array<{
-        value: string;
-        label: string;
-      }>;
-      landlineTitle: string;
-      landlineText: string;
-      landlineTextLink: string;
-      landlineCheckboxText: string;
-      dobModalTitle: string;
-      dobModal: ModalContent[];
-      modalCloseText: string;
-      teleHealthDeviceModalTitle: string;
-      teleHealthDeviceModal: ModalContent[];
-    };
-  };
 };
 
 type verificationSection = {

@@ -1,11 +1,6 @@
 import { InfoModal, useClickOutside } from "@react-component-library/ui";
 import { InfoIcon, TickWithCircle } from "@react-component-library/ui/icons";
-import React, {
-  forwardRef,
-  InputHTMLAttributes,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, InputHTMLAttributes, useRef, useState } from "react";
 import { FieldError } from "react-hook-form";
 
 import {

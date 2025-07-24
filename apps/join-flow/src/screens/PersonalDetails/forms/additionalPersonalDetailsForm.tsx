@@ -7,24 +7,46 @@ import {
 } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import { useRef, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 
+import { ManualAddressFields } from "@/components/ManualAddressForm/ManualAddressFields";
 import { ModalContent } from "@/components/ModalContent";
 import { TextInput } from "@/components/TextInput";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { getAssetPath } from "@/lib/get-asset-path";
 
+import personalDetailsProps from "../personalDetailsProps";
 import type { AdditionalPersonalDetailsFormProps } from "./formValues";
 
 export const AdditionalPersonalDetailsForm = ({
   register,
   errors,
-  personalDetailsProps,
   address,
   requiresLandline,
   control,
   hasSubmitted,
 }: AdditionalPersonalDetailsFormProps) => {
+  const { goodToKnow, signUpCheckDetails } = personalDetailsProps.tipCard;
+  const {
+    dobTitle,
+    dobLink,
+    addressTitle,
+    residencyOptions,
+    landlineTitle,
+    landlineText,
+    landlineTextLink,
+    landlineCheckboxText,
+    requiresLandlineText,
+    dobModalTitle,
+    dobModal,
+    teleHealthDeviceModalTitle,
+    modalCloseText,
+    teleHealthDeviceModal,
+    previousAddress,
+  } = personalDetailsProps.additionalSection;
+
+  const residencyDuration = useWatch({ control, name: "residencyDuration" });
+
   const dobModalRef = useRef<HTMLDialogElement>(null);
   const teleHealthModalRef = useRef<HTMLDialogElement>(null);
 
@@ -101,17 +123,13 @@ export const AdditionalPersonalDetailsForm = ({
       >
         <span>
           <span className="text-tertiary-blue-dark font-semibold">
-            Good to know:
+            {goodToKnow}
           </span>{" "}
-          As part of your sign up process, we’ll be running a soft credit check
-          to make sure Cuckoo is right for you. We’ll let you know before this
-          happens.
+          {signUpCheckDetails}
         </span>
       </TipCard>
       <div className="flex flex-col gap-6 mb-12 items-start">
-        <h2 className="text-md font-bold">
-          {personalDetailsProps.additionalSection.dobTitle}
-        </h2>
+        <h2 className="text-md font-semibold">{dobTitle}</h2>
         <div className="flex flex-row gap-4 items-center">
           <TextInput
             type="text"
@@ -171,14 +189,12 @@ export const AdditionalPersonalDetailsForm = ({
           }}
           className="leading-[1.6] underline font-medium cursor-pointer text-ui-link"
         >
-          {personalDetailsProps.additionalSection.dobLink}
+          {dobLink}
         </button>
       </div>
 
       <div className="flex flex-col gap-4 mb-12">
-        <h2 className="text-md font-bold">
-          {personalDetailsProps.additionalSection.addressTitle}
-        </h2>
+        <h2 className="text-md font-semibold">{addressTitle}</h2>
         {address && (
           <p className="mb-4 font-medium">
             {[address.line1, address.line2, address.line3, address.postcode]
@@ -191,21 +207,37 @@ export const AdditionalPersonalDetailsForm = ({
           control={control}
           render={({ field }) => (
             <div className="flex flex-col gap-2">
-              {personalDetailsProps.additionalSection.residencyOptions.map(
-                (option) => (
-                  <div key={option.value} className="inline-flex items-center">
-                    <Radio
-                      label={option.label}
-                      value={option.value}
-                      checked={field.value === option.value}
-                      onChange={() => field.onChange(option.value)}
-                    />
-                  </div>
-                ),
-              )}
+              {residencyOptions.map((option) => (
+                <div key={option.value} className="inline-flex items-center">
+                  <Radio
+                    label={option.label}
+                    value={option.value}
+                    checked={field.value === option.value}
+                    onChange={() => field.onChange(option.value)}
+                  />
+                </div>
+              ))}
             </div>
           )}
         />
+        {residencyDuration === "under-year" && (
+          <>
+            <div className="text-sm font-semibold mt-8 mb-4">
+              {previousAddress}
+            </div>
+            <ManualAddressFields
+              register={register}
+              errors={errors}
+              hasSubmitted={hasSubmitted}
+              fieldPlaceholders={{
+                line1: "House number/name",
+                line2: "First line of your address",
+                line3: "Second line of your address",
+                postcode: "Postcode",
+              }}
+            />
+          </>
+        )}
         {errors.residencyDuration && (
           <p className="text-ui-error text-sm mt-1">
             {errors.residencyDuration.message}
@@ -213,11 +245,9 @@ export const AdditionalPersonalDetailsForm = ({
         )}
       </div>
       <div className="flex flex-col gap-4 mb-16">
-        <h2 className="text-md font-bold">
-          {personalDetailsProps.additionalSection.landlineTitle}
-        </h2>
+        <h2 className="text-md font-semibold">{landlineTitle}</h2>
         <p>
-          {personalDetailsProps.additionalSection.landlineText}{" "}
+          {landlineText}{" "}
           <button
             type="button"
             onClick={(e) => {
@@ -227,7 +257,7 @@ export const AdditionalPersonalDetailsForm = ({
             }}
             className="leading-[1.6] underline font-medium cursor-pointer text-ui-link"
           >
-            {personalDetailsProps.additionalSection.landlineTextLink}
+            {landlineTextLink}
           </button>
         </p>
         <Controller
@@ -235,9 +265,7 @@ export const AdditionalPersonalDetailsForm = ({
           control={control}
           render={({ field }) => (
             <Checkbox
-              label={
-                personalDetailsProps.additionalSection.landlineCheckboxText
-              }
+              label={landlineCheckboxText}
               value="yes"
               checked={Boolean(field.value)}
               onChange={(checked) => field.onChange(checked)}
@@ -249,32 +277,25 @@ export const AdditionalPersonalDetailsForm = ({
             image={getAssetPath("/images/stop-hand.svg")}
             className="bg-tertiary-peach-light justify-center md:w-full items-center"
           >
-            You&apos;ll need a smartphone to get Cuckoo. We can&apos;t provide
-            our service without a smartphone.
+            {requiresLandlineText}
           </TipCard>
         )}
       </div>
       <InfoModal
-        title={personalDetailsProps.additionalSection.dobModalTitle}
+        title={dobModalTitle}
         modalRef={dobModalRef}
         buttonText="close"
         buttonType="button"
       >
-        <ModalContent
-          content={personalDetailsProps.additionalSection.dobModal}
-        />
+        <ModalContent content={dobModal} />
       </InfoModal>
       <InfoModal
-        title={
-          personalDetailsProps.additionalSection.teleHealthDeviceModalTitle
-        }
+        title={teleHealthDeviceModalTitle}
         modalRef={teleHealthModalRef}
-        buttonText={personalDetailsProps.additionalSection.modalCloseText}
+        buttonText={modalCloseText}
         buttonType="button"
       >
-        <ModalContent
-          content={personalDetailsProps.additionalSection.teleHealthDeviceModal}
-        />
+        <ModalContent content={teleHealthDeviceModal} />
       </InfoModal>
     </form>
   );

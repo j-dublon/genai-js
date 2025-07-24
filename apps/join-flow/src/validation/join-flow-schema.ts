@@ -6,7 +6,13 @@ const baseAddressSchema = z.object({
   line1: z.string(),
   line2: z.string(),
   line3: z.string().optional(),
-  postcode: z.string(),
+  postcode: z
+    .string()
+    .min(6, "Postcode is required")
+    .regex(
+      /^[A-Z]{1,2}[0-9]{1,2}[A-Z]?\s?[0-9][A-Z]{2}$/i,
+      "Please enter a valid UK postcode",
+    ),
   identifiers: z.array(
     z.object({
       value: z.string(),
@@ -20,7 +26,13 @@ export const additionalAddressSchema = baseAddressSchema.extend({
   line1: z.string().min(1, "House number is required "),
   line2: z.string().min(1, "First line of your address is required"),
   line3: z.string().min(1, "Second line of your address is required"),
-  postcode: z.string().min(1, "Postcode is a required field"),
+  postcode: z
+    .string()
+    .min(6, "Postcode is required")
+    .regex(
+      /^[A-Z]{1,2}[0-9]{1,2}[A-Z]?\s?[0-9][A-Z]{2}$/i,
+      "Please enter a valid UK postcode",
+    ),
 });
 
 export const packageSelectionSchema = z.object({
