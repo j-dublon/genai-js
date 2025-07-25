@@ -56,21 +56,41 @@ describe("SummaryBar", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 3999,
-      discountedPrice: 3999,
-      annualPriceRise: [
-        {
-          price: 4499,
-          date: "2026-04-01T12:00:00.000Z",
-          id: "test-rise-1",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 3999,
+        discount: 0,
+        customerPriceIncDiscount: 3999,
+        annualPriceRise: [
+          {
+            price: 4499,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "test-rise-1",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 3999,
+        discount: 0,
+        customerPriceIncDiscount: 3999,
+        annualPriceRise: [
+          {
+            price: 4499,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "test-rise-1",
+          },
+        ],
+      },
     },
     speeds: {
       download: 150,
       upload: 30,
     },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "test-pkg-id",
   };
@@ -160,9 +180,23 @@ describe("SummaryBar", () => {
       },
       termMonths: 24,
       prices: {
-        basePrice: 4500,
-        discountedPrice: 4500,
-        annualPriceRise: null,
+        broadbandAndCurrentExtras: {
+          basePrice: 4500,
+          discount: 0,
+          customerPriceIncDiscount: 4500,
+          annualPriceRise: null,
+        },
+        currentExtras: {
+          basePrice: 0,
+          discount: 0,
+          customerPriceIncDiscount: 0,
+        },
+        broadband: {
+          basePrice: 4500,
+          discount: 0,
+          customerPriceIncDiscount: 4500,
+          annualPriceRise: null,
+        },
       },
     };
 

@@ -64,7 +64,7 @@ export const PaymentSummary: React.FC = () => {
   }
 
   const annualPriceRise = sortAnnualPriceRiseByDate(
-    selectedPackage.prices.annualPriceRise ?? [],
+    selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise ?? [],
   );
 
   if (!annualPriceRise) {

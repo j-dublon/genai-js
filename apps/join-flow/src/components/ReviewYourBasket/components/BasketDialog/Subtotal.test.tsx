@@ -34,26 +34,51 @@ describe("Subtotal", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 3200,
-      discountedPrice: 3000,
-      annualPriceRise: [
-        {
-          price: 3500,
-          date: "2027-04-01T12:00:00.000Z",
-          id: "test-rise-1",
-        },
-        {
-          price: 3800,
-          date: "2028-04-01T12:00:00.000Z",
-          id: "test-rise-2",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 3200,
+        discount: 200,
+        customerPriceIncDiscount: 3000,
+        annualPriceRise: [
+          {
+            price: 3500,
+            date: "2027-04-01T12:00:00.000Z",
+            id: "test-rise-1",
+          },
+          {
+            price: 3800,
+            date: "2028-04-01T12:00:00.000Z",
+            id: "test-rise-2",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 3200,
+        discount: 200,
+        customerPriceIncDiscount: 3000,
+        annualPriceRise: [
+          {
+            price: 3500,
+            date: "2027-04-01T12:00:00.000Z",
+            id: "test-rise-1",
+          },
+          {
+            price: 3800,
+            date: "2028-04-01T12:00:00.000Z",
+            id: "test-rise-2",
+          },
+        ],
+      },
     },
     speeds: {
       download: 150,
       upload: 30,
     },
-    extras: null,
+    availableExtras: null,
     offers: [
       {
         blockType: "promotionBlock",
@@ -379,7 +404,14 @@ describe("Subtotal", () => {
         ...mockSelectedPackage,
         prices: {
           ...mockSelectedPackage.prices,
-          annualPriceRise: undefined,
+          broadbandAndCurrentExtras: {
+            ...mockSelectedPackage.prices.broadbandAndCurrentExtras,
+            annualPriceRise: undefined,
+          },
+          broadband: {
+            ...mockSelectedPackage.prices.broadband,
+            annualPriceRise: undefined,
+          },
         },
       };
 

@@ -47,18 +47,22 @@ export const PackageCard = ({
   const promotionPillsText = createPromotionPillText(pkg.offers);
   const discountPriceLabel = createDiscountPriceLabel(pkg.offers);
 
-  if (pkg.prices.annualPriceRise?.[0]?.price) {
+  if (pkg.prices.broadbandAndCurrentExtras.annualPriceRise?.[0]?.price) {
     additionalPrices.push({
-      price: convertPenceToPounds(pkg.prices.annualPriceRise[0].price),
+      price: convertPenceToPounds(
+        pkg.prices.broadbandAndCurrentExtras.annualPriceRise[0].price,
+      ),
       label: "From",
-      date: pkg.prices.annualPriceRise[0].date,
+      date: pkg.prices.broadbandAndCurrentExtras.annualPriceRise[0].date,
     });
   }
-  if (pkg.prices.annualPriceRise?.[1]?.price) {
+  if (pkg.prices.broadbandAndCurrentExtras.annualPriceRise?.[1]?.price) {
     additionalPrices.push({
-      price: convertPenceToPounds(pkg.prices.annualPriceRise[1].price),
+      price: convertPenceToPounds(
+        pkg.prices.broadbandAndCurrentExtras.annualPriceRise[1].price,
+      ),
       label: "From",
-      date: pkg.prices.annualPriceRise[1].date,
+      date: pkg.prices.broadbandAndCurrentExtras.annualPriceRise[1].date,
     });
   }
 
@@ -68,11 +72,13 @@ export const PackageCard = ({
       subtitle={packageSelectionPageText.promotionSubtitle}
       features={features}
       mainPrice={convertPenceToPounds(
-        pkg.prices.discountedPrice ?? pkg.prices.basePrice,
+        pkg.prices.broadbandAndCurrentExtras.customerPriceIncDiscount ??
+          pkg.prices.broadbandAndCurrentExtras.basePrice,
       )}
       basePrice={
-        pkg.prices.discountedPrice !== pkg.prices.basePrice
-          ? convertPenceToPounds(pkg.prices.basePrice)
+        pkg.prices.broadbandAndCurrentExtras.customerPriceIncDiscount !==
+        pkg.prices.broadbandAndCurrentExtras.basePrice
+          ? convertPenceToPounds(pkg.prices.broadbandAndCurrentExtras.basePrice)
           : ""
       }
       currency="£"

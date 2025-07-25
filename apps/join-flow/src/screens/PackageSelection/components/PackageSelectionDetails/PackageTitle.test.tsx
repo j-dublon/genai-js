@@ -15,21 +15,41 @@ describe("PackageTitle", () => {
       installationRequired: true,
       appliedPromotionUUIDs: [],
       prices: {
-        basePrice: 3000,
-        discountedPrice: 3000,
-        annualPriceRise: [
-          {
-            price: 3300,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "rise-1",
-          },
-        ],
+        broadbandAndCurrentExtras: {
+          basePrice: 3000,
+          discount: 0,
+          customerPriceIncDiscount: 3000,
+          annualPriceRise: [
+            {
+              price: 3300,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "rise-1",
+            },
+          ],
+        },
+        currentExtras: {
+          basePrice: 0,
+          discount: 0,
+          customerPriceIncDiscount: 0,
+        },
+        broadband: {
+          basePrice: 3000,
+          discount: 0,
+          customerPriceIncDiscount: 3000,
+          annualPriceRise: [
+            {
+              price: 3300,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "rise-1",
+            },
+          ],
+        },
       },
       speeds: {
         download: 100,
         upload: 20,
       },
-      extras: null,
+      availableExtras: null,
       offers: null,
       id: "c-150",
     };

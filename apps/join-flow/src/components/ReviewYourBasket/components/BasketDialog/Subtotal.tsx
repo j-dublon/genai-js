@@ -60,9 +60,9 @@ export const Subtotal = ({
   if (!selectedPackage || !eeroSelection) return null;
 
   const nextYearsIncreaseDate =
-    selectedPackage.prices.annualPriceRise?.[0]?.date;
+    selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise?.[0]?.date;
   const followingYearsIncreaseDate =
-    selectedPackage.prices.annualPriceRise?.[1]?.date;
+    selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise?.[1]?.date;
 
   const promotionPillText = createPromotionPillText(
     selectedPackage.offers,

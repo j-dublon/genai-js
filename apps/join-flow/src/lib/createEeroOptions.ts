@@ -46,14 +46,14 @@ export const hydrateEeroProductWithContent = (
 
 // Currently there can be up to three options: 1 eero (no additional eeros), 2 eeros (1 extra eero), 3 eeros (2 extra eeros)
 export const createEeroOptions = (
-  extras: StoreSelectedPackage["extras"],
+  availableExtras: StoreSelectedPackage["availableExtras"],
   eeroProductContent: EeroContent[],
 ): EeroOption[] => {
-  const availableExtras =
-    extras?.find((extra) => extra.family === "mesh_routers")?.availableExtras ||
+  const extras =
+    availableExtras?.find((extra) => extra.family === "mesh_routers")?.extras ||
     [];
 
-  return availableExtras
+  return extras
     .reduce<EeroOption[]>((acc, extra) => {
       const eeroContent = eeroProductContent.find(
         (product) => product.code === extra.code,

@@ -47,7 +47,7 @@ const EeroSelection = () => {
   });
 
   const eeroOptions = createEeroOptions(
-    selectedPackage?.extras || [],
+    selectedPackage?.availableExtras || [],
     eeroProducts,
   );
   const noAdditionalEeroOption = eeroOptions.find(

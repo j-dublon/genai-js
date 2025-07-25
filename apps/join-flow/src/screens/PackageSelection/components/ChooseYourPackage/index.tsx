@@ -85,24 +85,48 @@ export const ChooseYourPackage = () => {
       installationRequired: product.installationRequired,
       appliedPromotionUUIDs: product.appliedPromotionUUIDs || null,
       prices: {
-        basePrice: product.prices.basePrice,
-        discountedPrice: product.prices.discountedPrice,
-        annualPriceRise:
-          product.prices.annualPriceRise?.map((rise) => ({
-            price: rise.price,
-            date: rise.date,
-            id: rise.id || null,
-          })) || null,
+        broadbandAndCurrentExtras: {
+          basePrice: product.prices.broadbandAndCurrentExtras.basePrice,
+          discount: product.prices.broadbandAndCurrentExtras.discount,
+          customerPriceIncDiscount:
+            product.prices.broadbandAndCurrentExtras.customerPriceIncDiscount,
+          annualPriceRise:
+            product.prices.broadbandAndCurrentExtras.annualPriceRise?.map(
+              (rise) => ({
+                price: rise.price,
+                date: rise.date,
+                id: rise.id || null,
+              }),
+            ) || null,
+        },
+        currentExtras: {
+          basePrice: product.prices.currentExtras.basePrice,
+          discount: product.prices.currentExtras.discount,
+          customerPriceIncDiscount:
+            product.prices.currentExtras.customerPriceIncDiscount,
+        },
+        broadband: {
+          basePrice: product.prices.broadband.basePrice,
+          discount: product.prices.broadband.discount,
+          customerPriceIncDiscount:
+            product.prices.broadband.customerPriceIncDiscount,
+          annualPriceRise:
+            product.prices.broadband.annualPriceRise?.map((rise) => ({
+              price: rise.price,
+              date: rise.date,
+              id: rise.id || null,
+            })) || null,
+        },
       },
       speeds: {
         download: product.speeds.download,
         upload: product.speeds.upload,
       },
-      extras:
-        product.extras?.map((extra) => ({
+      availableExtras:
+        product.availableExtras?.map((extra) => ({
           family: extra.family,
-          availableExtras:
-            extra.availableExtras?.map((availableExtra) => ({
+          extras:
+            extra.extras?.map((availableExtra) => ({
               code: availableExtra.code,
               name: availableExtra.name,
               description: availableExtra.description,

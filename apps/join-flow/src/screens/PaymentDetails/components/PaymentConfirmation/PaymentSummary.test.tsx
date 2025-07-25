@@ -62,15 +62,32 @@ describe("PaymentSummary", () => {
     installationRequired: false,
     appliedPromotionUUIDs: null,
     prices: {
-      basePrice: 3000,
-      discountedPrice: 2500,
-      annualPriceRise: [
-        { price: 3500, date: "2025-04-01", id: "rise-1" },
-        { price: 4000, date: "2026-04-01", id: "rise-2" },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 3000,
+        discount: 500,
+        customerPriceIncDiscount: 2500,
+        annualPriceRise: [
+          { price: 3500, date: "2025-04-01", id: "rise-1" },
+          { price: 4000, date: "2026-04-01", id: "rise-2" },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 3000,
+        discount: 500,
+        customerPriceIncDiscount: 2500,
+        annualPriceRise: [
+          { price: 3500, date: "2025-04-01", id: "rise-1" },
+          { price: 4000, date: "2026-04-01", id: "rise-2" },
+        ],
+      },
     },
     speeds: { download: 150, upload: 30 },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "pkg-1-id",
   };

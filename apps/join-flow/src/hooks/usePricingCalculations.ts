@@ -57,17 +57,25 @@ export const usePricingCalculations = (
     }
 
     const monthlyPackagePrice = convertPenceToPounds(
-      selectedPackage.prices.basePrice,
+      selectedPackage.prices.broadbandAndCurrentExtras.basePrice,
     );
     const discountedPrice = convertPenceToPounds(
-      selectedPackage.prices.discountedPrice,
+      selectedPackage.prices.broadbandAndCurrentExtras.customerPriceIncDiscount,
     );
 
-    const nextPrice = selectedPackage.prices.annualPriceRise?.[0]?.price
-      ? convertPenceToPounds(selectedPackage.prices.annualPriceRise[0].price)
+    const nextPrice = selectedPackage.prices.broadbandAndCurrentExtras
+      .annualPriceRise?.[0]?.price
+      ? convertPenceToPounds(
+          selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise[0]
+            .price,
+        )
       : monthlyPackagePrice;
-    const followingPrice = selectedPackage.prices.annualPriceRise?.[1]?.price
-      ? convertPenceToPounds(selectedPackage.prices.annualPriceRise[1].price)
+    const followingPrice = selectedPackage.prices.broadbandAndCurrentExtras
+      .annualPriceRise?.[1]?.price
+      ? convertPenceToPounds(
+          selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise[1]
+            .price,
+        )
       : nextPrice;
 
     const monthlyEeroPrice = eeroSelection
@@ -77,17 +85,20 @@ export const usePricingCalculations = (
     // Calculate totals in pence first, then convert to pounds to avoid floating point precision issues
     const eeroSelectionPence = eeroSelection ? eeroSelection.price : 0;
     const monthlyTotal = convertPenceToPounds(
-      selectedPackage.prices.basePrice + eeroSelectionPence,
+      selectedPackage.prices.broadbandAndCurrentExtras.basePrice +
+        eeroSelectionPence,
     );
     const discountedMonthlyTotal = convertPenceToPounds(
-      selectedPackage.prices.discountedPrice + eeroSelectionPence,
+      selectedPackage.prices.broadbandAndCurrentExtras
+        .customerPriceIncDiscount + eeroSelectionPence,
     );
 
     const nextPricePence =
-      selectedPackage.prices.annualPriceRise?.[0]?.price ||
-      selectedPackage.prices.basePrice;
+      selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise?.[0]
+        ?.price || selectedPackage.prices.broadbandAndCurrentExtras.basePrice;
     const followingPricePence =
-      selectedPackage.prices.annualPriceRise?.[1]?.price || nextPricePence;
+      selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise?.[1]
+        ?.price || nextPricePence;
     const predictedTotalNext = convertPenceToPounds(
       nextPricePence + eeroSelectionPence,
     );
@@ -104,8 +115,9 @@ export const usePricingCalculations = (
       const discountTermLength = discountOffer.promotion.term;
 
       totalPlanSaving = convertPenceToPounds(
-        (selectedPackage.prices.basePrice -
-          selectedPackage.prices.discountedPrice) *
+        (selectedPackage.prices.broadbandAndCurrentExtras.basePrice -
+          selectedPackage.prices.broadbandAndCurrentExtras
+            .customerPriceIncDiscount) *
           Number(TermLength[discountTermLength || "wholeContract"]),
       );
     }

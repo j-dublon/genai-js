@@ -28,18 +28,38 @@ const setupInitialState = (page: Page) => {
               installationRequired: true,
               appliedPromotionUUIDs: [],
               prices: {
-                basePrice: 3800,
-                discountedPrice: 3800,
-                annualPriceRise: [
-                  {
-                    price: 4100,
-                    date: "2026-04-01T12:00:00.000Z",
-                    id: "684158f6b3586360474ec95e",
-                  },
-                ],
+                broadbandAndCurrentExtras: {
+                  basePrice: 3800,
+                  discount: 0,
+                  customerPriceIncDiscount: 3800,
+                  annualPriceRise: [
+                    {
+                      price: 4100,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec95e",
+                    },
+                  ],
+                },
+                currentExtras: {
+                  basePrice: 0,
+                  discount: 0,
+                  customerPriceIncDiscount: 0,
+                },
+                broadband: {
+                  basePrice: 3800,
+                  discount: 0,
+                  customerPriceIncDiscount: 3800,
+                  annualPriceRise: [
+                    {
+                      price: 4100,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec95e",
+                    },
+                  ],
+                },
               },
               speeds: { download: 150, upload: 25 },
-              extras: [],
+              availableExtras: [],
               offers: [],
               id: "684158f6b3586360474ec973",
             },
@@ -52,18 +72,38 @@ const setupInitialState = (page: Page) => {
               installationRequired: true,
               appliedPromotionUUIDs: [],
               prices: {
-                basePrice: 3900,
-                discountedPrice: 3900,
-                annualPriceRise: [
-                  {
-                    price: 4200,
-                    date: "2026-04-01T12:00:00.000Z",
-                    id: "684158f6b3586360474ec95f",
-                  },
-                ],
+                broadbandAndCurrentExtras: {
+                  basePrice: 3900,
+                  discount: 0,
+                  customerPriceIncDiscount: 3900,
+                  annualPriceRise: [
+                    {
+                      price: 4200,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec95f",
+                    },
+                  ],
+                },
+                currentExtras: {
+                  basePrice: 0,
+                  discount: 0,
+                  customerPriceIncDiscount: 0,
+                },
+                broadband: {
+                  basePrice: 3900,
+                  discount: 0,
+                  customerPriceIncDiscount: 3900,
+                  annualPriceRise: [
+                    {
+                      price: 4200,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec95f",
+                    },
+                  ],
+                },
               },
               speeds: { download: 500, upload: 75 },
-              extras: [],
+              availableExtras: [],
               offers: [],
               id: "684158f6b3586360474ec974",
             },
@@ -76,18 +116,38 @@ const setupInitialState = (page: Page) => {
               installationRequired: true,
               appliedPromotionUUIDs: [],
               prices: {
-                basePrice: 4100,
-                discountedPrice: 4100,
-                annualPriceRise: [
-                  {
-                    price: 4400,
-                    date: "2026-04-01T12:00:00.000Z",
-                    id: "684158f6b3586360474ec960",
-                  },
-                ],
+                broadbandAndCurrentExtras: {
+                  basePrice: 4100,
+                  discount: 0,
+                  customerPriceIncDiscount: 4100,
+                  annualPriceRise: [
+                    {
+                      price: 4400,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec960",
+                    },
+                  ],
+                },
+                currentExtras: {
+                  basePrice: 0,
+                  discount: 0,
+                  customerPriceIncDiscount: 0,
+                },
+                broadband: {
+                  basePrice: 4100,
+                  discount: 0,
+                  customerPriceIncDiscount: 4100,
+                  annualPriceRise: [
+                    {
+                      price: 4400,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec960",
+                    },
+                  ],
+                },
               },
               speeds: { download: 900, upload: 900 },
-              extras: [],
+              availableExtras: [],
               offers: [],
               id: "684158f6b3586360474ec975",
             },
@@ -100,18 +160,38 @@ const setupInitialState = (page: Page) => {
               installationRequired: true,
               appliedPromotionUUIDs: [],
               prices: {
-                basePrice: 3600,
-                discountedPrice: 3600,
-                annualPriceRise: [
-                  {
-                    price: 3900,
-                    date: "2026-04-01T12:00:00.000Z",
-                    id: "684158f6b3586360474ec961",
-                  },
-                ],
+                broadbandAndCurrentExtras: {
+                  basePrice: 3600,
+                  discount: 0,
+                  customerPriceIncDiscount: 3600,
+                  annualPriceRise: [
+                    {
+                      price: 3900,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec961",
+                    },
+                  ],
+                },
+                currentExtras: {
+                  basePrice: 0,
+                  discount: 0,
+                  customerPriceIncDiscount: 0,
+                },
+                broadband: {
+                  basePrice: 3600,
+                  discount: 0,
+                  customerPriceIncDiscount: 3600,
+                  annualPriceRise: [
+                    {
+                      price: 3900,
+                      date: "2026-04-01T12:00:00.000Z",
+                      id: "684158f6b3586360474ec961",
+                    },
+                  ],
+                },
               },
               speeds: { download: 150, upload: 25 },
-              extras: [],
+              availableExtras: [],
               offers: [],
               id: "684158f6b3586360474ec976",
             },

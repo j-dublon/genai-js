@@ -31,21 +31,41 @@ describe("PackageInfo", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 3200,
-      discountedPrice: 3200,
-      annualPriceRise: [
-        {
-          price: 3500,
-          date: "2026-04-01T12:00:00.000Z",
-          id: "test-rise-1",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 3200,
+        discount: 0,
+        customerPriceIncDiscount: 3200,
+        annualPriceRise: [
+          {
+            price: 3500,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "test-rise-1",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 3200,
+        discount: 0,
+        customerPriceIncDiscount: 3200,
+        annualPriceRise: [
+          {
+            price: 3500,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "test-rise-1",
+          },
+        ],
+      },
     },
     speeds: {
       download: 150,
       upload: 30,
     },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "test-pkg-id",
   };
@@ -61,21 +81,41 @@ describe("PackageInfo", () => {
       installationRequired: true,
       appliedPromotionUUIDs: [],
       prices: {
-        basePrice: 3800,
-        discountedPrice: 3800,
-        annualPriceRise: [
-          {
-            price: 4200,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "test-rise-2",
-          },
-        ],
+        broadbandAndCurrentExtras: {
+          basePrice: 3800,
+          discount: 0,
+          customerPriceIncDiscount: 3800,
+          annualPriceRise: [
+            {
+              price: 4200,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "test-rise-2",
+            },
+          ],
+        },
+        currentExtras: {
+          basePrice: 0,
+          discount: 0,
+          customerPriceIncDiscount: 0,
+        },
+        broadband: {
+          basePrice: 3800,
+          discount: 0,
+          customerPriceIncDiscount: 3800,
+          annualPriceRise: [
+            {
+              price: 4200,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "test-rise-2",
+            },
+          ],
+        },
       },
       speeds: {
         download: 300,
         upload: 50,
       },
-      extras: null,
+      availableExtras: null,
       offers: null,
       id: "test-pkg-2-id",
     },
@@ -130,7 +170,7 @@ describe("PackageInfo", () => {
     await user.click(changePlanButton);
 
     const dropdownOptions = screen.getByTestId("dropdown-options");
-    const expected = `${mockAvailablePackages[1].speeds.download}Mbps - £${convertPenceToPounds(mockAvailablePackages[1].prices.basePrice)}/month - ${mockAvailablePackages[1].termMonths} months`;
+    const expected = `${mockAvailablePackages[1].speeds.download}Mbps - £${convertPenceToPounds(mockAvailablePackages[1].prices.broadbandAndCurrentExtras.basePrice)}/month - ${mockAvailablePackages[1].termMonths} months`;
     expect(dropdownOptions.children[1].textContent).toBe(expected);
   });
 

@@ -16,17 +16,35 @@ describe("usePricingCalculations", () => {
       upload: 18,
     },
     prices: {
-      basePrice: 3000,
-      discountedPrice: 2599,
-      annualPriceRise: [
-        { price: 3300, date: "2025-04-01" },
-        { price: 3600, date: "2026-04-01" },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 3000,
+        discount: 401,
+        customerPriceIncDiscount: 2599,
+        annualPriceRise: [
+          { price: 3300, date: "2025-04-01" },
+          { price: 3600, date: "2026-04-01" },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 3000,
+        discount: 401,
+        customerPriceIncDiscount: 2599,
+        annualPriceRise: [
+          { price: 3300, date: "2025-04-01" },
+          { price: 3600, date: "2026-04-01" },
+        ],
+      },
     },
     krakenProductCode: "SUPERFAST_67",
     termMonths: 18,
     selectionIdentifier: "superfast-67",
     installationRequired: false,
+    availableExtras: null,
     offers: [
       {
         blockType: "promotionBlock",
@@ -127,7 +145,14 @@ describe("usePricingCalculations", () => {
         ...mockPackage,
         prices: {
           ...mockPackage.prices,
-          annualPriceRise: null,
+          broadbandAndCurrentExtras: {
+            ...mockPackage.prices.broadbandAndCurrentExtras,
+            annualPriceRise: null,
+          },
+          broadband: {
+            ...mockPackage.prices.broadband,
+            annualPriceRise: null,
+          },
         },
       };
 
@@ -148,7 +173,14 @@ describe("usePricingCalculations", () => {
         ...mockPackage,
         prices: {
           ...mockPackage.prices,
-          annualPriceRise: [{ price: 3300, date: "2025-04-01" }],
+          broadbandAndCurrentExtras: {
+            ...mockPackage.prices.broadbandAndCurrentExtras,
+            annualPriceRise: [{ price: 3300, date: "2025-04-01" }],
+          },
+          broadband: {
+            ...mockPackage.prices.broadband,
+            annualPriceRise: [{ price: 3300, date: "2025-04-01" }],
+          },
         },
       };
 
@@ -167,7 +199,14 @@ describe("usePricingCalculations", () => {
         ...mockPackage,
         prices: {
           ...mockPackage.prices,
-          annualPriceRise: [],
+          broadbandAndCurrentExtras: {
+            ...mockPackage.prices.broadbandAndCurrentExtras,
+            annualPriceRise: [],
+          },
+          broadband: {
+            ...mockPackage.prices.broadband,
+            annualPriceRise: [],
+          },
         },
       };
 

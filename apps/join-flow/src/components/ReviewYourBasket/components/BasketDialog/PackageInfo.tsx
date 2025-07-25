@@ -31,7 +31,7 @@ export const PackageInfo = ({
   };
 
   const getOptionLabel = (pkg: StoreSelectedPackage) => {
-    return `${pkg.speeds.download}Mbps - £${convertPenceToPounds(pkg.prices.basePrice)}/month - ${pkg.termMonths} months`;
+    return `${pkg.speeds.download}Mbps - £${convertPenceToPounds(pkg.prices.broadbandAndCurrentExtras.basePrice)}/month - ${pkg.termMonths} months`;
   };
 
   return (

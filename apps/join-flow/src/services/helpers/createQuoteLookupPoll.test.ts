@@ -26,21 +26,41 @@ describe("createQuoteLookupPoll", () => {
       installationRequired: true,
       appliedPromotionUUIDs: [],
       prices: {
-        basePrice: 3800,
-        discountedPrice: 3800,
-        annualPriceRise: [
-          {
-            price: 4100,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "682f084125d25c4681c1ad20",
-          },
-        ],
+        broadbandAndCurrentExtras: {
+          basePrice: 3800,
+          discount: 0,
+          customerPriceIncDiscount: 3800,
+          annualPriceRise: [
+            {
+              price: 4100,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "682f084125d25c4681c1ad20",
+            },
+          ],
+        },
+        currentExtras: {
+          basePrice: 0,
+          discount: 0,
+          customerPriceIncDiscount: 0,
+        },
+        broadband: {
+          basePrice: 3800,
+          discount: 0,
+          customerPriceIncDiscount: 3800,
+          annualPriceRise: [
+            {
+              price: 4100,
+              date: "2026-04-01T12:00:00.000Z",
+              id: "682f084125d25c4681c1ad20",
+            },
+          ],
+        },
       },
       speeds: {
         download: 25,
         upload: 150,
       },
-      extras: [],
+      availableExtras: [],
       offers: [],
       id: "682f084125d25c4681c1ad36",
     },

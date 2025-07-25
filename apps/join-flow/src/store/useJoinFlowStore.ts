@@ -182,24 +182,44 @@ export type StoreSelectedPackage = {
       }[]
     | null;
   prices: {
-    basePrice: number;
-    discountedPrice: number;
-    annualPriceRise?:
-      | {
-          price: number;
-          date: string;
-          id?: string | null;
-        }[]
-      | null;
+    broadbandAndCurrentExtras: {
+      basePrice: number;
+      discount: number;
+      customerPriceIncDiscount: number;
+      annualPriceRise?:
+        | {
+            price: number;
+            date: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
+    currentExtras: {
+      basePrice: number;
+      discount: number;
+      customerPriceIncDiscount: number;
+    };
+    broadband: {
+      basePrice: number;
+      discount: number;
+      customerPriceIncDiscount: number;
+      annualPriceRise?:
+        | {
+            price: number;
+            date: string;
+            id?: string | null;
+          }[]
+        | null;
+    };
   };
   speeds: {
     download: number;
     upload: number;
   };
-  extras?:
+  availableExtras?:
     | {
         family: string;
-        availableExtras?:
+        extras?:
           | {
               code: string;
               name: string;

@@ -69,29 +69,54 @@ describe("ReviewYourBasket", () => {
         installationRequired: false,
         appliedPromotionUUIDs: null,
         prices: {
-          basePrice: 2999,
-          discountedPrice: 2999,
-          annualPriceRise: [
-            {
-              price: 3299,
-              date: "2025-04-01",
-              id: "rise-1",
-            },
-            {
-              price: 3599,
-              date: "2026-04-01",
-              id: "rise-2",
-            },
-          ],
+          broadbandAndCurrentExtras: {
+            basePrice: 2999,
+            discount: 0,
+            customerPriceIncDiscount: 2999,
+            annualPriceRise: [
+              {
+                price: 3299,
+                date: "2025-04-01",
+                id: "rise-1",
+              },
+              {
+                price: 3599,
+                date: "2026-04-01",
+                id: "rise-2",
+              },
+            ],
+          },
+          currentExtras: {
+            basePrice: 0,
+            discount: 0,
+            customerPriceIncDiscount: 0,
+          },
+          broadband: {
+            basePrice: 2999,
+            discount: 0,
+            customerPriceIncDiscount: 2999,
+            annualPriceRise: [
+              {
+                price: 3299,
+                date: "2025-04-01",
+                id: "rise-1",
+              },
+              {
+                price: 3599,
+                date: "2026-04-01",
+                id: "rise-2",
+              },
+            ],
+          },
         },
         speeds: {
           download: 100,
           upload: 20,
         },
-        extras: [
+        availableExtras: [
           {
             family: "mesh_routers",
-            availableExtras: [
+            extras: [
               {
                 code: "EERO_MESH_ROUTER_X1",
                 family: "mesh_routers",
@@ -144,26 +169,51 @@ describe("ReviewYourBasket", () => {
               installationRequired: false,
               appliedPromotionUUIDs: null,
               prices: {
-                basePrice: 2999,
-                discountedPrice: 2999,
-                annualPriceRise: [
-                  {
-                    price: 3299,
-                    date: "2025-04-01",
-                    id: "rise-1",
-                  },
-                  {
-                    price: 3599,
-                    date: "2026-04-01",
-                    id: "rise-2",
-                  },
-                ],
+                broadbandAndCurrentExtras: {
+                  basePrice: 2999,
+                  discount: 0,
+                  customerPriceIncDiscount: 2999,
+                  annualPriceRise: [
+                    {
+                      price: 3299,
+                      date: "2025-04-01",
+                      id: "rise-1",
+                    },
+                    {
+                      price: 3599,
+                      date: "2026-04-01",
+                      id: "rise-2",
+                    },
+                  ],
+                },
+                currentExtras: {
+                  basePrice: 0,
+                  discount: 0,
+                  customerPriceIncDiscount: 0,
+                },
+                broadband: {
+                  basePrice: 2999,
+                  discount: 0,
+                  customerPriceIncDiscount: 2999,
+                  annualPriceRise: [
+                    {
+                      price: 3299,
+                      date: "2025-04-01",
+                      id: "rise-1",
+                    },
+                    {
+                      price: 3599,
+                      date: "2026-04-01",
+                      id: "rise-2",
+                    },
+                  ],
+                },
               },
               speeds: {
                 download: 100,
                 upload: 20,
               },
-              extras: null,
+              availableExtras: null,
               offers: null,
               id: "test-package-id",
             },

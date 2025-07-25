@@ -107,21 +107,41 @@ describe("PackageSelectionDetails", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 2000,
-      discountedPrice: 2000,
-      annualPriceRise: [
-        {
-          price: 2300,
-          date: "2026-04-01T12:00:00.000Z",
-          id: "rise-1",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 2000,
+        discount: 0,
+        customerPriceIncDiscount: 2000,
+        annualPriceRise: [
+          {
+            price: 2300,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-1",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 2000,
+        discount: 0,
+        customerPriceIncDiscount: 2000,
+        annualPriceRise: [
+          {
+            price: 2300,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-1",
+          },
+        ],
+      },
     },
     speeds: {
       download: 500,
       upload: 100,
     },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "test-id",
   };
@@ -135,21 +155,41 @@ describe("PackageSelectionDetails", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 5000,
-      discountedPrice: 5000,
-      annualPriceRise: [
-        {
-          price: 5300,
-          date: "2026-04-01T12:00:00.000Z",
-          id: "rise-2",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 5000,
+        discount: 0,
+        customerPriceIncDiscount: 5000,
+        annualPriceRise: [
+          {
+            price: 5300,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-2",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 5000,
+        discount: 0,
+        customerPriceIncDiscount: 5000,
+        annualPriceRise: [
+          {
+            price: 5300,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-2",
+          },
+        ],
+      },
     },
     speeds: {
       download: 900,
       upload: 100,
     },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "test-id-speed",
   };

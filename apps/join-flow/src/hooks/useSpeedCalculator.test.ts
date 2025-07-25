@@ -16,21 +16,41 @@ const mockThreePackages: StoreSelectedPackage[] = [
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 3000,
-      discountedPrice: 3000,
-      annualPriceRise: [
-        {
-          price: 3300,
-          date: "2026-04-01T12:00:00.000Z",
-          id: "rise-1",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 3000,
+        discount: 0,
+        customerPriceIncDiscount: 3000,
+        annualPriceRise: [
+          {
+            price: 3300,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-1",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 3000,
+        discount: 0,
+        customerPriceIncDiscount: 3000,
+        annualPriceRise: [
+          {
+            price: 3300,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-1",
+          },
+        ],
+      },
     },
     speeds: {
       download: 150,
       upload: 30,
     },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "c-150-id",
   },
@@ -43,21 +63,41 @@ const mockThreePackages: StoreSelectedPackage[] = [
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 3500,
-      discountedPrice: 3500,
-      annualPriceRise: [
-        {
-          price: 3800,
-          date: "2026-04-01T12:00:00.000Z",
-          id: "rise-2",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 3500,
+        discount: 0,
+        customerPriceIncDiscount: 3500,
+        annualPriceRise: [
+          {
+            price: 3800,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-2",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 3500,
+        discount: 0,
+        customerPriceIncDiscount: 3500,
+        annualPriceRise: [
+          {
+            price: 3800,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-2",
+          },
+        ],
+      },
     },
     speeds: {
       download: 500,
       upload: 20,
     },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "c-500-id",
   },
@@ -70,21 +110,41 @@ const mockThreePackages: StoreSelectedPackage[] = [
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      basePrice: 4100,
-      discountedPrice: 4100,
-      annualPriceRise: [
-        {
-          price: 4400,
-          date: "2026-04-01T12:00:00.000Z",
-          id: "rise-3",
-        },
-      ],
+      broadbandAndCurrentExtras: {
+        basePrice: 4100,
+        discount: 0,
+        customerPriceIncDiscount: 4100,
+        annualPriceRise: [
+          {
+            price: 4400,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-3",
+          },
+        ],
+      },
+      currentExtras: {
+        basePrice: 0,
+        discount: 0,
+        customerPriceIncDiscount: 0,
+      },
+      broadband: {
+        basePrice: 4100,
+        discount: 0,
+        customerPriceIncDiscount: 4100,
+        annualPriceRise: [
+          {
+            price: 4400,
+            date: "2026-04-01T12:00:00.000Z",
+            id: "rise-3",
+          },
+        ],
+      },
     },
     speeds: {
       download: 900,
       upload: 100,
     },
-    extras: null,
+    availableExtras: null,
     offers: null,
     id: "c-900-id",
   },

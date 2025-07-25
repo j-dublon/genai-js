@@ -30,7 +30,7 @@ describe("createEeroOptions", () => {
   ];
 
   const createMockExtras = (
-    availableExtras: Array<{
+    extras: Array<{
       code: string;
       name: string;
       description: string;
@@ -42,7 +42,7 @@ describe("createEeroOptions", () => {
   ) => [
     {
       family: "mesh_routers",
-      availableExtras,
+      extras,
       id: "mesh-routers-1",
     },
   ];
@@ -69,7 +69,7 @@ describe("createEeroOptions", () => {
     const extras = [
       {
         family: "other_family",
-        availableExtras: [
+        extras: [
           {
             code: "EERO_MESH_ROUTER_X1",
             name: "Test Eero",
@@ -87,11 +87,11 @@ describe("createEeroOptions", () => {
     expect(result).toEqual([]);
   });
 
-  it("should return empty array when mesh_routers family has no availableExtras", () => {
+  it("should return empty array when mesh_routers family has no extras", () => {
     const extras = [
       {
         family: "mesh_routers",
-        availableExtras: [],
+        extras: [],
         id: "mesh-routers-1",
       },
     ];
@@ -101,11 +101,11 @@ describe("createEeroOptions", () => {
     expect(result).toEqual([]);
   });
 
-  it("should return empty array when mesh_routers family has null availableExtras", () => {
+  it("should return empty array when mesh_routers family has null extras", () => {
     const extras = [
       {
         family: "mesh_routers",
-        availableExtras: null,
+        extras: null,
         id: "mesh-routers-1",
       },
     ];

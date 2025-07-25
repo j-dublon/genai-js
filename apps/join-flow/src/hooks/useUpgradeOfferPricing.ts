@@ -17,7 +17,8 @@ export const useUpgradeOfferPricing = (
     }
 
     const { prices, speeds } = topSpeedPackage;
-    const { basePrice, annualPriceRise } = prices;
+    const { broadbandAndCurrentExtras } = prices;
+    const { basePrice, annualPriceRise } = broadbandAndCurrentExtras;
 
     const sortedPriceRises = annualPriceRise;
 

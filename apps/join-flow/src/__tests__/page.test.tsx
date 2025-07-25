@@ -29,8 +29,21 @@ vi.mock("@store/useJoinFlowStore", () => ({
             selectionIdentifier: "test-selection",
             installationRequired: false,
             prices: {
-              basePrice: 25,
-              discountedPrice: 20,
+              broadbandAndCurrentExtras: {
+                basePrice: 25,
+                discount: 5,
+                customerPriceIncDiscount: 20,
+              },
+              currentExtras: {
+                basePrice: 0,
+                discount: 0,
+                customerPriceIncDiscount: 0,
+              },
+              broadband: {
+                basePrice: 25,
+                discount: 5,
+                customerPriceIncDiscount: 20,
+              },
             },
             speeds: {
               download: 100,
