@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "types": ["node", "vitest", "vitest/globals"],
+    "types": ["node", "vitest", "vitest/globals", "gtag.js"],
     "incremental": true,
 
     /* Bundler mode */
@@ -32,7 +32,9 @@
       "@icons/*": ["lib/icons/*"],
       "@utils/*": ["lib/utils/*"],
       "@lib/*": ["lib/*"],
-      "@hooks/*": ["lib/hooks/*"]
+      "@hooks/*": ["lib/hooks/*"],
+      "@contexts/*": ["lib/contexts/*"],
+      "@providers/*": ["lib/providers/*"]
     }
   },
   "include": ["lib", "packages/design-system/lib/**/*", "setup-test.ts"],

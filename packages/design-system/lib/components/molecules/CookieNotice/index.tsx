@@ -1,10 +1,9 @@
 "use client";
-import dynamic from "next/dynamic";
-
 import {
   shouldShowCookieNotice,
   useCookieNotice,
-} from "@/contexts/CookieNotice";
+} from "@contexts/CookieNotice";
+import dynamic from "next/dynamic";
 
 const CookieNotice = dynamic(
   () => import("./cookieNotice").then((m) => m.CookieNotice),

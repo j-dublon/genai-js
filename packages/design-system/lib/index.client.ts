@@ -38,6 +38,7 @@ import { TrustpilotStars } from "@components/atoms/TrustpilotStars";
 import { AccordionSection } from "@components/molecules/AccordionSection";
 import { ArticleCard } from "@components/molecules/ArticleCard";
 import { CompanyLogoStrip } from "@components/molecules/CompanyLogoStrip";
+import { DynamicCookieNotice } from "@components/molecules/CookieNotice";
 import { FullScreenModal } from "@components/molecules/FullScreenModal";
 import { ImageMarquee } from "@components/molecules/ImageMarquee";
 import { InfoCard, InfoCardProps } from "@components/molecules/InfoCard";
@@ -62,11 +63,20 @@ import { TrustpilotVertical } from "@components/molecules/TrustpilotVertical";
 import { Footer } from "@components/organisms/Footer";
 import { HowFastCanYouGo } from "@components/organisms/HowFastCanYouGo";
 import { NavBar } from "@components/organisms/NavBar";
+import {
+  ConsentParams,
+  CookieNoticeProvider,
+  shouldShowCookieNotice,
+  useCookieNotice,
+} from "@contexts/CookieNotice";
+import { defaultChoices } from "@contexts/CookieNotice/defaultChoices";
+import { getStorageValue, useBrowserStorage } from "@hooks/useBrowserStorage";
 import { useClickOutside } from "@hooks/useClickOutside";
 import { useScrollable } from "@hooks/useScrollable";
 import { useTrustpilotScore } from "@hooks/useTrustPilotScore";
 import { InfoIcon } from "@icons/InfoIcon";
 import { RadioIcon } from "@icons/Radio";
+import { userTrackingParams } from "@utils/userTrackingParams";
 
 import {
   BACKGROUND_COLORS,
@@ -85,11 +95,15 @@ export {
   Checkbox,
   ColorPill,
   CompanyLogoStrip,
+  CookieNoticeProvider,
   DatePicker,
+  defaultChoices,
   DropdownPill,
+  DynamicCookieNotice,
   FeatureImage,
   Footer,
   FullScreenModal,
+  getStorageValue,
   GuideCard,
   Heading,
   HowFastCanYouGo,
@@ -121,6 +135,7 @@ export {
   ReviewCard,
   ReviewCardSkeleton,
   SectionHeading,
+  shouldShowCookieNotice,
   SimpleNavBar,
   Slider,
   TEXT_COLORS,
@@ -134,13 +149,17 @@ export {
   TrustpilotHorizontal,
   TrustpilotStars,
   TrustpilotVertical,
+  useBrowserStorage,
   useClickOutside,
+  useCookieNotice,
+  userTrackingParams,
   useScrollable,
   useTrustpilotScore,
 };
 
 export type {
   BackgroundColors,
+  ConsentParams,
   CustomInputProps,
   DatePickerProps,
   GuideCardProps,

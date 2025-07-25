@@ -1,4 +1,5 @@
 "use client";
+import { getStorageValue, useBrowserStorage } from "@hooks/useBrowserStorage";
 import Script from "next/script";
 import {
   createContext,
@@ -7,8 +8,6 @@ import {
   useEffect,
   useState,
 } from "react";
-
-import { getStorageValue, useBrowserStorage } from "@/hooks/useBrowserStorage";
 
 import { defaultChoices } from "./defaultChoices";
 
@@ -23,13 +22,6 @@ export function shouldShowCookieNotice(state: CookieState): boolean {
 }
 
 export interface ConsentParams extends Gtag.ConsentParams {
-  functionality_storage?: "granted" | "denied";
-  ad_storage?: "granted" | "denied";
-  ad_user_data?: "granted" | "denied";
-  ad_personalization?: "granted" | "denied";
-  analytics_storage?: "granted" | "denied";
-  personalization_storage?: "granted" | "denied";
-  security_storage?: "granted" | "denied";
   ads_backend_tracking?: "granted" | "denied";
 }
 

@@ -19,13 +19,13 @@ const Toggle = (props: ComponentProps<"input">) => {
       {...props}
       className={cx(
         // remove defaults and setup background
-        "relative h-6 w-12 cursor-pointer appearance-none rounded-md bg-core-white shadow-[inset_0_0_0_1px] shadow-ui-grey-400 transition-all duration-300",
+        "ds:relative ds:h-6 ds:w-12 ds:cursor-pointer ds:appearance-none ds:rounded-md ds:bg-core-white ds:shadow-[inset_0_0_0_1px] ds:shadow-ui-grey-400 ds:transition-all ds:duration-300",
         // switch circle, default on left
-        "after:absolute after:left-0 after:h-6 after:w-6 after:scale-[.7] after:transform after:rounded-full after:bg-core-black after:transition-all after:duration-300",
+        "ds:after:absolute ds:after:left-0 ds:after:h-6 ds:after:w-6 ds:after:scale-[.7] ds:after:transform ds:after:rounded-full ds:after:bg-core-black ds:after:transition-all ds:after:duration-300",
         // checked, slide right and change background
-        "checked:bg-core-black checked:shadow-[inset_0_0_0_1px] checked:shadow-core-black checked:after:left-6 checked:after:bg-core-white",
+        "ds:checked:bg-core-black ds:checked:shadow-[inset_0_0_0_1px] ds:checked:shadow-core-black ds:checked:after:left-6 ds:checked:after:bg-core-white",
         // disabled, affects background, switch could be left or right
-        "disabled:cursor-default disabled:bg-ui-grey-400 disabled:shadow-[inset_0_0_0_2px] disabled:shadow-ui-grey-400 disabled:after:bg-core-white",
+        "ds:disabled:cursor-default ds:disabled:bg-ui-grey-400 ds:disabled:shadow-[inset_0_0_0_2px] ds:disabled:shadow-ui-grey-400 ds:disabled:after:bg-core-white",
         className,
       )}
       type="checkbox"
@@ -38,11 +38,11 @@ export const Preferences = (props: PreferencesProps) => {
 
   return (
     <Details.Root variant="sm">
-      <Details.Summary className="before:bg-transparent">
+      <Details.Summary className="ds:before:bg-transparent">
         <Details.IndicatorPlusMinus />
         <Details.Label>{header}</Details.Label>
         <Toggle
-          className="shrink-0"
+          className="ds:shrink-0"
           defaultChecked={defaultChecked}
           disabled={disabled}
           onClick={(ev) => {
@@ -52,9 +52,9 @@ export const Preferences = (props: PreferencesProps) => {
           onChange={(ev) => void onChange?.(ev.target.checked)}
         />
       </Details.Summary>
-      <Details.Content className="mx-2 mb-2 md:mx-2 md:mb-2">
-        <div className="mt-2 space-y-2 md:space-y-4">
-          <p className="text-[12px]">{body}</p>
+      <Details.Content className="ds:mx-2 ds:mb-2 ds:md:mx-2 ds:md:mb-2">
+        <div className="ds:mt-2 ds:space-y-2 ds:md:space-y-4">
+          <p className="ds:text-[12px]">{body}</p>
         </div>
       </Details.Content>
     </Details.Root>

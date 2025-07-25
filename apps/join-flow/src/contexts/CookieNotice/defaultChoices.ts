@@ -1,4 +1,4 @@
-import { ConsentParams } from ".";
+import { ConsentParams } from "@react-component-library/ui";
 
 export const defaultChoices: ConsentParams = {
   functionality_storage: "granted",

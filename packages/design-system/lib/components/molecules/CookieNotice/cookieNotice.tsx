@@ -1,12 +1,11 @@
 "use client";
-import { Button } from "@react-component-library/ui";
+import { Button } from "@components/atoms/Button";
+import { ScrollerVertical } from "@components/atoms/ScrollerVertical";
+import { ConsentParams, useCookieNotice } from "@contexts/CookieNotice";
 import { useEffect, useState } from "react";
-
-import { ConsentParams, useCookieNotice } from "@/contexts/CookieNotice";
 
 import { cookieBannerProps } from "./cookieBannerProps";
 import { Preferences } from "./preferences";
-import { ScrollerVertical } from "./scrollerVertical";
 
 export const CookieNotice = () => {
   const [checkCookies, setCheckCookies] = useState(false);
@@ -47,26 +46,26 @@ export const CookieNotice = () => {
       aria-modal="true"
       data-testid="cookie-notice"
       tabIndex={-1}
-      className="fixed inset-0 z-[1000] flex items-center justify-center bg-[#1F1F1F33] bg-opacity-50 backdrop-blur-sm"
+      className="ds:fixed ds:inset-0 ds:z-[1000] ds:flex ds:items-center ds:justify-center ds:bg-[#1F1F1F33] ds:bg-opacity-50 ds:backdrop-blur-sm"
     >
-      <div className="max-w-md p-6 mx-5 border-2 rounded-lg border-ui-grey-300 bg-ui-grey-100 md:p-8 md:text-center">
+      <div className="ds:max-w-md ds:p-6 ds:mx-5 ds:border-2 ds:rounded-lg ds:border-ui-grey-300 ds:bg-ui-grey-100 ds:md:p-8 ds:md:text-center">
         {checkCookies ? (
           <>
             <ScrollerVertical maxHeight="50vh">
-              <h1 className="text-sm font-semibold md:text-md">
+              <h1 className="ds:text-sm ds:font-semibold ds:md:text-md">
                 {cookieBannerProps.cookie_header_two}
               </h1>
-              <p className="mt-2 text-xxs text-ui-grey-500">
+              <p className="ds:mt-2 ds:text-xxs ds:text-ui-grey-500">
                 {cookieBannerProps.cookie_message_two}
                 <a
-                  className="text-ui-link"
+                  className="ds:text-ui-link"
                   href="https://cuckoo.co/legal/cookie-policy"
                 >
                   {" "}
                   Cookie policy.
                 </a>
               </p>
-              <div className="mt-4 max-h-[400px] space-y-2">
+              <div className="ds:mt-4 ds:max-h-[400px] ds:space-y-2">
                 {cookieBannerProps.preferences.map((preference) => {
                   const categories = preference.id.split(",");
                   const defaultChecked = categories.every(
@@ -85,17 +84,16 @@ export const CookieNotice = () => {
                         preference.cookie_preference_default === "disabled"
                       }
                       onChange={(checked) => {
-                        const toSet = categories.reduce<{
-                          [key in keyof ConsentParams]: "granted" | "denied";
-                        }>((acc, category) => {
-                          acc[category as keyof ConsentParams] = checked
+                        const toSet = categories.reduce((acc, category) => {
+                          // eslint-disable-next-line  @typescript-eslint/no-explicit-any
+                          (acc as any)[category] = checked
                             ? "granted"
                             : "denied";
                           return acc;
                         }, {});
                         setCookiePreferences((c) => ({
                           ...c,
-                          ...(toSet as ConsentParams),
+                          ...toSet,
                         }));
                       }}
                     />
@@ -105,7 +103,7 @@ export const CookieNotice = () => {
             </ScrollerVertical>
             <Button
               variant="solid"
-              className="mt-6"
+              className="ds:mt-6"
               onClick={handleChoice()}
               aria-label={cookieBannerProps.cookie_button_three_text}
               fullWidth
@@ -118,14 +116,14 @@ export const CookieNotice = () => {
           <>
             <h1
               id="cookieNoticeHeader"
-              className="mb-2 text-sm font-semibold md:text-md"
+              className="ds:mb-2 ds:text-sm ds:font-semibold ds:md:text-md"
             >
               {cookieBannerProps.cookie_header_one}
             </h1>
-            <div className="space-y-2 text-xxs md:text-xxs text-ui-grey-500 md:space-y-4">
+            <div className="ds:space-y-2 ds:text-xxs ds:md:text-xxs ds:text-ui-grey-500 ds:md:space-y-4">
               <p>{cookieBannerProps.cookie_message_one}</p>
             </div>
-            <div className="mt-4 flex items-center gap-4 [&>*]:grow">
+            <div className="ds:mt-4 ds:flex ds:items-center ds:gap-4 ds:[&>*]:grow">
               <Button
                 variant="solid"
                 id="cookie-button-allow"

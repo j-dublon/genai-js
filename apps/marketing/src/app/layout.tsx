@@ -1,5 +1,5 @@
-import "../../fonts.css";
 import "@react-component-library/ui/ui.css";
+import "../../fonts.css";
 import "./globals.css";
 
 import {
@@ -9,15 +9,9 @@ import {
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Suspense } from "react";
 
-import { DynamicCookieNotice } from "@/components/molecules/CookieNotice";
-import SalesWidget from "@/components/molecules/SalesAgentWidget";
-import { CookieNoticeProvider } from "@/contexts/CookieNotice";
+import { ClientAppShell } from "@/components/molecules/ClientAppShell";
 import { defaultChoices } from "@/contexts/CookieNotice/defaultChoices";
-import { SalesAgentProvider } from "@/contexts/SalesAgent";
-import { PostHogProvider } from "@/providers/postHog/postHogProvider";
-import { UserTracking } from "@/providers/userTracking/userTracking";
 
 const SITE_TITLE = "Cuckoo Broadband";
 const SITE_DESCRIPTION =
@@ -134,18 +128,7 @@ export default function RootLayout({
       </head>
       <body className="font-garnett">
         <PrefetchCrossZoneLinksProvider>
-          <CookieNoticeProvider gtmId={process.env.GTM_ID}>
-            <SalesAgentProvider>
-              <PostHogProvider>
-                <DynamicCookieNotice />
-                <Suspense fallback={null}>
-                  <UserTracking />
-                </Suspense>
-                {children}
-                <SalesWidget />
-              </PostHogProvider>
-            </SalesAgentProvider>
-          </CookieNoticeProvider>
+          <ClientAppShell gtmId={process.env.GTM_ID}>{children}</ClientAppShell>
         </PrefetchCrossZoneLinksProvider>
         <PrefetchCrossZoneLinks />
         <SpeedInsights />

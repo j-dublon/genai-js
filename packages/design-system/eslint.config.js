@@ -1,11 +1,11 @@
 import js from "@eslint/js";
-import globals from "globals";
-import react from "eslint-plugin-react";
-import reactHooks from "eslint-plugin-react-hooks";
 import * as tsEslint from "@typescript-eslint/eslint-plugin";
 import parser from "@typescript-eslint/parser";
 import vitest from "@vitest/eslint-plugin";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
+import globals from "globals";
 
 export default [
   {
@@ -18,6 +18,8 @@ export default [
       globals: {
         ...globals.browser,
         React: true,
+        gtag: "readonly",
+        Gtag: "readonly",
       },
       parser: parser,
     },

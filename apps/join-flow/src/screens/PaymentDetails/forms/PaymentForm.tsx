@@ -155,7 +155,7 @@ export const PaymentForm = ({
         savePaymentDetails(data);
       }
     },
-    [savePaymentDetails, onSubmit, trigger],
+    [savePaymentDetails, onSubmit, trigger, posthog],
   );
 
   const accountholderName = watch("accountholderName");

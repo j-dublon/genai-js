@@ -113,18 +113,18 @@ export const Summary = (props: SummaryProps) => {
 
     <summary
       className={cx(
-        "group/Details-Summary",
+        "ds:group/Details-Summary",
         // base
-        "flex cursor-pointer items-center gap-2 p-2 [&::-webkit-details-marker]:hidden",
+        "ds:flex ds:cursor-pointer ds:items-center ds:gap-2 ds:p-2 ds:[&::-webkit-details-marker]:hidden",
         // breathable background
-        "before:absolute before:inset-0 before:-z-base before:rounded-sm before:border before:bg-core-white before:transition-[border-radius,transform] before:duration-500 hover:before:rounded-md before:active:rounded-sm",
+        "ds:before:absolute ds:before:inset-0 ds:before:-z-base ds:before:rounded-sm ds:before:border ds:before:bg-core-white ds:before:transition-[border-radius,transform] ds:before:duration-500 ds:hover:before:rounded-md ds:before:active:rounded-sm",
         // large variant styles
-        "group-data-[variant=lg]/Details:before:rounded-lg group-data-[variant=lg]/Details:before:border-2 group-data-[variant=lg]/Details:before:hover:scale-[1.01] group-data-[variant=lg]/Details:hover:before:rounded-xl group-data-[variant=lg]/Details:before:active:rounded-lg",
-        "before:border-ui-grey-400 group-open/Details:before:border-core-black group-data-[open=false]/Details:before:border-ui-grey-400",
+        "ds:group-data-[variant=lg]/Details:before:rounded-lg ds:group-data-[variant=lg]/Details:before:border-2 ds:group-data-[variant=lg]/Details:before:hover:scale-[1.01] ds:group-data-[variant=lg]/Details:hover:before:rounded-xl ds:group-data-[variant=lg]/Details:before:active:rounded-lg",
+        "ds:before:border-ui-grey-400 ds:group-open/Details:before:border-core-black ds:group-data-[open=false]/Details:before:border-ui-grey-400",
         // highlight when focussed
-        "focus:outline-none focus:before:ring",
+        "ds:focus:outline-none ds:focus:before:ring",
         // large variant styles
-        "group-data-[variant=lg]/Details:px-6 group-data-[variant=lg]/Details:py-4 group-data-[variant=lg]/Details:md:px-8 group-data-[variant=lg]/Details:md:py-6",
+        "ds:group-data-[variant=lg]/Details:px-6 ds:group-data-[variant=lg]/Details:py-4 ds:group-data-[variant=lg]/Details:md:px-8 ds:group-data-[variant=lg]/Details:md:py-6",
         className,
       )}
       onClick={(ev) => {
@@ -153,9 +153,9 @@ export const Label = (props: LabelProps) => {
     <span
       className={cx(
         // depress animation on click
-        "grow transition-transform group-active/Details-Summary:translate-y-1",
+        "ds:grow ds:transition-transform ds:group-active/Details-Summary:translate-y-1",
         // large variant styles
-        "group-data-[variant=lg]/Details:text-xs group-data-[variant=lg]/Details:font-semibold",
+        "ds:group-data-[variant=lg]/Details:text-xs ds:group-data-[variant=lg]/Details:font-semibold",
         className,
       )}
     >
@@ -179,16 +179,16 @@ export const IndicatorArrow = (props: IndicatorArrowProps) => {
       aria-hidden
       className={cx(
         // base, pointing down
-        "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 border-ui-grey-300 bg-core-white focus:border-tertiary-blue-dark",
+        "ds:flex ds:h-8 ds:w-8 ds:shrink-0 ds:items-center ds:justify-center ds:rounded-full ds:border-2 ds:border-ui-grey-300 ds:bg-core-white ds:focus:border-tertiary-blue-dark",
         // pointing up, black background
-        "transition-all group-open/Details:border-core-black group-open/Details:bg-core-black group-open/Details:text-core-white group-data-[open=false]/Details:border-ui-grey-300 group-data-[open=false]/Details:bg-transparent group-data-[open=false]/Details:text-core-black",
+        "ds:transition-all group-open/Details:border-core-black group-open/Details:bg-core-black group-open/Details:text-core-white group-data-[open=false]/Details:border-ui-grey-300 group-data-[open=false]/Details:bg-transparent group-data-[open=false]/Details:text-core-black",
         // large variant styles
-        "group-data-[variant=lg]/Details:md:h-16 group-data-[variant=lg]/Details:md:w-16",
+        "ds:group-data-[variant=lg]/Details:md:h-16 ds:group-data-[variant=lg]/Details:md:w-16",
         className,
       )}
     >
       <svg
-        className="block w-1/2 transition-transform duration-500 group-open/Details:[transform:rotateX(180deg)] group-data-[open=false]/Details:transform-none"
+        className="ds:block ds:w-1/2 ds:transition-transform ds:duration-500 ds:group-open/Details:[transform:rotateX(180deg)] ds:group-data-[open=false]/Details:transform-none"
         width="29"
         height="18"
         viewBox="0 0 30 20"
@@ -214,19 +214,19 @@ export const IndicatorPlusMinus = (props: IndicatorCrossProps) => {
     <svg
       aria-hidden
       className={cx(
-        "block h-6 w-6 shrink-0 cursor-pointer rounded-full fill-currentColor outline -outline-offset-2 outline-ui-grey-300 [&>path]:origin-center [&>path]:transition-transform [&>path]:duration-300",
+        "ds:block ds:h-6 ds:w-6 ds:shrink-0 ds:cursor-pointer ds:rounded-full ds:fill-currentColor ds:outline ds:-outline-offset-2 ds:outline-ui-grey-300 ds:[&>path]:origin-center ds:[&>path]:transition-transform ds:[&>path]:duration-300",
         // large variant styles
-        "group-data-[variant=lg]/Details:md:h-12 group-data-[variant=lg]/Details:md:w-12",
+        "ds:group-data-[variant=lg]/Details:md:h-12 ds:group-data-[variant=lg]/Details:md:w-12",
         className,
       )}
       viewBox="0 0 12 12"
     >
       <path
-        className="group-open/Details:-rotate-180 group-data-[open=false]/Details:transform-none"
+        className="ds:group-open/Details:-rotate-180 ds:group-data-[open=false]/Details:transform-none"
         d="M6 10.91Zm.55-5.46h2v1h-5v-1z"
       />
       <path
-        className="group-open/Details:-rotate-90 group-data-[open=false]/Details:transform-none"
+        className="ds:group-open/Details:-rotate-90 ds:group-data-[open=false]/Details:transform-none"
         d="M6 10.91Zm.55-5.46v3h-1v-5h1z"
       />
     </svg>
@@ -274,8 +274,8 @@ export const Content = (props: ContentProps) => {
         >
           <div
             className={cx(
-              "mx-4 mb-2 mt-2 md:mx-2 md:mb-4 text-[12px]",
-              'group-data-[variant="lg"]/Details:text-xs',
+              "ds:mx-4 ds:mb-2 ds:mt-2 ds:md:mx-2 ds:md:mb-4 ds:text-[12px]",
+              'ds:group-data-[variant="lg"]/Details:text-xs',
               className,
             )}
           >

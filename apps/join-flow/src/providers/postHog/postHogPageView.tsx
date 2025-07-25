@@ -1,9 +1,8 @@
 "use client";
 
+import { useCookieNotice } from "@react-component-library/ui";
 import { usePostHog } from "posthog-js/react";
 import { Suspense, useEffect } from "react";
-
-import { useCookieNotice } from "@/contexts/CookieNotice";
 
 function PostHogPageView(): null {
   const posthog = usePostHog();

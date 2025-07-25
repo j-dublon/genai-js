@@ -1,20 +1,19 @@
+import { CookieState, useCookieNotice } from "@contexts/CookieNotice";
+import { defaultChoices } from "@contexts/CookieNotice/defaultChoices";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ReactNode } from "react";
 import { vi } from "vitest";
-
-import { CookieState, useCookieNotice } from "@/contexts/CookieNotice";
-import { defaultChoices } from "@/contexts/CookieNotice/defaultChoices";
 
 import { cookieBannerProps } from "./cookieBannerProps";
 import { CookieNotice } from "./cookieNotice";
 
 // Mock the useCookieNotice hook
 
-vi.mock("@/contexts/CookieNotice", async () => {
-  const actual = await vi.importActual<
-    typeof import("@/contexts/CookieNotice")
-  >("@/contexts/CookieNotice");
+vi.mock("@contexts/CookieNotice", async () => {
+  const actual = await vi.importActual<typeof import("@contexts/CookieNotice")>(
+    "@contexts/CookieNotice",
+  );
 
   return {
     ...actual,
