@@ -52,7 +52,7 @@ export const createStepBasedPersonalDetailsSchema = (
       .optional(),
     personalDetailsCompleted: z.boolean().optional(),
     requiresLandline: z.boolean().optional(),
-    addressHistory: baseAddressSchema.nullable().optional(),
+    addressHistory: z.array(baseAddressSchema).nullable().optional(),
   });
 
   if (step === "details") {
@@ -191,20 +191,30 @@ export const createStepBasedPersonalDetailsSchema = (
 
         if (
           values.residencyDuration === "under-year" &&
-          values.addressHistory
+          values.addressHistory &&
+          Array.isArray(values.addressHistory)
         ) {
-          const result = additionalAddressSchema.safeParse(
-            values.addressHistory,
-          );
-          if (!result.success) {
-            result.error.issues.forEach((issue) => {
-              ctx.addIssue({
-                path: ["addressHistory", ...issue.path],
-                message: issue.message,
-                code: z.ZodIssueCode.custom,
-              });
-            });
-          }
+          values.addressHistory.forEach((address, index) => {
+            if (
+              index > 0 &&
+              address &&
+              (address.line1 ||
+                address.line2 ||
+                address.line3 ||
+                address.postcode)
+            ) {
+              const result = additionalAddressSchema.safeParse(address);
+              if (!result.success) {
+                result.error.issues.forEach((issue) => {
+                  ctx.addIssue({
+                    path: ["addressHistory", index, ...issue.path],
+                    message: issue.message,
+                    code: z.ZodIssueCode.custom,
+                  });
+                });
+              }
+            }
+          });
         }
       });
   }

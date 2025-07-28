@@ -217,12 +217,9 @@ const PersonalDetails = () => {
       personalDetailsCompleted:
         personalDetails?.personalDetailsCompleted || false,
       requiresLandline: personalDetails?.requiresLandline ?? false,
-      addressHistory: {
-        line1: personalDetails?.addressHistory?.line1 || "",
-        line2: personalDetails?.addressHistory?.line2 || "",
-        line3: personalDetails?.addressHistory?.line3 || "",
-        postcode: personalDetails?.addressHistory?.postcode || "",
-      },
+      addressHistory: Array.isArray(personalDetails?.addressHistory)
+        ? personalDetails.addressHistory
+        : [],
     },
   });
 
@@ -238,6 +235,9 @@ const PersonalDetails = () => {
       {
         ...(personalDetails || {}),
         personalDetailsStep: currentFormStep,
+        addressHistory: Array.isArray(personalDetails?.addressHistory)
+          ? personalDetails.addressHistory
+          : [],
       },
       {
         keepValues: true,
@@ -309,10 +309,7 @@ const PersonalDetails = () => {
           formValues.requiresLandline !== undefined
             ? formValues.requiresLandline
             : false,
-        addressHistory:
-          formValues.residencyDuration === "under-year"
-            ? formValues.addressHistory
-            : null,
+        addressHistory: formValues.addressHistory,
       } as PersonalDetails;
 
       try {
@@ -430,8 +427,19 @@ const PersonalDetails = () => {
         postcode: serviceAddress.postcode,
       });
     }
-    if (residencyDuration === "under-year" && formValues.addressHistory) {
-      updatedAddressHistory.push(formValues.addressHistory);
+    if (
+      residencyDuration === "under-year" &&
+      formValues.addressHistory &&
+      Array.isArray(formValues.addressHistory)
+    ) {
+      formValues.addressHistory.slice(1).forEach((address) => {
+        if (
+          address &&
+          (address.line1 || address.line2 || address.line3 || address.postcode)
+        ) {
+          updatedAddressHistory.push(address);
+        }
+      });
     }
 
     const updatedDetails: PersonalDetails = {
@@ -459,10 +467,10 @@ const PersonalDetails = () => {
 
       setIsLoadingModalOpen(true);
 
-      const updatedAddressHistory = [];
+      const updatedAddressHistoryForBasket = [];
 
       if (serviceAddress) {
-        updatedAddressHistory.push({
+        updatedAddressHistoryForBasket.push({
           line1: serviceAddress.line1 || null,
           line2: serviceAddress.line2 || null,
           line3: serviceAddress.line3 || null,
@@ -471,13 +479,27 @@ const PersonalDetails = () => {
         });
       }
 
-      if (residencyDuration === "under-year" && formValues.addressHistory) {
-        updatedAddressHistory.push({
-          line1: formValues.addressHistory.line1 || null,
-          line2: formValues.addressHistory.line2 || null,
-          line3: formValues.addressHistory.line3 || null,
-          postcode: formValues.addressHistory.postcode || null,
-          id: null,
+      if (
+        residencyDuration === "under-year" &&
+        formValues.addressHistory &&
+        Array.isArray(formValues.addressHistory)
+      ) {
+        formValues.addressHistory.slice(1).forEach((address) => {
+          if (
+            address &&
+            (address.line1 ||
+              address.line2 ||
+              address.line3 ||
+              address.postcode)
+          ) {
+            updatedAddressHistoryForBasket.push({
+              line1: address.line1 || null,
+              line2: address.line2 || null,
+              line3: address.line3 || null,
+              postcode: address.postcode || null,
+              id: null,
+            });
+          }
         });
       }
 
@@ -490,7 +512,7 @@ const PersonalDetails = () => {
           email: personalDetails.email,
           phone: personalDetails.phone,
         },
-        addressHistory: updatedAddressHistory,
+        addressHistory: updatedAddressHistoryForBasket,
       });
 
       if (result.basket) {

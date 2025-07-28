@@ -7,7 +7,7 @@ import {
 } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import { useRef, useState } from "react";
-import { Controller, useWatch } from "react-hook-form";
+import { Controller, useFieldArray, useWatch } from "react-hook-form";
 
 import { ManualAddressFields } from "@/components/ManualAddressForm/ManualAddressFields";
 import { ModalContent } from "@/components/ModalContent";
@@ -43,9 +43,16 @@ export const AdditionalPersonalDetailsForm = ({
     modalCloseText,
     teleHealthDeviceModal,
     previousAddress,
+    addAnotherAddress,
+    removePreviousAddress,
   } = personalDetailsProps.additionalSection;
 
   const residencyDuration = useWatch({ control, name: "residencyDuration" });
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "addressHistory",
+  });
 
   const dobModalRef = useRef<HTMLDialogElement>(null);
   const teleHealthModalRef = useRef<HTMLDialogElement>(null);
@@ -113,6 +120,24 @@ export const AdditionalPersonalDetailsForm = ({
         event.preventDefault();
       }
     }
+  };
+
+  const handleAddAnotherAddress = () => {
+    append({
+      line1: "",
+      line2: "",
+      line3: "",
+      postcode: "",
+    });
+  };
+
+  const handleRemoveAddress = (index: number) => {
+    remove(index);
+  };
+
+  const getAddressTitle = (index: number) => {
+    if (index === 1) return "Previous Address";
+    return `Previous Address ${index - 1}`;
   };
 
   return (
@@ -225,17 +250,52 @@ export const AdditionalPersonalDetailsForm = ({
             <div className="text-sm font-semibold mt-8 mb-4">
               {previousAddress}
             </div>
-            <ManualAddressFields
-              register={register}
-              errors={errors}
-              hasSubmitted={hasSubmitted}
-              fieldPlaceholders={{
-                line1: "House number/name",
-                line2: "First line of your address",
-                line3: "Second line of your address",
-                postcode: "Postcode",
+            {fields.slice(1).map((field, index) => {
+              const actualIndex = index + 1;
+              return (
+                <div key={field.id} className="mt-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="text-sm font-semibold">
+                      {getAddressTitle(actualIndex)}
+                    </div>
+                    <div className="flex justify-between items-center mb-4"></div>
+                    {actualIndex > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAddress(actualIndex)}
+                        className="leading-[1.6] underline font-semibold cursor-pointer text-ui-link"
+                      >
+                        {removePreviousAddress}
+                      </button>
+                    )}
+                  </div>
+                  <ManualAddressFields
+                    register={register}
+                    errors={errors}
+                    hasSubmitted={hasSubmitted}
+                    fieldPlaceholders={{
+                      line1: "House number/name",
+                      line2: "First line of your address",
+                      line3: "Second line of your address",
+                      postcode: "Postcode",
+                    }}
+                    fieldPrefix={`addressHistory.${actualIndex}`}
+                  />
+                </div>
+              );
+            })}
+
+            <button
+              type="button"
+              onClick={handleAddAnotherAddress}
+              className="font-semibold underline pointer-events-auto text-ui-link mt-4"
+              disabled={fields.length >= 3}
+              style={{
+                display: fields.length >= 3 ? "none" : "block",
               }}
-            />
+            >
+              {addAnotherAddress}
+            </button>
           </>
         )}
         {errors.residencyDuration && (

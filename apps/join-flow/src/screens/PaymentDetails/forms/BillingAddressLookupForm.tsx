@@ -5,13 +5,12 @@ import useJoinFlowStore, {
   StoreAddress,
 } from "@store/useJoinFlowStore";
 import { useState } from "react";
+import z from "zod";
 
 import { AddressLookupForm } from "@/components/AddressLookupForm";
-import {
-  ManualAddressForm,
-  ManualAddressFormInputs,
-} from "@/components/ManualAddressForm";
+import { ManualAddressForm } from "@/components/ManualAddressForm";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { baseAddressSchema } from "@/validation/join-flow-schema";
 
 import { paymentDetailsText } from "../PaymentDetailsProps";
 
@@ -19,6 +18,8 @@ interface BillingAddressLookupFormProps {
   onAddressSelected?: (address: StoreAddress) => void;
   onError?: (error: string) => void;
 }
+
+type BaseAddress = z.infer<typeof baseAddressSchema>;
 
 export const BillingAddressLookupForm = ({
   onAddressSelected,
@@ -97,7 +98,7 @@ export const BillingAddressLookupForm = ({
     }
   };
 
-  const handleManualAddressSubmit = async (data: ManualAddressFormInputs) => {
+  const handleManualAddressSubmit = async (data: BaseAddress) => {
     const addressData: StoreAddress = {
       line1: data.line1,
       line2: data.line2 || "",
@@ -113,7 +114,15 @@ export const BillingAddressLookupForm = ({
   if (showManualForm) {
     return (
       <>
-        <ManualAddressForm
+        <ManualAddressForm<BaseAddress>
+          schema={baseAddressSchema}
+          defaultValues={{
+            line1: "",
+            line2: "",
+            line3: "",
+            postcode: "",
+            identifiers: [],
+          }}
           onSubmit={handleManualAddressSubmit}
           formId="billingAddressForm"
           isSubmitting={isUpdatingBasket}

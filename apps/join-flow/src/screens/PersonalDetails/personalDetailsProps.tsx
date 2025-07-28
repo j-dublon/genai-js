@@ -76,6 +76,8 @@ export const personalDetailsProps = {
       },
     ],
     previousAddress: "Please provide us with your current or previous address:",
+    addAnotherAddress: "Add another address",
+    removePreviousAddress: "Remove",
     landlineTitle: "Are you fully dependant on a landline for your health?",
     landlineText:
       "If you have a telehealth device that you rely on, it’s really important we know about it.",

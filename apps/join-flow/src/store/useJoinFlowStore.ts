@@ -55,7 +55,12 @@ export type PersonalDetails = {
   personalDetailsStep: "details" | "verification" | "additional";
   personalDetailsCompleted?: boolean;
   requiresLandline: boolean;
-  addressHistory?: Omit<StoreAddress, "identifiers"> | null;
+  addressHistory?: Array<{
+    line1: string;
+    line2: string;
+    line3: string;
+    postcode: string;
+  }> | null;
 };
 
 export type EeroProduct = {
