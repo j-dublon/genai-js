@@ -53,7 +53,7 @@ const AffiliateReferralPage = ({
     );
   }
 
-  if (response) {
+  if (response && documentId) {
     return (
       <ChooseYourAddress
         affiliateSession={response}

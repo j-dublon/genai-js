@@ -19,14 +19,15 @@ import useJoinFlowStore, {
 } from "@/store/useJoinFlowStore";
 
 import { ChooseYourAddressText, slides } from "./ChooseYourAddressProps";
+import { HeroBanner } from "./components/HeroBanner";
 import { ServiceAddressLookupForm } from "./forms/ServiceAddressLookupForm";
 
 export const ChooseYourAddress = ({
   affiliateSession,
   sessionDocumentId,
 }: {
-  affiliateSession?: AffiliateSession;
-  sessionDocumentId?: string;
+  affiliateSession: AffiliateSession;
+  sessionDocumentId: string;
 }) => {
   const {
     pageTitle,
@@ -81,6 +82,7 @@ export const ChooseYourAddress = ({
           </div>
         </SimpleNavBar>
         <div className="w-full sm:max-w-[570px] p-5 pt-20 flex flex-col items-center">
+          <HeroBanner affiliateContent={affiliateSession.displayItems} />
           <h1 className="mt-10 mb-4 text-md md:text-xl font-semibold">
             {pageTitle}
           </h1>

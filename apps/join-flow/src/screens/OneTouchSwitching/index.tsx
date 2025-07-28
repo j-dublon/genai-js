@@ -32,7 +32,6 @@ export const OneTouchSwitching = () => {
     setIsLoadingModalOpen,
   } = useJoinFlowStore();
 
-
   const [matchResult, setMatchResult] = useState<MatchResultType | null>(null);
   const [providerError, setProviderError] = useState<boolean>(false);
   const [providers, setProviders] = useState<BroadbandProvider[]>([]);

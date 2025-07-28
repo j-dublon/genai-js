@@ -1,5 +1,5 @@
-import type { NextConfig } from "next";
 import { withMicrofrontends } from "@vercel/microfrontends/next/config";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   serverExternalPackages: ["pino", "pino-pretty"],
@@ -14,6 +14,12 @@ const nextConfig: NextConfig = {
         destination: "/join-flow/referral/customer/:code",
       },
     ];
+  },
+  images: {
+    remotePatterns: [
+      new URL("https://squid-static.cuckoohatchery-stage.com/**"),
+      new URL("https://squid-static.cuckoohatchery.com/**"),
+    ],
   },
 };
 

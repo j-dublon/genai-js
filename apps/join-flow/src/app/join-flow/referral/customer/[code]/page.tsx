@@ -46,7 +46,7 @@ const CustomerReferralPage = ({
     );
   }
 
-  if (response) {
+  if (response && documentId) {
     return (
       <ChooseYourAddress
         affiliateSession={response}
