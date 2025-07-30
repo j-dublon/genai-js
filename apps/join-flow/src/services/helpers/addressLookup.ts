@@ -12,6 +12,7 @@ interface AddressLookupResult {
       | "noAddressFound"
       | "invalidPostcode"
       | "generalError"
+      | "joinSuspended"
       | "validationError"
       | "networkError"
       | "unknownError";
@@ -45,6 +46,20 @@ export const getAddressesByPostcode = async (
 
     if (response.state === "error" && response.data?.errors) {
       const errors = response.data.errors;
+
+      const joinSuspended = errors.find(
+        (err) => err.blockType === "JoinSuspended",
+      );
+
+      if (joinSuspended) {
+        return {
+          addresses: [],
+          error: {
+            type: "joinSuspended",
+            message: "Join flow is currently unavailable",
+          },
+        };
+      }
 
       const noAddressError = errors.find(
         (err) => err.blockType === "AddressLookupNoAddressesAtPostcode",
@@ -94,8 +109,6 @@ export const getAddressesByPostcode = async (
       },
     };
   } catch (error) {
-    console.error("Error in getAddressesByPostcode:", error);
-
     if (error instanceof ValidationError) {
       return {
         addresses: [],

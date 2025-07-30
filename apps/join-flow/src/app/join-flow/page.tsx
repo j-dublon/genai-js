@@ -1,12 +1,12 @@
 "use client";
 
 import { AccessibleLoadingEgg } from "@react-component-library/ui";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { ChooseYourAddress } from "@/screens/ChooseYourAddress";
 import { getDefaultAffiliateSession } from "@/services/helpers/affiliate/getDefaultAffiliate";
-import { AffiliateSession } from "@/store/useJoinFlowStore";
+import useJoinFlowStore, { AffiliateSession } from "@/store/useJoinFlowStore";
 
 const JoinFlowPage = () => {
   const searchParams = useSearchParams();
@@ -14,6 +14,8 @@ const JoinFlowPage = () => {
   const [response, setResponse] = useState<AffiliateSession | null>(null);
   const [documentId, setDocumentId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const { setErrorInfo } = useJoinFlowStore();
 
   useEffect(() => {
     const loadDefaultAffiliateSession = async () => {
@@ -48,9 +50,8 @@ const JoinFlowPage = () => {
       />
     );
   }
-
-  // TODO: If we can't create a session, we need to fallback to the generic error page
-  return <div>Error</div>;
+  // If we can't create a session, we need to fallback to the generic error page
+  throw new Error();
 };
 
 export default JoinFlowPage;

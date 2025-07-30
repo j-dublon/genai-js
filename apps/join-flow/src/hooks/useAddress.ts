@@ -1,10 +1,12 @@
 "use client";
 
 import { AddressLookupSuccess } from "@cuckoointernet/util-squid-network-requests";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { getAddressesByPostcode } from "@/services/helpers/addressLookup";
 import type { ExtendedStoreAddress } from "@/store/useJoinFlowStore";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 interface UseAddressProps {
   initialPostcode?: string;
@@ -47,6 +49,8 @@ export const useAddress = ({
   initialPostcode = "",
   autoFetch = true,
 }: UseAddressProps = {}): UseAddressResult => {
+  const router = useRouter();
+  const { setErrorInfo } = useJoinFlowStore();
   const [selectedAddress, setSelectedAddress] =
     useState<ExtendedStoreAddress | null>(null);
   const [addresses, setAddresses] = useState<ExtendedStoreAddress[] | null>(
@@ -67,24 +71,50 @@ export const useAddress = ({
       const result = await getAddressesByPostcode(postcode);
 
       if (result.error) {
-        setError(result.error.message);
-        setAddresses(null);
-        return;
+        const errorType = result.error.type;
+
+        switch (errorType) {
+          case "joinSuspended":
+            router.push("/join-flow/register-interest/unavailable");
+            return;
+
+          case "networkError":
+          case "unknownError":
+          case "generalError":
+          case "validationError":
+            setErrorInfo({
+              type: errorType,
+            });
+            router.push("/join-flow/error");
+            return;
+
+          case "noAddressFound":
+            router.push("/join-flow/register-interest/cannot-service-address");
+            return;
+
+          default:
+            setError(result.error.message);
+            setAddresses(null);
+            return;
+        }
       }
 
+      // this generally shouldn't happen, but if it does, we need to redirect to the cannot service address page
       if (!result.addresses || result.addresses.length === 0) {
-        setError("No addresses found for this postcode");
-        setAddresses(null);
+        router.push("/join-flow/register-interest/cannot-service-address");
         return;
       }
 
       const convertedAddresses = result.addresses.map(convertToStoreAddress);
       setAddresses(convertedAddresses);
     } catch (err) {
-      console.error("Failed to fetch addresses:", err);
-      setError("We couldn't load your address. Please try again.");
       setAddresses(null);
       setSelectedAddress(null);
+      setErrorInfo({
+        type: "unknownError",
+      });
+      router.push("/join-flow/error");
+      return;
     } finally {
       setLoading(false);
     }

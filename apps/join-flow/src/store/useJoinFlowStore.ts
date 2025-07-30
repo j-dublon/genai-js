@@ -324,6 +324,10 @@ export type SoftCreditCheck = {
   attempts: number;
 };
 
+export type ErrorInfo = {
+  type: "unknownError" | "generalError" | "networkError" | "validationError";
+};
+
 export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
@@ -343,6 +347,7 @@ export type JoinFlowState = {
   softCreditCheck: SoftCreditCheck | null;
   roiPostcode: string | null;
   isLoadingModalOpen: boolean;
+  errorInfo: ErrorInfo | null;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
@@ -367,6 +372,8 @@ export type JoinFlowState = {
   setSoftCreditCheck: (softCreditCheck: SoftCreditCheck) => void;
   setRoiPostcode: (roiPostcode: string | null) => void;
   setIsLoadingModalOpen: (open: boolean) => void;
+  setErrorInfo: (errorInfo: ErrorInfo | null) => void;
+  clearError: () => void;
   resetFlow: () => void;
   resetAffiliateSession: () => void;
 };
@@ -393,6 +400,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       softCreditCheck: null,
       roiPostcode: null,
       isLoadingModalOpen: false,
+      errorInfo: null,
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
       selectPackage: (pkg) =>
@@ -417,6 +425,8 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setSoftCreditCheck: (softCreditCheck) => set({ softCreditCheck }),
       setRoiPostcode: (roiPostcode) => set({ roiPostcode }),
       setIsLoadingModalOpen: (open) => set({ isLoadingModalOpen: open }),
+      setErrorInfo: (errorInfo) => set({ errorInfo }),
+      clearError: () => set({ errorInfo: null }),
       resetFlow: () =>
         set({
           currentStep: 0,
@@ -435,6 +445,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
           softCreditCheck: null,
           roiPostcode: null,
           isLoadingModalOpen: false,
+          errorInfo: null,
         }),
       resetAffiliateSession: () => set({ affiliateSession: null }),
     }),
