@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       new URL("https://squid-static.cuckoohatchery-stage.com/**"),
       new URL("https://squid-static.cuckoohatchery.com/**"),
+      new URL("http://localhost:3000/**"),
     ],
   },
 };

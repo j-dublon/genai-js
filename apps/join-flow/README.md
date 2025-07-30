@@ -17,3 +17,7 @@ bun dev
 Open [http://localhost:3000/join-flow](http://localhost:3000/join-flow) with your browser to see the result.
 
 You can start editing the page by modifying `app/join-flow/page.tsx`.
+
+### Docs
+
+[Entering the journey](./docs/Entering_the_journey.md)

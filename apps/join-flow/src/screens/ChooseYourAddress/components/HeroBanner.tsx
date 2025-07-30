@@ -12,26 +12,54 @@ interface HeroBannerProps {
   affiliateContent: AffiliateSession["displayItems"];
 }
 
-const bannerStyles: Record<
-  "default" | "apfn",
-  {
-    showBackgroundImage: boolean;
-    backgroundColor: string;
-    textColor: string;
-    tAndCLinkColor: string;
-  }
-> = {
+type BannerStyleBase = {
+  useLogoAsTitle: boolean;
+  backgroundColor?: string;
+  textColor: string;
+  tAndCLinkColor: string;
+};
+
+type BannerStyleWithBackgroundImage = BannerStyleBase & {
+  showBackgroundImage: true;
+  backgroundImageUrl: string;
+  backgroundImageStyle: string;
+};
+
+type BannerStyleWithoutBackgroundImage = BannerStyleBase & {
+  showBackgroundImage: false;
+};
+
+type BannerStyle =
+  | BannerStyleWithBackgroundImage
+  | BannerStyleWithoutBackgroundImage;
+
+const bannerStyles: Record<"default" | "apfn" | "raf", BannerStyle> = {
   default: {
+    useLogoAsTitle: false,
     showBackgroundImage: true,
+    backgroundImageUrl:
+      "bg-[url(/vc-ap-join-flow/assets/images/cuckoo-3d.png)]",
+    backgroundImageStyle:
+      "h-96 w-80 md:w-9/12 -top-4 -left-40 md:-top-4 md:-left-14 bg-contain",
     backgroundColor: "bg-core-yellow",
     textColor: "text-core-black",
     tAndCLinkColor: "text-ui-link",
   },
   apfn: {
+    useLogoAsTitle: false,
     showBackgroundImage: false,
     backgroundColor: "bg-ui-blue",
     textColor: "text-core-white",
     tAndCLinkColor: "text-ui-link-teal",
+  },
+  raf: {
+    useLogoAsTitle: true,
+    showBackgroundImage: true,
+    backgroundImageUrl: "bg-[url(/vc-ap-join-flow/assets/images/2d_world.png)]",
+    backgroundImageStyle:
+      "w-full h-130 sm:h-120 md:h-104 bg-cover bg-center -top-20",
+    textColor: "text-core-black",
+    tAndCLinkColor: "text-ui-link",
   },
 };
 
@@ -44,12 +72,15 @@ export const HeroBanner = ({ affiliateContent }: HeroBannerProps) => {
     tAndCLinkText,
   } = heroBannerProps;
 
+  const landingPageBanner = affiliateContent?.landingPageBanner?.[0];
+  const termsAndConditionsLink = affiliateContent?.termsAndConditionsLink;
+
   useEffect(() => {
     const renderMarkdownToHtml = async () => {
-      if (affiliateContent?.landingPageBanner?.[0]?.descriptionText) {
+      if (landingPageBanner?.descriptionText) {
         const description = await remark()
           .use(html)
-          .process(affiliateContent.landingPageBanner[0].descriptionText);
+          .process(landingPageBanner.descriptionText);
         setProcessedDescription(description.toString().replace(/p>/g, "span>"));
       } else {
         setProcessedDescription(defaultDescriptionText);
@@ -57,14 +88,7 @@ export const HeroBanner = ({ affiliateContent }: HeroBannerProps) => {
     };
 
     renderMarkdownToHtml();
-  }, [affiliateContent?.landingPageBanner, defaultDescriptionText]);
-
-  // TODO: Should handle an error here as the T&C is a hard requirement...although I don't think this can actually happen
-  if (!affiliateContent) return null;
-
-  const { landingPageBanner: landingPageBannerArray, termsAndConditionsLink } =
-    affiliateContent;
-  const landingPageBanner = landingPageBannerArray?.[0];
+  }, [landingPageBanner?.descriptionText, defaultDescriptionText]);
 
   const bannerStyle = bannerStyles[landingPageBanner?.style || "default"];
 
@@ -74,14 +98,28 @@ export const HeroBanner = ({ affiliateContent }: HeroBannerProps) => {
         className={`relative flex flex-col items-center overflow-hidden rounded-md px-8 py-10 text-center md:rounded-lg md:px-32 md:py-14 ${bannerStyle.backgroundColor} ${bannerStyle.textColor}`}
       >
         {bannerStyle.showBackgroundImage && (
-          <div className="absolute -top-4 -left-40 h-96 w-80 bg-[url(/vc-ap-join-flow/assets/images/cuckoo-3d.png)] bg-contain bg-no-repeat md:-top-4 md:-left-14 md:h-96 md:w-9/12" />
+          <div
+            className={`absolute ${bannerStyle.backgroundImageUrl} ${bannerStyle.backgroundImageStyle} bg-no-repeat`}
+          />
         )}
         <div className="relative">
-          <h1 className="mb-4 text-3xl leading-[1.4] font-semibold md:text-6xl md:leading-[1.2]">
-            {landingPageBanner?.primaryTitle
-              ? landingPageBanner.primaryTitle
-              : defaultPrimaryTitle}
-          </h1>
+          {bannerStyle.useLogoAsTitle &&
+          typeof landingPageBanner?.image !== "string" &&
+          landingPageBanner?.image?.url ? (
+            <Image
+              src={landingPageBanner.image.url}
+              alt={landingPageBanner.image.alt}
+              width={100}
+              height={100}
+              className="mb-4 h-34 w-auto self-center justify-self-center md:h-25"
+            />
+          ) : (
+            <h1 className="mb-4 text-3xl leading-[1.4] font-semibold md:text-6xl md:leading-[1.2]">
+              {landingPageBanner?.primaryTitle
+                ? landingPageBanner.primaryTitle
+                : defaultPrimaryTitle}
+            </h1>
+          )}
           <div className="flex flex-col">
             <span className="mb-2 inline items-baseline justify-center md:inline-flex md:items-center">
               <span className="text-md leading-[1.5] font-semibold md:text-lg">
@@ -89,7 +127,8 @@ export const HeroBanner = ({ affiliateContent }: HeroBannerProps) => {
                   ? landingPageBanner.secondaryTitle
                   : defaultSecondaryTitle}
               </span>
-              {typeof landingPageBanner?.image !== "string" &&
+              {!bannerStyle.useLogoAsTitle &&
+                typeof landingPageBanner?.image !== "string" &&
                 landingPageBanner?.image?.url && (
                   <span className="inline-block align-text-bottom md:inline-flex">
                     <Image
