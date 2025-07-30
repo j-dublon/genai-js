@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, LoadingModal } from "@react-component-library/ui";
+import { Button, LoadingModal, TipCard } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
@@ -8,6 +8,7 @@ import React, { useCallback, useState } from "react";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
+import { getAssetPath } from "@/lib/get-asset-path";
 import { otsCompleted } from "@/lib/otsCompleted";
 import { getCICS } from "@/services/helpers/getCICS";
 import { isBillingAddressesEqual } from "@/services/helpers/isBillingAddressEqual";
@@ -49,6 +50,11 @@ export const PaymentDetails = () => {
     backButtonText,
     submitButtonText,
     submittingButtonText,
+    subtitle,
+    tipCardText,
+    tipCardSubtitle,
+    addressDetailsTitle,
+    validationErrorMessage,
   } = paymentDetailsText;
 
   const handleFormSubmit = useCallback(
@@ -220,60 +226,83 @@ export const PaymentDetails = () => {
     );
   }
 
+  const subheadingStyling =
+    "text-sm leading-[1.6] md:text-md md:leading-[1.5] font-semibold";
+
   return (
     <>
       <StepNavigationWithBasket step={4} />
-      <div className="container mx-auto px-4 pb-8 pt-20">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-core-white p-8 rounded-md">
-            <h1 className="text-2xl font-bold mb-6">{title}</h1>
+      <div className="container mx-auto md:pb-16 lg:pt-16 flex justify-center">
+        <div className="bg-core-white rounded-md flex flex-col w-full max-w-[1194px] mx-5">
+          <div className="flex flex-col gap-4 md:gap-5 items-center text-center py-10 md:py-14">
+            <h1 className="md:text-3xl md:leading-[1.4] text-[26px] leading-[1.5] font-semibold">
+              {title}
+            </h1>
+            <p className="max-w-[350px] md:max-w-[525px] text-xs md:text-md md:leading-[1.3] font-normal leading-[1.6]">
+              {subtitle}
+            </p>
+          </div>
 
-            <div className="flex flex-row gap-8">
-              <div className="w-96">
-                <p className="text-md font-bold mb-6">{paymentDetailsTitle}</p>
+          <div className="flex flex-col md:flex-row gap-6 md:gap-16">
+            <div className="flex flex-col gap-6 md:gap-12 md:w-1/2">
+              <div className="flex flex-col gap-4 md:gap-6">
+                <p className={subheadingStyling}>{paymentDetailsTitle}</p>
                 <PaymentForm onSubmit={handleFormSubmit} />
                 {showPaymentDetailsError && (
                   <p className="text-sm text-ui-error mb-6">
-                    {paymentDetailsText.validationErrorMessage}
+                    {validationErrorMessage}
                   </p>
                 )}
-                <p className="text-md font-bold mb-6">
-                  {paymentDetailsText.addressDetailsTitle}
-                </p>
-                <PaymentAddressDetails />
-                <div className="flex justify-between mt-8">
-                  <Button
-                    onClick={handleBackClick}
-                    tint="white"
-                    variant="outline"
-                    type="button"
-                  >
-                    {backButtonText}
-                  </Button>
-
-                  <Button
-                    type="submit"
-                    tint="yellow"
-                    variant="solid"
-                    disabled={isSubmitting}
-                    form="payment-form"
-                  >
-                    {isSubmitting ? submittingButtonText : submitButtonText}
-                  </Button>
-                </div>
               </div>
-
-              <div className="flex-1">
-                <p className="text-md font-bold mb-6">
-                  {directDebitDetailsTitle}
-                </p>
-
-                <div className="mb-6">
-                  <PaymentSummary />
-                </div>
+              <div className="flex flex-col gap-4 md:gap-6">
+                <p className={subheadingStyling}>{addressDetailsTitle}</p>
+                <PaymentAddressDetails />
               </div>
             </div>
+
+            <div className="flex flex-col gap-4 md:gap-6 md:w-1/2">
+              <p className={subheadingStyling}>{directDebitDetailsTitle}</p>
+              <PaymentSummary />
+              {tipCardText && tipCardSubtitle && (
+                <TipCard
+                  subtitle={tipCardSubtitle}
+                  image={getAssetPath("/images/linked-hands.svg")}
+                  backgroundColor="green"
+                  subtitleColor="teal"
+                  className="mt-2 md:mt-0"
+                  hideImageOnMobile
+                >
+                  {tipCardText}
+                </TipCard>
+              )}
+            </div>
           </div>
+          <div className="flex flex-col md:flex-row gap-4 md:w-[calc(50%-16px)] mt-10 md:mt-12">
+            <div className="w-full md:w-[20%]">
+              <Button
+                onClick={handleBackClick}
+                tint="white"
+                variant="outline"
+                type="button"
+                fullWidth
+              >
+                {backButtonText}
+              </Button>
+            </div>
+            <div className="w-full md:w-[80%]">
+              <Button
+                type="submit"
+                tint="yellow"
+                variant="solid"
+                disabled={isSubmitting}
+                form="payment-form"
+                fullWidth
+              >
+                {isSubmitting ? submittingButtonText : submitButtonText}
+              </Button>
+            </div>
+          </div>
+          <hr className="mt-10 md:hidden border-ui-grey-300 bg-ui-grey-300 border w-full" />
         </div>
       </div>
       <Footer />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useClickOutside } from "@react-component-library/ui";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { formatServiceAddress } from "@/lib/formatServiceAddress";
@@ -34,41 +34,32 @@ export const PaymentAddressDetails = () => {
   };
 
   return (
-    <div className="bg-ui-grey-100 p-6 rounded-md">
-      <h3 className="font-bold">{addressDetailsLabel}</h3>
+    <div className="bg-ui-grey-100 p-6 rounded-lg md:rounded-md">
+      <h3 className="text-xs md:text-sm font-medium">{addressDetailsLabel}</h3>
 
-      <div className="flex justify-between items-center mt-4">
-        <div>
-          {serviceAddress && (
-            <div className="text-sm">
-              {formatServiceAddress(serviceAddress)}
-            </div>
-          )}
+      {serviceAddress && (
+        <div className="text-xs md:text-sm mt-3 md:mt-4">
+          {formatServiceAddress(serviceAddress)}
         </div>
+      )}
+
+      <div className="border-t border-ui-grey-400 pt-4 mt-4">
+        <h3 className="text-xs md:text-sm font-medium">
+          {billingAddressLabel}
+        </h3>
       </div>
 
-      <div className="border-t border-ui-grey-300 pt-4 mt-4">
-        <div className="flex justify-between items-center">
-          <h3 className="font-bold">{billingAddressLabel}</h3>
-        </div>
-      </div>
-
-      <div>
-        {displayBillingAddress && (
-          <div className="text-sm text-ui-grey-500 mt-2">
-            {formatServiceAddress(displayBillingAddress)}
-          </div>
-        )}
-        {!displayBillingAddress && (
-          <div className="text-sm text-ui-grey-400 italic">
-            {paymentAddressDetailsText.noBillingAddressSet}
-          </div>
-        )}
+      <div
+        className={`text-xs md:text-sm mt-3 md:mt-4 ${!displayBillingAddress ? "text-ui-grey-400 italic" : ""}`}
+      >
+        {displayBillingAddress
+          ? formatServiceAddress(displayBillingAddress)
+          : paymentAddressDetailsText.noBillingAddressSet}
       </div>
 
       <button
         type="button"
-        className="font-normal underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
+        className="text-xs md:text-sm font-medium underline text-ui-link cursor-pointer bg-transparent border-none p-0 mt-4"
         onClick={handleChangeMyDetails}
       >
         {paymentAddressDetailsText.changeBillingAddress}

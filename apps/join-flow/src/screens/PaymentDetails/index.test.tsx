@@ -131,6 +131,8 @@ vi.mock("./PaymentDetailsProps", () => ({
     submitButtonText: "Continue",
     submittingButtonText: "Processing...",
     addressDetailsTitle: "Address Details",
+    tipCardText: "You can always add or remove eeros in your account later.",
+    tipCardSubtitle: "Good to know:",
   },
   slides: [
     {
@@ -294,5 +296,14 @@ describe("PaymentDetails", () => {
     expect(mockRouter.push).toHaveBeenCalledWith(
       "/join-flow/payment-details/contract-retrieval-failed",
     );
+  });
+
+  it("renders TipCard under direct debit details when tipCardText and tipCardSubtitle props are available", () => {
+    const { getByText } = render(<PaymentDetails />);
+
+    expect(getByText("Good to know:")).toBeInTheDocument();
+    expect(
+      getByText("You can always add or remove eeros in your account later."),
+    ).toBeInTheDocument();
   });
 });

@@ -32,6 +32,7 @@ export const PaymentAddressModal = ({
         image={getAssetPath("/images/movingHome.svg")}
         backgroundColor="orange"
         className="mb-4 items-center justify-center md:mb-6 md:w-full mt-6"
+        hideImageOnMobile
       >
         <span>
           <span className="text-xs font-semibold md:text-sm">
@@ -45,7 +46,7 @@ export const PaymentAddressModal = ({
           {paymentAddressModalText.paymentDetailsError}
         </p>
       )}
-      <span className="font-semibold text-xs md:text-sm">
+      <span className="font-semibold text-sm md:text-md">
         {paymentAddressModalText.updateYourDetails}
       </span>
       <div className="mt-4">

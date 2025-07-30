@@ -228,7 +228,7 @@ export const GoLiveDate = () => {
         loading={isLoadingModalOpen}
       />
       <StepNavigationWithBasket step={3} />
-      <div className="container md:max-w-[758px] mx-auto px-4 pb-8 pt-10 lg:pt-20">
+      <div className="container md:max-w-[758px] mx-auto px-4 md:pb-16 pt-10 lg:pt-20">
         {otsSwitchFailedOrSkipped && (
           <OtsFailBanner
             bannerText={otsFailBannerText}
@@ -253,7 +253,7 @@ export const GoLiveDate = () => {
             otsSwitchFailedOrSkipped ? "pt-20" : ""
           }`}
         >
-          <h1 className="grid text-2xl font-bold pb-2 md:pb-16 justify-center">
+          <h1 className="grid text-2xl font-bold pb-10 md:pb-12 justify-center">
             {title}
           </h1>
           {!loadingAppointments &&
@@ -262,7 +262,7 @@ export const GoLiveDate = () => {
               <TipCard
                 image={getAssetPath("/images/love.svg")}
                 backgroundColor="green"
-                className="mt-10 md:mt-0 mb-10 md:mb-6 justify-center md:w-full items-center"
+                className="mb-10 md:mb-6 justify-center md:w-full items-center"
               >
                 {tipCardText}
                 <span className="font-medium">
@@ -311,9 +311,10 @@ export const GoLiveDate = () => {
             timeSlotPlaceHolder={timeSlotPlaceHolder}
             submitButtonText={continueButtonText}
             onSubmit={handleFormSubmit}
-            className="pt-12"
+            className="pt-6 md:pt-12"
             submitButtonFullWidth
           />
+          <hr className="mt-10 md:hidden border-ui-grey-300 bg-ui-grey-300 border w-full" />
         </div>
       </div>
       <Footer />

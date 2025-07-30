@@ -22,6 +22,7 @@ export const textColorVariants = {
   "secondary-blue": "ds:text-secondary-blue",
   "tertiary-blue-dark": "ds:text-tertiary-blue-dark",
   "tertiary-peach": "ds:text-tertiary-peach",
+  teal: "ds:text-ui-teal",
 };
 export const gapVariants = {
   small: "ds:gap-2",

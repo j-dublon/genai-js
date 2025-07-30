@@ -197,7 +197,7 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
 
         {showSubmitButton && !appointmentError && (
           <div
-            className={`flex mt-8 ${
+            className={`flex mt-10 md:mt-12 ${
               submitButtonAlignment === "right"
                 ? "justify-end"
                 : submitButtonAlignment === "center"

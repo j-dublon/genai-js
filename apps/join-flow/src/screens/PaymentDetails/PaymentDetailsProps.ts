@@ -1,10 +1,12 @@
 import { LoadingModalSlide } from "@/hooks/useLoadingModal";
 
 export const paymentDetailsText = {
-  title: "Payment Details",
-  addressDetailsTitle: "Your addresses",
-  paymentDetailsTitle: "Please enter your bank account details",
-  directDebitDetailsTitle: "Your direct debit payment details",
+  title: "Your payment details",
+  subtitle:
+    "Add all your bank details below and double-check we've got the right info for you.",
+  addressDetailsTitle: "Your address",
+  paymentDetailsTitle: "Enter your bank account details",
+  directDebitDetailsTitle: "Your Direct Debit payment details",
   monthlyPaymentTitle: "Your monthly payment",
   totalMonthlyPaymentTitle: "Your total monthly payment",
   accountholderNamePlaceholder: "Account holder name",
@@ -18,6 +20,8 @@ export const paymentDetailsText = {
   submitButtonText: "Next",
   submittingButtonText: "Processing...",
   saveBillingAddress: "Save Billing Address",
+  tipCardText: "You can always add or remove eeros in your account later.",
+  tipCardSubtitle: "Good to know:",
 };
 
 export const slides: LoadingModalSlide[] = [

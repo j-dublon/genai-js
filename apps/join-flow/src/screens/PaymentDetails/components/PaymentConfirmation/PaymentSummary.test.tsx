@@ -4,7 +4,7 @@ import { beforeEach, describe, it, vi } from "vitest";
 
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { hydrateEeroProductWithContent } from "@/lib/createEeroOptions";
-import { formatDisplayDate } from "@/lib/formatDate";
+import { formatDisplayDateMonthYear } from "@/lib/formatDate";
 import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
 
 import { PaymentSummary } from "./PaymentSummary";
@@ -32,9 +32,9 @@ vi.mock("@/lib/sortAnnualPriceRise", () => ({
 const mockSortAnnualPriceRiseByDate = vi.mocked(sortAnnualPriceRiseByDate);
 
 vi.mock("@/lib/formatDate", () => ({
-  formatDisplayDate: vi.fn(),
+  formatDisplayDateMonthYear: vi.fn(),
 }));
-const mockFormatDisplayDate = vi.mocked(formatDisplayDate);
+const mockFormatDisplayDateMonthYear = vi.mocked(formatDisplayDateMonthYear);
 
 vi.mock("./PaymentConfirmationProps", () => ({
   paymentConfirmationText: {
@@ -131,9 +131,9 @@ describe("PaymentSummary", () => {
     mockUsePricingCalculations.mockReturnValue(pricing);
     mockHydrateEeroProductWithContent.mockReturnValue(eeroWithContent);
     mockSortAnnualPriceRiseByDate.mockReturnValue(annualPriceRise);
-    mockFormatDisplayDate.mockImplementation((date: string) => {
-      if (date === "2025-04-01") return "1 April 2025";
-      if (date === "2026-04-01") return "1 April 2026";
+    mockFormatDisplayDateMonthYear.mockImplementation((date: string) => {
+      if (date === "2025-04-01") return "April 2025";
+      if (date === "2026-04-01") return "April 2026";
       return date;
     });
   });
@@ -141,6 +141,7 @@ describe("PaymentSummary", () => {
   it("renders the payment summary with eero", () => {
     render(<PaymentSummary />);
 
+    expect(screen.getByRole("presentation")).toBeInTheDocument();
     expect(screen.getByText("Your monthly payment")).toBeInTheDocument();
     expect(screen.getByText("150Mbps")).toBeInTheDocument();
     expect(screen.getByText("No additional Eero needed")).toBeInTheDocument();
@@ -150,9 +151,14 @@ describe("PaymentSummary", () => {
     expect(screen.getByText("Included")).toBeInTheDocument();
     expect(screen.getByText("Your total monthly payment")).toBeInTheDocument();
     expect(screen.getAllByText("£25")).toHaveLength(2);
-    expect(screen.getByText("From 1 April 2025")).toBeInTheDocument();
+    expect(
+      screen.getByText(/From April 2025 an increase of/),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("£5")).toHaveLength(2);
     expect(screen.getByText("£35")).toBeInTheDocument();
-    expect(screen.getByText("From 1 April 2026")).toBeInTheDocument();
+    expect(
+      screen.getByText(/From April 2026 an increase of/),
+    ).toBeInTheDocument();
     expect(screen.getByText("£40")).toBeInTheDocument();
   });
 
@@ -162,8 +168,13 @@ describe("PaymentSummary", () => {
     ]);
     render(<PaymentSummary />);
 
-    expect(screen.getByText("From 1 April 2025")).toBeInTheDocument();
-    expect(screen.queryByText("From 1 April 2026")).not.toBeInTheDocument();
+    expect(
+      screen.getByText(/From April 2025 an increase of/),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("£5")).toHaveLength(1);
+    expect(
+      screen.queryByText(/From April 2026 an increase of/),
+    ).not.toBeInTheDocument();
   });
 
   it("renders price values correctly when discountedMonthlyTotal is falsy", () => {

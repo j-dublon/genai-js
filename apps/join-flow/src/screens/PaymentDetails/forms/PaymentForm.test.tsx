@@ -138,20 +138,6 @@ vi.mock("@/screens/PaymentDetails/components/SortCodeInput", () => ({
   ),
 }));
 
-const renderWithCheckedCheckbox = (ui: React.ReactElement) => {
-  const result = render(ui);
-
-  const checkbox = document.getElementById(
-    "isAccountHolder",
-  ) as HTMLInputElement;
-  if (checkbox) {
-    checkbox.checked = true;
-    fireEvent.change(checkbox, { target: { checked: true } });
-  }
-
-  return result;
-};
-
 describe("PaymentForm", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -187,14 +173,12 @@ describe("PaymentForm", () => {
   });
 
   it("preserves checkbox state when form values match stored values", async () => {
-    renderWithCheckedCheckbox(<PaymentForm onSubmit={mockOnSubmit} />);
+    render(<PaymentForm onSubmit={mockOnSubmit} />);
 
     await waitFor(() => {
-      const checkbox = document.getElementById(
-        "isAccountHolder",
-      ) as HTMLInputElement;
+      const checkbox = screen.getByRole("checkbox") as HTMLInputElement;
       expect(checkbox).not.toBeNull();
-      expect(checkbox.checked).toBe(true);
+      expect(checkbox).toBeChecked();
     });
   });
 });

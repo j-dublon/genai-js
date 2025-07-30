@@ -5,7 +5,8 @@ import React from "react";
 
 import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { hydrateEeroProductWithContent } from "@/lib/createEeroOptions";
-import { formatDisplayDate } from "@/lib/formatDate";
+import { formatDisplayDateMonthYear } from "@/lib/formatDate";
+import { getAssetPath } from "@/lib/get-asset-path";
 import { sortAnnualPriceRiseByDate } from "@/lib/sortAnnualPriceRise";
 
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
@@ -24,25 +25,30 @@ const LineItem: React.FC<LineItemProps> = ({
   isIncluded = false,
 }) => (
   <div className="flex justify-between items-center mb-4">
-    <div>
-      <h3 className="font-medium">{title}</h3>
-      {description && <p className="text-sm text-ui-grey-500">{description}</p>}
+    <div className="text-ui-grey-500 text-xs md:text-sm font-normal">
+      <p>{title}</p>
+      {description && <p>{description}</p>}
     </div>
     <div className="text-right">
-      <p className="font-bold">{isIncluded ? "Included" : `£${price}`}</p>
+      <p className="text-xs md:text-sm font-semibold">
+        {isIncluded ? "Included" : `£${price}`}
+      </p>
     </div>
   </div>
 );
 
 interface PriceProjectionProps {
-  label: string;
+  label: string[];
   price: string;
 }
 
 const PriceProjection: React.FC<PriceProjectionProps> = ({ label, price }) => (
   <div className="flex justify-between items-center mb-2">
-    <p className="text-sm text-ui-grey-500">{label}</p>
-    <p className="font-bold">£{price}</p>
+    <p className="text-xs md:text-sm text-ui-grey-500">
+      {label[0]}
+      <span className="font-semibold">{label[1]}</span>
+    </p>
+    <p className="text-xs md:text-sm font-semibold">£{price}</p>
   </div>
 );
 
@@ -73,17 +79,33 @@ export const PaymentSummary: React.FC = () => {
 
   const nextPriceLabel =
     annualPriceRise.length > 0
-      ? `From ${formatDisplayDate(annualPriceRise[0].date)}`
+      ? [
+          `From ${formatDisplayDateMonthYear(annualPriceRise[0].date)} an increase of `,
+          `£${Number(pricing.predictedTotalNext) - Number(pricing.monthlyTotal)}`,
+        ]
       : null;
 
   const followingPriceLabel =
     annualPriceRise.length > 1
-      ? `From ${formatDisplayDate(annualPriceRise[1].date)}`
+      ? [
+          `From ${formatDisplayDateMonthYear(annualPriceRise[1].date)} an increase of `,
+          `£${Number(pricing.predictedTotalFollowing) - Number(pricing.predictedTotalNext)}`,
+        ]
       : null;
 
   return (
-    <div className="bg-ui-grey-100 p-6 rounded-md">
-      <h3 className="font-bold mb-4">{monthlyPaymentTitle}</h3>
+    <div className="bg-ui-grey-100 p-6 rounded-lg md:rounded-md">
+      <div className="flex flex-row justify-between items-center mb-6 md:mb-8">
+        <h3 className="text-xs md:text-sm font-medium">
+          {monthlyPaymentTitle}
+        </h3>
+        <img
+          role="presentation"
+          src={getAssetPath("/images/direct-debit.svg")}
+          alt=""
+          width={92}
+        />
+      </div>
 
       <LineItem
         title={pricing.packageName}
@@ -99,16 +121,18 @@ export const PaymentSummary: React.FC = () => {
         />
       )}
 
-      <div className="border-t border-ui-grey-300 pt-4 mt-4">
+      <div className="border-t border-ui-grey-400 pt-4 mt-4">
         <div className="flex justify-between items-center">
-          <h3 className="font-bold">{totalMonthlyPaymentTitle}</h3>
-          <p className="font-bold">
+          <h3 className="text-xs md:text-sm font-medium">
+            {totalMonthlyPaymentTitle}
+          </h3>
+          <p className="text-xs md:text-sm font-semibold">
             £{pricing.discountedMonthlyTotal || pricing.monthlyTotal}
           </p>
         </div>
       </div>
 
-      <div className="border-t border-ui-grey-300 pt-4 mt-4">
+      <div className="border-t border-ui-grey-400 pt-4 mt-4">
         {nextPriceLabel && (
           <PriceProjection
             label={nextPriceLabel}

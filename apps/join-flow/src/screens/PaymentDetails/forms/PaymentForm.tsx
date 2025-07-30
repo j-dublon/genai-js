@@ -1,4 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Checkbox } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { usePostHog } from "posthog-js/react";
@@ -64,6 +65,11 @@ export const PaymentForm = ({
   } = form;
 
   const fieldsModified = Object.keys(dirtyFields).length > 0;
+
+  const accountholderName = watch("accountholderName");
+  const accountNumber = watch("accountNumber");
+  const sortCode = watch("sortCode");
+  const isAccountHolder = watch("isAccountHolder");
 
   useEffect(() => {
     try {
@@ -158,38 +164,11 @@ export const PaymentForm = ({
     [savePaymentDetails, onSubmit, trigger, posthog],
   );
 
-  const accountholderName = watch("accountholderName");
-  const accountNumber = watch("accountNumber");
-  const sortCode = watch("sortCode");
-  const isAccountHolder = watch("isAccountHolder");
-
-  const isFormModified =
-    (!!accountholderName &&
-      !!initialAccountHolderName &&
-      accountholderName !== initialAccountHolderName) ||
-    (!!accountNumber &&
-      !!initialAccountNumber &&
-      accountNumber !== initialAccountNumber) ||
-    (!!sortCode && !!initialSortCode && sortCode !== initialSortCode);
-
   const isAccountholderNameValid = accountholderName?.trim().length > 0;
   const isAccountNumberValid = /^\d{8}$/.test(accountNumber || "");
   const isSortCodeValid = /^\d{2}-\d{2}-\d{2}$/.test(sortCode || "");
 
   const isAccountHolderChecked = !!isAccountHolder;
-
-  const { ref: accountHolderRegisterRef, ...accountHolderRegisterRest } =
-    register("isAccountHolder", {
-      required: "You must confirm that you are the account holder",
-    });
-
-  const combineRefs = (element: HTMLInputElement | null) => {
-    accountHolderRegisterRef(element);
-
-    if (element && paymentDetails?.isAccountHolder && !fieldsModified) {
-      element.checked = true;
-    }
-  };
 
   return (
     <form
@@ -252,22 +231,15 @@ export const PaymentForm = ({
         </div>
       </div>
 
-      <div className="mb-6" id="account-holder-container">
-        <label className="flex items-center">
-          <input
-            type="checkbox"
-            className={`w-5 h-5 mr-3 ${isAccountHolderChecked ? "border-green-500" : ""}`}
-            id="isAccountHolder"
-            defaultChecked={paymentDetails?.isAccountHolder}
-            ref={combineRefs}
-            {...accountHolderRegisterRest}
-            data-unchanged={!isFormModified}
-            disabled={isSubmitting}
-          />
-          <span className="text-sm">
-            {paymentDetailsText.confirmAccountHolder}
-          </span>
-        </label>
+      <div id="account-holder-container">
+        <Checkbox
+          label={paymentDetailsText.confirmAccountHolder}
+          value="isAccountHolder"
+          checked={isAccountHolderChecked}
+          onChange={(checked) => setValue("isAccountHolder", checked)}
+          disabled={isSubmitting}
+          labelClassName="text-core-black"
+        />
         {errors.isAccountHolder && (
           <p
             className="text-ui-error text-sm mt-2 ml-8"
