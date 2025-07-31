@@ -15,6 +15,7 @@ import { updateBasket } from "@/services/helpers/updateBasket";
 
 import { PaymentDocuments } from "../PaymentDocuments";
 import { AccessibilityRequirements } from "./Accessibility/AccessibilityRequirements";
+import { IncludedOffers } from "./IncludedOffers";
 import PaymentAccountDetails from "./PaymentAccountDetails";
 import { paymentConfirmationText, slides } from "./PaymentConfirmationProps";
 import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
@@ -251,6 +252,8 @@ export const PaymentConfirmation = ({
             <div className="my-6">
               <AccessibilityRequirements />
             </div>
+
+            <IncludedOffers />
 
             <p
               className="text-md font-bold mb-6"

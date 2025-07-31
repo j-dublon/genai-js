@@ -107,6 +107,7 @@ describe("PaymentSummary", () => {
     discountedMonthlyTotal: "25",
     predictedTotalNext: "35",
     predictedTotalFollowing: "40",
+    monthlySaving: "5",
     totalPlanSaving: "60",
     packageName: "150Mbps",
   };

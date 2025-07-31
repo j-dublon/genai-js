@@ -228,6 +228,7 @@ describe("BasketDialog", () => {
     nextPrice: "35",
     followingPrice: "38",
     totalPlanSaving: "2",
+    monthlySaving: "2",
     packageName: "C-300",
   };
 
@@ -390,6 +391,7 @@ describe("BasketDialog", () => {
         nextPrice: "38",
         followingPrice: "42",
         totalPlanSaving: "0",
+        monthlySaving: "0",
         packageName: "C-300",
       },
     });

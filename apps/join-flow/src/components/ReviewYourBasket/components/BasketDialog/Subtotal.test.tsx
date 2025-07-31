@@ -156,6 +156,7 @@ describe("Subtotal", () => {
       nextPrice: "35",
       followingPrice: "38",
       totalPlanSaving: "48",
+      monthlySaving: "2",
       packageName: "150Mbps",
     };
 
@@ -281,6 +282,7 @@ describe("Subtotal", () => {
       predictedTotalFollowing: "42",
       nextPrice: "35",
       followingPrice: "38",
+      monthlySaving: "0",
       totalPlanSaving: "0",
       packageName: "150Mbps",
     };
@@ -332,6 +334,7 @@ describe("Subtotal", () => {
         nextPrice: "35",
         followingPrice: "38",
         totalPlanSaving: "0",
+        monthlySaving: "0",
         packageName: "150Mbps",
       };
 
@@ -366,6 +369,7 @@ describe("Subtotal", () => {
         nextPrice: "35",
         followingPrice: "38",
         totalPlanSaving: "0",
+        monthlySaving: "0",
         packageName: "150Mbps",
       };
 
@@ -426,6 +430,7 @@ describe("Subtotal", () => {
         nextPrice: "32",
         followingPrice: "32",
         totalPlanSaving: "0",
+        monthlySaving: "0",
         packageName: "150Mbps",
       };
 

@@ -29,12 +29,15 @@ export interface PricingCalculations {
   predictedTotalNext: string;
   // total price of core broadband product and eero products after second year
   predictedTotalFollowing: string;
+  // monthly saving of core broadband product with discount
+  monthlySaving: string;
   // total saving of core broadband product with discount
   totalPlanSaving: string;
   // download speed of core broadband product (150Mbps)
   packageName: string;
 }
 
+// TODO: With the new pricing structure, we don't need the eero arg as all prices are available on the selectedPackage
 export const usePricingCalculations = (
   selectedPackage: StoreSelectedPackage | null,
   eeroSelection: EeroProduct | null,
@@ -51,6 +54,7 @@ export const usePricingCalculations = (
         discountedMonthlyTotal: "0",
         predictedTotalNext: "0",
         predictedTotalFollowing: "0",
+        monthlySaving: "0",
         totalPlanSaving: "0",
         packageName: "",
       };
@@ -107,6 +111,7 @@ export const usePricingCalculations = (
     );
 
     let totalPlanSaving = "0";
+    let monthlySaving = "0";
     const discountOffer = selectedPackage.offers?.find(
       (offer) => offer.blockType === "promotionBlock",
     );
@@ -119,6 +124,10 @@ export const usePricingCalculations = (
           selectedPackage.prices.broadbandAndCurrentExtras
             .customerPriceIncDiscount) *
           Number(TermLength[discountTermLength || "wholeContract"]),
+      );
+
+      monthlySaving = convertPenceToPounds(
+        selectedPackage.prices.broadbandAndCurrentExtras.discount,
       );
     }
 
@@ -134,6 +143,7 @@ export const usePricingCalculations = (
       discountedMonthlyTotal,
       predictedTotalNext,
       predictedTotalFollowing,
+      monthlySaving,
       totalPlanSaving,
       packageName,
     };

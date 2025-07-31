@@ -103,6 +103,7 @@ describe("SummaryBar", () => {
       monthlyPackagePrice: "42",
       nextPrice: "45",
       followingPrice: "48",
+      monthlySaving: "3",
       totalPlanSaving: "3",
       monthlyEeroPrice: "0",
       monthlyTotal: "42",
