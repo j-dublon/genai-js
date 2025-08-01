@@ -29,4 +29,17 @@ export const errorProps: Record<string, ErrorPageProps> = {
       "Give our lovely Customer Care team a ring on 0330 912 9955. Lines are open: 8am to 8pm, Monday - Friday, 9am to 5.30pm, weekends and bank holidays.",
     ],
   },
+  invalidAffiliateError: {
+    title: "Invalid Affiliate Link",
+    paragraphs: [
+      "Looks like you landed here expecting an affiliate link, it might be expired or otherwise not working.",
+      "Don't worry you can still get Cuckoo!",
+    ],
+    button: {
+      text: "Click here to signup normally",
+      onClick: () => {
+        window.location.href = "/join-flow";
+      },
+    },
+  },
 };

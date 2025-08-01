@@ -119,20 +119,16 @@ export const PaymentGoLiveModal = ({
       }
 
       if (result.basket) {
-        let contractInformation = "";
-        let contractSummary = "";
         const response = await getCICS(basket.id);
         if (response.success === true) {
-          contractInformation = response.data.contractInformation;
-          contractSummary = response.data.contractSummary;
+          setBasket({
+            ...result.basket,
+            cics: {
+              summaryHref: response.data.contractSummary,
+              informationHref: response.data.contractInformation,
+            },
+          });
         }
-        setBasket({
-          ...result.basket,
-          cics: {
-            summaryHref: response.data.contractSummary,
-            informationHref: response.data.contractInformation,
-          },
-        });
         setIsSubmitting(false);
       } else if (result.error) {
         console.error("Failed to update basket:", result.error);

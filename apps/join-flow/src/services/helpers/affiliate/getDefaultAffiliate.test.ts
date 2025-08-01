@@ -86,7 +86,8 @@ describe("getDefaultAffiliateSession", () => {
         type: "error",
         error: {
           type: "generalError",
-          message: "No affiliate data was returned",
+          message: "There was a problem creating the affiliate session",
+          details: ["Some error occurred"],
         },
       });
     });

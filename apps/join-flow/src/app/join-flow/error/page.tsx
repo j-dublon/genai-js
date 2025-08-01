@@ -23,6 +23,9 @@ const getErrorContent = (errorInfo: ErrorInfo | null) => {
     case "unknownError":
       return errorProps.unknownError;
 
+    case "invalidAffiliateError":
+      return errorProps.invalidAffiliateError;
+
     case "generalError":
     default:
       return errorProps.generalError;

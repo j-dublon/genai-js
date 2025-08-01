@@ -17,7 +17,10 @@ type CreateAffiliateSessionResult =
       error: {
         type:
           | "noAffiliateFound"
+          | "joinSuspended"
           | "invalidSubdomain"
+          | "expiredAffiliate"
+          | "inactiveAffiliate"
           | "generalError"
           | "validationError"
           | "networkError"
@@ -53,6 +56,7 @@ export const createAffiliateSession = async (
     if (response.state === "error" && response.data?.errors) {
       const errors = response.data.errors;
 
+      // Kraken API Errors (KT-CT codes)
       const badSubdomainError = errors.find(
         (err) =>
           err.blockType ===
@@ -69,6 +73,37 @@ export const createAffiliateSession = async (
         };
       }
 
+      const expiredAffiliateError = errors.find(
+        (err) =>
+          err.blockType === "KT-CT-7718KrakenUnableToLoadAffiliateLinkExpired",
+      );
+
+      if (expiredAffiliateError) {
+        return {
+          type: "error",
+          error: {
+            type: "expiredAffiliate",
+            message: "This affiliate link has expired",
+          },
+        };
+      }
+
+      const invalidApiExceptionError = errors.find(
+        (err) =>
+          err.blockType === "KT-CT-7803KrakenUnableToLoadApiExceptionIdInvalid",
+      );
+
+      if (invalidApiExceptionError) {
+        return {
+          type: "error",
+          error: {
+            type: "invalidSubdomain",
+            message: "The affiliate code provided is not valid",
+          },
+        };
+      }
+
+      // Affiliate Session Internal Errors
       const inactiveError = errors.find(
         (err) =>
           err.blockType === "AffiliateSessionInactive" ||
@@ -79,8 +114,64 @@ export const createAffiliateSession = async (
         return {
           type: "error",
           error: {
-            type: "noAffiliateFound",
+            type: "inactiveAffiliate",
             message: "This affiliate link is no longer active",
+          },
+        };
+      }
+
+      const joinSuspended = errors.find(
+        (err) => err.blockType === "JoinSuspended",
+      );
+
+      if (joinSuspended) {
+        return {
+          type: "error",
+          error: {
+            type: "joinSuspended",
+            message: "Join flow is currently unavailable",
+          },
+        };
+      }
+
+      const unableToLoadLinkDataError = errors.find(
+        (err) => err.blockType === "AffiliateSessionUnableToLoadLinkData",
+      );
+
+      if (unableToLoadLinkDataError) {
+        return {
+          type: "error",
+          error: {
+            type: "noAffiliateFound",
+            message: "This affiliate link could not be found",
+          },
+        };
+      }
+
+      const unableToStartSessionError = errors.find(
+        (err) => err.blockType === "AffiliateSessionUnableToStartSession",
+      );
+
+      if (unableToStartSessionError) {
+        return {
+          type: "error",
+          error: {
+            type: "generalError",
+            message: "There was a problem starting the affiliate session",
+          },
+        };
+      }
+
+      const unableToLoadCuckooDataError = errors.find(
+        (err) => err.blockType === "AffiliateSessionUnableToLoadCuckooData",
+      );
+
+      if (unableToLoadCuckooDataError) {
+        return {
+          type: "error",
+          error: {
+            type: "noAffiliateFound",
+            message: "This affiliate link could not be found",
           },
         };
       }
@@ -105,8 +196,6 @@ export const createAffiliateSession = async (
       },
     };
   } catch (error) {
-    console.error("Error in getAffiliateSessionByCode:", error);
-
     if (error instanceof ValidationError) {
       return {
         type: "error",

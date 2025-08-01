@@ -17,7 +17,6 @@ export default function NotFound() {
         text: "Go home",
         onClick: () => router.push("/join-flow"),
       }}
-      showTrustpilot={false}
     />
   );
 }

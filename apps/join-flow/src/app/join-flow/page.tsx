@@ -6,32 +6,59 @@ import { useEffect, useState } from "react";
 
 import { ChooseYourAddress } from "@/screens/ChooseYourAddress";
 import { getDefaultAffiliateSession } from "@/services/helpers/affiliate/getDefaultAffiliate";
-import useJoinFlowStore, { AffiliateSession } from "@/store/useJoinFlowStore";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 const JoinFlowPage = () => {
   const searchParams = useSearchParams();
   const awc = searchParams.get("awc");
-  const [response, setResponse] = useState<AffiliateSession | null>(null);
-  const [documentId, setDocumentId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const { setErrorInfo } = useJoinFlowStore();
+  const { setErrorInfo, setAffiliateSession } = useJoinFlowStore();
 
   useEffect(() => {
     const loadDefaultAffiliateSession = async () => {
-      const defaultAffiliateSessionResponse = await getDefaultAffiliateSession(
-        awc || undefined,
-      );
-      if (defaultAffiliateSessionResponse.type === "success") {
-        setResponse(defaultAffiliateSessionResponse.affiliateSession);
-        setDocumentId(defaultAffiliateSessionResponse.id);
-      }
+      try {
+        const defaultAffiliateSessionResponse =
+          await getDefaultAffiliateSession(awc || undefined);
 
-      setIsLoading(false);
+        if (defaultAffiliateSessionResponse.type === "success") {
+          setAffiliateSession(defaultAffiliateSessionResponse.affiliateSession);
+          return;
+        }
+
+        const errorType = defaultAffiliateSessionResponse.error.type;
+
+        switch (errorType) {
+          case "networkError":
+          case "unknownError":
+          case "generalError":
+          case "validationError":
+            setErrorInfo({
+              type: errorType,
+            });
+            router.push("/join-flow/error");
+            return;
+
+          default:
+            setErrorInfo({
+              type: "generalError",
+            });
+            router.push("/join-flow/error");
+            return;
+        }
+      } catch {
+        setErrorInfo({
+          type: "unknownError",
+        });
+        router.push("/join-flow/error");
+        return;
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     loadDefaultAffiliateSession();
-  }, [awc]);
+  }, [awc, router, setErrorInfo, setAffiliateSession]);
 
   if (isLoading) {
     return (
@@ -42,16 +69,7 @@ const JoinFlowPage = () => {
     );
   }
 
-  if (response && documentId) {
-    return (
-      <ChooseYourAddress
-        affiliateSession={response}
-        sessionDocumentId={documentId}
-      />
-    );
-  }
-  // If we can't create a session, we need to fallback to the generic error page
-  throw new Error();
+  return <ChooseYourAddress />;
 };
 
 export default JoinFlowPage;

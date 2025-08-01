@@ -325,7 +325,13 @@ export type SoftCreditCheck = {
 };
 
 export type ErrorInfo = {
-  type: "unknownError" | "generalError" | "networkError" | "validationError";
+  type:
+    | "unknownError"
+    | "generalError"
+    | "networkError"
+    | "validationError"
+    | "invalidAffiliateError";
+  affiliateCode?: string;
 };
 
 export type JoinFlowState = {

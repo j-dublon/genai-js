@@ -1,13 +1,12 @@
 "use client";
 
 import { AccessibleLoadingEgg } from "@react-component-library/ui";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { use, useEffect, useState } from "react";
 
 import { ChooseYourAddress } from "@/screens/ChooseYourAddress";
 import { createAffiliateSession } from "@/services/helpers/affiliate/createAffiliateSession";
-import { getDefaultAffiliateSession } from "@/services/helpers/affiliate/getDefaultAffiliate";
-import { AffiliateSession } from "@/store/useJoinFlowStore";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 const AffiliateReferralPage = ({
   params,
@@ -17,32 +16,70 @@ const AffiliateReferralPage = ({
   const { code } = use(params);
   const searchParams = useSearchParams();
   const awc = searchParams.get("awc");
-  const [response, setResponse] = useState<AffiliateSession | null>(null);
-  const [documentId, setDocumentId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const router = useRouter();
+  const { setErrorInfo, setAffiliateSession } = useJoinFlowStore();
 
   useEffect(() => {
     const loadAffiliateSession = async () => {
-      const affiliateSessionResponse = await createAffiliateSession(code, awc);
+      try {
+        const affiliateSessionResponse = await createAffiliateSession(
+          code,
+          awc,
+        );
 
-      if (affiliateSessionResponse.type === "success") {
-        setResponse(affiliateSessionResponse.affiliateSession);
-        setDocumentId(affiliateSessionResponse.id);
-      } else {
-        // For now, if something goes awry with the affiliate code, we'll fall back to the default affiliate
-        const defaultResponse = await getDefaultAffiliateSession();
-        if (defaultResponse.type === "success") {
-          // TODO: If the affiliate code did fail but the default affiliate didn't (i.e. the journey can continue), do we need to tell the user? If so, what?
-          setResponse(defaultResponse.affiliateSession);
-          setDocumentId(defaultResponse.id);
+        if (affiliateSessionResponse.type === "success") {
+          setAffiliateSession(affiliateSessionResponse.affiliateSession);
+          return;
         }
-      }
 
-      setIsLoading(false);
+        const errorType = affiliateSessionResponse.error.type;
+
+        switch (errorType) {
+          case "invalidSubdomain":
+          case "noAffiliateFound":
+          case "expiredAffiliate":
+          case "inactiveAffiliate":
+            setErrorInfo({
+              type: "invalidAffiliateError",
+              affiliateCode: code,
+            });
+            router.push("/join-flow/error");
+            return;
+          case "joinSuspended":
+            router.push("/join-flow/register-interest/unavailable");
+            return;
+          case "networkError":
+
+          case "unknownError":
+          case "generalError":
+          case "validationError":
+            setErrorInfo({
+              type: errorType,
+            });
+            router.push("/join-flow/error");
+            return;
+
+          default:
+            setErrorInfo({
+              type: "generalError",
+            });
+            router.push("/join-flow/error");
+            return;
+        }
+      } catch {
+        setErrorInfo({
+          type: "unknownError",
+        });
+        router.push("/join-flow/error");
+        return;
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     loadAffiliateSession();
-  }, [code, awc]);
+  }, [code, awc, router, setErrorInfo, setAffiliateSession]);
 
   if (isLoading) {
     return (
@@ -53,17 +90,7 @@ const AffiliateReferralPage = ({
     );
   }
 
-  if (response && documentId) {
-    return (
-      <ChooseYourAddress
-        affiliateSession={response}
-        sessionDocumentId={documentId}
-      />
-    );
-  }
-
-  // TODO: If we can't create a session, we need to fallback to the generic error page
-  return <div>Affiliate not found</div>;
+  return <ChooseYourAddress />;
 };
 
 export default AffiliateReferralPage;

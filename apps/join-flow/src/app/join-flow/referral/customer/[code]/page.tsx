@@ -6,7 +6,7 @@ import { use, useEffect, useState } from "react";
 
 import { ChooseYourAddress } from "@/screens/ChooseYourAddress";
 import { createReferralSession } from "@/services/helpers/affiliate/createReferralSession";
-import { AffiliateSession } from "@/store/useJoinFlowStore";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 const CustomerReferralPage = ({
   params,
@@ -16,9 +16,8 @@ const CustomerReferralPage = ({
   const { code } = use(params);
   const searchParams = useSearchParams();
   const awc = searchParams.get("awc");
-  const [response, setResponse] = useState<AffiliateSession | null>(null);
-  const [documentId, setDocumentId] = useState<string | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const { setAffiliateSession } = useJoinFlowStore();
 
   useEffect(() => {
     const loadReferralSession = async () => {
@@ -28,14 +27,13 @@ const CustomerReferralPage = ({
       );
 
       if (referralSessionResponse.type === "success") {
-        setResponse(referralSessionResponse.affiliateSession);
-        setDocumentId(referralSessionResponse.id);
+        setAffiliateSession(referralSessionResponse.affiliateSession);
       }
       setIsLoading(false);
     };
 
     loadReferralSession();
-  }, [code, awc]);
+  }, [code, awc, setAffiliateSession]);
 
   if (isLoading) {
     return (
@@ -46,17 +44,7 @@ const CustomerReferralPage = ({
     );
   }
 
-  if (response && documentId) {
-    return (
-      <ChooseYourAddress
-        affiliateSession={response}
-        sessionDocumentId={documentId}
-      />
-    );
-  }
-
-  // TODO: If we can't create a session, we need to fallback to the generic error page
-  return <div>Session error</div>;
+  return <ChooseYourAddress />;
 };
 
 export default CustomerReferralPage;

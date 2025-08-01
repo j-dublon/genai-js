@@ -1,9 +1,5 @@
 "use client";
-import {
-  Button,
-  TrustpilotHorizontal,
-  useTrustpilotScore,
-} from "@react-component-library/ui";
+import { Button } from "@react-component-library/ui";
 
 import { NavBar } from "@/components/NavBar";
 import { getAssetPath } from "@/lib/get-asset-path";
@@ -15,18 +11,13 @@ export interface ErrorPageProps {
     onClick: () => void;
   };
   paragraphs: string[];
-  showTrustpilot?: boolean;
 }
 
 export const ErrorPage = ({
   title,
   button,
   paragraphs = [],
-  showTrustpilot = true,
 }: ErrorPageProps) => {
-  const { data: trustpilotRating } = useTrustpilotScore();
-  const { trustScore, numberOfReviews } = trustpilotRating || {};
-
   const errorParagraphs = paragraphs.map((value, index) => (
     <p
       key={index}
@@ -68,16 +59,6 @@ export const ErrorPage = ({
             >
               {button.text}
             </Button>
-          )}
-
-          {showTrustpilot && trustScore && (
-            <div className="mt-6 md:mt-12">
-              <TrustpilotHorizontal
-                trustScore={trustScore}
-                numberOfReviews={numberOfReviews}
-                className="align-self-center"
-              />
-            </div>
           )}
         </div>
       </div>

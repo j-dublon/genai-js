@@ -126,7 +126,7 @@ describe("createAffiliateSession", () => {
     expect(result).toEqual({
       type: "error",
       error: {
-        type: "noAffiliateFound",
+        type: "inactiveAffiliate",
         message: "This affiliate link is no longer active",
       },
     });
