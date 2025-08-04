@@ -23,7 +23,7 @@
     "@hookform/resolvers": "5.0.1",
     "@react-component-library/ui": "*",
     "lodash": "4.17.21",
-    "react-hook-form": "7.61.1",
+    "react-hook-form": "7.62.0",
     "remark": "15.0.1",
     "remark-html": "16.0.1",
     "zod": "3.25.7",
