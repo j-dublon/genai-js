@@ -19,6 +19,7 @@ export const ServiceAddressLookupForm = () => {
     setQuoteResponse,
     setRoiPostcode,
     setIsLoadingModalOpen,
+    setErrorInfo,
   } = useJoinFlowStore();
 
   const posthog = usePostHog();
@@ -58,14 +59,45 @@ export const ServiceAddressLookupForm = () => {
         });
         router.push("/join-flow/package-selection");
         return;
-      } else if (quoteResult?.error?.type === "noProductsAvailable") {
-        router.push("/join-flow/register-interest/cannot-service-address");
-        return;
+      } else if (quoteResult?.error) {
+        const errorType = quoteResult.error.type;
+
+        switch (errorType) {
+          case "joinSuspended":
+            router.push("/join-flow/register-interest/unavailable");
+            return;
+
+          case "unknownError":
+            setErrorInfo({
+              type: errorType,
+            });
+            router.push("/join-flow/error");
+            return;
+
+          case "invalidAddressError":
+            router.push("/join-flow/register-interest/cannot-service-address");
+            return;
+
+          default:
+            console.error("Unknown error type:", errorType);
+            setErrorInfo({
+              type: "unknownError",
+            });
+            router.push("/join-flow/error");
+            return;
+        }
       } else {
-        throw new Error("No products available for this address.");
+        setErrorInfo({
+          type: "unknownError",
+        });
+        router.push("/join-flow/error");
       }
-    } catch (error) {
-      console.error("Error creating quote lookup:", error);
+    } catch {
+      setErrorInfo({
+        type: "unknownError",
+      });
+      router.push("/join-flow/error");
+    } finally {
       setIsLoadingModalOpen(false);
     }
   };

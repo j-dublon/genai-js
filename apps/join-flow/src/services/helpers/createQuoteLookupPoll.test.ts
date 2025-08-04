@@ -122,5 +122,128 @@ describe("createQuoteLookupPoll", () => {
 
       vi.useRealTimers();
     });
+
+    it("should handle JoinSuspended error", async () => {
+      const mockErrorResponse = {
+        state: "error" as const,
+        data: {
+          errors: [
+            {
+              blockType: "JoinSuspended" as const,
+              errorMessage: "Join flow is currently unavailable",
+            },
+          ],
+          documentID: "doc-123",
+        },
+      };
+
+      vi.mocked(squidAPI.createQuoteLookupAsync).mockResolvedValue({
+        state: "pending" as const,
+        documentID: "doc-123",
+      });
+
+      vi.mocked(squidAPI.getQuoteLookup).mockResolvedValue(mockErrorResponse);
+
+      const result = await createQuoteLookupPoll(
+        mockAffiliateSessionId,
+        mockAddressLookupId,
+        mockAddressLookupSelectionIdentifier,
+      );
+
+      expect(result).toEqual({
+        products: [],
+        documentID: "doc-123",
+        error: {
+          type: "joinSuspended",
+          message: "Join flow is currently unavailable",
+        },
+      });
+    });
+
+    it("should handle UnknownError", async () => {
+      const mockErrorResponse = {
+        state: "error" as const,
+        data: {
+          errors: [
+            {
+              blockType: "UnknownError" as const,
+              errorMessage: "An unexpected error occurred",
+            },
+          ],
+          documentID: "doc-123",
+        },
+      };
+
+      vi.mocked(squidAPI.createQuoteLookupAsync).mockResolvedValue({
+        state: "pending" as const,
+        documentID: "doc-123",
+      });
+
+      vi.mocked(squidAPI.getQuoteLookup).mockResolvedValue(mockErrorResponse);
+
+      const result = await createQuoteLookupPoll(
+        mockAffiliateSessionId,
+        mockAddressLookupId,
+        mockAddressLookupSelectionIdentifier,
+      );
+
+      expect(result).toEqual({
+        products: [],
+        documentID: "doc-123",
+        error: {
+          type: "unknownError",
+          message: "An unexpected error occurred",
+          details: ["An unexpected error occurred"],
+        },
+      });
+    });
+
+    it("should handle invalidAddressError for various error types", async () => {
+      const testCases = [
+        "KT-CT-4410KrakenAddressLookupBadPostcode" as const,
+        "KT-CT-4616KrakenUnableToCreateQuote" as const,
+        "KT-CT-4627KrakenNoProductsAvailableForProperty" as const,
+        "QuoteLookupNoProductsAvailableAtAddress" as const,
+        "QuoteLookupInvalidSelectionIdentifier" as const,
+      ];
+
+      for (const errorType of testCases) {
+        const mockErrorResponse = {
+          state: "error" as const,
+          data: {
+            errors: [
+              {
+                blockType: errorType,
+                errorMessage: "This address cannot be serviced",
+              },
+            ],
+            documentID: "doc-123",
+          },
+        };
+
+        vi.mocked(squidAPI.createQuoteLookupAsync).mockResolvedValue({
+          state: "pending" as const,
+          documentID: "doc-123",
+        });
+
+        vi.mocked(squidAPI.getQuoteLookup).mockResolvedValue(mockErrorResponse);
+
+        const result = await createQuoteLookupPoll(
+          mockAffiliateSessionId,
+          mockAddressLookupId,
+          mockAddressLookupSelectionIdentifier,
+        );
+
+        expect(result).toEqual({
+          products: [],
+          documentID: "doc-123",
+          error: {
+            type: "invalidAddressError",
+            message: "This address cannot be serviced",
+            details: ["This address cannot be serviced"],
+          },
+        });
+      }
+    });
   });
 });

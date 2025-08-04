@@ -1,8 +1,6 @@
 import {
-  FetchError,
   type QuoteLookupSuccess,
   squidAPI,
-  ValidationError,
 } from "@cuckoointernet/util-squid-network-requests";
 
 interface QuoteLookupResult {
@@ -10,14 +8,7 @@ interface QuoteLookupResult {
   quotingCode?: string;
   documentID?: string;
   error?: {
-    type:
-      | "noProductsAvailable"
-      | "invalidAddress"
-      | "invalidAffiliateSession"
-      | "validationError"
-      | "networkError"
-      | "unknownError"
-      | "timeout";
+    type: "joinSuspended" | "unknownError" | "invalidAddressError";
     message: string;
     details?: string[];
   };
@@ -28,159 +19,122 @@ export const createQuoteLookupPoll = async (
   addressLookupId: string,
   addressLookupSelectionIdentifier: string,
 ): Promise<QuoteLookupResult> => {
-  try {
-    const initialResponse = await squidAPI.createQuoteLookupAsync({
-      affiliateSession: affiliateSessionId,
-      addressLookup: addressLookupId,
-      addressLookupSelectionIdentifier: addressLookupSelectionIdentifier,
-    });
+  const initialResponse = await squidAPI.createQuoteLookupAsync({
+    affiliateSession: affiliateSessionId,
+    addressLookup: addressLookupId,
+    addressLookupSelectionIdentifier: addressLookupSelectionIdentifier,
+  });
 
-    const documentID = initialResponse.documentID;
-    let nextResponse = null;
+  const documentID = initialResponse.documentID;
+  let nextResponse = null;
 
-    while (true) {
-      nextResponse = await squidAPI.getQuoteLookup(documentID);
-      if (nextResponse.state === "pending") {
-        await new Promise((resolve) => setTimeout(resolve, 5000));
-      } else {
-        break;
-      }
+  while (true) {
+    nextResponse = await squidAPI.getQuoteLookup(documentID);
+    if (nextResponse.state === "pending") {
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+    } else {
+      break;
+    }
+  }
+
+  if (nextResponse.state === "error" && nextResponse.data?.errors) {
+    const errors = nextResponse.data.errors;
+
+    const joinSuspended = errors.find(
+      (err) => err.blockType === "JoinSuspended",
+    );
+
+    if (joinSuspended) {
+      return {
+        products: [],
+        documentID: nextResponse.data.documentID,
+        error: {
+          type: "joinSuspended",
+          message: "Join flow is currently unavailable",
+        },
+      };
     }
 
-    if (nextResponse.state === "error") {
-      return handleErrors(
-        nextResponse.data.errors,
-        nextResponse.data.documentID,
-      );
+    const unknownError = errors.find((err) => err.blockType === "UnknownError");
+
+    if (unknownError) {
+      return {
+        products: [],
+        documentID: nextResponse.data.documentID,
+        error: {
+          type: "unknownError",
+          message: "An unexpected error occurred",
+          details: errors.map(
+            (err) => err.errorMessage || err.blockType || "Unknown error",
+          ),
+        },
+      };
     }
 
-    return {
-      products: nextResponse.data.response.products || [],
-      quotingCode: nextResponse.data.response.quotingCode || undefined,
-      documentID: nextResponse.data.documentID,
-    };
-  } catch (error) {
-    return handleExceptions(error);
-  }
-};
-
-const handleErrors = (
-  errors: unknown[],
-  documentID?: string,
-): QuoteLookupResult => {
-  const noProductsError = errors.find(
-    (err: unknown) =>
-      typeof err === "object" &&
-      err !== null &&
-      "blockType" in err &&
-      (err.blockType === "QuoteLookupNoProductsAvailableAtAddress" ||
-        err.blockType === "KT-CT-4627KrakenNoProductsAvailableForProperty"),
-  );
-
-  if (noProductsError) {
-    return {
-      products: [],
-      documentID,
-      error: {
-        type: "noProductsAvailable",
-        message: "No products are available at this address",
-      },
-    };
-  }
-
-  const invalidAddressError = errors.find(
-    (err: unknown) =>
-      typeof err === "object" &&
-      err !== null &&
-      "blockType" in err &&
-      (err.blockType === "QuoteLookupInvalidSelectionIdentifier" ||
-        err.blockType === "QuoteLookupAddressLookupInvalidState"),
-  );
-
-  if (invalidAddressError) {
-    return {
-      products: [],
-      documentID,
-      error: {
-        type: "invalidAddress",
-        message: "The address provided is not valid",
-      },
-    };
-  }
-
-  const affiliateError = errors.find(
-    (err: unknown) =>
-      typeof err === "object" &&
-      err !== null &&
-      "blockType" in err &&
-      (err.blockType === "QuoteLookupCouldNotLoadAffiliateSession" ||
+    const invalidAddressError = errors.find(
+      (err) =>
+        err.blockType === "KT-CT-4410KrakenAddressLookupBadPostcode" ||
+        err.blockType === "KT-CT-4616KrakenUnableToCreateQuote" ||
+        err.blockType === "KT-CT-4627KrakenNoProductsAvailableForProperty" ||
+        err.blockType === "KT-CT-4620KrakenUnableToLoadQuote" ||
+        err.blockType === "KT-CT-4619KrakenUnableToLoadQuoteBadQuoteCode" ||
+        err.blockType === "QuoteLookupCouldNotLoadAffiliateSession" ||
+        err.blockType === "QuoteLookupCouldNotLoadAddressLookup" ||
+        err.blockType === "QuoteLookupAddressLookupInvalidState" ||
+        err.blockType === "QuoteLookupInvalidSelectionIdentifier" ||
+        err.blockType === "QuoteLookupKrakenCreateTelcoError" ||
+        err.blockType === "QuoteLookupResultPollingTimeout" ||
+        err.blockType === "QuoteLookupKrakenPollingError" ||
+        err.blockType === "QuoteLookupKrakenRetrievalError" ||
+        err.blockType === "QuoteLookupKrakenFormatError" ||
+        err.blockType === "QuoteLookupNoProductsAvailableAtAddress" ||
+        err.blockType === "QuoteLookupNoProductsAvailableForDiscriminator" ||
         err.blockType ===
-          "QuoteLookupAffiliateSessionConfigInvalidNoAffiliate"),
-  );
+          "QuoteLookupAffiliateSessionConfigInvalidNoAffiliate" ||
+        err.blockType === "QuoteLookupBadConfiguration",
+    );
 
-  if (affiliateError) {
+    if (invalidAddressError) {
+      return {
+        products: [],
+        documentID: nextResponse.data.documentID,
+        error: {
+          type: "invalidAddressError",
+          message: "This address cannot be serviced",
+          details: errors.map(
+            (err) => err.errorMessage || err.blockType || "Unknown error",
+          ),
+        },
+      };
+    }
+
     return {
       products: [],
-      documentID,
+      documentID: nextResponse.data.documentID,
       error: {
-        type: "invalidAffiliateSession",
-        message: "The affiliate session is not valid",
-      },
-    };
-  }
-
-  return {
-    products: [],
-    documentID,
-    error: {
-      type: "unknownError",
-      message: "There was a problem with the quote lookup",
-      details: errors.map((err: unknown) => {
-        if (typeof err === "object" && err !== null) {
-          if ("errorMessage" in err && typeof err.errorMessage === "string") {
-            return err.errorMessage;
-          }
-          if ("blockType" in err && typeof err.blockType === "string") {
-            return err.blockType;
-          }
-        }
-        return "Unknown error";
-      }),
-    },
-  };
-};
-
-const handleExceptions = (error: unknown): QuoteLookupResult => {
-  if (error instanceof ValidationError) {
-    return {
-      products: [],
-      error: {
-        type: "validationError",
-        message: "The input data is invalid",
-        details: error.details.map((err) =>
-          err.path ? `${err.path} is invalid: ${err.message}` : err.message,
+        type: "unknownError",
+        message: "There was a problem with the quote lookup",
+        details: errors.map(
+          (err) => err.errorMessage || err.blockType || "Unknown error",
         ),
       },
     };
   }
 
-  if (error instanceof FetchError) {
+  if (nextResponse.state === "success" && nextResponse.data?.response) {
     return {
-      products: [],
-      error: {
-        type: "networkError",
-        message: `Server error: ${error.message}`,
-        details: [`Status: ${error.response?.status}`],
-      },
+      products: nextResponse.data.response.products || [],
+      quotingCode: nextResponse.data.response.quotingCode || undefined,
+      documentID: nextResponse.data.documentID,
     };
   }
 
   return {
     products: [],
+    documentID: nextResponse.data?.documentID,
     error: {
       type: "unknownError",
-      message: "An unexpected error occurred",
-      details: [error instanceof Error ? error.message : "Unknown error"],
+      message: "There was a problem with the quote lookup",
     },
   };
 };
