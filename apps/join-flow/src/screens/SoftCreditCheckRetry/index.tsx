@@ -119,7 +119,7 @@ const SoftCreditCheckRetry = () => {
   return (
     <>
       <StepNavigationWithBasket step={4} />
-      <div className="container mx-auto px-6 py-10 md:pt-32 md:pb-16">
+      <div className="container mx-auto px-6 py-10 md:pb-16">
         <div className="max-w-[569px] mx-auto rounded-lg flex flex-col gap-10 md:gap-12">
           <h1 className="text-xl md:text-2xl text-center font-semibold leading-[150%] md:leading-[138%]">
             {softCreditCheckRetryProps.heading}

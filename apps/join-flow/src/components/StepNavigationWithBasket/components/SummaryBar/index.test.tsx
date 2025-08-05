@@ -1,7 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
+import { usePricingCalculations } from "@/hooks/usePricingCalculations";
+import useJoinFlowStore, {
+  StoreSelectedPackage,
+} from "@/store/useJoinFlowStore";
 
 import { SummaryBar } from "./index";
 
@@ -39,12 +42,22 @@ vi.mock("@react-component-library/ui/icons", () => ({
   ),
 }));
 
-vi.mock("@/components/ReviewYourBasket/ReviewYourBasketProps", () => ({
-  reviewYourBasketText: {
+vi.mock("./summaryBarProps", () => ({
+  summaryBarProps: {
     eeroImage: "/mock-eero-image.png",
     biDirectionalImage: "/mock-bidirectional-image.png",
   },
 }));
+
+vi.mock("@/store/useJoinFlowStore", () => ({
+  default: vi.fn(),
+}));
+const mockUseJoinFlowStore = vi.mocked(useJoinFlowStore);
+
+vi.mock("@/hooks/usePricingCalculations", () => ({
+  usePricingCalculations: vi.fn(),
+}));
+const mockUsePricingCalculations = vi.mocked(usePricingCalculations);
 
 describe("SummaryBar", () => {
   const mockSelectedPackage: StoreSelectedPackage = {
@@ -96,9 +109,17 @@ describe("SummaryBar", () => {
   };
 
   const mockProps = {
-    selectedPackage: mockSelectedPackage,
     isDialogOpen: false,
-    formattedPricing: {
+    openDialog: vi.fn(),
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseJoinFlowStore.mockReturnValue({
+      selectedPackage: mockSelectedPackage,
+      eeroSelection: null,
+    });
+    mockUsePricingCalculations.mockReturnValue({
       discountedPrice: "39",
       monthlyPackagePrice: "42",
       nextPrice: "45",
@@ -111,16 +132,16 @@ describe("SummaryBar", () => {
       predictedTotalNext: "45",
       predictedTotalFollowing: "48",
       packageName: "150Mbps",
-    },
-    openDialog: vi.fn(),
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
+    });
   });
 
   it("renders null when no package is selected", () => {
-    render(<SummaryBar {...mockProps} selectedPackage={null} />);
+    mockUseJoinFlowStore.mockReturnValue({
+      selectedPackage: null,
+      eeroSelection: null,
+    });
+
+    render(<SummaryBar {...mockProps} />);
 
     expect(screen.queryByTestId("summary-bar")).toBeNull();
   });
@@ -200,8 +221,12 @@ describe("SummaryBar", () => {
         },
       },
     };
+    mockUseJoinFlowStore.mockReturnValue({
+      selectedPackage: customPackage,
+      eeroSelection: null,
+    });
 
-    render(<SummaryBar {...mockProps} selectedPackage={customPackage} />);
+    render(<SummaryBar {...mockProps} />);
 
     expect(
       screen.getByText(customPackage.frontendIdentifier),

@@ -226,7 +226,7 @@ export const PaymentConfirmation = ({
   return (
     <>
       <StepNavigationWithBasket step={4} hideBasket hideLabels />
-      <div className="container mx-auto px-4 py-8 mt-20">
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-xl mx-auto">
           <div className="bg-core-white p-8 rounded-md">
             <h1 className="text-2xl font-bold mb-6">{title}</h1>

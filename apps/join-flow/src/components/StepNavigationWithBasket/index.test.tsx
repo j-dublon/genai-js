@@ -3,10 +3,12 @@ import { describe, expect, it, vi } from "vitest";
 
 import { StepNavigationWithBasket } from "./index";
 
-vi.mock("../ReviewYourBasket", () => ({
-  ReviewYourBasket: () => (
-    <div data-testid="review-your-basket">Review Your Basket Mock</div>
-  ),
+vi.mock("./components/BasketDialog", () => ({
+  BasketDialog: () => <div data-testid="basket-dialog">Basket Dialog Mock</div>,
+}));
+
+vi.mock("./components/SummaryBar", () => ({
+  SummaryBar: () => <div data-testid="summary-bar">Summary Bar Mock</div>,
 }));
 
 vi.mock("../Stepper", () => ({
@@ -54,7 +56,8 @@ describe("NavAndBasket", () => {
 
     expect(screen.getByTestId("simple-nav-bar")).toBeInTheDocument();
     expect(screen.getByTestId("stepper")).toBeInTheDocument();
-    expect(screen.getByTestId("review-your-basket")).toBeInTheDocument();
+    expect(screen.getByTestId("summary-bar")).toBeInTheDocument();
+    expect(screen.getByTestId("basket-dialog")).toBeInTheDocument();
   });
 
   it("displays the correct step number", () => {
@@ -157,22 +160,20 @@ describe("NavAndBasket", () => {
     it("hides ReviewYourBasket when hideBasket is true", () => {
       render(<StepNavigationWithBasket step={1} hideBasket={true} />);
 
-      expect(
-        screen.queryByTestId("review-your-basket"),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId("summary-bar")).not.toBeInTheDocument();
       expect(screen.getByTestId("stepper")).toBeInTheDocument();
     });
 
     it("shows ReviewYourBasket when hideBasket is false", () => {
       render(<StepNavigationWithBasket step={1} hideBasket={false} />);
 
-      expect(screen.getByTestId("review-your-basket")).toBeInTheDocument();
+      expect(screen.getByTestId("summary-bar")).toBeInTheDocument();
     });
 
     it("shows ReviewYourBasket by default when hideBasket is not provided", () => {
       render(<StepNavigationWithBasket step={1} />);
 
-      expect(screen.getByTestId("review-your-basket")).toBeInTheDocument();
+      expect(screen.getByTestId("summary-bar")).toBeInTheDocument();
     });
   });
 

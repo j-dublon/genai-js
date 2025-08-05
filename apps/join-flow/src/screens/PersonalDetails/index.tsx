@@ -626,8 +626,8 @@ const PersonalDetails = () => {
         slides={slidesWithAssetPath}
         loading={isLoadingModalOpen}
       />
-      <div className="container mx-auto px-6 py-8 lg:pt-24">
-        <div className="max-w-[569px] mx-auto py-8 rounded-lg">
+      <div className="container mx-auto px-6 py-12">
+        <div className="max-w-[569px] mx-auto rounded-lg">
           {showPill && (
             <div className="flex justify-center mb-6">
               <ColorPill

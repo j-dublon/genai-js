@@ -36,8 +36,8 @@ vi.mock("@/services/helpers/updateBasket", () => ({
 }));
 const mockUpdateBasket = vi.mocked(updateBasket);
 
-vi.mock("@/components/Stepper", () => ({
-  default: vi.fn(),
+vi.mock("@/components/StepNavigationWithBasket", () => ({
+  StepNavigationWithBasket: vi.fn(),
 }));
 
 vi.mock("@/components/Footer", () => ({

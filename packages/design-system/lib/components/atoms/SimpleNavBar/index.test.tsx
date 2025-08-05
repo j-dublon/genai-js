@@ -21,7 +21,7 @@ describe("SimpleNavBar", () => {
     expect(logo).toBeInTheDocument();
     expect(logo.parentElement).toHaveAttribute("href", "/");
     const header = screen.getByRole("banner");
-    expect(header).toHaveClass("ds:fixed");
+    expect(header).toHaveClass("ds:sticky");
     expect(header.firstChild).toHaveClass("ds:bg-core-white");
   });
 

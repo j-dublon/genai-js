@@ -2,6 +2,7 @@
 
 import { LegalClaims } from "@react-component-library/ui/server";
 
+import { AffiliateHeaderBanner } from "@/components/AffiliateHeaderBanner";
 import { ChooseYourPackage } from "@/screens/PackageSelection/components/ChooseYourPackage";
 import { HeroBanner } from "@/screens/PackageSelection/components/HeroBanner";
 import { NavWrapper } from "@/screens/PackageSelection/components/NavWrapper";
@@ -12,6 +13,7 @@ const PackageSelection = () => {
   return (
     <>
       <NavWrapper />
+      <AffiliateHeaderBanner />
       <HeroBanner />
       <ChooseYourPackage />
       <Reminders />

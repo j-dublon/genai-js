@@ -150,8 +150,8 @@ const EeroSelection = () => {
         slides={slidesWithAssetPath}
         loading={isLoadingModalOpen}
       />
-      <div className="container px-4 pb-8 lg:pt-16 mx-auto">
-        <div className="max-w-[1183px] mx-auto mt-16">
+      <div className="container px-4 pb-8 md:pt-12 mx-auto">
+        <div className="max-w-[1183px] mx-auto">
           {showPill && (
             <div className="flex justify-center mb-6">
               <ColorPill
@@ -171,7 +171,7 @@ const EeroSelection = () => {
             </div>
           )}
 
-          <div className="p-5 md:p-8 rounded-md">
+          <div className="px-5 md:px-8 rounded-md">
             <div className="flex flex-col items-center">
               <h1 className="mb-4 text-[26px] md:text-3xl font-semibold text-center [text-wrap:balance]">
                 {eeroPageContent.title}

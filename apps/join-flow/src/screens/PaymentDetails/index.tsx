@@ -232,7 +232,7 @@ export const PaymentDetails = () => {
   return (
     <>
       <StepNavigationWithBasket step={4} />
-      <div className="container mx-auto md:pb-16 lg:pt-16 flex justify-center">
+      <div className="container mx-auto md:pb-16 flex justify-center">
         <div className="bg-core-white rounded-md flex flex-col w-full max-w-[1194px] mx-5">
           <div className="flex flex-col gap-4 md:gap-5 items-center text-center py-10 md:py-14">
             <h1 className="md:text-3xl md:leading-[1.4] text-[26px] leading-[1.5] font-semibold">

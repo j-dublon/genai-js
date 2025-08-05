@@ -172,7 +172,7 @@ export const OneTouchSwitching = () => {
         loading={isLoadingModalOpen}
       />
       <StepNavigationWithBasket step={3} />
-      <div className="container mx-auto flex flex-col items-center md:mt-6 lg:mt-12 md:mb-16">
+      <div className="container mx-auto flex flex-col items-center md:mb-16">
         <div className="max-w-[720px] px-5 md:px-22 pt-10 md:pt-12 bg-core-white rounded-md">
           <h1 className="text-[26px] md:text-3xl font-semibold text-center pb-10 md:pb-12">
             {oneTouchSwitchingText.title}

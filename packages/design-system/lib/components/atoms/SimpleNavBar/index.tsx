@@ -16,7 +16,7 @@ export const SimpleNavBar = ({
 }: React.PropsWithChildren<SimpleNavBarProps>) => {
   return (
     <header
-      className={`ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ${fixed ? "ds:fixed" : ""} ${backgroundColor === "yellow" ? "ds:border-core-grey-200 ds:border-b" : "ds:border-b-[0.25px] ds:border-transparent ds:md:border-ui-grey-300"}`}
+      className={`ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ${fixed ? "ds:sticky" : ""} ${backgroundColor === "yellow" ? "ds:border-core-grey-200 ds:border-b" : "ds:md:border-b-[0.25px] ds:border-transparent ds:md:border-ui-grey-300"}`}
       role="banner"
     >
       <nav

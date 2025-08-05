@@ -1,10 +1,6 @@
-import { LoadingModalSlide } from "@/hooks/useLoadingModal";
-import { getAssetPath } from "@/lib/get-asset-path";
+import type { LoadingModalSlide } from "@/hooks/useLoadingModal";
 
-export const reviewYourBasketText = {
-  eeroImage: getAssetPath("/images/x1_eeros.png"),
-  biDirectionalImage: getAssetPath("/images/biDirectionalArrows.png"),
-
+export const basketDialogProps = {
   title: "Review your basket",
   viewBasketButton: "View Basket",
   whatIsNext: "What's next?",

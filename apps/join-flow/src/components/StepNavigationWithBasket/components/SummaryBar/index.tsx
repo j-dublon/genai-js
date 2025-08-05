@@ -1,25 +1,29 @@
 import { Button } from "@react-component-library/ui";
 import { ChevronVerticalWithCircle } from "@react-component-library/ui/icons";
 
-import { reviewYourBasketText } from "@/components/ReviewYourBasket/ReviewYourBasketProps";
-import type { PricingCalculations } from "@/hooks/usePricingCalculations";
+import { usePricingCalculations } from "@/hooks/usePricingCalculations";
 import { createPromotionPillText } from "@/lib/createOfferContent";
 import { formatDisplayDateMonthYear, nextApril } from "@/lib/formatDate";
-import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
+
+import { summaryBarProps } from "./summaryBarProps";
 
 interface SummaryBarProps {
-  selectedPackage: StoreSelectedPackage | null;
-  formattedPricing: PricingCalculations;
   isDialogOpen: boolean;
   openDialog: () => void;
 }
 
 export const SummaryBar: React.FC<SummaryBarProps> = ({
-  selectedPackage,
-  formattedPricing,
   isDialogOpen,
   openDialog,
 }) => {
+  const { selectedPackage, eeroSelection } = useJoinFlowStore();
+
+  const formattedPricing = usePricingCalculations(
+    selectedPackage,
+    eeroSelection,
+  );
+
   if (!selectedPackage) {
     return null;
   }
@@ -37,7 +41,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
   return (
     <div
       data-testid="summary-bar"
-      className={`${isDialogOpen ? "hidden" : "w-full fixed top-20 left-0 z-49 shadow-lg bg-core-white  border-ui-grey-300 border-y lg:border-0 px-5 lg:px-0 py-3 md:py-5 lg:bg-ui-grey-100"}`}
+      className={`${isDialogOpen ? "hidden" : "w-full shadow-lg bg-core-white  border-ui-grey-300 border-y lg:border-0 px-5 lg:px-0 py-3 md:py-5 lg:bg-ui-grey-100"}`}
     >
       <div className="w-full max-w-[1118px] flex items-center justify-center mx-auto">
         <div className="flex items-center w-full max-w-100 lg:max-w-none gap-2 sm:gap-6 lg:gap-0 justify-center lg:justify-between">
@@ -45,7 +49,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
             <div className="hidden lg:flex lg:items-center lg:mr-5">
               <img
                 alt="Cuckoo"
-                src={reviewYourBasketText.eeroImage}
+                src={summaryBarProps.eeroImage}
                 className="w-[111px] h-[72px]"
               />
             </div>
@@ -59,7 +63,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
               <div className="text-xxs items-center gap-2 hidden lg:flex leading-[1.6]">
                 <img
                   alt="Cuckoo"
-                  src={reviewYourBasketText.biDirectionalImage}
+                  src={summaryBarProps.biDirectionalImage}
                   className="w-[15px] h-[9px]"
                 />
                 <p>

@@ -228,7 +228,7 @@ export const GoLiveDate = () => {
         loading={isLoadingModalOpen}
       />
       <StepNavigationWithBasket step={3} />
-      <div className="container md:max-w-[758px] mx-auto px-4 md:pb-16 pt-10 lg:pt-20">
+      <div className="container md:max-w-[758px] mx-auto px-4 md:pb-16">
         {otsSwitchFailedOrSkipped && (
           <OtsFailBanner
             bannerText={otsFailBannerText}
