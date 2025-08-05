@@ -89,7 +89,7 @@ describe("updateBasket", () => {
 
       expect(result.basket).toBeUndefined();
       expect(result.error).toEqual({
-        type: "validationError",
+        type: "basketError",
         message: "Basket ID is required",
         details: ["ID parameter cannot be empty"],
       });

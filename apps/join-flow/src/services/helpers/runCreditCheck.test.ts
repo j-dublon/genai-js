@@ -107,4 +107,184 @@ describe("runCreditCheck", () => {
     });
     expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
   });
+
+  it("should handle invalid basket ID errors", async () => {
+    const basketError = new ValidationError([
+      {
+        message: "Invalid basket ID",
+        path: "basketId",
+        label: "invalidBasketId",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(basketError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketId is invalid: Invalid basket ID"],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle basket address history incomplete errors", async () => {
+    const addressError = new ValidationError([
+      {
+        message: "Basket address history is incomplete",
+        path: "basketAddress",
+        label: "basketAddressHistoryIncomplete",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(addressError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: [
+          "basketAddress is invalid: Basket address history is incomplete",
+        ],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle basket product missing errors", async () => {
+    const productError = new ValidationError([
+      {
+        message: "Basket product is missing",
+        path: "basketProduct",
+        label: "basketProductMissing",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(productError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketProduct is invalid: Basket product is missing"],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle basket not new sale errors", async () => {
+    const saleError = new ValidationError([
+      {
+        message: "Basket is not a new sale",
+        path: "basketSale",
+        label: "basketNotNewSale",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(saleError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketSale is invalid: Basket is not a new sale"],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle basket email not valid errors", async () => {
+    const emailError = new ValidationError([
+      {
+        message: "Basket email is not valid",
+        path: "basketEmail",
+        label: "basketEmailNotValid",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(emailError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketEmail is invalid: Basket email is not valid"],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle basket name not valid errors", async () => {
+    const nameError = new ValidationError([
+      {
+        message: "Basket name is not valid",
+        path: "basketName",
+        label: "basketNameNotValid",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(nameError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketName is invalid: Basket name is not valid"],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle credit check limit reached errors", async () => {
+    const limitError = new ValidationError([
+      {
+        message: "Credit check limit has been reached",
+        path: "creditCheck",
+        label: "creditCheckLimitReached",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(limitError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "creditCheckLimitReached",
+        message: "Payload Validation Error",
+        details: [
+          "creditCheck is invalid: Credit check limit has been reached",
+        ],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle credit check load hashed errors", async () => {
+    const hashedError = new ValidationError([
+      {
+        message: "Credit check load hashed error",
+        path: "creditCheck",
+        label: "creditCheckLoadHashedError",
+      },
+    ]);
+    vi.mocked(squidAPI.runCreditCheck).mockRejectedValueOnce(hashedError);
+
+    const result = await runCreditCheck("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "creditCheckLoadHashedError",
+        message: "Payload Validation Error",
+        details: ["creditCheck is invalid: Credit check load hashed error"],
+      },
+    });
+    expect(squidAPI.runCreditCheck).toHaveBeenCalledTimes(1);
+  });
 });

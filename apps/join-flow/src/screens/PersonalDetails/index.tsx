@@ -49,6 +49,7 @@ const PersonalDetails = () => {
     setSoftCreditCheck,
     isLoadingModalOpen,
     setIsLoadingModalOpen,
+    setErrorInfo,
   } = useJoinFlowStore();
   const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
     isLoadingModalOpen,
@@ -96,25 +97,25 @@ const PersonalDetails = () => {
 
   const validateCode = async (code: string) => {
     if (!basket) {
-      console.error("No basket available");
-      setIsEmailCodeValid(false);
-      setValidationAttempts((prev) => prev + 1);
+      setErrorInfo({ type: "basketError" });
+      router.push("/join-flow/error");
       return;
     }
 
     const response = await validateEmailCode(basket.id, code);
 
     if (response.error) {
-      if (
-        response.error.details.find((detail) => detail.includes("invalidCode"))
-      ) {
+      const errorType = response.error.type;
+      if (errorType === "invalidCode") {
         setEmailCodeErrorMessage(
           personalDetailsProps.verificationSection.invalidCodeText,
         );
+        setIsEmailCodeValid(false);
+        setValidationAttempts((prev) => prev + 1);
+        return;
       }
-      console.error("Failed to validate email code:", response.error);
-      setIsEmailCodeValid(false);
-      setValidationAttempts((prev) => prev + 1);
+      setErrorInfo({ type: errorType });
+      router.push("/join-flow/error");
       return;
     }
 
@@ -160,31 +161,28 @@ const PersonalDetails = () => {
   const handleSendCode = async () => {
     if (!isEmailVerified) {
       if (!basket) {
-        console.error("No basket available");
+        setErrorInfo({ type: "basketError" });
+        router.push("/join-flow/error");
         return;
       }
       setIsEmailCodeValid(undefined);
       setEmailCodeErrorMessage(undefined);
+
       const response = await sendEmailCode(basket.id);
+
       if (response.error) {
+        const errorType = response.error.type;
         if (
-          response.error.details.find((detail) =>
-            detail.includes("emailCodeTooRecent"),
-          )
+          errorType === "emailCodeTooRecent" ||
+          errorType === "emailCodeSpam"
         ) {
           setEmailCodeErrorMessage(
             personalDetailsProps.verificationSection.tooRecentRequestText,
           );
-        } else if (
-          response.error.details.find((detail) =>
-            detail.includes("emailCodeSpam"),
-          )
-        ) {
-          setEmailCodeErrorMessage(
-            personalDetailsProps.verificationSection.tooManyRequestsText,
-          );
+          return;
         }
-        console.error("Failed to send email code:", response.error);
+        setErrorInfo({ type: errorType });
+        router.push("/join-flow/error");
         return;
       }
     }
@@ -314,7 +312,8 @@ const PersonalDetails = () => {
 
       try {
         if (!basket) {
-          console.error("No basket available");
+          setErrorInfo({ type: "basketError" });
+          router.push("/join-flow/error");
           return;
         }
         setIsLoadingModalOpen(true);
@@ -335,9 +334,13 @@ const PersonalDetails = () => {
           setBasket(result.basket);
         } else if (result.error) {
           console.error("Failed to update basket:", result.error);
+          setErrorInfo({ type: result.error.type });
+          router.push("/join-flow/error");
+          return;
         }
-      } catch (error) {
-        console.error("Unexpected error updating basket:", error);
+      } catch {
+        setErrorInfo({ type: "unknownError" });
+        router.push("/join-flow/error");
         return;
       }
 
@@ -461,7 +464,8 @@ const PersonalDetails = () => {
 
     try {
       if (!basket) {
-        console.error("No basket available");
+        setErrorInfo({ type: "basketError" });
+        router.push("/join-flow/error");
         return;
       }
 
@@ -519,12 +523,13 @@ const PersonalDetails = () => {
         setBasket(result.basket);
       } else if (result.error) {
         console.error("Failed to update basket:", result.error);
-        setIsLoadingModalOpen(false);
+        setErrorInfo({ type: result.error.type });
+        router.push("/join-flow/error");
         return;
       }
-    } catch (error) {
-      console.error("Unexpected error updating basket:", error);
-      setIsLoadingModalOpen(false);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
       return;
     }
 
@@ -545,8 +550,23 @@ const PersonalDetails = () => {
       }
 
       if (error) {
-        console.error("Failed to run soft credit check:", error);
-        setIsLoadingModalOpen(false);
+        switch (error.type) {
+          case "basketError":
+            setErrorInfo({ type: "basketError" });
+            router.push("/join-flow/error");
+            break;
+          case "creditCheckLimitReached":
+            setErrorInfo({ type: "creditCheckLimitReached" });
+            router.push("/join-flow/error");
+            break;
+          case "creditCheckLoadHashedError":
+            setErrorInfo({ type: "creditCheckLoadHashedError" });
+            router.push("/join-flow/error");
+            break;
+          default:
+            router.push("/join-flow/personal-details/retry-check");
+            break;
+        }
         return;
       }
 
@@ -569,9 +589,9 @@ const PersonalDetails = () => {
           setIsLoadingModalOpen(false);
           break;
       }
-    } catch (error) {
-      console.error("Unexpected error during soft credit check:", error);
-      setIsLoadingModalOpen(false);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
       return;
     }
   };

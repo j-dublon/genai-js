@@ -330,8 +330,10 @@ export type ErrorInfo = {
     | "generalError"
     | "networkError"
     | "validationError"
+    | "basketError"
+    | "creditCheckLimitReached"
+    | "creditCheckLoadHashedError"
     | "invalidAffiliateError";
-  affiliateCode?: string;
 };
 
 export type JoinFlowState = {

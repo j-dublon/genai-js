@@ -115,4 +115,52 @@ describe("validateEmailCode", () => {
     });
     expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
   });
+
+  it("should handle invalid basket ID errors", async () => {
+    const basketError = new ValidationError([
+      {
+        message: "Invalid basket ID",
+        path: "basketId",
+        label: "invalidBasketId",
+      },
+    ]);
+    vi.mocked(squidAPI.emailValidationCheckCode).mockRejectedValueOnce(
+      basketError,
+    );
+
+    const result = await validateEmailCode("123", "123456");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketId is invalid: Invalid basket ID"],
+      },
+    });
+    expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle invalid code errors", async () => {
+    const codeError = new ValidationError([
+      {
+        message: "Invalid email validation code",
+        path: "code",
+        label: "invalidCode",
+      },
+    ]);
+    vi.mocked(squidAPI.emailValidationCheckCode).mockRejectedValueOnce(
+      codeError,
+    );
+
+    const result = await validateEmailCode("123", "123456");
+
+    expect(result).toEqual({
+      error: {
+        type: "invalidCode",
+        message: "Payload Validation Error",
+        details: ["code is invalid: Invalid email validation code"],
+      },
+    });
+    expect(squidAPI.emailValidationCheckCode).toHaveBeenCalledTimes(1);
+  });
 });

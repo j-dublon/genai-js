@@ -53,7 +53,6 @@ export const personalDetailsProps = {
     changeEmailText: "I want to use a different email address",
     invalidCodeText:
       "Oops! That code doesn't look right. Try entering a valid one.",
-    tooManyRequestsText: "Too many code requests.",
     tooRecentRequestText:
       "An email validation code was already requested recently. Please wait a moment.",
   },

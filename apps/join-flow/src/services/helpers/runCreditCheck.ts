@@ -5,10 +5,18 @@ import {
   ValidationError,
 } from "@cuckoointernet/util-squid-network-requests";
 
+type CreditCheckErrorType =
+  | "networkError"
+  | "unknownError"
+  | "validationError"
+  | "basketError"
+  | "creditCheckLimitReached"
+  | "creditCheckLoadHashedError";
+
 interface RunCreditCheckResult {
   status?: RunCreditCheckResponse["status"];
   error?: {
-    type: "networkError" | "unknownError" | "validationError";
+    type: CreditCheckErrorType;
     message: string;
     details: string[];
   };
@@ -35,9 +43,32 @@ export const runCreditCheck = async (
     }
 
     if (error instanceof ValidationError) {
+      const errorLabel = error.details[0].label;
+
+      let errorType: CreditCheckErrorType = "validationError";
+      switch (errorLabel) {
+        case "invalidBasketId":
+        case "basketAddressHistoryIncomplete":
+        case "basketProductMissing":
+        case "basketNotNewSale":
+        case "basketEmailNotValid":
+        case "basketNameNotValid":
+          errorType = "basketError";
+          break;
+        case "creditCheckLimitReached":
+          errorType = "creditCheckLimitReached";
+          break;
+        case "creditCheckLoadHashedError":
+          errorType = "creditCheckLoadHashedError";
+          break;
+        default:
+          errorType = "validationError";
+          break;
+      }
+
       return {
         error: {
-          type: "validationError",
+          type: errorType,
           message: error.message,
           details: error.details.map((err) =>
             err.path ? `${err.path} is invalid: ${err.message}` : err.message,

@@ -1,10 +1,45 @@
-import { ErrorPageProps } from "@/components/ErrorPage";
+export type ErrorAction = "restart" | "retry";
+interface ErrorButton {
+  text: string;
+  action: ErrorAction;
+}
+interface ErrorConfig {
+  title: string;
+  paragraphs: string[];
+  button?: ErrorButton;
+  showTrustpilot?: boolean;
+}
 
-export const errorProps: Record<string, ErrorPageProps> = {
+export const errorProps: Record<string, ErrorConfig> = {
   generalError: {
     title: "Whoops, that hasn't quite worked",
     paragraphs: [
       "We're really sorry, but something's not right here. It could be a hiccup on our side, or you may have missed something when adding your details.",
+      "Give our lovely Customer Care team a ring on 0330 912 9955. Lines are open: 8am to 8pm, Monday - Friday, 9am to 5.30pm, weekends and bank holidays.",
+    ],
+  },
+  basketError: {
+    title: "Whoops, that hasn't quite worked",
+    paragraphs: [
+      "We're really sorry, but something's not right here. It could be a hiccup on our side, or you may have missed something when adding your details.",
+      "You can retry below, or give our lovely Customer Care team a ring on 0330 912 9955. Lines are open: 8am to 8pm, Monday - Friday, 9am to 5.30pm, weekends and bank holidays.",
+    ],
+    button: {
+      text: "Restart signup",
+      action: "restart",
+    },
+  },
+  creditCheckLimitReached: {
+    title: "Credit Check Limit Reached",
+    paragraphs: [
+      "We're really sorry, but you've reached the limit of credit checks.",
+      "Give our lovely Customer Care team a ring on 0330 912 9955. Lines are open: 8am to 8pm, Monday - Friday, 9am to 5.30pm, weekends and bank holidays.",
+    ],
+  },
+  creditCheckLoadHashedError: {
+    title: "Credit Check Error",
+    paragraphs: [
+      "We're really sorry, but we're having trouble loading your credit check.",
       "Give our lovely Customer Care team a ring on 0330 912 9955. Lines are open: 8am to 8pm, Monday - Friday, 9am to 5.30pm, weekends and bank holidays.",
     ],
   },
@@ -37,9 +72,7 @@ export const errorProps: Record<string, ErrorPageProps> = {
     ],
     button: {
       text: "Click here to signup normally",
-      onClick: () => {
-        window.location.href = "/join-flow";
-      },
+      action: "restart",
     },
   },
 };

@@ -5,10 +5,17 @@ import {
   ValidationError,
 } from "@cuckoointernet/util-squid-network-requests";
 
+type UpdateBasketErrorType =
+  | "generalError"
+  | "validationError"
+  | "networkError"
+  | "unknownError"
+  | "basketError";
+
 interface UpdateBasketResult {
   basket?: Basket;
   error?: {
-    type: "generalError" | "validationError" | "networkError" | "unknownError";
+    type: UpdateBasketErrorType;
     message: string;
     details?: string[];
   };
@@ -21,7 +28,7 @@ export const updateBasket = async (
   if (!id) {
     return {
       error: {
-        type: "validationError",
+        type: "basketError",
         message: "Basket ID is required",
         details: ["ID parameter cannot be empty"],
       },
@@ -38,9 +45,14 @@ export const updateBasket = async (
     console.error("Error in updateBasket:", error);
 
     if (error instanceof ValidationError) {
+      let errorType: UpdateBasketErrorType = "validationError";
+      if (error.details[0].message === "Not Found") {
+        errorType = "basketError";
+      }
+
       return {
         error: {
-          type: "validationError",
+          type: errorType,
           message: "The basket data is invalid",
           details: error.details.map((err) =>
             err.path ? `${err.path} is invalid: ${err.message}` : err.message,

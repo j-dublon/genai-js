@@ -25,6 +25,7 @@ const SoftCreditCheckRetry = () => {
     setPersonalDetails,
     softCreditCheck,
     setSoftCreditCheck,
+    setErrorInfo,
   } = useJoinFlowStore();
 
   const onRetry = async (
@@ -39,7 +40,8 @@ const SoftCreditCheckRetry = () => {
 
     try {
       if (!basket) {
-        console.error("No basket available");
+        setErrorInfo({ type: "basketError" });
+        router.push("/join-flow/error");
         return;
       }
 
@@ -64,10 +66,13 @@ const SoftCreditCheckRetry = () => {
         setBasket(result.basket);
       } else if (result.error) {
         console.error("Failed to update basket:", result.error);
+        setErrorInfo({ type: result.error.type });
+        router.push("/join-flow/error");
+        return;
       }
-    } catch (error) {
-      // TODO: Proper error handling
-      console.error("Unexpected error updating basket:", error);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
       return;
     }
 
@@ -88,7 +93,24 @@ const SoftCreditCheckRetry = () => {
       }
 
       if (error) {
-        console.error("Failed to run soft credit check:", error);
+        switch (error.type) {
+          case "basketError":
+            setErrorInfo({ type: "basketError" });
+            router.push("/join-flow/error");
+            break;
+          case "creditCheckLimitReached":
+            setErrorInfo({ type: "creditCheckLimitReached" });
+            router.push("/join-flow/error");
+            break;
+          case "creditCheckLoadHashedError":
+            setErrorInfo({ type: "creditCheckLoadHashedError" });
+            router.push("/join-flow/error");
+            break;
+          default:
+            setErrorInfo({ type: error.type });
+            router.push("/join-flow/error");
+            break;
+        }
         return;
       }
 
@@ -110,8 +132,9 @@ const SoftCreditCheckRetry = () => {
         default:
           break;
       }
-    } catch (error) {
-      console.error("Unexpected error during soft credit check:", error);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
       return;
     }
   };

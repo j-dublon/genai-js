@@ -4,10 +4,17 @@ import {
   ValidationError,
 } from "@cuckoointernet/util-squid-network-requests";
 
+type ValidateEmailCodeErrorType =
+  | "networkError"
+  | "unknownError"
+  | "validationError"
+  | "basketError"
+  | "invalidCode";
+
 interface ValidateEmailCodeResult {
   success?: boolean;
   error?: {
-    type: "networkError" | "unknownError" | "validationError";
+    type: ValidateEmailCodeErrorType;
     message: string;
     details: string[];
   };
@@ -35,9 +42,24 @@ export const validateEmailCode = async (
     }
 
     if (error instanceof ValidationError) {
+      const errorLabel = error.details[0].label;
+
+      let errorType: ValidateEmailCodeErrorType = "validationError";
+      switch (errorLabel) {
+        case "invalidBasketId":
+          errorType = "basketError";
+          break;
+        case "invalidCode":
+          errorType = "invalidCode";
+          break;
+        default:
+          errorType = "validationError";
+          break;
+      }
+
       return {
         error: {
-          type: "validationError",
+          type: errorType,
           message: error.message,
           details: error.details.map((err) =>
             err.path ? `${err.path} is invalid: ${err.message}` : err.message,

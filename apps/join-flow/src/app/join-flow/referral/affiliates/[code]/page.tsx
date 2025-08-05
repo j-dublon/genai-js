@@ -42,7 +42,6 @@ const AffiliateReferralPage = ({
           case "inactiveAffiliate":
             setErrorInfo({
               type: "invalidAffiliateError",
-              affiliateCode: code,
             });
             router.push("/join-flow/error");
             return;

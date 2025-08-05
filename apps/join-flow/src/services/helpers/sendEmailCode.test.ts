@@ -115,4 +115,100 @@ describe("sendEmailCode", () => {
     });
     expect(squidAPI.emailValidationSendCode).toHaveBeenCalledTimes(1);
   });
+
+  it("should handle invalid basket ID errors", async () => {
+    const basketError = new ValidationError([
+      {
+        message: "Invalid basket ID",
+        path: "basketId",
+        label: "invalidBasketId",
+      },
+    ]);
+    vi.mocked(squidAPI.emailValidationSendCode).mockRejectedValueOnce(
+      basketError,
+    );
+
+    const result = await sendEmailCode("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketId is invalid: Invalid basket ID"],
+      },
+    });
+    expect(squidAPI.emailValidationSendCode).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle basket email incomplete errors", async () => {
+    const basketEmailError = new ValidationError([
+      {
+        message: "Basket email is incomplete",
+        path: "basketEmail",
+        label: "basketEmailIncomplete",
+      },
+    ]);
+    vi.mocked(squidAPI.emailValidationSendCode).mockRejectedValueOnce(
+      basketEmailError,
+    );
+
+    const result = await sendEmailCode("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "basketError",
+        message: "Payload Validation Error",
+        details: ["basketEmail is invalid: Basket email is incomplete"],
+      },
+    });
+    expect(squidAPI.emailValidationSendCode).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle email code too recent errors", async () => {
+    const tooRecentError = new ValidationError([
+      {
+        message: "Email code was sent too recently",
+        path: "emailCode",
+        label: "emailCodeTooRecent",
+      },
+    ]);
+    vi.mocked(squidAPI.emailValidationSendCode).mockRejectedValueOnce(
+      tooRecentError,
+    );
+
+    const result = await sendEmailCode("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "emailCodeTooRecent",
+        message: "Payload Validation Error",
+        details: ["emailCode is invalid: Email code was sent too recently"],
+      },
+    });
+    expect(squidAPI.emailValidationSendCode).toHaveBeenCalledTimes(1);
+  });
+
+  it("should handle email code spam errors", async () => {
+    const spamError = new ValidationError([
+      {
+        message: "Too many email code requests",
+        path: "emailCode",
+        label: "emailCodeSpam",
+      },
+    ]);
+    vi.mocked(squidAPI.emailValidationSendCode).mockRejectedValueOnce(
+      spamError,
+    );
+
+    const result = await sendEmailCode("123");
+
+    expect(result).toEqual({
+      error: {
+        type: "emailCodeSpam",
+        message: "Payload Validation Error",
+        details: ["emailCode is invalid: Too many email code requests"],
+      },
+    });
+    expect(squidAPI.emailValidationSendCode).toHaveBeenCalledTimes(1);
+  });
 });
