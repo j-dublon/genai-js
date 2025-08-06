@@ -14,6 +14,7 @@ interface AddressLookupResult {
       | "generalError"
       | "joinSuspended"
       | "validationError"
+      | "sessionExpiredError"
       | "networkError"
       | "unknownError";
     message: string;

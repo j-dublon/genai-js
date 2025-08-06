@@ -82,6 +82,7 @@ export const useAddress = ({
             case "networkError":
             case "unknownError":
             case "generalError":
+            case "sessionExpiredError":
             case "validationError":
               setErrorInfo({
                 type: errorType,

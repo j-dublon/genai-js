@@ -4,7 +4,10 @@ import useJoinFlowStore, { JoinFlowState } from "@store/useJoinFlowStore";
 import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
+import { EXPIRY_DURATION } from "@/lib/constants";
 import { otsCompleted } from "@/lib/otsCompleted";
+
+const isDev = process.env.NEXT_PUBLIC_IS_DEV;
 
 export type FlowStep = {
   path: string;
@@ -70,6 +73,8 @@ const isPathAllowed = (
   nextRequiredStep: string,
 ): boolean => {
   if (path === null) return false;
+
+  if (path === "/join-flow/error") return true;
 
   const pathIndex = FLOW_STEPS.find((step) => step.path === path)?.index ?? -1;
   const requiredStepIndex =
@@ -137,6 +142,19 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
       clearTimeout(validationDelay);
     };
   }, [pathname, router, store]);
+
+  useEffect(() => {
+    if (
+      isDev === "false" &&
+      store.timestamp &&
+      Date.now() - store.timestamp > EXPIRY_DURATION
+    ) {
+      store.setErrorInfo({ type: "sessionExpiredError" });
+      router.push("/join-flow/error");
+    } else {
+      store.setTimestamp(Date.now());
+    }
+  }, [store.errorInfo?.type, store.currentStep, router]);
 
   if (isValidating) {
     return (

@@ -30,6 +30,7 @@ describe("RouteGuard", () => {
       eeroSelection: { id: "test-eero" },
       switchingDetails: { otsSwitchStatus: "SWITCH_SUCCESS" },
       goLiveDetails: { selectedDate: "2023-01-01" },
+      setTimestamp: vi.fn(),
     });
   });
 
@@ -61,6 +62,7 @@ describe("RouteGuard", () => {
     mockedUsePathname.mockReturnValue("/join-flow/personal-details");
     mockedUseJoinFlowStore.mockReturnValue({
       selectedPackage: null,
+      setTimestamp: vi.fn(),
     });
 
     render(

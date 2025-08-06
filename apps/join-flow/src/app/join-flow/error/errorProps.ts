@@ -57,6 +57,17 @@ export const errorProps: Record<string, ErrorConfig> = {
       "Give our lovely Customer Care team a ring on 0330 912 9955. Lines are open: 8am to 8pm, Monday - Friday, 9am to 5.30pm, weekends and bank holidays.",
     ],
   },
+  sessionExpiredError: {
+    title: "Session Expired",
+    paragraphs: [
+      "We're really sorry, but your session has expired.",
+      "Please re-enter your information",
+    ],
+    button: {
+      text: "Restart",
+      action: "restart",
+    },
+  },
   unknownError: {
     title: "Unknown Error",
     paragraphs: [

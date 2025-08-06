@@ -313,6 +313,7 @@ export type ErrorInfo = {
     | "generalError"
     | "networkError"
     | "validationError"
+    | "sessionExpiredError"
     | "basketError"
     | "creditCheckLimitReached"
     | "creditCheckLoadHashedError"
@@ -322,6 +323,7 @@ export type ErrorInfo = {
 export type JoinFlowState = {
   _hasHydrated: boolean;
   currentStep: number;
+  timestamp: number;
   selectedPackage: StoreSelectedPackage | null;
   serviceAddress: StoreAddress | null;
   billingAddress: StoreAddress | null;
@@ -364,6 +366,7 @@ export type JoinFlowState = {
   setRoiPostcode: (roiPostcode: string | null) => void;
   setIsLoadingModalOpen: (open: boolean) => void;
   setErrorInfo: (errorInfo: ErrorInfo | null) => void;
+  setTimestamp: (timestamp: number) => void;
   clearError: () => void;
   resetFlow: () => void;
   resetAffiliateSession: () => void;
@@ -375,6 +378,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
     (set) => ({
       _hasHydrated: false,
       currentStep: 0,
+      timestamp: Date.now(),
       selectedPackage: null,
       serviceAddress: null,
       billingAddress: null,
@@ -417,10 +421,12 @@ const useJoinFlowStore = create<JoinFlowState>()(
       setRoiPostcode: (roiPostcode) => set({ roiPostcode }),
       setIsLoadingModalOpen: (open) => set({ isLoadingModalOpen: open }),
       setErrorInfo: (errorInfo) => set({ errorInfo }),
+      setTimestamp: (timestamp) => set({ timestamp }),
       clearError: () => set({ errorInfo: null }),
       resetFlow: () =>
         set({
           currentStep: 0,
+          timestamp: Date.now(),
           selectedPackage: null,
           billingAddress: null,
           serviceAddress: null,
