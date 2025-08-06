@@ -7,7 +7,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { EXPIRY_DURATION } from "@/lib/constants";
 import { otsCompleted } from "@/lib/otsCompleted";
 
-const isDev = process.env.NEXT_PUBLIC_IS_DEV;
+const isDev = process.env.NEXT_PUBLIC_IS_DEV || "false";
 
 export type FlowStep = {
   path: string;
@@ -145,7 +145,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (
-      isDev === "false" &&
+      isDev !== "true" &&
       store.timestamp &&
       Date.now() - store.timestamp > EXPIRY_DURATION
     ) {
