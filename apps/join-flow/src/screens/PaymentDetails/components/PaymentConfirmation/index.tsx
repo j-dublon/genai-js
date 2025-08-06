@@ -20,7 +20,6 @@ import PaymentAccountDetails from "./PaymentAccountDetails";
 import { paymentConfirmationText, slides } from "./PaymentConfirmationProps";
 import PaymentGoLiveDetails from "./PaymentGoLiveDetails";
 import { paymentGoLiveText } from "./paymentGoLiveDetailsProps";
-import PaymentSummary from "./PaymentSummary";
 import PaymentTermsAndConditions from "./PaymentTermsAndConditions";
 
 export const PaymentConfirmation = ({
@@ -78,10 +77,9 @@ export const PaymentConfirmation = ({
   const {
     title,
     accountDetailsTitle,
-    directDebitDetailsTitle,
     backButtonText,
     signUpText,
-    termsAndConditionsTitle,
+    yourAgreementTitle,
   } = paymentConfirmationText;
 
   const handleBack = useCallback(
@@ -237,11 +235,6 @@ export const PaymentConfirmation = ({
               items={documentItems}
             />
 
-            <p className="text-md font-bold mb-6">{directDebitDetailsTitle}</p>
-
-            <div className="mb-6">
-              <PaymentSummary />
-            </div>
             <p className="text-md font-bold mb-6">{accountDetailsTitle}</p>
             <div className="mb-6">
               <PaymentAccountDetails />
@@ -259,7 +252,7 @@ export const PaymentConfirmation = ({
               className="text-md font-bold mb-6"
               data-testid="termsAndConditions"
             >
-              {termsAndConditionsTitle}
+              {yourAgreementTitle}
             </p>
             <div className="mb-6">
               <PaymentTermsAndConditions

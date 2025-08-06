@@ -15,13 +15,17 @@ export const paymentConfirmationText = {
   backButtonText: "Back",
   sortCodeLabel: "Sort code",
   signUpText: "Sign me up",
-  termsAndConditionsTitle: "Terms & Conditions",
+  yourAgreementTitle: "Your agreement",
+  yourAgreementText:
+    "By agreeing, you’re confirming that you’ve read, downloaded and understood the following before joining Cuckoo: Contract Information, Contract Summary, Our Terms & Conditions and Privacy Notice",
   termsCheckboxText:
-    "I agree to Cuckoo's Terms & Conditions and I've read Cuckoo's Privacy Notice and Contract Summary",
+    "I’ve read and consented to Cuckoo’s Contract Summary, Terms & Conditions and Privacy Notice",
   directDebitCheckboxText:
     "I confirm I'm authorised to make Direct Debits using the account details provided",
   creditSearchCheckboxText:
     "I agree to a credit search being carried out on my file",
+  creditSearchHref:
+    "https://www.transunion.co.uk/consumer/credit-report-help/what-is-a-search-on-my-credit-report",
   eeroProductContent: [
     {
       code: "EERO_MESH_ROUTER_X1",

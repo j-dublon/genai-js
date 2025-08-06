@@ -260,7 +260,6 @@ describe("PaymentConfirmation", () => {
 
   it("renders the main sections", () => {
     render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
-    expect(screen.getByText(directDebitDetailsTitle)).toBeInTheDocument();
     expect(screen.getByText(accountDetailsTitle)).toBeInTheDocument();
     expect(screen.getByTestId("termsAndConditions")).toBeInTheDocument();
   });

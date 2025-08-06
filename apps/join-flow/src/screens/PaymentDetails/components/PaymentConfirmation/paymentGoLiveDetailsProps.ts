@@ -9,7 +9,8 @@ export const paymentGoLiveText = {
   pleaseRead: "Please read our",
   changeText: "Change",
   tipCardHighlight: "Good to know:",
-  tipCardText: "You can always add or remove eeros in your account later.",
+  tipCardText:
+    "You’ll be able to change your go-live date later if you need to.",
   switchingDetailsLabel: "Switching Terms & Conditions",
   switchingDetailsHref: "https://www.cuckoo.co/legal/terms",
   saveGoLiveInfo: "Save my go live info",

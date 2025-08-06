@@ -7,10 +7,16 @@ describe("Checkbox", () => {
   const mockValue = "test";
   const mockOnChange = vi.fn();
   const mockLabel = "Test Checkbox";
+  const mockLabelElement = () => <>{mockLabel}</>;
   const mockName = "test-group";
 
-  it("renders with label", () => {
+  it("renders with label of type string", () => {
     render(<Checkbox label={mockLabel} value={mockValue} />);
+    expect(screen.getByText(mockLabel)).toBeInTheDocument();
+  });
+
+  it("renders with label of type JSX element", () => {
+    render(<Checkbox label={mockLabelElement()} value={mockValue} />);
     expect(screen.getByText(mockLabel)).toBeInTheDocument();
   });
 

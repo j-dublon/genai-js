@@ -1,7 +1,8 @@
 import { CheckboxIcon } from "@icons/CheckboxIcon";
+import { ReactNode } from "react";
 
 export interface CheckboxProps {
-  label: string;
+  label: ReactNode;
   value: string;
   name?: string;
   checked?: boolean;

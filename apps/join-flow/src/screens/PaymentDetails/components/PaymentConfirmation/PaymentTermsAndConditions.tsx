@@ -1,7 +1,13 @@
 "use client";
 
-import { Checkbox } from "@react-component-library/ui";
-import React, { useEffect, useState } from "react";
+import {
+  Checkbox,
+  InsertLink,
+  InsertMultipleLinks,
+} from "@react-component-library/ui";
+import { useEffect, useState } from "react";
+
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 import { paymentConfirmationText } from "./PaymentConfirmationProps";
 
@@ -25,6 +31,8 @@ export const PaymentTermsAndConditions = ({
   onChange,
   initialState,
 }: PaymentTermsAndConditionsProps) => {
+  const { basket, affiliateSession } = useJoinFlowStore();
+
   const [termsChecked, setTermsChecked] = useState(
     initialState?.termsAgreed || false,
   );
@@ -39,6 +47,8 @@ export const PaymentTermsAndConditions = ({
     termsCheckboxText,
     directDebitCheckboxText,
     creditSearchCheckboxText,
+    creditSearchHref,
+    yourAgreementText,
   } = paymentConfirmationText;
 
   useEffect(() => {
@@ -53,6 +63,31 @@ export const PaymentTermsAndConditions = ({
 
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md">
+      <div className="mb-6">
+        <InsertMultipleLinks
+          text={yourAgreementText}
+          links={[
+            {
+              searchText: "Contract Information",
+              href: basket?.cics?.informationHref ?? "/",
+            },
+            {
+              searchText: "Contract Summary",
+              href: basket?.cics?.summaryHref ?? "/",
+            },
+            {
+              searchText: "Our Terms & Conditions",
+              href:
+                affiliateSession?.displayItems?.termsAndConditionsLink ?? "/",
+            },
+            {
+              searchText: "Privacy Notice",
+              href: affiliateSession?.displayItems?.privacyPolicyLink ?? "/",
+            },
+          ]}
+        />
+      </div>
+
       <div className="space-y-4">
         <Checkbox
           label={termsCheckboxText.replace(/'/g, "'")}
@@ -71,7 +106,13 @@ export const PaymentTermsAndConditions = ({
         />
 
         <Checkbox
-          label={creditSearchCheckboxText}
+          label={
+            <InsertLink
+              text={creditSearchCheckboxText}
+              searchText="credit search"
+              href={creditSearchHref}
+            />
+          }
           value="creditSearch"
           checked={creditSearchChecked}
           onChange={setCreditSearchChecked}

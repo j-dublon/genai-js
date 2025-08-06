@@ -19,6 +19,7 @@ import {
 import { InputSlider } from "@components/atoms/InputSlider";
 import { InsertFormattedText } from "@components/atoms/InsertFormattedText";
 import { InsertLink, InsertLinkProps } from "@components/atoms/InsertLink";
+import { InsertMultipleLinks } from "@components/atoms/InsertMultipleLinks";
 import { LoadingSlide } from "@components/atoms/LoadingSlide";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { PillButton } from "@components/atoms/PillButton";
@@ -116,6 +117,7 @@ export {
   InputSlider,
   InsertFormattedText,
   InsertLink,
+  InsertMultipleLinks,
   LoadingModal,
   LoadingSlide,
   MobileApp,
