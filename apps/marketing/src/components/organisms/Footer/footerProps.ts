@@ -91,6 +91,10 @@ export const props = {
           label: "Business Terms",
           href: "https://www.cuckoo.co/legal/terms-business-customers",
         },
+        {
+          label: "Legacy Brand Documents",
+          href: "https://www.cuckoo.co/legal/legacy-brand-documents",
+        },
       ],
     },
   ],
