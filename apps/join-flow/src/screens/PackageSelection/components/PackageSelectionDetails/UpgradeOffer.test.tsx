@@ -15,28 +15,6 @@ const mockTopSpeedPackage: StoreSelectedPackage = {
   installationRequired: true,
   appliedPromotionUUIDs: [],
   prices: {
-    broadbandAndCurrentExtras: {
-      basePrice: 4500,
-      discount: 0,
-      customerPriceIncDiscount: 4500,
-      annualPriceRise: [
-        {
-          price: 5000,
-          date: "2027-04-01T12:00:00.000Z",
-          id: "rise-1",
-        },
-        {
-          price: 5300,
-          date: "2028-04-01T12:00:00.000Z",
-          id: "rise-2",
-        },
-      ],
-    },
-    currentExtras: {
-      basePrice: 0,
-      discount: 0,
-      customerPriceIncDiscount: 0,
-    },
     broadband: {
       basePrice: 4500,
       discount: 0,
@@ -89,16 +67,14 @@ vi.mock("@/hooks/usePricingCalculations", () => ({
     }
 
     const monthlyPackagePrice =
-      topSpeedPackage.prices.broadbandAndCurrentExtras.basePrice / 100;
-    const nextPrice = topSpeedPackage.prices.broadbandAndCurrentExtras
-      .annualPriceRise?.[0]?.price
-      ? topSpeedPackage.prices.broadbandAndCurrentExtras.annualPriceRise[0]
-          .price / 100
+      topSpeedPackage.prices.broadband.basePrice / 100;
+    const nextPrice = topSpeedPackage.prices.broadband.annualPriceRise?.[0]
+      ?.price
+      ? topSpeedPackage.prices.broadband.annualPriceRise[0].price / 100
       : monthlyPackagePrice;
-    const followingPrice = topSpeedPackage.prices.broadbandAndCurrentExtras
-      .annualPriceRise?.[1]?.price
-      ? topSpeedPackage.prices.broadbandAndCurrentExtras.annualPriceRise[1]
-          .price / 100
+    const followingPrice = topSpeedPackage.prices.broadband.annualPriceRise?.[1]
+      ?.price
+      ? topSpeedPackage.prices.broadband.annualPriceRise[1].price / 100
       : nextPrice;
 
     return {
@@ -272,10 +248,6 @@ describe("UpgradeOffer", () => {
       ...mockTopSpeedPackage,
       prices: {
         ...mockTopSpeedPackage.prices,
-        broadbandAndCurrentExtras: {
-          ...mockTopSpeedPackage.prices.broadbandAndCurrentExtras,
-          annualPriceRise: null,
-        },
         broadband: {
           ...mockTopSpeedPackage.prices.broadband,
           annualPriceRise: null,

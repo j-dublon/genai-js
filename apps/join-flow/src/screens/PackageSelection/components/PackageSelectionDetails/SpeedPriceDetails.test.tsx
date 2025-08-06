@@ -27,28 +27,6 @@ describe("SpeedPriceDetails", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 2500,
-        discount: 0,
-        customerPriceIncDiscount: 2500,
-        annualPriceRise: [
-          {
-            price: 3000,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "rise-1",
-          },
-          {
-            price: 3300,
-            date: "2027-04-01T12:00:00.000Z",
-            id: "rise-2",
-          },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 2500,
         discount: 0,
@@ -143,10 +121,6 @@ describe("SpeedPriceDetails", () => {
       ...mockPackage,
       prices: {
         ...mockPackage.prices,
-        broadbandAndCurrentExtras: {
-          ...mockPackage.prices.broadbandAndCurrentExtras,
-          annualPriceRise: null,
-        },
         broadband: {
           ...mockPackage.prices.broadband,
           annualPriceRise: null,
@@ -169,16 +143,6 @@ describe("SpeedPriceDetails", () => {
       ...mockPackage,
       prices: {
         ...mockPackage.prices,
-        broadbandAndCurrentExtras: {
-          ...mockPackage.prices.broadbandAndCurrentExtras,
-          annualPriceRise: [
-            {
-              price: 3000,
-              date: "2026-04-01T12:00:00.000Z",
-              id: "rise-1",
-            },
-          ],
-        },
         broadband: {
           ...mockPackage.prices.broadband,
           annualPriceRise: [

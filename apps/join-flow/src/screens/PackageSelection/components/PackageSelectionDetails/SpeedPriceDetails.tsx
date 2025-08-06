@@ -10,8 +10,7 @@ export const SpeedPriceDetails = ({ pkg }: { pkg: StoreSelectedPackage }) => {
   const { download, upload } = speeds;
 
   const pricing = usePricingCalculations(pkg, null);
-  const annualPriceRise =
-    pkg.prices?.broadbandAndCurrentExtras.annualPriceRise ?? [];
+  const annualPriceRise = pkg.prices?.broadband.annualPriceRise ?? [];
   const nextPriceDate = annualPriceRise[0]?.date;
   const followingPriceDate = annualPriceRise[1]?.date;
 

@@ -79,10 +79,8 @@ export const PackageSelectionDetails = ({
                 topSpeedPackage={topSpeedPackage}
                 toggle={toggle}
                 priceDifference={
-                  topSpeedPackage.prices.broadbandAndCurrentExtras
-                    .customerPriceIncDiscount -
-                  packageDetails.prices.broadbandAndCurrentExtras
-                    .customerPriceIncDiscount
+                  topSpeedPackage.prices.broadband.customerPriceIncDiscount -
+                  packageDetails.prices.broadband.customerPriceIncDiscount
                 }
                 handlePackageSelection={handlePackageSelection}
                 hasOnlyOneContractLengthAvailable={
@@ -125,10 +123,8 @@ export const PackageSelectionDetails = ({
             topSpeedPackage={topSpeedPackage}
             toggle={toggle}
             priceDifference={
-              topSpeedPackage.prices.broadbandAndCurrentExtras
-                .customerPriceIncDiscount -
-              packageDetails.prices.broadbandAndCurrentExtras
-                .customerPriceIncDiscount
+              topSpeedPackage.prices.broadband.customerPriceIncDiscount -
+              packageDetails.prices.broadband.customerPriceIncDiscount
             }
             handlePackageSelection={handlePackageSelection}
             hasOnlyOneContractLengthAvailable={

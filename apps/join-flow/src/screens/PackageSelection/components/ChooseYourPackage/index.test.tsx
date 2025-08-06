@@ -145,17 +145,6 @@ vi.mock("@/screens/PackageSelection/components/SpeedCalculator", () => ({
             installationRequired: false,
             appliedPromotionUUIDs: null,
             prices: {
-              broadbandAndCurrentExtras: {
-                basePrice: 3000,
-                discount: 0,
-                customerPriceIncDiscount: 3000,
-                annualPriceRise: null,
-              },
-              currentExtras: {
-                basePrice: 0,
-                discount: 0,
-                customerPriceIncDiscount: 0,
-              },
               broadband: {
                 basePrice: 3000,
                 discount: 0,
@@ -222,23 +211,6 @@ const mockQuoteResponse = {
         installationRequired: false,
         appliedPromotionUUIDs: [],
         prices: {
-          broadbandAndCurrentExtras: {
-            basePrice: 3000,
-            discount: 0,
-            customerPriceIncDiscount: 3000,
-            annualPriceRise: [
-              {
-                price: 3300,
-                date: "2026-04-01T12:00:00.000Z",
-                id: "rise-1",
-              },
-            ],
-          },
-          currentExtras: {
-            basePrice: 0,
-            discount: 0,
-            customerPriceIncDiscount: 0,
-          },
           broadband: {
             basePrice: 3000,
             discount: 0,
@@ -268,23 +240,6 @@ const mockQuoteResponse = {
         installationRequired: false,
         appliedPromotionUUIDs: [],
         prices: {
-          broadbandAndCurrentExtras: {
-            basePrice: 3500,
-            discount: 0,
-            customerPriceIncDiscount: 3500,
-            annualPriceRise: [
-              {
-                price: 3800,
-                date: "2026-04-01T12:00:00.000Z",
-                id: "rise-2",
-              },
-            ],
-          },
-          currentExtras: {
-            basePrice: 0,
-            discount: 0,
-            customerPriceIncDiscount: 0,
-          },
           broadband: {
             basePrice: 3500,
             discount: 0,
@@ -314,23 +269,6 @@ const mockQuoteResponse = {
         installationRequired: false,
         appliedPromotionUUIDs: [],
         prices: {
-          broadbandAndCurrentExtras: {
-            basePrice: 4100,
-            discount: 0,
-            customerPriceIncDiscount: 4100,
-            annualPriceRise: [
-              {
-                price: 4400,
-                date: "2026-04-01T12:00:00.000Z",
-                id: "rise-3",
-              },
-            ],
-          },
-          currentExtras: {
-            basePrice: 0,
-            discount: 0,
-            customerPriceIncDiscount: 0,
-          },
           broadband: {
             basePrice: 4100,
             discount: 0,
@@ -365,23 +303,6 @@ const mockQuoteResponse = {
         installationRequired: false,
         appliedPromotionUUIDs: [],
         prices: {
-          broadbandAndCurrentExtras: {
-            basePrice: 3200,
-            discount: 0,
-            customerPriceIncDiscount: 3200,
-            annualPriceRise: [
-              {
-                price: 3500,
-                date: "2026-04-01T12:00:00.000Z",
-                id: "rise-4",
-              },
-            ],
-          },
-          currentExtras: {
-            basePrice: 0,
-            discount: 0,
-            customerPriceIncDiscount: 0,
-          },
           broadband: {
             basePrice: 3200,
             discount: 0,
@@ -411,23 +332,6 @@ const mockQuoteResponse = {
         installationRequired: false,
         appliedPromotionUUIDs: [],
         prices: {
-          broadbandAndCurrentExtras: {
-            basePrice: 3700,
-            discount: 0,
-            customerPriceIncDiscount: 3700,
-            annualPriceRise: [
-              {
-                price: 4000,
-                date: "2026-04-01T12:00:00.000Z",
-                id: "rise-5",
-              },
-            ],
-          },
-          currentExtras: {
-            basePrice: 0,
-            discount: 0,
-            customerPriceIncDiscount: 0,
-          },
           broadband: {
             basePrice: 3700,
             discount: 0,

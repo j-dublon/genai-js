@@ -62,20 +62,6 @@ describe("PaymentSummary", () => {
     installationRequired: false,
     appliedPromotionUUIDs: null,
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 3000,
-        discount: 500,
-        customerPriceIncDiscount: 2500,
-        annualPriceRise: [
-          { price: 3500, date: "2025-04-01", id: "rise-1" },
-          { price: 4000, date: "2026-04-01", id: "rise-2" },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 3000,
         discount: 500,
@@ -110,6 +96,8 @@ describe("PaymentSummary", () => {
     monthlySaving: "5",
     totalPlanSaving: "60",
     packageName: "150Mbps",
+    nextPriceRiseAmount: "5",
+    followingPriceRiseAmount: "5",
   };
   const eeroWithContent = {
     ...eeroSelection,

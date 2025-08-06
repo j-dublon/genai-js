@@ -70,7 +70,7 @@ export const PaymentSummary: React.FC = () => {
   }
 
   const annualPriceRise = sortAnnualPriceRiseByDate(
-    selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise ?? [],
+    selectedPackage.prices.broadband.annualPriceRise ?? [],
   );
 
   if (!annualPriceRise) {
@@ -81,7 +81,7 @@ export const PaymentSummary: React.FC = () => {
     annualPriceRise.length > 0
       ? [
           `From ${formatDisplayDateMonthYear(annualPriceRise[0].date)} an increase of `,
-          `£${Number(pricing.predictedTotalNext) - Number(pricing.monthlyTotal)}`,
+          `£${pricing.nextPriceRiseAmount}`,
         ]
       : null;
 
@@ -89,7 +89,7 @@ export const PaymentSummary: React.FC = () => {
     annualPriceRise.length > 1
       ? [
           `From ${formatDisplayDateMonthYear(annualPriceRise[1].date)} an increase of `,
-          `£${Number(pricing.predictedTotalFollowing) - Number(pricing.predictedTotalNext)}`,
+          `£${pricing.followingPriceRiseAmount}`,
         ]
       : null;
 

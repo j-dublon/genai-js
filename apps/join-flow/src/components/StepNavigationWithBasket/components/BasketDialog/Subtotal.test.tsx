@@ -34,28 +34,6 @@ describe("Subtotal", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 3200,
-        discount: 200,
-        customerPriceIncDiscount: 3000,
-        annualPriceRise: [
-          {
-            price: 3500,
-            date: "2027-04-01T12:00:00.000Z",
-            id: "test-rise-1",
-          },
-          {
-            price: 3800,
-            date: "2028-04-01T12:00:00.000Z",
-            id: "test-rise-2",
-          },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 3200,
         discount: 200,
@@ -157,6 +135,8 @@ describe("Subtotal", () => {
       followingPrice: "38",
       totalPlanSaving: "48",
       monthlySaving: "2",
+      nextPriceRiseAmount: "3",
+      followingPriceRiseAmount: "3",
       packageName: "150Mbps",
     };
 
@@ -284,6 +264,8 @@ describe("Subtotal", () => {
       followingPrice: "38",
       monthlySaving: "0",
       totalPlanSaving: "0",
+      nextPriceRiseAmount: "3",
+      followingPriceRiseAmount: "3",
       packageName: "150Mbps",
     };
 
@@ -335,6 +317,8 @@ describe("Subtotal", () => {
         followingPrice: "38",
         totalPlanSaving: "0",
         monthlySaving: "0",
+        nextPriceRiseAmount: "3",
+        followingPriceRiseAmount: "3",
         packageName: "150Mbps",
       };
 
@@ -370,6 +354,8 @@ describe("Subtotal", () => {
         followingPrice: "38",
         totalPlanSaving: "0",
         monthlySaving: "0",
+        nextPriceRiseAmount: "3",
+        followingPriceRiseAmount: "3",
         packageName: "150Mbps",
       };
 
@@ -408,10 +394,6 @@ describe("Subtotal", () => {
         ...mockSelectedPackage,
         prices: {
           ...mockSelectedPackage.prices,
-          broadbandAndCurrentExtras: {
-            ...mockSelectedPackage.prices.broadbandAndCurrentExtras,
-            annualPriceRise: undefined,
-          },
           broadband: {
             ...mockSelectedPackage.prices.broadband,
             annualPriceRise: undefined,
@@ -431,6 +413,8 @@ describe("Subtotal", () => {
         followingPrice: "32",
         totalPlanSaving: "0",
         monthlySaving: "0",
+        nextPriceRiseAmount: "0",
+        followingPriceRiseAmount: "0",
         packageName: "150Mbps",
       };
 

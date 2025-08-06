@@ -72,6 +72,8 @@ describe("IncludedOffers", () => {
       predictedTotalNext: "25",
       predictedTotalFollowing: "25",
       totalPlanSaving: "120",
+      nextPriceRiseAmount: "0",
+      followingPriceRiseAmount: "0",
       packageName: "150Mbps",
     });
   });

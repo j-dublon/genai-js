@@ -29,7 +29,7 @@ export const SummaryBar: React.FC<SummaryBarProps> = ({
   }
 
   const annualPriceRise =
-    selectedPackage.prices?.broadbandAndCurrentExtras?.annualPriceRise ?? [];
+    selectedPackage.prices?.broadband?.annualPriceRise ?? [];
   const nextPriceDate = annualPriceRise[0]?.date;
 
   const nonDiscountOffers = selectedPackage.offers?.filter(

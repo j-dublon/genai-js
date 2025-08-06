@@ -107,23 +107,6 @@ describe("PackageSelectionDetails", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 2000,
-        discount: 0,
-        customerPriceIncDiscount: 2000,
-        annualPriceRise: [
-          {
-            price: 2300,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "rise-1",
-          },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 2000,
         discount: 0,
@@ -155,23 +138,6 @@ describe("PackageSelectionDetails", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 5000,
-        discount: 0,
-        customerPriceIncDiscount: 5000,
-        annualPriceRise: [
-          {
-            price: 5300,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "rise-2",
-          },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 5000,
         discount: 0,

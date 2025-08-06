@@ -16,20 +16,6 @@ describe("usePricingCalculations", () => {
       upload: 18,
     },
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 3000,
-        discount: 401,
-        customerPriceIncDiscount: 2599,
-        annualPriceRise: [
-          { price: 3300, date: "2025-04-01" },
-          { price: 3600, date: "2026-04-01" },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 3000,
         discount: 401,
@@ -95,6 +81,8 @@ describe("usePricingCalculations", () => {
         predictedTotalNext: "0",
         predictedTotalFollowing: "0",
         totalPlanSaving: "0",
+        nextPriceRiseAmount: "0",
+        followingPriceRiseAmount: "0",
         packageName: "",
       });
     });
@@ -118,6 +106,8 @@ describe("usePricingCalculations", () => {
         predictedTotalNext: "33",
         predictedTotalFollowing: "36",
         totalPlanSaving: "96.24",
+        nextPriceRiseAmount: "7.01",
+        followingPriceRiseAmount: "3",
         packageName: "67Mbps",
       });
     });
@@ -139,6 +129,8 @@ describe("usePricingCalculations", () => {
         predictedTotalNext: "38",
         predictedTotalFollowing: "41",
         totalPlanSaving: "96.24",
+        nextPriceRiseAmount: "7.01",
+        followingPriceRiseAmount: "3",
         packageName: "67Mbps",
       });
     });
@@ -148,10 +140,6 @@ describe("usePricingCalculations", () => {
         ...mockPackage,
         prices: {
           ...mockPackage.prices,
-          broadbandAndCurrentExtras: {
-            ...mockPackage.prices.broadbandAndCurrentExtras,
-            annualPriceRise: null,
-          },
           broadband: {
             ...mockPackage.prices.broadband,
             annualPriceRise: null,
@@ -176,10 +164,6 @@ describe("usePricingCalculations", () => {
         ...mockPackage,
         prices: {
           ...mockPackage.prices,
-          broadbandAndCurrentExtras: {
-            ...mockPackage.prices.broadbandAndCurrentExtras,
-            annualPriceRise: [{ price: 3300, date: "2025-04-01" }],
-          },
           broadband: {
             ...mockPackage.prices.broadband,
             annualPriceRise: [{ price: 3300, date: "2025-04-01" }],
@@ -202,10 +186,6 @@ describe("usePricingCalculations", () => {
         ...mockPackage,
         prices: {
           ...mockPackage.prices,
-          broadbandAndCurrentExtras: {
-            ...mockPackage.prices.broadbandAndCurrentExtras,
-            annualPriceRise: [],
-          },
           broadband: {
             ...mockPackage.prices.broadband,
             annualPriceRise: [],

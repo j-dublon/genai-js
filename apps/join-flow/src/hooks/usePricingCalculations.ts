@@ -11,33 +11,36 @@ const generatePackageName = (speeds: { download: number }): string =>
   `${speeds.download}Mbps`;
 
 export interface PricingCalculations {
-  // base price of core broadband product
+  /** base price of core broadband product */
   monthlyPackagePrice: string;
-  // discounted price of core broadband product
+  /** discounted price of core broadband product */
   discountedPrice: string;
-  // price of core broadband product after first year
-  nextPrice: string;
-  // price of core broadband product after second year
-  followingPrice: string;
-  // price of eero products
+  /** price of selected eero products */
   monthlyEeroPrice: string;
-  // total price of core broadband product and eero products
+  /** total base price of core broadband product and eero products */
   monthlyTotal: string;
-  // total price of core broadband product and eero products after discount
+  /** total discounted price of core broadband product and eero products */
   discountedMonthlyTotal: string;
-  // total price of core broadband product and eero products after first year
+  /** The value of the price increase for the next year */
+  nextPriceRiseAmount: string;
+  /** The value of the price increase for the second year */
+  followingPriceRiseAmount: string;
+  /** price of core broadband product after first year (inc discounts) */
+  nextPrice: string;
+  /** price of core broadband product after second year (inc discounts) */
+  followingPrice: string;
+  /** total price of core broadband product and eero products after first year (inc discounts) */
   predictedTotalNext: string;
-  // total price of core broadband product and eero products after second year
+  /** total price of core broadband product and eero products after second year (inc discounts) */
   predictedTotalFollowing: string;
-  // monthly saving of core broadband product with discount
+  /** monthly saving of discount on core broadband product */
   monthlySaving: string;
-  // total saving of core broadband product with discount
+  /** total saving of discount on core broadband product across the contract */
   totalPlanSaving: string;
-  // download speed of core broadband product (150Mbps)
+  /** download speed of core broadband product (e.g. 150Mbps) */
   packageName: string;
 }
 
-// TODO: With the new pricing structure, we don't need the eero arg as all prices are available on the selectedPackage
 export const usePricingCalculations = (
   selectedPackage: StoreSelectedPackage | null,
   eeroSelection: EeroProduct | null,
@@ -54,6 +57,8 @@ export const usePricingCalculations = (
         discountedMonthlyTotal: "0",
         predictedTotalNext: "0",
         predictedTotalFollowing: "0",
+        nextPriceRiseAmount: "0",
+        followingPriceRiseAmount: "0",
         monthlySaving: "0",
         totalPlanSaving: "0",
         packageName: "",
@@ -61,48 +66,44 @@ export const usePricingCalculations = (
     }
 
     const monthlyPackagePrice = convertPenceToPounds(
-      selectedPackage.prices.broadbandAndCurrentExtras.basePrice,
+      selectedPackage.prices.broadband.basePrice,
     );
     const discountedPrice = convertPenceToPounds(
-      selectedPackage.prices.broadbandAndCurrentExtras.customerPriceIncDiscount,
+      selectedPackage.prices.broadband.customerPriceIncDiscount,
     );
-
-    const nextPrice = selectedPackage.prices.broadbandAndCurrentExtras
-      .annualPriceRise?.[0]?.price
-      ? convertPenceToPounds(
-          selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise[0]
-            .price,
-        )
-      : monthlyPackagePrice;
-    const followingPrice = selectedPackage.prices.broadbandAndCurrentExtras
-      .annualPriceRise?.[1]?.price
-      ? convertPenceToPounds(
-          selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise[1]
-            .price,
-        )
-      : nextPrice;
-
-    const monthlyEeroPrice = eeroSelection
-      ? convertPenceToPounds(eeroSelection.price)
-      : "0";
 
     // Calculate totals in pence first, then convert to pounds to avoid floating point precision issues
     const eeroSelectionPence = eeroSelection ? eeroSelection.price : 0;
+    const monthlyEeroPrice = convertPenceToPounds(eeroSelectionPence);
+
     const monthlyTotal = convertPenceToPounds(
-      selectedPackage.prices.broadbandAndCurrentExtras.basePrice +
-        eeroSelectionPence,
+      selectedPackage.prices.broadband.basePrice + eeroSelectionPence,
     );
     const discountedMonthlyTotal = convertPenceToPounds(
-      selectedPackage.prices.broadbandAndCurrentExtras
-        .customerPriceIncDiscount + eeroSelectionPence,
+      selectedPackage.prices.broadband.customerPriceIncDiscount +
+        eeroSelectionPence,
     );
 
     const nextPricePence =
-      selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise?.[0]
-        ?.price || selectedPackage.prices.broadbandAndCurrentExtras.basePrice;
+      selectedPackage.prices.broadband.annualPriceRise?.[0]?.price ||
+      selectedPackage.prices.broadband.basePrice;
     const followingPricePence =
-      selectedPackage.prices.broadbandAndCurrentExtras.annualPriceRise?.[1]
-        ?.price || nextPricePence;
+      selectedPackage.prices.broadband.annualPriceRise?.[1]?.price ||
+      nextPricePence;
+
+    const nextPriceRiseAmount = convertPenceToPounds(
+      nextPricePence -
+        selectedPackage.prices.broadband.customerPriceIncDiscount,
+    );
+    const followingPriceRiseAmount = convertPenceToPounds(
+      followingPricePence - nextPricePence,
+    );
+
+    // Reminder: These are the price rises, excluding extras
+    const nextPrice = convertPenceToPounds(nextPricePence);
+    const followingPrice = convertPenceToPounds(followingPricePence);
+
+    // Reminder: These are the price rises, including extras
     const predictedTotalNext = convertPenceToPounds(
       nextPricePence + eeroSelectionPence,
     );
@@ -120,14 +121,13 @@ export const usePricingCalculations = (
       const discountTermLength = discountOffer.promotion.term;
 
       totalPlanSaving = convertPenceToPounds(
-        (selectedPackage.prices.broadbandAndCurrentExtras.basePrice -
-          selectedPackage.prices.broadbandAndCurrentExtras
-            .customerPriceIncDiscount) *
+        (selectedPackage.prices.broadband.basePrice -
+          selectedPackage.prices.broadband.customerPriceIncDiscount) *
           Number(TermLength[discountTermLength || "wholeContract"]),
       );
 
       monthlySaving = convertPenceToPounds(
-        selectedPackage.prices.broadbandAndCurrentExtras.discount,
+        selectedPackage.prices.broadband.discount,
       );
     }
 
@@ -143,6 +143,8 @@ export const usePricingCalculations = (
       discountedMonthlyTotal,
       predictedTotalNext,
       predictedTotalFollowing,
+      nextPriceRiseAmount,
+      followingPriceRiseAmount,
       monthlySaving,
       totalPlanSaving,
       packageName,

@@ -58,28 +58,6 @@ describe("BasketDialog", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 3200,
-        discount: 200,
-        customerPriceIncDiscount: 3000,
-        annualPriceRise: [
-          {
-            price: 3500,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "test-rise-1",
-          },
-          {
-            price: 3800,
-            date: "2027-04-01T12:00:00.000Z",
-            id: "test-rise-2",
-          },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 3200,
         discount: 200,
@@ -192,23 +170,6 @@ describe("BasketDialog", () => {
       installationRequired: true,
       appliedPromotionUUIDs: [],
       prices: {
-        broadbandAndCurrentExtras: {
-          basePrice: 3800,
-          discount: 0,
-          customerPriceIncDiscount: 3800,
-          annualPriceRise: [
-            {
-              price: 4200,
-              date: "2026-04-01T12:00:00.000Z",
-              id: "test-rise-3",
-            },
-          ],
-        },
-        currentExtras: {
-          basePrice: 0,
-          discount: 0,
-          customerPriceIncDiscount: 0,
-        },
         broadband: {
           basePrice: 3800,
           discount: 0,
@@ -271,6 +232,8 @@ describe("BasketDialog", () => {
     followingPrice: "38",
     totalPlanSaving: "2",
     monthlySaving: "2",
+    nextPriceRiseAmount: "3",
+    followingPriceRiseAmount: "3",
     packageName: "C-300",
   };
 
@@ -425,6 +388,8 @@ describe("BasketDialog", () => {
       followingPrice: "42",
       totalPlanSaving: "0",
       monthlySaving: "0",
+      nextPriceRiseAmount: "3",
+      followingPriceRiseAmount: "3",
       packageName: "C-300",
     });
 

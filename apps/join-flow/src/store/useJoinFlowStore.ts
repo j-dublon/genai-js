@@ -187,23 +187,6 @@ export type StoreSelectedPackage = {
       }[]
     | null;
   prices: {
-    broadbandAndCurrentExtras: {
-      basePrice: number;
-      discount: number;
-      customerPriceIncDiscount: number;
-      annualPriceRise?:
-        | {
-            price: number;
-            date: string;
-            id?: string | null;
-          }[]
-        | null;
-    };
-    currentExtras: {
-      basePrice: number;
-      discount: number;
-      customerPriceIncDiscount: number;
-    };
     broadband: {
       basePrice: number;
       discount: number;

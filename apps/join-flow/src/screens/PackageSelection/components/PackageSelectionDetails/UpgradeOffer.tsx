@@ -43,7 +43,7 @@ export const UpgradeOffer = ({
   };
 
   const annualPriceRise =
-    topSpeedPackage.prices?.broadbandAndCurrentExtras.annualPriceRise ?? [];
+    topSpeedPackage.prices?.broadband.annualPriceRise ?? [];
   const nextPriceDate = annualPriceRise[0]?.date;
   const followingPriceDate = annualPriceRise[1]?.date;
 

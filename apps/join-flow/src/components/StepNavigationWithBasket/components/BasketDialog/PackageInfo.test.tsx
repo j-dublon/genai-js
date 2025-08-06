@@ -31,23 +31,6 @@ describe("PackageInfo", () => {
     installationRequired: true,
     appliedPromotionUUIDs: [],
     prices: {
-      broadbandAndCurrentExtras: {
-        basePrice: 3200,
-        discount: 0,
-        customerPriceIncDiscount: 3200,
-        annualPriceRise: [
-          {
-            price: 3500,
-            date: "2026-04-01T12:00:00.000Z",
-            id: "test-rise-1",
-          },
-        ],
-      },
-      currentExtras: {
-        basePrice: 0,
-        discount: 0,
-        customerPriceIncDiscount: 0,
-      },
       broadband: {
         basePrice: 3200,
         discount: 0,
@@ -81,23 +64,6 @@ describe("PackageInfo", () => {
       installationRequired: true,
       appliedPromotionUUIDs: [],
       prices: {
-        broadbandAndCurrentExtras: {
-          basePrice: 3800,
-          discount: 0,
-          customerPriceIncDiscount: 3800,
-          annualPriceRise: [
-            {
-              price: 4200,
-              date: "2026-04-01T12:00:00.000Z",
-              id: "test-rise-2",
-            },
-          ],
-        },
-        currentExtras: {
-          basePrice: 0,
-          discount: 0,
-          customerPriceIncDiscount: 0,
-        },
         broadband: {
           basePrice: 3800,
           discount: 0,
@@ -170,7 +136,7 @@ describe("PackageInfo", () => {
     await user.click(changePlanButton);
 
     const dropdownOptions = screen.getByTestId("dropdown-options");
-    const expected = `${mockAvailablePackages[1].speeds.download}Mbps - £${convertPenceToPounds(mockAvailablePackages[1].prices.broadbandAndCurrentExtras.basePrice)}/month - ${mockAvailablePackages[1].termMonths} months`;
+    const expected = `${mockAvailablePackages[1].speeds.download}Mbps - £${convertPenceToPounds(mockAvailablePackages[1].prices.broadband.basePrice)}/month - ${mockAvailablePackages[1].termMonths} months`;
     expect(dropdownOptions.children[1].textContent).toBe(expected);
   });
 

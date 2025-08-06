@@ -47,22 +47,22 @@ export const PackageCard = ({
   const promotionPillsText = createPromotionPillText(pkg.offers);
   const discountPriceLabel = createDiscountPriceLabel(pkg.offers);
 
-  if (pkg.prices.broadbandAndCurrentExtras.annualPriceRise?.[0]?.price) {
+  if (pkg.prices.broadband.annualPriceRise?.[0]?.price) {
     additionalPrices.push({
       price: convertPenceToPounds(
-        pkg.prices.broadbandAndCurrentExtras.annualPriceRise[0].price,
+        pkg.prices.broadband.annualPriceRise[0].price,
       ),
       label: "From",
-      date: pkg.prices.broadbandAndCurrentExtras.annualPriceRise[0].date,
+      date: pkg.prices.broadband.annualPriceRise[0].date,
     });
   }
-  if (pkg.prices.broadbandAndCurrentExtras.annualPriceRise?.[1]?.price) {
+  if (pkg.prices.broadband.annualPriceRise?.[1]?.price) {
     additionalPrices.push({
       price: convertPenceToPounds(
-        pkg.prices.broadbandAndCurrentExtras.annualPriceRise[1].price,
+        pkg.prices.broadband.annualPriceRise[1].price,
       ),
       label: "From",
-      date: pkg.prices.broadbandAndCurrentExtras.annualPriceRise[1].date,
+      date: pkg.prices.broadband.annualPriceRise[1].date,
     });
   }
 
@@ -72,13 +72,13 @@ export const PackageCard = ({
       subtitle={packageSelectionPageText.promotionSubtitle}
       features={features}
       mainPrice={convertPenceToPounds(
-        pkg.prices.broadbandAndCurrentExtras.customerPriceIncDiscount ??
-          pkg.prices.broadbandAndCurrentExtras.basePrice,
+        pkg.prices.broadband.customerPriceIncDiscount ??
+          pkg.prices.broadband.basePrice,
       )}
       basePrice={
-        pkg.prices.broadbandAndCurrentExtras.customerPriceIncDiscount !==
-        pkg.prices.broadbandAndCurrentExtras.basePrice
-          ? convertPenceToPounds(pkg.prices.broadbandAndCurrentExtras.basePrice)
+        pkg.prices.broadband.customerPriceIncDiscount !==
+        pkg.prices.broadband.basePrice
+          ? convertPenceToPounds(pkg.prices.broadband.basePrice)
           : ""
       }
       currency="£"
