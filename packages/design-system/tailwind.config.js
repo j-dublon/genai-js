@@ -5,5 +5,4 @@ export default {
   ...sharedConfig,
   prefix: "ds",
   content: ["./lib/**/*.{js,ts,jsx,tsx}"],
-  safelist: [],
 };

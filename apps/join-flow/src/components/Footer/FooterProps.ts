@@ -29,3 +29,9 @@ export const reminders: TextWithTickProps[] = [
     className: "font-medium md:text-sm",
   },
 ];
+
+export const contactInfo = {
+  phoneNumber: "0330 912 9955",
+  openingHoursText:
+    "We're open Monday - Friday 8am - 8pm, and on weekends and bank holidays 9am - 5.30pm.",
+};

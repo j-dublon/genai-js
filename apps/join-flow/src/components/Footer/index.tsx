@@ -8,7 +8,7 @@ import {
 import { ContactInfo } from "@/components/ContactInfo";
 import { getAssetPath } from "@/lib/get-asset-path";
 
-import { heading, reminders } from "./FooterProps";
+import { contactInfo, heading, reminders } from "./FooterProps";
 
 export const Footer = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
@@ -25,11 +25,12 @@ export const Footer = () => {
               </h2>
               <TipCard
                 image={getAssetPath("/images/love.svg")}
-                className="mt-10 md:mt-0 mb-10 md:mb-12 bg-ui-grey-100 md:bg-core-white sm:max-w-[505px]"
+                backgroundColor="grey"
+                className="mt-10 md:mt-0 mb-10 md:mb-12 md:bg-core-white sm:max-w-[505px]"
               >
                 <ContactInfo
-                  phoneNumber="0330 912 9955"
-                  openingHoursText="We're open Monday - Friday between the hours of 9am - 6pm and Saturday 9am - 5pm"
+                  phoneNumber={contactInfo.phoneNumber}
+                  openingHoursText={contactInfo.openingHoursText}
                 />
               </TipCard>
               {trustScore && (

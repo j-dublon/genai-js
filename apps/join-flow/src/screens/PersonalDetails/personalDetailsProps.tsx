@@ -83,7 +83,7 @@ export const personalDetailsProps = {
     landlineTextLink: "Why are you asking me this?",
     landlineCheckboxText: "Yes, I have or need a telehealth care device ",
     requiresLandlineText:
-      "You'll need a smartphone in order to set up your new router in an app. Cuckoo won’t work without one.",
+      "We can’t offer you Cuckoo right now, because you’ve told us you rely on a telehealth care device. If you need to talk someone about this, call our friendly team on 0330 912 9955 Monday - Friday between the hours of 8am - 8pm and 9am - 5.30pm on weekends and bank holidays.",
     dobModalTitle: "Why do you need my date of birth?",
     dobModal: [
       {

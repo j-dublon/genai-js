@@ -86,6 +86,6 @@ describe("Footer Component", () => {
     const footer = screen.getByRole("contentinfo");
     expect(footer).toHaveClass("md:bg-ui-grey-100", "bg-core-white");
     const tipCard = screen.getByLabelText("Tip card");
-    expect(tipCard).toHaveClass("bg-ui-grey-100", "md:bg-core-white");
+    expect(tipCard).toHaveClass("ds:bg-ui-grey-100", "md:bg-core-white");
   });
 });

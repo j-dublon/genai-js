@@ -220,7 +220,7 @@ export const PaymentDetailsModal = () => {
             {paymentAccountDetailsText.validationErrorMessage}
           </p>
         )}
-        <div className="ds:flex ds:justify-end">
+        <div className="flex justify-end">
           <Button
             type="submit"
             form="payment-form"

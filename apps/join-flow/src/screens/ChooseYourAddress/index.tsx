@@ -75,7 +75,8 @@ export const ChooseYourAddress = () => {
           <ServiceAddressLookupForm />
           <TipCard
             image={getAssetPath("/images/love.svg")}
-            className="my-8 md:my-10 bg-ui-grey-100"
+            backgroundColor="grey"
+            className="my-8 md:my-10"
           >
             <ContactInfo
               phoneNumber={phoneNumber}

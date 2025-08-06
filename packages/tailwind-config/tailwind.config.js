@@ -137,7 +137,6 @@ export default {
       "9xl": "8rem",
     },
   },
-  safelist: [],
   plugins: [
     function ({ addBase, theme }) {
       addBase({

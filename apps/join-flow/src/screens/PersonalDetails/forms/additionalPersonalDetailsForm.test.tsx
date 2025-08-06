@@ -31,7 +31,8 @@ vi.mock("react-hook-form", async () => {
   };
 });
 
-vi.mock("@react-component-library/ui", () => {
+vi.mock("@react-component-library/ui", async () => {
+  const actual = await vi.importActual("@react-component-library/ui");
   const InfoModal = React.forwardRef<
     HTMLDialogElement,
     React.PropsWithChildren<{
@@ -73,6 +74,7 @@ vi.mock("@react-component-library/ui", () => {
   InfoModal.displayName = "InfoModal";
 
   return {
+    ...actual,
     TipCard: (
       props: React.PropsWithChildren<{
         image: string;

@@ -132,7 +132,8 @@ export const EmailVerificationForm = ({
       {errorCardText && validationAttempts > 3 && !isCodeValid && (
         <TipCard
           image={getAssetPath("/images/stop-hand.svg")}
-          className="mt-10 md:mt-0 mb-10 md:mb-6 bg-tertiary-peach-light justify-center md:w-full items-center"
+          backgroundColor="peach"
+          className="mt-10 md:mt-0 mb-10 md:mb-6 justify-center md:w-full items-center"
           textStyling="font-semibold"
           hideImageOnMobile
         >
@@ -143,7 +144,8 @@ export const EmailVerificationForm = ({
       <p className="text-md mb-6">{description}</p>
       <TipCard
         image={getAssetPath("/images/envelope.svg")}
-        className="mt-10 md:mt-0 mb-10 md:mb-6 bg-secondary-green justify-center md:w-full items-center"
+        backgroundColor="green"
+        className="mt-10 md:mt-0 mb-10 md:mb-6 justify-center md:w-full items-center"
         hideImageOnMobile
       >
         <span>

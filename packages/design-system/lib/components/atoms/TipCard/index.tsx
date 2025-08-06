@@ -9,6 +9,7 @@ export const tipCardColors = {
   orange: "ds:bg-tertiary-orange-light",
   green: "ds:bg-secondary-green",
   peach: "ds:bg-tertiary-peach-light",
+  grey: "ds:bg-ui-grey-100",
 };
 
 interface TipCardProps {

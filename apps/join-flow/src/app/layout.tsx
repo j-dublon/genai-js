@@ -50,7 +50,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           }}
         />
       </head>
-      <body className="font-garnett">
+      <body className="font-garnett" id="app-root">
         <PrefetchCrossZoneLinksProvider>
           <ClientAppShell gtmId={process.env.GTM_ID}>{children}</ClientAppShell>
         </PrefetchCrossZoneLinksProvider>

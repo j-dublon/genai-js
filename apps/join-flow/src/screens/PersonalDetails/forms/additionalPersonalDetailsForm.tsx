@@ -1,6 +1,7 @@
 import {
   Checkbox,
   InfoModal,
+  PhoneTextContent,
   Radio,
   TipCard,
   useClickOutside,
@@ -144,7 +145,8 @@ export const AdditionalPersonalDetailsForm = ({
     <form id="additionalDetailsForm">
       <TipCard
         image={getAssetPath("/images/linked-hands.svg")}
-        className="mt-10 md:mt-12 mb-10 md:mb-12 bg-tertiary-blue-light justify-center md:w-full items-center"
+        backgroundColor="blue"
+        className="mt-10 md:mt-12 mb-10 md:mb-12 justify-center md:w-full items-center"
       >
         <span>
           <span className="text-tertiary-blue-dark font-semibold">
@@ -304,7 +306,7 @@ export const AdditionalPersonalDetailsForm = ({
           </p>
         )}
       </div>
-      <div className="flex flex-col gap-4 mb-16">
+      <div className="flex flex-col gap-4 mb-8 md:mb-12">
         <h2 className="text-md font-semibold">{landlineTitle}</h2>
         <p>
           {landlineText}{" "}
@@ -335,9 +337,13 @@ export const AdditionalPersonalDetailsForm = ({
         {requiresLandline && (
           <TipCard
             image={getAssetPath("/images/stop-hand.svg")}
-            className="bg-tertiary-peach-light justify-center md:w-full items-center"
+            backgroundColor="peach"
+            className="justify-center md:w-full items-center"
           >
-            {requiresLandlineText}
+            <PhoneTextContent
+              className="text-ui-link font-medium"
+              text={requiresLandlineText}
+            ></PhoneTextContent>
           </TipCard>
         )}
       </div>

@@ -7,7 +7,7 @@ export const notReadyToJoinProps = {
   contactInfo: {
     phoneNumber: "0330 912 9955",
     openingHours:
-      "We're open Monday - Friday between the hours of 9am - 6pm and Saturday 9am - 5pm",
+      "We're open Monday - Friday 8am - 8pm, and on weekends and bank holidays 9am - 5.30pm.",
   },
   privacyNoticeText:
     "By clicking the button below, you're confirming that you consent to Cuckoo Fibre processing and storing your details in line with our Privacy Notice. We'll use these details to send you info about our services. Don't worry - you can change your mind or hit 'unsubscribe' anytime you like.",

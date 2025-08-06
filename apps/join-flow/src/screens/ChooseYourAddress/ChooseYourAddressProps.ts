@@ -5,7 +5,7 @@ export const ChooseYourAddressText = {
   continueButtonText: "See if I can get Cuckoo",
   searchForMyAddressButtonText: "Search for my address",
   openingHoursText:
-    "We're open Monday - Friday between the hours of 9am - 6pm and Saturday 9am - 5pm",
+    "We're open Monday - Friday 8am - 8pm, and on weekends and bank holidays 9am - 5.30pm.",
   phoneNumber: "0330 912 9955",
   addressNotFoundText: "My address is not shown",
   addressDropdownPlaceholder: "Select an address",

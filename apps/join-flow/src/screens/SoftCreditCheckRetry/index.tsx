@@ -150,7 +150,8 @@ const SoftCreditCheckRetry = () => {
           <div>
             <TipCard
               image={getAssetPath("/images/signingUp.svg")}
-              className="mb-4 items-center justify-center bg-tertiary-orange/30 md:mb-6 md:w-full"
+              backgroundColor="orange"
+              className="mb-4 items-center justify-center md:mb-6 md:w-full"
               hideImageOnMobile
             >
               <span>
