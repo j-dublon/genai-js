@@ -86,6 +86,12 @@ export const DatePicker = ({
               onSelect={handleDateSelect}
               minDate={availableDates[0]}
               maxDate={availableDates[availableDates.length - 1]}
+              filterDate={(date) => {
+                return availableDates.some(
+                  (availableDate) =>
+                    availableDate.toDateString() === date.toDateString(),
+                );
+              }}
               calendarClassName="calendar-style ds:md:justify-center ds:px-2 ds:w-full"
               renderDayContents={(day, date) => (
                 <div

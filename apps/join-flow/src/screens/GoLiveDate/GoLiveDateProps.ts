@@ -34,7 +34,7 @@ export const goLiveDateText: GoLiveDateProps = {
   availableDatesLabel: "Choose your go live date",
   datePickerPlaceholder: "Select an installation date...",
   timeSlotLabel:
-    "Please note, our engineers operate Monday - Saturday, between the hours of 8am - 6pm. ",
+    "Please note, our engineers operate Monday - Friday, between the hours of 8am - 6pm. ",
   timeSlotPlaceHolder: "Select a timeslot",
   continueButtonText: "Continue to payment",
   otsFailBannerText:
