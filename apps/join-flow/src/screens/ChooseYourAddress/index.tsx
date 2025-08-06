@@ -53,7 +53,7 @@ export const ChooseYourAddress = () => {
         slides={slidesWithAssetPath}
         loading={isLoadingModalOpen}
       />
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center gap-7 md:gap-16">
         <SimpleNavBar backgroundColor="yellow">
           <div className="flex flex-col items-center gap-[2px] md:gap-2">
             <p className="text-xxs leading-[1.6] font-normal text-ui-grey-500">
@@ -67,11 +67,9 @@ export const ChooseYourAddress = () => {
             />
           </div>
         </SimpleNavBar>
-        <div className="w-full sm:max-w-[570px] p-5 pt-20 flex flex-col items-center">
+        <div className="w-full sm:max-w-[570px] px-5 pb-5 flex flex-col items-center">
           <HeroBanner affiliateContent={affiliateSession?.displayItems} />
-          <h1 className="mt-10 mb-4 text-md md:text-xl font-semibold">
-            {pageTitle}
-          </h1>
+          <h1 className="mb-4 text-md md:text-xl font-semibold">{pageTitle}</h1>
           <ServiceAddressLookupForm />
           <TipCard
             image={getAssetPath("/images/love.svg")}

@@ -93,7 +93,7 @@ export const HeroBanner = ({ affiliateContent }: HeroBannerProps) => {
   const bannerStyle = bannerStyles[landingPageBanner?.style || "default"];
 
   return (
-    <div className="col-span-4 mt-7 md:col-span-12 md:col-start-0 md:mt-16 md:mb-6">
+    <div className="col-span-4 md:col-span-12 md:col-start-0 mb-10 md:mb-16">
       <div
         className={`relative flex flex-col items-center overflow-hidden rounded-md px-8 py-10 text-center md:rounded-lg md:px-32 md:py-14 ${bannerStyle.backgroundColor} ${bannerStyle.textColor}`}
       >

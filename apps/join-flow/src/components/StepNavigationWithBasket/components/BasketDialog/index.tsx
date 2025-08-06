@@ -216,7 +216,7 @@ export const BasketDialog = ({
 
   return (
     <>
-      <div className="fixed inset-0 bg-[rgba(31,31,31,0.4)]" />
+      <div className="fixed inset-0 bg-[rgba(31,31,31,0.4)] z-39" />
       <div className="z-40">
         <div
           className="fixed inset-x-0 bottom-0 flex items-start justify-center z-40 overflow-y-auto"
