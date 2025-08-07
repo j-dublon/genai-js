@@ -253,8 +253,8 @@ describe("PaymentDetails", () => {
       expect(paymentDetails).toEqual(
         expect.objectContaining({
           accountholderName: "Test User",
-          accountNumber: "12345678",
-          sortCode: "12-34-56",
+          accountNumber: "XXXX5678",
+          sortCode: "XX-XX-56",
           billingAddress: {
             line1: "123 Test St",
             line2: "Test Area",

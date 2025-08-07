@@ -7,6 +7,7 @@ import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
+import { redactPaymentDetailValue } from "@/lib/redactPaymentDetailValue";
 import { SortCodeInput } from "@/screens/PaymentDetails/components/SortCodeInput";
 
 import { paymentDetailsText } from "../PaymentDetailsProps";
@@ -38,8 +39,8 @@ export const PaymentForm = ({
     (personalDetails
       ? `${personalDetails.firstName} ${personalDetails.lastName}`
       : "");
-  const initialAccountNumber = paymentDetails?.accountNumber || "";
-  const initialSortCode = paymentDetails?.sortCode || "";
+  const initialAccountNumber = "";
+  const initialSortCode = "";
 
   const defaultValues: FormValues = {
     accountholderName: initialAccountHolderName,
@@ -62,6 +63,7 @@ export const PaymentForm = ({
     watch,
     trigger,
     setValue,
+    reset,
   } = form;
 
   const fieldsModified = Object.keys(dirtyFields).length > 0;
@@ -73,13 +75,7 @@ export const PaymentForm = ({
 
   useEffect(() => {
     try {
-      const isInModal = document.querySelector("dialog[open]") !== null;
-
-      if (isInModal && !fieldsModified && paymentDetails?.isAccountHolder) {
-        setValue("isAccountHolder", true);
-      } else if (fieldsModified) {
-        setValue("isAccountHolder", false);
-      }
+      setValue("isAccountHolder", false);
     } catch (err) {
       console.error("Error updating isAccountHolder checkbox state:", err);
     }
@@ -119,8 +115,8 @@ export const PaymentForm = ({
 
       setPaymentDetails({
         accountholderName: data.accountholderName,
-        accountNumber: data.accountNumber,
-        sortCode: data.sortCode,
+        accountNumber: redactPaymentDetailValue(data.accountNumber),
+        sortCode: redactPaymentDetailValue(data.sortCode),
         billingAddress: resolvedBillingAddress,
         sameAsServiceAddress: useSameAddress,
         isAccountHolder: data.isAccountHolder,
@@ -159,6 +155,7 @@ export const PaymentForm = ({
 
       if (submitSuccess) {
         savePaymentDetails(data);
+        reset(defaultValues);
       }
     },
     [savePaymentDetails, onSubmit, trigger, posthog],

@@ -21,27 +21,8 @@ export const PaymentDetailsModal = () => {
   const modalRef = useRef<HTMLDialogElement | null>(null);
   const { paymentDetails, basket } = useJoinFlowStore();
   const [showingModal, setShowingModal] = useState(false);
-  const [initialValues, setInitialValues] = useState<{
-    accountholderName: string;
-    accountNumber: string;
-    sortCode: string;
-  } | null>(null);
   const [showPaymentDetailsError, setShowPaymentDetailsError] = useState(false);
   const [isFormSubmitting, setIsFormSubmitting] = useState(false);
-
-  const [fieldsModified, setFieldsModified] = useState(false);
-
-  useEffect(() => {
-    if (showingModal && paymentDetails) {
-      setInitialValues({
-        accountholderName: paymentDetails.accountholderName || "",
-        accountNumber: paymentDetails.accountNumber || "",
-        sortCode: paymentDetails.sortCode || "",
-      });
-
-      setFieldsModified(false);
-    }
-  }, [showingModal, paymentDetails]);
 
   useEffect(() => {
     const dialog = modalRef.current;
@@ -60,60 +41,6 @@ export const PaymentDetailsModal = () => {
       }
     };
   }, [showingModal]);
-
-  useEffect(() => {
-    if (!showingModal) return;
-
-    const formInputs = document.querySelectorAll('input[type="text"]');
-
-    const handleInputChange = () => {
-      if (!initialValues) return;
-
-      const currentAccountHolderName =
-        (document.getElementById("accountholderName") as HTMLInputElement)
-          ?.value || "";
-      const currentAccountNumber =
-        (document.getElementById("accountNumber") as HTMLInputElement)?.value ||
-        "";
-      const currentSortCode =
-        (document.getElementById("sortCode") as HTMLInputElement)?.value || "";
-
-      const isModified =
-        currentAccountHolderName !== initialValues.accountholderName ||
-        currentAccountNumber !== initialValues.accountNumber ||
-        currentSortCode !== initialValues.sortCode;
-
-      setFieldsModified(isModified);
-
-      if (isModified) {
-        const checkbox = document.querySelector(
-          'input[name="isAccountHolder"]',
-        ) as HTMLInputElement;
-        if (checkbox && checkbox.checked) {
-          checkbox.checked = false;
-        }
-      } else {
-        if (paymentDetails?.isAccountHolder) {
-          const checkbox = document.querySelector(
-            'input[name="isAccountHolder"]',
-          ) as HTMLInputElement;
-          if (checkbox) {
-            checkbox.checked = true;
-          }
-        }
-      }
-    };
-
-    formInputs.forEach((input) => {
-      input.addEventListener("input", handleInputChange);
-    });
-
-    return () => {
-      formInputs.forEach((input) => {
-        input.removeEventListener("input", handleInputChange);
-      });
-    };
-  }, [showingModal, initialValues, paymentDetails]);
 
   const showError = (checkbox: HTMLInputElement) => {
     let errorElement = document.getElementById("account-holder-error");
@@ -195,17 +122,6 @@ export const PaymentDetailsModal = () => {
   const openModal = () => {
     setShowingModal(true);
     modalRef.current?.showModal();
-
-    setTimeout(() => {
-      if (paymentDetails?.isAccountHolder && !fieldsModified) {
-        const checkbox = document.querySelector(
-          'input[name="isAccountHolder"]',
-        ) as HTMLInputElement;
-        if (checkbox) {
-          checkbox.checked = true;
-        }
-      }
-    }, 0);
   };
 
   return (

@@ -10,6 +10,7 @@ import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket"
 import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { otsCompleted } from "@/lib/otsCompleted";
+import { redactPaymentDetailValue } from "@/lib/redactPaymentDetailValue";
 import { getCICS } from "@/services/helpers/getCICS";
 import { isBillingAddressesEqual } from "@/services/helpers/isBillingAddressEqual";
 import { updateBasket } from "@/services/helpers/updateBasket";
@@ -141,8 +142,8 @@ export const PaymentDetails = () => {
 
         setPaymentDetails({
           accountholderName: data.accountholderName,
-          accountNumber: data.accountNumber,
-          sortCode: data.sortCode,
+          accountNumber: redactPaymentDetailValue(data.accountNumber),
+          sortCode: redactPaymentDetailValue(data.sortCode),
           billingAddress: resolvedBillingAddress,
           sameAsServiceAddress: data.sameAsServiceAddress,
           isAccountHolder: data.isAccountHolder,
@@ -157,8 +158,10 @@ export const PaymentDetails = () => {
           billingAddress: resolvedBillingAddress,
           payment: {
             bankAccountHolder: data.accountholderName,
-            bankAccountNumber: data.accountNumber,
-            bankSortCode: data.sortCode.replace(/-/g, ""),
+            bankAccountNumber: redactPaymentDetailValue(data.accountNumber),
+            bankSortCode: redactPaymentDetailValue(
+              data.sortCode.replace(/-/g, ""),
+            ),
           },
           cics: {
             summaryHref: contractSummary,

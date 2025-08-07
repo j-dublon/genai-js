@@ -255,8 +255,7 @@ describe("PaymentConfirmation", () => {
     vi.clearAllMocks();
   });
 
-  const { directDebitDetailsTitle, accountDetailsTitle, signUpText } =
-    paymentConfirmationText;
+  const { accountDetailsTitle, signUpText } = paymentConfirmationText;
 
   it("renders the main sections", () => {
     render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
