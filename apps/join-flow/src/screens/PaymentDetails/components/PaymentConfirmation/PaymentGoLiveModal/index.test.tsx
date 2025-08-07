@@ -88,7 +88,7 @@ describe("PaymentGoLiveModal", () => {
 
     expect(screen.getByTestId("info-modal")).toBeInTheDocument();
     expect(
-      screen.getByText("Your go-live date and Switching info"),
+      screen.getByText("Your go-live date & Switching info"),
     ).toBeInTheDocument();
   });
 

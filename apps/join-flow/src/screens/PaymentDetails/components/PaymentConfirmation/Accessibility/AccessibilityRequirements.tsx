@@ -145,14 +145,18 @@ export const AccessibilityRequirements = () => {
 
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md flex flex-col gap-4 md:gap-6">
-      <p className="text-md font-semibold">{accessibilityRequirementsTitle}</p>
-      <p className="text-sm">{accessibilityRequirementsDescription}</p>
+      <p className="text-sm md:text-md font-semibold">
+        {accessibilityRequirementsTitle}
+      </p>
+      <p className="text-xs md:text-sm">
+        {accessibilityRequirementsDescription}
+      </p>
       <Checkbox
         label={accessibilityRequirementsCheckboxText}
         value="accessibilityRequirements"
         checked={accessibilityRequirements !== null}
         onChange={handleCheckboxChange}
-        labelClassName="text-sm font-medium leading-[1.6] text-core-black"
+        labelClassName="text-xs md:text-sm font-medium leading-[1.6] text-core-black"
       />
       {accessibilityRequirements && (
         <>

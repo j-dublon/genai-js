@@ -94,7 +94,7 @@ export const PaymentTermsAndConditions = ({
           value="terms"
           checked={termsChecked}
           onChange={setTermsChecked}
-          labelClassName="text-sm text-core-black"
+          labelClassName="text-core-black"
         />
 
         <Checkbox
@@ -102,7 +102,7 @@ export const PaymentTermsAndConditions = ({
           value="directDebit"
           checked={directDebitChecked}
           onChange={setDirectDebitChecked}
-          labelClassName="text-sm text-core-black"
+          labelClassName="text-core-black"
         />
 
         <Checkbox
@@ -116,7 +116,7 @@ export const PaymentTermsAndConditions = ({
           value="creditSearch"
           checked={creditSearchChecked}
           onChange={setCreditSearchChecked}
-          labelClassName="text-sm text-core-black"
+          labelClassName="text-core-black"
         />
       </div>
     </div>

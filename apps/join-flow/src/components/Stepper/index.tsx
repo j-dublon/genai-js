@@ -37,7 +37,7 @@ const Stepper = ({ showLabels = true, steps = defaultSteps }: StepperProps) => {
     pathToStepperIndex[pathname as keyof typeof pathToStepperIndex] || 0;
 
   return (
-    <div className="w-full max-w-[360px] mx-auto py-4 hidden md:block">
+    <div className="w-full absolute left-1/2 transform -translate-x-1/2 max-w-[360px] py-4 hidden md:block">
       <div className="flex justify-between items-center">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>

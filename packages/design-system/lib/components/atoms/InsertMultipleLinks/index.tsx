@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 export interface LinkData {
   searchText: string;
   href: string;
@@ -33,7 +31,7 @@ export const InsertMultipleLinks = ({
             <a
               key={index}
               href={link.href}
-              className="ds:text-ui-link ds:font-medium ds:underline"
+              className="ds:text-ui-link ds:text-xs ds:md:text-sm ds:underline"
               target={link.openInNewTab ? "_blank" : undefined}
               rel={link.openInNewTab ? "noopener noreferrer" : undefined}
             >
@@ -41,7 +39,11 @@ export const InsertMultipleLinks = ({
             </a>
           );
         }
-        return <Fragment key={index}>{part}</Fragment>;
+        return (
+          <span key={index} className="ds:text-xs ds:md:text-sm">
+            {part}
+          </span>
+        );
       })}
     </>
   );

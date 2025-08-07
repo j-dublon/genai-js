@@ -3,18 +3,21 @@ import { getAssetPath } from "@/lib/get-asset-path";
 
 export const paymentConfirmationText = {
   title: "Review your info and join",
-  accountHolderLabel: "Account holder",
-  accountNumberLabel: "Account number",
+  subtitle:
+    "Once you’re happy all the info below is totally correct, we’ll sign you up to join Cuckoo.",
+  disclaimer: "Please read and download the following before joining Cuckoo:",
+  accountHolderLabel: "Account holder:",
+  accountNumberLabel: "Account number:",
   addressDetailsLabel: "Your home and installation address",
-  accountDetailsTitle: "Your account details",
+  accountDetailsTitle: "Your Direct Debit details",
   billingAddressLabel: "Your billing address",
   goLiveDetailsTitle: "Your go live date",
   directDebitDetailsTitle: "Your direct debit payment details",
   monthlyPaymentTitle: "Your monthly payment",
   totalMonthlyPaymentTitle: "Your total monthly payment",
   backButtonText: "Back",
-  sortCodeLabel: "Sort code",
-  signUpText: "Sign me up",
+  sortCodeLabel: "Sort code:",
+  signUpText: "Pay and join Cuckoo",
   yourAgreementTitle: "Your agreement",
   yourAgreementText:
     "By agreeing, you’re confirming that you’ve read, downloaded and understood the following before joining Cuckoo: Contract Information, Contract Summary, Our Terms & Conditions and Privacy Notice",
@@ -67,3 +70,9 @@ export const slides: LoadingModalSlide[] = [
     message: "You're one peck away from broadband bliss!",
   },
 ];
+
+export const contactInfo = {
+  phoneNumber: "0330 912 9955",
+  openingHoursText:
+    "We're open Monday - Friday 8am - 8pm, and on weekends and bank holidays 9am - 5.30pm.",
+};

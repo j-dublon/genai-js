@@ -6,6 +6,7 @@ import {
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
+import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
@@ -76,6 +77,8 @@ export const PaymentConfirmation = ({
 
   const {
     title,
+    subtitle,
+    disclaimer,
     accountDetailsTitle,
     backButtonText,
     signUpText,
@@ -224,50 +227,53 @@ export const PaymentConfirmation = ({
   return (
     <>
       <StepNavigationWithBasket step={4} hideBasket hideLabels />
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 pt-8 md:mb-16">
         <div className="max-w-xl mx-auto">
-          <div className="bg-core-white p-8 rounded-md">
-            <h1 className="text-2xl font-bold mb-6">{title}</h1>
+          <div className="bg-core-white pt-8 px-2 rounded-md">
+            <h1 className="text-2xl font-bold mb-6 text-center">{title}</h1>
+            <p className="text-md mb-10 text-center">{subtitle}</p>
 
             <PaymentDocuments
               title="Your Cuckoo Documents"
-              disclaimer="Please read and download the following before joining Cuckoo:"
+              disclaimer={disclaimer}
               items={documentItems}
             />
 
-            <p className="text-md font-bold mb-6">{accountDetailsTitle}</p>
-            <div className="mb-6">
-              <PaymentAccountDetails />
-            </div>
-            <p className="text-md font-bold mb-6">{paymentGoLiveText.title}</p>
+            <p className="text-sm md:text-md font-bold mb-4 md:mb-6 mt-10 md:mt-12">
+              {accountDetailsTitle}
+            </p>
+            <PaymentAccountDetails />
+
+            <p className="text-sm md:text-md font-bold mb-4 md:mb-6 mt-10 md:mt-12">
+              {paymentGoLiveText.title}
+            </p>
             <PaymentGoLiveDetails />
 
-            <div className="my-6">
+            <div className="mt-10 md:mt-12">
               <AccessibilityRequirements />
             </div>
 
             <IncludedOffers />
 
             <p
-              className="text-md font-bold mb-6"
+              className="text-sm md:text-md font-bold mt-10 md:mt-12 mb-4 md:mb-6"
               data-testid="termsAndConditions"
             >
               {yourAgreementTitle}
             </p>
-            <div className="mb-6">
-              <PaymentTermsAndConditions
-                onChange={handleTermsChange}
-                initialState={termsState}
-              />
-            </div>
+            <PaymentTermsAndConditions
+              onChange={handleTermsChange}
+              initialState={termsState}
+            />
 
-            <div className="mt-8">
-              <div className="flex justify-between">
+            <div className="mt-10 md:mt-12">
+              <div className="flex flex-col md:flex-row md:justify-between gap-4 md:gap-6">
                 <Button
                   onClick={handleBack}
                   tint="white"
                   variant="outline"
                   type="button"
+                  fullWidth
                 >
                   {backButtonText}
                 </Button>
@@ -277,6 +283,7 @@ export const PaymentConfirmation = ({
                   tint="yellow"
                   variant="solid"
                   type="button"
+                  fullWidth
                   disabled={!termsAgreed}
                 >
                   {signUpText}
@@ -285,7 +292,9 @@ export const PaymentConfirmation = ({
             </div>
           </div>
         </div>
+        <hr className="mt-10 md:hidden border-ui-grey-300 bg-ui-grey-300 border w-full" />
       </div>
+      <Footer />
       <LoadingModal
         modalRef={loadingModalRef}
         slides={slidesWithAssetPath}

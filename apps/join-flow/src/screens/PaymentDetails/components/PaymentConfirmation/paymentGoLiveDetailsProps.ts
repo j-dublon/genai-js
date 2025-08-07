@@ -1,5 +1,5 @@
 export const paymentGoLiveText = {
-  title: "Your go-live date and Switching info",
+  title: "Your go-live date & Switching info",
   subtitle: "Choose your go live date",
   textHightlight: "Important:",
   goLiveInstructionSkipped:
@@ -11,7 +11,7 @@ export const paymentGoLiveText = {
   tipCardHighlight: "Good to know:",
   tipCardText:
     "You’ll be able to change your go-live date later if you need to.",
-  switchingDetailsLabel: "Switching Terms & Conditions",
+  switchingDetailsLabel: "Terms & Conditions",
   switchingDetailsHref: "https://www.cuckoo.co/legal/terms",
   saveGoLiveInfo: "Save my go live info",
 };

@@ -12,24 +12,21 @@ const DocumentItem = ({
   href,
 }: DocumentItemProps): React.ReactElement => {
   return (
-    <div className="flex items-center gap-4 md:gap-24 p-4 self-stretch mb-4 last content-center [&:not(:last-child)]:border-b-[0.5]">
-      <div className="text-sm md:text-medium font-bold">{text}</div>
-      <div>
-        <Button
-          size="small"
-          data-testid={text}
-          target="_blank"
-          variant="outline"
-          href={href}
-          tint="white"
-          aria-label={text}
-          className="w-full md:w-auto"
-          type="button"
-        >
-          {" "}
-          View and Download{" "}
-        </Button>
-      </div>
+    <div className="flex items-center justify-between p-4 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-ui-grey-300 md:-mt-2 gap-2 md:gap-3">
+      <div className="text-xs md:text-sm font-bold">{text}</div>
+      <Button
+        size="small"
+        data-testid={text}
+        target="_blank"
+        variant="outline"
+        href={href}
+        tint="white"
+        aria-label={text}
+        className="w-auto font-normal max-[389px]:text-wrap max-[389px]:w-[100px]"
+        type="button"
+      >
+        View and download
+      </Button>
     </div>
   );
 };
@@ -64,10 +61,10 @@ export const PaymentDocuments = ({
 
   return (
     <>
-      <p className="text-md font-bold mb-6">{title}</p>
-      <div className="bg-ui-grey-100 p-6 rounded-md">
-        <div className="font-semibold mb-4">{disclaimer}</div>
-        <div className="flex flex-col md:gap-[10] md:p-4 p-2 bg-core-white rounded-sm">
+      <p className="text-sm md:text-md font-bold mb-4 md:mb-6">{title}</p>
+      <div className="bg-ui-grey-100 p-5 md:p-6 rounded-md">
+        <div className="text-xs md:text-sm font-medium mb-6">{disclaimer}</div>
+        <div className="flex flex-col md:gap-[10] md:pt-2 bg-core-white rounded-sm">
           {documents}
         </div>
       </div>

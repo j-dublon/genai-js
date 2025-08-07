@@ -23,26 +23,36 @@ export const PaymentAccountDetails = () => {
   return (
     <>
       <div className="bg-ui-grey-100 p-6 rounded-md">
-        <h3 className="mb-2">
-          <span className="font-semibold">{accountHolderLabel}</span>{" "}
-          <span className="font-normal">
+        <h3 className="mb-3">
+          <span className="text-xs md:text-sm font-medium">
+            {accountHolderLabel}
+          </span>{" "}
+          <span className="text-xs md:text-sm font-normal">
             {paymentDetails?.accountholderName}
           </span>
         </h3>
 
-        <h3 className="mb-2">
-          <span className="font-semibold">{accountNumberLabel}</span>{" "}
-          <span className="font-normal">{paymentDetails?.accountNumber}</span>
+        <h3 className="mb-3">
+          <span className="text-xs md:text-sm font-medium">
+            {accountNumberLabel}
+          </span>{" "}
+          <span className="text-xs md:text-sm font-normal">
+            {paymentDetails?.accountNumber}
+          </span>
         </h3>
 
         <h3>
-          <span className="font-semibold">{sortCodeLabel}</span>{" "}
-          <span className="font-normal">{paymentDetails?.sortCode}</span>
+          <span className="text-xs md:text-sm font-medium">
+            {sortCodeLabel}
+          </span>{" "}
+          <span className="text-xs md:text-sm font-normal">
+            {paymentDetails?.sortCode}
+          </span>
         </h3>
 
         <button
           type="button"
-          className="underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
+          className="underline text-xs md:text-sm font-medium text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
           onClick={handleChangeMyDetails}
         >
           {paymentAccountDetailsText.changeMyDetails}

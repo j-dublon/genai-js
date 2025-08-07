@@ -1,6 +1,6 @@
 import { TipCard, useClickOutside } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { formatDisplayDate } from "@/lib/formatDate";
@@ -63,19 +63,21 @@ export const PaymentGoLiveDetails = ({}) => {
     <>
       <div className="bg-ui-grey-100 p-6 rounded-md">
         <h3>
-          <span className="font-bold">{formattedSchedule}</span>{" "}
+          <span className="text-xs md:text-sm font-medium">
+            {formattedSchedule}
+          </span>{" "}
           <button
             type="button"
-            className="underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
+            className="underline text-xs md:text-sm font-medium text-ui-link cursor-pointer bg-transparent border-none p-0 mt-2"
             onClick={handleChangeMyDetails}
           >
             {paymentGoLiveText.changeText}
           </button>
         </h3>
         <div className="mt-4">
-          <span className="font-bold">
+          <span className="text-xs md:text-sm font-medium">
             {paymentGoLiveText.textHightlight}{" "}
-            <span className="font-normal">
+            <span className="text-xs md:text-sm font-normal">
               {otsSwitchFailedOrSkipped
                 ? paymentGoLiveText.goLiveInstructionSkipped
                 : paymentGoLiveText.goLiveInstruction}{" "}
@@ -83,7 +85,7 @@ export const PaymentGoLiveDetails = ({}) => {
             </span>{" "}
           </span>
           <a
-            className="underline font-semibold text-ui-link cursor-pointer bg-transparent border-none p-0"
+            className="underline font-medium text-ui-link cursor-pointer bg-transparent border-none p-0"
             href={paymentGoLiveText.switchingDetailsHref}
           >
             {paymentGoLiveText.switchingDetailsLabel}
@@ -93,7 +95,7 @@ export const PaymentGoLiveDetails = ({}) => {
         <TipCard
           image={getAssetPath("/images/linked-hands.svg")}
           backgroundColor="green"
-          className="mb-4 items-center justify-center md:mb-6 md:w-full mt-6"
+          className="items-center justify-center md:w-full mt-6"
         >
           <span>
             <span className="text-xs text-ui-teal font-semibold md:text-sm">
