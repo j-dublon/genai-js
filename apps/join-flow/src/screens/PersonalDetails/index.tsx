@@ -639,7 +639,7 @@ const PersonalDetails = () => {
     AdditionalPersonalDetailsForm as React.ComponentType<AdditionalPersonalDetailsFormProps>;
 
   return (
-    <>
+    <div id="personalDetailsContainer">
       <StepNavigationWithBasket step={1} />
       <LoadingModal
         modalRef={loadingModalRef}
@@ -801,7 +801,7 @@ const PersonalDetails = () => {
         </div>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
 

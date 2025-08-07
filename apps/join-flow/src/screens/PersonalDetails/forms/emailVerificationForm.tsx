@@ -7,6 +7,7 @@ import { TickWithCircle } from "@react-component-library/ui/icons";
 import { useEffect, useRef, useState } from "react";
 
 import { TextInput } from "@/components/TextInput";
+import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { getAssetPath } from "@/lib/get-asset-path";
 
 import { EmailVerificationFormProps } from "./formValues";
@@ -27,6 +28,7 @@ export const EmailVerificationForm = ({
   validationAttempts = 0,
 }: EmailVerificationFormProps) => {
   const inputRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const scrollToTop = useScrollToElement("#personalDetailsContainer");
   const [code, setCode] = useState<string[]>(Array(NUM_FIELDS).fill(""));
 
   const {
@@ -41,6 +43,10 @@ export const EmailVerificationForm = ({
     resendButtonText,
     changeEmailText,
   } = verificationSection;
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   // Skip this page if already verified
   useEffect(() => {

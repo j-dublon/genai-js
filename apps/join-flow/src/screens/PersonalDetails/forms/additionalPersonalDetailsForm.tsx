@@ -7,13 +7,14 @@ import {
   useClickOutside,
 } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useFieldArray, useWatch } from "react-hook-form";
 
 import { ManualAddressFields } from "@/components/ManualAddressForm/ManualAddressFields";
 import { ModalContent } from "@/components/ModalContent";
 import { TextInput } from "@/components/TextInput";
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { getAssetPath } from "@/lib/get-asset-path";
 
 import personalDetailsProps from "../personalDetailsProps";
@@ -49,6 +50,7 @@ export const AdditionalPersonalDetailsForm = ({
   } = personalDetailsProps.additionalSection;
 
   const residencyDuration = useWatch({ control, name: "residencyDuration" });
+  const scrollToTop = useScrollToElement("#personalDetailsContainer");
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -60,6 +62,10 @@ export const AdditionalPersonalDetailsForm = ({
 
   const [isDobModalOpen, setIsDobModalOpen] = useState(false);
   const [isTeleHealthModalOpen, setIsTeleHealthModalOpen] = useState(false);
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   const closeDobModal = (e?: MouseEvent) => {
     if (dobModalRef.current) {

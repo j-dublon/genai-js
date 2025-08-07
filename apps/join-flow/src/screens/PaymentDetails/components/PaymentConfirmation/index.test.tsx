@@ -170,6 +170,11 @@ vi.mock("@services/helpers/createVulnerabilityAndAccessibility", () => ({
   }),
 }));
 
+const scrollToTopMock = vi.fn();
+vi.mock("@/hooks/useScrollToElement", () => ({
+  useScrollToElement: () => scrollToTopMock,
+}));
+
 describe("PaymentConfirmation", () => {
   const mockRouter = {
     push: vi.fn(),
@@ -261,6 +266,7 @@ describe("PaymentConfirmation", () => {
     render(<PaymentConfirmation onGoBack={() => {}} onComplete={() => {}} />);
     expect(screen.getByText(accountDetailsTitle)).toBeInTheDocument();
     expect(screen.getByTestId("termsAndConditions")).toBeInTheDocument();
+    expect(scrollToTopMock).toHaveBeenCalled();
   });
 
   it("handles back button click correctly", async () => {

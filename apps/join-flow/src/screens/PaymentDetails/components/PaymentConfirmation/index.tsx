@@ -10,6 +10,7 @@ import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
+import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
@@ -45,6 +46,7 @@ export const PaymentConfirmation = ({
     isLoadingModalOpen,
     slides,
   });
+  const scrollToTop = useScrollToElement("#paymentConfirmationContainer");
 
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [termsState, setTermsState] = useState({
@@ -63,6 +65,10 @@ export const PaymentConfirmation = ({
 
   useClickOutside(goLiveModalRef, isGoLiveModalOpen, closeGoLiveModal);
   useClearFocus(goLiveModalRef, "close");
+
+  useEffect(() => {
+    scrollToTop();
+  }, []);
 
   useEffect(() => {
     if (paymentDetails) {
@@ -225,7 +231,7 @@ export const PaymentConfirmation = ({
   ];
 
   return (
-    <>
+    <div id="paymentConfirmationContainer">
       <StepNavigationWithBasket step={4} hideBasket hideLabels />
       <div className="container mx-auto px-4 pt-8 md:mb-16">
         <div className="max-w-xl mx-auto">
@@ -300,7 +306,7 @@ export const PaymentConfirmation = ({
         slides={slidesWithAssetPath}
         loading={isLoadingModalOpen}
       />
-    </>
+    </div>
   );
 };
 
