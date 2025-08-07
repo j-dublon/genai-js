@@ -19,6 +19,7 @@ import { useClearFocus } from "@/hooks/useClearFocus";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { PILL_FADE_OUT_DELAY, PILL_HIDE_DELAY } from "@/lib/constants";
 import { getAssetPath } from "@/lib/get-asset-path";
+import { getCICS } from "@/services/helpers/getCICS";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
 import { getGoLiveDates } from "@/services/helpers/getGoLiveDates";
 import { updateBasket } from "@/services/helpers/updateBasket";
@@ -144,6 +145,16 @@ export const GoLiveDate = () => {
         return;
       }
 
+      const haveGoLiveDetailsChanged =
+        data.selectedDate !== goLiveDetails?.selectedDate ||
+        data.timeSlot !== goLiveDetails?.engineerTimeSlot?.selectionIdentifier;
+
+      if (!haveGoLiveDetailsChanged) {
+        setCurrentStep(4);
+        router.push("/join-flow/payment-details");
+        return;
+      }
+
       let result;
       setIsLoadingModalOpen(true);
 
@@ -161,7 +172,16 @@ export const GoLiveDate = () => {
       }
 
       if (result.basket) {
-        setBasket(result.basket);
+        const response = await getCICS(basket.id);
+        const contractInformation = response?.data?.contractInformation;
+        const contractSummary = response?.data?.contractSummary;
+        setBasket({
+          ...result.basket,
+          cics: {
+            informationHref: contractInformation,
+            summaryHref: contractSummary,
+          },
+        });
       } else if (result.error) {
         setIsLoadingModalOpen(false);
         return;
