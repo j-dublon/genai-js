@@ -61,7 +61,7 @@ const mockEeroProducts: EeroOption[] = [
     price: 1000,
     heading: "Add one extra eero to your plan",
     description:
-      "2 eeros will cover an area of approximately XXX square metres.",
+      "2 eeros will cover an area of approximately 380 square metres.",
     imageURL: "/images/x2_eeros.png",
     totalCount: 2,
   },
@@ -160,7 +160,7 @@ describe("EeroInfo", () => {
 
       expect(
         screen.getByText(
-          "2 eeros will cover an area of approximately XXX square metres.",
+          "2 eeros will cover an area of approximately 380 square metres.",
         ),
       ).toBeInTheDocument();
     });
