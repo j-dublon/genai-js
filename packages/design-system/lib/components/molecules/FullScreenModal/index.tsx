@@ -27,7 +27,7 @@ export const FullScreenModal = ({
       aria-modal="true"
     >
       <div className="ds:flex ds:flex-col ds:items-center">
-        <div className="ds:w-full ds:flex ds:flex-wrap ds:justify-between ds:items-end ds:mb-4 ds:md:mb-13 ds:align-middle ds:md:max-w-[1252px]">
+        <div className="ds:w-full ds:flex ds:flex-wrap ds:justify-between ds:mb-4 ds:md:mb-11 ds:items-center ds:md:max-w-[1252px] md:gap-4">
           <h2
             className="ds:text-core-white ds:text-xs ds:md:text-md ds:font-medium ds:align-middle"
             id="fullscreen-modal-title"
