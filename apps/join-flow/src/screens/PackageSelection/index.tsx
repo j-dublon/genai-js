@@ -18,7 +18,7 @@ const PackageSelection = () => {
       <ChooseYourPackage />
       <Reminders />
       <NotReadyToJoin />
-      <LegalClaims backgroundColor="grey-100" />
+      <LegalClaims backgroundColor="yellow" className="ds:md:bg-ui-grey-100" />
     </>
   );
 };

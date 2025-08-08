@@ -21,12 +21,12 @@ export const NotReadyToJoin = () => {
     >
       <div className="md:max-w-[1152px] mx-auto">
         <div className="flex flex-col md:flex-row gap-6 md:gap-20 justify-center w-full">
-          <div className="flex flex-col gap-5 md:gap-6 md:w-1/2">
-            <h2 className="font-semibold text-[26px] md:text-3xl text-core-black max-w-[260px] md:max-w-[400px]">
+          <div className="flex flex-col md:w-1/2">
+            <h2 className="font-semibold text-[26px] md:text-3xl text-core-black max-w-[260px] md:max-w-[400px] mb-6 md:mb-10">
               {heading}
             </h2>
-            <p className="text-md max-w-[400px]">{description}</p>
-            <h3 className="hidden md:block font-semibold text-md text-core-black">
+            <p className="text-md max-w-[400px] mb-6 md:mb-12">{description}</p>
+            <h3 className="hidden md:block font-semibold text-md text-core-black md:mb-6">
               {contactInfoHeading}
             </h3>
             <TipCard

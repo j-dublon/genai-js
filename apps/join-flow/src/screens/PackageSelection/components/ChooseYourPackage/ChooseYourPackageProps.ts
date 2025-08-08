@@ -5,7 +5,7 @@ export const packageSelectionPageText = {
   pageTitle: "Pick the speed you need",
   pageSubtitle: "Your contract length",
   errorMessage: "Please select a package to continue",
-  buttonText: "Add to bag",
+  buttonText: "Add to basket",
   packageDetailsModalTitle: "Choose your contract length",
   packageDetailsModalTitleFallback: "Is this plan for me?",
   toggleSwitchLabels: {

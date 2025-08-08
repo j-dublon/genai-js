@@ -4,8 +4,7 @@ import { Button } from "@lib/components/atoms/Button";
 import { format } from "date-fns";
 import { ReactNode } from "react";
 
-const TEXT_CLASS =
-  "ds:font-normal ds:text-xs ds:md:text-sm ds:leading-[1.6] ds:md:leading-[1.5]";
+const TEXT_CLASS = "ds:font-normal ds:text-xs ds:md:text-sm ds:leading-[1.625]";
 const FEATURE_TEXT_CLASS = "ds:text-sm ds:md:text-md ds:font-semibold";
 
 export type ColorTint = "pink" | "blue" | "yellow";
@@ -44,7 +43,7 @@ const PromotionBadge = ({
 
 const Feature = ({ icon, value, label, unit = "" }: FeatureItem) => {
   return (
-    <div className="ds:flex ds:flex-row ds:items-center ds:gap-1 ds:md:gap-2">
+    <div className="ds:flex ds:flex-row ds:items-center ds:gap-1 ds:md:gap-2 ds:mb-1 ds:md:mb-2.5">
       {icon}
       <p className={TEXT_CLASS}>
         <span className={FEATURE_TEXT_CLASS}>

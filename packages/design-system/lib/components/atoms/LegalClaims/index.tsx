@@ -3,21 +3,23 @@ import { bgColorVariants } from "@lib/variants";
 
 export const LegalClaims = ({
   backgroundColor = "white",
+  className = "",
 }: {
   backgroundColor?: BackgroundColors;
+  className?: string;
 }) => {
   const linkClass = "ds:text-ui-link ds:font-medium ds:underline ds:ml-1";
 
   return (
     <section
       aria-label="Legal"
-      className={`ds:relative ds:flex ds:justify-center ds:sm:px-tablet ds:px-mobile ds:lg:px-desktop ${bgColorVariants[backgroundColor]}`}
+      className={`ds:relative ds:flex ds:justify-center ds:sm:px-tablet ds:px-mobile ds:lg:px-desktop ${bgColorVariants[backgroundColor]} ${className}`}
     >
       <div className="ds:flex ds:flex-col ds:py-6 ds:md:py-15 ds:max-w-[1152px] ds:w-full">
-        <h2 className="ds:text-xs ds:md:text-sm ds:font-semibold">
+        <h2 className="ds:text-xs ds:md:text-sm ds:font-semibold mb-2">
           Stats and claims
         </h2>
-        <ul className="ds:text-xs ds:md:text-sm ds:list-disc ds:list-inside ds:marker:text-xs">
+        <ul className="ds:text-xs ds:md:text-sm ds:list-disc ds:list-outside ds:pl-6 ds:marker:text-xs">
           <li>
             <b className="ds:font-medium">£0 set-up and installation:</b>
             <a className={linkClass} href="https://www.cuckoo.co/legal/terms">
