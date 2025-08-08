@@ -30,6 +30,7 @@ export const OneTouchSwitching = () => {
     basket,
     isLoadingModalOpen,
     setIsLoadingModalOpen,
+    setErrorInfo,
   } = useJoinFlowStore();
 
   const [matchResult, setMatchResult] = useState<MatchResultType | null>(null);
@@ -68,14 +69,13 @@ export const OneTouchSwitching = () => {
     setIsLoadingProviders(true);
     const result = await getAllProviders();
 
-    if (result.error) {
-      console.error("Error fetching providers:", result.error);
+    if (result.error || !result.providers?.length) {
       setProviderError(true);
       setIsLoadingProviders(false);
       return;
     }
     setIsLoadingProviders(false);
-    setProviders(result.providers || []);
+    setProviders(result.providers);
   };
 
   const handleSubmit = async (data: OneTouchSwitchingFormData) => {
@@ -84,12 +84,8 @@ export const OneTouchSwitching = () => {
 
     // this should never happen
     if (!basket?.id) {
-      console.error("No basket ID available for OTS");
-      setMatchResult({
-        success: false,
-        message: oneTouchSwitchingText.errorMessage,
-      });
-      setIsLoadingModalOpen(false);
+      setErrorInfo({ type: "basketError" });
+      router.push("/join-flow/error");
       return;
     }
 
@@ -121,6 +117,11 @@ export const OneTouchSwitching = () => {
 
       // Failure case - OTS did not match or API returned error
       if (result.error) {
+        if (result.error.type === "joinSuspended") {
+          router.push("/join-flow/register-interest/unavailable");
+          return;
+        }
+
         const errorMessage =
           result.error.message || oneTouchSwitchingText.noMatchMessage;
 

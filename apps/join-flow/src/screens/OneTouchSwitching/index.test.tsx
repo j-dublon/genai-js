@@ -77,6 +77,7 @@ describe("OneTouchSwitching", () => {
     },
     isLoadingModalOpen: false,
     setIsLoadingModalOpen: vi.fn(),
+    setErrorInfo: vi.fn(),
   };
 
   const mockProviders = [
@@ -514,7 +515,10 @@ describe("OneTouchSwitching", () => {
     await user.click(submitButton);
 
     // Should handle missing basket ID gracefully
-    expect(mockStore.setIsLoadingModalOpen).toHaveBeenCalledWith(false);
+    expect(mockStore.setErrorInfo).toHaveBeenCalledWith({
+      type: "basketError",
+    });
+    expect(mockRouter.push).toHaveBeenCalledWith("/join-flow/error");
   });
 
   it("should show loading state when providers are being fetched", async () => {

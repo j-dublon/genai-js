@@ -9,7 +9,12 @@ import {
 interface CreateSwitchMatchLookupResult {
   switchMatchLookup?: SwitchMatchLookupSuccess["documentID"];
   error?: {
-    type: "generalError" | "validationError" | "networkError" | "unknownError";
+    type:
+      | "generalError"
+      | "validationError"
+      | "networkError"
+      | "unknownError"
+      | "joinSuspended";
     message: string;
     details?: string[];
   };
@@ -30,14 +35,31 @@ export const createSwitchMatchLookup = async (
       return {
         switchMatchLookup: switchMatchLookup.data.documentID,
       };
-    } else {
-      return {
-        error: {
-          type: "generalError",
-          message: "Switch match lookup failed",
-        },
-      };
     }
+
+    if (switchMatchLookup.state === "error" && switchMatchLookup.data?.errors) {
+      const errors = switchMatchLookup.data.errors;
+
+      const joinSuspended = errors.find(
+        (err) => err.blockType === "JoinSuspended",
+      );
+
+      if (joinSuspended) {
+        return {
+          error: {
+            type: "joinSuspended",
+            message: "Join flow is currently unavailable",
+          },
+        };
+      }
+    }
+
+    return {
+      error: {
+        type: "generalError",
+        message: "Switch match lookup failed",
+      },
+    };
   } catch (error) {
     console.error("Error in createSwitchMatchLookup:", error);
 

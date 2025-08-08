@@ -8,7 +8,7 @@ const baseOneTouchSwitchingSchema = z.object({
     .min(1, "Please select a provider from the list"),
   consentGiven: z.boolean().refine((val) => val === true, {
     message:
-      "Please confirm you're the accountholder and consent to the switch",
+      "Please confirm you're the account holder and consent to the switch",
   }),
 });
 

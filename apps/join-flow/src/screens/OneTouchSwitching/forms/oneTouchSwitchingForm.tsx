@@ -99,12 +99,9 @@ export const OneTouchSwitchingForm = ({
   const errorTextStyling = "text-ui-error text-xs md:text-sm mt-1";
 
   const showProviderError =
-    !currentProvider &&
-    (providerError || customProviderError || errors.provider?.message);
+    !currentProvider && (customProviderError || errors.provider?.message);
 
-  const providerErrorMessage = providerError
-    ? oneTouchSwitchingText.providerErrorMessage
-    : customProviderError || errors.provider?.message;
+  const providerErrorMessage = customProviderError || errors.provider?.message;
 
   return (
     <>
@@ -153,63 +150,79 @@ export const OneTouchSwitchingForm = ({
               </div>
             </>
           )}
-          <h3 className="font-semibold text-xs md:text-sm text-core-black">
-            {oneTouchSwitchingText.providerSelectionTitle}
-          </h3>
-          <div>
-            {isLoadingProviders ? (
-              <div className="flex flex-row gap-2 items-center justify-center">
-                <AccessibleLoadingEgg
-                  height={40}
-                  wrapperClassName="flex justify-center"
-                />
-                <span className="text-xs md:text-sm leading-[1.6] font-normal">
-                  Loading providers...
-                </span>
+          {providerError ? (
+            <TipCard
+              backgroundColor="orange"
+              subtitle="Oops, something went wrong!"
+              subtitleColor="tertiary-peach"
+              image={getAssetPath("/images/stop-hand.svg")}
+              className="text-center"
+            >
+              <p>{oneTouchSwitchingText.providerErrorMessage}</p>
+            </TipCard>
+          ) : (
+            <>
+              <h3 className="font-semibold text-xs md:text-sm text-core-black">
+                {oneTouchSwitchingText.providerSelectionTitle}
+              </h3>
+              <div>
+                {isLoadingProviders ? (
+                  <div className="flex flex-row gap-2 items-center justify-center">
+                    <AccessibleLoadingEgg
+                      height={40}
+                      wrapperClassName="flex justify-center"
+                    />
+                    <span className="text-xs md:text-sm leading-[1.6] font-normal">
+                      Loading providers...
+                    </span>
+                  </div>
+                ) : (
+                  <FormDropdown
+                    control={control}
+                    name="provider"
+                    dropdownPlaceholder={
+                      oneTouchSwitchingText.providerSelectorDefault
+                    }
+                    options={providerOptions}
+                    errorMessage={
+                      showProviderError ? providerErrorMessage : undefined
+                    }
+                    showLabel={false}
+                    errorMessageStyling={errorTextStyling}
+                  />
+                )}
               </div>
-            ) : (
-              <FormDropdown
-                control={control}
-                name="provider"
-                dropdownPlaceholder={
-                  oneTouchSwitchingText.providerSelectorDefault
-                }
-                options={providerOptions}
-                errorMessage={
-                  showProviderError ? providerErrorMessage : undefined
-                }
-                showLabel={false}
-                errorMessageStyling={errorTextStyling}
-              />
-            )}
-          </div>
 
-          <div className="flex flex-col">
-            <Checkbox
-              label={oneTouchSwitchingText.consentLabel}
-              value="consent"
-              checked={currentConsent}
-              onChange={(checked) => setValue("consentGiven", checked)}
-              disabled={isSubmitting}
-              labelClassName="text-core-black"
-            />
-            {!currentConsent && errors.consentGiven && (
-              <p className={errorTextStyling}>{errors.consentGiven.message}</p>
-            )}
-          </div>
-          <TipCard
-            backgroundColor="blue"
-            subtitle={oneTouchSwitchingText.tipSubtitle}
-            subtitleColor="tertiary-blue-dark"
-            image={getAssetPath("/images/linked-hands.svg")}
-            hideImageOnMobile
-          >
-            <InsertFormattedText
-              text={oneTouchSwitchingText.tipText}
-              searchText={oneTouchSwitchingText.tipTextHighlight}
-              className="font-medium"
-            />
-          </TipCard>
+              <div className="flex flex-col">
+                <Checkbox
+                  label={oneTouchSwitchingText.consentLabel}
+                  value="consent"
+                  checked={currentConsent}
+                  onChange={(checked) => setValue("consentGiven", checked)}
+                  disabled={isSubmitting}
+                  labelClassName="text-core-black"
+                />
+                {!currentConsent && errors.consentGiven && (
+                  <p className={errorTextStyling}>
+                    {errors.consentGiven.message}
+                  </p>
+                )}
+              </div>
+              <TipCard
+                backgroundColor="blue"
+                subtitle={oneTouchSwitchingText.tipSubtitle}
+                subtitleColor="tertiary-blue-dark"
+                image={getAssetPath("/images/linked-hands.svg")}
+                hideImageOnMobile
+              >
+                <InsertFormattedText
+                  text={oneTouchSwitchingText.tipText}
+                  searchText={oneTouchSwitchingText.tipTextHighlight}
+                  className="font-medium"
+                />
+              </TipCard>
+            </>
+          )}
         </div>
       </form>
     </>
