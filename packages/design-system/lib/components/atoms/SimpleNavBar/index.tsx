@@ -6,6 +6,7 @@ interface SimpleNavBarProps {
   logo?: JSX.Element;
   fixed?: boolean;
   backgroundColor?: "yellow" | "white";
+  noBorder?: boolean;
 }
 
 export const SimpleNavBar = ({
@@ -13,10 +14,11 @@ export const SimpleNavBar = ({
   children,
   fixed = true,
   backgroundColor = "white",
+  noBorder = false,
 }: React.PropsWithChildren<SimpleNavBarProps>) => {
   return (
     <header
-      className={`ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ${fixed ? "ds:sticky" : ""} ${backgroundColor === "yellow" ? "ds:border-core-grey-200 ds:border-b" : "ds:md:border-b-[0.25px] ds:border-transparent ds:md:border-ui-grey-300"}`}
+      className={`ds:w-full ds:top-0 ds:z-50 ds:transition-all ds:duration-300 ${fixed ? "ds:sticky" : ""} ${backgroundColor === "yellow" ? "ds:border-core-grey-200 ds:border-b" : "ds:md:border-b-[0.25px] ds:border-transparent ds:md:border-ui-grey-300"}  ${noBorder === true && "border-none"}`}
       role="banner"
     >
       <nav

@@ -81,6 +81,7 @@ const isPathAllowed = (
     FLOW_STEPS.find((step) => step.path === nextRequiredStep)?.index ?? -1;
 
   if (path === "/join-flow" || pathIndex === -1) return true;
+  if (path === "/join-flow/order-summary") return true;
 
   return pathIndex <= requiredStepIndex;
 };

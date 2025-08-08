@@ -14,7 +14,6 @@ const getErrorContent = (errorInfo: ErrorInfo | null) => {
   }
 
   return errorProps[errorInfo.type] || errorProps.generalError;
-
 };
 
 const createActionHandler =
