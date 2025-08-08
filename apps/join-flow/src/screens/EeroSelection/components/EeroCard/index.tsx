@@ -16,7 +16,7 @@ export type EeroCardProps = {
 };
 
 const ProductImageAndInfo = ({ product }: { product: EeroOption }) => (
-  <div className="flex flex-col mb-2">
+  <div className="flex flex-col">
     {product.imageURL && (
       <div className="w-full aspect-[555/256]">
         <img
@@ -26,8 +26,8 @@ const ProductImageAndInfo = ({ product }: { product: EeroOption }) => (
         />
       </div>
     )}
-    <div className="flex flex-col justify-between w-full mt-8 space-y-2md:flex-row">
-      <h3 className="font-semibold text-core-black text-sm md:text-md leading-[1.6]">
+    <div className="flex flex-col justify-between w-full mt-8 mb-2 space-y-2md:flex-row">
+      <h3 className="font-semibold text-core-black text-sm md:text-md leading-[1.6] mb-2 md:mb-3.5">
         {product.heading}
       </h3>
       {product.totalCount && (
@@ -50,6 +50,7 @@ const PricingInfo = ({
   isActive: boolean;
 }) => {
   const price = convertPenceToPounds(product.price);
+  const numberOfEeros = product.totalCount - 1;
   return (
     <>
       <div className="flex flex-row items-baseline justify-between md:flex-col">
@@ -57,23 +58,25 @@ const PricingInfo = ({
           <h2 className="text-sm font-semibold leading-[1.6]">
             {isActive ? (
               <span className="flex flex-row">
-                <Tick />
+                <div className="pt-1">
+                  <Tick height={14} width={17} />
+                </div>
                 <span className="ml-1">
-                  {product.totalCount - 1} extra eero
-                  {product.totalCount - 1 > 1 ? "s" : ""} selected
+                  {numberOfEeros} extra eero
+                  {numberOfEeros > 1 ? "s" : ""} selected
                 </span>
               </span>
             ) : (
-              `Add ${product.totalCount - 1} extra eeros`
+              `Add ${numberOfEeros} extra eero${numberOfEeros > 1 ? "s" : ""}`
             )}
           </h2>
         )}
-        <span className="flex flex-row items-baseline">
-          <span className="font-semibold text-md text-nowrap">+£{price}</span>
-          <span className="text-xxs">/month</span>
+        <span className="flex flex-row">
+          <span className="font-semibold text-sm text-nowrap">+£{price}</span>
+          <span className="text-xxs mt-1">/month</span>
         </span>
       </div>
-      <p className="mt-1 text-xs text-ui-grey-500 md:text-core-black md:max-w-[160px]">
+      <p className="mt-2 text-xs text-ui-grey-500 md:text-core-black md:max-w-[160px]">
         You&apos;ll have{" "}
         <span className="font-semibold text-core-black">
           {product.totalCount}
@@ -111,11 +114,8 @@ export const EeroCard = ({
       <div className="flex flex-col w-full mx-auto overflow-hidden md:flex-row">
         <div
           className={`
-            flex flex-col justify-center w-full p-4 pb-2 md:pb-4 md:pl-7 md:py-6
-            ${isActive ? "md:w-7/9 md:pr-0" : "md:w-1/2"}
-            ${isActive ? "bg-core-white" : "md:bg-ui-grey-100"}
-            ${isActive ? "md:border-ui-teal md:border-2 md:border-r-0" : "border-2 border-transparent md:group-hover:border-ui-teal md:group-hover:border-r-0"}
-            md:rounded-l-lg
+            flex flex-col justify-center w-full md:w-1/2 p-4 md:p-6 md:pr-0 md:rounded-l-lg
+            ${isActive ? "bg-core-white md:border-ui-teal md:border-2 md:border-r-0" : "md:bg-ui-grey-100 md:border-2 border-transparent md:group-hover:border-ui-teal md:group-hover:border-r-0"}
           `}
         >
           <PricingInfo product={eero} isActive={isActive} />
@@ -123,10 +123,8 @@ export const EeroCard = ({
 
         <div
           className={`
-            w-full p-4 bg-ui-white flex items-center md:items-center
-            ${isActive ? "md:w-2/5" : "md:w-1/2"}
-            ${isActive ? "md:border-2 border-l-0 md:border-ui-teal" : "md:w-1/2"}
-            border-0 md:rounded-r-lg md:border-2 border-core-grey-200 md:border-t-2 md:border-b-2 md:border-r-2 md:border-l-0 group-hover:border-ui-teal
+            flex w-full md:w-1/2 px-4 pb-4 pt-2 md:py-11 md:pr-10 md:pl-12 bg-ui-white items-center md:items-start justify-center border-core-grey-200 border-0 md:rounded-r-lg md:border-2 md:border-l-0 group-hover:border-ui-teal
+            ${isActive ? "md:border-2 border-l-0 md:border-ui-teal" : ""}
           `}
         >
           <Button
@@ -136,6 +134,7 @@ export const EeroCard = ({
             size="medium"
             fullWidth
           >
+            {isActive && "X "}
             {isActive
               ? eeroChooseProductButtonText.remove
               : eeroChooseProductButtonText.choose}
