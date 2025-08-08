@@ -229,6 +229,13 @@ const PersonalDetails = () => {
   const [hasSubmittedAdditional, setHasSubmittedAdditional] = useState<boolean>(
     !!personalDetails?.dobDay,
   );
+  const hasSmartphoneValue = watch("hasSmartphone");
+  const dobDay = watch("dobDay");
+  const dobMonth = watch("dobMonth");
+  const dobYear = watch("dobYear");
+  const residencyDuration = watch("residencyDuration");
+  const currentEmail = watch("email");
+  const requiresLandline = watch("requiresLandline");
 
   useEffect(() => {
     reset(
@@ -246,6 +253,12 @@ const PersonalDetails = () => {
       },
     );
 
+    const validateDOB = async () => {
+      await trigger(["dobDay", "dobMonth", "dobYear"]);
+    };
+
+    validateDOB();
+
     setShowPill(true);
     setFadeOut(false);
 
@@ -259,15 +272,7 @@ const PersonalDetails = () => {
       clearTimeout(fadeOuttimer);
       clearTimeout(hidePillTimer);
     };
-  }, [currentFormStep, reset, personalDetails]);
-
-  const hasSmartphoneValue = watch("hasSmartphone");
-  const dobDay = watch("dobDay");
-  const dobMonth = watch("dobMonth");
-  const dobYear = watch("dobYear");
-  const residencyDuration = watch("residencyDuration");
-  const currentEmail = watch("email");
-  const requiresLandline = watch("requiresLandline");
+  }, [currentFormStep, reset, personalDetails, dobDay, dobMonth, dobYear]);
 
   const handleContinueFormDetails = async () => {
     try {
