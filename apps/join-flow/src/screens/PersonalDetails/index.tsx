@@ -14,6 +14,7 @@ import { z } from "zod";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
+import { useScrollToElement } from "@/hooks/useScrollToElement";
 import {
   PILL_FADE_OUT_DELAY,
   PILL_HIDE_DELAY,
@@ -55,6 +56,7 @@ const PersonalDetails = () => {
     isLoadingModalOpen,
     slides,
   });
+  const scrollToTop = useScrollToElement("#personalDetailsContainer");
   const [emailCodeLoading, setEmailCodeLoading] = useState<boolean>(false);
 
   const initialStep = personalDetails?.personalDetailsStep || "details";
@@ -272,6 +274,7 @@ const PersonalDetails = () => {
       setHasSubmittedDetails(true);
       const isFormValid = await trigger();
       if (!isFormValid) {
+        scrollToTop();
         return;
       }
 
@@ -683,10 +686,10 @@ const PersonalDetails = () => {
 
           {currentFormStep === "details" && (
             <div className="flex flex-col gap-6">
-              <h2 className="text-md font-bold">
+              <h2 className="text-sm md:text-md font-semibold">
                 {personalDetailsProps.sectionTitle}
               </h2>
-              <p className="text-md">
+              <p className="text-xs md:text-sm text-md">
                 Fields marked <span className="text-ui-error">*</span> are
                 required
               </p>

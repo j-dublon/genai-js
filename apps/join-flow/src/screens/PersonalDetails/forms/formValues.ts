@@ -83,7 +83,7 @@ export const createStepBasedPersonalDetailsSchema = (
           .refine((val) => !val || val.length === 11, {
             message: "UK mobile number must be 11 digits",
           })
-          .refine((val) => !val || /^07\d{9}$/.test(val || ""), {
+          .refine((val) => /^07\d{9}$/.test(val || ""), {
             message: "Please enter a valid UK mobile phone number",
           }),
 
@@ -278,9 +278,10 @@ export type PersonalDetailsUIConfig = {
   };
   marketingSection: {
     consentText: string;
-    text?: string;
-    privacyNoticeUrl?: string;
-    privacyNoticeText?: string;
+    marketingText: string;
+    privacyInfoText: string;
+    privacyNoticeUrl: string;
+    privacyNoticeText: string;
   };
   validationMessages: {
     firstNameRequired: string;

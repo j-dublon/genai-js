@@ -107,7 +107,10 @@ export const personalDetailsProps = {
   },
 
   marketingSection: {
-    text: "From time to time, we'd love let you know about useful things like upgrades, referrals and offers. We won't bombard your inbox and we'll never send you marketing materials without your permission. Here's our Privacy Notice. Are you okay with this?",
+    marketingText:
+      "From time to time, we'd love let you know about useful things like upgrades, referrals and offers.",
+    privacyInfoText:
+      "We won't bombard your inbox and we'll never send you marketing materials without your permission. Here's our Privacy Notice. Are you okay with this?",
     privacyNoticeText: "Privacy Notice",
     privacyNoticeUrl: "https://www.cuckoo.co/legal/privacy",
     consentText: "Yes, count me in",

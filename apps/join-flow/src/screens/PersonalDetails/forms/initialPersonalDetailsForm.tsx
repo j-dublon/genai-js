@@ -1,6 +1,7 @@
 import {
   Checkbox,
   InfoModal,
+  InsertLink,
   Radio,
   TipCard,
   useClickOutside,
@@ -37,24 +38,23 @@ export const InitialPersonalDetailsForm = ({
 
   useClickOutside(mobileModalRef, isMobileModalOpen, closeDobModal);
 
-  const renderMarketingText = () => {
-    const text = personalDetailsProps.marketingSection.text;
-    if (!text) return;
-    const parts = text.split("Privacy Notice");
+  const MarketingText = () => {
+    const {
+      marketingText,
+      privacyInfoText,
+      privacyNoticeText,
+      privacyNoticeUrl,
+    } = personalDetailsProps.marketingSection;
 
     return (
       <>
-        {parts[0]}
-        <a
-          href={personalDetailsProps.marketingSection.privacyNoticeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-ui-link underline hover:text-tertiary-purple cursor-pointer"
-          style={{ transition: "color 0.2s ease" }}
-        >
-          {personalDetailsProps.marketingSection.privacyNoticeText}
-        </a>
-        {parts[1]}
+        <p className="font-medium text-xs md:text-sm mb-4">{marketingText}</p>
+        <InsertLink
+          text={privacyInfoText}
+          searchText={privacyNoticeText}
+          href={privacyNoticeUrl}
+          className="ds:text-xs ds:md:text-sm"
+        />
       </>
     );
   };
@@ -156,7 +156,7 @@ export const InitialPersonalDetailsForm = ({
         )}
       </div>
 
-      <div className="flex flex-col gap-4 mb-5 md:mb-6">
+      <div className="flex flex-col gap-4 mb-6">
         <FormInput
           id="email"
           placeholder={personalDetailsProps.fieldPlaceholders.email}
@@ -181,8 +181,8 @@ export const InitialPersonalDetailsForm = ({
       </div>
 
       <div className="mb-5 md:mb-6">
-        <div className="mb-5 md:mb-6 text-sm leading-[26px]">
-          {renderMarketingText()}
+        <div className="mb-6 text-sm leading-[26px]">
+          <MarketingText />
         </div>
         <Controller
           name="marketingConsent"

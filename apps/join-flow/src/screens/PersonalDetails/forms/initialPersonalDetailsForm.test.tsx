@@ -34,6 +34,17 @@ vi.mock("@react-component-library/ui", () => ({
       className: string;
     }>,
   ) => <div data-testid="tip-card">{props.children}</div>,
+  InsertLink: (
+    props: React.PropsWithChildren<{
+      text: string;
+      searchText: string;
+      href: string;
+    }>,
+  ) => (
+    <div data-testid="insert-link">
+      <a href={props.href}>{props.searchText}</a>
+    </div>
+  ),
   useClickOutside: () => {},
   InfoModal: (
     props: React.PropsWithChildren<{

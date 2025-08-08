@@ -3,6 +3,7 @@ export interface InsertLinkProps {
   searchText: string;
   href: string;
   openInNewTab?: boolean;
+  className?: string;
 }
 
 export const InsertLink = ({
@@ -10,6 +11,7 @@ export const InsertLink = ({
   searchText,
   href,
   openInNewTab = false,
+  className,
 }: InsertLinkProps) => {
   const index = text.indexOf(searchText);
 
@@ -22,16 +24,16 @@ export const InsertLink = ({
 
   return (
     <>
-      {beforeText}
+      <span className={className}>{beforeText}</span>
       <a
         href={href}
-        className="ds:text-ui-link ds:font-medium ds:underline"
+        className={`ds:text-ui-link ds:font-medium ds:underline ${className}`}
         target={openInNewTab ? "_blank" : undefined}
         rel={openInNewTab ? "noopener noreferrer" : undefined}
       >
         {searchText}
       </a>
-      {afterText}
+      <span className={className}>{afterText}</span>
     </>
   );
 };
