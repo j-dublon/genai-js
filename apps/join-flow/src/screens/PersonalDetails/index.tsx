@@ -272,15 +272,7 @@ const PersonalDetails = () => {
       clearTimeout(fadeOuttimer);
       clearTimeout(hidePillTimer);
     };
-  }, [
-    currentFormStep,
-    reset,
-    trigger,
-    personalDetails,
-    dobDay,
-    dobMonth,
-    dobYear,
-  ]);
+  }, [currentFormStep, reset, trigger, personalDetails]);
 
   const handleContinueFormDetails = async () => {
     try {
