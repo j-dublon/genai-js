@@ -12,22 +12,33 @@ export const personalDetailsProps = {
       { value: "yes", label: "I have a smartphone" },
       { value: "no", label: "I don't have a smartphone" },
     ],
-    noSmartphoneAlertText: "Omg no smartphone",
+    smartphoneTooltip:
+      "You'll need a smartphone to download the eero app, so you can set up and manage your router.",
+    noSmartphoneAlertText:
+      "You'll need a smartphone to get Cuckoo. We can't provide our service without a smartphone.",
+  },
+
+  emailSection: {
+    emailTooltip:
+      "Before you sign up, we'll send you a unique code to verify your email address.",
   },
 
   emailModalDetails: {
-    modalTitle: "title about email modal",
+    modalTitle: "Why does Cuckoo need my email address?",
     modalContent: [
-      { title: "title about email modal", text: "text about email modal" },
+      {
+        title: "Why does Cuckoo need my email address?",
+        text: "Before you sign up, we'll send you a unique code to verify your email address.",
+      },
     ],
   },
 
   smartphoneModalDetails: {
-    modalTitle: "title about smartphone modal",
+    modalTitle: "Why do I need a smartphone?",
     modalContent: [
       {
-        title: "title about smartphone modal",
-        text: "text about smartphone modal",
+        title: "Why do I need a smartphone?",
+        text: "You'll need a smartphone to download the eero app, so you can set up and manage your router.",
       },
     ],
   },

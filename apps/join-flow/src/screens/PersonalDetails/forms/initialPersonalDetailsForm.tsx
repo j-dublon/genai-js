@@ -28,7 +28,7 @@ export const InitialPersonalDetailsForm = ({
 
   const [isMobileModalOpen, setIsMobileModalOpen] = useState(false);
 
-  const closeDobModal = (e?: MouseEvent) => {
+  const closeMobileModal = (e?: MouseEvent) => {
     if (mobileModalRef.current) {
       e?.preventDefault();
       mobileModalRef.current.close();
@@ -36,7 +36,7 @@ export const InitialPersonalDetailsForm = ({
     }
   };
 
-  useClickOutside(mobileModalRef, isMobileModalOpen, closeDobModal);
+  useClickOutside(mobileModalRef, isMobileModalOpen, closeMobileModal);
 
   const MarketingText = () => {
     const {
@@ -97,11 +97,11 @@ export const InitialPersonalDetailsForm = ({
           <ToolTip
             gap={16}
             className="md:top-14"
-            content={
-              "Hover over the ‘i’ icon and copy will go here in a tooltip  to explain how we will be sending a code to their email address lorum ipsum dolor sit amet lorum conquistitor."
-            }
+            content={personalDetailsProps.smartphoneSection.smartphoneTooltip}
           >
-            <span className="text-ui-link">Why is this?</span>
+            <span className="text-ui-link">
+              {personalDetailsProps.smartphoneSection.whyText}
+            </span>
           </ToolTip>
         </span>
         <button
@@ -113,7 +113,9 @@ export const InitialPersonalDetailsForm = ({
           }}
           className="inline md:hidden items-center group cursor-pointer"
         >
-          <span className="text-ui-link">Why is this?</span>
+          <span className="text-ui-link">
+            {personalDetailsProps.smartphoneSection.whyText}
+          </span>
         </button>
       </div>
 
@@ -150,8 +152,7 @@ export const InitialPersonalDetailsForm = ({
             backgroundColor="peach"
             className="justify-center md:w-full items-center"
           >
-            You&apos;ll need a smartphone to get Cuckoo. We can&apos;t provide
-            our service without a smartphone.
+            {personalDetailsProps.smartphoneSection.noSmartphoneAlertText}
           </TipCard>
         )}
       </div>
@@ -172,11 +173,9 @@ export const InitialPersonalDetailsForm = ({
           {...register("confirmEmail")}
           hasSubmitted={hasSubmitted}
           required
-          iconTooltip="Hover over the ‘i’ icon and copy will go here in a tooltip  to explain how we will be sending a code to their email address lorum ipsum dolor sit amet lorum conquistitor. "
-          modalTitle={personalDetailsProps.smartphoneModalDetails.modalTitle}
-          modalContent={
-            personalDetailsProps.smartphoneModalDetails.modalContent
-          }
+          iconTooltip={personalDetailsProps.emailSection.emailTooltip}
+          modalTitle={personalDetailsProps.emailModalDetails.modalTitle}
+          modalContent={personalDetailsProps.emailModalDetails.modalContent}
         />
       </div>
 
@@ -198,13 +197,13 @@ export const InitialPersonalDetailsForm = ({
         />
       </div>
       <InfoModal
-        title={personalDetailsProps.emailModalDetails.modalTitle}
+        title={personalDetailsProps.smartphoneModalDetails.modalTitle}
         modalRef={mobileModalRef}
         buttonText="close"
         buttonType="button"
       >
         <ModalContent
-          content={personalDetailsProps.emailModalDetails.modalContent}
+          content={personalDetailsProps.smartphoneModalDetails.modalContent}
         />
       </InfoModal>
     </form>

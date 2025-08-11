@@ -276,6 +276,11 @@ export type PersonalDetailsUIConfig = {
     mainText: string;
     whyText: string;
     options: SmartphoneOption[];
+    smartphoneTooltip: string;
+    noSmartphoneAlertText: string;
+  };
+  emailSection: {
+    emailTooltip: string;
   };
   marketingSection: {
     consentText: string;
