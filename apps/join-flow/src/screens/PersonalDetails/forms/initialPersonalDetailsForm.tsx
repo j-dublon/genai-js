@@ -177,6 +177,7 @@ export const InitialPersonalDetailsForm = ({
           {...register("confirmEmail")}
           hasSubmitted={hasSubmitted}
           required
+          onPaste={(e) => e.preventDefault()}
           iconTooltip={personalDetailsProps.emailSection.emailTooltip}
           modalTitle={personalDetailsProps.emailModalDetails.modalTitle}
           modalContent={personalDetailsProps.emailModalDetails.modalContent}

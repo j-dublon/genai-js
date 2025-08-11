@@ -17,6 +17,7 @@ export interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   modalTitle?: string;
   modalContent?: ModalContent[];
   hasSubmitted?: boolean;
+  onPaste?: (e: React.ClipboardEvent<HTMLInputElement>) => void;
 }
 
 const FormInput = forwardRef<HTMLInputElement, FormInputProps>(
