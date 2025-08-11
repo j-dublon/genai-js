@@ -92,6 +92,19 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
   const store = useJoinFlowStore();
   const [isValidating, setIsValidating] = useState(true);
 
+  const {
+    serviceAddress,
+    selectedPackage,
+    personalDetails,
+    eeroSelection,
+    switchingDetails,
+    goLiveDetails,
+    paymentDetails,
+    timestamp,
+    setErrorInfo,
+    setTimestamp,
+  } = store;
+
   useEffect(() => {
     let isMounted = true;
     const safetyTimeout = setTimeout(() => {
@@ -102,7 +115,15 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
       if (!isMounted) return;
 
       try {
-        const nextRequiredStep = findNextRequiredStep(store);
+        const nextRequiredStep = findNextRequiredStep({
+          serviceAddress,
+          selectedPackage,
+          personalDetails,
+          eeroSelection,
+          switchingDetails,
+          goLiveDetails,
+          paymentDetails,
+        } as JoinFlowState);
         const allowed = isPathAllowed(pathname, nextRequiredStep);
 
         if (!allowed) {
@@ -112,7 +133,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
 
         if (
           pathname === "/join-flow/one-touch-switching" &&
-          otsCompleted(store.switchingDetails)
+          otsCompleted(switchingDetails)
         ) {
           router.replace("/join-flow/go-live-date");
           return;
@@ -120,7 +141,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
 
         if (
           pathname === "/join-flow/payment-details" &&
-          store.paymentDetails?.allTermsAgreed
+          paymentDetails?.allTermsAgreed
         ) {
           router.replace("/join-flow/order-summary");
           return;
@@ -142,20 +163,30 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
       clearTimeout(safetyTimeout);
       clearTimeout(validationDelay);
     };
-  }, [pathname, router, store]);
+  }, [
+    pathname,
+    router,
+    serviceAddress,
+    selectedPackage,
+    personalDetails,
+    eeroSelection,
+    switchingDetails,
+    goLiveDetails,
+    paymentDetails,
+  ]);
 
   useEffect(() => {
     if (
       isDev !== "true" &&
-      store.timestamp &&
-      Date.now() - store.timestamp > EXPIRY_DURATION
+      timestamp &&
+      Date.now() - timestamp > EXPIRY_DURATION
     ) {
-      store.setErrorInfo({ type: "sessionExpiredError" });
+      setErrorInfo({ type: "sessionExpiredError" });
       router.push("/join-flow/error");
     } else {
-      store.setTimestamp(Date.now());
+      setTimestamp(Date.now());
     }
-  }, [store.errorInfo?.type, store.currentStep, router]);
+  }, [timestamp, setErrorInfo, setTimestamp, router]);
 
   if (isValidating) {
     return (
