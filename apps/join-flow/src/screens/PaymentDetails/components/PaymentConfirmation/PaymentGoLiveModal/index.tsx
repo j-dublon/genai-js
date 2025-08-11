@@ -1,5 +1,6 @@
 import { InfoModal, TipCard } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import DateTimeSelectionForm from "@/components/DateTimeSelectionForm";
@@ -25,6 +26,7 @@ export const PaymentGoLiveModal = ({
   setIsModalOpen,
   isModalOpen = false,
 }: PaymentGoLiveModalProps) => {
+  const router = useRouter();
   const { availableDatesLabel, timeSlotLabel, timeSlotPlaceHolder } =
     goLiveDateText;
 
@@ -36,6 +38,7 @@ export const PaymentGoLiveModal = ({
     basket,
     setBasket,
     selectedPackage,
+    setErrorInfo,
   } = useJoinFlowStore();
 
   const [availableAppointments, setAvailableAppointments] = useState<
@@ -120,7 +123,7 @@ export const PaymentGoLiveModal = ({
 
       if (result.basket) {
         const response = await getCICS(basket.id);
-        if (response.success === true) {
+        if (response.success && response.data) {
           setBasket({
             ...result.basket,
             cics: {
@@ -128,6 +131,13 @@ export const PaymentGoLiveModal = ({
               informationHref: response.data.contractInformation,
             },
           });
+        } else if (response.error) {
+          if (response.error.type === "networkError") {
+            setErrorInfo({ type: "networkError" });
+            router.push("/join-flow/error");
+          } else {
+            router.push("/join-flow/payment-details/contract-retrieval-failed");
+          }
         }
         setIsSubmitting(false);
       } else if (result.error) {

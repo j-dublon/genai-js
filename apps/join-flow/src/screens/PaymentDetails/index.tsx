@@ -35,6 +35,7 @@ export const PaymentDetails = () => {
     setBasket,
     isLoadingModalOpen,
     setIsLoadingModalOpen,
+    setErrorInfo,
   } = useJoinFlowStore();
   const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
     isLoadingModalOpen,
@@ -132,9 +133,18 @@ export const PaymentDetails = () => {
 
         if (typeof basket?.id === "string") {
           const response = await getCICS(basket.id);
-          if (response.success === true) {
+          if (response.success && response.data) {
             contractInformation = response.data.contractInformation;
             contractSummary = response.data.contractSummary;
+          } else if (response.error) {
+            if (response.error.type === "networkError") {
+              setErrorInfo({ type: "networkError" });
+              router.push("/join-flow/error");
+            } else {
+              router.push(
+                "/join-flow/payment-details/contract-retrieval-failed",
+              );
+            }
           } else {
             router.push("/join-flow/payment-details/contract-retrieval-failed");
           }
@@ -190,6 +200,7 @@ export const PaymentDetails = () => {
       setPaymentDetails,
       router,
       setIsLoadingModalOpen,
+      setErrorInfo,
     ],
   );
 

@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { useRouter } from "next/navigation";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { EeroOption } from "@/lib/createEeroOptions";
@@ -23,6 +24,11 @@ vi.mock("@/services/helpers/getCICS", () => ({
   getCICS: vi.fn(),
 }));
 const mockGetCICS = vi.mocked(getCICS);
+
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+}));
+const mockUseRouter = vi.mocked(useRouter);
 
 vi.mock("@/hooks/useLoadingModal", () => ({
   useLoadingModal: vi.fn().mockReturnValue({
@@ -105,6 +111,15 @@ describe("EeroInfo", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     console.error = vi.fn();
+
+    mockUseRouter.mockReturnValue({
+      push: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    });
 
     mockUseJoinFlowStore.mockReturnValue({
       selectEeroProduct: mockSelectEeroProduct,

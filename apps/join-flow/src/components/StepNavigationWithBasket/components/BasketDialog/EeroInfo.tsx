@@ -1,5 +1,6 @@
 import { PillButton } from "@react-component-library/ui";
 import { Minus, Plus } from "@react-component-library/ui/icons";
+import { useRouter } from "next/navigation";
 
 import type { EeroOption } from "@/lib/createEeroOptions";
 import { getCICS } from "@/services/helpers/getCICS";
@@ -25,8 +26,10 @@ export const EeroInfo = ({
   eeroInfoText,
   setBasketIsLoading,
 }: EeroInfoProps) => {
+  const router = useRouter();
   const { title, addMoreEeros, removeEeros } = eeroInfoText;
-  const { selectEeroProduct, basket, setBasket } = useJoinFlowStore();
+  const { selectEeroProduct, basket, setBasket, setErrorInfo } =
+    useJoinFlowStore();
 
   if (!eeroSelection) return null;
 
@@ -71,9 +74,16 @@ export const EeroInfo = ({
         let contractInformation = "";
         let contractSummary = "";
         const response = await getCICS(basket.id);
-        if (response.success === true) {
+        if (response.success && response.data) {
           contractInformation = response.data.contractInformation;
           contractSummary = response.data.contractSummary;
+        } else if (response.error) {
+          if (response.error.type === "networkError") {
+            setErrorInfo({ type: "networkError" });
+            router.push("/join-flow/error");
+          } else {
+            router.push("/join-flow/payment-details/contract-retrieval-failed");
+          }
         }
         setBasket({
           ...result.basket,

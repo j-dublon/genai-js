@@ -55,6 +55,7 @@ export const BasketDialog = ({
     basket,
     setBasket,
     selectPackage,
+    setErrorInfo,
   } = useJoinFlowStore();
 
   const { yourMeshNetwork, addMoreEeros, removeEeros } = basketDialogProps;
@@ -188,9 +189,18 @@ export const BasketDialog = ({
           let contractInformation = "";
           let contractSummary = "";
           const response = await getCICS(basket.id);
-          if (response.success === true) {
+          if (response.success && response.data) {
             contractInformation = response.data.contractInformation;
             contractSummary = response.data.contractSummary;
+          } else if (response.error) {
+            if (response.error.type === "networkError") {
+              setErrorInfo({ type: "networkError" });
+              router.push("/join-flow/error");
+            } else {
+              router.push(
+                "/join-flow/payment-details/contract-retrieval-failed",
+              );
+            }
           }
           setBasket({
             ...result.basket,

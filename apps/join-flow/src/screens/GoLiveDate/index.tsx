@@ -57,6 +57,7 @@ export const GoLiveDate = () => {
     selectedPackage,
     isLoadingModalOpen,
     setIsLoadingModalOpen,
+    setErrorInfo,
   } = useJoinFlowStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -173,15 +174,24 @@ export const GoLiveDate = () => {
 
       if (result.basket) {
         const response = await getCICS(basket.id);
-        const contractInformation = response?.data?.contractInformation;
-        const contractSummary = response?.data?.contractSummary;
-        setBasket({
-          ...result.basket,
-          cics: {
-            informationHref: contractInformation,
-            summaryHref: contractSummary,
-          },
-        });
+        if (response.success && response.data) {
+          const contractInformation = response.data.contractInformation;
+          const contractSummary = response.data.contractSummary;
+          setBasket({
+            ...result.basket,
+            cics: {
+              informationHref: contractInformation,
+              summaryHref: contractSummary,
+            },
+          });
+        } else if (response.error) {
+          if (response.error.type === "networkError") {
+            setErrorInfo({ type: "networkError" });
+            router.push("/join-flow/error");
+          } else {
+            router.push("/join-flow/payment-details/contract-retrieval-failed");
+          }
+        }
       } else if (result.error) {
         setIsLoadingModalOpen(false);
         return;

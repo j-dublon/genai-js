@@ -2,11 +2,17 @@ import { squidAPI } from "@cuckoointernet/util-squid-network-requests";
 
 import { CicsResponse, getCICS } from "./getCICS";
 
-vi.mock("@cuckoointernet/util-squid-network-requests", () => ({
-  squidAPI: {
-    getCICS: vi.fn(),
-  },
-}));
+vi.mock("@cuckoointernet/util-squid-network-requests", async () => {
+  const actual = await vi.importActual(
+    "@cuckoointernet/util-squid-network-requests",
+  );
+  return {
+    ...actual,
+    squidAPI: {
+      getCICS: vi.fn(),
+    },
+  };
+});
 const mockGetCICS = vi.mocked(squidAPI.getCICS);
 
 describe("When getting contract information / summary for a customer", () => {
@@ -37,16 +43,14 @@ describe("When getting contract information / summary for a customer", () => {
       throw new Error("Some 4XX or 5XX response");
     });
 
-    const expectedResponse: CicsResponse = {
-      success: false,
-      data: {
-        contractInformation: "/",
-        contractSummary: "/",
-      },
-    };
-
     const actualResponse = await getCICS("123");
 
-    expect(actualResponse).toStrictEqual(expectedResponse);
+    expect(actualResponse).toStrictEqual({
+      error: {
+        type: "unknownError",
+        message: "An unexpected error occurred",
+        details: ["Some 4XX or 5XX response"],
+      },
+    });
   });
 });

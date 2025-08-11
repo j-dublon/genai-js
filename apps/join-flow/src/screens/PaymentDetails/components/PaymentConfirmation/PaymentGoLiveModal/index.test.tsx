@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { useRouter } from "next/navigation";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 
@@ -75,7 +76,23 @@ vi.mock("@/services/helpers/updateBasket", () => ({
   updateBasket: vi.fn(() => Promise.resolve({ basket: { id: "test" } })),
 }));
 
+vi.mock("next/navigation", () => ({
+  useRouter: vi.fn(),
+}));
+const mockUseRouter = vi.mocked(useRouter);
+
 describe("PaymentGoLiveModal", () => {
+  beforeEach(() => {
+    mockUseRouter.mockReturnValue({
+      push: vi.fn(),
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    });
+  });
+
   const renderComponent = () => {
     const modalRef = createRef<HTMLDialogElement>();
     return render(
