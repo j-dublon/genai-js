@@ -176,17 +176,48 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
   ]);
 
   useEffect(() => {
-    if (
-      isDev !== "true" &&
-      timestamp &&
-      Date.now() - timestamp > EXPIRY_DURATION
-    ) {
-      setErrorInfo({ type: "sessionExpiredError" });
-      router.push("/join-flow/error");
-    } else {
+    if (!timestamp) {
       setTimestamp(Date.now());
     }
-  }, [timestamp, setErrorInfo, setTimestamp, router]);
+  }, [timestamp, setTimestamp]);
+
+  // Update timestamp when user progresses through the journey
+  useEffect(() => {
+    if (timestamp && isDev !== "true") {
+      // Check if session has expired
+      if (Date.now() - timestamp > EXPIRY_DURATION) {
+        setErrorInfo({ type: "sessionExpiredError" });
+        router.push("/join-flow/error");
+        return;
+      }
+
+      // Refresh timestamp if user is actively progressing (has completed steps)
+      const hasProgress =
+        serviceAddress ||
+        selectedPackage ||
+        personalDetails ||
+        eeroSelection ||
+        switchingDetails ||
+        goLiveDetails ||
+        paymentDetails;
+
+      if (hasProgress) {
+        setTimestamp(Date.now());
+      }
+    }
+  }, [
+    timestamp,
+    serviceAddress,
+    selectedPackage,
+    personalDetails,
+    eeroSelection,
+    switchingDetails,
+    goLiveDetails,
+    paymentDetails,
+    setErrorInfo,
+    setTimestamp,
+    router,
+  ]);
 
   if (isValidating) {
     return (
