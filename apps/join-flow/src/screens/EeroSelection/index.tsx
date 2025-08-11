@@ -1,11 +1,17 @@
 "use client";
 
-import { Button, ColorPill, LoadingModal } from "@react-component-library/ui";
+import {
+  Button,
+  ColorPill,
+  InsertLinksOrButtons,
+  LoadingModal,
+  useClickOutside,
+} from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore, { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
@@ -16,6 +22,7 @@ import { updateBasket } from "@/services/helpers/updateBasket";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
 import { EeroCard } from "./components/EeroCard";
+import { EeroSelectionHelpModal } from "./components/EeroSelectionHelpModal";
 import {
   eeroChooseProductButtonText,
   eeroContinueButtonText,
@@ -39,7 +46,31 @@ const EeroSelection = () => {
     setIsLoadingModalOpen,
   } = useJoinFlowStore();
 
+  const {
+    backButtonText,
+    title,
+    description,
+    linkText,
+    infoModalTitle,
+    infoModalButtonText,
+    infoModalSubtitle,
+    infoModalContent,
+    infoModalImage,
+  } = eeroPageContent;
+
   const posthog = usePostHog();
+
+  const infoModalRef = useRef<HTMLDialogElement>(null);
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+
+  const closeFunction = () => {
+    if (infoModalRef.current) {
+      infoModalRef.current.close();
+      setIsInfoModalOpen(false);
+    }
+  };
+
+  useClickOutside(infoModalRef, isInfoModalOpen, closeFunction);
 
   const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
     isLoadingModalOpen,
@@ -174,10 +205,24 @@ const EeroSelection = () => {
           <div className="px-5 md:px-8 rounded-md">
             <div className="flex flex-col items-center">
               <h1 className="mb-4 text-[26px] md:text-3xl font-semibold text-center [text-wrap:balance]">
-                {eeroPageContent.title}
+                {title}
               </h1>
               <p className="text-xs md:text-md mb-6 text-center max-w-[880px]">
-                {eeroPageContent.description}
+                <InsertLinksOrButtons
+                  text={description[0]}
+                  items={[
+                    {
+                      onClick: () => {
+                        infoModalRef.current?.showModal();
+                        setIsInfoModalOpen(true);
+                      },
+                      searchText: linkText,
+                      openInNewTab: true,
+                    },
+                  ]}
+                />{" "}
+                <span className="font-medium">{description[1]}</span>{" "}
+                {description[2]}
               </p>
             </div>
 
@@ -205,7 +250,7 @@ const EeroSelection = () => {
                 variant="outline"
                 className="w-full md:w-fit"
               >
-                {eeroPageContent.backButtonText}
+                {backButtonText}
               </Button>
 
               <Button
@@ -225,6 +270,14 @@ const EeroSelection = () => {
         </div>
       </div>
       <Footer />
+      <EeroSelectionHelpModal
+        title={infoModalTitle}
+        buttonText={infoModalButtonText}
+        modalRef={infoModalRef}
+        subtitle={infoModalSubtitle}
+        content={infoModalContent}
+        image={infoModalImage}
+      />
     </>
   );
 };

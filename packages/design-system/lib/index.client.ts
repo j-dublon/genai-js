@@ -18,8 +18,7 @@ import {
 } from "@components/atoms/InputField";
 import { InputSlider } from "@components/atoms/InputSlider";
 import { InsertFormattedText } from "@components/atoms/InsertFormattedText";
-import { InsertLink, InsertLinkProps } from "@components/atoms/InsertLink";
-import { InsertMultipleLinks } from "@components/atoms/InsertMultipleLinks";
+import { InsertLinksOrButtons } from "@components/atoms/InsertLinksOrButtons";
 import { LoadingSlide } from "@components/atoms/LoadingSlide";
 import { PhoneTextContent } from "@components/atoms/PhoneTextContent";
 import { PillButton } from "@components/atoms/PillButton";
@@ -116,8 +115,7 @@ export {
   DropdownInputField as InputField,
   InputSlider,
   InsertFormattedText,
-  InsertLink,
-  InsertMultipleLinks,
+  InsertLinksOrButtons,
   LoadingModal,
   LoadingSlide,
   MobileApp,
@@ -166,7 +164,6 @@ export type {
   DatePickerProps,
   GuideCardProps,
   InfoCardProps,
-  InsertLinkProps,
   ReviewCardProps,
   TextColors,
   TextWithTickProps,

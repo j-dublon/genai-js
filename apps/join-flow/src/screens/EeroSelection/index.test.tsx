@@ -56,8 +56,18 @@ vi.mock("@/hooks/useLoadingModal", () => ({
 vi.mock("./eeroSelectionProps", () => ({
   eeroPageContent: {
     title: "Eero Selection",
-    description: "Choose your Eero setup",
+    description: ["Choose your Eero setup"],
     backButtonText: "Back",
+    linkText: "Eero setup",
+    infoModalTitle: "TrueMesh explained",
+    infoModalSubtitle:
+      "Their patented TrueMesh technology lets multiple eeros work together to intelligently spread Wi-Fi throughout your home.",
+    infoModalContent: [
+      "This is particularly useful in larger homes, where the signal might have previously struggled to reach every room.",
+      "The eeros constantly monitor the signal strength and adapt to make sure there are no weak areas or slow connections.",
+      "When you join Cuckoo, you can add up to three eeros to create a TrueMesh connection for your home and say goodbye to dead spots. Woohoo!",
+    ],
+    infoModalImage: "/images/true-mesh.svg",
   },
   eeroChooseProductButtonText: {
     choose: "Choose",
@@ -137,6 +147,11 @@ vi.mock("@/hooks/useLoadingModal", () => ({
 }));
 
 describe("EeroSelection", () => {
+  beforeAll(() => {
+    HTMLDialogElement.prototype.showModal = vi.fn();
+    HTMLDialogElement.prototype.close = vi.fn();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockJoinFlowStore.mockReturnValue({
@@ -145,6 +160,7 @@ describe("EeroSelection", () => {
       selectEeroProduct: vi.fn(),
       isLoadingModalOpen: false,
       setIsLoadingModalOpen: vi.fn(),
+      setErrorInfo: vi.fn(),
     });
     mockUpdateBasket.mockResolvedValue({
       basket: {
@@ -159,7 +175,19 @@ describe("EeroSelection", () => {
     render(<EeroSelection />);
 
     expect(screen.getByText("Eero Selection")).toBeInTheDocument();
-    expect(screen.getByText("Choose your Eero setup")).toBeInTheDocument();
+    expect(screen.getByText("Choose your")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Eero setup" }),
+    ).toBeInTheDocument();
+  });
+
+  it("attempts to open the info modal when clicking the link text", async () => {
+    const user = userEvent.setup();
+    render(<EeroSelection />);
+    const linkText = screen.getByRole("button", { name: "Eero setup" });
+    await user.click(linkText);
+
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
   });
 
   it("renders Eero cards for extra eero options", () => {

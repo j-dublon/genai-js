@@ -1,4 +1,4 @@
-import { InfoModal, InsertLink } from "@react-component-library/ui";
+import { InfoModal, InsertLinksOrButtons } from "@react-component-library/ui";
 import { RefObject } from "react";
 
 import { GoLiveDateProps } from "../GoLiveDateProps";
@@ -10,7 +10,7 @@ export const EngineerVisitModal = ({
   modalRef: RefObject<HTMLDialogElement | null>;
   modalContent: GoLiveDateProps["engineerVisitModal"];
 }) => {
-  const { title, paragraphs, link } = modalContent;
+  const { title, paragraphs, link, linkText } = modalContent;
   return (
     <InfoModal
       title={title}
@@ -27,11 +27,15 @@ export const EngineerVisitModal = ({
           <li>{paragraphs[4]}</li>
         </ul>
         <p>
-          <InsertLink
-            href={link}
+          <InsertLinksOrButtons
             text={paragraphs[5]}
-            searchText="what happens on the day of the installation/activation?"
-            openInNewTab
+            items={[
+              {
+                href: link,
+                searchText: linkText,
+                openInNewTab: true,
+              },
+            ]}
           />
         </p>
       </div>

@@ -3,7 +3,7 @@ import {
   AccessibleLoadingEgg,
   Button,
   DatePicker,
-  InsertLink,
+  InsertLinksOrButtons,
   TipCard,
 } from "@react-component-library/ui";
 import { usePostHog } from "posthog-js/react";
@@ -195,10 +195,14 @@ export const NotReadyToJoinForm = () => {
             </TipCard>
           )}
           <p className="text-xs text-core-black leading-[1.6] opacity-80">
-            <InsertLink
+            <InsertLinksOrButtons
               text={privacyNoticeText}
-              searchText="Privacy Notice"
-              href="/legal/privacy"
+              items={[
+                {
+                  searchText: "Privacy Notice",
+                  href: "/legal/privacy",
+                },
+              ]}
             />
           </p>
           {submissionStatus === "submitting" ? (

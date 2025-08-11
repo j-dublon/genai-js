@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  Checkbox,
-  InsertLink,
-  InsertMultipleLinks,
-} from "@react-component-library/ui";
+import { Checkbox, InsertLinksOrButtons } from "@react-component-library/ui";
 import { useEffect, useState } from "react";
 
 import useJoinFlowStore from "@/store/useJoinFlowStore";
@@ -64,9 +60,9 @@ export const PaymentTermsAndConditions = ({
   return (
     <div className="bg-ui-grey-100 p-6 rounded-md">
       <div className="mb-6">
-        <InsertMultipleLinks
+        <InsertLinksOrButtons
           text={yourAgreementText}
-          links={[
+          items={[
             {
               searchText: "Contract Information",
               href: basket?.cics?.informationHref ?? "/",
@@ -107,10 +103,14 @@ export const PaymentTermsAndConditions = ({
 
         <Checkbox
           label={
-            <InsertLink
+            <InsertLinksOrButtons
               text={creditSearchCheckboxText}
-              searchText="credit search"
-              href={creditSearchHref}
+              items={[
+                {
+                  searchText: "credit search",
+                  href: creditSearchHref,
+                },
+              ]}
             />
           }
           value="creditSearch"

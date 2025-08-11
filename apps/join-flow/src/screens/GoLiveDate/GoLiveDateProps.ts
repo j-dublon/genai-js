@@ -17,6 +17,7 @@ export interface GoLiveDateProps {
   engineerVisitModal: {
     title: string;
     paragraphs: string[];
+    linkText: string;
     link: string;
     buttonText: string;
   };
@@ -50,6 +51,7 @@ export const goLiveDateText: GoLiveDateProps = {
       "check that the equipment that's been installed previously is still working and take action to ensure that any faults they spot get fixed.",
       "When your home is connected, the team will carry out several quality tests to confirm your new fibre broadband works. To learn more, read our handy guide what happens on the day of the installation/activation?",
     ],
+    linkText: "what happens on the day of the installation/activation?",
     link: "https://help.cuckoo.co/en/articles/9123620-what-happens-on-the-day-of-the-installation-activation",
     buttonText: "Okay, got it",
   },

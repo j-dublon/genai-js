@@ -1,7 +1,7 @@
 import {
   Checkbox,
   InfoModal,
-  InsertLink,
+  InsertLinksOrButtons,
   Radio,
   TipCard,
   useClickOutside,
@@ -49,11 +49,15 @@ export const InitialPersonalDetailsForm = ({
     return (
       <>
         <p className="font-medium text-xs md:text-sm mb-4">{marketingText}</p>
-        <InsertLink
+        <InsertLinksOrButtons
           text={privacyInfoText}
-          searchText={privacyNoticeText}
-          href={privacyNoticeUrl}
-          className="ds:text-xs ds:md:text-sm"
+          items={[
+            {
+              searchText: privacyNoticeText,
+              href: privacyNoticeUrl,
+            },
+          ]}
+          defaultClassName="ds:text-xs ds:md:text-sm"
         />
       </>
     );

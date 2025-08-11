@@ -33,6 +33,7 @@ const mockModalContent = {
     "This paragraph contains a link to more information about the mock topic. Here's what happens on the day of the installation/activation?",
   ],
   link: "https://example.com/mock-link",
+  linkText: "what happens on the day of the installation/activation?",
   buttonText: "Mock Button Text",
 };
 

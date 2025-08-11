@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AccessibleLoadingEgg,
   Button,
-  InsertLink,
+  InsertLinksOrButtons,
   TipCard,
 } from "@react-component-library/ui";
 import { usePostHog } from "posthog-js/react";
@@ -176,11 +176,15 @@ export const RegisterOfInterestForm = ({
       />
 
       <p className="text-xs text-core-black">
-        <InsertLink
+        <InsertLinksOrButtons
           text={privacyNoticeText}
-          searchText={privacyNoticeLinkText}
-          href={privacyNoticeUrl}
-          openInNewTab={true}
+          items={[
+            {
+              searchText: privacyNoticeLinkText,
+              href: privacyNoticeUrl,
+              openInNewTab: true,
+            },
+          ]}
         />
       </p>
 
