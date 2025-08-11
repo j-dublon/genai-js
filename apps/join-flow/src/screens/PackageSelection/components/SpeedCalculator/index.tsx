@@ -132,17 +132,24 @@ export const SpeedCalculator = ({
   return (
     <div className="md:px-20 lg:px-29 md:pt-16 md:pb-25 flex justify-center">
       <div className="rounded-lg w-full py-8 px-5 md:p-0 md:max-w-[1018px]">
-        <div className="rounded-lg md:rounded-b-none bg-secondary-pink p-6 flex flex-col gap-3">
+        <div className="relative rounded-lg md:rounded-b-none bg-secondary-pink p-6 flex flex-col gap-3 overflow-hidden">
+          <div
+            className={`absolute bg-[url(/vc-ap-join-flow/assets/images/whoosh-mobile.svg)] md:bg-[url(/vc-ap-join-flow/assets/images/whoosh.svg)] h-full w-full left-0 top-0 rounded-lg md:rounded-b-none bg-contain md:bg-cover bg-right md:bg-center bg-no-repeat z-1`}
+            style={{
+              WebkitMaskImage: "linear-gradient(to right, transparent, black)",
+              maskImage: "linear-gradient(to right, transparent, black)",
+            }}
+          />
           <ColorPill
             backgroundColor="tertiary-purple"
             colorPillText="Cuckoo help"
             size="extraSmall"
             whiteText
           />
-          <h2 className="text-core-black text-xl font-semibold leading-[1.5] md:text-3xl md:leading-[1.4] max-w-[260px] md:max-w-[378px]">
+          <h2 className="text-core-black text-xl font-semibold leading-[1.5] md:text-3xl md:leading-[1.4] max-w-[260px] md:max-w-[378px] z-2">
             {title}
           </h2>
-          <p className="text-xs font-normal leading-[1.6] md:text-sm sm:max-w-[450px]">
+          <p className="text-xs font-normal leading-[1.6] md:text-sm sm:max-w-[450px] z-2">
             {subtitle}
           </p>
         </div>

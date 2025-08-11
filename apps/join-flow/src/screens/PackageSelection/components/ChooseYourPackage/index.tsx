@@ -223,7 +223,7 @@ export const ChooseYourPackage = () => {
     modalRef.current?.showModal();
   };
 
-  const getModalContent = () => {
+  const ModalContent = () => {
     switch (modalContent) {
       case "speed-calculator":
         return (
@@ -334,7 +334,7 @@ export const ChooseYourPackage = () => {
               : undefined
           }
         >
-          {getModalContent()}
+          <ModalContent />
         </FullScreenModal>
       </section>
     </>
