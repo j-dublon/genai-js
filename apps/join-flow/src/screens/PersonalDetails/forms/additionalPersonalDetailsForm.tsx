@@ -65,7 +65,7 @@ export const AdditionalPersonalDetailsForm = ({
 
   useEffect(() => {
     scrollToTop();
-  }, []);
+  }, [scrollToTop]);
 
   const closeDobModal = (e?: MouseEvent) => {
     if (dobModalRef.current) {

@@ -55,6 +55,7 @@ export const personalDetailsProps = {
       "Oops! That code doesn't look right. Try entering a valid one.",
     tooRecentRequestText:
       "An email validation code was already requested recently. Please wait a moment.",
+    privacyHref: "https://www.cuckoo.co/legal/privacy",
   },
 
   additionalSection: {

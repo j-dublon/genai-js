@@ -3,7 +3,7 @@ import { Checkbox } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { usePostHog } from "posthog-js/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
@@ -36,19 +36,25 @@ export const PaymentForm = ({
 
   const initialAccountHolderName =
     paymentDetails?.accountholderName ||
-    (personalDetails
-      ? `${personalDetails.firstName} ${personalDetails.lastName}`
-      : "");
+    `${personalDetails?.firstName ?? ""} ${personalDetails?.lastName ?? ""}`;
   const initialAccountNumber = "";
   const initialSortCode = "";
 
-  const defaultValues: FormValues = {
-    accountholderName: initialAccountHolderName,
-    accountNumber: initialAccountNumber,
-    sortCode: initialSortCode,
-    sameAsServiceAddress: billingAddress ? false : true,
-    isAccountHolder: paymentDetails?.isAccountHolder || false,
-  };
+  const defaultValues = useMemo<FormValues>(() => {
+    return {
+      accountholderName: initialAccountHolderName,
+      accountNumber: initialAccountNumber,
+      sortCode: initialSortCode,
+      sameAsServiceAddress: billingAddress ? false : true,
+      isAccountHolder: paymentDetails?.isAccountHolder || false,
+    };
+  }, [
+    paymentDetails?.isAccountHolder,
+    billingAddress,
+    initialAccountHolderName,
+    initialAccountNumber,
+    initialSortCode,
+  ]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(paymentFormSchema),
@@ -158,7 +164,7 @@ export const PaymentForm = ({
         reset(defaultValues);
       }
     },
-    [savePaymentDetails, onSubmit, trigger, posthog],
+    [savePaymentDetails, onSubmit, trigger, posthog, defaultValues, reset],
   );
 
   const isAccountholderNameValid = accountholderName?.trim().length > 0;

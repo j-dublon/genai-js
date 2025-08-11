@@ -261,6 +261,7 @@ type verificationSection = {
   loadingText: string;
   resendButtonText: string;
   changeEmailText: string;
+  privacyHref?: string;
 };
 
 export type PersonalDetailsUIConfig = {

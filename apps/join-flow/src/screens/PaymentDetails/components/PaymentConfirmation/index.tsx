@@ -68,7 +68,7 @@ export const PaymentConfirmation = ({
 
   useEffect(() => {
     scrollToTop();
-  }, []);
+  }, [scrollToTop]);
 
   useEffect(() => {
     if (paymentDetails) {

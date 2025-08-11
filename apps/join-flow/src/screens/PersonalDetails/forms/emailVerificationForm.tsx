@@ -42,11 +42,12 @@ export const EmailVerificationForm = ({
     errorCardText,
     resendButtonText,
     changeEmailText,
+    privacyHref,
   } = verificationSection;
 
   useEffect(() => {
     scrollToTop();
-  }, []);
+  }, [scrollToTop]);
 
   // Skip this page if already verified
   useEffect(() => {
@@ -157,7 +158,7 @@ export const EmailVerificationForm = ({
         <span>
           {tipCardText} <span className="font-medium">{currentEmail}</span>.
           Also, here’s our{" "}
-          <a href="" className="text-ui-link">
+          <a href={privacyHref} className="text-ui-link">
             Privacy Notice.
           </a>
         </span>
