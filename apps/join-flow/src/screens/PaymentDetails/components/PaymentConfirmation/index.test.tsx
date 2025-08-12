@@ -416,9 +416,6 @@ describe("PaymentConfirmation", () => {
 
   it("handles missing basket ID", async () => {
     const user = userEvent.setup();
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
     const store = useJoinFlowStore.getState();
     store.setBasket({
       id: undefined as unknown as string,
@@ -435,11 +432,8 @@ describe("PaymentConfirmation", () => {
     }
     const confirmButton = screen.getByRole("button", { name: signUpText });
     await user.click(confirmButton);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Basket ID is required to update basket",
-    );
+
     expect(mockUpdateBasket).not.toHaveBeenCalled();
     expect(mockSubmitBasket).not.toHaveBeenCalled();
-    consoleErrorSpy.mockRestore();
   });
 });

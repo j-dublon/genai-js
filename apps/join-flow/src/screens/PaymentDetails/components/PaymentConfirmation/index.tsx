@@ -4,6 +4,7 @@ import {
   useClickOutside,
 } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { Footer } from "@/components/Footer";
@@ -31,6 +32,7 @@ export const PaymentConfirmation = ({
   onGoBack: () => void;
   onComplete: () => void;
 }) => {
+  const router = useRouter();
   const {
     paymentDetails,
     setPaymentDetails,
@@ -41,6 +43,7 @@ export const PaymentConfirmation = ({
     accessibilityCommunicationPreferences,
     setIsLoadingModalOpen,
     isLoadingModalOpen,
+    setErrorInfo,
   } = useJoinFlowStore();
   const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
     isLoadingModalOpen,
@@ -111,9 +114,18 @@ export const PaymentConfirmation = ({
           accessibilityRequirements,
           accessibilityCommunicationPreferences,
         );
+
+        if (result.error) {
+          setErrorInfo({ type: result.error.type });
+          router.push("/join-flow/error");
+          return;
+        }
+
         vulnerabilityAndAccessibility = result.vulnerabilityAndAccessibility;
-      } catch (error) {
-        console.error("Error creating vulnerability and accessibility:", error);
+      } catch {
+        setErrorInfo({ type: "unknownError" });
+        router.push("/join-flow/error");
+        return;
       }
     }
 
@@ -129,7 +141,8 @@ export const PaymentConfirmation = ({
 
     if (!basket?.id) {
       console.error("Basket ID is required to update basket");
-      setIsLoadingModalOpen(false);
+      setErrorInfo({ type: "generalError" });
+      router.push("/join-flow/error");
       return;
     }
 
@@ -144,11 +157,8 @@ export const PaymentConfirmation = ({
       });
 
       if (result.error) {
-        console.error(
-          "Error updating opt ins on basket:",
-          result.error.message || "Unknown error",
-        );
-        setIsLoadingModalOpen(false);
+        setErrorInfo({ type: result.error.type });
+        router.push("/join-flow/error");
         return;
       }
 
@@ -160,22 +170,21 @@ export const PaymentConfirmation = ({
         const submitResult = await submitBasket(basket.id);
 
         if (submitResult.type === "error") {
-          console.error(
-            "Error submitting basket:",
-            submitResult.error?.message ?? "Unknown error",
-          );
-          setIsLoadingModalOpen(false);
+          setErrorInfo({ type: "generalError" });
+          router.push("/join-flow/error");
           return;
         }
 
         onComplete();
-      } catch (error) {
-        console.error("Unexpected error submitting basket:", error);
-        setIsLoadingModalOpen(false);
+      } catch {
+        setErrorInfo({ type: "unknownError" });
+        router.push("/join-flow/error");
+        return;
       }
-    } catch (error) {
-      console.error("Unexpected error updating opt ins on basket:", error);
-      setIsLoadingModalOpen(false);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
+      return;
     }
   }, [
     paymentDetails,
@@ -190,6 +199,8 @@ export const PaymentConfirmation = ({
     termsAgreed,
     setBasket,
     setIsLoadingModalOpen,
+    router,
+    setErrorInfo,
   ]);
 
   const handleTermsChange = useCallback(
