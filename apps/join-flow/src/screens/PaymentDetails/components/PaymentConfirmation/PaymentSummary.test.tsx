@@ -133,11 +133,6 @@ describe("PaymentSummary", () => {
     expect(screen.getByRole("presentation")).toBeInTheDocument();
     expect(screen.getByText("Your monthly payment")).toBeInTheDocument();
     expect(screen.getByText("150Mbps")).toBeInTheDocument();
-    expect(screen.getByText("No additional Eero needed")).toBeInTheDocument();
-    expect(
-      screen.getByText("Just one eero provided by us."),
-    ).toBeInTheDocument();
-    expect(screen.getByText("Included")).toBeInTheDocument();
     expect(screen.getByText("Your total monthly payment")).toBeInTheDocument();
     expect(screen.getAllByText("£25")).toHaveLength(2);
     expect(

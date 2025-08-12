@@ -12,8 +12,8 @@ describe("usePricingCalculations", () => {
     frontendIdentifier: "Superfast",
     frontendTitle: "C-150",
     speeds: {
-      download: 67,
-      upload: 18,
+      download: 150,
+      upload: 25,
     },
     prices: {
       broadband: {
@@ -108,7 +108,7 @@ describe("usePricingCalculations", () => {
         totalPlanSaving: "96.24",
         nextPriceRiseAmount: "7.01",
         followingPriceRiseAmount: "3",
-        packageName: "67Mbps",
+        packageName: "C-150 full fibre broadband",
       });
     });
 
@@ -131,7 +131,7 @@ describe("usePricingCalculations", () => {
         totalPlanSaving: "96.24",
         nextPriceRiseAmount: "7.01",
         followingPriceRiseAmount: "3",
-        packageName: "67Mbps",
+        packageName: "C-150 full fibre broadband",
       });
     });
 
@@ -248,7 +248,7 @@ describe("usePricingCalculations", () => {
         usePricingCalculations(fastPackage, null),
       );
 
-      expect(result.current.packageName).toBe("100Mbps");
+      expect(result.current.packageName).toBe("C-100 full fibre broadband");
     });
   });
 
@@ -282,7 +282,7 @@ describe("usePricingCalculations", () => {
       rerender({ pkg: newPackage, eero: mockEeroProduct });
 
       expect(result.current).not.toBe(firstResult);
-      expect(result.current.packageName).toBe("200Mbps");
+      expect(result.current.packageName).toBe("C-200 full fibre broadband");
     });
   });
 });

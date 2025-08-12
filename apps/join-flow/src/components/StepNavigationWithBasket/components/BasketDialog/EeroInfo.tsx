@@ -54,12 +54,15 @@ export const EeroInfo = ({
     try {
       const result = await updateBasket(basket.id, {
         product: {
-          extras: [
-            {
-              family: eeroSelection.family,
-              selectionIdentifier: eeroSelection.selectionIdentifier,
-            },
-          ],
+          extras:
+            eeroSelection.code === "EERO_MESH_ROUTER_X0"
+              ? []
+              : [
+                  {
+                    family: eeroSelection.family,
+                    selectionIdentifier: eeroSelection.selectionIdentifier,
+                  },
+                ],
         },
       });
 

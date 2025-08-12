@@ -23,19 +23,18 @@ const LineItem: React.FC<LineItemProps> = ({
   description,
   price,
   isIncluded = false,
-}) => (
-  <div className="flex justify-between items-center mb-4">
-    <div className="text-ui-grey-500 text-xs md:text-sm font-normal">
-      <p>{title}</p>
-      {description && <p>{description}</p>}
+}) =>
+  !isIncluded && (
+    <div className="flex justify-between items-center mb-4">
+      <div className="text-ui-grey-500 text-xs md:text-sm font-normal">
+        <p>{title}</p>
+        {description && <p>{description}</p>}
+      </div>
+      <div className="text-right">
+        <p className="text-xs md:text-sm font-semibold">{`£${price}`}</p>
+      </div>
     </div>
-    <div className="text-right">
-      <p className="text-xs md:text-sm font-semibold">
-        {isIncluded ? "Included" : `£${price}`}
-      </p>
-    </div>
-  </div>
-);
+  );
 
 interface PriceProjectionProps {
   label: string[];

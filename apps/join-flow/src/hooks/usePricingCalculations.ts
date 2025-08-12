@@ -8,7 +8,7 @@ export const convertPenceToPounds = (pence: number): string =>
   (pence / 100).toFixed(2).replace(/\.00/, "");
 
 const generatePackageName = (speeds: { download: number }): string =>
-  `${speeds.download}Mbps`;
+  `C-${speeds.download} full fibre broadband`;
 
 export interface PricingCalculations {
   /** base price of core broadband product */

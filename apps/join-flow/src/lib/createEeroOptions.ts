@@ -5,7 +5,7 @@ import type {
 
 export type EeroOption = EeroProduct & {
   heading: string;
-  description: string;
+  description?: string;
   imageURL: string;
   totalCount: number;
 };
@@ -14,7 +14,7 @@ export type EeroOption = EeroProduct & {
 type EeroContent = {
   code: string;
   heading: string;
-  description: string;
+  description?: string;
   totalCount: number;
   imageURL: string;
 };
@@ -38,7 +38,7 @@ export const hydrateEeroProductWithContent = (
   return {
     ...eero,
     heading: eeroContent.heading,
-    description: eeroContent.description,
+    description: eeroContent.description ?? "",
     imageURL: eeroContent.imageURL,
     totalCount: eeroContent.totalCount,
   };
@@ -53,28 +53,48 @@ export const createEeroOptions = (
     availableExtras?.find((extra) => extra.family === "mesh_routers")?.extras ||
     [];
 
-  return extras
-    .reduce<EeroOption[]>((acc, extra) => {
-      const eeroContent = eeroProductContent.find(
-        (product) => product.code === extra.code,
-      );
+  const options = extras.reduce<EeroOption[]>((acc, extra) => {
+    const eeroContent = eeroProductContent.find(
+      (product) => product.code === extra.code,
+    );
 
-      if (!eeroContent) {
-        return acc;
-      }
-
-      acc.push({
-        code: extra.code,
-        family: extra.family,
-        selectionIdentifier: extra.selectionIdentifier,
-        price: extra.price,
-        heading: eeroContent.heading,
-        description: eeroContent.description,
-        imageURL: eeroContent.imageURL,
-        totalCount: eeroContent.totalCount,
-      });
-
+    if (!eeroContent) {
       return acc;
-    }, [])
-    .sort((a, b) => a.totalCount - b.totalCount);
+    }
+
+    acc.push({
+      code: extra.code,
+      family: extra.family,
+      selectionIdentifier: extra.selectionIdentifier,
+      price: extra.price,
+      heading: eeroContent.heading,
+      description: eeroContent.description ?? "",
+      imageURL: eeroContent.imageURL,
+      totalCount: eeroContent.totalCount,
+    });
+
+    return acc;
+  }, []);
+
+  const defaultOption = eeroProductContent.find(
+    (product) => product.code === "EERO_MESH_ROUTER_X0",
+  );
+
+  if (
+    defaultOption &&
+    !options.some((opt) => opt.code === defaultOption.code)
+  ) {
+    options.push({
+      code: defaultOption.code,
+      family: "mesh_routers",
+      selectionIdentifier: "default",
+      price: 0,
+      heading: defaultOption.heading,
+      description: defaultOption.description ?? "",
+      imageURL: defaultOption.imageURL,
+      totalCount: defaultOption.totalCount,
+    });
+  }
+
+  return options.sort((a, b) => a.totalCount - b.totalCount);
 };

@@ -32,24 +32,19 @@ export const paymentConfirmationText = {
   eeroProductContent: [
     {
       code: "EERO_MESH_ROUTER_X1",
-      heading: "No additional Eero needed",
-      description: "Just one eero provided by us.",
+      heading: "1 eero router",
       totalCount: 1,
       imageURL: getAssetPath("/images/x1_eeros.png"),
     },
     {
       code: "EERO_MESH_ROUTER_X2",
-      heading: "Add one extra eero to your plan",
-      description:
-        "2 eeros will cover an area of approximately 380 square metres and is perfect for most UK homes.",
+      heading: "2 eero routers",
       totalCount: 2,
       imageURL: getAssetPath("/images/x2_eeros.png"),
     },
     {
       code: "EERO_MESH_ROUTER_X3",
-      heading: "Add 2 extra eeros to your plan",
-      description:
-        "3 eero routers will cover an area of approximately 560 square metres, and is perfect for really large homes, multiple floors and connection outside.",
+      heading: "3 eero routers",
       totalCount: 3,
       imageURL: getAssetPath("/images/x3_eeros.png"),
     },

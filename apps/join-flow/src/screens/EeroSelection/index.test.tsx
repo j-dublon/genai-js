@@ -97,34 +97,44 @@ vi.mock("./eeroSelectionProps", () => ({
 vi.mock("@/lib/createEeroOptions", () => ({
   createEeroOptions: vi.fn().mockReturnValue([
     {
-      code: "EERO_MESH_ROUTER_X1",
+      code: "EERO_MESH_ROUTER_X0",
       family: "mesh_routers",
-      selectionIdentifier: "1",
-      price: 700,
-      heading: "Basic Eero",
+      selectionIdentifier: "default",
+      price: 0,
+      heading: "Included eero",
       imageURL: "",
       description: "One router.",
       totalCount: 1,
     },
     {
-      code: "EERO_MESH_ROUTER_X2",
+      code: "EERO_MESH_ROUTER_X1",
       family: "mesh_routers",
-      selectionIdentifier: "2",
-      price: 1400,
+      selectionIdentifier: "0",
+      price: 700,
       heading: "One extra Eero",
       imageURL: "",
       description: "Two routers.",
       totalCount: 2,
     },
     {
-      code: "EERO_MESH_ROUTER_X3",
+      code: "EERO_MESH_ROUTER_X2",
       family: "mesh_routers",
-      selectionIdentifier: "3",
-      price: 2100,
+      selectionIdentifier: "1",
+      price: 1400,
       heading: "Two extra Eeros",
       imageURL: "",
       description: "Three routers.",
       totalCount: 3,
+    },
+    {
+      code: "EERO_MESH_ROUTER_X3",
+      family: "mesh_routers",
+      selectionIdentifier: "2",
+      price: 2100,
+      heading: "Three extra Eeros",
+      imageURL: "",
+      description: "Four routers.",
+      totalCount: 4,
     },
   ]),
 }));
@@ -193,8 +203,8 @@ describe("EeroSelection", () => {
   it("renders Eero cards for extra eero options", () => {
     render(<EeroSelection />);
 
+    expect(screen.getByTestId("eero-card-1")).toBeInTheDocument();
     expect(screen.getByTestId("eero-card-2")).toBeInTheDocument();
-    expect(screen.getByTestId("eero-card-3")).toBeInTheDocument();
   });
 
   it("selects and toggles eero product", async () => {
@@ -236,7 +246,7 @@ describe("EeroSelection", () => {
           product: {
             extras: [
               {
-                selectionIdentifier: "2",
+                selectionIdentifier: "0",
               },
             ],
           },
@@ -346,7 +356,7 @@ describe("EeroSelection", () => {
         product: {
           extras: [
             {
-              selectionIdentifier: "2",
+              selectionIdentifier: "0",
             },
           ],
         },

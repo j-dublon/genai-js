@@ -31,7 +31,7 @@ import {
   slides,
 } from "./eeroSelectionProps";
 
-const INCLUDED_EERO_CODE = "EERO_MESH_ROUTER_X1";
+const INCLUDED_EERO_CODE = "EERO_MESH_ROUTER_X0";
 
 const EeroSelection = () => {
   const router = useRouter();
@@ -81,8 +81,9 @@ const EeroSelection = () => {
     selectedPackage?.availableExtras || [],
     eeroProducts,
   );
+
   const noAdditionalEeroOption = eeroOptions.find(
-    (option) => option.totalCount === 1,
+    (option) => option.code === INCLUDED_EERO_CODE,
   )!;
   const additionalEeroOptions = eeroOptions.filter(
     (option) => option.totalCount > 1,
