@@ -14,4 +14,4 @@ export const VALIDATION_CODE_LENGTH = 6;
 export const PILL_FADE_OUT_DELAY = 9000;
 export const PILL_HIDE_DELAY = 10000;
 
-export const EXPIRY_DURATION = 1000 * 60 * 30;
+export const EXPIRY_DURATION = 1000 * 60 * 60;
