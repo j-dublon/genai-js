@@ -197,11 +197,11 @@ export const SpeedCalculator = ({
                 {({ onChange, value }) => (
                   <div className="flex flex-col gap-3">
                     {[
-                      "Streaming",
-                      "Gaming",
                       "Working from home",
-                      "Video calls",
-                      "Social media",
+                      "Gaming",
+                      "Streaming music",
+                      "Streaming movies and TV",
+                      "Browsing and social media",
                     ].map((option) => (
                       <Checkbox
                         key={option}

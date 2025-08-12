@@ -174,11 +174,11 @@ describe("SpeedCalculator", () => {
 
     expect(screen.getByText(questionProps.question2.title)).toBeInTheDocument();
     const internetUses = [
-      "Streaming",
-      "Gaming",
       "Working from home",
-      "Video calls",
-      "Social media",
+      "Gaming",
+      "Streaming music",
+      "Streaming movies and TV",
+      "Browsing and social media",
     ];
     internetUses.forEach((use) => {
       const checkbox = screen.getByLabelText(use);
@@ -218,7 +218,7 @@ describe("SpeedCalculator", () => {
       const slider = screen.getByRole("slider");
       fireEvent.change(slider, { target: { value: "3" } });
 
-      const streamingCheckbox = screen.getByLabelText("Streaming");
+      const streamingCheckbox = screen.getByLabelText("Streaming music");
       fireEvent.click(streamingCheckbox);
 
       const yesRadio = screen.getByLabelText("Yes");
@@ -231,7 +231,7 @@ describe("SpeedCalculator", () => {
     await waitFor(() => {
       expect(mockCalculateRecommendedPackage).toHaveBeenCalledWith({
         peopleCount: 3,
-        internetUses: ["Streaming"],
+        internetUses: ["Streaming music"],
         smartSpeakers: "Yes",
       });
       expect(mockScrollToElement).toHaveBeenCalled();
@@ -271,7 +271,7 @@ describe("SpeedCalculator", () => {
       const slider = screen.getByRole("slider");
       fireEvent.change(slider, { target: { value: "3" } });
 
-      const streamingCheckbox = screen.getByLabelText("Streaming");
+      const streamingCheckbox = screen.getByLabelText("Streaming music");
       fireEvent.click(streamingCheckbox);
 
       const yesRadio = screen.getByLabelText("Yes");
@@ -282,7 +282,7 @@ describe("SpeedCalculator", () => {
     });
 
     const slider = screen.getByRole("slider");
-    const streamingCheckbox = screen.getByLabelText("Streaming");
+    const streamingCheckbox = screen.getByLabelText("Streaming music");
     const yesRadio = screen.getByLabelText("Yes");
 
     expect(slider).toHaveValue("0");
@@ -335,7 +335,7 @@ describe("SpeedCalculator", () => {
       const slider = screen.getByRole("slider");
       fireEvent.change(slider, { target: { value: "3" } });
 
-      const streamingCheckbox = screen.getByLabelText("Streaming");
+      const streamingCheckbox = screen.getByLabelText("Streaming music");
       fireEvent.click(streamingCheckbox);
 
       const yesRadio = screen.getByLabelText("Yes");
@@ -350,7 +350,7 @@ describe("SpeedCalculator", () => {
     });
 
     const slider = screen.getByRole("slider");
-    const streamingCheckbox = screen.getByLabelText("Streaming");
+    const streamingCheckbox = screen.getByLabelText("Streaming music");
     const yesRadio = screen.getByLabelText("Yes");
 
     expect(slider).toBeDisabled();
@@ -377,7 +377,7 @@ describe("SpeedCalculator", () => {
     );
 
     const slider = screen.getByRole("slider");
-    const streamingCheckbox = screen.getByLabelText("Streaming");
+    const streamingCheckbox = screen.getByLabelText("Streaming music");
     const yesRadio = screen.getByLabelText("Yes");
     const calculateButton = screen.getByText("Calculate");
 
@@ -391,7 +391,7 @@ describe("SpeedCalculator", () => {
     await waitFor(() => {
       expect(mockCalculateRecommendedPackage).toHaveBeenCalledWith({
         peopleCount: 3,
-        internetUses: ["Streaming"],
+        internetUses: ["Streaming music"],
         smartSpeakers: "Yes",
       });
       expect(screen.queryByText("Calculate")).not.toBeInTheDocument();

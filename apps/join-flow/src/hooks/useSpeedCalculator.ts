@@ -8,10 +8,10 @@ const WEIGHTING = {
   PEOPLE_COUNT: 10,
   USAGE_WEIGHTS: {
     Gaming: 15,
-    Streaming: 12,
+    "Streaming movies and TV": 12,
     "Working from home": 10,
-    "Video calls": 8,
-    "Social media": 5,
+    "Streaming music": 8,
+    "Browsing and social media": 5,
   },
   SMART_SPEAKERS_MULTIPLIER: 1.2,
 };

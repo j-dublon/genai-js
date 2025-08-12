@@ -130,7 +130,7 @@ describe("useSpeedCalculator", () => {
       );
       const formData: SpeedCalculatorFormData = {
         peopleCount: 3,
-        internetUses: ["Gaming", "Streaming"],
+        internetUses: ["Gaming", "Streaming music"],
         smartSpeakers: "No",
       };
       act(() => {
@@ -145,7 +145,11 @@ describe("useSpeedCalculator", () => {
       );
       const formData: SpeedCalculatorFormData = {
         peopleCount: 5,
-        internetUses: ["Gaming", "Streaming", "Working from home"],
+        internetUses: [
+          "Gaming",
+          "Streaming movies and TV",
+          "Working from home",
+        ],
         smartSpeakers: "Yes",
       };
       act(() => {
@@ -173,7 +177,7 @@ describe("useSpeedCalculator", () => {
       const { result } = renderHook(() => useSpeedCalculator(mockTwoPackages));
       const formData: SpeedCalculatorFormData = {
         peopleCount: 4,
-        internetUses: ["Gaming", "Streaming"],
+        internetUses: ["Gaming", "Streaming music"],
         smartSpeakers: "Yes",
       };
       act(() => {
@@ -202,7 +206,7 @@ describe("useSpeedCalculator", () => {
     const { result } = renderHook(() => useSpeedCalculator(mockThreePackages));
     const formData: SpeedCalculatorFormData = {
       peopleCount: 4,
-      internetUses: ["Gaming", "Streaming"],
+      internetUses: ["Gaming", "Streaming music"],
       smartSpeakers: "Yes",
     };
     act(() => {
