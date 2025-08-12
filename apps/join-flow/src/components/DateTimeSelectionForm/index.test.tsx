@@ -98,6 +98,7 @@ vi.mock("@/components/FormDropdown", () => ({
 
 describe("DateTimeSelectionForm - Business Logic", () => {
   const mockOnSubmit = vi.fn();
+  const mockOnRetry = vi.fn();
 
   const defaultProps = {
     availableAppointments: [
@@ -121,6 +122,7 @@ describe("DateTimeSelectionForm - Business Logic", () => {
     timeSlotPlaceHolder: "Select a time slot",
     submitButtonText: "Submit",
     onSubmit: mockOnSubmit,
+    onRetry: mockOnRetry,
   };
 
   beforeEach(() => {
@@ -210,6 +212,24 @@ describe("DateTimeSelectionForm - Business Logic", () => {
       );
 
       expect(screen.getByText(text.errorTipCardText)).toBeInTheDocument();
+    });
+
+    it("shows retry button and calls onRetry when clicked", async () => {
+      const user = userEvent.setup();
+
+      render(
+        <DateTimeSelectionForm
+          {...defaultProps}
+          appointmentError="Failed to load appointments"
+        />,
+      );
+
+      const retryButton = screen.getByText(text.retryButtonText);
+      expect(retryButton).toBeInTheDocument();
+
+      await user.click(retryButton);
+
+      expect(mockOnRetry).toHaveBeenCalledTimes(1);
     });
 
     it("shows a loading slide when loading appointments, and no drop down or date picker", () => {

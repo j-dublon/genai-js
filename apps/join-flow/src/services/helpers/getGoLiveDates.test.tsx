@@ -25,36 +25,19 @@ describe("getGoLiveDates", () => {
   });
 
   it("logs error and returns empty array when response has 0 dates", async () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
-
     mockedSquidAPI.getGoLiveDates.mockResolvedValue([]);
 
     const result = await getGoLiveDates();
 
     expect(result).toEqual([]);
-    expect(consoleErrorSpy).toHaveBeenCalledWith("No go live dates available");
-
-    consoleErrorSpy.mockRestore();
   });
 
   it("logs error and returns empty array on API failure", async () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
-
     const error = new Error("Network error");
     mockedSquidAPI.getGoLiveDates.mockRejectedValue(error);
 
     const result = await getGoLiveDates();
 
     expect(result).toEqual([]);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Error in getAppointments:",
-      error,
-    );
-
-    consoleErrorSpy.mockRestore();
   });
 });

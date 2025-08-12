@@ -1,30 +1,4 @@
-import {
-  Appointment,
-  getEngineerAppointments,
-} from "@/services/helpers/getEngineerAppointments";
-
-export const fetchEngineerAppointments = async (
-  setAppointmentError: (error: string) => void,
-  setAvailableAppointments: (appointments: Appointment[]) => void,
-  setDocumentID: (documentID: string) => void,
-  quoteLookup: string,
-) => {
-  try {
-    const response = await getEngineerAppointments(quoteLookup);
-    if (response.error) {
-      console.error("Failed to fetch engineer appointments");
-      setAppointmentError("Failed to fetch engineer appointments");
-    }
-
-    const appointments = response.appointments || [];
-    setDocumentID(response.documentID);
-
-    setAvailableAppointments(appointments);
-  } catch (error) {
-    console.error("Failed to fetch engineer appointments", error);
-    setAppointmentError("Failed to fetch engineer appointments");
-  }
-};
+import { Appointment } from "@/services/helpers/getEngineerAppointments";
 
 export type TimeSlot = {
   label: string;

@@ -20,6 +20,8 @@ export interface EngineerAppointmentLookupResult {
       | "generalError"
       | "validationError"
       | "networkError"
+      | "joinSuspended"
+      | "basketError"
       | "unknownError";
     message: string;
     details?: string[];
@@ -49,12 +51,20 @@ export const getEngineerAppointments = async (
 
     if (response.state === "error" && response.data?.errors) {
       const errors = response.data.errors;
+      const errorBlockTypes = errors.map((err) => err.blockType);
 
-      const noAppointmentsError = errors.find(
-        (err) => err.blockType === "EngineerAppointmentsNonAvailable",
-      );
+      if (errorBlockTypes.includes("JoinSuspended")) {
+        return {
+          documentID: "",
+          appointments: [],
+          error: {
+            type: "joinSuspended",
+            message: "Join flow is currently unavailable",
+          },
+        };
+      }
 
-      if (noAppointmentsError) {
+      if (errorBlockTypes.includes("EngineerAppointmentsNonAvailable")) {
         return {
           documentID: "",
           appointments: [],
@@ -64,6 +74,23 @@ export const getEngineerAppointments = async (
           },
         };
       }
+
+      if (
+        errorBlockTypes.includes(
+          "EngineerAppointmentsCouldNotLoadQuoteLookup",
+        ) ||
+        errorBlockTypes.includes("EngineerAppointmentsInvalidQuoteLookup")
+      ) {
+        return {
+          documentID: "",
+          appointments: [],
+          error: {
+            type: "basketError",
+            message: "Error loading quote lookup",
+          },
+        };
+      }
+
       return {
         documentID: "",
         appointments: [],

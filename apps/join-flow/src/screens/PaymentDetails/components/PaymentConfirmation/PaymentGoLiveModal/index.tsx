@@ -1,12 +1,12 @@
 import { InfoModal, TipCard } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import DateTimeSelectionForm from "@/components/DateTimeSelectionForm";
+import { useFetchEngineerAppointments } from "@/hooks/useFetchEngineerAppointments";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { goLiveDateText } from "@/screens/GoLiveDate/GoLiveDateProps";
-import { fetchEngineerAppointments } from "@/screens/GoLiveDate/utils/GoLiveDateUtils";
 import { getCICS } from "@/services/helpers/getCICS";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
 import { getGoLiveDates } from "@/services/helpers/getGoLiveDates";
@@ -26,11 +26,11 @@ export const PaymentGoLiveModal = ({
   setIsModalOpen,
   isModalOpen = false,
 }: PaymentGoLiveModalProps) => {
-  const router = useRouter();
   const { availableDatesLabel, timeSlotLabel, timeSlotPlaceHolder } =
     goLiveDateText;
 
   const { switchingDetails } = useJoinFlowStore();
+  const router = useRouter();
 
   const {
     setGoLiveDetails,
@@ -41,6 +41,8 @@ export const PaymentGoLiveModal = ({
     setErrorInfo,
   } = useJoinFlowStore();
 
+  const { fetchEngineerAppointments } = useFetchEngineerAppointments();
+
   const [availableAppointments, setAvailableAppointments] = useState<
     Appointment[]
   >([]);
@@ -50,24 +52,32 @@ export const PaymentGoLiveModal = ({
   const [hasDataBeenFetched, setHasDataBeenFetched] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!basket?.product?.quoteLookup?.value || hasDataBeenFetched) {
-        return;
-      }
+  const fetchAppointments = useCallback(async () => {
+    if (!basket?.product?.quoteLookup?.value) {
+      setErrorInfo({ type: "basketError" });
+      router.push("/join-flow/error");
+      return;
+    }
 
-      setLoadingAppointments(true);
+    setLoadingAppointments(true);
 
-      try {
-        if (selectedPackage?.installationRequired) {
-          await fetchEngineerAppointments(
-            setAppointmentError,
-            setAvailableAppointments,
-            setDocumentID,
-            basket.product.quoteLookup.value as string,
-          );
+    try {
+      if (selectedPackage?.installationRequired) {
+        await fetchEngineerAppointments(
+          setAppointmentError,
+          setAvailableAppointments,
+          setDocumentID,
+          basket.product.quoteLookup.value as string,
+        );
+      } else {
+        setAppointmentError(undefined);
+        const goLiveDates = await getGoLiveDates();
+        // if go-live dates are not available, something has gone wrong with API
+        if (goLiveDates.length === 0) {
+          setErrorInfo({ type: "generalError" });
+          router.push("/join-flow/error");
+          return;
         } else {
-          const goLiveDates = await getGoLiveDates();
           setAvailableAppointments(
             goLiveDates.map((date) => ({
               startDateTime: new Date(date),
@@ -76,22 +86,32 @@ export const PaymentGoLiveModal = ({
             })),
           );
         }
-        setLoadingAppointments(false);
-        setHasDataBeenFetched(true);
-      } catch (error) {
-        console.error("Error fetching appointment data:", error);
-        setLoadingAppointments(false);
       }
-    };
+      setLoadingAppointments(false);
+      setHasDataBeenFetched(true);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
+      return;
+    }
+  }, [
+    basket?.product?.quoteLookup?.value,
+    setErrorInfo,
+    selectedPackage?.installationRequired,
+    fetchEngineerAppointments,
+    router,
+  ]);
 
+  useEffect(() => {
     if (isModalOpen && !hasDataBeenFetched) {
-      fetchData();
+      fetchAppointments();
     }
   }, [
     isModalOpen,
     basket?.product?.quoteLookup?.value,
     selectedPackage?.installationRequired,
     hasDataBeenFetched,
+    fetchAppointments,
   ]);
 
   const handleFormSubmit = async (data: GoLiveDateFormValues) => {
@@ -102,7 +122,8 @@ export const PaymentGoLiveModal = ({
 
     try {
       if (!basket) {
-        console.error("No basket available");
+        setErrorInfo({ type: "basketError" });
+        router.push("/join-flow/error");
         return;
       }
 
@@ -145,8 +166,9 @@ export const PaymentGoLiveModal = ({
         setIsSubmitting(false);
         return;
       }
-    } catch (error) {
-      console.error("Unexpected error updating basket:", error);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
       setIsSubmitting(false);
       return;
     }
@@ -230,6 +252,7 @@ export const PaymentGoLiveModal = ({
         onSubmit={handleFormSubmit}
         isSubmitting={isSubmitting}
         className="pt-12"
+        onRetry={fetchAppointments}
       />
     </InfoModal>
   );

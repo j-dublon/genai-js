@@ -6,7 +6,6 @@ import {
   LoadingSlide,
   TipCard,
 } from "@react-component-library/ui";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -39,6 +38,7 @@ interface DateTimeSelectionFormProps {
   showSubmitButton?: boolean;
   tipCard?: React.ReactNode;
   isSubmitting?: boolean;
+  onRetry?: () => void | Promise<void>;
 }
 
 export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
@@ -59,8 +59,8 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
   showSubmitButton = true,
   tipCard,
   isSubmitting,
+  onRetry,
 }) => {
-  const router = useRouter();
   const initialTimeslots: Record<string, string> = defaultTimeSlot
     ? { [defaultTimeSlot]: defaultTimeSlot }
     : {};
@@ -230,9 +230,7 @@ export const DateTimeSelectionForm: React.FC<DateTimeSelectionFormProps> = ({
             tint="yellow"
             variant="solid"
             fullWidth={submitButtonFullWidth}
-            onClick={() => {
-              router.refresh();
-            }}
+            onClick={onRetry}
           >
             {text.retryButtonText}
           </Button>

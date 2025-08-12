@@ -5,6 +5,8 @@ import { describe, expect, it, vi } from "vitest";
 
 import { PaymentGoLiveModal } from "./index";
 
+vi.mock("next/navigation", () => ({ useRouter: vi.fn() }));
+
 vi.mock("@react-component-library/ui", async () => {
   const actual = await vi.importActual("@react-component-library/ui");
   return {

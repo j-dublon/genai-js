@@ -6,12 +6,12 @@ import React from "react";
 import { Control, FieldValues, Path } from "react-hook-form";
 import { beforeEach, describe, expect, it, Mock, vi } from "vitest";
 
+import { useFetchEngineerAppointments } from "@/hooks/useFetchEngineerAppointments";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
 import * as goLiveDatesModule from "@/services/helpers/getGoLiveDates";
 
 import GoLiveDate from "./";
 import { goLiveDateText } from "./GoLiveDateProps";
-import { fetchEngineerAppointments } from "./utils/GoLiveDateUtils";
 
 vi.mock("@/services/helpers/getEngineerAppointments");
 vi.mock("@services/helpers/getGoLiveDates");
@@ -22,13 +22,9 @@ vi.mock("@/components/StepNavigationWithBasket", () => ({
 }));
 vi.mock("@/components/Footer", () => ({ Footer: () => <footer /> }));
 
-vi.mock("./utils/GoLiveDateUtils", async () => {
-  const actual = await vi.importActual("./utils/GoLiveDateUtils");
-  return {
-    ...actual,
-    fetchEngineerAppointments: vi.fn(),
-  };
-});
+vi.mock("@/hooks/useFetchEngineerAppointments", () => ({
+  useFetchEngineerAppointments: vi.fn(),
+}));
 
 vi.mock("@/hooks/useLoadingModal", () => ({
   useLoadingModal: vi.fn().mockReturnValue({
@@ -127,6 +123,7 @@ describe("GoLiveDate component", () => {
   const mockSetCurrentStep = vi.fn();
   const mockPush = vi.fn();
   const mockSetIsLoadingModalOpen = vi.fn();
+  const mockFetchEngineerAppointments = vi.fn();
 
   beforeAll(() => {
     HTMLDialogElement.prototype.show = vi.fn();
@@ -136,6 +133,10 @@ describe("GoLiveDate component", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    (useFetchEngineerAppointments as Mock).mockReturnValue({
+      fetchEngineerAppointments: mockFetchEngineerAppointments,
+    });
 
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       setGoLiveDetails: mockSetGoLiveDetails,
@@ -151,13 +152,14 @@ describe("GoLiveDate component", () => {
       selectedPackage: { installationRequired: true },
       setIsLoadingModalOpen: mockSetIsLoadingModalOpen,
       isLoadingModalOpen: false,
+      setErrorInfo: vi.fn(),
     });
 
     (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       push: mockPush,
     });
 
-    (fetchEngineerAppointments as Mock).mockImplementation(
+    mockFetchEngineerAppointments.mockImplementation(
       async (
         setAppointmentError: (err: string) => void,
         setAvailableAppointments: (appts: Appointment[]) => void,
@@ -188,7 +190,7 @@ describe("GoLiveDate component", () => {
     });
 
     expect(screen.getByText("Step Navigation")).toBeDefined();
-    expect(fetchEngineerAppointments).toHaveBeenCalledWith(
+    expect(mockFetchEngineerAppointments).toHaveBeenCalledWith(
       expect.any(Function),
       expect.any(Function),
       expect.any(Function),
@@ -208,7 +210,7 @@ describe("GoLiveDate component", () => {
   });
 
   it("shows error tip card and retry button if fetching appointments fails, and no tip card with first available appointment", async () => {
-    (fetchEngineerAppointments as Mock).mockImplementationOnce(
+    mockFetchEngineerAppointments.mockImplementationOnce(
       async (
         setAppointmentError: (msg: string) => void,
         setAvailableAppointments: (appts: Appointment[]) => void,
@@ -283,27 +285,26 @@ describe("GoLiveDate component", () => {
     expect(HTMLDialogElement.prototype.close).toHaveBeenCalled();
   });
 
-  it("logs error and returns nothing if no quoteLookup in basket", async () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, "error")
-      .mockImplementation(() => {});
-
+  it("redirects to error page if no quoteLookup in basket", async () => {
+    const mockSetErrorInfo = vi.fn();
     (useJoinFlowStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
       basket: { product: {} },
       setIsLoadingModalOpen: vi.fn(),
       isLoadingModalOpen: false,
+      setErrorInfo: mockSetErrorInfo,
     });
 
-    let container: HTMLElement;
+    // Ensure router mock is set up for this test
+    (useRouter as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+      push: mockPush,
+    });
+
     await act(async () => {
-      const result = render(<GoLiveDate />);
-      container = result.container;
+      render(<GoLiveDate />);
     });
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith("no quoting code available");
-    expect(container!.innerHTML).toBe("");
-
-    consoleErrorSpy.mockRestore();
+    expect(mockSetErrorInfo).toHaveBeenCalledWith({ type: "basketError" });
+    expect(mockPush).toHaveBeenCalledWith("/join-flow/error");
   });
 
   it("renders the toast message pill if switch is successful", async () => {
@@ -316,6 +317,7 @@ describe("GoLiveDate component", () => {
       },
       setIsLoadingModalOpen: vi.fn(),
       isLoadingModalOpen: false,
+      setErrorInfo: vi.fn(),
     });
 
     await act(async () => {
@@ -341,6 +343,7 @@ describe("GoLiveDate component", () => {
       selectedPackage: { installationRequired: false }, // Changed to false to avoid timeSlot requirement
       setIsLoadingModalOpen: mockSetIsLoadingModalOpen,
       isLoadingModalOpen: false,
+      setErrorInfo: vi.fn(),
     });
 
     await act(async () => {

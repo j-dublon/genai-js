@@ -10,12 +10,13 @@ import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { DateTimeSelectionForm } from "@/components/DateTimeSelectionForm";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useClearFocus } from "@/hooks/useClearFocus";
+import { useFetchEngineerAppointments } from "@/hooks/useFetchEngineerAppointments";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { PILL_FADE_OUT_DELAY, PILL_HIDE_DELAY } from "@/lib/constants";
 import { getAssetPath } from "@/lib/get-asset-path";
@@ -28,7 +29,6 @@ import { GoLiveDateFormValues } from "@/validation/join-flow-schema";
 import { EngineerVisitModal } from "./components/EngineerVisitModal";
 import { OtsFailBanner } from "./components/OtsFailBanner";
 import { goLiveDateText, slides } from "./GoLiveDateProps";
-import { fetchEngineerAppointments } from "./utils/GoLiveDateUtils";
 
 export const GoLiveDate = () => {
   const {
@@ -84,20 +84,28 @@ export const GoLiveDate = () => {
   const [appointmentError, setAppointmentError] = useState<string>();
   const [documentID, setDocumentID] = useState<string>("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoadingAppointments(true);
+  const { fetchEngineerAppointments } = useFetchEngineerAppointments();
 
-      try {
-        if (selectedPackage?.installationRequired) {
-          await fetchEngineerAppointments(
-            setAppointmentError,
-            setAvailableAppointments,
-            setDocumentID,
-            basket?.product?.quoteLookup?.value as string,
-          );
+  const fetchAppointments = useCallback(async () => {
+    setLoadingAppointments(true);
+
+    try {
+      if (selectedPackage?.installationRequired) {
+        await fetchEngineerAppointments(
+          setAppointmentError,
+          setAvailableAppointments,
+          setDocumentID,
+          basket?.product?.quoteLookup?.value as string,
+        );
+      } else {
+        setAppointmentError(undefined);
+        const goLiveDates = await getGoLiveDates();
+        // if go-live dates are not available, something has gone wrong with API
+        if (goLiveDates.length === 0) {
+          setErrorInfo({ type: "generalError" });
+          router.push("/join-flow/error");
+          return;
         } else {
-          const goLiveDates = await getGoLiveDates();
           setAvailableAppointments(
             goLiveDates.map((date) => ({
               startDateTime: new Date(date),
@@ -106,21 +114,32 @@ export const GoLiveDate = () => {
             })),
           );
         }
-        setLoadingAppointments(false);
-      } catch (error) {
-        setAppointmentError("Failed to fetch go-live dates");
-        console.error("Failed to fetch dates", error);
-        setLoadingAppointments(false);
       }
-    };
-
-    // TODO: take user to error screen if no quote lookup
-    if (basket?.product?.quoteLookup?.value) {
-      fetchData();
+      setLoadingAppointments(false);
+    } catch {
+      setErrorInfo({ type: "unknownError" });
+      router.push("/join-flow/error");
     }
   }, [
     basket?.product?.quoteLookup?.value,
     selectedPackage?.installationRequired,
+    router,
+    setErrorInfo,
+    fetchEngineerAppointments,
+  ]);
+
+  useEffect(() => {
+    if (basket?.product?.quoteLookup?.value) {
+      fetchAppointments();
+    } else {
+      setErrorInfo({ type: "basketError" });
+      router.push("/join-flow/error");
+    }
+  }, [
+    fetchAppointments,
+    basket?.product?.quoteLookup?.value,
+    setErrorInfo,
+    router,
   ]);
 
   useEffect(() => {
@@ -143,6 +162,8 @@ export const GoLiveDate = () => {
     posthog.capture("join_flow_submitted_go_live_date");
     try {
       if (!basket) {
+        setErrorInfo({ type: "basketError" });
+        router.push("/join-flow/error");
         return;
       }
 
@@ -241,8 +262,8 @@ export const GoLiveDate = () => {
   };
 
   if (!basket?.product?.quoteLookup?.value) {
-    console.error("no quoting code available");
-    setIsLoadingModalOpen(false);
+    setErrorInfo({ type: "basketError" });
+    router.push("/join-flow/error");
     return;
   }
 
@@ -343,6 +364,7 @@ export const GoLiveDate = () => {
             onSubmit={handleFormSubmit}
             className="pt-6 md:pt-12"
             submitButtonFullWidth
+            onRetry={fetchAppointments}
           />
           <hr className="mt-10 md:hidden border-ui-grey-300 bg-ui-grey-300 border w-full" />
         </div>
