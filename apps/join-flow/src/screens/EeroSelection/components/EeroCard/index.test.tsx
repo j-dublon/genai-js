@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
 import { EeroCard } from ".";
@@ -27,6 +28,10 @@ describe("EeroCard", () => {
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
+        helpButton={{
+          onHelpClick: vi.fn(),
+          buttonText: "Help me decide",
+        }}
       />,
     );
 
@@ -46,6 +51,10 @@ describe("EeroCard", () => {
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
+        helpButton={{
+          onHelpClick: vi.fn(),
+          buttonText: "Help me decide",
+        }}
       />,
     );
 
@@ -68,6 +77,10 @@ describe("EeroCard", () => {
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
+        helpButton={{
+          onHelpClick: vi.fn(),
+          buttonText: "Help me decide",
+        }}
       />,
     );
 
@@ -83,6 +96,10 @@ describe("EeroCard", () => {
         isActive={true}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={vi.fn()}
+        helpButton={{
+          onHelpClick: vi.fn(),
+          buttonText: "Help me decide",
+        }}
       />,
     );
 
@@ -91,7 +108,8 @@ describe("EeroCard", () => {
     ).toBeInTheDocument();
   });
 
-  it("calls handleSelectEero when button is clicked", () => {
+  it("calls handleSelectEero when button is clicked", async () => {
+    const user = userEvent.setup();
     const handleSelectEero = vi.fn();
 
     render(
@@ -100,10 +118,31 @@ describe("EeroCard", () => {
         isActive={false}
         eeroChooseProductButtonText={buttonText}
         handleSelectEero={handleSelectEero}
+        helpButton={{
+          onHelpClick: vi.fn(),
+          buttonText: "Help me decide",
+        }}
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: /Add Eero/i }));
+    await user.click(screen.getByRole("button", { name: /Add Eero/i }));
     expect(handleSelectEero).toHaveBeenCalledWith(mockEeroProduct);
+  });
+
+  it("calls onHelpClick when help button is clicked", async () => {
+    const user = userEvent.setup();
+    const onHelpClick = vi.fn();
+    render(
+      <EeroCard
+        eero={mockEeroProduct}
+        isActive={false}
+        eeroChooseProductButtonText={buttonText}
+        handleSelectEero={vi.fn()}
+        helpButton={{ onHelpClick, buttonText: "Help me decide" }}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: /Help me decide/i }));
+    expect(onHelpClick).toHaveBeenCalled();
   });
 });

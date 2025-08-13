@@ -1,6 +1,5 @@
 import { Button, ColorPill } from "@react-component-library/ui";
 import { Tick } from "@react-component-library/ui/icons";
-import Link from "next/link";
 
 import { convertPenceToPounds } from "@/hooks/usePricingCalculations";
 import type { EeroOption } from "@/lib/createEeroOptions";
@@ -13,6 +12,7 @@ export type EeroCardProps = {
     choose: string;
   };
   handleSelectEero: (product: EeroOption) => void;
+  helpButton: { onHelpClick: () => void; buttonText: string };
 };
 
 const ProductImageAndInfo = ({ product }: { product: EeroOption }) => (
@@ -92,6 +92,7 @@ export const EeroCard = ({
   isActive,
   eeroChooseProductButtonText,
   handleSelectEero,
+  helpButton,
 }: EeroCardProps) => {
   return (
     <div
@@ -105,9 +106,12 @@ export const EeroCard = ({
         <ProductImageAndInfo product={eero} />
         <span>
           {eero.description}{" "}
-          <Link className="font-medium underline text-ui-link" href="">
-            Help me decide
-          </Link>
+          <button
+            className="font-medium underline text-ui-link"
+            onClick={helpButton.onHelpClick}
+          >
+            {helpButton.buttonText}
+          </button>
         </span>
       </div>
 

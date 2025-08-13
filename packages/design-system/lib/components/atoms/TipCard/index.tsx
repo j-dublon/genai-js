@@ -43,7 +43,7 @@ export const TipCard = ({
           alt=""
           width={60}
           height={60}
-          className={`ds:max-w-10 ds:md:max-w-12 ds:h-auto ${hideImageOnMobile ? "ds:hidden ds:md:block" : ""}`}
+          className={`ds:max-w-10 ds:md:max-w-14 ds:h-auto ${hideImageOnMobile ? "ds:hidden ds:md:block" : ""}`}
           role="presentation"
         />
       )}

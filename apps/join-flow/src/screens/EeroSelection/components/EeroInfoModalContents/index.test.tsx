@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import { EeroSelectionHelpModal } from "./index";
+import { EeroInfoModalContents } from "./index";
 
 describe("EeroSelectionHelpModal", () => {
   const defaultProps = {
@@ -13,14 +13,7 @@ describe("EeroSelectionHelpModal", () => {
   };
 
   it("renders with all required props", () => {
-    render(<EeroSelectionHelpModal {...defaultProps} />);
-
-    expect(screen.getByText("Test Modal Title")).toBeInTheDocument();
-    expect(screen.getByText("Close")).toBeInTheDocument();
-  });
-
-  it("renders subtitle correctly", () => {
-    render(<EeroSelectionHelpModal {...defaultProps} />);
+    render(<EeroInfoModalContents {...defaultProps} />);
 
     const subtitle = screen.getByText("Test Subtitle");
     expect(subtitle).toBeInTheDocument();
@@ -28,7 +21,7 @@ describe("EeroSelectionHelpModal", () => {
   });
 
   it("renders all content paragraphs", () => {
-    render(<EeroSelectionHelpModal {...defaultProps} />);
+    render(<EeroInfoModalContents {...defaultProps} />);
 
     expect(screen.getByText("First paragraph")).toBeInTheDocument();
     expect(screen.getByText("Second paragraph")).toBeInTheDocument();
@@ -36,7 +29,7 @@ describe("EeroSelectionHelpModal", () => {
   });
 
   it("renders image when provided", () => {
-    render(<EeroSelectionHelpModal {...defaultProps} />);
+    render(<EeroInfoModalContents {...defaultProps} />);
 
     const image = screen.getByTestId("modal-image");
     expect(image).toBeInTheDocument();
@@ -56,7 +49,7 @@ describe("EeroSelectionHelpModal", () => {
       content: ["First paragraph", "Second paragraph", "Third paragraph"],
     };
 
-    render(<EeroSelectionHelpModal {...propsWithoutImage} />);
+    render(<EeroInfoModalContents {...propsWithoutImage} />);
 
     expect(screen.queryByTestId("modal-image")).not.toBeInTheDocument();
   });
@@ -67,7 +60,7 @@ describe("EeroSelectionHelpModal", () => {
       content: ["Single paragraph"],
     };
 
-    render(<EeroSelectionHelpModal {...propsWithSingleContent} />);
+    render(<EeroInfoModalContents {...propsWithSingleContent} />);
 
     expect(screen.getByText("Single paragraph")).toBeInTheDocument();
     expect(screen.queryByText("Second paragraph")).not.toBeInTheDocument();

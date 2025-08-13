@@ -59,8 +59,29 @@ export const eeroPageContent = {
     "The eeros constantly monitor the signal strength and adapt to make sure there are no weak areas or slow connections.",
     "When you join Cuckoo, you can add up to three eeros to create a TrueMesh connection for your home and say goodbye to dead spots. Woohoo!",
   ],
-  infoModalButtonText: "Okay, got it",
   infoModalImage: "/images/true-mesh.svg",
+  modalButtonText: "Okay, got it",
+  helpButtonText: "Help me decide",
+  helpModalTitle: "How many eeros do I need?",
+  helpModalSubtitle:
+    "Not sure how many eeros to get? Here's a quick guide to help you choose.",
+  helpModalContent: [
+    {
+      subtitle: "One eero covers up to 190 square metres.",
+      description: "Perfect for a studio, small flat or smaller home.",
+    },
+    {
+      subtitle: "Two eeros covers up to 380 square metres",
+      description: "Ideal for medium-sized homes over a couple of floors.",
+    },
+    {
+      subtitle: "Three eeros covers up to 560 square metres. ",
+      description:
+        "Best for larger homes, or if you have thick walls made of brick or stone. This will give you the very strongest signal.",
+    },
+  ],
+  helpModalTipCardText:
+    "Just so you know, you can add up to three eeros to your plan anytime on My Account or on the Cuckoo app.",
 };
 
 export const eeroChooseProductButtonText = {

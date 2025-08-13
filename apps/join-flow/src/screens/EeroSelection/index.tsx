@@ -3,6 +3,7 @@
 import {
   Button,
   ColorPill,
+  InfoModal,
   InsertLinksOrButtons,
   LoadingModal,
   useClickOutside,
@@ -22,7 +23,8 @@ import { updateBasket } from "@/services/helpers/updateBasket";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
 import { EeroCard } from "./components/EeroCard";
-import { EeroSelectionHelpModal } from "./components/EeroSelectionHelpModal";
+import { EeroHelpModalContents } from "./components/EeroHelpModalContents";
+import { EeroInfoModalContents } from "./components/EeroInfoModalContents";
 import {
   eeroChooseProductButtonText,
   eeroContinueButtonText,
@@ -32,6 +34,8 @@ import {
 } from "./eeroSelectionProps";
 
 const INCLUDED_EERO_CODE = "EERO_MESH_ROUTER_X0";
+
+type ModalContent = "info-modal" | "help-modal";
 
 const EeroSelection = () => {
   const router = useRouter();
@@ -52,25 +56,37 @@ const EeroSelection = () => {
     description,
     linkText,
     infoModalTitle,
-    infoModalButtonText,
+    modalButtonText,
     infoModalSubtitle,
     infoModalContent,
     infoModalImage,
+    helpModalTitle,
+    helpModalContent,
+    helpModalTipCardText,
+    helpButtonText,
+    helpModalSubtitle,
   } = eeroPageContent;
 
   const posthog = usePostHog();
 
-  const infoModalRef = useRef<HTMLDialogElement>(null);
-  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+  const modalRef = useRef<HTMLDialogElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<ModalContent>("info-modal");
 
-  const closeFunction = () => {
-    if (infoModalRef.current) {
-      infoModalRef.current.close();
-      setIsInfoModalOpen(false);
+  const closeModal = () => {
+    if (modalRef.current) {
+      modalRef.current.close();
+      setIsModalOpen(false);
     }
   };
 
-  useClickOutside(infoModalRef, isInfoModalOpen, closeFunction);
+  useEffect(() => {
+    if (modalContent && isModalOpen) {
+      modalRef.current?.showModal();
+    }
+  }, [modalContent, isModalOpen]);
+
+  useClickOutside(modalRef, isModalOpen, closeModal);
 
   const { loadingModalRef, slidesWithAssetPath } = useLoadingModal({
     isLoadingModalOpen,
@@ -214,8 +230,8 @@ const EeroSelection = () => {
                   items={[
                     {
                       onClick: () => {
-                        infoModalRef.current?.showModal();
-                        setIsInfoModalOpen(true);
+                        setModalContent("info-modal");
+                        setIsModalOpen(true);
                       },
                       searchText: linkText,
                       openInNewTab: true,
@@ -238,6 +254,13 @@ const EeroSelection = () => {
                   }
                   eeroChooseProductButtonText={eeroChooseProductButtonText}
                   handleSelectEero={handleSelectEero}
+                  helpButton={{
+                    onHelpClick: () => {
+                      setModalContent("help-modal");
+                      setIsModalOpen(true);
+                    },
+                    buttonText: helpButtonText,
+                  }}
                 />
               ))}
             </div>
@@ -271,14 +294,25 @@ const EeroSelection = () => {
         </div>
       </div>
       <Footer />
-      <EeroSelectionHelpModal
-        title={infoModalTitle}
-        buttonText={infoModalButtonText}
-        modalRef={infoModalRef}
-        subtitle={infoModalSubtitle}
-        content={infoModalContent}
-        image={infoModalImage}
-      />
+      <InfoModal
+        title={modalContent === "info-modal" ? infoModalTitle : helpModalTitle}
+        modalRef={modalRef}
+        buttonText={modalButtonText}
+      >
+        {modalContent === "info-modal" ? (
+          <EeroInfoModalContents
+            subtitle={infoModalSubtitle}
+            content={infoModalContent}
+            image={infoModalImage}
+          />
+        ) : (
+          <EeroHelpModalContents
+            subtitle={helpModalSubtitle}
+            content={helpModalContent}
+            tipCardText={helpModalTipCardText}
+          />
+        )}
+      </InfoModal>
     </>
   );
 };

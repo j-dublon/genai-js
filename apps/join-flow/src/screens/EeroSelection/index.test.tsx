@@ -27,11 +27,17 @@ vi.mock("@/components/Footer", () => ({
   Footer: () => <div data-testid="footer">Footer</div>,
 }));
 vi.mock("./components/EeroCard", () => ({
-  EeroCard: ({ eero, isActive, handleSelectEero }: EeroCardProps) => (
+  EeroCard: ({
+    eero,
+    isActive,
+    handleSelectEero,
+    helpButton,
+  }: EeroCardProps) => (
     <div data-testid={`eero-card-${eero.selectionIdentifier}`}>
       <button onClick={() => handleSelectEero(eero)}>
         {isActive ? "Remove" : "Choose"} {eero.heading}
       </button>
+      <button onClick={helpButton.onHelpClick}>{helpButton.buttonText}</button>
     </div>
   ),
 }));
@@ -60,14 +66,24 @@ vi.mock("./eeroSelectionProps", () => ({
     backButtonText: "Back",
     linkText: "Eero setup",
     infoModalTitle: "TrueMesh explained",
-    infoModalSubtitle:
-      "Their patented TrueMesh technology lets multiple eeros work together to intelligently spread Wi-Fi throughout your home.",
+    infoModalSubtitle: "infoModal subtitle",
     infoModalContent: [
-      "This is particularly useful in larger homes, where the signal might have previously struggled to reach every room.",
-      "The eeros constantly monitor the signal strength and adapt to make sure there are no weak areas or slow connections.",
-      "When you join Cuckoo, you can add up to three eeros to create a TrueMesh connection for your home and say goodbye to dead spots. Woohoo!",
+      "infoModal content 1",
+      "infoModal content 2",
+      "infoModal content 3",
     ],
     infoModalImage: "/images/true-mesh.svg",
+    modalButtonText: "Okay, got it",
+    helpButtonText: "Help me decide",
+    helpModalTitle: "Help me decide",
+    helpModalSubtitle: "Help modal subtitle.",
+    helpModalContent: [
+      {
+        subtitle: "Help modal description subtitle.",
+        description: "Help modal description.",
+      },
+    ],
+    helpModalTipCardText: "Help modal tip card text.",
   },
   eeroChooseProductButtonText: {
     choose: "Choose",
@@ -191,13 +207,44 @@ describe("EeroSelection", () => {
     ).toBeInTheDocument();
   });
 
-  it("attempts to open the info modal when clicking the link text", async () => {
+  it("attempts to open the info modal when clicking the link text, and renders the correct content", async () => {
     const user = userEvent.setup();
     render(<EeroSelection />);
     const linkText = screen.getByRole("button", { name: "Eero setup" });
     await user.click(linkText);
 
     expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+
+    [
+      "TrueMesh explained",
+      "infoModal subtitle",
+      "infoModal content 1",
+      "infoModal content 2",
+      "infoModal content 3",
+      "Okay, got it",
+    ].forEach((text) => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
+  });
+
+  it("attempts to open the help modal when clicking the help button, and renders the correct content", async () => {
+    const user = userEvent.setup();
+    render(<EeroSelection />);
+    const helpButton = screen.getAllByRole("button", {
+      name: "Help me decide",
+    });
+    await user.click(helpButton[0]);
+
+    expect(HTMLDialogElement.prototype.showModal).toHaveBeenCalled();
+
+    [
+      "Help modal subtitle.",
+      "Help modal description subtitle.",
+      "Help modal description.",
+      "Help modal tip card text.",
+    ].forEach((text) => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
   });
 
   it("renders Eero cards for extra eero options", () => {
