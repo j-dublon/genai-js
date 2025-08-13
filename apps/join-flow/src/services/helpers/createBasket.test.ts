@@ -57,6 +57,7 @@ describe("createBasket", () => {
       const result = await createBasket(mockBasketData);
 
       expect(result).toEqual({
+        type: "success",
         basket: mockBasketResponse,
       });
       expect(squidAPI.createBasket).toHaveBeenCalledWith(mockBasketData);
@@ -88,8 +89,10 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.basket).toEqual(complexBasketResponse);
-      expect(result.error).toBeUndefined();
+      expect(result).toEqual({
+        type: "success",
+        basket: complexBasketResponse,
+      });
     });
   });
 
@@ -107,13 +110,15 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.basket).toBeUndefined();
-      expect(result.error).toEqual({
-        type: "validationError",
-        message: "The basket data is invalid",
-        details: [
-          "product.selectionIdentifier is invalid: Selection identifier is required",
-        ],
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "validationError",
+          message: "Payload Validation Error",
+          details: [
+            "product.selectionIdentifier is invalid: Selection identifier is required",
+          ],
+        },
       });
     });
 
@@ -135,13 +140,17 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.error?.details).toHaveLength(2);
-      expect(result.error?.details).toContain(
-        "product.selectionIdentifier is invalid: Selection identifier is required",
-      );
-      expect(result.error?.details).toContain(
-        "product.quoteLookup.value is invalid: Quote lookup ID is invalid",
-      );
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "validationError",
+          message: "Payload Validation Error",
+          details: [
+            "product.selectionIdentifier is invalid: Selection identifier is required",
+            "product.quoteLookup.value is invalid: Quote lookup ID is invalid",
+          ],
+        },
+      });
     });
 
     it("should handle ValidationError without path", async () => {
@@ -155,7 +164,14 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.error?.details).toEqual(["General validation error"]);
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "validationError",
+          message: "Payload Validation Error",
+          details: ["General validation error"],
+        },
+      });
     });
   });
 
@@ -178,11 +194,13 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.basket).toBeUndefined();
-      expect(result.error).toEqual({
-        type: "networkError",
-        message: "Server error: HTTP Error: 400 Bad Request",
-        details: ["Status: 400"],
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "networkError",
+          message: "HTTP Error: 400 Bad Request",
+          details: ["Status: 400"],
+        },
       });
     });
 
@@ -204,8 +222,14 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.error?.type).toBe("networkError");
-      expect(result.error?.details).toContain("Status: 500");
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "networkError",
+          message: "HTTP Error: 500 Internal Server Error",
+          details: ["Status: 500"],
+        },
+      });
     });
   });
 
@@ -216,11 +240,13 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.basket).toBeUndefined();
-      expect(result.error).toEqual({
-        type: "unknownError",
-        message: "An unexpected error occurred",
-        details: ["Something went wrong"],
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "unknownError",
+          message: "Something went wrong",
+          details: ["Something went wrong"],
+        },
       });
     });
 
@@ -229,10 +255,13 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.error).toEqual({
-        type: "unknownError",
-        message: "An unexpected error occurred",
-        details: ["Unknown error"],
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "unknownError",
+          message: "An unexpected error occurred",
+          details: ["Unknown error"],
+        },
       });
     });
 
@@ -241,7 +270,14 @@ describe("createBasket", () => {
 
       const result = await createBasket(mockBasketData);
 
-      expect(result.error?.details).toEqual(["Unknown error"]);
+      expect(result).toEqual({
+        type: "error",
+        error: {
+          type: "unknownError",
+          message: "An unexpected error occurred",
+          details: ["Unknown error"],
+        },
+      });
     });
   });
 
@@ -252,57 +288,11 @@ describe("createBasket", () => {
 
       const result = await createBasket(emptyBasketData);
 
-      expect(result.basket).toEqual(mockBasketResponse);
+      expect(result).toEqual({
+        type: "success",
+        basket: mockBasketResponse,
+      });
       expect(squidAPI.createBasket).toHaveBeenCalledWith(emptyBasketData);
-    });
-
-    it("should log errors to console", async () => {
-      const consoleSpy = vi
-        .spyOn(console, "error")
-        .mockImplementation(() => {});
-      const testError = new Error("Test error");
-      vi.mocked(squidAPI.createBasket).mockRejectedValue(testError);
-
-      await createBasket(mockBasketData);
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        "Error in createBasket:",
-        testError,
-      );
-
-      consoleSpy.mockRestore();
-    });
-  });
-
-  describe("Type safety", () => {
-    it("should return correct TypeScript types for success case", async () => {
-      vi.mocked(squidAPI.createBasket).mockResolvedValue(mockBasketResponse);
-
-      const result = await createBasket(mockBasketData);
-
-      if (result.basket) {
-        expect(typeof result.basket.id).toBe("string");
-        expect(typeof result.basket.updatedAt).toBe("string");
-        expect(typeof result.basket.createdAt).toBe("string");
-      }
-    });
-
-    it("should return correct TypeScript types for error case", async () => {
-      const error = new ValidationError([{ message: "test error" }]);
-      vi.mocked(squidAPI.createBasket).mockRejectedValue(error);
-
-      const result = await createBasket(mockBasketData);
-
-      if (result.error) {
-        expect([
-          "generalError",
-          "validationError",
-          "networkError",
-          "unknownError",
-        ]).toContain(result.error.type);
-        expect(typeof result.error.message).toBe("string");
-        expect(Array.isArray(result.error.details)).toBe(true);
-      }
     });
   });
 });

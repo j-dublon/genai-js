@@ -42,8 +42,6 @@ export const updateBasket = async (
       basket,
     };
   } catch (error) {
-    console.error("Error in updateBasket:", error);
-
     if (error instanceof ValidationError) {
       let errorType: UpdateBasketErrorType = "validationError";
       if (error.details[0].message === "Not Found") {

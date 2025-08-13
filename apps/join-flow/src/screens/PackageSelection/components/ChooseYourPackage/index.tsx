@@ -40,6 +40,7 @@ export const ChooseYourPackage = () => {
     setSoftCreditCheck,
     setIsLoadingModalOpen,
     isLoadingModalOpen,
+    setErrorInfo,
   } = useJoinFlowStore();
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -182,31 +183,27 @@ export const ChooseYourPackage = () => {
       selectPackage(selectedStorePackage);
       modalRef.current?.close();
 
-      try {
-        setIsLoadingModalOpen(true);
-        const result = await createBasket({
-          product: {
-            selectionIdentifier: selectedStorePackage.selectionIdentifier,
-            quoteLookup: {
-              relationTo: "newSaleQuoteLookups",
-              value: quoteResponse.documentID,
-            },
+      setIsLoadingModalOpen(true);
+      const result = await createBasket({
+        product: {
+          selectionIdentifier: selectedStorePackage.selectionIdentifier,
+          quoteLookup: {
+            relationTo: "newSaleQuoteLookups",
+            value: quoteResponse.documentID,
           },
-        });
+        },
+      });
 
-        if (result.basket) {
-          setBasket(result.basket);
-          setSoftCreditCheck({
-            latestStatus: null,
-            attempts: 0,
-          });
-          router.push("/join-flow/personal-details");
-        } else if (result.error) {
-          console.error("Failed to create basket:", result.error);
-          setIsLoadingModalOpen(false);
-        }
-      } catch (error) {
-        console.error("Unexpected error creating basket:", error);
+      if (result.type === "success") {
+        setBasket(result.basket);
+        setSoftCreditCheck({
+          latestStatus: null,
+          attempts: 0,
+        });
+        router.push("/join-flow/personal-details");
+      } else if (result.type === "error") {
+        setErrorInfo({ type: result.error.type });
+        router.push("/join-flow/error");
         setIsLoadingModalOpen(false);
       }
     }

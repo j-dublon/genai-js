@@ -423,6 +423,7 @@ describe("ChooseYourPackage", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockCreateBasket.mockResolvedValue({
+      type: "success",
       basket: mockBasketResponse,
     });
     mockUseJoinFlowStore.mockReturnValue(mockStore);
@@ -553,7 +554,10 @@ describe("ChooseYourPackage", () => {
 
   it("opens the loading modal when the package is selected", async () => {
     mockCreateBasket.mockImplementation(
-      () => new Promise((resolve) => resolve({ basket: mockBasketResponse })),
+      () =>
+        new Promise((resolve) =>
+          resolve({ type: "success", basket: mockBasketResponse }),
+        ),
     );
 
     const { rerender } = render(<ChooseYourPackage />);

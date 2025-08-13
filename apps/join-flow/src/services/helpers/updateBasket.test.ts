@@ -109,14 +109,5 @@ describe("updateBasket", () => {
       );
       expect(squidAPI.updateBasket).toHaveBeenCalledTimes(1);
     });
-
-    it("should log errors to console", async () => {
-      const error = new Error("Test error");
-      vi.mocked(squidAPI.updateBasket).mockRejectedValue(error);
-
-      await updateBasket(mockBasketId, mockBasketData);
-
-      expect(consoleSpy).toHaveBeenCalledWith("Error in updateBasket:", error);
-    });
   });
 });

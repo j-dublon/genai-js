@@ -6,14 +6,19 @@ import {
   ValidationError,
 } from "@cuckoointernet/util-squid-network-requests";
 
-interface CreateBasketResult {
-  basket?: Basket;
-  error?: {
-    type: "generalError" | "validationError" | "networkError" | "unknownError";
-    message: string;
-    details?: string[];
-  };
-}
+type CreateBasketResult =
+  | {
+      type: "success";
+      basket: Basket;
+    }
+  | {
+      type: "error";
+      error: {
+        type: "validationError" | "networkError" | "unknownError";
+        message: string;
+        details?: string[];
+      };
+    };
 
 export const createBasket = async (
   basketData: InitialBasket,
@@ -22,16 +27,16 @@ export const createBasket = async (
     const basket = await squidAPI.createBasket(basketData);
 
     return {
+      type: "success",
       basket,
     };
   } catch (error) {
-    console.error("Error in createBasket:", error);
-
     if (error instanceof ValidationError) {
       return {
+        type: "error",
         error: {
           type: "validationError",
-          message: "The basket data is invalid",
+          message: error.message,
           details: error.details.map((err) =>
             err.path ? `${err.path} is invalid: ${err.message}` : err.message,
           ),
@@ -41,18 +46,23 @@ export const createBasket = async (
 
     if (error instanceof FetchError) {
       return {
+        type: "error",
         error: {
           type: "networkError",
-          message: `Server error: ${error.message}`,
+          message: error.message,
           details: [`Status: ${error.response?.status}`],
         },
       };
     }
 
     return {
+      type: "error",
       error: {
         type: "unknownError",
-        message: "An unexpected error occurred",
+        message:
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
         details: [error instanceof Error ? error.message : "Unknown error"],
       },
     };
