@@ -19,7 +19,7 @@ const getIsServiceable = (
   source?: string,
 ) => {
   // if we don't have an address key we can't know if its serviceable
-  if (!address[0].addressKey) return null;
+  if (!address[0].identifiers?.length) return null;
   // if they come from not-ready-to-join then its serviceable
   if (source === "not-ready-to-join") return true;
   // if they come from "cannot-service-address" we know there's no products

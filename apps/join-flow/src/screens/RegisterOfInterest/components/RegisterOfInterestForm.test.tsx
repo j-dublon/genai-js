@@ -2,9 +2,9 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useRoiAddress } from "@/hooks/useRoiAddress";
 import { ROIOriginJourney } from "@/lib/constants";
 import { registerInterest } from "@/services/helpers/registerInterest";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 import {
   RegisterOfInterestForm,
@@ -29,13 +29,13 @@ vi.mock("@react-component-library/ui", async () => {
   };
 });
 
-vi.mock("@/hooks/useRoiAddress", () => ({
-  useRoiAddress: vi.fn(),
-}));
-
 vi.mock("@/store/useJoinFlowStore", () => ({
   __esModule: true,
-  default: () => ({ affiliateSession: { affiliateName: "test-affiliate" } }),
+  default: vi.fn(() => ({
+    affiliateSession: { affiliateName: "test-affiliate" },
+    serviceAddress: null,
+    roiPostcode: "AB12 3CD",
+  })),
 }));
 
 vi.mock("@/services/helpers/registerInterest", () => ({
@@ -49,12 +49,14 @@ const TEST_EMAIL = "john@example.com";
 const TEST_PHONE = "07123456789";
 const TEST_ADDRESS_POSTCODE_ONLY = { postcode: "AB12 3CD" };
 const TEST_ADDRESS_FULL = {
+  line1: "123 Main St",
+  line2: "Apt 4B",
+  line3: "London",
   postcode: "AB12 3CD",
-  addressKey: "123",
-  addressKeyType: "URN",
-  formattedAddress:
-    "line1=123+Main+St&postcode=AB12+3CD&addressKeyType=URN&addressKey=123",
-  additionalAddressKeys: [],
+  identifiers: [
+    { value: "123", scheme: "OSS_IDENTIFIER", id: "123" },
+    { value: "456", scheme: "URN", id: "456" },
+  ],
 };
 
 describe("RegisterOfInterestForm", () => {
@@ -75,7 +77,11 @@ describe("RegisterOfInterestForm", () => {
     vi.clearAllMocks();
     defaultProps.onSuccess = vi.fn();
     vi.mocked(registerInterest).mockResolvedValue({ roi: "abc-123" });
-    vi.mocked(useRoiAddress).mockReturnValue([TEST_ADDRESS_POSTCODE_ONLY]);
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      affiliateSession: { affiliateName: "test-affiliate" },
+      serviceAddress: null,
+      roiPostcode: "AB12 3CD",
+    });
   });
 
   it("renders all required fields and the submit button", () => {
@@ -159,7 +165,11 @@ describe("RegisterOfInterestForm", () => {
   });
 
   it("submits the full address data when available", async () => {
-    vi.mocked(useRoiAddress).mockReturnValue([TEST_ADDRESS_FULL]);
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      affiliateSession: { affiliateName: "test-affiliate" },
+      serviceAddress: TEST_ADDRESS_FULL,
+      roiPostcode: "AB12 3CD",
+    });
     render(
       <RegisterOfInterestForm
         {...defaultProps}

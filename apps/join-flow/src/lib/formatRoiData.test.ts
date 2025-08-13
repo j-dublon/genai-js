@@ -12,12 +12,14 @@ import { formatRoiData } from "./formatRoiData";
 const roiAddressDataWithFullAddress: RegisterOfInterestSubmissionsInputs["address"] =
   [
     {
-      addressKeyType: "URN",
-      addressKey: "ADDR123",
-      formattedAddress:
-        "line1=1+Test+Street&line2=example+line&postcode=AB1+2CD&addressKeyType=URN&addressKey=ADDR123",
-      postcode: "AB1 2CD",
-      additionalAddressKeys: [],
+      line1: "123 Main St",
+      line2: "Apt 4B",
+      line3: "London",
+      postcode: "AB12 3CD",
+      identifiers: [
+        { value: "123", scheme: "OSS_IDENTIFIER", id: "123" },
+        { value: "456", scheme: "URN", id: "456" },
+      ],
     },
   ];
 
@@ -28,7 +30,7 @@ const roiAddressPostcodeOnly: RegisterOfInterestSubmissionsInputs["address"] = [
 ];
 
 describe("formatRoiData", () => {
-  it("sets originJourney to SERVICEABLE_ROI if source is 'not-ready-to-join' and addressKey present", () => {
+  it("sets originJourney to SERVICEABLE_ROI if source is 'not-ready-to-join' and identifiers present", () => {
     const data: NotReadyToJoinFormData = {
       fullName: "John Doe",
       email: "john@example.com",

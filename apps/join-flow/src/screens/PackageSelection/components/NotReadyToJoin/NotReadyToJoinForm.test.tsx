@@ -3,8 +3,8 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useRoiAddress } from "@/hooks/useRoiAddress";
 import { registerInterest } from "@/services/helpers/registerInterest";
+import useJoinFlowStore from "@/store/useJoinFlowStore";
 
 import { NotReadyToJoinForm } from "./NotReadyToJoinForm";
 
@@ -24,12 +24,14 @@ const TEST_EMAIL = "john.doe@example.com";
 const TEST_PHONE = "07123456789";
 const TEST_DATE = "2024-12-31";
 const TEST_ADDRESS = {
-  addressKey: "abc-123",
-  addressKeyType: "URN",
+  line1: "123 Main St",
+  line2: "Apt 4B",
+  line3: "London",
   postcode: "AB12 3CD",
-  formattedAddress:
-    "line1=123&line2=Main+St&line3=Anytown&postcode=AB12+3CD&addressKey=abc-123&addressKeyType=URN",
-  additionalAddressKeys: [],
+  identifiers: [
+    { value: "123", scheme: "OSS_IDENTIFIER", id: "123" },
+    { value: "456", scheme: "URN", id: "456" },
+  ],
 };
 
 interface ButtonProps {
@@ -94,13 +96,22 @@ vi.mock("@/components/FormInput", () => ({
   ),
 }));
 
-vi.mock("@/hooks/useRoiAddress", () => ({
-  useRoiAddress: vi.fn(),
-}));
-
 vi.mock("@/store/useJoinFlowStore", () => ({
   __esModule: true,
-  default: () => ({ affiliateSession: { affiliateName: "test-affiliate" } }),
+  default: vi.fn(() => ({
+    affiliateSession: { affiliateName: "test-affiliate" },
+    serviceAddress: {
+      line1: "123 Main St",
+      line2: "Apt 4B",
+      line3: "London",
+      postcode: "AB12 3CD",
+      identifiers: [
+        { value: "123", scheme: "OSS_IDENTIFIER", id: "123" },
+        { value: "456", scheme: "URN", id: "456" },
+      ],
+    },
+    roiPostcode: "AB12 3CD",
+  })),
 }));
 
 vi.mock("@/services/helpers/registerInterest", () => ({
@@ -115,7 +126,20 @@ describe("NotReadyToJoinForm", () => {
     vi.mocked(registerInterest).mockImplementation(
       () => new Promise((resolve) => resolve({ roi: "abc-123" })),
     );
-    vi.mocked(useRoiAddress).mockReturnValue([TEST_ADDRESS]);
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      affiliateSession: { affiliateName: "test-affiliate" },
+      serviceAddress: {
+        line1: "123 Main St",
+        line2: "Apt 4B",
+        line3: "London",
+        postcode: "AB12 3CD",
+        identifiers: [
+          { value: "123", scheme: "OSS_IDENTIFIER", id: "123" },
+          { value: "456", scheme: "URN", id: "456" },
+        ],
+      },
+      roiPostcode: "AB12 3CD",
+    });
   });
 
   it("renders the form with all required fields", () => {
@@ -287,7 +311,11 @@ describe("NotReadyToJoinForm", () => {
   });
 
   it("shows error state if address can't be found on store", async () => {
-    vi.mocked(useRoiAddress).mockReturnValue([]);
+    vi.mocked(useJoinFlowStore).mockReturnValue({
+      affiliateSession: { affiliateName: "test-affiliate" },
+      serviceAddress: null,
+      roiPostcode: null,
+    });
     render(<NotReadyToJoinForm />);
 
     await user.type(screen.getByPlaceholderText("Full name"), TEST_FULL_NAME);

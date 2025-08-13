@@ -11,7 +11,6 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
-import { useRoiAddress } from "@/hooks/useRoiAddress";
 import { formatRoiData } from "@/lib/formatRoiData";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { registerInterest } from "@/services/helpers/registerInterest";
@@ -58,8 +57,12 @@ export const NotReadyToJoinForm = () => {
     },
   });
 
-  const roiAddressData = useRoiAddress();
-  const { affiliateSession } = useJoinFlowStore();
+  const { affiliateSession, serviceAddress, roiPostcode } = useJoinFlowStore();
+  const roiAddressData = serviceAddress
+    ? [serviceAddress]
+    : roiPostcode
+      ? [{ postcode: roiPostcode }]
+      : null;
 
   const onSubmit = async (
     data: NotReadyToJoinFormData,
