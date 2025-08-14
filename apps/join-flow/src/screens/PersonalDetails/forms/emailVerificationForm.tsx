@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { TextInput } from "@/components/TextInput";
 import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { getAssetPath } from "@/lib/get-asset-path";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import { EmailVerificationFormProps } from "./formValues";
 
@@ -55,6 +56,14 @@ export const EmailVerificationForm = ({
       onVerificationSuccess();
     }
   }, [isVerified, onVerificationSuccess]);
+
+  useEffect(() => {
+    captureJoinFlowEvent("$pageview", {
+      subFeature: "email-validation",
+      outcome: "success",
+      type: "display",
+    });
+  }, []);
 
   const handleInput = async (
     index: number,

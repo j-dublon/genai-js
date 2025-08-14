@@ -11,7 +11,6 @@ import {
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore, { EeroProduct } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { usePostHog } from "posthog-js/react";
 import { useEffect, useRef, useState } from "react";
 
 import { Footer } from "@/components/Footer";
@@ -20,6 +19,7 @@ import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { PILL_FADE_OUT_DELAY } from "@/lib/constants";
 import { createEeroOptions, type EeroOption } from "@/lib/createEeroOptions";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
 
 import { EeroCard } from "./components/EeroCard";
@@ -66,8 +66,6 @@ const EeroSelection = () => {
     helpButtonText,
     helpModalSubtitle,
   } = eeroPageContent;
-
-  const posthog = usePostHog();
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -122,9 +120,14 @@ const EeroSelection = () => {
   };
 
   const handleContinue = async () => {
-    posthog.capture("join_flow_selected_eero_router");
     if (!basket) {
       console.error("Basket not found"); // TODO: This shouldn't be possible but needs handling
+      captureJoinFlowEvent("join_flow_selected_eero_router", {
+        subFeature: "eero-selection",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Basket not found",
+      });
       return;
     }
 
@@ -155,7 +158,12 @@ const EeroSelection = () => {
 
         if (result.error) {
           // TODO: Error handling
-          console.error("Error updating basket:", result.error);
+          captureJoinFlowEvent("join_flow_selected_eero_router", {
+            subFeature: "eero-selection",
+            outcome: "error",
+            type: "select",
+            errorMessage: result.error.message,
+          });
           setIsLoadingModalOpen(false);
           return;
         }
@@ -167,9 +175,19 @@ const EeroSelection = () => {
 
       setCurrentStep(3);
       selectEeroProduct(selectedEero);
+      captureJoinFlowEvent("join_flow_selected_eero_router", {
+        subFeature: "eero-selection",
+        outcome: "success",
+        type: "select",
+      });
       router.push("/join-flow/one-touch-switching");
-    } catch (error) {
-      console.error("Error in handleContinue:", error);
+    } catch {
+      captureJoinFlowEvent("join_flow_selected_eero_router", {
+        subFeature: "eero-selection",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Unknown error",
+      });
       setIsLoadingModalOpen(false);
     }
   };

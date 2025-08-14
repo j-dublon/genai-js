@@ -2,7 +2,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "@react-component-library/ui";
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
-import { usePostHog } from "posthog-js/react";
 import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
@@ -25,8 +24,6 @@ export const PaymentForm = ({
     serviceAddress,
     billingAddress,
   } = useJoinFlowStore();
-
-  const posthog = usePostHog();
 
   const {
     accountholderNamePlaceholder,
@@ -147,7 +144,6 @@ export const PaymentForm = ({
 
   const formSubmitHandler = useCallback(
     async (data: FormValues) => {
-      posthog.capture("join_flow_submitted_payment_details");
       if (!data.isAccountHolder) {
         await trigger("isAccountHolder");
         return;
@@ -164,7 +160,7 @@ export const PaymentForm = ({
         reset(defaultValues);
       }
     },
-    [savePaymentDetails, onSubmit, trigger, posthog, defaultValues, reset],
+    [savePaymentDetails, onSubmit, trigger, defaultValues, reset],
   );
 
   const isAccountholderNameValid = accountholderName?.trim().length > 0;

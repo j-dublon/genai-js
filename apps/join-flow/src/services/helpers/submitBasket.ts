@@ -1,5 +1,6 @@
 import {
   FetchError,
+  posthogBrowserIdentifyUser,
   squidAPI,
   ValidationError,
 } from "@cuckoointernet/util-squid-network-requests";
@@ -23,6 +24,7 @@ export type SubmitBasketResult =
 
 export const submitBasket = async (
   basketId: string,
+  email?: string,
 ): Promise<SubmitBasketResult> => {
   if (!basketId) {
     return {
@@ -39,6 +41,10 @@ export const submitBasket = async (
     const response = await squidAPI.doSignup(basketId);
 
     if (response.success) {
+      posthogBrowserIdentifyUser({
+        accountNumber: response.accountNumber,
+        email,
+      });
       return {
         type: "success",
       };

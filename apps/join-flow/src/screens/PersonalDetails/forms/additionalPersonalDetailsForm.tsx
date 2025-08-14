@@ -16,6 +16,7 @@ import { TextInput } from "@/components/TextInput";
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { getAssetPath } from "@/lib/get-asset-path";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import personalDetailsProps from "../personalDetailsProps";
 import type { AdditionalPersonalDetailsFormProps } from "./formValues";
@@ -62,6 +63,14 @@ export const AdditionalPersonalDetailsForm = ({
 
   const [isDobModalOpen, setIsDobModalOpen] = useState(false);
   const [isTeleHealthModalOpen, setIsTeleHealthModalOpen] = useState(false);
+
+  useEffect(() => {
+    captureJoinFlowEvent("$pageview", {
+      subFeature: "additional-details",
+      outcome: "success",
+      type: "display",
+    });
+  }, []);
 
   useEffect(() => {
     scrollToTop();

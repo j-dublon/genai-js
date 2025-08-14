@@ -11,7 +11,6 @@ import useJoinFlowStore, {
   type StoreSelectedPackage,
 } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { usePostHog } from "posthog-js/react";
 import { useMemo, useRef, useState } from "react";
 
 import { useClearFocus } from "@/hooks/useClearFocus";
@@ -19,6 +18,7 @@ import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { useTopSpeedPackage } from "@/hooks/useTopSpeedPackage";
 import { PackageCard } from "@/screens/PackageSelection/components/PackageCard";
 import { createBasket } from "@/services/helpers/createBasket";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import { PackageSelectionDetails } from "../PackageSelectionDetails";
 import { SpeedCalculator } from "../SpeedCalculator";
@@ -31,7 +31,6 @@ import {
 type ModalContent = "speed-calculator" | "package-details";
 
 export const ChooseYourPackage = () => {
-  const posthog = usePostHog();
   const router = useRouter();
   const {
     selectPackage,
@@ -178,7 +177,6 @@ export const ChooseYourPackage = () => {
   const handlePackageSelection = async (
     selectedStorePackage: StoreSelectedPackage,
   ) => {
-    posthog.capture("join_flow_selected_choose_your_package");
     if (selectedStorePackage && quoteResponse?.response?.products?.[0]) {
       selectPackage(selectedStorePackage);
       modalRef.current?.close();
@@ -200,8 +198,19 @@ export const ChooseYourPackage = () => {
           latestStatus: null,
           attempts: 0,
         });
+        captureJoinFlowEvent("join_flow_selected_package", {
+          subFeature: "package-selection",
+          outcome: "success",
+          type: "select",
+        });
         router.push("/join-flow/personal-details");
       } else if (result.type === "error") {
+        captureJoinFlowEvent("join_flow_selected_package", {
+          subFeature: "package-selection",
+          outcome: "error",
+          type: "select",
+          errorMessage: result.error.message,
+        });
         setErrorInfo({ type: result.error.type });
         router.push("/join-flow/error");
         setIsLoadingModalOpen(false);

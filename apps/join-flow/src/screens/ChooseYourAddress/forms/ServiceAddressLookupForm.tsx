@@ -2,11 +2,11 @@ import useJoinFlowStore, {
   ExtendedStoreAddress,
 } from "@store/useJoinFlowStore";
 import { useRouter, useSearchParams } from "next/navigation";
-import { usePostHog } from "posthog-js/react";
 import { useCallback } from "react";
 
 import { AddressLookupForm } from "@/components/AddressLookupForm/index";
 import { createQuoteLookupPoll } from "@/services/helpers/createQuoteLookupPoll";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import { ChooseYourAddressText } from "../ChooseYourAddressProps";
 
@@ -22,19 +22,21 @@ export const ServiceAddressLookupForm = () => {
     setErrorInfo,
   } = useJoinFlowStore();
 
-  const posthog = usePostHog();
-
   const handleAddressSelected = async (
     selectedAddress: ExtendedStoreAddress,
   ) => {
     setServiceAddress(selectedAddress);
-    posthog.capture("join_flow_selected_address");
 
     if (!affiliateSession) {
-      console.error("No affiliate session available");
-      throw new Error(
-        "Session information is missing. Please refresh the page or try again later.",
-      );
+      const errorMessage =
+        "Session information is missing. Please refresh the page or try again later.";
+      captureJoinFlowEvent("join_flow_selected_address", {
+        subFeature: "address-lookup",
+        outcome: "error",
+        type: "select",
+        errorMessage,
+      });
+      throw new Error(errorMessage);
     }
 
     setIsLoadingModalOpen(true);
@@ -57,9 +59,20 @@ export const ServiceAddressLookupForm = () => {
             quotingCode: quoteResult.quotingCode,
           },
         });
+        captureJoinFlowEvent("join_flow_selected_address", {
+          subFeature: "address-lookup",
+          outcome: "success",
+          type: "select",
+        });
         router.push("/join-flow/package-selection");
         return;
       } else if (quoteResult?.error) {
+        captureJoinFlowEvent("join_flow_selected_address", {
+          subFeature: "address-lookup",
+          outcome: "error",
+          type: "select",
+          errorMessage: quoteResult.error.message,
+        });
         const errorType = quoteResult.error.type;
 
         switch (errorType) {
@@ -87,12 +100,24 @@ export const ServiceAddressLookupForm = () => {
             return;
         }
       } else {
+        captureJoinFlowEvent("join_flow_selected_address", {
+          subFeature: "address-lookup",
+          outcome: "error",
+          type: "select",
+          errorMessage: "Unknown error",
+        });
         setErrorInfo({
           type: "unknownError",
         });
         router.push("/join-flow/error");
       }
     } catch {
+      captureJoinFlowEvent("join_flow_selected_address", {
+        subFeature: "address-lookup",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Unknown error",
+      });
       setErrorInfo({
         type: "unknownError",
       });

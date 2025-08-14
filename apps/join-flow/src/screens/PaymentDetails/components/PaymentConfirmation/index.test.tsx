@@ -22,6 +22,7 @@ vi.mock("@cuckoointernet/util-squid-network-requests", () => ({
       },
     }),
   },
+  posthogBrowserCaptureEvent: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
@@ -320,7 +321,7 @@ describe("PaymentConfirmation", () => {
       },
       vulnerabilityAndAccessibility: undefined,
     });
-    expect(mockSubmitBasket).toHaveBeenCalledWith("123");
+    expect(mockSubmitBasket).toHaveBeenCalledWith("123", undefined);
     expect(mockOnCompleteHandler).toHaveBeenCalled();
   });
 

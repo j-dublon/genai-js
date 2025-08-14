@@ -24,6 +24,7 @@ import { runCreditCheck } from "@/services/helpers/runCreditCheck";
 import { sendEmailCode } from "@/services/helpers/sendEmailCode";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import { validateEmailCode } from "@/services/helpers/validateEmailCode";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import {
   AdditionalPersonalDetailsFormProps,
@@ -315,6 +316,12 @@ const PersonalDetails = () => {
       try {
         if (!basket) {
           setErrorInfo({ type: "basketError" });
+          captureJoinFlowEvent("join_flow_submit_personal_details", {
+            subFeature: "personal-details",
+            outcome: "error",
+            type: "select",
+            errorMessage: "Basket not found",
+          });
           router.push("/join-flow/error");
           return;
         }
@@ -335,24 +342,46 @@ const PersonalDetails = () => {
         if (result.basket) {
           setBasket(result.basket);
         } else if (result.error) {
-          console.error("Failed to update basket:", result.error);
+          captureJoinFlowEvent("join_flow_submit_personal_details", {
+            subFeature: "personal-details",
+            outcome: "error",
+            type: "select",
+            errorMessage: result.error.message,
+          });
           setErrorInfo({ type: result.error.type });
           router.push("/join-flow/error");
           return;
         }
       } catch {
         setErrorInfo({ type: "unknownError" });
+        captureJoinFlowEvent("join_flow_submit_personal_details", {
+          subFeature: "personal-details",
+          outcome: "error",
+          type: "select",
+          errorMessage: "Unknown error",
+        });
         router.push("/join-flow/error");
         return;
       }
 
       await handleSendCode();
 
+      captureJoinFlowEvent("join_flow_submit_personal_details", {
+        subFeature: "personal-details",
+        outcome: "success",
+        type: "select",
+      });
+
       setPersonalDetails(updatedDetails);
       setCurrentFormStep(nextStep);
       setIsLoadingModalOpen(false);
-    } catch (error) {
-      console.log(error);
+    } catch {
+      captureJoinFlowEvent("join_flow_submit_personal_details", {
+        subFeature: "personal-details",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Unknown error",
+      });
       setIsLoadingModalOpen(false);
     }
   };
@@ -376,6 +405,11 @@ const PersonalDetails = () => {
       setPersonalDetails(updatedDetails);
     }
     setIsEmailVerified(true);
+    captureJoinFlowEvent("join_flow_submit_email_validation", {
+      subFeature: "email-validation",
+      outcome: "success",
+      type: "select",
+    });
     setCurrentFormStep("additional");
   };
 
@@ -467,6 +501,12 @@ const PersonalDetails = () => {
     try {
       if (!basket) {
         setErrorInfo({ type: "basketError" });
+        captureJoinFlowEvent("join_flow_submit_additional_details", {
+          subFeature: "additional-details",
+          outcome: "error",
+          type: "select",
+          errorMessage: "Basket not found",
+        });
         router.push("/join-flow/error");
         return;
       }
@@ -524,12 +564,23 @@ const PersonalDetails = () => {
       if (result.basket) {
         setBasket(result.basket);
       } else if (result.error) {
-        console.error("Failed to update basket:", result.error);
+        captureJoinFlowEvent("join_flow_submit_additional_details", {
+          subFeature: "additional-details",
+          outcome: "error",
+          type: "select",
+          errorMessage: result.error.message,
+        });
         setErrorInfo({ type: result.error.type });
         router.push("/join-flow/error");
         return;
       }
     } catch {
+      captureJoinFlowEvent("join_flow_submit_additional_details", {
+        subFeature: "additional-details",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Unknown error",
+      });
       setErrorInfo({ type: "unknownError" });
       router.push("/join-flow/error");
       return;
@@ -552,6 +603,12 @@ const PersonalDetails = () => {
       }
 
       if (error) {
+        captureJoinFlowEvent("join_flow_submit_additional_details", {
+          subFeature: "additional-details",
+          outcome: "error",
+          type: "select",
+          errorMessage: error.message,
+        });
         switch (error.type) {
           case "basketError":
             setErrorInfo({ type: "basketError" });
@@ -579,12 +636,28 @@ const PersonalDetails = () => {
 
       switch (latestStatus) {
         case "FAILED":
+          captureJoinFlowEvent("join_flow_submit_additional_details", {
+            subFeature: "additional-details",
+            outcome: "error",
+            type: "select",
+            errorMessage: "Credit check FAILED",
+          });
           router.push("/join-flow/personal-details/check-failed");
           break;
         case "PASSED":
+          captureJoinFlowEvent("join_flow_submit_additional_details", {
+            subFeature: "additional-details",
+            outcome: "success",
+            type: "select",
+          });
           router.push("/join-flow/eero-selection");
           break;
         case "NO_MATCH":
+          captureJoinFlowEvent("join_flow_submit_additional_details", {
+            subFeature: "additional-details",
+            outcome: "success",
+            type: "select",
+          });
           router.push("/join-flow/personal-details/retry-check");
           break;
         default:
@@ -592,6 +665,12 @@ const PersonalDetails = () => {
           break;
       }
     } catch {
+      captureJoinFlowEvent("join_flow_submit_additional_details", {
+        subFeature: "additional-details",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Unknown error",
+      });
       setErrorInfo({ type: "unknownError" });
       router.push("/join-flow/error");
       return;

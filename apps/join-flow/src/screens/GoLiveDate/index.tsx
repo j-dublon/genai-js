@@ -9,7 +9,6 @@ import {
 import { TickWithCircle } from "@react-component-library/ui/icons";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { usePostHog } from "posthog-js/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { DateTimeSelectionForm } from "@/components/DateTimeSelectionForm";
@@ -24,6 +23,7 @@ import { getCICS } from "@/services/helpers/getCICS";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
 import { getGoLiveDates } from "@/services/helpers/getGoLiveDates";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 import { GoLiveDateFormValues } from "@/validation/join-flow-schema";
 
 import { EngineerVisitModal } from "./components/EngineerVisitModal";
@@ -46,7 +46,6 @@ export const GoLiveDate = () => {
   } = goLiveDateText;
 
   const router = useRouter();
-  const posthog = usePostHog();
   const {
     setGoLiveDetails,
     goLiveDetails,
@@ -157,9 +156,14 @@ export const GoLiveDate = () => {
   }, []);
 
   const handleFormSubmit = async (data: GoLiveDateFormValues) => {
-    posthog.capture("join_flow_submitted_go_live_date");
     try {
       if (!basket) {
+        captureJoinFlowEvent("join_flow_selected_go_live_date", {
+          subFeature: "go-live-date",
+          outcome: "error",
+          type: "select",
+          errorMessage: "Basket not found",
+        });
         setErrorInfo({ type: "basketError" });
         router.push("/join-flow/error");
         return;
@@ -212,12 +216,23 @@ export const GoLiveDate = () => {
           }
         }
       } else if (result.error) {
+        captureJoinFlowEvent("join_flow_selected_go_live_date", {
+          subFeature: "go-live-date",
+          outcome: "error",
+          type: "select",
+          errorMessage: result.error.message,
+        });
         setIsLoadingModalOpen(false);
         return;
       }
-    } catch (error) {
+    } catch {
+      captureJoinFlowEvent("join_flow_selected_go_live_date", {
+        subFeature: "go-live-date",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Unknown error",
+      });
       setIsLoadingModalOpen(false);
-      console.error("Error in handleFormSubmit", error);
       return;
     }
 
@@ -256,6 +271,11 @@ export const GoLiveDate = () => {
     });
 
     setCurrentStep(4);
+    captureJoinFlowEvent("join_flow_submitted_go_live_date", {
+      subFeature: "go-live-date",
+      outcome: "success",
+      type: "select",
+    });
     router.push("/join-flow/payment-details");
   };
 

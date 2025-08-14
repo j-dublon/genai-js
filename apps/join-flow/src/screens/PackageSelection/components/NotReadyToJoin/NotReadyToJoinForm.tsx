@@ -6,7 +6,6 @@ import {
   InsertLinksOrButtons,
   TipCard,
 } from "@react-component-library/ui";
-import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
@@ -15,6 +14,7 @@ import { formatRoiData } from "@/lib/formatRoiData";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { registerInterest } from "@/services/helpers/registerInterest";
 import useJoinFlowStore from "@/store/useJoinFlowStore";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 import {
   NotReadyToJoinFormData,
   notReadyToJoinSchema,
@@ -39,8 +39,6 @@ export const NotReadyToJoinForm = () => {
   >(null);
 
   // TODO: add a loading state
-
-  const posthog = usePostHog();
 
   const {
     register,
@@ -69,7 +67,6 @@ export const NotReadyToJoinForm = () => {
     event?: React.BaseSyntheticEvent,
   ) => {
     event?.stopPropagation();
-    posthog.capture("join_flow_submitted_not_ready_to_join");
     setFormError(null);
     setSubmissionStatus("submitting");
 
@@ -77,6 +74,12 @@ export const NotReadyToJoinForm = () => {
       // this shouldn't happen, but just in case
       setFormError(noAddressError);
       setSubmissionStatus("error");
+      captureJoinFlowEvent("join_flow_submitted_not_ready_to_join", {
+        subFeature: "register-interest",
+        outcome: "error",
+        type: "select",
+        errorMessage: "No address entered",
+      });
       return;
     } else {
       setFormError(null);
@@ -90,13 +93,30 @@ export const NotReadyToJoinForm = () => {
         const result = await registerInterest(formattedData);
         if (result.roi) {
           setSubmissionStatus("success");
+          captureJoinFlowEvent("join_flow_submitted_not_ready_to_join", {
+            subFeature: "register-interest",
+            outcome: "success",
+            type: "select",
+          });
         } else {
           setFormError(errorMessage);
           setSubmissionStatus("error");
+          captureJoinFlowEvent("join_flow_submitted_not_ready_to_join", {
+            subFeature: "register-interest",
+            outcome: "error",
+            type: "select",
+            errorMessage: result.error?.message || errorMessage,
+          });
         }
       } catch {
         setFormError(errorMessage);
         setSubmissionStatus("error");
+        captureJoinFlowEvent("join_flow_submitted_not_ready_to_join", {
+          subFeature: "register-interest",
+          outcome: "error",
+          type: "select",
+          errorMessage: "Unknown error",
+        });
       }
     }
   };

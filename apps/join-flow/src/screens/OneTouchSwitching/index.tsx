@@ -6,7 +6,6 @@ import useJoinFlowStore, {
   SwitchingDetails,
 } from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import { usePostHog } from "posthog-js/react";
 import { useEffect, useState } from "react";
 
 import { Footer } from "@/components/Footer";
@@ -15,6 +14,7 @@ import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { createSwitchMatchLookup } from "@/services/helpers/createSwitchMatchLookup";
 import { getAllProviders } from "@/services/helpers/getAllProviders";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import { MatchResultType, OneTouchSwitchingFormData } from "./forms/formValues";
 import OneTouchSwitchingForm from "./forms/oneTouchSwitchingForm";
@@ -22,7 +22,6 @@ import { oneTouchSwitchingText, slides } from "./oneTouchSwitchingProps";
 
 export const OneTouchSwitching = () => {
   const router = useRouter();
-  const posthog = usePostHog();
   const {
     setSwitchingDetails,
     switchingDetails,
@@ -79,12 +78,17 @@ export const OneTouchSwitching = () => {
   };
 
   const handleSubmit = async (data: OneTouchSwitchingFormData) => {
-    posthog.capture("join_flow_submitted_one_touch_switch");
     setIsLoadingModalOpen(true);
 
     // this should never happen
     if (!basket?.id) {
       setErrorInfo({ type: "basketError" });
+      captureJoinFlowEvent("join_flow_submitted_one_touch_switch", {
+        subFeature: "one-touch-switching",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Basket not found",
+      });
       router.push("/join-flow/error");
       return;
     }
@@ -111,12 +115,24 @@ export const OneTouchSwitching = () => {
 
         setSwitchingDetails(switchData);
         setCurrentStep(3);
+        captureJoinFlowEvent("join_flow_submitted_one_touch_switch", {
+          subFeature: "one-touch-switching",
+          outcome: "success",
+          type: "select",
+        });
         router.push("/join-flow/go-live-date");
         return;
       }
 
       // Failure case - OTS did not match or API returned error
       if (result.error) {
+        captureJoinFlowEvent("join_flow_submitted_one_touch_switch", {
+          subFeature: "one-touch-switching",
+          outcome: "error",
+          type: "select",
+          errorMessage: result.error.message,
+        });
+
         if (result.error.type === "joinSuspended") {
           router.push("/join-flow/register-interest/unavailable");
           return;
@@ -132,8 +148,13 @@ export const OneTouchSwitching = () => {
       }
 
       handleOTSFailure(provider);
-    } catch (error) {
-      console.error("Error during One Touch Switching API call:", error);
+    } catch {
+      captureJoinFlowEvent("join_flow_submitted_one_touch_switch", {
+        subFeature: "one-touch-switching",
+        outcome: "error",
+        type: "select",
+        errorMessage: "Unknown error",
+      });
 
       setMatchResult({
         success: false,
@@ -145,7 +166,11 @@ export const OneTouchSwitching = () => {
   };
 
   const handleSkip = () => {
-    posthog.capture("join_flow_skipped_one_touch_switch");
+    captureJoinFlowEvent("join_flow_skipped_one_touch_switch", {
+      subFeature: "one-touch-switching",
+      outcome: "success",
+      type: "select",
+    });
     const switchData: SwitchingDetails = {
       otsSwitchStatus: "SKIPPED",
     };

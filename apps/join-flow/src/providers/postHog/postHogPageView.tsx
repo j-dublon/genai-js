@@ -1,12 +1,19 @@
 "use client";
 
 import { useCookieNotice } from "@react-component-library/ui";
+import { usePathname } from "next/navigation";
 import { usePostHog } from "posthog-js/react";
 import { Suspense, useEffect } from "react";
+
+import {
+  captureJoinFlowEvent,
+  getSubFeatureFromPath,
+} from "@/tracking/posthogUtilWrappers";
 
 function PostHogPageView(): null {
   const posthog = usePostHog();
   const cookieNotice = useCookieNotice();
+  const pathname = usePathname();
 
   useEffect(() => {
     // https://posthog.com/tutorials/nextjs-cookie-banner#adding-the-opt-in-and-out-logic
@@ -16,6 +23,16 @@ function PostHogPageView(): null {
         : "opt_out_capturing"
     ]();
   }, [cookieNotice?.choices?.analytics_storage, posthog]);
+
+  useEffect(() => {
+    const subFeature = getSubFeatureFromPath(pathname);
+
+    captureJoinFlowEvent("$pageview", {
+      subFeature,
+      outcome: "success",
+      type: "display",
+    });
+  }, [pathname]);
 
   return null;
 }

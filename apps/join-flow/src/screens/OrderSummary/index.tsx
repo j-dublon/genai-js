@@ -12,7 +12,6 @@ import {
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import Image from "next/image";
 import Link from "next/link";
-import { usePostHog } from "posthog-js/react";
 import { useEffect, useState } from "react";
 
 import { getAssetPath } from "@/lib/get-asset-path";
@@ -96,7 +95,6 @@ const TrustpilotCondensed = ({
 export const OrderSummary = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const { trustScore, numberOfReviews } = trustpilotRating || {};
-  const posthog = usePostHog();
   const { personalDetails, resetAffiliateSession, resetFlow } =
     useJoinFlowStore();
   const [firstName, setFirstName] = useState("");
@@ -106,10 +104,9 @@ export const OrderSummary = () => {
       setFirstName(personalDetails.firstName);
     }
 
-    posthog.capture("join_flow_reset_basket");
     resetAffiliateSession();
     resetFlow();
-  }, [personalDetails, posthog, resetAffiliateSession, resetFlow]);
+  }, [personalDetails, resetAffiliateSession, resetFlow]);
 
   return (
     <>

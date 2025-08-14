@@ -15,6 +15,7 @@ import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { createVulnerabilityAndAccessibility } from "@/services/helpers/createVulnerabilityAndAccessibility";
 import { submitBasket } from "@/services/helpers/submitBasket";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import { PaymentDocuments } from "../PaymentDocuments";
 import { AccessibilityRequirements } from "./Accessibility/AccessibilityRequirements";
@@ -36,6 +37,7 @@ export const PaymentConfirmation = ({
   const {
     paymentDetails,
     setPaymentDetails,
+    personalDetails,
     basket,
     setBasket,
     affiliateSession,
@@ -83,6 +85,14 @@ export const PaymentConfirmation = ({
       setTermsAgreed(paymentDetails.allTermsAgreed || false);
     }
   }, [paymentDetails]);
+
+  useEffect(() => {
+    captureJoinFlowEvent("$pageview", {
+      subFeature: "payment-details",
+      outcome: "success",
+      type: "display",
+    });
+  }, []);
 
   const {
     title,
@@ -167,7 +177,10 @@ export const PaymentConfirmation = ({
       }
 
       try {
-        const submitResult = await submitBasket(basket.id);
+        const submitResult = await submitBasket(
+          basket.id,
+          personalDetails?.email,
+        );
 
         if (submitResult.type === "error") {
           setErrorInfo({ type: "generalError" });
@@ -188,7 +201,7 @@ export const PaymentConfirmation = ({
     }
   }, [
     paymentDetails,
-    basket,
+    basket?.id,
     onComplete,
     setPaymentDetails,
     accessibilityRequirements,
@@ -199,6 +212,7 @@ export const PaymentConfirmation = ({
     termsAgreed,
     setBasket,
     setIsLoadingModalOpen,
+    personalDetails?.email,
     router,
     setErrorInfo,
   ]);

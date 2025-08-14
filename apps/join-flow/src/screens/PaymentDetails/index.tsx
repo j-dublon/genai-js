@@ -14,6 +14,7 @@ import { redactPaymentDetailValue } from "@/lib/redactPaymentDetailValue";
 import { getCICS } from "@/services/helpers/getCICS";
 import { isBillingAddressesEqual } from "@/services/helpers/isBillingAddressEqual";
 import { updateBasket } from "@/services/helpers/updateBasket";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 
 import PaymentAddressDetails from "./components/PaymentAddressDetails";
 import PaymentConfirmation from "./components/PaymentConfirmation";
@@ -65,12 +66,22 @@ export const PaymentDetails = () => {
 
       try {
         if (!basket?.id) {
-          console.error("Basket ID is required to update basket");
+          captureJoinFlowEvent("join_flow_submit_payment_details", {
+            subFeature: "payment-details",
+            outcome: "error",
+            type: "select",
+            errorMessage: "Basket not found",
+          });
           return false;
         }
 
         if (!serviceAddress) {
-          console.error("Service address is required to update basket");
+          captureJoinFlowEvent("join_flow_submit_payment_details", {
+            subFeature: "payment-details",
+            outcome: "error",
+            type: "select",
+            errorMessage: "Service address not found",
+          });
           return false;
         }
 
@@ -105,6 +116,11 @@ export const PaymentDetails = () => {
 
         if (!havePaymentDetailsChanged) {
           setShowConfirmation(true);
+          captureJoinFlowEvent("join_flow_submit_payment_details", {
+            subFeature: "payment-details",
+            outcome: "success",
+            type: "select",
+          });
           return false;
         }
 
@@ -122,7 +138,12 @@ export const PaymentDetails = () => {
         });
 
         if (result.error) {
-          console.error("Error updating basket:", result.error);
+          captureJoinFlowEvent("join_flow_submit_payment_details", {
+            subFeature: "payment-details",
+            outcome: "error",
+            type: "select",
+            errorMessage: result.error.message,
+          });
           setShowPaymentDetailsError(true);
           setIsLoadingModalOpen(false);
           return false;
@@ -146,6 +167,12 @@ export const PaymentDetails = () => {
               );
             }
           } else {
+            captureJoinFlowEvent("join_flow_submit_payment_details", {
+              subFeature: "payment-details",
+              outcome: "error",
+              type: "select",
+              errorMessage: "Unknown error",
+            });
             router.push("/join-flow/payment-details/contract-retrieval-failed");
           }
         }
@@ -179,11 +206,21 @@ export const PaymentDetails = () => {
           },
         });
         setShowPaymentDetailsError(false);
+        captureJoinFlowEvent("join_flow_submit_payment_details", {
+          subFeature: "payment-details",
+          outcome: "success",
+          type: "select",
+        });
         setShowConfirmation(true);
         setIsLoadingModalOpen(false);
         return true;
-      } catch (error) {
-        console.error("Error processing payment details:", error);
+      } catch {
+        captureJoinFlowEvent("join_flow_submit_payment_details", {
+          subFeature: "payment-details",
+          outcome: "error",
+          type: "select",
+          errorMessage: "Unknown error",
+        });
         setShowPaymentDetailsError(true);
         setIsLoadingModalOpen(false);
         return false;

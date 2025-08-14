@@ -5,7 +5,6 @@ import {
   InsertLinksOrButtons,
   TipCard,
 } from "@react-component-library/ui";
-import { usePostHog } from "posthog-js/react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -14,6 +13,7 @@ import { formatRoiData } from "@/lib/formatRoiData";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { registerInterest } from "@/services/helpers/registerInterest";
 import useJoinFlowStore from "@/store/useJoinFlowStore";
+import { captureJoinFlowEvent } from "@/tracking/posthogUtilWrappers";
 import {
   ExpressionOfInterestFormData,
   expressionOfInterestSchema,
@@ -52,7 +52,6 @@ export const RegisterOfInterestForm = ({
       phoneNumber: "",
     },
   });
-  const posthog = usePostHog();
 
   const { affiliateSession, serviceAddress, roiPostcode } = useJoinFlowStore();
   const roiAddressData = serviceAddress
@@ -67,7 +66,6 @@ export const RegisterOfInterestForm = ({
 
   const onSubmit = async (data: ExpressionOfInterestFormData) => {
     setHasAttemptedSubmit(true);
-    posthog.capture("join_flow_submitted_register_of_interest");
 
     if (!roiAddressData || roiAddressData.length === 0) {
       setFormError("Please return to the previous page and select an address.");
@@ -85,11 +83,28 @@ export const RegisterOfInterestForm = ({
         setIsLoading(true);
         const result = await registerInterest(apiPayload);
         if (result.roi) {
+          captureJoinFlowEvent("join_flow_submit_register_of_interest", {
+            subFeature: "register-interest",
+            outcome: "success",
+            type: "select",
+          });
           onSuccess();
         } else {
+          captureJoinFlowEvent("join_flow_submit_register_of_interest", {
+            subFeature: "register-interest",
+            outcome: "error",
+            type: "select",
+            errorMessage: result.error?.message || "Unknown error",
+          });
           setFormError(formErrorText);
         }
       } catch {
+        captureJoinFlowEvent("join_flow_submit_register_of_interest", {
+          subFeature: "register-interest",
+          outcome: "error",
+          type: "select",
+          errorMessage: "Unknown error",
+        });
         setFormError(formErrorText);
       } finally {
         setIsLoading(false);
