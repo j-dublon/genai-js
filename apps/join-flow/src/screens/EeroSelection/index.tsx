@@ -17,7 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
-import { PILL_FADE_OUT_DELAY, PILL_HIDE_DELAY } from "@/lib/constants";
+import { PILL_FADE_OUT_DELAY } from "@/lib/constants";
 import { createEeroOptions, type EeroOption } from "@/lib/createEeroOptions";
 import { updateBasket } from "@/services/helpers/updateBasket";
 import { eeroSelectionSchema } from "@/validation/join-flow-schema";
@@ -175,18 +175,15 @@ const EeroSelection = () => {
   };
 
   useEffect(() => {
-    setShowPill(true);
     setFadeOut(false);
 
     const fadeOuttimer = setTimeout(
       () => setFadeOut(true),
       PILL_FADE_OUT_DELAY,
     );
-    const hidePillTimer = setTimeout(() => setShowPill(false), PILL_HIDE_DELAY);
 
     return () => {
       clearTimeout(fadeOuttimer);
-      clearTimeout(hidePillTimer);
     };
   }, []);
 

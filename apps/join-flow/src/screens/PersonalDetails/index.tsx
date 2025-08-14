@@ -15,11 +15,7 @@ import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
 import { useScrollToElement } from "@/hooks/useScrollToElement";
-import {
-  PILL_FADE_OUT_DELAY,
-  PILL_HIDE_DELAY,
-  VALIDATION_CODE_LENGTH,
-} from "@/lib/constants";
+import { PILL_FADE_OUT_DELAY, VALIDATION_CODE_LENGTH } from "@/lib/constants";
 import { formatDateOfBirth } from "@/lib/formatDate";
 import { AdditionalPersonalDetailsForm } from "@/screens/PersonalDetails/forms/additionalPersonalDetailsForm";
 import { EmailVerificationForm } from "@/screens/PersonalDetails/forms/emailVerificationForm";
@@ -266,11 +262,9 @@ const PersonalDetails = () => {
       () => setFadeOut(true),
       PILL_FADE_OUT_DELAY,
     );
-    const hidePillTimer = setTimeout(() => setShowPill(false), PILL_HIDE_DELAY);
 
     return () => {
       clearTimeout(fadeOuttimer);
-      clearTimeout(hidePillTimer);
     };
   }, [currentFormStep, reset, trigger, personalDetails]);
 

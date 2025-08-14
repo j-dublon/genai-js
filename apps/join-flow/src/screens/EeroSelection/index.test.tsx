@@ -267,7 +267,11 @@ describe("EeroSelection", () => {
 
   it("renders the toast message pill", () => {
     render(<EeroSelection />);
-    expect(screen.getByText("Your info has been saved")).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(
+        "Color pill with the text Your info has been saved",
+      ),
+    ).toHaveClass("opacity-100");
   });
 
   it("hides the toast message pill after 10 seconds", async () => {
@@ -279,8 +283,10 @@ describe("EeroSelection", () => {
     });
 
     expect(
-      screen.queryByText("Your info has been saved"),
-    ).not.toBeInTheDocument();
+      screen.getByLabelText(
+        "Color pill with the text Your info has been saved",
+      ),
+    ).toHaveClass("opacity-0");
 
     vi.useRealTimers();
   });

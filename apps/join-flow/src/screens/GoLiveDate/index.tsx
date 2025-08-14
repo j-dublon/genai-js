@@ -18,7 +18,7 @@ import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket"
 import { useClearFocus } from "@/hooks/useClearFocus";
 import { useFetchEngineerAppointments } from "@/hooks/useFetchEngineerAppointments";
 import { useLoadingModal } from "@/hooks/useLoadingModal";
-import { PILL_FADE_OUT_DELAY, PILL_HIDE_DELAY } from "@/lib/constants";
+import { PILL_FADE_OUT_DELAY } from "@/lib/constants";
 import { getAssetPath } from "@/lib/get-asset-path";
 import { getCICS } from "@/services/helpers/getCICS";
 import { Appointment } from "@/services/helpers/getEngineerAppointments";
@@ -150,11 +150,9 @@ export const GoLiveDate = () => {
       () => setFadeOut(true),
       PILL_FADE_OUT_DELAY,
     );
-    const hidePillTimer = setTimeout(() => setShowPill(false), PILL_HIDE_DELAY);
 
     return () => {
       clearTimeout(fadeOuttimer);
-      clearTimeout(hidePillTimer);
     };
   }, []);
 
