@@ -122,8 +122,6 @@ export const ServiceAddressLookupForm = () => {
         type: "unknownError",
       });
       router.push("/join-flow/error");
-    } finally {
-      setIsLoadingModalOpen(false);
     }
   };
 

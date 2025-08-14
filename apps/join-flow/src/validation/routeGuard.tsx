@@ -139,14 +139,6 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
           return;
         }
 
-        if (
-          pathname === "/join-flow/payment-details" &&
-          paymentDetails?.allTermsAgreed
-        ) {
-          router.replace("/join-flow/order-summary");
-          return;
-        }
-
         setIsValidating(false);
       } catch (error) {
         console.log(error);
