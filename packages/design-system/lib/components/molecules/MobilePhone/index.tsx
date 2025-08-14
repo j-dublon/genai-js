@@ -7,8 +7,10 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export const MobilePhone = ({
   selectedTextIndex,
+  className,
 }: {
   selectedTextIndex: number;
+  className?: string;
 }) => {
   let screenLabel: string;
   let MobileScreen: React.ComponentType;
@@ -36,7 +38,11 @@ export const MobilePhone = ({
   }
 
   return (
-    <div className="relative" role="none" data-testid="mobile-screen">
+    <div
+      className={`relative ${className ?? ""}`}
+      role="none"
+      data-testid="mobile-screen"
+    >
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={selectedTextIndex}
