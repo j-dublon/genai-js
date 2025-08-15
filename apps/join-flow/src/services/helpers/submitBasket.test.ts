@@ -31,6 +31,7 @@ describe("submitBasket", () => {
     it("should successfully submit a basket with valid basketId", async () => {
       mockSquidAPI.doSignup.mockResolvedValue({
         success: true,
+        firstName: "John",
         accountNumber: "1234567890",
       });
 
