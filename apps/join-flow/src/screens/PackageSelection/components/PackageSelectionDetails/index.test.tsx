@@ -17,12 +17,6 @@ vi.mock("./EeroImage", () => ({
   ),
 }));
 
-vi.mock("./MoreInformation", () => ({
-  MoreInformation: () => (
-    <div data-testid="more-information">More Information</div>
-  ),
-}));
-
 vi.mock("./PackageTitle", () => ({
   PackageTitle: ({ pkg }: { pkg: StoreSelectedPackage }) => (
     <div data-testid="package-title">{pkg.speeds.download}Mbps</div>
@@ -219,9 +213,6 @@ describe("PackageSelectionDetails", () => {
     expect(within(mobileView).getByTestId("add-to-basket")).toBeInTheDocument();
     expect(within(mobileView).getByTestId("tick-list")).toBeInTheDocument();
     expect(within(mobileView).getByTestId("trustpilot")).toBeInTheDocument();
-    expect(
-      within(mobileView).getByTestId("more-information"),
-    ).toBeInTheDocument();
 
     expect(mobileView).toHaveClass("flex", "flex-col", "gap-6", "md:hidden");
 
@@ -234,9 +225,6 @@ describe("PackageSelectionDetails", () => {
       "div.flex.flex-col.gap-4",
     );
     expect(tickListContainer).toBeInTheDocument();
-
-    const divider = mobileView.querySelector("hr");
-    expect(divider).toHaveClass("border-t-[2px]", "text-ui-grey-300", "mt-4");
   });
 
   it("has correct desktop view styling and components", () => {
@@ -281,11 +269,8 @@ describe("PackageSelectionDetails", () => {
       within(rightColumn as HTMLElement).getByTestId("tick-list"),
     ).toBeInTheDocument();
     expect(
-      within(rightColumn as HTMLElement).getByTestId("trustpilot"),
+      within(desktopView as HTMLElement).getByTestId("trustpilot"),
     ).toBeInTheDocument();
-
-    const divider = desktopView.querySelector("hr");
-    expect(divider).toHaveClass("border-t-[2px]", "text-ui-grey-300", "my-16");
   });
 
   it("handles package selection when clicking the button", () => {

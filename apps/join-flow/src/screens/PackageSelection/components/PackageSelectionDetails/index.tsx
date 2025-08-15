@@ -8,7 +8,6 @@ import {
 import { StoreSelectedPackage } from "@/store/useJoinFlowStore";
 
 import { EeroImage } from "./EeroImage";
-import { MoreInformation } from "./MoreInformation";
 import { tickListItems } from "./PackageSelectionDetailsProps";
 import { PackageTitle } from "./PackageTitle";
 import { SpeedPriceDetails } from "./SpeedPriceDetails";
@@ -44,7 +43,7 @@ export const PackageSelectionDetails = ({
     packageDetails.frontendIdentifier === "900-24";
 
   return (
-    <div className="px-5 md:px-20 lg:px-29 py-8 md:pt-14 lg:pt-20 md:pb-27">
+    <div className="px-5 md:px-20 lg:px-29 py-8 md:py-14 lg:py-20">
       {/* Desktop View */}
       <div
         className="hidden md:block"
@@ -88,17 +87,17 @@ export const PackageSelectionDetails = ({
                 }
               />
             )}
-            {trustScore && (
-              <TrustpilotHorizontal
-                trustScore={trustScore}
-                numberOfReviews={numberOfReviews}
-                className="md:flex-col lg:flex-row"
-              />
-            )}
           </div>
         </div>
-        <hr className="border-t-[2px] text-ui-grey-300 my-16" />
-        <MoreInformation />
+        {trustScore && (
+          <div className="m-auto w-fit mt-12">
+            <TrustpilotHorizontal
+              trustScore={trustScore}
+              numberOfReviews={numberOfReviews}
+              className="md:flex-col lg:flex-row"
+            />
+          </div>
+        )}
       </div>
 
       {/* Mobile View */}
@@ -141,8 +140,6 @@ export const PackageSelectionDetails = ({
         >
           Add to basket
         </Button>
-        <hr className="border-t-[2px] text-ui-grey-300 mt-4" />
-        <MoreInformation />
         {trustScore && (
           <div className="mt-4">
             <TrustpilotHorizontal

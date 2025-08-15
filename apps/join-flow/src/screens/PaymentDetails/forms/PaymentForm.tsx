@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import FormInput from "@/components/FormInput";
+import { useScrollToElement } from "@/hooks/useScrollToElement";
 import { redactPaymentDetailValue } from "@/lib/redactPaymentDetailValue";
 import { SortCodeInput } from "@/screens/PaymentDetails/components/SortCodeInput";
 
@@ -24,6 +25,8 @@ export const PaymentForm = ({
     serviceAddress,
     billingAddress,
   } = useJoinFlowStore();
+
+  const scrollToIsAccountHolder = useScrollToElement("#account-holder-name");
 
   const {
     accountholderNamePlaceholder,
@@ -83,6 +86,12 @@ export const PaymentForm = ({
       console.error("Error updating isAccountHolder checkbox state:", err);
     }
   }, [fieldsModified, paymentDetails?.isAccountHolder, setValue]);
+
+  useEffect(() => {
+    if (errors.isAccountHolder) {
+      scrollToIsAccountHolder();
+    }
+  }, [errors.isAccountHolder, scrollToIsAccountHolder]);
 
   const savePaymentDetails = useCallback(
     (data: FormValues) => {
@@ -177,7 +186,7 @@ export const PaymentForm = ({
       noValidate
       aria-busy={isSubmitting}
     >
-      <div className="mb-6">
+      <div id="account-holder-name" className="mb-6">
         <div className="relative">
           <FormInput
             {...register("accountholderName")}
