@@ -69,7 +69,7 @@ export const AffiliateHeaderBanner = () => {
         size="small"
         variant="solid"
         tint="white"
-        href={`/join-flow/refer/${affiliateSession?.id ?? "#"}`}
+        href={`/join-flow/a/${affiliateSession?.id ?? "#"}`}
       >
         {affiliateHeaderBannerProps.salesAgentLinkText}
       </Button>
