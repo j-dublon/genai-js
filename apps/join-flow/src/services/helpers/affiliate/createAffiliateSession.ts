@@ -49,6 +49,7 @@ export const createAffiliateSession = async (
           sessionId: response.data.response.sessionID || "",
           affiliateName: response.data.response.affiliateName || "",
           displayItems: response.data.response.displayItems,
+          code: affiliateCode,
         },
       };
     }

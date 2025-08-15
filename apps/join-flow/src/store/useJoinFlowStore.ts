@@ -18,6 +18,7 @@ export type AffiliateSession = {
   sessionId: string;
   affiliateName: string;
   displayItems: AffiliateSessionSuccess["response"]["displayItems"];
+  code?: string;
 };
 
 export type StoreAddressIdentifier = {

@@ -4,9 +4,20 @@ import { useEffect, useState } from "react";
 import { remark } from "remark";
 import html from "remark-html";
 
-import useJoinFlowStore from "@/store/useJoinFlowStore";
+import useJoinFlowStore, { AffiliateSession } from "@/store/useJoinFlowStore";
 
 import { affiliateHeaderBannerProps } from "./affiliateHeaderBannerProps";
+
+type HeaderBannerItem = NonNullable<
+  NonNullable<AffiliateSession["displayItems"]>["headerBanner"]
+>[number];
+
+const isBasicPageBanner = (
+  banner: HeaderBannerItem | undefined,
+): banner is Extract<
+  HeaderBannerItem,
+  { blockType: "basicPageTitleBannerBlock" }
+> => banner?.blockType === "basicPageTitleBannerBlock";
 
 export const AffiliateHeaderBanner = () => {
   const [processedDescription, setProcessedDescription] = useState("");
@@ -16,29 +27,34 @@ export const AffiliateHeaderBanner = () => {
   const headerBanner = affiliateSession?.displayItems?.headerBanner?.[0];
   const termsAndConditionsLink =
     affiliateSession?.displayItems?.termsAndConditionsLink;
-  // @ts-expect-error types not yet updated
   const isSalesAgent = headerBanner?.blockType === "salesAgentTitleBannerBlock";
 
   useEffect(() => {
     const renderMarkdownToHtml = async () => {
-      if (headerBanner?.text) {
-        const description = await remark()
-          .use(html)
-          .process(headerBanner?.text);
-        setProcessedDescription(description.toString().replace(/p>/g, "span>"));
-      }
-      if (headerBanner?.shortText) {
-        const shortDescription = await remark()
-          .use(html)
-          .process(headerBanner?.shortText);
-        setShortProcessedDescription(
-          shortDescription.toString().replace(/p>/g, "span>"),
-        );
+      if (isBasicPageBanner(headerBanner)) {
+        if (headerBanner?.text) {
+          const description = await remark()
+            .use(html)
+            .process(headerBanner?.text);
+          setProcessedDescription(
+            description.toString().replace(/p>/g, "span>"),
+          );
+        }
+        if (headerBanner?.shortText) {
+          const shortDescription = await remark()
+            .use(html)
+            .process(headerBanner?.shortText);
+          setShortProcessedDescription(
+            shortDescription.toString().replace(/p>/g, "span>"),
+          );
+        }
       }
     };
 
-    renderMarkdownToHtml();
-  }, [headerBanner?.text, headerBanner?.shortText]);
+    if (isBasicPageBanner(headerBanner)) {
+      renderMarkdownToHtml();
+    }
+  }, [headerBanner]);
 
   if (!headerBanner) return null;
 
@@ -69,7 +85,7 @@ export const AffiliateHeaderBanner = () => {
         size="small"
         variant="solid"
         tint="white"
-        href={`/join-flow/refer/${affiliateSession?.id ?? "#"}`}
+        href={`/join-flow/a/${affiliateSession?.code ?? "#"}`}
       >
         {affiliateHeaderBannerProps.salesAgentLinkText}
       </Button>
