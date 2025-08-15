@@ -17,6 +17,7 @@ export default {
       "core-black": "#1F1F1F",
       "core-white": "#FFFFFF",
       "core-grey-200": "#F0F0E9",
+      "core-red": "#fa0309",
       "secondary-green": "#CDFFCF",
       "secondary-teal": "#C3F9FD",
       "secondary-blue": "#ACB9FE",
