@@ -1,6 +1,4 @@
 import { Button } from "@react-component-library/ui";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 
 export interface DocumentItemProps {
   text: string;
@@ -42,17 +40,6 @@ export const PaymentDocuments = ({
   disclaimer,
   items,
 }: PaymentDocumentProps): React.ReactElement => {
-  const router = useRouter();
-
-  useEffect(() => {
-    const hasInvalidHref = items.some(
-      (page) => !page.href || page.href === "/",
-    );
-    if (hasInvalidHref) {
-      router.push("/join-flow/payment-details/contract-retrieval-failed");
-    }
-  }, [items, router]);
-
   const documents = items.map(
     (item: DocumentItemProps, index: number): React.ReactElement => (
       <DocumentItem key={index} text={item.text} href={item.href} />

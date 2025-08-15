@@ -341,6 +341,7 @@ export type JoinFlowState = {
   roiPostcode: string | null;
   isLoadingModalOpen: boolean;
   errorInfo: ErrorInfo | null;
+  complete: boolean | null;
 
   // Actions
   setHasHydrated: (state: boolean) => void;
@@ -370,6 +371,7 @@ export type JoinFlowState = {
   clearError: () => void;
   resetFlow: () => void;
   resetAffiliateSession: () => void;
+  completeFlow: () => void;
 };
 
 // Create the store with persistence
@@ -396,6 +398,7 @@ const useJoinFlowStore = create<JoinFlowState>()(
       roiPostcode: null,
       isLoadingModalOpen: false,
       errorInfo: null,
+      complete: false,
       setHasHydrated: (state) => set({ _hasHydrated: state }),
       setCurrentStep: (step) => set({ currentStep: step }),
       selectPackage: (pkg) =>
@@ -443,8 +446,32 @@ const useJoinFlowStore = create<JoinFlowState>()(
           roiPostcode: null,
           isLoadingModalOpen: false,
           errorInfo: null,
+          complete: false,
         }),
       resetAffiliateSession: () => set({ affiliateSession: null }),
+      completeFlow: () =>
+        set({
+          currentStep: 0,
+          timestamp: Date.now(),
+          selectedPackage: null,
+          billingAddress: null,
+          serviceAddress: null,
+          personalDetails: null,
+          eeroSelection: null,
+          switchingDetails: null,
+          paymentDetails: null,
+          goLiveDetails: null,
+          accessibilityRequirements: null,
+          accessibilityCommunicationPreferences: null,
+          quoteResponse: null,
+          basket: null,
+          softCreditCheck: null,
+          roiPostcode: null,
+          isLoadingModalOpen: false,
+          errorInfo: null,
+          complete: true,
+          affiliateSession: null,
+        }),
     }),
     {
       name: "cuckoo-join-flow-storage",

@@ -81,7 +81,6 @@ const isPathAllowed = (
     FLOW_STEPS.find((step) => step.path === nextRequiredStep)?.index ?? -1;
 
   if (path === "/join-flow" || pathIndex === -1) return true;
-  if (path === "/join-flow/order-summary") return true;
 
   return pathIndex <= requiredStepIndex;
 };
@@ -103,6 +102,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
     timestamp,
     setErrorInfo,
     setTimestamp,
+    complete,
   } = store;
 
   useEffect(() => {
@@ -115,6 +115,8 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
       if (!isMounted) return;
 
       try {
+        if (pathname === "/join-flow/order-summary" && complete) return;
+
         const nextRequiredStep = findNextRequiredStep({
           serviceAddress,
           selectedPackage,
@@ -124,6 +126,9 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
           goLiveDetails,
           paymentDetails,
         } as JoinFlowState);
+
+        const otsComplete = otsCompleted(switchingDetails);
+
         const allowed = isPathAllowed(pathname, nextRequiredStep);
 
         if (!allowed) {
@@ -131,10 +136,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
           return;
         }
 
-        if (
-          pathname === "/join-flow/one-touch-switching" &&
-          otsCompleted(switchingDetails)
-        ) {
+        if (pathname === "/join-flow/one-touch-switching" && otsComplete) {
           router.replace("/join-flow/go-live-date");
           return;
         }
@@ -165,6 +167,7 @@ const RouteGuard = ({ children }: { children: ReactNode }) => {
     switchingDetails,
     goLiveDetails,
     paymentDetails,
+    complete,
   ]);
 
   useEffect(() => {

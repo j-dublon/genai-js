@@ -5,7 +5,13 @@ import {
 } from "@react-component-library/ui";
 import useJoinFlowStore from "@store/useJoinFlowStore";
 import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
 import { Footer } from "@/components/Footer";
 import { StepNavigationWithBasket } from "@/components/StepNavigationWithBasket";
@@ -71,6 +77,32 @@ export const PaymentConfirmation = ({
   useClickOutside(goLiveModalRef, isGoLiveModalOpen, closeGoLiveModal);
   useClearFocus(goLiveModalRef, "close");
 
+  const documentItems = useMemo(
+    () => [
+      {
+        text: "Contract Summary",
+        href: basket?.cics?.summaryHref || "",
+        name: "contractSummary",
+      },
+      {
+        text: "Contract Information",
+        href: basket?.cics?.informationHref || "",
+        name: "contractInformation",
+      },
+      {
+        text: "Terms & Conditions",
+        href: affiliateSession?.displayItems?.termsAndConditionsLink || "",
+        name: "termsAndConditions",
+      },
+      {
+        text: "Privacy Notice",
+        href: affiliateSession?.displayItems?.privacyPolicyLink || "",
+        name: "privacyPolicy",
+      },
+    ],
+    [basket, affiliateSession],
+  );
+
   useEffect(() => {
     scrollToTop();
   }, [scrollToTop]);
@@ -85,6 +117,15 @@ export const PaymentConfirmation = ({
       setTermsAgreed(paymentDetails.allTermsAgreed || false);
     }
   }, [paymentDetails]);
+
+  useEffect(() => {
+    const hasInvalidHref = documentItems.some(
+      (page) => !page.href || page.href === "",
+    );
+    if (hasInvalidHref) {
+      router.push("/join-flow/payment-details/contract-retrieval-failed");
+    }
+  }, [documentItems, router]);
 
   useEffect(() => {
     captureJoinFlowEvent("$pageview", {
@@ -173,7 +214,7 @@ export const PaymentConfirmation = ({
       }
 
       if (result.basket) {
-        setBasket(result.basket);
+        setBasket({ ...basket, ...result.basket });
       }
 
       try {
@@ -201,7 +242,7 @@ export const PaymentConfirmation = ({
     }
   }, [
     paymentDetails,
-    basket?.id,
+    basket,
     onComplete,
     setPaymentDetails,
     accessibilityRequirements,
@@ -231,29 +272,6 @@ export const PaymentConfirmation = ({
     },
     [],
   );
-
-  const documentItems = [
-    {
-      text: "Contract Summary",
-      href: basket?.cics?.summaryHref || "/",
-      name: "contractSummary",
-    },
-    {
-      text: "Contract Information",
-      href: basket?.cics?.informationHref || "/",
-      name: "contractInformation",
-    },
-    {
-      text: "Terms & Conditions",
-      href: affiliateSession?.displayItems?.termsAndConditionsLink || "/",
-      name: "termsAndConditions",
-    },
-    {
-      text: "Privacy Notice",
-      href: affiliateSession?.displayItems?.privacyPolicyLink || "/",
-      name: "privacyPolicy",
-    },
-  ];
 
   return (
     <div id="paymentConfirmationContainer">

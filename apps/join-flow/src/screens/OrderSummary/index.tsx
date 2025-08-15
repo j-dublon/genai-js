@@ -89,8 +89,7 @@ const TopCardMobile = ({ firstName, selectedTextIndex }: TopCardProps) => (
 export const OrderSummary = () => {
   const { data: trustpilotRating } = useTrustpilotScore();
   const { trustScore, numberOfReviews } = trustpilotRating || {};
-  const { personalDetails, resetAffiliateSession, resetFlow } =
-    useJoinFlowStore();
+  const { personalDetails, completeFlow } = useJoinFlowStore();
   const [firstName, setFirstName] = useState("");
   const [animationScreenIndex, setAnimationScreenIndex] = useState<number>(0);
 
@@ -109,9 +108,8 @@ export const OrderSummary = () => {
       setFirstName(personalDetails.firstName);
     }
 
-    resetAffiliateSession();
-    resetFlow();
-  }, [personalDetails, resetAffiliateSession, resetFlow]);
+    completeFlow();
+  }, [personalDetails, completeFlow]);
 
   return (
     <>
