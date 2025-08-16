@@ -9,4 +9,4 @@ const response = await llm.invoke(
   "Describe the importance of learning generative AI for javascript developers in 50 words."
 );
 
-console.log("GEN AI RES: ", response);
+console.log("RES: ", response);
