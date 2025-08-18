@@ -33,10 +33,13 @@ const personalisedPitch = async (
   //     llm,
   //     outputParser,
   //   ]);
-
   //   const result = await legacyLlmChain.invoke({ course, role, wordLimit });
 
-  //   console.log("RES: ", result);
+  // LCEL Chain
+  const lcelChain = promptTemplate.pipe(llm).pipe(outputParser);
+  const result = await lcelChain.invoke({ course, role, wordLimit });
+
+  console.log("RES: ", result);
 };
 
-await personalisedPitch("GenAI", "Javascript Developer", 100);
+await personalisedPitch("AWS", "Javascript Developer", 100);
