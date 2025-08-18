@@ -27,19 +27,19 @@ const personalisedPitch = async (
 
   const outputParser = new StringOutputParser();
 
-  // Legacy Chain
-  //   const legacyLlmChain = RunnableSequence.from([
-  //     promptTemplate,
-  //     llm,
-  //     outputParser,
-  //   ]);
-  //   const result = await legacyLlmChain.invoke({ course, role, wordLimit });
+  // LCEL, i.e. pipe method chain
+  //   const lcelChain = promptTemplate.pipe(llm).pipe(outputParser);
+  //   const result = await lcelChain.invoke({ course, role, wordLimit });
 
-  // LCEL Chain
-  const lcelChain = promptTemplate.pipe(llm).pipe(outputParser);
-  const result = await lcelChain.invoke({ course, role, wordLimit });
+  // LCEL runnable sequence method chain
+  const legacyLlmChain = RunnableSequence.from([
+    promptTemplate,
+    llm,
+    outputParser,
+  ]);
+  const result = await legacyLlmChain.invoke({ course, role, wordLimit });
 
   console.log("RES: ", result);
 };
 
-await personalisedPitch("AWS", "Javascript Developer", 100);
+await personalisedPitch("Gen AI", "Javascript Developer", 100);
