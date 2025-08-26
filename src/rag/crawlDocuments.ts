@@ -3,19 +3,10 @@ import fetch from "node-fetch";
 import urlModule from "url";
 import cliProgress from "cli-progress";
 
-// Note: Full Langchain document takes a very long time to download. A short documentation is provided for the course (recommended).
-
 const LANGCHAIN_DOCS_HOME =
   "https://learn-with-amit.github.io/genai-js/langchain/";
 
 const LANGCHAIN_DOCS_PREFIX = "";
-
-// use following links if you want to use full langchain documentation. This can take several minutes to process.
-
-// const LANGCHAIN_DOCS_HOME =
-//   "https://js.langchain.com/docs/introduction";
-
-// const LANGCHAIN_DOCS_PREFIX = "/docs/";
 
 const progressBar = new cliProgress.SingleBar({
   format: "Documents Crawled: {value}",
