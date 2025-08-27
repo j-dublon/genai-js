@@ -3,8 +3,7 @@ import { RunnableInterface } from "@langchain/core/runnables";
 import { Document } from "@langchain/core/documents";
 import { ReadableStream } from "node:stream/web";
 
-// chat handler function type that takes the user question as input
-// and returns the answer as Langchain Runnable output
+// Chat handler function type - returns answer as Langchain Runnable output
 export type ChatHandler = (question: string) => Promise<{
   answer:
     | ReturnType<RunnableInterface["invoke"]>
@@ -14,7 +13,7 @@ export type ChatHandler = (question: string) => Promise<{
   answerCallBack?: (answerText: string) => Promise<void>;
 }>;
 
-// chat utility function that creates chat user interface on terminal
+// Chat util - creates chat UI in terminal
 export const chat = async (handler: ChatHandler) => {
   const rl = readlinePromises.createInterface({
     input: process.stdin,
@@ -22,10 +21,7 @@ export const chat = async (handler: ChatHandler) => {
   });
 
   while (true) {
-    // wait for user question
     const question = await rl.question("Human: ");
-
-    // invoke handler with the question
     const response = await handler(question);
     const answer = await response.answer;
 
@@ -36,13 +32,12 @@ export const chat = async (handler: ChatHandler) => {
       let isFirstAnswerChunk = true;
       for await (const chunk of answer) {
         if (typeof chunk === "string") {
-          // if chunk is a string response then just print it
+          // If chunk is a string response print it
           process.stdout.write(`${chunk}`);
           answerText += chunk;
         } else {
-          // chunk is a streamed object, find answer and print it
+          // If chunk is a streamed object, find answer and print it
           if (chunk.answer !== undefined) {
-            // if its first answer chunk then add Answer heading
             if (isFirstAnswerChunk) {
               process.stdout.write("Answer: ");
               isFirstAnswerChunk = false;
@@ -50,11 +45,11 @@ export const chat = async (handler: ChatHandler) => {
             process.stdout.write(`${chunk.answer}`);
             answerText += chunk.answer;
           } else {
-            // for other stuff (e.g. question, context ) just print it as it is
+            // For other stuff (e.g. question, context) just print it as it is
             console.log(`${JSON.stringify(chunk)}`);
 
             if (chunk.context) {
-              // if chunk is a RAG context then extract sources and print them
+              // If chunk is a RAG context then extract sources and print them
               const docs: Document[] = chunk.context;
               const sources = docs.map((doc) => doc.metadata.source);
               console.log(`Sources:\n${sources.join("\n")}`);
@@ -67,17 +62,17 @@ export const chat = async (handler: ChatHandler) => {
       console.log(`AI: ${answer.trimStart()}`);
       answerText = answer;
     } else {
-      // if LLM response is a json object then just print it
+      // If LLM response is a json object print it
       console.log(`AI: ${JSON.stringify(answer)}`);
     }
 
-    // if sources are provided them print them as well
+    // If sources are provided print them too
     if (response.sources) {
       console.log(`Sources:\n${response.sources.join("\n")}`);
     }
 
-    // if answer call back is provided then invoke the callback before moving to next question
-    // this can be useful for maintaining the chat history
+    // If answer call back is provided then invoke the callback before moving to next question
+    // Useful for maintaining the chat history
     if (response.answerCallBack) {
       await response.answerCallBack(answerText);
     }
