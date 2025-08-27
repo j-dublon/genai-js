@@ -34,9 +34,8 @@ async function fetchLinkedUrls(url: string, downloadedUrls: Set<string>) {
     const html = await response.text();
     const $ = cheerio.load(html);
 
-    downloadedUrls.add(url); // Add URL to downloaded set
+    downloadedUrls.add(url);
 
-    // Extract all anchor tags
     const links: string[] = [];
     $("a").each((index, element) => {
       const href = $(element).attr("href");
@@ -45,7 +44,6 @@ async function fetchLinkedUrls(url: string, downloadedUrls: Set<string>) {
       }
     });
 
-    // Download HTML from linked URLs with reduced depth
     for (const link of links) {
       const absoluteUrl = urlModule.resolve(url, link);
       await fetchLinkedUrls(absoluteUrl, downloadedUrls);

@@ -19,12 +19,6 @@ const personalisedPitch = async (
     inputVariables: ["course", "role", "wordLimit"],
   });
 
-  const formattedPrompt = await promptTemplate.format({
-    course,
-    role,
-    wordLimit,
-  });
-
   // Open AI
   const llm = new ChatOpenAI({
     temperature: 0,
@@ -53,11 +47,6 @@ const personalisedPitch = async (
 
   const outputParser = new StringOutputParser();
 
-  // LCEL, i.e. pipe method chain
-  //   const lcelChain = promptTemplate.pipe(llm).pipe(outputParser);
-  //   const result = await lcelChain.invoke({ course, role, wordLimit });
-
-  // LCEL runnable sequence method chain
   const legacyLlmChain = RunnableSequence.from([
     promptTemplate,
     llm,
