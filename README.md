@@ -13,3 +13,6 @@ If you would like to interact with this agent, you will need to set up a .env fi
 - LANGCHAIN_TRACING_V2=true
 
 Here's what it looks like in use:
+
+https://github.com/user-attachments/assets/7dc7631f-cde7-4b3f-9c5b-784f3f2276be
+
