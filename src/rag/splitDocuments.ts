@@ -1,8 +1,7 @@
 import { Document } from "langchain/document";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { loadDocuments } from "./loadDocuments";
 
-const splitDocuments = async (
+export const splitDocuments = async (
   rawDocuments: Document[],
 ): Promise<Document[]> => {
   console.log("Splitting docs...");
